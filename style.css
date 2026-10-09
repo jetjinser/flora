@@ -518,3 +518,13 @@ mjx-container > mjx-speech {
   margin-inline: auto;
   margin-block: 0.35lh;
 }
+
+/* 语义插图：分析期把「图片段落 + 紧随的图题段落」配对为 figure/figcaption。 */
+figure { margin-block: 0.35lh; }
+figcaption {
+  max-inline-size: 88%;
+  margin-inline: auto;
+  margin-block-start: 0.4em;
+  font-size: 0.95em;
+  line-height: 1.7;
+}

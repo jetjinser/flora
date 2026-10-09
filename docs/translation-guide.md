@@ -82,7 +82,7 @@
 2. Read 整页 PNG,按比例估算图形包围盒(**不含**英文 "Figure X.Y:" 图题行)。
 3. `convert -crop WxH+X+Y +repage -fuzz 8% -trim +repage` 输出到 `assets/blazek2005/fig-<章>-<图>.png`,`-trim` 自动去白边;结果必须 Read 目检:图形完整、无英文图题残留、轴标签/子图标注齐全。
 4. `assets/` 目录由 `project.scm` 递归扫描自动注册(URL 即 `/blazek2005/fig-X-Y.png`),新增图片无需改配置。
-5. 图片样式见 `style.css` 的 `.article img`(居中、88% 限宽)。
+5. 图片样式见 `style.css` 的 `.article img`(居中、88% 限宽);渲染时分析期自动把「图片段落 + 紧随的图题段落(以 `@emph` 开头)」配对为 `<figure>/<figcaption>`,内容侧保持 `@image` + 图题段落的原始写法,无需手工包 figure(实现见 `modules/queries.plant` 的 figure-site)。
 
 纯数值表格用 `@verbatim` 重建,不裁图。
 
