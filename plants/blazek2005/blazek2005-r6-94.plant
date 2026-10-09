@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mulder, W.; Van Leer, B.: Experiments with Implicit Upwind Methods for the Euler Equations. J. Computational Physics, 59 (1985), pp. 232-246.}
+@taxon["reference"]

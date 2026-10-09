@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Liberson, A.; Kosolapov, Y.; Rieger, N.; Hesler, S.: Calculation of 3-D Condensing Flows in Nozzles and Turbine Stages. EPRI Nucleation Workshop, Rochester, N.Y., October 24-26, 1995.}
+@taxon["reference"]
+
+Liberson等人在EPRI成核研讨会上报告的喷管与汽轮机级内三维凝结流动计算。

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Van der Weide, E.; Deconinck, H.: Compact Residual-Distribution Scheme Applied to Viscous Flow Simulations. VKI Lecture Series 1998-03, 1998.}
+@taxon["reference"]

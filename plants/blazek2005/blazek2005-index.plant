@@ -1,0 +1,571 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Index 索引}
+@summary{全书术语索引:英文词条、中文译名与原书页码对照。}
+@taxon["index"]
+
+本页为原书索引的中英对照;页码为原书印刷页码,照录原书(含“81–83”这类页码范围),本站各章页面按印刷页码顺序对应;词条按原书字母序排列,并按首字母分组(原书无X、Y、Z起始的词条)。
+
+@subtree[#:id "blazek2005-idx-a"]{
+  @title{A}
+
+  @itemize{
+    @item{ADI: Alternating Direction Implicit(交替方向隐式)—50, 201, 387}
+    @item{Advancing-front Delaunay(推进前沿Delaunay法)—388}
+    @item{Advancing-front method(推进前沿法)—388, 394}
+    @item{Advancing-layers method(推进层法)—397}
+    @item{Advancing-normal point placement(推进法向布点)—400}
+    @item{Agglomeration multigrid(聚合多重网格)—323}
+    @item{ALE: Arbitrary Lagrangian Eulerian(任意拉格朗日-欧拉方法)—441}
+    @item{Algebraic grid generation(代数网格生成)—376, 379}
+    @item{Algebraic models(代数模型)—55}
+    @item{All-speed flow(全速域流动)—327}
+    @item{AMG: Algebraic Multigrid(代数多重网格)—312, 322}
+    @item{Amplification factor(放大因子)—355}
+    @item{Approximate Riemann solver(近似黎曼求解器)—43, 108}
+    @item{Arrhenius formulae(Arrhenius公式)—22}
+    @item{ARS: Algebraic Reynolds Stress(代数雷诺应力)—54}
+    @item{Artificial compressibility method(人工压缩性方法)—30, 327}
+    @item{Artificial dissipation(人工耗散)—41, 97, 153}
+    @item{AUSM: Advection Upstream Splitting Method(对流上游分裂方法)—42, 100, 103}
+    @item{Average of fluxes(通量平均)—85, 90, 142, 145}
+    @item{Average of variables(变量平均)—85, 90, 142, 148}
+    @item{Axisymmetric form(轴对称形式)—448}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-b"]{
+  @title{B}
+
+  @itemize{
+    @item{Background grid(背景网格)—389}
+    @item{Backscatter(反散射)—254}
+    @item{Backward Euler(后向Euler格式)—214, 444}
+    @item{Baldwin-Lomax model(Baldwin-Lomax模型)—55}
+    @item{Bi-CGSTAB: Bi-Conjugate Gradient Stabilised(稳定化双共轭梯度法)—51, 210}
+    @item{Body-fitted grid(贴体网格)—29}
+    @item{Boundary conditions(边界条件)—56}
+    @item{Boundary value problem(边值问题)—436}
+    @item{Boussinesq hypothesis(Boussinesq假设)—54, 235}
+    @item{Bradshaw's assumption(Bradshaw假设)—248}
+    @item{Bubble packing method(气泡填充法)—388}
+    @item{Bulk viscosity(体积黏性)—15}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-c"]{
+  @title{C}
+
+  @itemize{
+    @item{Carbuncle phenomenon(carbuncle现象)—110}
+    @item{Cartesian grids(笛卡尔网格)—30, 402}
+    @item{Cell-centred scheme(格心格式)—37, 78, 85, 134, 142}
+    @item{Cell-vertex scheme(格顶点格式)—37, 80, 87, 90, 134, 145}
+    @item{Central scheme(中心格式)—41, 97, 153}
+    @item{Centrifugal force(离心力)—438}
+    @item{CFL condition(CFL条件)—188, 358, 367, 368}
+    @item{CFL number(CFL数)—185, 189, 358, 367}
+    @item{CGS: Conjugate Gradient Squared(共轭梯度平方法)—51, 210}
+    @item{Characteristic boundary conditions(特征边界条件)—56}
+    @item{Characteristic time-stepping(特征时间推进)—47}
+    @item{Characteristic variables(特征变量)—42, 109, 112, 117, 281, 455}
+    @item{Characteristics of PDE's(偏微分方程的特征线)—434}
+    @item{Chimera technique(重叠网格技术)—34, 295}
+    @item{Circulation(环量)—284}
+    @item{CIRS: Central Implicit Residual Smoothing(中心隐式残差光顺)—306}
+    @item{Co-located grid scheme(同位网格格式)—80, 134}
+    @item{Coarse grid correction(粗网格校正)—314}
+    @item{Computational molecule(计算分子)—95}
+    @item{Computational space(计算空间)—32, 376}
+    @item{Condition number(条件数)—327}
+    @item{Conjugate gradient method(共轭梯度法)—51, 210}
+    @item{Conservation laws(守恒定律)—5}
+    @item{Conservative variable preconditioning matrix(守恒变量预处理矩阵)—329}
+    @item{Conservative variables(守恒变量)—16, 80}
+    @item{Consistency(一致性)—351, 352}
+    @item{Constrained Delaunay triangulation(约束Delaunay三角剖分)—393}
+    @item{Containment-dual control volume(包含型对偶控制体)—149}
+    @item{Continuum(连续介质)—5}
+    @item{Contravariant velocity(逆变速度)—16, 441}
+    @item{Control functions(控制函数)—383}
+    @item{Control volume(控制体)—81, 82, 136, 138}
+    @item{Convective flux Jacobian(对流通量雅可比矩阵)—189, 194, 197, 200, 203, 205, 206, 433, 450}
+    @item{Convective flux tensor(对流通量张量)—7}
+    @item{Convective fluxes(对流通量)—6, 16, 95, 153}
+    @item{Coordinate cut(坐标切割)—291, 377, 379}
+    @item{Coriolis force(科里奥利力)—438}
+    @item{Curvilinear grid(曲线网格)—32}
+    @item{CUSP: Convective Upwind Split Pressure(对流上风压力分裂)—42, 100, 105}
+    @item{Cyclic directions(循环方向)—297}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-d"]{
+  @title{D}
+
+  @itemize{
+    @item{Dalton's law(Dalton定律)—21}
+    @item{Damköhler number(Damköhler数)—19}
+    @item{Damping functions(阻尼函数)—243, 245}
+    @item{Damping properties(阻尼特性)—354}
+    @item{Decoupling(解耦)—97, 120, 176}
+    @item{Degrees of freedom(自由度)—39}
+    @item{Delaunay method(Delaunay方法)—388, 389}
+    @item{Density (mass) weighted decomposition(密度加权分解)—53, 232}
+    @item{Density-based schemes(密度基格式)—30}
+    @item{Dependent variables(因变量)—80}
+    @item{DES: Detached Eddy Simulation(分离涡模拟)—258}
+    @item{Determinant of Jacobian of coordinate transformation(坐标变换雅可比行列式)—430}
+    @item{Differential form(微分形式)—427}
+    @item{Diffusive flux(扩散通量)—6}
+    @item{Diffusive flux tensor(扩散通量张量)—7}
+    @item{Dilatation(膨胀率)—15}
+    @item{Direct methods(直接解法)—49, 193}
+    @item{Dirichlet condition(Dirichlet条件)—384, 437}
+    @item{Dirichlet tessellation(Dirichlet镶嵌)—389}
+    @item{Discretisation accuracy(离散精度)—353}
+    @item{Discretisation error(离散误差)—351}
+    @item{DNS: Direct Numerical Simulation(直接数值模拟)—53, 227}
+    @item{Domain decomposition(区域分解)—34}
+    @item{Dual control volumes(对偶控制体)—37, 80, 90, 145}
+    @item{Dual time-stepping approach(双时间步进方法)—49, 214}
+    @item{Dummy cells(虚单元)—272}
+    @item{Dummy points(虚点)—272}
+    @item{Dynamic SGS models(动态SGS模型)—256}
+    @item{Dynamic viscosity coefficient(动力黏性系数)—13}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-e"]{
+  @title{E}
+
+  @itemize{
+    @item{E-CUSP scheme(E-CUSP格式)—106}
+    @item{Eddy viscosity(涡黏性)—55, 227, 235}
+    @item{Edge collapsing(边收缩)—323}
+    @item{Eigenvalue(特征值)—107, 109, 110, 336, 456, 457}
+    @item{Eigenvector(特征向量)—109, 111, 337, 455–457}
+    @item{Einstein summation convention(Einstein求和约定)—462}
+    @item{Elliptic equation(椭圆型方程)—436}
+    @item{Elliptic grid generation(椭圆型网格生成)—376, 383}
+    @item{ENO: Essentially Non-Oscillatory(本质无振荡格式)—43}
+    @item{Ensemble averaging(系综平均)—232}
+    @item{Enthalpy(焓)—18}
+    @item{Enthalpy damping(焓阻尼)—305}
+    @item{Entropy condition(熵条件)—38}
+    @item{Entropy correction(熵修正)—110, 112}
+    @item{Equation of state(状态方程)—18}
+    @item{Ergodic hypothesis(各态历经假说)—232}
+    @item{Euler equations(欧拉方程)—25}
+    @item{Explicit operator(显式算子)—192}
+    @item{Explicit scheme(显式格式)—184}
+    @item{Explicit time-stepping scheme(显式时间推进格式)—46}
+    @item{External body forces(外部体力)—9, 428}
+    @item{External volume forces(外部体积力)—9}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-f"]{
+  @title{F}
+
+  @itemize{
+    @item{Face vector(面向量)—81–83, 137–139}
+    @item{Factored scheme(因式分解格式)—193}
+    @item{Factorisation error(因式分解误差)—50, 203}
+    @item{Farfield(远场)—281}
+    @item{FAS: Full Approximation Storage(全近似存储)—48, 314}
+    @item{Favre (mass) averaging(Favre质量加权平均)—53, 232}
+    @item{Favre decomposition(Favre分解)—53, 232}
+    @item{Fick's law(Fick定律)—7, 11}
+    @item{Finite control volume(有限控制体)—6}
+    @item{Finite difference method(有限差分法)—32, 36}
+    @item{Finite element method(有限元法)—32, 39}
+    @item{Finite volume method(有限体积法)—32, 37}
+    @item{First-order closures(一阶封闭模型)—54, 227, 240}
+    @item{Fluctuation-splitting scheme(脉动分裂格式)—42, 43}
+    @item{Fluid dynamics(流体动力学)—5}
+    @item{Flux(通量)—5}
+    @item{Flux Jacobian(通量雅可比矩阵)—32, 42, 47, 49, 192, 193, 197}
+    @item{Flux-difference splitting scheme(通量差分分裂格式)—42, 43, 108}
+    @item{Flux-vector splitting scheme(通量向量分裂格式)—42, 100}
+    @item{FMG: Full Multigrid(完全多重网格)—48, 316}
+    @item{Forcing function(强制函数)—313}
+    @item{Forward Euler(前向Euler格式)—184, 442}
+    @item{Fourier symbol(Fourier符号)—355}
+    @item{Fourier's law(Fourier定律)—11}
+    @item{Frontal Delaunay(前沿Delaunay法)—388}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-g"]{
+  @title{G}
+
+  @itemize{
+    @item{Gauss quadrature points(Gauss求积点)—162}
+    @item{Gauss's theorem(Gauss定理)—427}
+    @item{Gaussian filter(Gaussian滤波器)—251}
+    @item{GCL: Geometric Conservation Law(几何守恒律)—18, 215, 442}
+    @item{Germano identity(Germano恒等式)—257}
+    @item{Global coarsening(全局粗化)—324}
+    @item{Global time stepping(全局时间步长)—189}
+    @item{GMRES: Generalised Minimal Residual(广义极小残量法)—51, 210, 458}
+    @item{Green-Gauss gradient computation(Green-Gauss梯度计算)—163, 298}
+    @item{Grid cells(网格单元)—29}
+    @item{Grid converged solution(网格收敛解)—41, 353}
+    @item{Grid generation(网格生成)—29}
+    @item{Grid lines(网格线)—29}
+    @item{Grid nodes(网格节点)—29}
+    @item{Grid points(网格点)—29}
+    @item{Grid refinement(网格加密)—323}
+    @item{Grid smoothing(网格光顺)—404}
+    @item{Grid velocity(网格速度)—441}
+    @item{Grid vertices(网格顶点)—29}
+    @item{Gridless Method(无网格法)—40}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-h"]{
+  @title{H}
+
+  @itemize{
+    @item{H-CUSP scheme(H-CUSP格式)—106}
+    @item{Hanging nodes(悬挂节点)—32}
+    @item{High Reynolds number model(高雷诺数模型)—247}
+    @item{Horse-shoe vortex(马蹄涡)—283, 285}
+    @item{Hybrid grids(混合网格)—32, 131, 400}
+    @item{Hyperbolic equation(双曲型方程)—434}
+    @item{Hyperbolic grid generation(双曲型网格生成)—376, 385}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-i"]{
+  @title{I}
+
+  @itemize{
+    @item{IGES: Initial Graphics Exchange Specification(初始图形交换规范)—373}
+    @item{ILU: Incomplete Lower Upper(不完全LU分解)—51, 212}
+    @item{Implicit operator(隐式算子)—49, 192, 193, 312}
+    @item{Implicit scheme(隐式格式)—192}
+    @item{Implicit time-stepping scheme(隐式时间推进格式)—46, 49}
+    @item{Implicit-explicit residual smoothing(隐式-显式残差光顺)—47}
+    @item{Incremental point insertion(增量插点)—390}
+    @item{Inflow(入流)—8}
+    @item{Initial value problem(初值问题)—434}
+    @item{Injection boundary(注入边界)—289}
+    @item{Inlet boundary(入口边界)—287}
+    @item{Integral formulation(积分形式)—7}
+    @item{Internal energy(内能)—10}
+    @item{Interpolation operator(插值算子)—313}
+    @item{IRS: Implicit Residual Smoothing(隐式残差光顺)—47, 306}
+    @item{Iterative methods(迭代法)—50, 193}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-j"]{
+  @title{J}
+
+  @itemize{
+    @item{Jacobi preconditioning(Jacobi预处理)—47}
+    @item{Jacobian coordinate transformation(Jacobian坐标变换)—37}
+    @item{Jacobian matrix(Jacobian矩阵)—450, 452}
+    @item{JST scheme(JST格式)—98}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-k"]{
+  @title{K}
+
+  @itemize{
+    @item{K-ω model(K-ω模型)—55}
+    @item{K-ε model(K-ε模型)—55, 243}
+    @item{Kinematic eddy viscosity(运动涡黏性)—231}
+    @item{Kinematic viscosity coefficient(运动黏性系数)—15}
+    @item{Kronecker symbol(Kronecker符号)—462}
+    @item{Krylov subspace(Krylov子空间)—50, 210}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-l"]{
+  @title{L}
+
+  @itemize{
+    @item{Laplace equation(Laplace方程)—383, 385}
+    @item{Laplacian operator(Laplace算子)—154, 404}
+    @item{LDFSS: Low-Diffusion Flux-Splitting Scheme(低耗散通量分裂格式)—42, 100}
+    @item{Least-squares gradient computation(最小二乘梯度计算)—165}
+    @item{Left state(左状态)—43, 86, 92, 95, 143}
+    @item{Left/right preconditioning(左/右预处理)—51, 212}
+    @item{LES: Large-Eddy Simulation(大涡模拟)—53, 250}
+    @item{Lifting body(升力体)—283}
+    @item{Limiter(限制器)—44, 96, 112, 168}
+    @item{Limiter for CUSP scheme(CUSP格式的限制器)—117}
+    @item{Limiter for TVD scheme(TVD格式的限制器)—117}
+    @item{Limiter function(限制器函数)—44, 96, 112, 115, 168}
+    @item{Line-implicit methods(线隐式方法)—50}
+    @item{Linear reconstruction(线性重构)—160}
+    @item{Linear TFI(线性TFI)—382}
+    @item{Linelets(线状子块)—50}
+    @item{Local time-stepping(局部时间步长)—46, 189}
+    @item{Low Reynolds number model(低雷诺数模型)—243}
+    @item{LU-SGS: Lower-Upper Symmetric Gauss-Seidel(下-上对称Gauss-Seidel分解)—50, 204}
+    @item{LU-SSOR: Lower-Upper Symmetric Successive Overrelaxation(下-上对称逐次超松弛)—50, 204}
+    @item{Lumped mass matrix(集中质量矩阵)—45, 184, 192}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-m"]{
+  @title{M}
+
+  @itemize{
+    @item{MAPS: Mach Number-Based Advection Pressure Splitting(基于马赫数的对流压力分裂)—42, 100}
+    @item{Mass matrix(质量矩阵)—45, 151, 183, 192, 214, 216}
+    @item{Matrix dissipation scheme(矩阵耗散格式)—42, 100, 156}
+    @item{Matrix-free approach(无矩阵方法)—52, 211}
+    @item{Max-min triangulation(最大-最小三角剖分)—388}
+    @item{Median-dual control volume(中点对偶控制体)—134, 145}
+    @item{Mesh(网格)—29}
+    @item{Method of lines(线方法)—30, 45, 77, 131, 183}
+    @item{Method of weighted residuals(加权余量法)—39}
+    @item{Metric terms(度量项)—430}
+    @item{Metrics(度量系数)—81, 136}
+    @item{MILES: Monotonically Integrated LES(单调积分LES)—255}
+    @item{Mixed grids(混合单元网格)—32, 131, 388, 400}
+    @item{Monotonicity preserving scheme(单调性保持格式)—43, 112, 168}
+    @item{Morkovin's hypothesis(Morkovin假设)—53, 234}
+    @item{Moving grid(运动网格)—441}
+    @item{Multiblock approach(多块方法)—32, 295}
+    @item{Multigrid cycle(多重网格循环)—47}
+    @item{Multigrid level(多重网格层数)—47}
+    @item{Multigrid method(多重网格)—47, 312}
+    @item{Multiphase flow(多相流)—22}
+    @item{Multistage scheme(多级格式)—184}
+    @item{Multistage time-stepping scheme(多级时间推进格式)—46}
+    @item{MUSCL: Monotone Upstream-Centred Schemes for Conservation Laws(守恒律的单调上游中心格式)—96, 114, 158}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-n"]{
+  @title{N}
+
+  @itemize{
+    @item{Navier-Stokes equations(Navier-Stokes方程)—17}
+    @item{Neumann condition(Neumann条件)—384, 437}
+    @item{Newton-Krylov method(Newton-Krylov方法)—52, 193, 210, 212}
+    @item{Newtonian fluid(牛顿流体)—13}
+    @item{Non-linear eddy viscosity(非线性涡黏性)—55, 237}
+    @item{Nonnested grids(非嵌套网格)—323}
+    @item{Normal-momentum relation(法向动量关系)—274}
+    @item{Noslip boundary condition(无滑移边界条件)—57, 279}
+    @item{NURBS: Non-Uniform Rational B-Splines(非均匀有理B样条)—399}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-o"]{
+  @title{O}
+
+  @itemize{
+    @item{Order of accuracy(精度阶数)—36, 353}
+    @item{Outflow(出流)—8}
+    @item{Outlet boundary(出口边界)—287}
+    @item{Overlapping control volumes(重叠控制体)—37, 80, 87, 134}
+    @item{Overrelaxation parameter(超松弛参数)—206, 208, 210}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-p"]{
+  @title{P}
+
+  @itemize{
+    @item{Parabolic equation(抛物型方程)—436}
+    @item{Perfect gas(完全气体)—18}
+    @item{Periodic boundary(周期边界)—292, 379}
+    @item{Phase angle(相位角)—355}
+    @item{Physical space(物理空间)—29}
+    @item{Piecewise linear prolongation(分段线性延拓)—326}
+    @item{PNS: Parabolised Navier-Stokes(抛物化Navier-Stokes)—24, 436, 447}
+    @item{Point implicit(点隐式)—188}
+    @item{Prandtl number(Prandtl数)—19, 55, 236, 429}
+    @item{Preconditioning(预处理)—30, 327}
+    @item{Preconditioning matrix(预处理矩阵)—328, 333}
+    @item{Preconditioning parameter(预处理参数)—334, 335}
+    @item{Pressure sensor(压力传感器)—99}
+    @item{Pressure-based schemes(压力基格式)—30, 327}
+    @item{Prolongation operator(延拓算子)—314}
+    @item{Pseudo-Laplacian(伪Laplace算子)—154}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-q"]{
+  @title{Q}
+
+  @itemize{
+    @item{Quadratic reconstruction(二次重构)—161}
+    @item{Quasilinear form(拟线性形式)—433}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-r"]{
+  @title{R}
+
+  @itemize{
+    @item{RANS: Reynolds-Averaged Navier-Stokes(雷诺平均Navier-Stokes)—53, 233}
+    @item{RCM: Reverse Cuthill-McKee(逆Cuthill-McKee排序)—197, 212}
+    @item{Real gas(真实气体)—19, 44}
+    @item{Reconstruction(重构)—135, 142, 148, 153, 157, 163}
+    @item{Reflected cells(镜像单元)—290}
+    @item{Residual(残差)—45, 78, 134, 183}
+    @item{Residual averaging(残差平均)—47}
+    @item{Residual distribution(残差分布)—88}
+    @item{Residual smoothing(残差光顺)—47, 306}
+    @item{Restriction operator(限制算子)—314}
+    @item{Reynolds averaging(雷诺平均)—53, 231}
+    @item{Reynolds-stress tensor(雷诺应力张量)—54, 233, 234}
+    @item{Right state(右状态)—43, 86, 92, 95, 143}
+    @item{Roe average(Roe平均)—107, 109}
+    @item{Roe matrix(Roe矩阵)—106, 108}
+    @item{Roe upwind scheme(Roe上风格式)—43, 108}
+    @item{Rotating frame of reference(旋转参考系)—17, 438}
+    @item{Rotation-rate tensor(旋转速率张量)—230}
+    @item{Rotational periodicity(旋转周期性)—292, 294}
+    @item{Rothalpy(转焓)—439}
+    @item{Rotor-stator interaction(转子-静子干涉)—401}
+    @item{RST: Reynolds-Stress Transport(雷诺应力输运)—54, 238}
+    @item{Runge-Kutta time-stepping scheme(Runge-Kutta时间推进格式)—46, 184}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-s"]{
+  @title{S}
+
+  @itemize{
+    @item{Scalar dissipation scheme(标量耗散格式)—98}
+    @item{Search directions(搜索方向)—51, 211}
+    @item{Second viscosity coefficient(第二黏性系数)—13}
+    @item{Second-order closures(二阶封闭模型)—54, 227}
+    @item{Seed points(种子点)—324}
+    @item{Semi-implicit Runge-Kutta(半隐式Runge-Kutta格式)—188}
+    @item{Semicoarsening(半粗化)—313}
+    @item{SGS: Subgrid-Scale stress(亚格子应力)—252}
+    @item{Shape functions(形函数)—39}
+    @item{Sharp Fourier cut-off filter(锐截止Fourier滤波器)—251}
+    @item{Single-stage time-stepping scheme(单级时间推进格式)—46}
+    @item{Singletons(孤立单元)—324}
+    @item{SLIP: Symmetric Limited Positive(对称限量正格式)—98}
+    @item{Slope limiter(斜率限制器)—114, 115}
+    @item{Smagorinsky SGS model(Smagorinsky亚格子模型)—255}
+    @item{Smooth grid(光滑网格)—29, 133}
+    @item{Solid wall(固壁)—274}
+    @item{Solution reconstruction(解重构)—142, 148, 153, 157, 163}
+    @item{Solution update(解更新)—183}
+    @item{Source term(源项)—78, 133, 187, 192}
+    @item{Spalart-Allmaras model(Spalart-Allmaras模型)—55, 240}
+    @item{Spatial averaging(空间平均)—231}
+    @item{Spatial discretisation(空间离散)—32, 78, 133}
+    @item{Spectral Element Method(谱元法)—40}
+    @item{Spectral radius(谱半径)—99, 156, 189–191, 336, 442}
+    @item{SST turbulence model(SST湍流模型)—247}
+    @item{Stability(稳定性)—351}
+    @item{Stability analysis(稳定性分析)—354}
+    @item{Staggered grid scheme(交错网格格式)—80, 134}
+    @item{Steger-Warming flux-vector splitting(Steger-Warming通量向量分裂)—197}
+    @item{Steiner point(Steiner点)—393}
+    @item{Stencil(模板)—95}
+    @item{Stiffness(刚性)—187, 192}
+    @item{Stokes's hypothesis(Stokes假设)—429}
+    @item{Strain-rate tensor(应变率张量)—230}
+    @item{Structured grids(结构网格)—32, 376}
+    @item{Structured scheme(结构网格格式)—77}
+    @item{Subgrid-scale model(亚格子模型)—53, 250, 254}
+    @item{Surface forces(表面力)—9}
+    @item{Surface grid(表面网格)—376}
+    @item{Surface grid generation(表面网格生成)—400}
+    @item{Sutherland formula(Sutherland公式)—18}
+    @item{Switched Evolution Relaxation(切换演化松弛)—213}
+    @item{Symmetric TVD scheme(对称TVD格式)—43, 111}
+    @item{Symmetry boundary(对称边界)—290}
+    @item{System matrix(系统矩阵)—192, 312}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-t"]{
+  @title{T}
+
+  @itemize{
+    @item{Tensor notation(张量记号)—230, 462}
+    @item{TFI: Transfinite Interpolation(超限插值)—376, 379}
+    @item{TFQMR: Transpose-Free Quasi-Minimum Residual(无转置拟最小残量法)—51, 210}
+    @item{Thermal conductivity coefficient(导热系数)—11}
+    @item{Thermal diffusivity coefficient(热扩散系数)—7, 11}
+    @item{Time averaging(时间平均)—231}
+    @item{Time step(时间步长)—188}
+    @item{Time-stepping operator(时间推进算子)—355}
+    @item{Tophat filter(顶帽滤波器)—251}
+    @item{Total energy(总能量)—10, 438}
+    @item{Total enthalpy(总焓)—12, 439}
+    @item{Translational periodicity(平移周期性)—292}
+    @item{Truncation error(截断误差)—36, 352}
+    @item{TSL: Thin Shear Layer(薄剪切层)—23, 121, 201, 445}
+    @item{Turbulence modelling(湍流建模)—53, 227}
+    @item{Turbulent dissipation rate(湍流耗散率)—238}
+    @item{Turbulent eddy viscosity(湍流涡黏性)—55, 235}
+    @item{Turbulent heat-flux vector(湍流热通量向量)—54, 235, 236}
+    @item{Turbulent kinetic energy(湍动能)—233, 234}
+    @item{Turbulent Prandtl number(湍流Prandtl数)—55, 236}
+    @item{Turbulent thermal conductivity coefficient(湍流导热系数)—55, 236}
+    @item{TVD: Total Variation Diminishing(总变差减小)—42, 43, 111}
+    @item{Two-equation models(两方程模型)—243}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-u"]{
+  @title{U}
+
+  @itemize{
+    @item{UIRS: Upwind Implicit Residual Smoothing(上风隐式残差光顺)—47, 309}
+    @item{Unit normal vector(单位法向量)—6, 16, 79, 81–83, 136, 137, 139, 143, 147, 246, 439, 441}
+    @item{Unsteady flows(非定常流动)—49, 214}
+    @item{Unstructured grids(非结构网格)—32, 34, 388}
+    @item{Unstructured scheme(非结构网格格式)—131}
+    @item{Upwind prolongation(上风延拓)—317, 321, 323}
+    @item{Upwind restriction(上风限制)—317, 323}
+    @item{Upwind scheme(上风格式)—42, 80, 94, 96, 100, 108, 111, 157}
+    @item{Upwind TVD scheme(上风TVD格式)—43, 111}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-v"]{
+  @title{V}
+
+  @itemize{
+    @item{V-Cycle(V循环)—315}
+    @item{Validation(确认)—352}
+    @item{Van Albada limiter(Van Albada限制器)—113, 116}
+    @item{Van Leer's flux-vector splitting(Van Leer通量向量分裂)—101}
+    @item{Variational principle(变分原理)—39}
+    @item{Vector of convective fluxes(对流通量向量)—16}
+    @item{Vector of viscous fluxes(黏性通量向量)—16}
+    @item{Verification(验证)—352}
+    @item{Virtual edges(虚拟边)—168}
+    @item{Viscous flux Jacobian(黏性通量雅可比矩阵)—190, 201, 203, 205, 206, 209, 452}
+    @item{Viscous fluxes(黏性通量)—16, 118, 172}
+    @item{Viscous stress tensor(黏性应力张量)—9, 230}
+    @item{Viscous stresses(黏性应力)—13}
+    @item{Visibility criterion(可视性准则)—399}
+    @item{Volume agglomeration(体积聚合)—324}
+    @item{Volume grid(体积网格)—376}
+    @item{Von Neumann stability analysis(Von Neumann稳定性分析)—354}
+    @item{Voronoj diagram(Voronoi图)—389}
+    @item{Vortex correction(涡修正)—284, 285}
+  }
+}
+
+@subtree[#:id "blazek2005-idx-w"]{
+  @title{W}
+
+  @itemize{
+    @item{W-Cycle(W循环)—315}
+    @item{Wall functions(壁面函数)—247}
+    @item{Weak formulation(弱形式)—39}
+    @item{Weak solutions(弱解)—38}
+  }
+}

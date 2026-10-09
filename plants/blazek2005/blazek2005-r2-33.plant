@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Steger, J.L.: Implicit Finite Difference Simulation of Flows About Two-Dimensional Arbitrary Geometries. AIAA Journal, 17 (1978), pp. 679-686.}
+@taxon["reference"]
+
+Steger关于二维任意外形绕流隐式有限差分模拟的论文，薄剪切层近似的参考来源之一。

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yokota, J.W.: Diagonally Inverted Lower-Upper Factored Implicit Multigrid Scheme for the Three-Dimensional Navier-Stokes Equations. AIAA Journal, 28 (1989), pp. 1642-1649.}
+@taxon["reference"]

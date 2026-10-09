@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lakshminarayana, B.: Turbulence Modeling for Complex Shear Flows. AIAA Journal, 24 (1986), pp. 1900-1917.}
+@taxon["reference"]

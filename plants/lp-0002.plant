@@ -1,0 +1,73 @@
+@use-modules[(flora commands) (lp checked) (language scribble commands)]
+
+@title{文章中的可执行Scheme定义}
+@summary{使用program展示真实Scheme定义，使用核验表达式说明结果与复用行为。}
+@taxon["tutorial"]
+
+program适合需要直接执行的函数说明：同一份Scheme定义进入文章环境，也生成可引用的Program tree。它与@link["lp-model"]{片段、计划和实例}的写法不同，不延迟到独立的计划中执行。
+
+@subtree{
+  @title{program与checked-example的源码写法}
+
+  (lp checked)提供文章内的执行与核验。定义型program放在文章顶层，不能借助subtree参数自动成为顶层定义：
+
+  @verbatim["@use-modules[(flora commands) (lp checked) (language scribble commands)]
+
+@program[\"short-square\" \"平方函数 square 的定义\"]{
+@(define (square x)
+   (* x x))
+}
+@checked-example[\"square-test\" \"square(4) 的结果\" (square 4) 16]"]
+
+  program执行定义并生成代码tree；checked-example求值表达式，将实际值与给定的预期做equal?比较。Program和Example是内容分类，不是运行按钮。完整标记说明见@link["lp-results"]{LP核验与依赖标记}。
+}
+
+平方函数把一个数乘以自身，square(4)的预期为16：
+
+@program["lp-scheme-square" "平方函数 square 的定义"]{
+@(define (square x)
+   (* x x))
+}
+@checked-example["lp-scheme-square-test" "平方函数 square(4) 的结果" (square 4) 16]
+
+squares对列表调用square；两个函数通过真实Scheme binding组合，代码内容可通过@link["lp-scheme-square"]{平方定义}独立引用：
+
+@program["lp-scheme-list" "平方列表函数 squares 的定义"]{
+@(define (squares xs)
+   (map square xs))
+}
+@checked-example["lp-scheme-list-test" "squares(1 2 3 4) 的结果" (squares '(1 2 3 4)) '(1 4 9 16)]
+
+energy对@link["lp-scheme-list"]{平方列表}求和。程序组合由函数调用完成，链接承担阅读导航，不导入函数：
+
+@program["lp-scheme-energy" "平方和函数 energy 的定义"]{
+@(define (energy xs)
+   (let loop ((remaining (squares xs)) (total 0))
+     (if (null? remaining)
+         total
+         (loop (cdr remaining) (+ total (car remaining))))))
+}
+@checked-example["lp-scheme-energy-test" "energy 的平方和与空列表结果" (list (energy '(1 2 3 4)) (energy '())) '(30 0)]
+
+@(define program-evaluations 0)
+@subtree{
+  @title{Program tree的展示复用与执行计数}
+
+  program-evaluations是文章读取时初始化为0的计数。这个program执行set! 增加计数，同一内容还会被transclude展示：
+
+  @program["lp-scheme-once" "文章读取计数的增加表达式"]{
+@(set! program-evaluations (+ program-evaluations 1))
+  }
+  @transclude["lp-scheme-once"]
+  @checked-example["lp-scheme-once-test" "计数在重复展示后仍为 1" program-evaluations 1]
+
+  1表示内容复用没有重复执行set!。transclude与独立页面复用生成的内容IR，不导入binding；重新读取文章才会执行，缓存也可以复用已核验的结果。浏览页面本身不运行这段代码。
+}
+
+@subtree{
+  @title{文章内定义的源码与作用域}
+
+  program使用source-text在宏展开时保存原文，保留表达式内部的注释和排版；缺少范围时使用pretty-print。checked-example的表达式也优先使用原文，表达式外的注释不会自动并入代码框。
+
+  定义的作用域是文章环境。跨文章调用使用@link["lp-0004"]{Scheme模块导入}；需要将代码组织为独立计划和实例时，使用@link["lp-0001"]{代码片段写法}。站点内执行不要求导出额外源码文件。
+}

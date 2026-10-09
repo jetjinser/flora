@@ -1,0 +1,669 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Afterword and Glossary 后记与术语表}
+@summary{Charles Osgood的后记，以及Robert DiYanni编写的语法术语表。}
+@taxon["reference"]
+
+@subtree[#:id "strunk1999-afterword"]{
+  @title{Afterword 后记}
+
+  @bi{
+    @lang["en"]{Will Strunk and E. B. White were unique collaborators. Unlike Gilbert and Sullivan, or Woodward and Bernstein, they worked separately and decades apart.}
+    @lang["zh-CN"]{威尔·斯特伦克与E. B. 怀特是一对独特的合作者。与吉尔伯特和沙利文，或伍德沃德和伯恩斯坦不同，他们各自独立工作，相隔数十年。}
+  }
+
+  @bi{
+    @lang["en"]{We have no way of knowing whether Professor Strunk took particular notice of Elwyn Brooks White, a student of his at Cornell University in 1919. Neither teacher nor pupil could have realized that their names would be linked as they now are. Nor could they have imagined that thirty-eight years after they met, White would take this little gem of a textbook that Strunk had written for his students, polish it, expand it, and transform it into a classic.}
+    @lang["zh-CN"]{我们无从得知斯特伦克教授是否特别留意过埃尔温·布鲁克斯·怀特——1919年他在康奈尔大学的一名学生。无论老师还是学生，都不可能意识到他们的名字会像今天这样被联系在一起。他们也想象不到，在两人相遇三十八年之后，怀特会把斯特伦克为学生写下的这本小书般的珍品拿出来打磨、扩充，并把它变成一部经典。}
+  }
+
+  @bi{
+    @lang["en"]{E. B. White shared Strunk's sympathy for the reader. To Strunk's do's and don'ts he added passages about the power of words and the clear expression of thoughts and feelings. To the nuts and bolts of grammar he added a rhetorical dimension. The editors of this edition have followed in White's footsteps, once again providing fresh examples and modernizing usage where appropriate. @emph{The Elements of Style} is still a little book, small enough and important enough to carry in your pocket, as I carry mine. It has helped me to write better. I believe it can do the same for you.}
+    @lang["zh-CN"]{E. B. 怀特与斯特伦克一样体贴读者。他在斯特伦克的种种该做与不该做之外，增添了关于文字的力量、关于清楚表达思想与情感的段落。他在语法的基本构件之上，加入了修辞的维度。本版的编者也追随怀特的脚步，再次提供新的例句，并在适当之处更新用法。@emph{The Elements of Style}仍是一本小书，小到足以、也重要到足以放进你的口袋，就像我把我的那本放进口袋一样。它帮助我写得更好。我相信它也能为你做到同样的事。}
+  }
+
+  @bi{
+    @lang["en"]{Charles Osgood}
+    @lang["zh-CN"]{查尔斯·奥斯古德}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-adjectival-modifier"]{
+  @title{形容词性修饰语}
+
+  @bi{
+    @lang["en"]{@bold{adjectival modifier} A word, phrase, or clause that acts as an adjective in qualifying the meaning of a noun or pronoun:}
+    @lang["zh-CN"]{@bold{adjectival modifier}相当于形容词、用来限定名词或代词意义的词、短语或子句：}
+  }
+
+  @emph{Your} country；a @emph{turn-of-the-century} style；people @emph{who are always late}。
+}
+
+@subtree[#:id "strunk1999-gloss-adjective"]{
+  @title{形容词}
+
+  @bi{
+    @lang["en"]{@bold{adjective} A word that modifies, quantifies, or otherwise describes a noun or pronoun.}
+    @lang["zh-CN"]{@bold{adjective}用来修饰、量化或以其他方式描述名词或代词的词。}
+  }
+
+  @emph{Drizzly} November；midnight @emph{dreary}；@emph{only} requirement。
+}
+
+@subtree[#:id "strunk1999-gloss-adverb"]{
+  @title{副词}
+
+  @bi{
+    @lang["en"]{@bold{adverb} A word that modifies or otherwise qualifies a verb, an adjective, or another adverb.}
+    @lang["zh-CN"]{@bold{adverb}用来修饰或以其他方式限定动词、形容词或另一副词的词。}
+  }
+
+  Gestures @emph{gracefully}；@emph{exceptionally} quiet engine。
+}
+
+@subtree[#:id "strunk1999-gloss-adverbial-phrase"]{
+  @title{副词短语}
+
+  @bi{
+    @lang["en"]{@bold{adverbial phrase} A phrase that functions as an adverb. (See @link["strunk1999-gloss-phrase"]{phrase}.)}
+    @lang["zh-CN"]{@bold{adverbial phrase}起副词作用的短语。（参见@link["strunk1999-gloss-phrase"]{短语}。）}
+  }
+
+  Landon laughs @emph{with abandon}。
+}
+
+@subtree[#:id "strunk1999-gloss-agreement"]{
+  @title{一致}
+
+  @bi{
+    @lang["en"]{@bold{agreement} The correspondence of a verb with its subject in person and number (Karen @emph{goes} to Cal Tech; her sisters @emph{go} to UCLA), and of a pronoun with its antecedent in person, number, and gender (As soon as Karen finished the exam, @emph{she} picked up @emph{her} books and left the room).}
+    @lang["zh-CN"]{@bold{agreement}动词与其主语在人称和数上的一致（Karen @emph{goes} to Cal Tech；her sisters @emph{go} to UCLA），以及代词与其先行词在人称、数和性上的一致（As soon as Karen finished the exam, @emph{she} picked up @emph{her} books and left the room）。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-antecedent"]{
+  @title{先行词}
+
+  @bi{
+    @lang["en"]{@bold{antecedent} The noun to which a pronoun refers. A pronoun and its antecedent must agree in person, number, and gender.}
+    @lang["zh-CN"]{@bold{antecedent}代词所指代的名词。代词与其先行词必须在人称、数和性上一致。}
+  }
+
+  Michael and @emph{his} teammates moved off campus。
+}
+
+@subtree[#:id "strunk1999-gloss-appositive"]{
+  @title{同位语}
+
+  @bi{
+    @lang["en"]{@bold{appositive} A noun or noun phrase that renames or adds identifying information to a noun it immediately follows.}
+    @lang["zh-CN"]{@bold{appositive}紧跟在某名词之后、对该名词重新命名或补充识别信息的名词或名词短语。}
+  }
+
+  His brother, @emph{an accountant with Arthur Andersen}, was recently promoted。
+}
+
+@subtree[#:id "strunk1999-gloss-articles"]{
+  @title{冠词}
+
+  @bi{
+    @lang["en"]{@bold{articles} The words @emph{a}, @emph{an}, and @emph{the}, which signal or introduce nouns. The definite article @emph{the} refers to a particular item: @emph{the} report. The indefinite articles @emph{a} and @emph{an} refer to a general item or one not already mentioned: @emph{an} apple.}
+    @lang["zh-CN"]{@bold{articles}@emph{a}、@emph{an}和@emph{the}这三个词，用来标示或引入名词。定冠词@emph{the}指某一特定事物：@emph{the} report。不定冠词@emph{a}和@emph{an}指一般事物或尚未提及的事物：@emph{an} apple。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-auxiliary-verb"]{
+  @title{助动词}
+
+  @bi{
+    @lang["en"]{@bold{auxiliary verb} A verb that combines with the main verb to show differences in tense, person, and voice. The most common auxiliaries are forms of @emph{be}, @emph{do}, and @emph{have}.}
+    @lang["zh-CN"]{@bold{auxiliary verb}与主动词结合、以体现时态、人称和语态差异的动词。最常见的助动词是@emph{be}、@emph{do}和@emph{have}的各种形式。}
+  }
+
+  I @emph{am} going；we @emph{did} not go；they @emph{have} gone。
+
+  @bi{
+    @lang["en"]{(See also @link["strunk1999-gloss-modal-auxiliaries"]{modal auxiliaries}.)}
+    @lang["zh-CN"]{（另见@link["strunk1999-gloss-modal-auxiliaries"]{情态助动词}。）}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-case"]{
+  @title{格}
+
+  @bi{
+    @lang["en"]{@bold{case} The form of a noun or pronoun that reflects its grammatical function in a sentence as subject (@emph{they}), object (@emph{them}), or possessor (@emph{their}).}
+    @lang["zh-CN"]{@bold{case}名词或代词的一种形式，反映其在句中作主语（@emph{they}）、宾语（@emph{them}）或所有者（@emph{their}）的语法功能。}
+  }
+
+  @emph{She} gave @emph{her} employees a raise that pleased @emph{them} greatly。
+}
+
+@subtree[#:id "strunk1999-gloss-clause"]{
+  @title{子句}
+
+  @bi{
+    @lang["en"]{@bold{clause} A group of related words that contains a subject and predicate.}
+    @lang["zh-CN"]{@bold{clause}包含主语和谓语的一组相关词。}
+  }
+
+  @emph{Moths swarm} around a burning candle. While @emph{she was taking} the test, @emph{Karen muttered} to herself。
+}
+
+@subtree[#:id "strunk1999-gloss-colloquialism"]{
+  @title{口语／俗语}
+
+  @bi{
+    @lang["en"]{@bold{colloquialism} A word or expression appropriate to informal conversation but not usually suitable for academic or business writing.}
+    @lang["zh-CN"]{@bold{colloquialism}适合非正式交谈、但通常不适合学术或商务写作的词或表达。}
+  }
+
+  They wanted to @emph{get even}（而不是they wanted to @emph{retaliate}）。
+}
+
+@subtree[#:id "strunk1999-gloss-complement"]{
+  @title{补语}
+
+  @bi{
+    @lang["en"]{@bold{complement} A word or phrase (especially a noun or adjective) that completes the predicate. @bold{Subject complements} complete linking verbs and rename or describe the subject: Martha is my @emph{neighbor}. She seems @emph{shy}. @bold{Object complements} complete transitive verbs by describing or renaming the direct object: They found the play @emph{exciting}. Robert considers Mary @emph{a wonderful wife}.}
+    @lang["zh-CN"]{@bold{complement}补足谓语的词或短语（尤其是名词或形容词）。@bold{主语补语}补足系动词，并对主语重新命名或加以描述：Martha is my @emph{neighbor}. She seems @emph{shy}. @bold{宾语补语}补足及物动词，通过描述或重新命名直接宾语来完成：They found the play @emph{exciting}. Robert considers Mary @emph{a wonderful wife}。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-compound-sentence"]{
+  @title{复合句}
+
+  @bi{
+    @lang["en"]{@bold{compound sentence} Two or more independent clauses joined by a coordinating conjunction, a correlative conjunction, or a semicolon.}
+    @lang["zh-CN"]{@bold{compound sentence}由并列连词、关联连词或分号连接的两个或更多独立子句。}
+  }
+
+  @emph{Caesar conquered Gaul}, but @emph{Alexander the Great conquered the world}。
+}
+
+@subtree[#:id "strunk1999-gloss-compound-subject"]{
+  @title{复合主语}
+
+  @bi{
+    @lang["en"]{@bold{compound subject} Two or more simple subjects joined by a coordinating or correlative conjunction.}
+    @lang["zh-CN"]{@bold{compound subject}由并列连词或关联连词连接的两个或更多简单主语。}
+  }
+
+  @emph{Hemingway and Fitzgerald} had little in common。
+}
+
+@subtree[#:id "strunk1999-gloss-conjunction"]{
+  @title{连词}
+
+  @bi{
+    @lang["en"]{@bold{conjunction} A word that joins words, phrases, clauses, or sentences. The coordinating conjunctions, @emph{and, but, or, nor, yet, so, for}, join grammatically equivalent elements. Correlative conjunctions (@emph{both, and; either, or; neither, nor}) join the same kinds of elements.}
+    @lang["zh-CN"]{@bold{conjunction}连接单词、短语、子句或句子的词。并列连词@emph{and, but, or, nor, yet, so, for}连接语法上对等的成分。关联连词（@emph{both, and}；@emph{either, or}；@emph{neither, nor}）连接同类成分。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-contraction"]{
+  @title{缩合词}
+
+  @bi{
+    @lang["en"]{@bold{contraction} A shortened form of a word or group of words: @emph{can't} for cannot; @emph{they're} for they are.}
+    @lang["zh-CN"]{@bold{contraction}一个词或一组词的缩短形式：@emph{can't}表示cannot；@emph{they're}表示they are。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-correlative-expression"]{
+  @title{关联表达}
+
+  @bi{
+    @lang["en"]{@bold{correlative expression} See @link["strunk1999-gloss-conjunction"]{conjunction}.}
+    @lang["zh-CN"]{@bold{correlative expression}参见@link["strunk1999-gloss-conjunction"]{连词}。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-dependent-clause"]{
+  @title{从属子句}
+
+  @bi{
+    @lang["en"]{@bold{dependent clause} A group of words that includes a subject and verb but is subordinate to an independent clause in a sentence. Dependent clauses begin with either a subordinating conjunction, such as @emph{if, because, since}, or a relative pronoun, such as @emph{who, which, that}.}
+    @lang["zh-CN"]{@bold{dependent clause}包含主语和动词、但在句中从属于某个独立子句的一组词。从属子句以从属连词（如@emph{if, because, since}）或关系代词（如@emph{who, which, that}）开头。}
+  }
+
+  @emph{When it gets dark}, we'll find a restaurant @emph{that has music}。
+}
+
+@subtree[#:id "strunk1999-gloss-direct-object"]{
+  @title{直接宾语}
+
+  @bi{
+    @lang["en"]{@bold{direct object} A noun or pronoun that receives the action of a transitive verb.}
+    @lang["zh-CN"]{@bold{direct object}接受及物动词动作的名词或代词。}
+  }
+
+  Pearson publishes @emph{books}。
+}
+
+@subtree[#:id "strunk1999-gloss-gerund"]{
+  @title{动名词}
+
+  @bi{
+    @lang["en"]{@bold{gerund} The @emph{-ing} form of a verb that functions as a noun:}
+    @lang["zh-CN"]{@bold{gerund}动词的@emph{-ing}形式，起名词作用：}
+  }
+
+  @emph{Hiking} is good exercise. She was praised for her @emph{playing}。
+}
+
+@subtree[#:id "strunk1999-gloss-indefinite-pronoun"]{
+  @title{不定代词}
+
+  @bi{
+    @lang["en"]{@bold{indefinite pronoun} A pronoun that refers to an unspecified person (@emph{anybody}) or thing (@emph{something}).}
+    @lang["zh-CN"]{@bold{indefinite pronoun}指代未指明的人（@emph{anybody}）或事物（@emph{something}）的代词。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-independent-clause"]{
+  @title{独立子句}
+
+  @bi{
+    @lang["en"]{@bold{independent clause} A group of words with a subject and verb that can stand alone as a sentence.}
+    @lang["zh-CN"]{@bold{independent clause}包含主语和动词、可以单独成句的一组词。}
+  }
+
+  @emph{Raccoons steal food}。
+}
+
+@subtree[#:id "strunk1999-gloss-indirect-object"]{
+  @title{间接宾语}
+
+  @bi{
+    @lang["en"]{@bold{indirect object} A noun or pronoun that indicates to whom or for whom, to what or for what the action of a transitive verb is performed.}
+    @lang["zh-CN"]{@bold{indirect object}表示及物动词动作向谁或为谁、对什么或为什么而施行的名词或代词。}
+  }
+
+  I asked @emph{her} a question. Ed gave @emph{the door} a kick。
+}
+
+@subtree[#:id "strunk1999-gloss-infinitive-split-infinitive"]{
+  @title{不定式／分裂不定式}
+
+  @bi{
+    @lang["en"]{@bold{infinitive/split infinitive} In the present tense, a verb phrase consisting of @emph{to} followed by the base form of the verb (@emph{to write}). A split infinitive occurs when one or more words separate @emph{to} and the verb (@emph{to boldly go}).}
+    @lang["zh-CN"]{@bold{infinitive/split infinitive}在现在时中，由@emph{to}后接动词原形构成的动词短语（@emph{to write}）。当一个或更多词把@emph{to}和动词分开时，就出现分裂不定式（@emph{to boldly go}）。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-intransitive-verb"]{
+  @title{不及物动词}
+
+  @bi{
+    @lang["en"]{@bold{intransitive verb} A verb that does not take a direct object.}
+    @lang["zh-CN"]{@bold{intransitive verb}不带直接宾语的动词。}
+  }
+
+  His @emph{nerve failed}。
+}
+
+@subtree[#:id "strunk1999-gloss-linking-verb"]{
+  @title{系动词}
+
+  @bi{
+    @lang["en"]{@bold{linking verb} A verb that joins the subject of a sentence to its complement.}
+    @lang["zh-CN"]{@bold{linking verb}把句子主语与其补语连接起来的动词。}
+  }
+
+  Professor Chapman @emph{is a} philosophy teacher. They @emph{were} ecstatic。
+}
+
+@subtree[#:id "strunk1999-gloss-loose-sentence"]{
+  @title{松散句}
+
+  @bi{
+    @lang["en"]{@bold{loose sentence} A sentence that begins with the main idea and then attaches modifiers, qualifiers, and additional details:}
+    @lang["zh-CN"]{@bold{loose sentence}以主要意思开头、随后再附加修饰语、限定语和额外细节的句子：}
+  }
+
+  He was determined to succeed, with or without the promotion he was hoping for and in spite of the difficulties he was confronting at every turn.
+}
+
+@subtree[#:id "strunk1999-gloss-main-clause"]{
+  @title{主句}
+
+  @bi{
+    @lang["en"]{@bold{main clause} An independent clause, which can stand alone as a grammatically complete sentence.}
+    @lang["zh-CN"]{@bold{main clause}独立子句，可以单独作为语法完整的句子。}
+  }
+
+  Grammarians quibble。
+}
+
+@subtree[#:id "strunk1999-gloss-modal-auxiliaries"]{
+  @title{情态助动词}
+
+  @bi{
+    @lang["en"]{@bold{modal auxiliaries} Any of the verbs that combine with the main verb to express necessity (@emph{must}), obligation (@emph{should}), permission (@emph{may}), probability (@emph{might}), possibility (@emph{could}), ability (@emph{can}), or tentativeness (@emph{would}).}
+    @lang["zh-CN"]{@bold{modal auxiliaries}任何与主动词结合、用以表达必要性（@emph{must}）、义务（@emph{should}）、许可（@emph{may}）、概率（@emph{might}）、可能性（@emph{could}）、能力（@emph{can}）或试探性（@emph{would}）的动词。}
+  }
+
+  @emph{Mary might} wash the car。
+}
+
+@subtree[#:id "strunk1999-gloss-modifier"]{
+  @title{修饰语}
+
+  @bi{
+    @lang["en"]{@bold{modifier} A word or phrase that qualifies, describes, or limits the meaning of a word, phrase, or clause.}
+    @lang["zh-CN"]{@bold{modifier}限定、描述或限制某个词、短语或子句意义的词或短语。}
+  }
+
+  @emph{Frayed} ribbon, @emph{dancing} flowers, @emph{worldly} wisdom。
+}
+
+@subtree[#:id "strunk1999-gloss-nominative-pronoun"]{
+  @title{主格代词}
+
+  @bi{
+    @lang["en"]{@bold{nominative pronoun} A pronoun that functions as a subject or a subject complement: @emph{I, we, you, he, she, it, they, who}.}
+    @lang["zh-CN"]{@bold{nominative pronoun}作主语或主语补语的代词：@emph{I, we, you, he, she, it, they, who}。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-nonrestrictive-modifier"]{
+  @title{非限制性修饰语}
+
+  @bi{
+    @lang["en"]{@bold{nonrestrictive modifier} A phrase or clause that does not limit or restrict the essential meaning of the element it modifies.}
+    @lang["zh-CN"]{@bold{nonrestrictive modifier}不限定或限制其所修饰成分核心意义的短语或子句。}
+  }
+
+  My youngest niece, @emph{who lives in Ann Arbor}, is a magazine editor。
+}
+
+@subtree[#:id "strunk1999-gloss-noun"]{
+  @title{名词}
+
+  @bi{
+    @lang["en"]{@bold{noun} A word that names a person, place, thing, or idea. Most nouns have a plural form and a possessive form.}
+    @lang["zh-CN"]{@bold{noun}命名人、地点、事物或观念的词。大多数名词有复数形式和所有格形式。}
+  }
+
+  @emph{Carol}；the @emph{park}；the @emph{cup}；@emph{democracy}。
+}
+
+@subtree[#:id "strunk1999-gloss-number"]{
+  @title{数}
+
+  @bi{
+    @lang["en"]{@bold{number} A feature of nouns, pronouns, and a few verbs, referring to singular or plural. A subject and its corresponding verb must be consistent in number; a pronoun should agree in number with its antecedent.}
+    @lang["zh-CN"]{@bold{number}名词、代词和少数动词的一种特征，指单数或复数。主语与其对应的动词必须在数上一致；代词应在数上与其先行词一致。}
+  }
+
+  A @emph{solo flute plays}；two @emph{oboes join} in。
+}
+
+@subtree[#:id "strunk1999-gloss-object"]{
+  @title{宾语}
+
+  @bi{
+    @lang["en"]{@bold{object} The noun or pronoun that completes a prepositional phrase or the meaning of a transitive verb. (See also @link["strunk1999-gloss-direct-object"]{direct object}, @link["strunk1999-gloss-indirect-object"]{indirect object}, and @link["strunk1999-gloss-preposition"]{preposition}.)}
+    @lang["zh-CN"]{@bold{object}补足介词短语或补足及物动词意义的名词或代词。（另见@link["strunk1999-gloss-direct-object"]{直接宾语}、@link["strunk1999-gloss-indirect-object"]{间接宾语}和@link["strunk1999-gloss-preposition"]{介词}。）}
+  }
+
+  Frost offered @emph{his audience a poetic performance} they would likely never forget。
+}
+
+@subtree[#:id "strunk1999-gloss-participial-phrase"]{
+  @title{分词短语}
+
+  @bi{
+    @lang["en"]{@bold{participial phrase} A present or past participle with accompanying modifiers, objects, or complements.}
+    @lang["zh-CN"]{@bold{participial phrase}带有相关修饰语、宾语或补语的现在分词或过去分词。}
+  }
+
+  The buzzards, @emph{circling with sinister determination}, squawked loudly。
+}
+
+@subtree[#:id "strunk1999-gloss-participle"]{
+  @title{分词}
+
+  @bi{
+    @lang["en"]{@bold{participle} A verbal that functions as an adjective. Present participles end in @emph{-ing} (@emph{brimming}); past participles typically end in @emph{-d} or @emph{-ed} (@emph{injured}) or @emph{-en} (@emph{broken}) but may appear in other forms (@emph{brought, been, gone}).}
+    @lang["zh-CN"]{@bold{participle}起形容词作用的动词性形式。现在分词以@emph{-ing}结尾（@emph{brimming}）；过去分词通常以@emph{-d}或@emph{-ed}结尾（@emph{injured}）或以@emph{-en}结尾（@emph{broken}），但也可有其他形式（@emph{brought, been, gone}）。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-periodic-sentence"]{
+  @title{掉尾句／圆周句}
+
+  @bi{
+    @lang["en"]{@bold{periodic sentence} A sentence that expresses the main idea at the end.}
+    @lang["zh-CN"]{@bold{periodic sentence}把主要意思放在末尾表达的句子。}
+  }
+
+  With or without their parents' consent, and whether or not they receive the assignment relocation they requested, @emph{they are determined to get married}。
+}
+
+@subtree[#:id "strunk1999-gloss-phrase"]{
+  @title{短语}
+
+  @bi{
+    @lang["en"]{@bold{phrase} A group of related words that functions as a unit but lacks a subject, a verb, or both.}
+    @lang["zh-CN"]{@bold{phrase}作为整体起作用、但缺少主语、动词或两者皆缺的一组相关词。}
+  }
+
+  @emph{Without the resources to continue}。
+}
+
+@subtree[#:id "strunk1999-gloss-possessive"]{
+  @title{所有格}
+
+  @bi{
+    @lang["en"]{@bold{possessive} The case of nouns and pronouns that indicates ownership or possession (@emph{Harold's, ours, mine}).}
+    @lang["zh-CN"]{@bold{possessive}名词和代词表示所有权或占有关系的一种格（@emph{Harold's, ours, mine}）。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-predicate"]{
+  @title{谓语}
+
+  @bi{
+    @lang["en"]{@bold{predicate} The verb and its related words in a clause or sentence. The predicate expresses what the subject does, experiences, or is.}
+    @lang["zh-CN"]{@bold{predicate}子句或句子中的动词及其相关词。谓语表达主语做什么、经历什么或是什么。}
+  }
+
+  @emph{Birds fly. The partygoers celebrated wildly for a long time}。
+}
+
+@subtree[#:id "strunk1999-gloss-preposition"]{
+  @title{介词}
+
+  @bi{
+    @lang["en"]{@bold{preposition} A word that relates its object (a noun, pronoun, or @emph{-ing} verb form) to another word in the sentence.}
+    @lang["zh-CN"]{@bold{preposition}把其宾语（名词、代词或@emph{-ing}动词形式）与句中另一词联系起来的词。}
+  }
+
+  She is the leader @emph{of} our group. We opened the door @emph{by} picking the lock. She went @emph{out} the window。
+}
+
+@subtree[#:id "strunk1999-gloss-prepositional-phrase"]{
+  @title{介词短语}
+
+  @bi{
+    @lang["en"]{@bold{prepositional phrase} A group of words consisting of a preposition, its object, and any of the object's modifiers.}
+    @lang["zh-CN"]{@bold{prepositional phrase}由介词、其宾语以及宾语的所有修饰语组成的一组词。}
+  }
+
+  Georgia @emph{on my mind}。
+}
+
+@subtree[#:id "strunk1999-gloss-principal-verb"]{
+  @title{主要动词}
+
+  @bi{
+    @lang["en"]{@bold{principal verb} The predicating verb in a main clause or sentence.}
+    @lang["zh-CN"]{@bold{principal verb}主句或句子中起谓语作用的动词。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-pronominal-possessive"]{
+  @title{代词性所有格}
+
+  @bi{
+    @lang["en"]{@bold{pronominal possessive} Possessive pronouns such as @emph{hers}, @emph{its}, and @emph{theirs}.}
+    @lang["zh-CN"]{@bold{pronominal possessive}诸如@emph{hers}、@emph{its}和@emph{theirs}之类的物主代词。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-proper-noun"]{
+  @title{专有名词}
+
+  @bi{
+    @lang["en"]{@bold{proper noun} The name of a particular person (@emph{Frank Sinatra}), place (@emph{Boston}), or thing (@emph{Moby Dick}). Proper nouns are capitalized. Common nouns name classes of people (@emph{singers}), places (@emph{cities}), or things (@emph{books}) and are not capitalized.}
+    @lang["zh-CN"]{@bold{proper noun}特定的人（@emph{Frank Sinatra}）、地点（@emph{Boston}）或事物（@emph{Moby Dick}）的名称。专有名词要大写。普通名词指一类人（@emph{singers}）、地点（@emph{cities}）或事物（@emph{books}），不大写。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-relative-clause"]{
+  @title{关系从句}
+
+  @bi{
+    @lang["en"]{@bold{relative clause} A clause introduced by a relative pronoun, such as @emph{who, which, that}, or by a relative adverb, such as @emph{where, when, why}.}
+    @lang["zh-CN"]{@bold{relative clause}由关系代词（如@emph{who, which, that}）或关系副词（如@emph{where, when, why}）引导的子句。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-relative-pronoun"]{
+  @title{关系代词}
+
+  @bi{
+    @lang["en"]{@bold{relative pronoun} A pronoun that connects a dependent clause to a main clause in a sentence: @emph{who, whom, whose, which, that, what, whoever, whomever, whichever}, and @emph{whatever}.}
+    @lang["zh-CN"]{@bold{relative pronoun}在句中把从属子句连接到主句的代词：@emph{who, whom, whose, which, that, what, whoever, whomever, whichever}和@emph{whatever}。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-restrictive-term-element-clause"]{
+  @title{限制性词语、成分、子句}
+
+  @bi{
+    @lang["en"]{@bold{restrictive term, element, clause} A phrase or clause that limits the essential meaning of the sentence element it modifies or identifies.}
+    @lang["zh-CN"]{@bold{restrictive term, element, clause}限制或确定其所修饰或指明的句子成分核心意义的短语或子句。}
+  }
+
+  Professional athletes @emph{who perform exceptionally} should earn stratospheric salaries.
+
+  @bi{
+    @lang["en"]{Since there are no commas before and after the italicized clause, the italicized clause is restrictive and suggests that only those athletes who perform exceptionally are entitled to such salaries. If commas were added before @emph{who} and after @emph{exceptionally}, the clause would be nonrestrictive and would suggest that @emph{all} professional athletes should receive stratospheric salaries.}
+    @lang["zh-CN"]{由于斜体子句前后没有逗号，该子句是限制性的，表示只有那些表现格外出色的运动员才有资格获得这样的薪水。如果在@emph{who}之前和@emph{exceptionally}之后加上逗号，该子句就会变成非限制性的，表示@emph{所有}职业运动员都应当获得天价薪水。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-sentence-fragment"]{
+  @title{句子片段}
+
+  @bi{
+    @lang["en"]{@bold{sentence fragment} A group of words that is not grammatically a complete sentence but is punctuated as one:}
+    @lang["zh-CN"]{@bold{sentence fragment}在语法上不是一个完整句子、却按一个句子来标点的一组词：}
+  }
+
+  @emph{Because it mattered greatly}。
+}
+
+@subtree[#:id "strunk1999-gloss-subject"]{
+  @title{主语}
+
+  @bi{
+    @lang["en"]{@bold{subject} The noun or pronoun that indicates what a sentence is about, and which the principal verb of a sentence elaborates.}
+    @lang["zh-CN"]{@bold{subject}表示句子谈论对象、并由句子的主要动词加以展开的名词或代词。}
+  }
+
+  @emph{The new Steven Spielberg movie} is a box office hit。
+}
+
+@subtree[#:id "strunk1999-gloss-subordinate-clause"]{
+  @title{从属子句}
+
+  @bi{
+    @lang["en"]{@bold{subordinate clause} A clause dependent on the main clause in a sentence.}
+    @lang["zh-CN"]{@bold{subordinate clause}从属于句中主句的子句。}
+  }
+
+  @emph{After we finish our work}, we will go out for dinner。
+}
+
+@subtree[#:id "strunk1999-gloss-syntax"]{
+  @title{句法}
+
+  @bi{
+    @lang["en"]{@bold{syntax} The order or arrangement of words in a sentence. Syntax may exhibit parallelism (@emph{I came, I saw, I conquered}), inversion (@emph{Whose woods these are I think I know}), or other formal characteristics.}
+    @lang["zh-CN"]{@bold{syntax}句子中词的顺序或排列。句法可以体现平行结构（@emph{I came, I saw, I conquered}）、倒装（@emph{Whose woods these are I think I know}）或其他形式特征。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-tense"]{
+  @title{时态}
+
+  @bi{
+    @lang["en"]{@bold{tense} The time of a verb's action or state of being, such as past, present, or future.}
+    @lang["zh-CN"]{@bold{tense}动词动作或状态所处的时间，如过去、现在或将来。}
+  }
+
+  @emph{Saw, see, will see}。
+}
+
+@subtree[#:id "strunk1999-gloss-transition"]{
+  @title{过渡}
+
+  @bi{
+    @lang["en"]{@bold{transition} A word or group of words that aids coherence in writing by showing the connections between ideas.}
+    @lang["zh-CN"]{@bold{transition}通过显示观念之间的联系来帮助写作连贯的词或词组。}
+  }
+
+  William Carlos Williams was influenced by the poetry of Walt Whitman. @emph{Moreover}, Williams's emphasis on the present and the immediacy of the ordinary represented a rejection of the poetic stance and style of his contemporary T. S. Eliot. @emph{In addition}, Williams's poetry ....
+}
+
+@subtree[#:id "strunk1999-gloss-transitive-verb"]{
+  @title{及物动词}
+
+  @bi{
+    @lang["en"]{@bold{transitive verb} A verb that requires a direct object to complete its meaning: They @emph{washed} their new car. An @emph{intransitive verb} does not require an object to complete its meaning: The audience @emph{laughed}. Many verbs can be both: The wind @emph{blew} furiously. My car @emph{blew} a gasket.}
+    @lang["zh-CN"]{@bold{transitive verb}需要直接宾语来补足其意义的动词：They @emph{washed} their new car. 一个@emph{intransitive verb}（不及物动词）不需要宾语来补足其意义：The audience @emph{laughed}. 许多动词可以两者兼是：The wind @emph{blew} furiously. My car @emph{blew} a gasket。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-verb"]{
+  @title{动词}
+
+  @bi{
+    @lang["en"]{@bold{verb} A word or group of words that expresses the action or indicates the state of being of the subject. Verbs @emph{activate} sentences.}
+    @lang["zh-CN"]{@bold{verb}表达动作或表明主语状态的一个词或一组词。动词使句子@emph{activate}。}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-verbal"]{
+  @title{动词性形式}
+
+  @bi{
+    @lang["en"]{@bold{verbal} A verb form that functions in a sentence as a noun, an adjective, or an adverb rather than as a principal verb.}
+    @lang["zh-CN"]{@bold{verbal}在句中起名词、形容词或副词作用、而不作主要动词的动词形式。}
+  }
+
+  @emph{Thinking} can be fun. An @emph{embroidered} handkerchief。
+
+  @bi{
+    @lang["en"]{(See also @link["strunk1999-gloss-gerund"]{gerund}, @link["strunk1999-gloss-infinitive-split-infinitive"]{infinitive}, and @link["strunk1999-gloss-participle"]{participle}.)}
+    @lang["zh-CN"]{（另见@link["strunk1999-gloss-gerund"]{动名词}、@link["strunk1999-gloss-infinitive-split-infinitive"]{不定式}和@link["strunk1999-gloss-participle"]{分词}。）}
+  }
+}
+
+@subtree[#:id "strunk1999-gloss-voice"]{
+  @title{语态}
+
+  @bi{
+    @lang["en"]{@bold{voice} The attribute of a verb that indicates whether its subject is active (Janet @emph{played} the guitar) or passive (The guitar @emph{was played} by Janet).}
+    @lang["zh-CN"]{@bold{voice}动词的一种属性，表明其主语是主动（Janet @emph{played} the guitar）还是被动（The guitar @emph{was played} by Janet）。}
+  }
+}
+
+@bi{
+  @lang["en"]{Glossary prepared by Robert DiYanni.}
+  @lang["zh-CN"]{术语表由Robert DiYanni编写。}
+}

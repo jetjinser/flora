@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Spalart, P.; Shur, M.: On the Sensitization of Turbulence Models to Rotation and Curvature. Aerospace Science and Technology, 5 (1997), pp. 297-302.}
+@taxon["reference"]

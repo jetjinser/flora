@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{White, F.M.: Viscous Fluid Flow. McGraw-Hill, New York, 1991.}
+@taxon["reference"]
+
+F. M. White《Viscous Fluid Flow》，黏性流动理论的常用教科书。

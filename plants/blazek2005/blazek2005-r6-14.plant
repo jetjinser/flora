@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Rosenbrock, H.H.: Some General Implicit Processes for the Numerical Solution of Differential Equations. Computer J., 5 (1963), pp. 329-330.}
+@taxon["reference"]

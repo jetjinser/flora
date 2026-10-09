@@ -1,0 +1,124 @@
+@use-modules[(flora commands) (lp core) (lp scribble) (lp forester) (lp checked) (language scribble commands)]
+
+@title{文学编程：片段、计划与实例}
+@summary{用累计器学习完整定义的保存、程序装配、状态隔离和同源输出。}
+@taxon["tutorial"]
+
+累计器的accumulate接受一个增量，返回累计总量。这个小程序把LP的生命周期写完整：片段保存源码，计划声明组合，实例保存状态。页面标记的含义见@link["lp-reading"]{标题与代码}及@link["lp-results"]{结果与依赖}。
+
+@subtree{
+  @title{累计器教程的模块导入}
+
+  .plant文档使用以下导入；Flora的project.scm已将LP库所在目录加入Guile的模块搜索路径：
+
+  @verbatim["@use-modules[(flora commands) (lp core) (lp scribble) (lp forester) (lp checked) (language scribble commands)]"]
+
+  (lp core)管理片段、计划和实例，(lp scribble)提供code-fragment宏，(lp forester)提供阅读tree与输出，(lp checked)提供核验展示。这里只将(flora commands)用于文章命令，程序核心不依赖Flora。
+}
+
+@(define operations
+   (code-fragment "lp-accumulate" "累计器的 accumulate 定义"
+     #:requires (total)
+     (define (accumulate delta)
+       (set! total (+ total delta))
+       total)))
+
+@(define state
+   (code-fragment "lp-accumulator-state" "累计器的 total 初始状态"
+     (define total 0)))
+
+@(define accumulator
+   (make-program "lp-accumulator" "累计器的装配计划"
+     (list state operations) '(accumulate)))
+
+@subtree{
+  @title{累计器的代码片段写法}
+
+  code-fragment返回片段值，不执行其中的define。operations保存累计操作，state保存total的初始值。作者可以围绕操作解释程序，而在装配中明确状态的位置：
+
+  @verbatim["@(define operations
+   (code-fragment \"lp-accumulate\" \"累计器的 accumulate 定义\"
+     #:requires (total)
+     (define (accumulate delta)
+       (set! total (+ total delta))
+       total)))
+@(define state
+   (code-fragment \"lp-accumulator-state\" \"累计器的 total 初始状态\"
+     (define total 0)))"]
+
+  fragment-tree才产生阅读内容。它使用片段的原文与稳定ID；requires明确声明操作依赖total，不能代替完整的依赖分析。
+
+  @fragment-tree[operations accumulator]
+  @fragment-tree[state accumulator]
+}
+
+@subtree{
+  @title{累计器的计划与公开入口}
+
+  @verbatim["@(define accumulator
+   (make-program \"lp-accumulator\" \"累计器的装配计划\"
+     (list state operations) '(accumulate)))
+@program-tree[accumulator]"]
+
+  make-program保存state、operations的装配顺序，验证重复身份、重复定义、未知导出和显式依赖，不执行初始化。accumulate是公开入口，total是实例内部状态。Module tree显示计划的导出及片段链接：
+
+  @program-tree[accumulator]
+
+  计划不是一次运行。program-datums返回Scheme数据形式，program-source返回源码字符串；两者都来自计划中的同一份定义。
+}
+
+@(define first-instance (instantiate-program accumulator))
+@(define second-instance (instantiate-program accumulator))
+@(define add-first (instance-binding first-instance 'accumulate))
+@(define add-second (instance-binding second-instance 'accumulate))
+
+@subtree{
+  @title{累计器实例的创建与状态结果}
+
+  instantiate-program在新的宿主命名空间中按计划执行定义。每次调用都表示创建独立实例；instance-binding只开放声明的入口：
+
+  @verbatim["@(define first-instance (instantiate-program accumulator))
+@(define second-instance (instantiate-program accumulator))
+@(define add-first (instance-binding first-instance 'accumulate))
+@(define add-second (instance-binding second-instance 'accumulate))"]
+
+  @checked-example["lp-accumulator-test" "累计器两个实例的结果为 (2 5 10)"
+    (let ((first (add-first 2)))
+      (let ((next (add-first 3)))
+        (list first next (add-second 10)))) '(2 5 10)]
+
+  2和5来自同一个实例的两次调用；10来自另一个total从0开始的实例。checked-example使用equal?核验这个列表，表达式中的let明确调用顺序。阅读或嵌入结果tree不会再次增加总量。
+}
+
+@subtree{
+  @title{累计器的同源.scm输出}
+
+  @verbatim["@program-output[\"accumulator.scm\" accumulator]"]
+  @program-output["accumulator.scm" accumulator]
+
+  program-output声明构建产物，并生成Download链接。Flora的LP renderer将源码写到build/programs/accumulator.scm；文件包含定义及来源注释，不保存已运行实例的total。
+
+  在项目根目录运行以下命令会创建一个独立的累计器，输出2和5：
+
+  @verbatim{guile --no-auto-compile -c '(load "build/programs/accumulator.scm") (write (accumulate 2)) (newline) (write (accumulate 3)) (newline)'}
+
+  program-source仅返回字符串，真正写文件由输出适配器负责；下载和展示不触发instantiate-program。
+}
+
+@subtree{
+  @title{纯Guile的LP写法}
+
+  LP核心不依赖Grove，普通Scheme datum也能声明片段。Guile使用 -L指定LP库所在目录，以下程序的结果为16：
+
+  @code-block[#:language 'scheme]{
+(use-modules (lp core))
+(define fragment
+  (make-fragment "square" "Square"
+    '((define (square x) (* x x)))))
+(define plan (make-program "squares" "Squares" (list fragment) '(square)))
+(define instance (instantiate-program plan))
+((instance-binding instance 'square) 4)
+  }
+
+  缺少原文时使用pretty-print。make-fragment的 #:texts和 #:origins可保存原文与来源，#:requires声明依赖。片段只支持完整define；装配使用共同命名空间，不继承片段声明处的词法binding。
+}

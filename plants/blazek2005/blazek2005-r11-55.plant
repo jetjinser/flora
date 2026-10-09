@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Finkel, R.A.; Bentley, J.L.: Quad Trees, A Data Structure for Retrieval of Composite Keys. Acta Informatica, 4 (1974).}
+@taxon["reference"]

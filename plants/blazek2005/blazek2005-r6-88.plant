@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Gropp, W.D.; Keyes, D.E.; McInnes, L.C.; Tidriri, M.D.: Globalized Newton-Krylov-Schwarz Algorithms and Software for Parallel Implicit CFD. ICASE Report No. 98-24, 1998.}
+@taxon["reference"]

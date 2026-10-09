@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Goldberg, U.; Peroomian, O.; Chakravarthy, S.: Application of the k-ε-R Turbulence Model to Wall-bounded Compressive Flows. AIAA Paper 98-0323, 1998.}
+@taxon["reference"]

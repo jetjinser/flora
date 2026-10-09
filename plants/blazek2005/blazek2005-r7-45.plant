@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Launder, B.E.; Sharma, B.I.: Application of the Energy Dissipation Model of Turbulence to the Calculation of Flow Near a Spinning Disc. Letters in Heat and Mass Transfer, 1 (1974), pp. 131-138.}
+@taxon["reference"]

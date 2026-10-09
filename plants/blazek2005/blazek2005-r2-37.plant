@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Kirtley, K.R.; Lakshminarayana, B.: A Multiple Pass Space-Marching Method for Three-Dimensional Incompressible Viscous Flow. ZFW, 16 (1992), Springer Verlag, pp. 49-59.}
+@taxon["reference"]
+
+Kirtley与Lakshminarayana针对三维不可压黏性流动的多遍空间推进方法。

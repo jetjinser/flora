@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Karman, S.L.: Development of a 3D Unstructured CFD Method. PhD thesis, The University of Texas at Arlington, 1991.}
+@taxon["reference"]

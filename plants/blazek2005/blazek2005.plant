@@ -1,0 +1,40 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{计算流体力学：Computational Fluid Dynamics}
+@summary{Jiri Blazek《Computational Fluid Dynamics: Principles and Applications》第二版段落级双语翻译,全书完成。}
+@taxon["index"]
+
+作者：@author["blazek"]
+
+本主题是Jiri Blazek所著@emph{Computational Fluid Dynamics: Principles and Applications}（第二版,Elsevier 2005）的段落级双语翻译:页面默认显示中文,每个段落都折叠保存英文原文,可展开对照。展示公式按原书编号用LaTeX重排(点击正文公式编号可精确跳转),插图从原书扫描页裁剪嵌入,文献引用链接到独立的文献条目页。
+
+@subtree{
+  @title{全书结构}
+
+  @itemize{
+    @item{@link["blazek2005-front"]{致谢 · 符号表 · 缩写}：前置材料,154条符号逐条核对。}
+    @item{@link["blazek2005-ch01"]{第1章 引言}：CFD 的历史沿革与本书结构。}
+    @item{@link["blazek2005-ch02"]{第2章 控制方程}：守恒定律与Navier-Stokes方程的完整形式。}
+    @item{@link["blazek2005-ch03"]{第3章 控制方程求解原理}：空间与时间离散,显式与隐式格式,湍流建模与边界条件概述。}
+    @item{@link["blazek2005-ch04"]{第4章 结构网格有限体积格式}：控制体几何量,单元中心与单元顶点格式,对流与黏性通量的离散。}
+    @item{@link["blazek2005-ch05"]{第5章 非结构网格有限体积格式}：非结构控制体,中位对偶格式,解的重构与梯度求值,限制器。}
+    @item{@link["blazek2005-ch06"]{第6章 时间离散}：显式多步格式,隐式算子(ADI、LU-SGS、Newton-Krylov),非定常流动的双时间步方法。}
+    @item{@link["blazek2005-ch07"]{第7章 湍流建模}：平均方法与涡黏性假设,SA、k-ε、SST 一/两方程模型,大涡模拟(LES)与 DES。}
+    @item{@link["blazek2005-ch08"]{第8章 边界条件}：虚单元,固壁、远场、入流/出流、周期与网格块交界面等边界的数值处理。}
+    @item{@link["blazek2005-ch09"]{第9章 加速技术}：局部时间步长、残差光顺、多重网格,以及低马赫数预条件。}
+    @item{@link["blazek2005-ch10"]{第10章 一致性、精度与稳定性}：离散化的一致性与精度要求,Von Neumann 稳定性分析与 CFL 条件。}
+    @item{@link["blazek2005-ch11"]{第11章 网格生成原理}：结构网格的 C/H/O 拓扑与代数、椭圆、双曲生成;非结构的 Delaunay、推进波前与网格质量。}
+    @item{@link["blazek2005-ch12"]{第12章 源代码说明 + 附录A}：随书源程序说明;附录汇集度量项、旋转坐标系、雅可比、变量变换、GMRES 与张量记号。}
+    @item{@link["blazek2005-index"]{索引}：全书术语中英对照,附原书页码。}
+  }
+
+  全书 15 个页面已全部完成。
+}
+
+@subtree{
+  @title{阅读说明}
+
+  每个自然段是一个双语块：中文默认可见,英文原文折叠,可展开对照。公式编号与原书一致（如(2.19)),便于对照纸质书或原页扫描。章节小节均有稳定地址,可从正文交叉引用跳转。
+
+  本翻译依据原书300dpi扫描件,公式逐条对照扫描页转录,OCR讹误按上下文校正。版权归原作者与出版方所有,仅作个人学习用途。
+}

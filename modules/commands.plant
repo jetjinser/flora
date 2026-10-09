@@ -1,0 +1,45 @@
+@(define-module (flora commands)
+  #:use-module (forester commands)
+  #:use-module (forester i18n)
+  #:use-module (language scribble command)
+  #:use-module (grove element)
+  #:use-module (grove ir)
+  #:re-export (image tag taxon title subtree transclude summary published updated lipsum
+               bilingual lang term)
+  #:re-export-and-replace (link))
+
+@(define-public (bi . body)
+   "Folded bilingual block: show the Chinese lane, fold the sources.
+The fold hint defaults to the folded lanes' language codes (e.g. en)."
+   (apply bilingual #:reader "zh-CN" body))
+
+@(define-public (emph . body)
+   (set! body (command-body body))
+   (make-content-element 'emph body))
+
+@(define-public (content-query-results)
+   (make-content-element 'flora-content-query-results '() #:flow-kind 'block))
+
+@(define-public (orphan-page-results)
+   (make-content-element 'flora-orphan-page-results '() #:flow-kind 'block))
+
+@(define-public (sidenote . body)
+   "A margin note anchored where it is authored. Emits a numbered marker
+inline (the counter is styled in CSS) followed by the note itself, so the
+margin text pairs with its anchor the way Tufte's sidenotes do."
+   (list ((make-element #:tag "span" #:class "flora-sidenote-number") "")
+         (apply (make-element #:tag "span" #:class "flora-sidenote"
+                              #:attributes '((role . "note")))
+                body)))
+
+@(define-public defn
+   ;; Marks the defining occurrence of a term: rendered as <dfn>, so glossary
+   ;; semantics stay in the content tree without borrowing math's @term.
+   (make-element #:tag "dfn"))
+
+@(define-public (author id . ignored)
+   "Authorship marker resolving to a person tree (taxon person,
+bare-surname id): @author[\"kazmer\"]. The display text is the person
+tree's own title, filled in at analyze time by modules/queries.plant."
+   (make-content-element 'flora-author '()
+     #:properties `((target . ,id))))

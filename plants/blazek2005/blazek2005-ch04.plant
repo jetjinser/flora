@@ -1,0 +1,1830 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Structured Finite Volume Schemes 第4章 结构网格有限体积格式}
+@summary{控制体几何量、单元中心与单元顶点格式ï¼以及通用离散方法学。}
+@taxon["chapter"]
+
+@bi{
+  @lang["en"]{As we already mentioned in the introduction to Chapter 3, the overwhelming number of numerical schemes for the solution of the Euler- and the Navier-Stokes equations employs the @emph{method of lines}, i.e., a separate discretisation in space and in time. By consequence, it allows us to use numerical approximations of different accuracy for the spatial and temporal derivatives, as it may be required by the problem to be solved. Thus, we gain a lot of flexibility by this approach. For this reason, we shall follow the method of lines here. A detailed discussion of numerical methods based on @emph{coupled} space and time discretisation, like the Lax-Wendroff family of schemes (e.g., explicit MacCormack predictor-corrector scheme, implicit Lerat's scheme, etc.), may be found, e.g., in Ref. @link["blazek2005-r4-1"]{[1]}.}
+  @lang["zh-CN"]{正如我们在第3章引言中已经提到的ï¼求解欧拉方程与Navier-Stokes方程的绝大多数数值格式都采用线法(method of lines)ï¼即在空间与时间上分别进行离散。这样做的结果是ï¼我们可以按待解问题的需要ï¼对空间导数和时间导数采用不同精度的数值近似。因此ï¼这一做法带来了很大的灵活性。出于这个原因ï¼本书将采用线法。至于基于空间与时间@emph{耦合}离散的数值方法——如Lax-Wendroff格式族(例如显式MacCormack预估-校正格式、隐式Lerat格式等)——的详细讨论ï¼可参阅文献@link["blazek2005-r4-1"]{[1]}等。}
+}
+
+@bi{
+  @lang["en"]{A general, structured, finite volume scheme is naturally based on the conservation laws, which are expressed by the Navier-Stokes (2.19) or the Euler (2.45) equations. In a pre-processing step, the physical space is subdivided into a number of grid cells - quadrilaterals in 2D, hexahedra in 3D. The grid generation is done in such a way that:
+    @itemize{
+      @item{the domain is completely covered by the grid,}
+      @item{there is no free space left between the grid cells,}
+      @item{the grid cells do not overlap each other.}
+    }
+  }
+  @lang["zh-CN"]{一般的结构网格有限体积格式自然地建立在守恒定律的基础上ï¼守恒定律由Navier-Stokes方程(2.19)或欧拉方程(2.45)表达。在预处理阶段ï¼物理空间被划分成许多网格单元——二维为四边形ï¼三维为六面体。网格生成须做到:
+    @itemize{
+      @item{计算域被网格完全覆盖;}
+      @item{网格单元之间不留空隙;}
+      @item{网格单元互不重叠。}
+    }
+  }
+}
+
+@bi{
+  @lang["en"]{The resulting structured grid is uniquely described by the coordinates @tex-math{x, y, z} of the grid points (corners of the grid cells) and indices in the computational space (see Fig. 3.2), let us call them @tex-math{i, j, k}. Based on the grid, control volumes are defined in order to evaluate the integrals of the convective and viscous fluxes as well as of the source term. For simplicity, let us suppose that a particular control volume does not change in time (otherwise please refer to Appendix A.5). Then, the time derivative of the conservative variables @tex-math{\vec{W}} can be cast in the form}
+  @lang["zh-CN"]{由此得到的结构网格由网格点(即网格单元的角点)的坐标@tex-math{x, y, z}以及计算空间中的索引(见图3.2)——我们记作@tex-math{i, j, k}——唯一描述。在网格的基础上定义控制体ï¼以便计算对流通量、黏性通量以及源项的积分。为简单起见ï¼设某一控制体不随时间变化(否则请参阅附录A.5)。于是ï¼守恒变量@tex-math{\vec{W}}的时间导数可以写成}
+}
+
+@tex-display-math{\frac{\partial}{\partial t}\int_{\Omega}\vec{W}\,d\Omega = \Omega\,\frac{\partial\vec{W}}{\partial t}\,.}
+
+@bi{
+  @lang["en"]{Herewith, Eq. (2.19) becomes}
+  @lang["zh-CN"]{据此ï¼方程(2.19)变为}
+}
+
+@tex-display-math[#:id "eq-4-1"]{\frac{\partial\vec{W}}{\partial t} = -\frac{1}{\Omega}\left[\oint_{\partial\Omega}\left(\vec{F}_c - \vec{F}_v\right)dS - \int_{\Omega}\vec{Q}\,d\Omega\right]. \tag{4.1}}
+
+@bi{
+  @lang["en"]{The surface integral on the right-hand side of Equation @link["blazek2005-ch04#eq-4-1"]{(4.1)} is approximated by a sum of the fluxes crossing the faces of the control volume. This approximation is called @emph{spatial discretisation}. It is usually supposed that the flux is constant along the individual face and that it is evaluated at the midpoint of the face. The source term is generally assumed to be constant inside the control volume. However, in cases where the source term becomes dominant, it is advisable to evaluate @tex-math{\vec{Q}} as the weighted sum of values from the neighbouring control volumes (see @link["blazek2005-r4-2"]{[2]} and the references cited therein). If we consider a particular volume @tex-math{\Omega_{I,J,K}}, as displayed in Fig. 4.1b, we obtain from Eq. @link["blazek2005-ch04#eq-4-1"]{(4.1)}}
+  @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-1"]{(4.1)}右端的面积分ï¼用穿过控制体各面的通量之和来近似。这一近似称为空间离散(spatial discretisation)。通常假定通量沿各个面为常数ï¼并在面的中点处取值。源项一般假定在控制体内部为常数。然而ï¼当源项占主导地位时ï¼建议把@tex-math{\vec{Q}}取为相邻控制体上数值的加权和(参见@link["blazek2005-r4-2"]{[2]}及其所引文献)。如果我们考虑如图4.1b所示的控制体@tex-math{\Omega_{I,J,K}}ï¼则由方程@link["blazek2005-ch04#eq-4-1"]{(4.1)}可得}
+}
+
+@tex-display-math[#:id "eq-4-2"]{\frac{d\vec{W}_{I,J,K}}{dt} = -\frac{1}{\Omega_{I,J,K}}\left[\sum_{m=1}^{N_F}\left(\vec{F}_c - \vec{F}_v\right)_m\,\Delta S_m - \left(\vec{Q}\,\Omega\right)_{I,J,K}\right]. \tag{4.2}}
+
+@bi{
+  @lang["en"]{In the above expression, the indices in capital letters @tex-math{(I, J, K)} reference the control volume in the computational space (cf. Section 3.1). As we shall see later, the control volume does not necessarily coincide with the grid. Furthermore, @tex-math{N_F} denotes the number of control volume faces (which is @tex-math{N_F = 4} in 2D and @tex-math{N_F = 6} in 3D). The variable @tex-math{\Delta S_m} stands for the area of the face @tex-math{m}. The term in square brackets on the right-hand side of Eq. @link["blazek2005-ch04#eq-4-2"]{(4.2)} is also generally termed the @emph{residual}. It is denoted here by @tex-math{\vec{R}_{I,J,K}}. Hence, we can abbreviate Eq. @link["blazek2005-ch04#eq-4-2"]{(4.2)} as}
+  @lang["zh-CN"]{在上式中ï¼大写字母索引@tex-math{(I, J, K)}指计算空间中的控制体(参见3.1节)。后面将会看到ï¼控制体不一定与网格重合。此外,@tex-math{N_F}表示控制体的面数(二维为@tex-math{N_F = 4}ï¼三维为@tex-math{N_F = 6})。变量@tex-math{\Delta S_m}代表第@tex-math{m}面的面积。方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}右端方括号中的项一般也称为残差(residual)ï¼这里记作@tex-math{\vec{R}_{I,J,K}}。因此ï¼方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}可以简写为}
+}
+
+@tex-display-math[#:id "eq-4-3"]{\frac{d\vec{W}_{I,J,K}}{dt} = -\frac{1}{\Omega_{I,J,K}}\,\vec{R}_{I,J,K}\,. \tag{4.3}}
+
+@bi{
+  @lang["en"]{When we write down the relationship in Equation @link["blazek2005-ch04#eq-4-3"]{(4.3)} for all control volumes @tex-math{\Omega_{I,J,K}}, we obtain a system of ordinary differential equations of first order. The equations are hyperbolic in time. That means, we have to advance them in time by starting from a known initial solution. We have also to provide suitable boundary conditions for the viscous and the inviscid fluxes, as they are described in Chapter 8.}
+  @lang["zh-CN"]{对所有控制体@tex-math{\Omega_{I,J,K}}写下方程@link["blazek2005-ch04#eq-4-3"]{(4.3)}这样的关系式ï¼便得到一个一阶常微分方程组。这些方程在时间上是双曲型的。这意味着ï¼我们必须从已知的初始解出发在时间上向前推进。我们还必须为黏性通量和无黏通量提供适当的边界条件ï¼如第8章所述。}
+}
+
+@bi{
+  @lang["en"]{When solving the system of discretised governing equations @link["blazek2005-ch04#eq-4-3"]{(4.3)} numerically, the first question is how do we define the control volumes and where do we locate the flow variables with respect to the computational grid. In the framework of structured finite volume schemes, three basic strategies are available:
+    @itemize{
+      @item{@emph{Cell-centred} scheme - control volumes are identical with the grid cells and the flow variables are associated with their centroids (Fig. 4.3).}
+      @item{@emph{Cell-vertex} scheme with @emph{overlapping} control volumes - flow quantities are assigned to the grid points (vertices, nodes) and the control volumes are defined as the union of all grid cells having the respective vertex in common (4 cells in 2D, 8 cells in 3D - see Fig. 4.4). This means that the control volumes associated with two neighbouring grid points overlap each other.}
+      @item{Cell-vertex scheme with @emph{dual} control volumes - flow variables are again stored at the grid vertices, but the control volumes are now created by connecting the midpoints of the cells having the respective vertex in common (Fig. 4.5). In this way, the grid points are surrounded by their corresponding control volumes which do not overlap.}
+    }
+  }
+  @lang["zh-CN"]{在数值求解离散化控制方程组@link["blazek2005-ch04#eq-4-3"]{(4.3)}时ï¼第一个问题是我们如何定义控制体ï¼以及相对于计算网格把流动变量布置在何处。在结构网格有限体积格式的框架下ï¼有三种基本策略可供选择:
+    @itemize{
+      @item{单元中心格式(cell-centred scheme)——控制体与网格单元完全相同ï¼流动变量布置在各单元的形心处(图4.3)。}
+      @item{采用重叠(overlapping)控制体的单元顶点格式(cell-vertex scheme)——流动量被赋给网格点(顶点、节点)ï¼控制体定义为共享该顶点的所有网格单元的并集(二维4个单元ï¼三维8个单元——见图4.4)。这意味着与两个相邻网格点相对应的控制体彼此重叠。}
+      @item{采用对偶(dual)控制体的单元顶点格式——流动变量同样存储在网格顶点上ï¼但此时控制体由共享相应顶点的各单元的中点连接而成(图4.5)。这样ï¼每个网格点都被其对应的、互不重叠的控制体所包围。}
+    }
+  }
+}
+
+@image["blazek2005/fig-4-1.png"]{图4.1:结构网格中控制体(Ω)及各面单位法向量(n⃗_m):(a)二维;(b)三维}
+
+@emph{图4.1:结构网格中控制体(@tex-math{\Omega})及各面单位法向量(@tex-math{\vec{n}_m}):(a)二维;(b)三维。}图例:情形(a)中ï¼单位法向量@tex-math{\vec{n}_2}与@tex-math{\vec{n}_4}对应计算空间中的@tex-math{i}坐标(方向),@tex-math{\vec{n}_1}与@tex-math{\vec{n}_3}对应@tex-math{j}坐标;四边形控制体@tex-math{\Omega_{I,J}}的顶点标记为1—4ï¼左下角为物理坐标轴@tex-math{x}、@tex-math{y}ï¼右上角为计算坐标@tex-math{i}、@tex-math{j}。情形(b)中ï¼单位法向量@tex-math{\vec{n}_1}与@tex-math{\vec{n}_2}对应@tex-math{i}坐标,@tex-math{\vec{n}_5}与@tex-math{\vec{n}_6}对应@tex-math{j}坐标,@tex-math{\vec{n}_3}与@tex-math{\vec{n}_4}对应@tex-math{k}坐标;六面体控制体@tex-math{\Omega_{I,J,K}}的顶点标记为1—8ï¼左下角为物理坐标轴@tex-math{x}、@tex-math{y}、@tex-math{z}ï¼右下角为计算坐标@tex-math{i}、@tex-math{j}、@tex-math{k}。
+
+@bi{
+  @lang["en"]{All three methodologies will be outlined in Section 4.2, which is devoted to general concepts of discretisation schemes. It should be mentioned at this point that the cell-vertex scheme with overlapping control volumes is only seldom used today. Nevertheless, it is included here for completeness.}
+  @lang["zh-CN"]{这三种方法学都将在4.2节中概述ï¼该节专门讨论离散格式的一般概念。这里应当指出ï¼采用重叠控制体的单元顶点格式如今已很少使用;不过ï¼为完整起见仍在此予以介绍。}
+}
+
+@bi{
+  @lang["en"]{It is important to notice that in our case @emph{all} flow variables, i.e., the conservative variables @tex-math{(\rho, \rho u, \rho v, \rho w} and @tex-math{\rho E)} and the dependent variables @tex-math{(p, T, c}, etc.), are associated with the @emph{same} location - with the cell centre or with the grid node. This approach is known as the @emph{co-located} grid scheme. By contrast, many older pressure-based methods (cf. Section 3.1) use the so-called @emph{staggered} grid scheme, where the pressure and the velocity components are stored at different locations in order to suppress oscillations of the solution which arise from central differencing.}
+  @lang["zh-CN"]{需要注意的是ï¼在我们的情形中ï¼所有流动变量——即守恒变量@tex-math{(\rho, \rho u, \rho v, \rho w}与@tex-math{\rho E)}以及因变量@tex-math{(p, T, c}等)——都布置在@emph{同一}位置:或在单元中心ï¼或在网格节点。这一做法称为同位网格(co-located grid)方案。与此相反ï¼许多较老的基于压力的方法(参见3.1节)采用所谓的交错网格(staggered grid)方案ï¼把压力和速度分量存储在不同位置ï¼以抑制中心差分所引起的解的振荡。}
+}
+
+@bi{
+  @lang["en"]{A wide range of choices exists with respect to the evaluation of the convective fluxes. The basic problem is that we have to know their values at all @tex-math{N_F} faces of a control volume, but the flow variables are not directly available there. This means, we have to interpolate either the fluxes or the flow variables to the faces of the control volumes. In principle, this can be done in one of two ways:
+    @itemize{
+      @item{by arithmetic averaging like in @emph{central} discretisation schemes;}
+      @item{by some biased interpolation like in @emph{upwind} discretisation schemes, which take care of the characteristics of the flow equations.}
+    }
+  }
+  @lang["zh-CN"]{在对流通量的计算方面存在很大的选择余地。基本问题在于:我们必须知道控制体全部@tex-math{N_F}个面上的通量值ï¼但流动变量在这些面上并不能直接得到。这意味着ï¼我们必须把通量或流动变量插值到控制体的面上。原则上ï¼这可以通过以下两种途径之一来实现:
+    @itemize{
+      @item{像中心(central)离散格式那样ï¼采用算术平均;}
+      @item{像上风(upwind)离散格式那样ï¼采用某种偏置插值ï¼以照顾流动方程的特征(方向)。}
+    }
+  }
+}
+
+@bi{
+  @lang["en"]{Besides the description, we shall treat aspects such as accuracy, range of applicability and numerical effort of the most widely used discretisation schemes for the convective fluxes in Section 4.3.}
+  @lang["zh-CN"]{除描述之外ï¼我们还将在4.3节讨论最常用的对流通量离散格式的精度、适用范围和计算量等问题。}
+}
+
+@bi{
+  @lang["en"]{A commonly applied methodology for the evaluation of the viscous fluxes at a face of the control volume is based on arithmetic averaging of the flow quantities. In contrast to the flow variables, the calculation of the velocity and the temperature gradients in Equations (2.15) and (2.24) is more involved. We shall present appropriate procedures in Section 4.4.}
+  @lang["zh-CN"]{在控制体某个面上计算黏性通量的一种常用方法学ï¼基于流动量的算术平均。与流动变量不同ï¼方程(2.15)和(2.24)中速度梯度与温度梯度的计算更为复杂。我们将在4.4节给出相应的做法。}
+}
+
+@subtree[#:id "blazek2005-4-1"]{
+  @title{4.1 Geometrical Quantities of a Control Volume 控制体的几何量}
+
+  @bi{
+    @lang["en"]{Before we turn our attention to the discretisation methodologies, it is instructive to consider the calculation of geometrical quantities of the control volume @tex-math{\Omega_{I,J,K}} - its volume, the unit normal vector @tex-math{\vec{n}_m} (defined as outward facing) and the area @tex-math{\Delta S_m} of a face @tex-math{m}. The normal vector and the face area are also denoted as the @emph{metrics} of the control volume. In the following, we shall consider the 2-D and the 3-D case separately for a general quadrilateral or hexahedral control volume, respectively.}
+    @lang["zh-CN"]{在转向离散方法学之前ï¼先考察控制体@tex-math{\Omega_{I,J,K}}的几何量的计算是有益的——即它的体积、单位法向量@tex-math{\vec{n}_m}(定义为指向外侧)以及第@tex-math{m}面的面积@tex-math{\Delta S_m}。法向量与面面积也合称为控制体的度量(metrics)。下面我们针对一般的四边形(二维)或六面体(三维)控制体ï¼分别讨论二维与三维情形。}
+  }
+
+  @subtree[#:id "blazek2005-4-1-1"]{
+    @title{4.1.1 Two-Dimensional Case 二维情形}
+
+    @bi{
+      @lang["en"]{In general, we consider flow in a plane as a special case of a 3-D problem, where the solution is symmetric with respect to one coordinate direction (e.g., to the @tex-math{z}-direction). Because of the symmetry and in order to obtain correct physical units for volume, pressure, etc., we set the depth of all grid cells and control volumes equal to a constant value @tex-math{b}. The volume of a control volume results then in two dimensions from the product of its area with the depth @tex-math{b}. The area of a quadrilateral can be exactly calculated by the formula of Gauss. Hence, for a control volume like that displayed in Fig. 4.1a, we get after some algebra}
+      @lang["zh-CN"]{一般地ï¼我们把平面内的流动看作三维问题的一个特例ï¼其中解关于某一坐标方向(例如@tex-math{z}方向)对称。由于对称性ï¼也为了使体积、压力等物理量具有正确的单位ï¼我们把所有网格单元和控制体的深度设为常数@tex-math{b}。于是ï¼在二维中ï¼控制体的体积等于其面积与深度@tex-math{b}的乘积。四边形的面积可以用Gauss公式精确计算。因此ï¼对于如图4.1a所示的控制体ï¼经过一些代数运算可得}
+    }
+
+    @tex-display-math[#:id "eq-4-4"]{\Omega_{I,J} = \frac{b}{2}\left[(x_1 - x_3)(y_2 - y_4) + (x_4 - x_2)(y_1 - y_3)\right]. \tag{4.4}}
+
+    @bi{
+      @lang["en"]{In the above, we have assumed that the control volume is located in the @tex-math{x}–@tex-math{y}-plane and that the @tex-math{z}-coordinate is the symmetry axis. Since the depth @tex-math{b} is arbitrary, we may set @tex-math{b = 1} for convenience. In two dimensions, the faces of a control volume are given by straight lines and therefore the unit normal vector is constant along them. When we integrate the fluxes according to the approximation of Eq. @link["blazek2005-ch04#eq-4-2"]{(4.2)}, we have to evaluate the product of the area of a face @tex-math{\Delta S} and the corresponding unit normal vector @tex-math{\vec{n}} - the @emph{face vector} @tex-math{\vec{S}}}
+      @lang["zh-CN"]{上式中ï¼我们假定控制体位于@tex-math{x}–@tex-math{y}平面内ï¼且@tex-math{z}坐标是对称轴。由于深度@tex-math{b}是任意的ï¼为方便起见可取@tex-math{b = 1}。在二维中ï¼控制体的面由直线段构成ï¼因此单位法向量沿面为常数。当我们按照方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}的近似对通量积分时ï¼需要计算面的面积@tex-math{\Delta S}与相应单位法向量@tex-math{\vec{n}}的乘积——即面向量(face vector)@tex-math{\vec{S}}}
+    }
+
+    @tex-display-math[#:id "eq-4-5"]{\vec{S}_m = \begin{bmatrix} S_{x,m} \\ S_{y,m} \end{bmatrix} = \vec{n}_m\,\Delta S_m\,. \tag{4.5}}
+
+    @bi{
+      @lang["en"]{Because of the symmetry, the @tex-math{z}-component of the face vectors (and of the unit normal vector) is zero. It is therefore dropped from the expressions. The face vectors of the control volume from Fig. 4.1a are given by the relations}
+      @lang["zh-CN"]{由于对称性ï¼面向量(以及单位法向量)的@tex-math{z}分量为零ï¼因此从表达式中略去。图4.1a中控制体的面向量由以下关系式给出}
+    }
+
+    @tex-display-math[#:id "eq-4-6"]{\begin{aligned}
+      \vec{S}_1 &= b\begin{bmatrix} y_2 - y_1 \\ x_1 - x_2 \end{bmatrix}, &\quad
+      \vec{S}_2 &= b\begin{bmatrix} y_3 - y_2 \\ x_2 - x_3 \end{bmatrix}, \\
+      \vec{S}_3 &= b\begin{bmatrix} y_4 - y_3 \\ x_3 - x_4 \end{bmatrix}, &\quad
+      \vec{S}_4 &= b\begin{bmatrix} y_1 - y_4 \\ x_4 - x_1 \end{bmatrix}.
+    \end{aligned} \tag{4.6}}
+
+    @bi{
+      @lang["en"]{The unit normal vector at face @tex-math{m} is then obtained from Eq. @link["blazek2005-ch04#eq-4-5"]{(4.5)} as}
+      @lang["zh-CN"]{于是ï¼第@tex-math{m}面上的单位法向量由方程@link["blazek2005-ch04#eq-4-5"]{(4.5)}得到}
+    }
+
+    @tex-display-math[#:id "eq-4-7"]{\vec{n}_m = \frac{\vec{S}_m}{\Delta S_m} \tag{4.7}}
+
+    @bi{
+      @lang["en"]{with}
+      @lang["zh-CN"]{其中}
+    }
+
+    @tex-display-math{\Delta S_m = |\vec{S}_m| = \sqrt{S_{x,m}^2 + S_{y,m}^2}\,.}
+
+    @bi{
+      @lang["en"]{In practice, only the face vectors @tex-math{\vec{S}_1} and @tex-math{\vec{S}_4} are computed and stored for each control volume @tex-math{\Omega_{I,J}}. The face vectors @tex-math{\vec{S}_2} as well as @tex-math{\vec{S}_3} are taken (with reversed signs to become outward facing) from the appropriate neighbouring control volumes in order to save memory and to reduce the number of point operations.}
+      @lang["zh-CN"]{实际计算中ï¼对每个控制体@tex-math{\Omega_{I,J}}只计算并存储面向量@tex-math{\vec{S}_1}与@tex-math{\vec{S}_4}。面向量@tex-math{\vec{S}_2}与@tex-math{\vec{S}_3}则(经反号使其指向外侧)取自相应的相邻控制体ï¼以节省内存并减少点操作次数。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-4-1-2"]{
+    @title{4.1.2 Three-Dimensional Case 三维情形}
+
+    @bi{
+      @lang["en"]{As opposed to the previous 2-D case, the calculation of face vectors and volumes poses some problems in three dimensions. The main reason for this is that, in general, the four vertices of the face of a control volume may not lie in a plane. Then, the normal vector is no longer constant on the face (Fig. 4.2). In}
+      @lang["zh-CN"]{与前述二维情形不同ï¼在三维中ï¼面向量与体积的计算存在一些困难。主要原因在于:一般情形下ï¼控制体一个面的四个顶点可能不共面。此时ï¼法向量在面上不再为常数(图4.2)。}
+    }
+
+    @image["blazek2005/fig-4-2.png"]{图4.2:三维中控制体一个面上法向量变化的情形}
+
+    @emph{图4.2:三维中控制体一个面上法向量变化的情形。}图例:阴影四边形为控制体的一个面;由于其四个顶点不共面ï¼面上的法向量(图中@tex-math{\vec{n}_1}、@tex-math{\vec{n}_2})随位置变化ï¼不再是常向量。
+
+    @bi{
+      @lang["en"]{order to overcome this difficulty, we could decompose all six faces of the control volume into two or more triangles each. The volume itself could then be built of tetrahedra. Performing this subdivision in an appropriate manner would lead to a discretisation scheme which is at least first-order accurate on arbitrary grids @link["blazek2005-r4-3"]{[3]}. Of course, the numerical effort would be increased substantially, because the fluxes would have to be integrated over each partial triangle separately. Hence, the number of point operations would be at least doubled. However, in @link["blazek2005-r4-3"]{[3]}, @link["blazek2005-r4-4"]{[4]} it is shown that for reasonably smooth grids, where the control volume faces approach parallelograms, the decomposition into triangles does not noticeably improve the solution accuracy. Therefore, we shall employ a simplified treatment of the quadrilateral faces in the following considerations, which is based on an @emph{averaged normal vector}.}
+      @lang["zh-CN"]{为了克服这一困难ï¼我们可以把控制体的全部六个面各自分解成两个或多个三角形ï¼而体积本身则由四面体拼成。以适当方式进行这种细分ï¼将得到一个在任意网格上至少一阶精度的离散格式@link["blazek2005-r4-3"]{[3]}。当然ï¼数值代价会显著增加ï¼因为通量必须对每个部分三角形分别积分ï¼点操作次数至少加倍。然而ï¼文献@link["blazek2005-r4-3"]{[3]}、@link["blazek2005-r4-4"]{[4]}表明ï¼对于相当光滑、控制体面接近平行四边形的网格ï¼分解成三角形并不能明显提高解的精度。因此ï¼在下面的讨论中ï¼我们将对四边形面采用一种简化的处理方式ï¼它基于@emph{平均法向量}(averaged normal vector)。}
+    }
+
+    @bi{
+      @lang["en"]{A face vector @tex-math{\vec{S}} of an hexahedral control volume, like that rendered in Fig. 4.1b, is most conveniently computed using the same Gauss's formula as employed in 2D for the area of a quadrilateral. Thus, e.g., for the face @tex-math{m = 1} (points 1, 5, 8 and 4 in Fig. 4.1b) we first define the differences}
+      @lang["zh-CN"]{六面体控制体(如图4.1b所示)的面向量@tex-math{\vec{S}}ï¼用与二维中计算四边形面积相同的Gauss公式来计算最为方便。例如ï¼对于面@tex-math{m = 1}(图4.1b中的点1、5、8和4)ï¼先定义如下差分}
+    }
+
+    @tex-display-math[#:id "eq-4-8"]{\begin{aligned}
+      \Delta x_A &= x_8 - x_1, &\quad \Delta x_B &= x_5 - x_4, \\
+      \Delta y_A &= y_8 - y_1, &\quad \Delta y_B &= y_5 - y_4, \\
+      \Delta z_A &= z_8 - z_1, &\quad \Delta z_B &= z_5 - z_4.
+    \end{aligned} \tag{4.8}}
+
+    @bi{
+      @lang["en"]{The face vector @tex-math{\vec{S}_1 = \vec{n}_1\Delta S_1} results then from}
+      @lang["zh-CN"]{于是ï¼面向量@tex-math{\vec{S}_1 = \vec{n}_1\Delta S_1}由下式得出}
+    }
+
+    @tex-display-math[#:id "eq-4-9"]{\vec{S}_1 = \frac{1}{2}\begin{bmatrix} \Delta z_A\,\Delta y_B - \Delta y_A\,\Delta z_B \\ \Delta x_A\,\Delta z_B - \Delta z_A\,\Delta x_B \\ \Delta y_A\,\Delta x_B - \Delta x_A\,\Delta y_B \end{bmatrix}. \tag{4.9}}
+
+    @bi{
+      @lang["en"]{The five remaining face vectors are calculated in a similar manner. It is again very convenient to store only three of the six the face vectors (e.g., @tex-math{\vec{S}_1}, @tex-math{\vec{S}_3}, and @tex-math{\vec{S}_5}) for each control volume @tex-math{\Omega_{I,J,K}}. The remaining face vectors @tex-math{\vec{S}_2}, @tex-math{\vec{S}_4} as well as @tex-math{\vec{S}_6} are obtained (with reversed signs to become outward facing) from the appropriate neighbouring control volumes. The above expressions in Eq. @link["blazek2005-ch04#eq-4-8"]{(4.8)} and @link["blazek2005-ch04#eq-4-9"]{(4.9)} deliver an average face vector. The approximation becomes exact when the face approaches a parallelogram, i.e., when the vertices of the face lie all in one plane. The unit normal vector is obtained from Eq. @link["blazek2005-ch04#eq-4-7"]{(4.7)} with}
+      @lang["zh-CN"]{其余五个面向量按类似方式计算。同样非常方便的做法是ï¼对每个控制体@tex-math{\Omega_{I,J,K}}只存储六个面向量中的三个(例如@tex-math{\vec{S}_1}、@tex-math{\vec{S}_3}与@tex-math{\vec{S}_5});其余面向量@tex-math{\vec{S}_2}、@tex-math{\vec{S}_4}与@tex-math{\vec{S}_6}(经反号使其指向外侧)由相应的相邻控制体得到。方程@link["blazek2005-ch04#eq-4-8"]{(4.8)}与@link["blazek2005-ch04#eq-4-9"]{(4.9)}给出的是平均面向量。当面趋于平行四边形ï¼即面的全部顶点位于同一平面内时ï¼这一近似变为精确。单位法向量由方程@link["blazek2005-ch04#eq-4-7"]{(4.7)}得到ï¼其中}
+    }
+
+    @tex-display-math[#:id "eq-4-10"]{\Delta S_m = \sqrt{S_{x,m}^2 + S_{y,m}^2 + S_{z,m}^2}\,. \tag{4.10}}
+
+    @bi{
+      @lang["en"]{Various, more or less accurate formulae are available for the calculation of the volume of a general hexahedron (see, e.g., @link["blazek2005-r4-1"]{[1]}). One approach, which performed very well in various applications, is based on the divergence theorem @link["blazek2005-r4-5"]{[5]}. This relates the volume integral of the divergence of some vector quantity to its surface integral. The key idea is to use the location in space of some point of the control volume @tex-math{\Omega}, let us call it @tex-math{\vec{r} = [r_x, r_y, r_z]^T}, as the vector quantity. Herewith, the divergence theorem reads}
+      @lang["zh-CN"]{计算一般六面体的体积有各种精度不一的公式(参见例如@link["blazek2005-r4-1"]{[1]})。其中一种在多种应用中表现非常好的方法基于散度定理@link["blazek2005-r4-5"]{[5]}。该定理把某一向量量的散度的体积分与其面积分联系起来。关键想法是取控制体@tex-math{\Omega}内某一点的空间位置——记作@tex-math{\vec{r} = [r_x, r_y, r_z]^T}——作为该向量量。据此ï¼散度定理写作}
+    }
+
+    @tex-display-math[#:id "eq-4-11"]{\int_{\Omega}\mathrm{div}(\vec{r})\,d\Omega = \oint_{\partial\Omega}\left(\vec{r}\cdot\vec{n}\right)dS\,. \tag{4.11}}
+
+    @bi{
+      @lang["en"]{We can easily evaluate the left-hand side of Eq. @link["blazek2005-ch04#eq-4-11"]{(4.11)} which gives us the volume of @tex-math{\Omega} that we are looking for}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-11"]{(4.11)}的左端很容易计算ï¼它给出的正是我们所要求的@tex-math{\Omega}的体积}
+    }
+
+    @tex-display-math[#:id "eq-4-12"]{\int_{\Omega}\mathrm{div}(\vec{r})\,d\Omega = \int_{\Omega}\left(\frac{\partial r_x}{\partial x} + \frac{\partial r_y}{\partial y} + \frac{\partial r_z}{\partial z}\right)d\Omega = 3\,\Omega\,. \tag{4.12}}
+
+    @bi{
+      @lang["en"]{If we assume now the unit normal vector is constant on all faces of the control volume, we can solve the surface integral on the right-hand side of Eq. @link["blazek2005-ch04#eq-4-11"]{(4.11)} as follows}
+      @lang["zh-CN"]{如果现在假定单位法向量在控制体的所有面上均为常数ï¼则方程@link["blazek2005-ch04#eq-4-11"]{(4.11)}右端的面积分可以按如下方式求解}
+    }
+
+    @tex-display-math[#:id "eq-4-13"]{\oint_{\partial\Omega}\left(\vec{r}\cdot\vec{n}\right)dS \approx \sum_{m=1}^{m=6}\left(\vec{r}_{\mathrm{mid}}\cdot\vec{n}\right)_m\,\Delta S_m\,. \tag{4.13}}
+
+    @bi{
+      @lang["en"]{In Eq. @link["blazek2005-ch04#eq-4-13"]{(4.13)}, @tex-math{\vec{r}_{\mathrm{mid},m}} denotes the midpoint of the control volume face @tex-math{m}. For example,}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-13"]{(4.13)}中,@tex-math{\vec{r}_{\mathrm{mid},m}}表示控制体第@tex-math{m}面的中点。例如}
+    }
+
+    @tex-display-math{\vec{r}_{\mathrm{mid},1} = \frac{1}{4}\left(\vec{r}_1 + \vec{r}_5 + \vec{r}_8 + \vec{r}_4\right),}
+
+    @bi{
+      @lang["en"]{where the vectors @tex-math{\vec{r}_1}, @tex-math{\vec{r}_5}, @tex-math{\vec{r}_8}, and @tex-math{\vec{r}_4} correspond to the vertices 1, 5, 8, and 4 of the face @tex-math{m = 1} in Fig. 4.1b. Similar relations hold for the midpoints of the remaining faces. The area @tex-math{\Delta S_m} of the face @tex-math{m} in Eq. @link["blazek2005-ch04#eq-4-13"]{(4.13)} is obtained from Eq. @link["blazek2005-ch04#eq-4-10"]{(4.10)}. Combining Equations @link["blazek2005-ch04#eq-4-12"]{(4.12)} and @link["blazek2005-ch04#eq-4-13"]{(4.13)} together, and inserting the face vector @tex-math{\vec{S}} for the product @tex-math{\vec{n}_m\Delta S_m}, we have finally the relationship}
+      @lang["zh-CN"]{其中向量@tex-math{\vec{r}_1}、@tex-math{\vec{r}_5}、@tex-math{\vec{r}_8}与@tex-math{\vec{r}_4}对应图4.1b中面@tex-math{m = 1}的顶点1、5、8和4。其余各面的中点也有类似关系。方程@link["blazek2005-ch04#eq-4-13"]{(4.13)}中面@tex-math{m}的面积@tex-math{\Delta S_m}由方程@link["blazek2005-ch04#eq-4-10"]{(4.10)}得到。把方程@link["blazek2005-ch04#eq-4-12"]{(4.12)}与@link["blazek2005-ch04#eq-4-13"]{(4.13)}结合起来ï¼并用面向量@tex-math{\vec{S}}代替乘积@tex-math{\vec{n}_m\Delta S_m}ï¼最终得到}
+    }
+
+    @tex-display-math[#:id "eq-4-14"]{\Omega_{I,J,K} = \frac{1}{3}\sum_{m=1}^{m=6}\left(\vec{r}_{\mathrm{mid}}\cdot\vec{S}\right)_m \tag{4.14}}
+
+    @bi{
+      @lang["en"]{for the volume of the control volume @tex-math{\Omega_{I,J,K}}.}
+      @lang["zh-CN"]{这就是控制体@tex-math{\Omega_{I,J,K}}体积的关系式。}
+    }
+
+    @bi{
+      @lang["en"]{The origin of the coordinate system can be in principle moved to any place without affecting the volume calculation in Eq. @link["blazek2005-ch04#eq-4-14"]{(4.14)}. This leads us to the advice to locate the origin in one vertex of the control volume (e.g., point 1 in Fig. 4.1b), in order to achieve a better scaling of the numerical values. Thus, we may replace @tex-math{\vec{r}} in the above expressions @link["blazek2005-ch04#eq-4-11"]{(4.11)}–@link["blazek2005-ch04#eq-4-14"]{(4.14)} by a transformed vector @tex-math{\vec{r}^{*}}, which is defined as}
+      @lang["zh-CN"]{坐标系的原点原则上可以移到任何位置ï¼而不影响方程@link["blazek2005-ch04#eq-4-14"]{(4.14)}的体积计算。这提示我们把原点放在控制体的某个顶点处(例如图4.1b中的点1)ï¼以获得更好的数值大小标度。于是ï¼我们可以把上述表达式@link["blazek2005-ch04#eq-4-11"]{(4.11)}–@link["blazek2005-ch04#eq-4-14"]{(4.14)}中的@tex-math{\vec{r}}替换为变换后的向量@tex-math{\vec{r}^{*}}ï¼其定义为}
+    }
+
+    @tex-display-math{\vec{r}^{*} = \vec{r} - \vec{r}_{\mathrm{origin}}\,.}
+
+    @bi{
+      @lang["en"]{It is important to note that the volume computed with aid of Eq. @link["blazek2005-ch04#eq-4-14"]{(4.14)} is exact for a control volume with planar faces.}
+      @lang["zh-CN"]{需要特别指出ï¼用方程@link["blazek2005-ch04#eq-4-14"]{(4.14)}算得的体积ï¼对于面为平面多边形的控制体是精确的。}
+    }
+  }
+}
+
+@subtree[#:id "blazek2005-4-2"]{
+  @title{4.2 General Discretisation Methodologies 通用离散方法学}
+
+  @bi{
+    @lang["en"]{In the introduction to Chapter 4, we already mentioned the three approaches for the definition of the control volume and for the location of the flow variables. Here, we shall present all three in more detail. We shall also discuss their advantages and shortcomings.}
+    @lang["zh-CN"]{在第4章的引言中ï¼我们已经提到了定义控制体和布置流动变量的三种做法。这里我们将更详细地逐一介绍这三种做法ï¼并讨论它们的优点与不足。}
+  }
+
+  @subtree[#:id "blazek2005-4-2-1"]{
+    @title{4.2.1 Cell-Centred Scheme 单元中心格式}
+
+    @bi{
+      @lang["en"]{We speak of a cell-centred scheme if the control volumes are identical with the grid cells and if the flow variables are located at the centroids of the grid cells as indicated in Fig. 4.3. When we evaluate the discretised flow equations @link["blazek2005-ch04#eq-4-2"]{(4.2)}, we have to supply the convective and the viscous fluxes at the faces of a cell @link["blazek2005-r4-6"]{[6]}. They can be approximated in one of the three following ways:
+        @itemize{
+          @item{by the @emph{average of fluxes} computed from values at the centroids of the grid cells to the left and to the right of the cell face, but using the same face vector (generally applied only to the convective fluxes);}
+          @item{by using an @emph{average of variables} associated with the centroids of the grid cells to the left and to the right of the cell face;}
+          @item{by computing the fluxes from flow quantities interpolated separately to the left and to the right side of the cell face (employed only for the convective fluxes).}
+        }
+      }
+      @lang["zh-CN"]{如果控制体与网格单元完全相同ï¼且流动变量位于网格单元的形心处(如图4.3所示)ï¼我们称之为单元中心格式(cell-centred scheme)。在计算离散化流动方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}时ï¼需要在单元的各个面上提供对流通量和黏性通量@link["blazek2005-r4-6"]{[6]}。它们可以按以下三种方式之一来近似:
+        @itemize{
+          @item{通量平均(average of fluxes)——由单元面左右两侧网格单元形心处的值分别计算通量ï¼再取平均ï¼但使用同一面向量(一般只用于对流通量);}
+          @item{变量平均(average of variables)——对与单元面左右两侧网格单元形心相关联的变量取平均;}
+          @item{由分别插值到单元面左右两侧的流动量计算通量(只用于对流通量)。}
+        }
+      }
+    }
+
+    @image["blazek2005/fig-4-3.png"]{图4.3:单元中心格式的控制体(二维)}
+
+    @emph{图4.3:单元中心格式的控制体(二维)。}图例:阴影四边形@tex-math{\Omega_{I,J}}为控制体(即网格单元)ï¼其四个角点(实心圆点)为网格点@tex-math{i,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i+1,j+1};实心方块@tex-math{I-1,J}、@tex-math{I,J}、@tex-math{I+1,J}、@tex-math{I,J+1}、@tex-math{I,J-1}表示各单元形心处流动变量的存储位置;@tex-math{\vec{n}_{I+1/2,J}}、@tex-math{\vec{n}_{I-1/2,J}}、@tex-math{\vec{n}_{I,J+1/2}}、@tex-math{\vec{n}_{I,J-1/2}}为控制体各面的单位法向量。
+
+    @bi{
+      @lang["en"]{Thus, taking the cell face @tex-math{\vec{n}_{I+1/2,J}} in Fig. 4.3 as an example, the first approach - average of fluxes - reads in two dimensions}
+      @lang["zh-CN"]{以图4.3中的单元面@tex-math{\vec{n}_{I+1/2,J}}为例ï¼第一种做法——通量平均——在二维中写作}
+    }
+
+    @tex-display-math[#:id "eq-4-15"]{\left(\vec{F}_c\,\Delta S\right)_{I+1/2,J} \approx \frac{1}{2}\left[\vec{F}_c(\vec{W}_{I,J}) + \vec{F}_c(\vec{W}_{I+1,J})\right]\Delta S_{I+1/2,J} \tag{4.15}}
+
+    @bi{
+      @lang["en"]{with @tex-math{\Delta S_{I+1/2,J}} computed from Eqs. @link["blazek2005-ch04#eq-4-6"]{(4.6)} and @link["blazek2005-ch04#eq-4-7"]{(4.7)}.}
+      @lang["zh-CN"]{其中@tex-math{\Delta S_{I+1/2,J}}由方程@link["blazek2005-ch04#eq-4-6"]{(4.6)}与@link["blazek2005-ch04#eq-4-7"]{(4.7)}计算。}
+    }
+
+    @bi{
+      @lang["en"]{The second possible approach - average of variables - can be formulated as follows}
+      @lang["zh-CN"]{第二种可能的做法——变量平均——可以表述为}
+    }
+
+    @tex-display-math[#:id "eq-4-16"]{\left(\vec{F}\,\Delta S\right)_{I+1/2,J} \approx \vec{F}(\vec{W}_{I+1/2,J})\,\Delta S_{I+1/2,J}, \tag{4.16}}
+
+    @bi{
+      @lang["en"]{where the conservative/dependent variables at the face @tex-math{\vec{n}_{I+1/2,J}} of the control volume are defined as the arithmetic average of values at the two adjacent cells, i.e.,}
+      @lang["zh-CN"]{其中ï¼控制体面@tex-math{\vec{n}_{I+1/2,J}}上的守恒变量/因变量定义为两个相邻单元处数值的算术平均ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-17"]{\vec{W}_{I+1/2,J} = \frac{1}{2}\left(\vec{W}_{I,J} + \vec{W}_{I+1,J}\right). \tag{4.17}}
+
+    @bi{
+      @lang["en"]{The flux vector @tex-math{\vec{F}} in Eq. @link["blazek2005-ch04#eq-4-16"]{(4.16)} stands either for the convective or for the viscous fluxes.}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-16"]{(4.16)}中的通量向量@tex-math{\vec{F}}既可以指对流通量ï¼也可以指黏性通量。}
+    }
+
+    @bi{
+      @lang["en"]{The third methodology starts with an interpolation of flow quantities (being mostly velocity components, pressure, density and total enthalpy) separately to both sides of the cell face. The interpolated quantities - termed the @emph{left} and the @emph{right state} (see the begin of Section 4.3) - differ in general between both sides. The fluxes through the cell face are then evaluated from the difference of the left and right state using some non-linear function. Hence,}
+      @lang["zh-CN"]{第三种做法先把流动量(大多为速度分量、压力、密度和总焓)分别插值到单元面的两侧。插值得到的量——称为左(left)状态与右(right)状态(见4.3节开头)——在两侧一般并不相同。通过单元面的通量随后利用某个非线性函数由左、右状态之差求出。于是}
+    }
+
+    @tex-display-math[#:id "eq-4-18"]{\left(\vec{F}_c\,\Delta S\right)_{I+1/2,J} \approx f_{Flux}\left(\vec{U}_L,\,\vec{U}_R,\,\Delta S_{I+1/2,J}\right), \tag{4.18}}
+
+    @bi{
+      @lang["en"]{where}
+      @lang["zh-CN"]{其中}
+    }
+
+    @tex-display-math[#:id "eq-4-19"]{\begin{aligned}
+      \vec{U}_L &= f_{Interp}\left(\cdots,\,\vec{U}_{I-1,J},\,\vec{U}_{I,J},\,\cdots\right) \\
+      \vec{U}_R &= f_{Interp}\left(\cdots,\,\vec{U}_{I,J},\,\vec{U}_{I+1,J},\,\cdots\right)
+    \end{aligned} \tag{4.19}}
+
+    @bi{
+      @lang["en"]{represent the interpolated states. Of course, similar relations like @link["blazek2005-ch04#eq-4-15"]{(4.15)}–@link["blazek2005-ch04#eq-4-19"]{(4.19)} hold also for the other cell faces.}
+      @lang["zh-CN"]{它们表示插值得到的状态。当然ï¼与@link["blazek2005-ch04#eq-4-15"]{(4.15)}–@link["blazek2005-ch04#eq-4-19"]{(4.19)}类似的关系对其余单元面同样成立。}
+    }
+
+    @bi{
+      @lang["en"]{The same approximations are employed in three dimensions. For example, at the cell face @tex-math{\vec{n}_{I+1/2,J,K}} (e.g., identical to @tex-math{\vec{n}_2} in Fig. 4.1b) the average of fluxes in Eq. @link["blazek2005-ch04#eq-4-15"]{(4.15)} becomes}
+      @lang["zh-CN"]{同样的近似也用于三维。例如ï¼在单元面@tex-math{\vec{n}_{I+1/2,J,K}}(例如与图4.1b中的@tex-math{\vec{n}_2}相同)处ï¼方程@link["blazek2005-ch04#eq-4-15"]{(4.15)}的通量平均变为}
+    }
+
+    @tex-display-math[#:id "eq-4-20"]{\left(\vec{F}_c\,\Delta S\right)_{I+1/2,J,K} \approx \frac{1}{2}\left[\vec{F}_c(\vec{W}_{I,J,K}) + \vec{F}_c(\vec{W}_{I+1,J,K})\right]\Delta S_{I+1/2,J,K} \tag{4.20}}
+
+    @bi{
+      @lang["en"]{with @tex-math{\Delta S_{I+1/2,J,K}} being defined correspondingly to Equations @link["blazek2005-ch04#eq-4-8"]{(4.8)} and @link["blazek2005-ch04#eq-4-9"]{(4.9)}. The average of variables reads similarly to Eq. @link["blazek2005-ch04#eq-4-16"]{(4.16)} as}
+      @lang["zh-CN"]{其中@tex-math{\Delta S_{I+1/2,J,K}}按照与方程@link["blazek2005-ch04#eq-4-8"]{(4.8)}和@link["blazek2005-ch04#eq-4-9"]{(4.9)}相应的方式定义。变量平均则与方程@link["blazek2005-ch04#eq-4-16"]{(4.16)}类似地写作}
+    }
+
+    @tex-display-math[#:id "eq-4-21"]{\left(\vec{F}\,\Delta S\right)_{I+1/2,J,K} \approx \vec{F}(\vec{W}_{I+1/2,J,K})\,\Delta S_{I+1/2,J,K} \tag{4.21}}
+
+    @bi{
+      @lang["en"]{with}
+      @lang["zh-CN"]{其中}
+    }
+
+    @tex-display-math[#:id "eq-4-22"]{\vec{W}_{I+1/2,J,K} = \frac{1}{2}\left(\vec{W}_{I,J,K} + \vec{W}_{I+1,J,K}\right). \tag{4.22}}
+
+    @bi{
+      @lang["en"]{The way over the interpolation of the flow variables results similarly to Eq. @link["blazek2005-ch04#eq-4-18"]{(4.18)} in}
+      @lang["zh-CN"]{经由流动变量插值的做法ï¼则与方程@link["blazek2005-ch04#eq-4-18"]{(4.18)}类似地给出}
+    }
+
+    @tex-display-math[#:id "eq-4-23"]{\left(\vec{F}_c\,\Delta S\right)_{I+1/2,J,K} \approx f_{Flux}\left(\vec{U}_L,\,\vec{U}_R,\,\Delta S_{I+1/2,J,K}\right), \tag{4.23}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\vec{U}_L} and @tex-math{\vec{U}_R} are the interpolated values at the cell face.}
+      @lang["zh-CN"]{其中@tex-math{\vec{U}_L}与@tex-math{\vec{U}_R}是单元面上插值得到的数值。}
+    }
+
+    @bi{
+      @lang["en"]{The last term in the discretised flow equations @link["blazek2005-ch04#eq-4-2"]{(4.2)} which remains to be evaluated is the source term @tex-math{\vec{Q}}. As we already stated in the introduction, the source term is usually supposed to be constant inside the control volume. For this reason, it is calculated using the flow variables from the corresponding cell centre. Hence, we may define}
+      @lang["zh-CN"]{离散化流动方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}中尚待计算的最后一项是源项@tex-math{\vec{Q}}。如引言中所述ï¼源项通常假定在控制体内部为常数。因此ï¼它用相应单元中心处的流动变量来计算。于是ï¼我们可以定义}
+    }
+
+    @tex-display-math[#:id "eq-4-24"]{\left(\vec{Q}\,\Omega\right)_{I,J,K} = \vec{Q}(\vec{W}_{I,J,K})\,\Omega_{I,J,K}\,. \tag{4.24}}
+
+    @bi{
+      @lang["en"]{Using the above relations, the fluxes through the faces can be computed and the numerical integration over the boundary of @tex-math{\Omega_{I,J,K}} may be performed according to @link["blazek2005-ch04#eq-4-2"]{(4.2)}. In other words, the complete residual @tex-math{\vec{R}_{I,J,K}} is obtained. In Sections 4.3 and 4.4, we shall learn more about the details of the evaluation of the convective and viscous fluxes.}
+      @lang["zh-CN"]{利用上述关系ï¼可以算出通过各面的通量ï¼并按照@link["blazek2005-ch04#eq-4-2"]{(4.2)}完成对@tex-math{\Omega_{I,J,K}}边界的数值积分。换言之ï¼完整的残差@tex-math{\vec{R}_{I,J,K}}便得到了。在4.3节和4.4节中ï¼我们将进一步了解对流通量与黏性通量计算的细节。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-4-2-2"]{
+    @title{4.2.2 Cell-Vertex Scheme: Overlapping Control Volumes 单元顶点格式:重叠控制体}
+
+    @bi{
+      @lang["en"]{In a cell-vertex scheme, all flow variables are associated with the nodes of the computational grid. Within the approach based on overlapping control volumes, the grid cells still represent the control volumes, just as in the case of the cell-centred scheme. The difference is that now the residuals computed for the control volumes have to be distributed to the grid points @link["blazek2005-r4-4"]{[4]}, @link["blazek2005-r4-7"]{[7]}, @link["blazek2005-r4-8"]{[8]}. The situation is sketched in Fig. 4.4.}
+      @lang["zh-CN"]{在单元顶点格式中ï¼所有流动变量都与计算网格的节点相关联。在基于重叠控制体的做法中ï¼网格单元仍然充当控制体ï¼与单元中心格式的情形一样。区别在于:此时为各控制体算出的残差必须分配到网格点上@link["blazek2005-r4-4"]{[4]}、@link["blazek2005-r4-7"]{[7]}、@link["blazek2005-r4-8"]{[8]}。图4.4示意了这一情形。}
+    }
+
+    @bi{
+      @lang["en"]{Let us consider the control volume @tex-math{\Omega_{I,J}} in Fig. 4.4, which is defined by the nodes}
+      @lang["zh-CN"]{考察图4.4中的控制体@tex-math{\Omega_{I,J}}ï¼它由下列节点定义}
+    }
+
+    @tex-display-math{(i,j)\quad (i+1,j)\quad (i+1,j+1)\quad (i,j+1)\,.}
+
+    @bi{
+      @lang["en"]{Note that the point @tex-math{(i,j)} is located at the lower left corner of @tex-math{\Omega_{I,J}}. The convective fluxes, e.g., for the face @tex-math{\Delta S_{I,J-1/2}}, which is given by the points @tex-math{(i,j)} and @tex-math{(i+1,j)}, are approximated as}
+      @lang["zh-CN"]{注意ï¼点@tex-math{(i,j)}位于@tex-math{\Omega_{I,J}}的左下角。对流通量——例如对面@tex-math{\Delta S_{I,J-1/2}}ï¼它由点@tex-math{(i,j)}与@tex-math{(i+1,j)}给定——近似为}
+    }
+
+    @tex-display-math[#:id "eq-4-25"]{\left(\vec{F}_c\,\Delta S\right)_{I,J-1/2} \approx \vec{F}_c(\vec{W}_{I,J-1/2})\,\Delta S_{I,J-1/2}\,. \tag{4.25}}
+
+    @bi{
+      @lang["en"]{The variables at the midpoint of the face are evaluated using an arithmetic average of the variables at the nodes defining the face, i.e.,}
+      @lang["zh-CN"]{面中点处的变量用定义该面的两个节点上变量的算术平均来计算ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-26"]{\vec{W}_{I,J-1/2} = \frac{1}{2}\left[\vec{W}_{i,j} + \vec{W}_{i+1,j}\right]. \tag{4.26}}
+
+    @bi{
+      @lang["en"]{The face area @tex-math{\Delta S_{I,J-1/2}} is computed from the relations @link["blazek2005-ch04#eq-4-6"]{(4.6)} and @link["blazek2005-ch04#eq-4-7"]{(4.7)}.}
+      @lang["zh-CN"]{面面积@tex-math{\Delta S_{I,J-1/2}}由关系式@link["blazek2005-ch04#eq-4-6"]{(4.6)}与@link["blazek2005-ch04#eq-4-7"]{(4.7)}计算。}
+    }
+
+    @bi{
+      @lang["en"]{The approach remains the same in three dimensions. For example, for the face associated with the normal vector @tex-math{\vec{n}_3} in Fig. 4.1b, the averaged variables read}
+      @lang["zh-CN"]{这一做法在三维中保持不变。例如ï¼对于与图4.1b中法向量@tex-math{\vec{n}_3}相关联的面ï¼平均变量为}
+    }
+
+    @tex-display-math[#:id "eq-4-27"]{\vec{W}_{I,J,K-1/2} = \frac{1}{4}\left[\vec{W}_1 + \vec{W}_2 + \vec{W}_5 + \vec{W}_6\right]. \tag{4.27}}
+
+    @image["blazek2005/fig-4-4.png"]{图4.4:单元顶点格式的重叠控制体(二维);箭头表示残差从单元形心向公共节点i,j的分配}
+
+    @emph{图4.4:单元顶点格式的重叠控制体(二维);箭头表示残差从单元形心向公共节点@tex-math{i,j}的分配。}图例:四个单元@tex-math{\Omega_{I-1,J-1}}、@tex-math{\Omega_{I,J-1}}、@tex-math{\Omega_{I-1,J}}、@tex-math{\Omega_{I,J}}(阴影四边形)共享公共节点@tex-math{i,j}(实心圆点);各单元形心以实心方块标记@tex-math{I-1,J-1}、@tex-math{I,J-1}、@tex-math{I-1,J}、@tex-math{I,J};箭头表示把各单元(形心)的残差分配到公共节点;外圈网格点标记为@tex-math{i-1,j-1}、@tex-math{i,j-1}、@tex-math{i+1,j-1}、@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i-1,j+1}、@tex-math{i,j+1}、@tex-math{i+1,j+1}。
+
+    @bi{
+      @lang["en"]{If we assume the edge 1-2 being oriented in the @tex-math{i}-direction, edge 1-5 in the @tex-math{j}-direction, edge 1-4 in the @tex-math{k}-direction, and if we finally associate the point @tex-math{(i,j,k)} with the corner 1 in Fig. 4.1b, the average in Eq. @link["blazek2005-ch04#eq-4-27"]{(4.27)} can also be written as}
+      @lang["zh-CN"]{如果假定边1-2沿@tex-math{i}方向、边1-5沿@tex-math{j}方向、边1-4沿@tex-math{k}方向ï¼并把点@tex-math{(i,j,k)}与图4.1b中的角点1相关联ï¼则方程@link["blazek2005-ch04#eq-4-27"]{(4.27)}中的平均也可以写成}
+    }
+
+    @tex-display-math[#:id "eq-4-28"]{\vec{W}_{I,J,K-1/2} = \frac{1}{4}\left[\vec{W}_{i,j,k} + \vec{W}_{i+1,j,k} + \vec{W}_{i,j+1,k} + \vec{W}_{i+1,j+1,k}\right]. \tag{4.28}}
+
+    @bi{
+      @lang["en"]{The convective flux is then again obtained from}
+      @lang["zh-CN"]{对流通量于是同样由下式得到}
+    }
+
+    @tex-display-math[#:id "eq-4-29"]{\left(\vec{F}_c\,\Delta S\right)_{I,J,K-1/2} \approx \vec{F}_c(\vec{W}_{I,J,K-1/2})\,\Delta S_{I,J,K-1/2}, \tag{4.29}}
+
+    @bi{
+      @lang["en"]{where the face area @tex-math{\Delta S_{I,J,K-1/2}} results from the formulae @link["blazek2005-ch04#eq-4-8"]{(4.8)} and @link["blazek2005-ch04#eq-4-9"]{(4.9)}. The viscous fluxes are normally computed employing the same approach as for the dual control-volume scheme @link["blazek2005-r4-9"]{[9]}, @link["blazek2005-r4-10"]{[10]}, which results in a more compact scheme (i.e., one which involves fewer nodal values).}
+      @lang["zh-CN"]{其中面面积@tex-math{\Delta S_{I,J,K-1/2}}由公式@link["blazek2005-ch04#eq-4-8"]{(4.8)}与@link["blazek2005-ch04#eq-4-9"]{(4.9)}得出。黏性通量通常采用与对偶控制体格式相同的方法计算@link["blazek2005-r4-9"]{[9]}、@link["blazek2005-r4-10"]{[10]}ï¼这样得到的格式更为紧凑(即涉及的节点值更少)。}
+    }
+
+    @bi{
+      @lang["en"]{Summing up all face contributions given by relations @link["blazek2005-ch04#eq-4-25"]{(4.25)}, @link["blazek2005-ch04#eq-4-26"]{(4.26)} and @link["blazek2005-ch04#eq-4-28"]{(4.28)}, @link["blazek2005-ch04#eq-4-29"]{(4.29)}, respectively, we obtain intermediate residuals @tex-math{\vec{R}_{I,J,K}} for all grid cells. In order to relate the cell-based to the node-based residuals, a further approximation is made using a @emph{residual distribution formula}. It is basically a function, which evaluates the @emph{unknown} node-based residual from a weighted sum of all cells having the particular grid node in common. The following distribution formulae were devised:
+        @itemize{
+          @item{volume weighted sum due to Ni @link["blazek2005-r4-7"]{[7]};}
+          @item{non-weighted sum due to Hall @link["blazek2005-r4-8"]{[8]};}
+          @item{characteristic (upwind) weighting procedure of Rossow @link["blazek2005-r4-11"]{[11]}, @link["blazek2005-r4-12"]{[12]}.}
+        }
+      }
+      @lang["zh-CN"]{把关系式@link["blazek2005-ch04#eq-4-25"]{(4.25)}、@link["blazek2005-ch04#eq-4-26"]{(4.26)}与@link["blazek2005-ch04#eq-4-28"]{(4.28)}、@link["blazek2005-ch04#eq-4-29"]{(4.29)}给出的所有面的贡献分别求和ï¼便得到所有网格单元的中间残差@tex-math{\vec{R}_{I,J,K}}。为了把基于单元的残差与基于节点的残差联系起来ï¼还需要作进一步近似ï¼即采用残差分布公式(residual distribution formula)。它基本上是一个函数ï¼由共享该网格节点的所有单元的加权和来计算@emph{未知的}基于节点的残差。已经提出的分布公式有:
+        @itemize{
+          @item{Ni的体积加权和@link["blazek2005-r4-7"]{[7]};}
+          @item{Hall的非加权求和@link["blazek2005-r4-8"]{[8]};}
+          @item{Rossow的特征(上风)加权方法@link["blazek2005-r4-11"]{[11]}、@link["blazek2005-r4-12"]{[12]}。}
+        }
+      }
+    }
+
+    @bi{
+      @lang["en"]{Theoretical investigations of the truncation error @link["blazek2005-r4-4"]{[4]} suggest that Ni's scheme is more accurate than Hall's approach. However, in practice Ni's distribution formula leads to problems in places, where the grid is strongly distorted and stretched. For example, strong oscillations of the pressure field near the trailing edge of an airfoil were observed when using O-grids @link["blazek2005-r4-13"]{[13]}, @link["blazek2005-r4-4"]{[4]}. Furthermore, convergence could only be achieved when the numerical viscosity was increased considerably. The underlying idea of the upwind weighting procedure @link["blazek2005-r4-11"]{[11]}, @link["blazek2005-r4-12"]{[12]} is quite similar to that of the fluctuation-splitting schemes @link["blazek2005-r4-14"]{[14]}-@link["blazek2005-r4-17"]{[17]} (cf. Subsection 3.1.5), but the implementation is numerically much simpler. Basically, the residuals are sent only upstream in the characteristic direction.}
+      @lang["zh-CN"]{对截断误差的理论研究@link["blazek2005-r4-4"]{[4]}表明,Ni的格式比Hall的方法更精确。然而在实践中,Ni的分布公式在网格强烈扭曲和拉伸的地方会导致问题。例如ï¼使用O型网格时ï¼曾观察到翼型后缘附近压力场的强烈振荡@link["blazek2005-r4-13"]{[13]}、@link["blazek2005-r4-4"]{[4]}。此外ï¼只有把数值黏性加大很多才能获得收敛。上风加权方法@link["blazek2005-r4-11"]{[11]}、@link["blazek2005-r4-12"]{[12]}的基本思想与脉动分裂(fluctuation-splitting)格式@link["blazek2005-r4-14"]{[14]}-@link["blazek2005-r4-17"]{[17]}相当类似(参见3.1.5小节)ï¼但其数值实现要简单得多。从根本上说ï¼残差只沿特征方向向上游发送。}
+    }
+
+    @bi{
+      @lang["en"]{Of the three approaches, Hall's distribution scheme proved to be the most robust. In Hall's scheme, the residual at a particular node results from a simple sum of all intermediate residuals @tex-math{\vec{R}_{I,J,K}}, which cells share the node. Thus, in the 2-D case rendered in Fig. 4.4, we get}
+      @lang["zh-CN"]{在这三种做法中,Hall的分布格式被证明最为稳健。在Hall的格式中ï¼某一节点处的残差由共享该节点的所有单元的中间残差@tex-math{\vec{R}_{I,J,K}}直接求和得到。于是ï¼在图4.4所示的二维情形中ï¼我们得到}
+    }
+
+    @tex-display-math[#:id "eq-4-30"]{\vec{R}_{i,j} = \vec{R}_{I,J} + \vec{R}_{I-1,J} + \vec{R}_{I-1,J-1} + \vec{R}_{I,J-1}\,. \tag{4.30}}
+
+    @bi{
+      @lang["en"]{In three dimensions, in total eight cell-based residuals have to be summed up in the same way. A close inspection of @link["blazek2005-ch04#eq-4-30"]{(4.30)} reveals that @tex-math{\vec{R}_{i,j}} is just the net flux through the boundary of the supercell}
+      @lang["zh-CN"]{在三维中ï¼必须以同样的方式把总共八个基于单元的残差求和。仔细考察@link["blazek2005-ch04#eq-4-30"]{(4.30)}可以发现,@tex-math{\vec{R}_{i,j}}恰好就是穿过超级单元(supercell)边界的净通量}
+    }
+
+    @tex-display-math[#:id "eq-4-31"]{\Omega_{i,j} = \Omega_{I,J} + \Omega_{I-1,J} + \Omega_{I-1,J-1} + \Omega_{I,J-1}, \tag{4.31}}
+
+    @bi{
+      @lang["en"]{due to the fact that the fluxes across the inner faces cancel each other. The supercell also represents the "total" control volume, centred at the point @tex-math{(i,j)}. In the 3-D case, the total volume consists of the cells}
+      @lang["zh-CN"]{这是因为穿过内部各面的通量互相抵消。超级单元也代表以点@tex-math{(i,j)}为中心的“总”控制体。在三维情形中ï¼总体积由以下单元构成}
+    }
+
+    @tex-display-math[#:id "eq-4-32"]{\begin{aligned}
+      \Omega_{i,j,k} = {}& \Omega_{I,J,K} + \Omega_{I-1,J,K} + \Omega_{I-1,J-1,K} + \Omega_{I,J-1,K} \\
+      & + \Omega_{I,J,K-1} + \Omega_{I-1,J,K-1} + \Omega_{I-1,J-1,K-1} + \Omega_{I,J-1,K-1}\,.
+    \end{aligned} \tag{4.32}}
+
+    @bi{
+      @lang["en"]{As it can be seen from Fig. 4.4, the control volumes overlap by at least one cell, which gave the scheme its name.}
+      @lang["zh-CN"]{从图4.4可以看出ï¼这些控制体至少重叠一个单元ï¼该格式正因此得名。}
+    }
+
+    @bi{
+      @lang["en"]{The source term is calculated using the flow variables from the corresponding grid node, i.e.,}
+      @lang["zh-CN"]{源项用相应网格节点处的流动变量计算ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-33"]{\left(\vec{Q}\,\Omega\right)_{i,j,k} = \vec{Q}(\vec{W}_{i,j,k})\,\Omega_{i,j,k}\,. \tag{4.33}}
+
+    @bi{
+      @lang["en"]{With the above definitions, the time-stepping scheme in Eq. @link["blazek2005-ch04#eq-4-2"]{(4.2)} becomes}
+      @lang["zh-CN"]{采用上述定义后ï¼方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}中的时间推进格式变为}
+    }
+
+    @tex-display-math[#:id "eq-4-34"]{\frac{d\vec{W}_{i,j,k}}{dt} = -\frac{1}{\Omega_{i,j,k}}\,\vec{R}_{i,j,k}\,. \tag{4.34}}
+
+    @bi{
+      @lang["en"]{This represents a system of ordinary differential equations, which has to be solved in each grid point @tex-math{(i,j,k)} in the same way as for the cell-centred scheme. Note that the total volume @link["blazek2005-ch04#eq-4-31"]{(4.31)} or @link["blazek2005-ch04#eq-4-32"]{(4.32)}, respectively, is utilised in Eq. @link["blazek2005-ch04#eq-4-34"]{(4.34)}.}
+      @lang["zh-CN"]{这代表一个常微分方程组ï¼它必须在每个网格点@tex-math{(i,j,k)}上求解ï¼方式与单元中心格式相同。注意ï¼方程@link["blazek2005-ch04#eq-4-34"]{(4.34)}中分别使用总体积@link["blazek2005-ch04#eq-4-31"]{(4.31)}或@link["blazek2005-ch04#eq-4-32"]{(4.32)}。}
+    }
+  }
+}
+@subtree[#:id "blazek2005-4-2-3"]{
+  @title{4.2.3 Cell-Vertex Scheme: Dual Control Volumes 单元顶点格式:对偶控制体}
+
+  @bi{
+    @lang["en"]{In this scheme, the control volumes are centred around the particular grid node (vertex), where all flow variables are stored @link["blazek2005-r4-18"]{[18]}, @link["blazek2005-r4-19"]{[19]}. As depicted in Fig. 4.5, in the 2-D case the dual control volumes are constructed by joining the midpoints of the four cells which share the node. In three dimensions, the centroids of eight cells have to be connected in order to form the faces of the control volume. Another possibility would be to join one cell centroid to the edge midpoint (in two dimensions) and then to the neighbouring cell centroid again @link["blazek2005-r4-20"]{[20]}. Thus, the face of the control volume would consist of two parts with different normal vectors, as it is common for unstructured grids (see next Chapter). However, in the case of structured grids, such a definition of the control volume is justified only at boundaries, where the surface discretisation would be otherwise changed. This is demonstrated in Fig. 4.6. Significant advantages with respect to accuracy in the interior field cannot be expected from the second approach on reasonably smooth grids. Therefore, in what follows, the simpler definition of the dual control volume will be employed. The boundary treatment is discussed in Chapter 8.}
+    @lang["zh-CN"]{在这一格式中ï¼控制体围绕各个网格节点(顶点)构造ï¼所有流动变量都存储在节点上@link["blazek2005-r4-18"]{[18]}、@link["blazek2005-r4-19"]{[19]}。如图4.5所示ï¼在二维情形中ï¼对偶控制体通过连接共享该节点的四个单元的中点而构成。在三维中ï¼则须把八个单元的形心连接起来ï¼以构成控制体的各个面。另一种可能的做法是(在二维中)把某个单元形心连接到边中点ï¼再连接回相邻单元的形心@link["blazek2005-r4-20"]{[20]}。这样一来ï¼控制体的面将由法向量不同的两部分构成ï¼这在非结构网格中十分常见(参见下一章)。然而ï¼对于结构网格ï¼这种控制体定义只有在边界处才有理由采用ï¼因为在边界处若不如此定义ï¼表面的离散方式将会改变。图4.6演示了这一情形。在相当光滑的网格上ï¼不能指望第二种做法在内部流场精度方面带来显著优势。因此ï¼下文将采用较简单的对偶控制体定义。边界处理将在第8章中讨论。}
+  }
+
+  @bi{
+    @lang["en"]{When we evaluate the discretised flow Equations @link["blazek2005-ch04#eq-4-2"]{(4.2)}, we have to compute the convective and the viscous fluxes at the faces of the control volume. This can be done according to one of the following three approaches:
+      @itemize{
+        @item{by the @emph{average of fluxes} computed from values at the nodes to the left and to the right of the face of the control volume, but using the same face vector (generally applied only to the convective fluxes);}
+        @item{by using an @emph{average of variables} stored at the nodes to the left and to the right of the face;}
+        @item{by computing the fluxes from flow quantities interpolated separately to the left and to the right side of the face (employed only for the convective fluxes).}
+      }
+    }
+    @lang["zh-CN"]{在计算离散化流动方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}时ï¼需要计算控制体各面上的对流通量和黏性通量。这可以按以下三种做法之一来完成:
+      @itemize{
+        @item{通量平均(average of fluxes)——由控制体面左右两侧节点处的值分别计算通量ï¼再取平均ï¼但使用同一面向量(一般只用于对流通量);}
+        @item{变量平均(average of variables)——对存储在控制体面左右两侧节点处的变量取平均;}
+        @item{由分别插值到控制体面左右两侧的流动量计算通量(只用于对流通量)。}
+      }
+    }
+  }
+
+  @bi{
+    @lang["en"]{Thus, for example at the cell face @tex-math{\vec{n}_{i+1/2,j}} in Fig. 4.5 the first approach - average of fluxes - reads in two dimensions}
+    @lang["zh-CN"]{于是ï¼例如对图4.5中的单元面@tex-math{\vec{n}_{i+1/2,j}}ï¼第一种做法——通量平均——在二维中写作}
+  }
+
+  @tex-display-math[#:id "eq-4-35"]{\left(\vec{F}_c\,\Delta S\right)_{i+1/2,j} \approx \frac{1}{2}\left[\vec{F}_c(\vec{W}_{i,j}) + \vec{F}_c(\vec{W}_{i+1,j})\right]\Delta S_{i+1/2,j} \tag{4.35}}
+
+  @bi{
+    @lang["en"]{with @tex-math{\Delta S_{i+1/2,j}} being computed according to Eq. @link["blazek2005-ch04#eq-4-6"]{(4.6)} and @link["blazek2005-ch04#eq-4-7"]{(4.7)}, respectively, from the known coordinates of the cell centroids.}
+    @lang["zh-CN"]{其中@tex-math{\Delta S_{i+1/2,j}}分别按方程@link["blazek2005-ch04#eq-4-6"]{(4.6)}与@link["blazek2005-ch04#eq-4-7"]{(4.7)}ï¼由单元形心的已知坐标计算。}
+  }
+
+  @bi{
+    @lang["en"]{The second possible approach - average of variables - can be formulated as follows}
+    @lang["zh-CN"]{第二种可能的做法——变量平均——可以表述为}
+  }
+
+  @tex-display-math[#:id "eq-4-36"]{\left(\vec{F}\,\Delta S\right)_{i+1/2,j} \approx \vec{F}(\vec{W}_{i+1/2,j})\,\Delta S_{i+1/2,j}\,, \tag{4.36}}
+
+  @bi{
+    @lang["en"]{where the conservative (or the dependent) variables at the face @tex-math{\vec{n}_{i+1/2,j}} of the control volume result from arithmetic averaging of values at the two neighbouring nodes. Hence,}
+    @lang["zh-CN"]{其中ï¼控制体面@tex-math{\vec{n}_{i+1/2,j}}上的守恒变量(或因变量)由两个相邻节点处数值的算术平均得到。于是}
+  }
+
+  @tex-display-math[#:id "eq-4-37"]{\vec{W}_{i+1/2,j} = \frac{1}{2}\left(\vec{W}_{i,j} + \vec{W}_{i+1,j}\right)\,. \tag{4.37}}
+
+  @image["blazek2005/fig-4-5.png"]{图4.5:二维中单元顶点格式的对偶控制体}
+
+  @emph{图4.5:二维中单元顶点格式的对偶控制体。}图例:阴影四边形@tex-math{\Omega_{I,J}}为围绕网格节点@tex-math{i,j}的对偶控制体ï¼由共享该节点的四个单元的中点连接而成;节点@tex-math{i,j}以及相邻节点@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i,j-1}均以实心圆点标记;@tex-math{\vec{n}_{i+1/2,j}}、@tex-math{\vec{n}_{i-1/2,j}}、@tex-math{\vec{n}_{i,j+1/2}}、@tex-math{\vec{n}_{i,j-1/2}}为对偶控制体各面的单位法向量(箭头所示)。
+
+  @image["blazek2005/fig-4-6.png"]{图4.6:边界处对偶控制体的定义(二维);上排:连接边中点构成;下排:连接边中点及边界上的中心节点构成}
+
+  @emph{图4.6:边界处对偶控制体的定义(二维)。}上排:通过连接边中点构成;下排:通过连接边中点以及边界上的中心节点构成。图例:阴影四边形为边界网格点(实心圆点)处的对偶控制体;阴影斜线区域为物面(壁面);左列为平直边界上的情形ï¼右列为折角(斜坡)边界上的情形。
+
+  @bi{
+    @lang["en"]{The flux vector @tex-math{\vec{F}} in Eq. @link["blazek2005-ch04#eq-4-36"]{(4.36)} represents either the convective or the viscous fluxes.}
+    @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-36"]{(4.36)}中的通量向量@tex-math{\vec{F}}既可以指对流通量ï¼也可以指黏性通量。}
+  }
+
+  @bi{
+    @lang["en"]{The third methodology utilises an interpolation of flow quantities (being mostly velocity components, pressure, density and total enthalpy) separately to both sides of the face. The interpolated quantities - termed the @emph{left} and the @emph{right state} (see the begin of Section 4.3) - differ in general between both sides. The fluxes through the face of the control volume are then evaluated from the difference of the left and right state using some non-linear function. Thus,}
+    @lang["zh-CN"]{第三种方法把流动量(大多为速度分量、压力、密度和总焓)分别插值到面的两侧。插值得到的量——称为左(left)状态与右(right)状态(见4.3节开头)——在两侧一般并不相同。通过控制体面的通量随后利用某个非线性函数由左、右状态之差求出。于是}
+  }
+
+  @tex-display-math[#:id "eq-4-38"]{\left(\vec{F}_c\,\Delta S\right)_{i+1/2,j} \approx f_{Flux}\left(\vec{U}_L,\,\vec{U}_R,\,\Delta S_{i+1/2,j}\right), \tag{4.38}}
+
+  @bi{
+    @lang["en"]{where}
+    @lang["zh-CN"]{其中}
+  }
+
+  @tex-display-math[#:id "eq-4-39"]{\begin{aligned}
+    \vec{U}_L &= f_{Interp}\left(\cdots,\,\vec{U}_{i-1,j},\,\vec{U}_{i,j},\,\cdots\right) \\
+    \vec{U}_R &= f_{Interp}\left(\cdots,\,\vec{U}_{i,j},\,\vec{U}_{i+1,j},\,\cdots\right)
+  \end{aligned} \tag{4.39}}
+
+  @bi{
+    @lang["en"]{stand for the interpolated states. Of course, similar relations like @link["blazek2005-ch04#eq-4-35"]{(4.35)}–@link["blazek2005-ch04#eq-4-39"]{(4.39)} apply in the same way to other faces of the control volume.}
+    @lang["zh-CN"]{它们表示插值得到的状态。当然ï¼与@link["blazek2005-ch04#eq-4-35"]{(4.35)}–@link["blazek2005-ch04#eq-4-39"]{(4.39)}类似的关系对控制体的其他面同样成立。}
+  }
+
+  @bi{
+    @lang["en"]{The same approximations are employed in three dimensions. For example, at the cell face @tex-math{\vec{n}_{i+1/2,j,k}} (e.g., identical to @tex-math{\vec{n}_2} in Fig. 4.1b) the average of fluxes in Eq. @link["blazek2005-ch04#eq-4-35"]{(4.35)} becomes}
+    @lang["zh-CN"]{同样的近似也用于三维。例如ï¼在单元面@tex-math{\vec{n}_{i+1/2,j,k}}(例如与图4.1b中的@tex-math{\vec{n}_2}相同)处ï¼方程@link["blazek2005-ch04#eq-4-35"]{(4.35)}的通量平均变为}
+  }
+
+  @tex-display-math[#:id "eq-4-40"]{\left(\vec{F}_c\,\Delta S\right)_{i+1/2,j,k} \approx \frac{1}{2}\left[\vec{F}_c(\vec{W}_{i,j,k}) + \vec{F}_c(\vec{W}_{i+1,j,k})\right]\Delta S_{i+1/2,j,k}, \tag{4.40}}
+
+  @bi{
+    @lang["en"]{where @tex-math{\Delta S_{i+1/2,j,k}} is obtained from the Equations @link["blazek2005-ch04#eq-4-8"]{(4.8)} and @link["blazek2005-ch04#eq-4-9"]{(4.9)}. The average of the flow variables results similarly to Eq. @link["blazek2005-ch04#eq-4-36"]{(4.36)} in}
+    @lang["zh-CN"]{其中@tex-math{\Delta S_{i+1/2,j,k}}由方程@link["blazek2005-ch04#eq-4-8"]{(4.8)}与@link["blazek2005-ch04#eq-4-9"]{(4.9)}得到。与方程@link["blazek2005-ch04#eq-4-36"]{(4.36)}类似ï¼流动变量的平均给出为}
+  }
+
+  @tex-display-math[#:id "eq-4-41"]{\left(\vec{F}\,\Delta S\right)_{i+1/2,j,k} \approx \vec{F}(\vec{W}_{i+1/2,j,k})\,\Delta S_{i+1/2,j,k} \tag{4.41}}
+
+  @bi{
+    @lang["en"]{with}
+    @lang["zh-CN"]{其中}
+  }
+
+  @tex-display-math[#:id "eq-4-42"]{\vec{W}_{i+1/2,j,k} = \frac{1}{2}\left(\vec{W}_{i,j,k} + \vec{W}_{i+1,j,k}\right)\,. \tag{4.42}}
+
+  @bi{
+    @lang["en"]{Finally, the interpolation of the flow variables leads correspondingly to Eq. @link["blazek2005-ch04#eq-4-38"]{(4.38)} to}
+    @lang["zh-CN"]{最后ï¼流动变量的插值对应于方程@link["blazek2005-ch04#eq-4-38"]{(4.38)}ï¼给出}
+  }
+
+  @tex-display-math[#:id "eq-4-43"]{\left(\vec{F}_c\,\Delta S\right)_{i+1/2,j,k} \approx f_{Flux}\left(\vec{U}_L,\,\vec{U}_R,\,\Delta S_{i+1/2,j,k}\right), \tag{4.43}}
+
+  @bi{
+    @lang["en"]{where @tex-math{\vec{U}_L} and @tex-math{\vec{U}_R} denote the interpolated values at the face. A detailed description of several possible approaches will be presented in Section 4.3 for the convective and in Section 4.4 for the viscous fluxes.}
+    @lang["zh-CN"]{其中@tex-math{\vec{U}_L}与@tex-math{\vec{U}_R}表示在面上插值得到的值。关于几种可能做法的详细描述ï¼将在4.3节中针对对流通量、在4.4节中针对黏性通量分别介绍。}
+  }
+
+  @bi{
+    @lang["en"]{The last term in the discretised flow Equations @link["blazek2005-ch04#eq-4-2"]{(4.2)} to be evaluated is the source term @tex-math{\vec{Q}}. As already stated in the introduction, the source term is mostly supposed to be constant inside the control volume. For this reason, it is computed using the flow variables from the corresponding grid point. Hence, we may define}
+    @lang["zh-CN"]{离散化流动方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}中最后一项需要计算的是源项@tex-math{\vec{Q}}。如引言中所述ï¼源项大多假定在控制体内部为常数。因此ï¼它用相应网格点处的流动变量计算。于是ï¼我们可以定义}
+  }
+
+  @tex-display-math[#:id "eq-4-44"]{\left(\vec{Q}\,\Omega\right)_{i,j,k} = \vec{Q}(\vec{W}_{i,j,k})\;\Omega_{i,j,k}\,. \tag{4.44}}
+
+  @bi{
+    @lang["en"]{Using the above relations, the fluxes through the faces can be computed and the numerical integration over the boundary of @tex-math{\Omega_{i,j,k}} can be carried out according to Eq. @link["blazek2005-ch04#eq-4-2"]{(4.2)}. In this way, we obtain the complete residual @tex-math{\vec{R}_{i,j,k}} including the source term. The change in time of the conservative variables follows then for each grid point from}
+    @lang["zh-CN"]{利用上述关系ï¼可以算出通过各面的通量ï¼并可按方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}沿@tex-math{\Omega_{i,j,k}}的边界完成数值积分。这样ï¼我们便得到包含源项的完整残差@tex-math{\vec{R}_{i,j,k}}。守恒变量随时间的变化随后对每个网格点由下式给出}
+  }
+
+  @tex-display-math[#:id "eq-4-45"]{\frac{d\vec{W}_{i,j,k}}{dt} = -\frac{1}{\Omega_{i,j,k}}\,\vec{R}_{i,j,k}\,. \tag{4.45}}
+
+  @bi{
+    @lang["en"]{Suitable solution methods will be presented later in Chapter 6.}
+    @lang["zh-CN"]{适当的求解方法将在第6章中介绍。}
+  }
+}
+
+@subtree[#:id "blazek2005-4-2-4"]{
+  @title{4.2.4 Cell-Centred versus Cell-Vertex Schemes 单元中心格式与单元顶点格式的对比}
+
+  @bi{
+    @lang["en"]{In the preceding three subsections, both the cell-centred and the cell-vertex discretisation methodologies were outlined. The following paragraphs compare the three schemes and give an overview of the, at times controversial, debate about their relative merits.}
+    @lang["zh-CN"]{在前面三小节中ï¼我们概述了单元中心与单元顶点两种离散方法学。下面几段将对这三种格式进行比较ï¼并概述围绕它们相对优劣的、有时颇具争议的讨论。}
+  }
+
+  @bi{
+    @lang["en"]{First, let us consider the accuracy of the discretisations. It follows from the discussion in @link["blazek2005-r4-4"]{[4]}, @link["blazek2005-r4-21"]{[21]} that the cell-vertex scheme (either with overlapping or dual control volumes) can be made first-order accurate on distorted grids. On Cartesian or on smooth grids (i.e., where the volumes between adjacent cells vary only moderately and which are only slightly skewed), the cell-vertex scheme is second- or higher-order accurate @link["blazek2005-r4-22"]{[22]}, depending on the flux evaluation scheme. In the opposite, the discretisation error of a cell-centred scheme depends strongly on the smoothness of the grid. For example, for an arrangement of the cells sketched in Fig. 4.7, an averaging does not provide the correct value at the midpoint of a face even for a linearly varying function. The consequence is that on a grid with slope discontinuity the discretisation error will not be reduced even when the grid is infinitely refined. As demonstrated in @link["blazek2005-r4-4"]{[4]}, such zero-order errors manifest themselves as oscillations or kinks in isolines, whereas a cell-vertex scheme experiences no problems in the same situation. Nevertheless, on Cartesian or on sufficiently smooth grids, the cell-centred scheme can also reach second- or higher-order accuracy. A further analysis of the discretisation errors were presented in @link["blazek2005-r4-23"]{[23]}-@link["blazek2005-r4-26"]{[26]}.}
+    @lang["zh-CN"]{首先ï¼考察离散化的精度。由文献@link["blazek2005-r4-4"]{[4]}、@link["blazek2005-r4-21"]{[21]}中的讨论可知ï¼单元顶点格式(无论采用重叠控制体还是对偶控制体)在扭曲网格上只能做到一阶精度。在笛卡尔网格或光滑网格(即相邻单元的体积变化不大、扭曲轻微的网格)上ï¼单元顶点格式按通量计算格式的不同可达到二阶或更高精度@link["blazek2005-r4-22"]{[22]}。相反ï¼单元中心格式的离散误差在很大程度上取决于网格的光滑程度。例如ï¼对于图4.7所示的单元布置ï¼即使是线性变化的函数ï¼取平均也不能给出面上中点的正确值。其后果是:在具有斜率间断的网格上ï¼即使把网格无限细化ï¼离散误差也不会减小。如文献@link["blazek2005-r4-4"]{[4]}所证明的ï¼这类零阶误差表现为等值线上的振荡或扭折ï¼而单元顶点格式在同一情形下不会遇到任何问题。尽管如此ï¼在笛卡尔网格或充分光滑的网格上ï¼单元中心格式同样可以达到二阶或更高精度。文献@link["blazek2005-r4-23"]{[23]}-@link["blazek2005-r4-26"]{[26]}对离散误差作了进一步分析。}
+  }
+
+  @bi{
+    @lang["en"]{Second, let us compare the three methods and their characteristics at boundaries. It is mainly at the solid wall boundary where the cell-vertex scheme with dual control volumes faces difficulties. Recalling Fig. 4.6 again, it is apparent that only about one half of the control volume is left at the boundary. The integration of fluxes around the faces results in a residual located @emph{inside} - ideally in the @emph{centroid} - of the control volume. But, the residual is associated with the @emph{node} residing directly at the wall. This mismatch leads to increased discretisation error in comparison to the cell-centred scheme. The definition of the dual control volume causes also problems at sharp corners (like trailing edges), which show up as unphysical peaks in pressure or density. Further complications arise, e.g., at coordinate cuts or at periodic boundaries (see Chapter 8), where the fluxes from both parts of the control volume have to be summed}
+    @lang["zh-CN"]{其次ï¼比较三种方法及其在边界处的特性。采用对偶控制体的单元顶点格式主要在固壁边界处遇到困难。再次回顾图4.6即可明显看出ï¼在边界处控制体只剩大约一半。沿各面对通量积分得到的残差位于控制体@emph{内部}——理想情况下位于其@emph{形心};但残差却被关联到直接位于壁面上的@emph{节点}。与单元中心格式相比ï¼这种错位导致离散误差增大。对偶控制体的定义在尖角(如尾缘)处也会引起问题ï¼表现为压力或密度上的非物理峰值。此外ï¼在坐标切割或周期边界(见第8章)等处还会出现更多复杂情况ï¼在那里必须把来自控制体两部分的通量正确地相加}
+  }
+
+  @image["blazek2005/fig-4-7.png"]{图4.7:斜扭曲网格上的单元中心通量平衡;叉号表示单元面的中点}
+
+  @emph{图4.7:斜扭曲网格上的单元中心通量平衡;叉号表示单元面的中点。}图例:阴影四边形@tex-math{\Omega_{I,J}}为控制体ï¼其右侧相邻单元@tex-math{I+1,J}发生扭斜;两个单元形心以实心方块标记ï¼虚线连接两形心;叉号@tex-math{\times}表示两单元公共面的中点——即使是线性变化的函数ï¼由形心处数值取平均也得不到该点的正确值。
+
+  @bi{
+    @lang["en"]{up correctly. All cell-vertex schemes also require additional logic, in order to assure a consistent solution at boundary points shared by multiple grid blocks. No such problems appear for cell-centred schemes.}
+    @lang["zh-CN"]{才行。所有单元顶点格式还需要额外的逻辑ï¼以保证在由多个网格块共享的边界点上解的一致性。单元中心格式则不存在这些问题。}
+  }
+
+  @bi{
+    @lang["en"]{The cell-vertex scheme with overlapping control volumes has an advantage over the dual volume scheme in the treatment of wall boundaries, but it cannot be combined with the popular upwind discretisation methods like TVD, AUSM, or CUSP. The discretisation involves more points than those of the cell-centred and the dual control-volume schemes (27 instead of 7 in 3D), which leads to smearing of discontinuities and memory overhead in the case of an implicit time discretisation.}
+    @lang["zh-CN"]{采用重叠控制体的单元顶点格式在壁面边界的处理上比对偶体积格式有利ï¼但它不能与流行的上风离散方法(如TVD、AUSM或CUSP)结合使用。其离散所涉及的点多于单元中心格式与对偶控制体格式(三维中为27个而非7个)ï¼这会导致间断被抹平ï¼并且在隐式时间离散的情形下带来内存开销。}
+  }
+
+  @bi{
+    @lang["en"]{The last main difference between the cell-centred and the cell-vertex schemes appears for unsteady flow problems. As mentioned earlier in Section 3.2, the cell-vertex schemes require at least an approximate treatment of the mass matrix @link["blazek2005-r4-27"]{[27]}, @link["blazek2005-r4-28"]{[28]}. On the contrary, the mass matrix can be completely discarded in the case of a cell-centred scheme, because the residual is naturally associated with the centroid of the control volume.}
+    @lang["zh-CN"]{单元中心格式与单元顶点格式之间的最后一个主要差别出现在非定常流动问题中。正如3.2节中早已提到的ï¼单元顶点格式至少需要对质量矩阵@link["blazek2005-r4-27"]{[27]}、@link["blazek2005-r4-28"]{[28]}作近似处理。相反ï¼在单元中心格式中ï¼质量矩阵可以完全舍弃ï¼因为残差自然地与控制体的形心相关联。}
+  }
+
+  @bi{
+    @lang["en"]{In summary, the cell-vertex scheme with dual control volumes and the cell-centred scheme are numerically very similar in the interior of a stationary flow field. The main differences occur on distorted grids, in the boundary treatment and for unsteady flows. In the last two cases, the cell-centred approach shows advantages over the cell-vertex schemes, which result in a more straightforward implementation in a flow solver.}
+    @lang["zh-CN"]{总之ï¼采用对偶控制体的单元顶点格式与单元中心格式在定常流场内部的数值特性非常相似。主要差别出现在扭曲网格、边界处理以及非定常流动等情形。在后两种情形中ï¼单元中心方法相对单元顶点格式表现出优势ï¼使得它在流动求解器中的实现更为直接。}
+  }
+}
+@subtree[#:id "blazek2005-4-3"]{
+  @title{4.3 Discretisation of the Convective Fluxes 对流通量的离散化}
+
+  @bi{
+    @lang["en"]{In the previous sections, we discussed the spatial discretisation methodologies in general. In this part, we shall learn more about the details, how the convective fluxes can be approximated.}
+    @lang["zh-CN"]{在前几节中ï¼我们总体上讨论了空间离散方法学。在本部分中ï¼我们将更深入地了解对流通量近似的具体细节。}
+  }
+
+  @bi{
+    @lang["en"]{As we could already see in Subsection 3.1.5, in the framework of the finite volume approach, we have basically the choice between:
+      @itemize{
+        @item{central,}
+        @item{flux-vector splitting,}
+        @item{flux-difference splitting,}
+        @item{total variation diminishing (TVD), and}
+        @item{fluctuation-splitting}
+      }
+    schemes. In order to keep the amount of material bounded, we will restrict ourselves to the most important and popular methods. We will omit any detailed description of all possible modifications to the basic schemes, but instead reference the relevant literature.}
+    @lang["zh-CN"]{正如我们在3.1.5小节中已经看到的ï¼在有限体积方法的框架下ï¼基本上可以在以下几类格式中选择:
+      @itemize{
+        @item{中心格式(central);}
+        @item{通量向量分裂格式(flux-vector splitting);}
+        @item{通量差分分裂格式(flux-difference splitting);}
+        @item{总变差减小(total variation diminishing,TVD)格式;以及}
+        @item{脉动分裂格式(fluctuation-splitting)}
+      }
+    。为了控制篇幅ï¼我们只介绍最重要、最流行的方法;对基本格式的各种可能改型不再详细描述ï¼而是引用相关文献。}
+  }
+
+  @bi{
+    @lang["en"]{Before we start to present the various discretisation schemes in detail, we should explain what is meant by the designations left and right state, as well as by stencil or computational molecule, respectively.}
+    @lang["zh-CN"]{在开始详细展示各种离散格式之前ï¼我们应当先解释left与right state(左状态与右状态)这两个称谓ï¼以及stencil(模板)或computational molecule(计算分子)的含义。}
+  }
+
+  @bi{
+    @lang["en"]{Certain cell-centred and dual control-volume schemes require an interpolation of flow variables to the faces of the control volume. The situation is sketched in Fig. 4.8 for a grid in the @emph{i}-direction.}
+    @lang["zh-CN"]{某些单元中心格式与对偶控制体格式需要把流动变量插值到控制体的面上。图4.8以@emph{i}方向网格为例示意了这一情形。}
+  }
+
+  @image["blazek2005/fig-4-8.png"]{图4.8:单元面I+1/2(或i+1/2)处的左状态与右状态;上半部分:单元中心格式;下半部分:采用对偶控制体的单元顶点格式}
+
+  @emph{图4.8:单元面@tex-math{I+1/2}(或@tex-math{i+1/2})处的左状态与右状态。上半部分:单元中心格式;下半部分:采用对偶控制体的单元顶点格式。}图例:圆点表示节点ï¼矩形表示单元形心;L与R分别表示面左侧与右侧的状态ï¼箭头所指为控制体的面(face of control volume)。
+
+  @bi{
+    @lang["en"]{One possibility, which is employed by the central scheme (see next subsection), consists of linear interpolation using the same number of values to the left and to the right of the face. In other words, the interpolation is centred at the face. Discretisations based on the characteristics of the Euler equations - upwind schemes - separately interpolate flow variables from the left and the right side of the face using non-symmetric formulae. The two values, named the left and the right state, are then utilised to compute the convective flux through the face (see Eqs. @link["blazek2005-ch04#eq-4-18"]{(4.18)}, @link["blazek2005-ch04#eq-4-23"]{(4.23)}, (4.38), or (4.43)). The interpolation formulae are almost exclusively (with the exception of TVD schemes) based on Van Leer's MUSCL (Monotone Upstream-Centred Schemes for Conservation Laws) approach @link["blazek2005-r4-29"]{[29]}. They read for a general flow variable @tex-math{U}}
+    @lang["zh-CN"]{中心格式(见下一小节)采用的一种做法ï¼是利用面两侧相同数目的值做线性插值;换句话说ï¼插值相对于面居中。基于欧拉方程特征的离散——上风格式——则用非对称公式分别从面的左侧和右侧插值流动变量。这两个值分别称为左状态(left state)和右状态(right state)ï¼随后被用来计算通过该面的对流通量(见方程@link["blazek2005-ch04#eq-4-18"]{(4.18)}、@link["blazek2005-ch04#eq-4-23"]{(4.23)}、(4.38)或(4.43))。这些插值公式几乎全部(TVD格式除外)基于Van Leer的MUSCL(守恒律的单调上游中心型格式,Monotone Upstream-Centred Schemes for Conservation Laws)方法@link["blazek2005-r4-29"]{[29]}。对于一般流动变量@tex-math{U}ï¼它们为}
+  }
+
+  @tex-display-math[#:id "eq-4-46"]{\begin{aligned}
+    U_R &= U_{I+1} - \frac{\epsilon}{4}\left[(1+\hat{\kappa})\Delta_{-} + (1-\hat{\kappa})\Delta_{+}\right] U_{I+1}\\
+    U_L &= U_{I}\ \;+ \frac{\epsilon}{4}\left[(1+\hat{\kappa})\Delta_{+} + (1-\hat{\kappa})\Delta_{-}\right] U_{I}\,.
+  \end{aligned} \tag{4.46}}
+
+  @bi{
+    @lang["en"]{The forward (@tex-math{\Delta_{+}}) and the backward (@tex-math{\Delta_{-}}) difference operators are defined as}
+    @lang["zh-CN"]{前向(@tex-math{\Delta_{+}})与后向(@tex-math{\Delta_{-}})差分算子定义为}
+  }
+
+  @tex-display-math[#:id "eq-4-47"]{\begin{aligned}
+    \Delta_{+} U_I &= U_{I+1} - U_I\\
+    \Delta_{-} U_I &= U_I - U_{I-1}\,.
+  \end{aligned} \tag{4.47}}
+
+  @bi{
+    @lang["en"]{The indices are shifted as appropriate. The above relationships remain valid for a cell-vertex scheme with dual control volumes, if the node index @tex-math{i} is substituted for @tex-math{I}. The parameter @tex-math{\epsilon} can be set equal to zero to obtain a first-order accurate upwind discretisation. The parameter @tex-math{\hat{\kappa}} determines the spatial accuracy of the interpolation. For @tex-math{\epsilon = 1} and @tex-math{\hat{\kappa} = -1}, the above interpolation formulae @link["blazek2005-ch04#eq-4-46"]{(4.46)} give a fully one-sided interpolation of the flow variables, which results in a second-order accurate upwind approximation on uniformly spaced grid. The case @tex-math{\hat{\kappa} = 0} corresponds to a second-order accurate, upwind-biased linear interpolation. Furthermore, by setting @tex-math{\hat{\kappa} = 1/3}, we obtain a three-point interpolation formula which constitutes (in a finite volume framework - cf. Ref. @link["blazek2005-r4-30"]{[30]}, @link["blazek2005-r4-48"]{[48]}) a second-order upwind-biased scheme with lower truncation error than the @tex-math{\hat{\kappa} = -1} and @tex-math{\hat{\kappa} = 0} schemes. Finally, if we specify @tex-math{\hat{\kappa} = 1}, the MUSCL approach reduces to a purely central scheme - the average of variables. The schemes with @tex-math{\hat{\kappa} = 0} and @tex-math{\hat{\kappa} = 1/3} are the most often used ones in practice.}
+    @lang["zh-CN"]{指标按需平移。若把节点指标@tex-math{i}替换@tex-math{I}ï¼上述关系式对采用对偶控制体的单元顶点格式仍然成立。参数@tex-math{\epsilon}可取为零ï¼得到一阶精度的上风离散。参数@tex-math{\hat{\kappa}}决定插值的空间精度。当@tex-math{\epsilon = 1}、@tex-math{\hat{\kappa} = -1}时ï¼上述插值公式@link["blazek2005-ch04#eq-4-46"]{(4.46)}给出完全单侧的流动变量插值ï¼在均匀网格上得到二阶精度的上风近似。@tex-math{\hat{\kappa} = 0}对应二阶精度的上风偏置线性插值。此外ï¼取@tex-math{\hat{\kappa} = 1/3}可得三点插值公式ï¼它(在有限体积框架下——参见文献@link["blazek2005-r4-30"]{[30]}、@link["blazek2005-r4-48"]{[48]})构成二阶上风偏置格式ï¼其截断误差低于@tex-math{\hat{\kappa} = -1}与@tex-math{\hat{\kappa} = 0}的格式。最后ï¼若指定@tex-math{\hat{\kappa} = 1},MUSCL方法退化为纯中心格式——即变量的算术平均。实践中最常用的是@tex-math{\hat{\kappa} = 0}与@tex-math{\hat{\kappa} = 1/3}的格式。}
+  }
+
+  @bi{
+    @lang["en"]{The MUSCL interpolation @link["blazek2005-ch04#eq-4-46"]{(4.46)} has to be enhanced by the so-called @emph{limiter function} or @emph{limiter}, if the flow region contains strong gradients. The purpose of the limiter is to suppress non-physical oscillation of the solution. Limiters will be discussed further in Subsection 4.3.5.}
+    @lang["zh-CN"]{当流动区域包含强梯度时,MUSCL插值@link["blazek2005-ch04#eq-4-46"]{(4.46)}必须辅以所谓的限制器函数(limiter function)或限制器(limiter)。限制器的目的是抑制解的非物理振荡。限制器将在4.3.5小节进一步讨论。}
+  }
+
+  @bi{
+    @lang["en"]{@emph{Stencil} or @emph{computational molecule} stands for the union of those cell-centroids or grid points, which are involved in the computation of the residual, the gradient, etc. For example, if we average the fluxes at the faces of the control volume according to the Equations @link["blazek2005-ch04#eq-4-15"]{(4.15)}, @link["blazek2005-ch04#eq-4-20"]{(4.20)}, or (4.35), (4.40), respectively, we obtain in two dimensions a 5-point stencil, consisting of the cells/points}
+    @lang["zh-CN"]{模板(stencil)或计算分子(computational molecule)指参与残差、梯度等计算的那些单元形心或网格点的并集。例如ï¼若分别按方程@link["blazek2005-ch04#eq-4-15"]{(4.15)}、@link["blazek2005-ch04#eq-4-20"]{(4.20)}或(4.35)、(4.40)对控制体各面上的通量作平均ï¼则在二维得到5点模板ï¼由下列单元/点组成}
+  }
+
+  @tex-display-math{(I,J)\quad (I+1,J)\quad (I,J+1)\quad (I-1,J)\quad (I,J-1)\,.}
+
+  @image["blazek2005/fig-4-9.png"]{图4.9:中心离散格式的模板(计算分子):(a)二维;(b)三维空间}
+
+  @emph{图4.9:中心离散格式的模板(计算分子):(a)二维;(b)三维空间。}图例:情形(a)中模板点为@tex-math{I,J}、@tex-math{I+1,J}、@tex-math{I-1,J}、@tex-math{I,J+1}、@tex-math{I,J-1};情形(b)中模板点为@tex-math{I,J,K}、@tex-math{I+1,J,K}、@tex-math{I-1,J,K}、@tex-math{I,J+1,K}、@tex-math{I,J-1,K}、@tex-math{I,J,K+1}、@tex-math{I,J,K-1};中心点为@tex-math{I,J}或@tex-math{I,J,K}。
+
+  @bi{
+    @lang["en"]{In three dimensions, a 7-point stencil results, which involves the cells/points}
+    @lang["zh-CN"]{在三维中ï¼得到7点模板ï¼涉及的单元/点为}
+  }
+
+  @tex-display-math{\begin{aligned}
+    &(I,J,K)\quad (I+1,J,K)\quad (I,J+1,K)\quad (I-1,J,K)\\
+    &(I,J-1,K)\quad (I,J,K-1)\quad (I,J,K+1)\,.
+  \end{aligned}}
+
+  @bi{
+    @lang["en"]{Both stencils are displayed in Fig. 4.9. Note that on a Cartesian grid this corresponds to the second-order accurate central-difference approximation of the first derivatives in @emph{i}-, @emph{j}-, and @emph{k}-direction. Thus, a finite difference scheme, applied to the differential form of the governing equations and using the central differences, would deliver the same result.}
+    @lang["zh-CN"]{两种模板均示于图4.9。注意ï¼在笛卡尔网格上ï¼这对应于@emph{i}、@emph{j}、@emph{k}方向一阶导数的二阶精度中心差分近似。因此ï¼把采用中心差分的有限差分格式应用于控制方程的微分形式ï¼将得到相同的结果。}
+  }
+
+  @subtree[#:id "blazek2005-4-3-1"]{
+    @title{4.3.1 Central Scheme with Artificial Dissipation 含人工耗散的中心格式}
+
+    @bi{
+      @lang["en"]{The central scheme with artificial dissipation is very simple compared to other discretisation methods. It is easy to implement with either the cell-centred scheme or with both cell-vertex schemes. For these reasons the scheme became very wide-spread.}
+      @lang["zh-CN"]{与其他离散方法相比ï¼含人工耗散的中心格式非常简单。它既容易与单元中心格式结合实现ï¼也容易与两种单元顶点格式结合实现。因此该格式得到了非常广泛的应用。}
+    }
+
+    @bi{
+      @lang["en"]{The basic idea of the central scheme is to compute the convective fluxes at a face of the control volume from the arithmetic average of the conservative variables on both sides of the face. Since this would allow for odd-even decoupling of the solution (generation of two independent solutions of the discretised equations) and for overshoots at shocks, artificial dissipation (which is similar to the viscous fluxes) has to be added for stability. The scheme was first implemented for the Euler equations by Jameson et al. @link["blazek2005-r4-6"]{[6]}. Because of the names of the authors, it is also abbreviated as the JST scheme.}
+      @lang["zh-CN"]{中心格式的基本思想ï¼是用面两侧守恒变量的算术平均来计算控制体面上的对流通量。由于这会导致解的奇偶失联(odd-even decouplingï¼即离散方程产生两个独立的解)以及激波处的过冲ï¼为保证稳定性必须加入人工耗散(其形式与黏性通量类似)。该格式由Jameson等人@link["blazek2005-r4-6"]{[6]}最先实现于欧拉方程。以作者姓氏命名ï¼它也简称为JST格式。}
+    }
+
+    @bi{
+      @lang["en"]{The central scheme is generally less accurate in the resolution of discontinuities and boundary layers than, let say, the upwind schemes. However, it is computationally considerably cheaper. Therefore, attempts were made to improve the accuracy of the scheme, while still keeping the numerical effort low. For example, improvements were devised to reduce the amount of the artificial dissipation in boundary layers @link["blazek2005-r4-31"]{[31]}, @link["blazek2005-r4-32"]{[32]}, or to enhance the shock resolution @link["blazek2005-r4-33"]{[33]}-@link["blazek2005-r4-35"]{[35]}. Another idea, followed in @link["blazek2005-r4-35"]{[35]}, is to utilise the Jacobian matrix of the convective fluxes, in order to scale the dissipation independently for each conservation equation. This successful approach is known as the matrix dissipation scheme. It can be viewed as a compromise between the original scalar scheme and the upwind schemes. The basic scheme also employs a single, pressure-based sensor to switch from second- to first-order accuracy at discontinuities to prevent non-physical oscillations of the flow variables. In @link["blazek2005-r4-36"]{[36]}, Jameson developed a concept called the SLIP (Symmetric Limited Positive) scheme, where a limiter is applied separately for each conservation equation. A brief description of the previous approaches and comparisons for inviscid and viscous 2-D flows was presented in @link["blazek2005-r4-37"]{[37]}.}
+      @lang["zh-CN"]{与上风格式等相比ï¼中心格式在间断和边界层的分辨率方面一般较差ï¼但计算代价要低得多。因此ï¼人们尝试在保持数值开销较低的同时提高格式精度。例如ï¼有改进方案用于减少边界层内的人工耗散量@link["blazek2005-r4-31"]{[31]}、@link["blazek2005-r4-32"]{[32]}ï¼或增强激波分辨率@link["blazek2005-r4-33"]{[33]}-@link["blazek2005-r4-35"]{[35]}。文献@link["blazek2005-r4-35"]{[35]}中的另一个想法是利用对流通量的Jacobian矩阵ï¼使每个守恒方程的耗散得到各自独立的缩放。这一成功的方法称为矩阵耗散格式(matrix dissipation scheme)ï¼可视为原始标量格式与上风格式之间的折中。基本格式还采用单一的、基于压力的传感器ï¼在间断处从二阶精度切换到一阶精度ï¼以防止流动变量的非物理振荡。文献@link["blazek2005-r4-36"]{[36]}中,Jameson提出了称为SLIP(对称限制正,Symmetric Limited Positive)格式的概念ï¼其中对每个守恒方程分别施加限制器。文献@link["blazek2005-r4-37"]{[37]}简要描述了上述各种方法ï¼并给出了无黏与黏性二维流动的比较结果。}
+    }
+
+    @emph{Scalar Dissipation Scheme 标量耗散格式}
+
+    @bi{
+      @lang["en"]{The convective fluxes (Eq. (2.21)) through a face of the control volume are approximated using the average of variables, according to the Equations @link["blazek2005-ch04#eq-4-16"]{(4.16)}, @link["blazek2005-ch04#eq-4-21"]{(4.21)}, (4.36), or (4.41), respectively. Artificial dissipation is then added to the central fluxes for stability @link["blazek2005-r4-6"]{[6]}, @link["blazek2005-r4-38"]{[38]}. Thus, the total convective flux at face @tex-math{(I+1/2,J,K)} reads}
+      @lang["zh-CN"]{通过控制体面的对流通量(方程(2.21))用变量的平均来近似ï¼分别依照方程@link["blazek2005-ch04#eq-4-16"]{(4.16)}、@link["blazek2005-ch04#eq-4-21"]{(4.21)}、(4.36)或(4.41)。然后ï¼为使格式稳定ï¼在中心通量上加入人工耗散@link["blazek2005-r4-6"]{[6]}、@link["blazek2005-r4-38"]{[38]}。于是ï¼面@tex-math{(I+1/2,J,K)}上的总对流通量为}
+    }
+
+    @tex-display-math[#:id "eq-4-48"]{(\vec{F}_c\,\Delta S)_{I+1/2,J,K} \approx \vec{F}_c(\vec{W}_{I+1/2,J,K})\,\Delta S_{I+1/2,J,K} - \vec{D}_{I+1/2,J,K}\,, \tag{4.48}}
+
+    @bi{
+      @lang["en"]{where the flow variables are averaged as (see also Fig. 4.8)}
+      @lang["zh-CN"]{其中流动变量取平均为(另见图4.8)}
+    }
+
+    @tex-display-math[#:id "eq-4-49"]{\vec{W}_{I+1/2,J,K} = \frac{1}{2}\left(\vec{W}_{I,J,K} + \vec{W}_{I+1,J,K}\right). \tag{4.49}}
+
+    @bi{
+      @lang["en"]{In the case of the cell-vertex scheme with dual control volumes, node indices @tex-math{(i,j,k)} would be used instead. For simplicity, @tex-math{(I+1/2,J,K)} will be abbreviated as @tex-math{(I+1/2)} hereafter. The artificial dissipation flux consists of a blend of adaptive second- and fourth-order differences, which result from the sum of first- and third-order difference operators}
+      @lang["zh-CN"]{在采用对偶控制体的单元顶点格式情形ï¼将改用节点指标@tex-math{(i,j,k)}。为简便起见ï¼今后把@tex-math{(I+1/2,J,K)}缩写为@tex-math{(I+1/2)}。人工耗散通量由自适应的二阶与四阶差分的混合构成ï¼它们来自一阶与三阶差分算子之和}
+    }
+
+    @tex-display-math[#:id "eq-4-50"]{\vec{D}_{I+1/2} = \hat{\Lambda}^{S}_{I+1/2}\left[\epsilon^{(2)}_{I+1/2}(\vec{W}_{I+1} - \vec{W}_I) - \epsilon^{(4)}_{I+1/2}(\vec{W}_{I+2} - 3\vec{W}_{I+1} + 3\vec{W}_I - \vec{W}_{I-1})\right]. \tag{4.50}}
+
+    @bi{
+      @lang["en"]{From Eq. @link["blazek2005-ch04#eq-4-50"]{(4.50)} we can see that the scheme possesses a compact 9-point stencil in two dimensions and a 13-point stencil in three dimensions. The dissipation is scaled by the sum of the spectral radii of the convective flux Jacobians in all coordinate directions}
+      @lang["zh-CN"]{由方程@link["blazek2005-ch04#eq-4-50"]{(4.50)}可见ï¼该格式在二维具有紧凑的9点模板ï¼在三维为13点模板。耗散用所有坐标方向上对流通量Jacobian的谱半径之和来缩放}
+    }
+
+    @tex-display-math[#:id "eq-4-51"]{\hat{\Lambda}^{S}_{I+1/2} = (\hat{\Lambda}^{I}_{c})_{I+1/2} + (\hat{\Lambda}^{J}_{c})_{I+1/2} + (\hat{\Lambda}^{K}_{c})_{I+1/2}\,. \tag{4.51}}
+
+    @bi{
+      @lang["en"]{The spectral radius at the cell face @tex-math{(I+1/2)}, e.g., in @emph{I}-direction (represented by the superscript @tex-math{I}), results from the average}
+      @lang["zh-CN"]{单元面@tex-math{(I+1/2)}处的谱半径——例如@emph{I}方向(以上标@tex-math{I}表示)——由平均得到}
+    }
+
+    @tex-display-math[#:id "eq-4-52"]{(\hat{\Lambda}^{I}_{c})_{I+1/2} = \frac{1}{2}\left[(\hat{\Lambda}^{I}_{c})_{I} + (\hat{\Lambda}^{I}_{c})_{I+1}\right]. \tag{4.52}}
+
+    @bi{
+      @lang["en"]{It is evaluated using the formula}
+      @lang["zh-CN"]{它用下式计算}
+    }
+
+    @tex-display-math[#:id "eq-4-53"]{\hat{\Lambda}_{c} = \left(\left|V\right| + c\right)\Delta S\,, \tag{4.53}}
+
+    @bi{
+      @lang["en"]{where @tex-math{V} stands for the contravariant velocity (2.22) and @tex-math{c} for the speed of sound, respectively. A pressure-based sensor is used to switch off the fourth-order differences at shocks, where they would lead to strong oscillation of the solution. The sensor also switches off the second-order differences in smooth parts of the flow field, in order to reduce the dissipation to the lowest possible level. Herewith, the coefficients @tex-math{\epsilon^{(2)}} and @tex-math{\epsilon^{(4)}} in Eq. @link["blazek2005-ch04#eq-4-50"]{(4.50)} are defined as}
+      @lang["zh-CN"]{其中@tex-math{V}为逆变量速度(contravariant velocity)(2.22),@tex-math{c}为声速。格式用一个基于压力的传感器在激波处关闭四阶差分——在那里四阶差分会引起解的强烈振荡;该传感器同时在流场光滑区域关闭二阶差分ï¼以把耗散降到尽可能低的水平。据此ï¼方程@link["blazek2005-ch04#eq-4-50"]{(4.50)}中的系数@tex-math{\epsilon^{(2)}}与@tex-math{\epsilon^{(4)}}定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-54"]{\begin{aligned}
+      \epsilon^{(2)}_{I+1/2} &= k^{(2)} \max(\Upsilon_I, \Upsilon_{I+1})\\
+      \epsilon^{(4)}_{I+1/2} &= \max\left[0,\,(k^{(4)} - \epsilon^{(2)}_{I+1/2})\right]
+    \end{aligned} \tag{4.54}}
+
+    @bi{
+      @lang["en"]{with the pressure sensor given by}
+      @lang["zh-CN"]{其中压力传感器为}
+    }
+
+    @tex-display-math[#:id "eq-4-55"]{\Upsilon_I = \frac{\left|p_{I+1} - 2p_I + p_{I-1}\right|}{p_{I+1} + 2p_I + p_{I-1}}\,. \tag{4.55}}
+
+    @bi{
+      @lang["en"]{Typical values of the parameters are @tex-math{k^{(2)} = 1/2} and @tex-math{1/128 \le k^{(4)} \le 1/64}. In order to reduce the amount of artificial dissipation across a viscous shear layer, we can re-define the scaling factors in Eq. @link["blazek2005-ch04#eq-4-50"]{(4.50)} as follows @link["blazek2005-r4-31"]{[31]}, @link["blazek2005-r4-32"]{[32]}}
+      @lang["zh-CN"]{参数的典型取值为@tex-math{k^{(2)} = 1/2}与@tex-math{1/128 \le k^{(4)} \le 1/64}。为了减少跨越黏性剪切层的人工耗散量ï¼可以把方程@link["blazek2005-ch04#eq-4-50"]{(4.50)}中的缩放因子重新定义如下@link["blazek2005-r4-31"]{[31]}、@link["blazek2005-r4-32"]{[32]}}
+    }
+
+    @tex-display-math[#:id "eq-4-56"]{\begin{aligned}
+      \hat{\Lambda}^{S}_{I+1/2} &= \frac{1}{2}\left[(\phi^{I}\hat{\Lambda}^{I}_{c})_{I} + (\phi^{I}\hat{\Lambda}^{I}_{c})_{I+1}\right]\\
+      \hat{\Lambda}^{S}_{J+1/2} &= \frac{1}{2}\left[(\phi^{J}\hat{\Lambda}^{J}_{c})_{J} + (\phi^{J}\hat{\Lambda}^{J}_{c})_{J+1}\right]\\
+      \hat{\Lambda}^{S}_{K+1/2} &= \frac{1}{2}\left[(\phi^{K}\hat{\Lambda}^{K}_{c})_{K} + (\phi^{K}\hat{\Lambda}^{K}_{c})_{K+1}\right].
+    \end{aligned} \tag{4.56}}
+
+    @bi{
+      @lang["en"]{These are then employed instead of Eq. @link["blazek2005-ch04#eq-4-51"]{(4.51)}. The directionally dependent coefficients @tex-math{\phi} are given by the relations}
+      @lang["zh-CN"]{随后用它们替代方程@link["blazek2005-ch04#eq-4-51"]{(4.51)}。依赖方向的系数@tex-math{\phi}由以下关系给出}
+    }
+
+    @tex-display-math[#:id "eq-4-57"]{\begin{aligned}
+      \phi^{I} &= 1 + \max\left[\left(\frac{\hat{\Lambda}^{J}_{c}}{\hat{\Lambda}^{I}_{c}}\right)^{\sigma},\left(\frac{\hat{\Lambda}^{K}_{c}}{\hat{\Lambda}^{I}_{c}}\right)^{\sigma}\right]\\
+      \phi^{J} &= 1 + \max\left[\left(\frac{\hat{\Lambda}^{I}_{c}}{\hat{\Lambda}^{J}_{c}}\right)^{\sigma},\left(\frac{\hat{\Lambda}^{K}_{c}}{\hat{\Lambda}^{J}_{c}}\right)^{\sigma}\right]\\
+      \phi^{K} &= 1 + \max\left[\left(\frac{\hat{\Lambda}^{I}_{c}}{\hat{\Lambda}^{K}_{c}}\right)^{\sigma},\left(\frac{\hat{\Lambda}^{J}_{c}}{\hat{\Lambda}^{K}_{c}}\right)^{\sigma}\right].
+    \end{aligned} \tag{4.57}}
+
+    @bi{
+      @lang["en"]{The parameter @tex-math{\sigma} is usually set equal to 1/2 or 2/3. This formulation decreases the scaling of the dissipation terms in the direction along the shorter side of a control volume, whose longer side is aligned with the flow.}
+      @lang["zh-CN"]{参数@tex-math{\sigma}通常取1/2或2/3。这一表述减小了沿控制体较短一侧方向的耗散项缩放ï¼适用于较长一侧与流动方向一致的情形。}
+    }
+
+    @emph{Matrix Dissipation Scheme 矩阵耗散格式}
+
+    @bi{
+      @lang["en"]{In order to improve the accuracy by reducing the numerical dissipation, the preceding JST scheme can be modified to become more like an upwind scheme. The idea is to use a matrix - the convective flux Jacobian - instead of the scalar value @tex-math{\hat{\Lambda}^{S}} to scale the dissipation terms @link["blazek2005-r4-35"]{[35]}. In this way, each equation is scaled properly by the corresponding eigenvalue. Hence, the Eq. @link["blazek2005-ch04#eq-4-50"]{(4.50)} becomes}
+      @lang["zh-CN"]{为了通过减少数值耗散来提高精度ï¼可以把前述JST格式修改得更像上风格式。其想法是用一个矩阵——对流通量Jacobian——代替标量值@tex-math{\hat{\Lambda}^{S}}来缩放耗散项@link["blazek2005-r4-35"]{[35]}。这样ï¼每个方程都由相应的特征值恰当地缩放。于是ï¼方程@link["blazek2005-ch04#eq-4-50"]{(4.50)}变为}
+    }
+
+    @tex-display-math[#:id "eq-4-58"]{\vec{D}_{I+1/2} = \left|\bar{A}_c\right|_{I+1/2}\left[\epsilon^{(2)}_{I+1/2}(\vec{W}_{I+1} - \vec{W}_I) - \epsilon^{(4)}_{I+1/2}(\vec{W}_{I+2} - 3\vec{W}_{I+1} + 3\vec{W}_I - \vec{W}_{I-1})\right]. \tag{4.58}}
+
+    @bi{
+      @lang["en"]{The scaling matrix corresponds to the convective flux Jacobian @tex-math{(\bar{A}_c = \partial\vec{F}_c/\partial\vec{W})} diagonalised with absolute values of the eigenvalues}
+      @lang["zh-CN"]{缩放矩阵对应于用特征值绝对值对角化的对流通量Jacobian@tex-math{(\bar{A}_c = \partial\vec{F}_c/\partial\vec{W})}}
+    }
+
+    @tex-display-math[#:id "eq-4-59"]{\left|\bar{A}_c\right| = \bar{T}\left|\bar{\Lambda}_c\,\Delta S\right|\bar{T}^{-1}. \tag{4.59}}
+
+    @bi{
+      @lang["en"]{The matrices of right @tex-math{(\bar{T})} and left @tex-math{(\bar{T}^{-1})} eigenvectors as well as the diagonal matrix of the eigenvalues @tex-math{\bar{\Lambda}_c} can be found in the Appendix A.11. The eigenvalues must be limited at stagnation points and sonic lines to prevent the dissipation from becoming zero. An efficient way of computing the product of @tex-math{|\bar{A}_c|} with @tex-math{\vec{W}} is provided in @link["blazek2005-r4-35"]{[35]}. It should be noted that by setting @tex-math{\epsilon^{(2)} = 1/2} and @tex-math{\epsilon^{(4)} = 0}, we obtain a first-order accurate, fully upwind scheme.}
+      @lang["zh-CN"]{右特征向量矩阵@tex-math{(\bar{T})}与左特征向量矩阵@tex-math{(\bar{T}^{-1})}以及特征值对角矩阵@tex-math{\bar{\Lambda}_c}见附录A.11。在驻点和声速线处必须对特征值加以限制ï¼以防耗散变为零。文献@link["blazek2005-r4-35"]{[35]}给出了一种高效计算@tex-math{|\bar{A}_c|}与@tex-math{\vec{W}}乘积的方法。注意ï¼若取@tex-math{\epsilon^{(2)} = 1/2}、@tex-math{\epsilon^{(4)} = 0}ï¼则得到一阶精度的完全上风格式。}
+    }
+
+    @bi{
+      @lang["en"]{As it was already stated before, the idea here was to develop a scheme which accuracy is close to that of upwind schemes, but which is still computationally only slightly more expensive (about 15-20%) than the scalar dissipation approach. Results of comparisons with flux-vector splitting schemes (CUSP and AUSM) were recently reported in @link["blazek2005-r4-37"]{[37]}.}
+      @lang["zh-CN"]{如前所述ï¼这里的目标是发展一种精度接近上风格式、但计算开销只比标量耗散方法高约15%-20%的格式。最近ï¼文献@link["blazek2005-r4-37"]{[37]}报道了与通量向量分裂格式(CUSP与AUSM)的比较结果。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-4-3-2"]{
+    @title{4.3.2 Flux-Vector Splitting Schemes 通量向量分裂格式}
+
+    @bi{
+      @lang["en"]{The flux-vector splitting methods can be viewed as the first level of upwind schemes, since they account only for the direction of wave propagation. The flux-vector splitting schemes decompose the vector of the convective fluxes into two parts - either according to the sign of certain characteristic variables, or into a convective and a pressure part. The well-known Van Leer's flux-vector splitting scheme @link["blazek2005-r4-39"]{[39]} belongs to the first category based on characteristic decomposition. The second approach is followed by more recent methods like the Advection Upstream Splitting Method (AUSM) of Liou et al. @link["blazek2005-r4-40"]{[40]}, @link["blazek2005-r4-41"]{[41]}, or the Convective Upwind Split Pressure (CUSP) scheme of Jameson @link["blazek2005-r4-42"]{[42]}, @link["blazek2005-r4-43"]{[43]}, respectively. Further similar approaches are the Low-Diffusion Flux-Splitting Scheme (LDFSS) introduced by Edwards @link["blazek2005-r4-44"]{[44]}, or the Mach number-based Advection Pressure Splitting (MAPS) scheme of Rossow @link["blazek2005-r4-45"]{[45]}, @link["blazek2005-r4-46"]{[46]}.}
+      @lang["zh-CN"]{通量向量分裂方法可以视为最初等的上风格式ï¼因为它们只考虑波的传播方向。通量向量分裂格式把对流通量向量分解为两部分——或按某些特征变量的符号ï¼或分裂为对流部分与压力部分。著名的Van Leer通量向量分裂格式@link["blazek2005-r4-39"]{[39]}属于基于特征分解的第一类。遵循第二种思路的有较新的方法ï¼如Liou等人的对流上游分裂方法(AUSM)@link["blazek2005-r4-40"]{[40]}、@link["blazek2005-r4-41"]{[41]}ï¼以及Jameson的对流上游分裂压力(CUSP)格式@link["blazek2005-r4-42"]{[42]}、@link["blazek2005-r4-43"]{[43]}。类似的方法还有Edwards提出的低耗散通量分裂格式(LDFSS)@link["blazek2005-r4-44"]{[44]}ï¼以及Rossow的基于马赫数的对流压力分裂(MAPS)格式@link["blazek2005-r4-45"]{[45]}、@link["blazek2005-r4-46"]{[46]}。}
+    }
+
+    @bi{
+      @lang["en"]{The flux-vector splitting schemes can be implemented only in the framework of the cell-centred scheme (Subsection 4.2.1), or the cell-vertex scheme with dual control volumes (Subsection 4.2.3). Their advantage can be seen in only a moderately increased numerical effort but a much better resolution of shocks and boundary layers, as compared to the central scheme with scalar artificial dissipation. However, the matrix dissipation scheme (Eq. @link["blazek2005-ch04#eq-4-58"]{(4.58)}), can also produce results of comparable accuracy @link["blazek2005-r4-37"]{[37]}. Because of certain numerical difficulties, many modifications to the basic schemes (particularly to AUSM) were devised by various researchers and the development still continues. In the following, we shall present the basics of the Van Leer, AUSM and CUSP schemes, give some hints with respect to the most important modifications, and provide references to the corresponding literature.}
+      @lang["zh-CN"]{通量向量分裂格式只能在单元中心格式(4.2.1小节)或采用对偶控制体的单元顶点格式(4.2.3小节)的框架下实现。与采用标量人工耗散的中心格式相比ï¼其优点在于数值开销只是适度增加ï¼而激波与边界层的分辨率却好得多。不过ï¼矩阵耗散格式(方程@link["blazek2005-ch04#eq-4-58"]{(4.58)})也能给出精度相当的结果@link["blazek2005-r4-37"]{[37]}。由于某些数值上的困难ï¼多位研究者对基本格式(尤其是AUSM)作了大量改进ï¼相关工作至今仍在继续。下面我们将介绍Van Leer、AUSM与CUSP格式的基础ï¼对最重要的改进给出一些提示ï¼并提供相应文献。}
+    }
+
+    @emph{Van Leer's Scheme Van Leer格式}
+
+    @bi{
+      @lang["en"]{Van Leer's flux-vector splitting scheme @link["blazek2005-r4-39"]{[39]} is based on characteristic decomposition of the convective fluxes. An extension of the approach to body-fitted grids was presented in @link["blazek2005-r4-47"]{[47]}, @link["blazek2005-r4-48"]{[48]}. The convective flux is split into a positive and a negative part, i.e.,}
+      @lang["zh-CN"]{Van Leer的通量向量分裂格式@link["blazek2005-r4-39"]{[39]}基于对流通量的特征分解。该方法在贴体网格上的推广见文献@link["blazek2005-r4-47"]{[47]}、@link["blazek2005-r4-48"]{[48]}。对流通量被分裂为正、负两部分ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-60"]{\vec{F}_c = \vec{F}_c^{+} + \vec{F}_c^{-}\,, \tag{4.60}}
+
+    @bi{
+      @lang["en"]{according to the Mach number normal to the face of the control volume (e.g., at @tex-math{(I+1/2)} - see Fig. 4.8)}
+      @lang["zh-CN"]{分解依据的是垂直于控制体面的马赫数(例如在@tex-math{(I+1/2)}处——见图4.8)}
+    }
+
+    @tex-display-math[#:id "eq-4-61"]{(M_n)_{I+1/2} = \left(\frac{V}{c}\right)_{I+1/2}, \tag{4.61}}
+
+    @bi{
+      @lang["en"]{where @tex-math{V} represents the contravariant velocity (2.22) and @tex-math{c} the speed of sound, respectively. In the case of the cell-vertex scheme with dual control volumes, the cell indices have to be replaced by node indices. The values of the flow variables @tex-math{\rho}, @tex-math{u}, @tex-math{v}, @tex-math{w}, and @tex-math{p}, respectively, have to be interpolated first to the faces of the control volume correspondingly to Eq. @link["blazek2005-ch04#eq-4-19"]{(4.19)} or Eq. (4.39). Then, the positive fluxes are computed with the left state and the negative fluxes with the right state. The advection Mach number @tex-math{(M_n)_{I+1/2}} is obtained from the relation @link["blazek2005-r4-39"]{[39]}}
+      @lang["zh-CN"]{其中@tex-math{V}为逆变量速度(2.22),@tex-math{c}为声速。在采用对偶控制体的单元顶点格式情形ï¼单元指标须换成节点指标。流动变量@tex-math{\rho}、@tex-math{u}、@tex-math{v}、@tex-math{w}与@tex-math{p}的值须先按方程@link["blazek2005-ch04#eq-4-19"]{(4.19)}或方程(4.39)插值到控制体的面上。然后ï¼正通量用左状态计算ï¼负通量用右状态计算。对流马赫数@tex-math{(M_n)_{I+1/2}}由以下关系得到@link["blazek2005-r4-39"]{[39]}}
+    }
+
+    @tex-display-math[#:id "eq-4-62"]{(M_n)_{I+1/2} = M^{+}_{L} + M^{-}_{R}\,, \tag{4.62}}
+
+    @bi{
+      @lang["en"]{where the split Mach numbers are defined as}
+      @lang["zh-CN"]{其中分裂马赫数定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-63"]{M^{+}_{L} = \begin{cases}
+      M_L & \text{if } M_L \ge +1\\
+      \frac{1}{4}(M_L + 1)^2 & \text{if } |M_L| < 1\\
+      0 & \text{if } M_L \le -1\,,
+    \end{cases} \tag{4.63}}
+
+    @bi{
+      @lang["en"]{and}
+      @lang["zh-CN"]{而}
+    }
+
+    @tex-display-math[#:id "eq-4-64"]{M^{-}_{R} = \begin{cases}
+      0 & \text{if } M_R \ge +1\\
+      \frac{1}{4}(M_R - 1)^2 & \text{if } |M_R| < 1\\
+      M_R & \text{if } M_R \le -1\,.
+    \end{cases} \tag{4.64}}
+
+    @bi{
+      @lang["en"]{The Mach numbers @tex-math{M_L} and @tex-math{M_R} are evaluated using the left and right state, respectively, i.e.,}
+      @lang["zh-CN"]{马赫数@tex-math{M_L}与@tex-math{M_R}分别用左、右状态计算ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-65"]{M_L = \frac{V_L}{c_L}\,, \quad M_R = \frac{V_R}{c_R}\,. \tag{4.65}}
+
+    @bi{
+      @lang["en"]{In the case of @tex-math{|M_n| < 1} (subsonic flow), the positive and the negative flux parts are given by}
+      @lang["zh-CN"]{当@tex-math{|M_n| < 1}(亚声速流动)时ï¼正、负通量部分为}
+    }
+
+    @tex-display-math[#:id "eq-4-66"]{\vec{F}_c^{\pm} = \begin{bmatrix}
+      f^{\pm}_{\mathrm{mass}}\\
+      f^{\pm}_{\mathrm{mass}}\left[n_x(-V \pm 2c)/\gamma + u\right]\\
+      f^{\pm}_{\mathrm{mass}}\left[n_y(-V \pm 2c)/\gamma + v\right]\\
+      f^{\pm}_{\mathrm{mass}}\left[n_z(-V \pm 2c)/\gamma + w\right]\\
+      f^{\pm}_{\mathrm{energy}}
+    \end{bmatrix}. \tag{4.66}}
+
+    @bi{
+      @lang["en"]{The mass and energy flux components are defined as}
+      @lang["zh-CN"]{质量与能量通量分量定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-67"]{\begin{aligned}
+      f^{+}_{\mathrm{mass}} &= +\rho_L c_L\,\frac{(M_L + 1)^2}{4}\\
+      f^{-}_{\mathrm{mass}} &= -\rho_R c_R\,\frac{(M_R - 1)^2}{4}\\
+      f^{\pm}_{\mathrm{energy}} &= f^{\pm}_{\mathrm{mass}}\left\{\frac{\left[(\gamma - 1)V \pm 2c\right]^2}{2(\gamma^2 - 1)} + \frac{u^2 + v^2 + w^2 - V^2}{2}\right\}_{L/R}.
+    \end{aligned} \tag{4.67}}
+
+    @bi{
+      @lang["en"]{For supersonic flow, i.e., for @tex-math{|M_n| \ge 1}, the fluxes are evaluated from}
+      @lang["zh-CN"]{对于超声速流动ï¼即@tex-math{|M_n| \ge 1}ï¼通量按下式计算}
+    }
+
+    @tex-display-math[#:id "eq-4-68"]{\begin{aligned}
+      \vec{F}_c^{+} = \vec{F}_c\,, \quad \vec{F}_c^{-} = 0 \quad &\text{if } M_n \ge +1\\
+      \vec{F}_c^{+} = 0\,, \quad \vec{F}_c^{-} = \vec{F}_c \quad &\text{if } M_n \le -1\,.
+    \end{aligned} \tag{4.68}}
+
+    @bi{
+      @lang["en"]{The evaluation of the left and right state follows generally the MUSCL approach @link["blazek2005-r4-29"]{[29]}, which is given by Eqs. @link["blazek2005-ch04#eq-4-46"]{(4.46)}. The higher order schemes @tex-math{\hat{\kappa} = -1}, @tex-math{\hat{\kappa} = 0} and @tex-math{\hat{\kappa} = 1/3}, respectively, require a limiter if the flow field contains discontinuities like shocks. More details are provided in Subsection 4.3.5.}
+      @lang["zh-CN"]{左、右状态的计算一般遵循MUSCL方法@link["blazek2005-r4-29"]{[29]}ï¼即方程@link["blazek2005-ch04#eq-4-46"]{(4.46)}。若流场含有激波等间断ï¼高阶格式@tex-math{\hat{\kappa} = -1}、@tex-math{\hat{\kappa} = 0}与@tex-math{\hat{\kappa} = 1/3}都需要限制器。更多细节见4.3.5小节。}
+    }
+
+    @bi{
+      @lang["en"]{The flux-vector splitting scheme of Van Leer performs very well in the case of the Euler equations. But several investigations @link["blazek2005-r4-49"]{[49]}, @link["blazek2005-r4-50"]{[50]}, carried out with the Navier-Stokes equations revealed that splitting errors in the momentum and the energy equations smear the boundary layers and also lead to inaccurate stagnation and wall temperatures. A modification to the momentum flux in the direction normal to the boundary layer was therefore suggested in Ref. @link["blazek2005-r4-51"]{[51]}. A similar remedy for the energy flux was proposed in Ref. @link["blazek2005-r4-52"]{[52]}. Both modifications together remove the splitting errors, and hence they improve the solution accuracy considerably @link["blazek2005-r4-53"]{[53]}.}
+      @lang["zh-CN"]{Van Leer的通量向量分裂格式在欧拉方程情形下表现非常好。但用Navier-Stokes方程进行的若干研究@link["blazek2005-r4-49"]{[49]}、@link["blazek2005-r4-50"]{[50]}表明ï¼动量方程与能量方程中的分裂误差会抹平边界层ï¼并导致驻点温度与壁面温度不准确。为此ï¼文献@link["blazek2005-r4-51"]{[51]}建议对垂直于边界层方向的动量通量作修改;文献@link["blazek2005-r4-52"]{[52]}对能量通量提出了类似的补救措施。两项修改合在一起可以消除分裂误差ï¼从而显著提高解的精度@link["blazek2005-r4-53"]{[53]}。}
+    }
+
+    @emph{AUSM}
+
+    @bi{
+      @lang["en"]{The Advection Upstream Splitting Method (AUSM) was introduced by Liou and Steffen @link["blazek2005-r4-40"]{[40]}, and Liou @link["blazek2005-r4-54"]{[54]}. It was subsequently modified by Wada and Liou @link["blazek2005-r4-55"]{[55]} and renamed as AUSMD/V. Finally, an improved version termed AUSM@code{+} was presented by Liou @link["blazek2005-r4-41"]{[41]}, @link["blazek2005-r4-56"]{[56]}.}
+      @lang["zh-CN"]{对流上游分裂方法(AUSM)由Liou与Steffen@link["blazek2005-r4-40"]{[40]}以及Liou@link["blazek2005-r4-54"]{[54]}提出。随后经Wada与Liou@link["blazek2005-r4-55"]{[55]}修改并更名为AUSMD/V。最后,Liou@link["blazek2005-r4-41"]{[41]}、@link["blazek2005-r4-56"]{[56]}提出了称为AUSM@code{+}的改进版本。}
+    }
+
+    @bi{
+      @lang["en"]{The underlying idea of the approach is based on the observation that the vector of convective fluxes (2.21) consists of two physically distinct parts, namely the convective and the pressure part}
+      @lang["zh-CN"]{该方法的基本思想基于这样的观察:对流通量向量(2.21)由两个物理上截然不同的部分组成ï¼即对流部分与压力部分}
+    }
+
+    @tex-display-math[#:id "eq-4-69"]{\vec{F}_c = V\begin{bmatrix}
+      \rho\\ \rho u\\ \rho v\\ \rho w\\ \rho H
+    \end{bmatrix} + \begin{bmatrix}
+      0\\ n_x p\\ n_y p\\ n_z p\\ 0
+    \end{bmatrix}. \tag{4.69}}
+
+    @bi{
+      @lang["en"]{The first term in Eq. @link["blazek2005-ch04#eq-4-69"]{(4.69)} represents scalar quantities, which are convected by the contravariant velocity @tex-math{V}. By contrast, the pressure term is governed by the acoustic wave speed. The idea now is to discretise the convective term in purely upwind manner by taking either the left or the right state, depending on the sign of @tex-math{V} (even for subsonic flow). On the other hand, the pressure term includes both states in the subsonic case. It becomes fully upwind only for a supersonic flow.}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-69"]{(4.69)}中的第一项代表由逆变量速度@tex-math{V}输运的标量量;相比之下ï¼压力项由声波速度支配。现在的想法是:根据@tex-math{V}的符号(即使在亚声速流动中)以纯上风方式离散对流项ï¼即取左状态或右状态之一;而压力项在亚声速情形下同时包含两个状态ï¼只有在超声速流动中才变为完全上风。}
+    }
+
+    @bi{
+      @lang["en"]{Following the basic AUSM from @link["blazek2005-r4-40"]{[40]}, we introduce an advection Mach number @tex-math{(M_n)_{I+1/2}} from Eq. @link["blazek2005-ch04#eq-4-61"]{(4.61)}. Herewith, we can recast the convective flux at the face @tex-math{(I+1/2)}, or @tex-math{(i+1/2)} of the control volume, respectively, into}
+      @lang["zh-CN"]{遵循文献@link["blazek2005-r4-40"]{[40]}的基本AUSMï¼我们由方程@link["blazek2005-ch04#eq-4-61"]{(4.61)}引入对流马赫数@tex-math{(M_n)_{I+1/2}}。据此ï¼可以把控制体面@tex-math{(I+1/2)}或@tex-math{(i+1/2)}处的对流通量改写为}
+    }
+
+    @tex-display-math[#:id "eq-4-70"]{(\vec{F}_c)_{I+1/2} = (M_n)_{I+1/2}\begin{bmatrix}
+      \rho c\\ \rho c u\\ \rho c v\\ \rho c w\\ \rho c H
+    \end{bmatrix}_{L/R} + \begin{bmatrix}
+      0\\ n_x p\\ n_y p\\ n_z p\\ 0
+    \end{bmatrix}_{I+1/2}, \tag{4.70}}
+
+    @bi{
+      @lang["en"]{where}
+      @lang["zh-CN"]{其中}
+    }
+
+    @tex-display-math[#:id "eq-4-71"]{(\bullet)_{L/R} = \begin{cases}
+      (\bullet)_L & \text{if } M_{I+1/2} \ge 0\\
+      (\bullet)_R & \text{otherwise.}
+    \end{cases} \tag{4.71}}
+
+    @bi{
+      @lang["en"]{Similar to Van Leer's flux-vector splitting scheme, the advection Mach number is evaluated as a sum of the left and right split Mach numbers according to the relations @link["blazek2005-ch04#eq-4-62"]{(4.62)} and (4.63)-(4.65). The computation of the left and right state (flow quantities: @tex-math{\rho}, @tex-math{u}, @tex-math{v}, @tex-math{w}, @tex-math{p}, @tex-math{H}) is based again on a separate interpolation to the faces of the control volume according to Eq. @link["blazek2005-ch04#eq-4-19"]{(4.19)} or Eq. (4.39). The interpolation follows the MUSCL methodology @link["blazek2005-r4-29"]{[29]}, as it is given in Eq. @link["blazek2005-ch04#eq-4-46"]{(4.46)}. All higher-order MUSCL schemes (@tex-math{\hat{\kappa} = -1}, @tex-math{\hat{\kappa} = 0}, and @tex-math{\hat{\kappa} = 1/3}) require a limiter, if the flow field contains strong gradients like shocks. Please refer to Subsection 4.3.5 for more details.}
+      @lang["zh-CN"]{与Van Leer通量向量分裂格式类似ï¼对流马赫数按关系式@link["blazek2005-ch04#eq-4-62"]{(4.62)}与(4.63)-(4.65)由左、右分裂马赫数之和求出。左、右状态(流动量:@tex-math{\rho}、@tex-math{u}、@tex-math{v}、@tex-math{w}、@tex-math{p}、@tex-math{H})的计算同样依据方程@link["blazek2005-ch04#eq-4-19"]{(4.19)}或方程(4.39)分别插值到控制体的面上ï¼插值遵循方程@link["blazek2005-ch04#eq-4-46"]{(4.46)}给出的MUSCL方法@link["blazek2005-r4-29"]{[29]}。所有高阶MUSCL格式(@tex-math{\hat{\kappa} = -1}、@tex-math{\hat{\kappa} = 0}与@tex-math{\hat{\kappa} = 1/3})在流场包含激波等强梯度时都需要限制器。更多细节请参阅4.3.5小节。}
+    }
+
+    @bi{
+      @lang["en"]{The pressure at the face @tex-math{(I+1/2)} of the control volume is obtained from the splitting @link["blazek2005-r4-40"]{[40]}}
+      @lang["zh-CN"]{控制体面@tex-math{(I+1/2)}处的压力由分裂式@link["blazek2005-r4-40"]{[40]}得到}
+    }
+
+    @tex-display-math[#:id "eq-4-72"]{p_{I+1/2} = p^{+}_{L} + p^{-}_{R} \tag{4.72}}
+
+    @bi{
+      @lang["en"]{with the split pressures given by @link["blazek2005-r4-39"]{[39]}}
+      @lang["zh-CN"]{其中分裂压力由文献@link["blazek2005-r4-39"]{[39]}给出}
+    }
+
+    @tex-display-math[#:id "eq-4-73"]{p^{+}_{L} = \begin{cases}
+      p_L & \text{if } M_L \ge +1\\
+      \frac{p_L}{4}(M_L + 1)^2(2 - M_L) & \text{if } |M_L| < 1\\
+      0 & \text{if } M_L \le -1\,,
+    \end{cases} \tag{4.73}}
+
+    @bi{
+      @lang["en"]{and}
+      @lang["zh-CN"]{而}
+    }
+
+    @tex-display-math[#:id "eq-4-74"]{p^{-}_{R} = \begin{cases}
+      0 & \text{if } M_R \ge +1\\
+      \frac{p_R}{4}(M_R - 1)^2(2 + M_R) & \text{if } |M_R| < 1\\
+      p_R & \text{if } M_R \le -1\,.
+    \end{cases} \tag{4.74}}
+
+    @bi{
+      @lang["en"]{It is also possible to use the following lower-order expansion for @tex-math{|M_{L/R}| < 1}}
+      @lang["zh-CN"]{当@tex-math{|M_{L/R}| < 1}时ï¼也可以采用如下低阶展开}
+    }
+
+    @tex-display-math[#:id "eq-4-75"]{p^{\pm}_{L/R} = \frac{p_{L/R}}{2}\left(1 \pm M_{L/R}\right). \tag{4.75}}
+
+    @bi{
+      @lang["en"]{It should be noted that we can write AUSM also in the form}
+      @lang["zh-CN"]{应当指出,AUSM也可以写成如下形式}
+    }
+
+    @tex-display-math[#:id "eq-4-76"]{\begin{aligned}
+      (\vec{F}_c)_{I+1/2} = {}& \frac{1}{2}(M_n)_{I+1/2}\left\{\begin{bmatrix}
+        \rho c\\ \rho c u\\ \rho c v\\ \rho c w\\ \rho c H
+      \end{bmatrix}_{L} + \begin{bmatrix}
+        \rho c\\ \rho c u\\ \rho c v\\ \rho c w\\ \rho c H
+      \end{bmatrix}_{R}\right\}\\
+      &- \frac{1}{2}\left|(M_n)_{I+1/2}\right|\left\{\begin{bmatrix}
+        \rho c\\ \rho c u\\ \rho c v\\ \rho c w\\ \rho c H
+      \end{bmatrix}_{R} - \begin{bmatrix}
+        \rho c\\ \rho c u\\ \rho c v\\ \rho c w\\ \rho c H
+      \end{bmatrix}_{L}\right\}\\
+      &+ \begin{bmatrix}
+        0\\ n_x(p^{+}_{L} + p^{-}_{R})\\ n_y(p^{+}_{L} + p^{-}_{R})\\ n_z(p^{+}_{L} + p^{-}_{R})\\ 0
+      \end{bmatrix}. \tag{4.76}
+    \end{aligned}}
+
+    @bi{
+      @lang["en"]{The first term on the right-hand side of the above Eq. @link["blazek2005-ch04#eq-4-76"]{(4.76)} represents a Mach number-weighted average of the left and right state - similar to the average of fluxes Eq. @link["blazek2005-ch04#eq-4-15"]{(4.15)}, @link["blazek2005-ch04#eq-4-20"]{(4.20)} or Eq. (4.35), (4.40), respectively. The second term has a dissipative character. It is scaled by the scalar value @tex-math{|(M_n)_{I+1/2}|}.}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-76"]{(4.76)}右端第一项代表左、右状态的马赫数加权平均——分别类似于通量平均方程@link["blazek2005-ch04#eq-4-15"]{(4.15)}、@link["blazek2005-ch04#eq-4-20"]{(4.20)}或(4.35)、(4.40)。第二项具有耗散性质ï¼由标量值@tex-math{|(M_n)_{I+1/2}|}缩放。}
+    }
+
+    @bi{
+      @lang["en"]{AUSM proved to deliver a crisp resolution of strong shocks and accurate results for boundary layers. However, the original AUSM @link["blazek2005-r4-40"]{[40]}, @link["blazek2005-r4-54"]{[54]} was found to generate local pressure oscillations at shocks and in cases where the flow is aligned with the grid @link["blazek2005-r4-57"]{[57]}. In @link["blazek2005-r4-57"]{[57]}, @link["blazek2005-r4-58"]{[58]} it was therefore suggested to switch at shocks to Van Leer's scheme. When the advection Mach number @tex-math{(M_n)_{I+1/2}} tends to zero, the dissipation term in Eq. @link["blazek2005-ch04#eq-4-76"]{(4.76)} will approach zero as well. Thus, any disturbances cannot be damped by the scheme. In order to solve the flow alignment problem, it was proposed in @link["blazek2005-r4-57"]{[57]} to modify the scaling of the dissipation term as follows}
+      @lang["zh-CN"]{实践证明,AUSM能清晰分辨强激波ï¼并给出精确的边界层结果。然而ï¼人们发现原始AUSM@link["blazek2005-r4-40"]{[40]}、@link["blazek2005-r4-54"]{[54]}在激波处以及流动与网格对齐的情形会产生局部压力振荡@link["blazek2005-r4-57"]{[57]}。因此文献@link["blazek2005-r4-57"]{[57]}、@link["blazek2005-r4-58"]{[58]}建议在激波处切换到Van Leer格式。当对流马赫数@tex-math{(M_n)_{I+1/2}}趋于零时ï¼方程@link["blazek2005-ch04#eq-4-76"]{(4.76)}中的耗散项也趋于零ï¼因而任何扰动都无法被格式阻尼。为解决流动对齐问题ï¼文献@link["blazek2005-r4-57"]{[57]}建议如下修改耗散项的缩放}
+    }
+
+    @tex-display-math[#:id "eq-4-77"]{\left|(M_n)_{I+1/2}\right| = \begin{cases}
+      \left|(M_n)_{I+1/2}\right| & \text{if } \left|(M_n)_{I+1/2}\right| > \delta\\
+      \dfrac{(M_n)^2_{I+1/2} + \delta^2}{2\delta} & \text{if } \left|(M_n)_{I+1/2}\right| \le \delta\,,
+    \end{cases} \tag{4.77}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\delta} is a small value @tex-math{(0 < \delta \le 0.5)}. Hence, there will always be a sufficient amount of numerical dissipation. In order to retain the accuracy of AUSM for boundary layers, the parameter @tex-math{\delta} could be reduced in the wall normal direction using the same idea as given for the central scheme by Eq. @link["blazek2005-ch04#eq-4-57"]{(4.57)}. Further improvements of the basic AUSM, with respect to better behaviour in the vicinity of shocks, was presented in @link["blazek2005-r4-41"]{[41]}, @link["blazek2005-r4-56"]{[56]} as AUSM@code{+}. The modifications consist of new Mach and pressure splittings, which replace the relations @link["blazek2005-ch04#eq-4-63"]{(4.63)}, @link["blazek2005-ch04#eq-4-64"]{(4.64)} and @link["blazek2005-ch04#eq-4-73"]{(4.73)}, @link["blazek2005-ch04#eq-4-74"]{(4.74)}, respectively.}
+      @lang["zh-CN"]{其中@tex-math{\delta}是一个小值@tex-math{(0 < \delta \le 0.5)}。这样ï¼数值耗散总是足够的。为了保持AUSM对边界层的精度ï¼可以按照与中心格式方程@link["blazek2005-ch04#eq-4-57"]{(4.57)}相同的思路ï¼在壁面法向减小参数@tex-math{\delta}。文献@link["blazek2005-r4-41"]{[41]}、@link["blazek2005-r4-56"]{[56]}针对激波附近更好的表现提出了基本AUSM的进一步改进ï¼称为AUSM@code{+}。这些修改包括新的马赫数分裂与压力分裂ï¼分别取代关系式@link["blazek2005-ch04#eq-4-63"]{(4.63)}、@link["blazek2005-ch04#eq-4-64"]{(4.64)}与@link["blazek2005-ch04#eq-4-73"]{(4.73)}、@link["blazek2005-ch04#eq-4-74"]{(4.74)}。}
+    }
+
+    @emph{CUSP Scheme CUSP格式}
+
+    @bi{
+      @lang["en"]{The concept of the Convective Upwind Split Pressure (CUSP) scheme is quite similar to that of AUSM. However, the CUSP approach has the advantage to be formulated as an average of fluxes (but without weighting like within AUSM) minus a dissipation term. This feature is crucial for the implementation in an explicit, hybrid multistage scheme. Furthermore, because of the different scaling factors as compared to AUSM, the CUSP scheme behaves more favourably in the case of flow alignment. The CUSP scheme was introduced by Jameson @link["blazek2005-r4-42"]{[42]}, @link["blazek2005-r4-59"]{[59]}, @link["blazek2005-r4-60"]{[60]}, and subsequently modified by Tatsumi et al. @link["blazek2005-r4-43"]{[43]}, @link["blazek2005-r4-61"]{[61]}. It can be implemented either within the cell-centred or the (cell-vertex) dual control-volume type of spatial discretisation.}
+      @lang["zh-CN"]{对流上游分裂压力(CUSP)格式的概念与AUSM十分相似。不过,CUSP方法的优点是可以表述为通量平均(但不像AUSM那样加权)减去一个耗散项。这一特点对于在显式混合多步格式中的实现至关重要。此外ï¼由于缩放因子与AUSM不同,CUSP格式在流动对齐情形下表现更为有利。CUSP格式由Jameson@link["blazek2005-r4-42"]{[42]}、@link["blazek2005-r4-59"]{[59]}、@link["blazek2005-r4-60"]{[60]}提出ï¼随后由Tatsumi等人@link["blazek2005-r4-43"]{[43]}、@link["blazek2005-r4-61"]{[61]}修改。它既可在单元中心型空间离散中实现ï¼也可在(单元顶点)对偶控制体型空间离散中实现。}
+    }
+
+    @bi{
+      @lang["en"]{The convective fluxes (Eq. (2.21)) through a face of the control volume are approximated using the arithmetic average of fluxes according to the Equations @link["blazek2005-ch04#eq-4-15"]{(4.15)}, @link["blazek2005-ch04#eq-4-20"]{(4.20)}, (4.35), or (4.40), respectively. The dissipation term is then subtracted from the central fluxes for stabilisation. Thus, the total convective fluxes at the face @tex-math{(I+1/2)} read}
+      @lang["zh-CN"]{通过控制体面的对流通量(方程(2.21))用通量的算术平均近似ï¼分别依照方程@link["blazek2005-ch04#eq-4-15"]{(4.15)}、@link["blazek2005-ch04#eq-4-20"]{(4.20)}、(4.35)或(4.40)。然后ï¼为使格式稳定ï¼从中心通量中减去耗散项。于是ï¼面@tex-math{(I+1/2)}处的总对流通量为}
+    }
+
+    @tex-display-math[#:id "eq-4-78"]{(\vec{F}_c)_{I+1/2} = \frac{1}{2}\left[\vec{F}_c(\vec{W}_R) + \vec{F}_c(\vec{W}_L)\right] - \vec{D}_{I+1/2}. \tag{4.78}}
+
+    @bi{
+      @lang["en"]{In the case of the dual control-volume discretisation, @tex-math{(i+1/2)} would apply instead. The dissipation term, which is composed of a linear combination of the differences of the state and the flux vector, can be expressed as}
+      @lang["zh-CN"]{在对偶控制体离散的情形ï¼则相应使用@tex-math{(i+1/2)}。耗散项由状态向量之差与通量向量之差的线性组合构成ï¼可表示为}
+    }
+
+    @tex-display-math[#:id "eq-4-79"]{\begin{aligned}
+      \vec{D}_{I+1/2} = {}& \frac{1}{2}(\alpha^{*}c)_{I+1/2}\left\{\begin{bmatrix}
+        \rho\\ \rho u\\ \rho v\\ \rho w\\ \rho\phi
+      \end{bmatrix}_{R} - \begin{bmatrix}
+        \rho\\ \rho u\\ \rho v\\ \rho w\\ \rho\phi
+      \end{bmatrix}_{L}\right\}\\
+      &+ \frac{1}{2}\beta_{I+1/2}\left\{\begin{bmatrix}
+        \rho V\\ \rho uV + n_x p\\ \rho vV + n_y p\\ \rho wV + n_z p\\ \rho HV
+      \end{bmatrix}_{R} - \begin{bmatrix}
+        \rho V\\ \rho uV + n_x p\\ \rho vV + n_y p\\ \rho wV + n_z p\\ \rho HV
+      \end{bmatrix}_{L}\right\}. \tag{4.79}
+    \end{aligned}}
+
+    @bi{
+      @lang["en"]{There are two choices for the term @tex-math{\phi} in Eq. @link["blazek2005-ch04#eq-4-79"]{(4.79)}. Either, @tex-math{\phi} is set equal to the total energy @tex-math{E}, or it is set to the total enthalpy @tex-math{H}. In the first case we speak of the E-CUSP scheme @link["blazek2005-r4-62"]{[62]}, the second choice is consequently called the H-CUSP scheme. The formulation with @tex-math{\phi = H} preserves the total enthalpy @link["blazek2005-r4-43"]{[43]} and is therefore suitable for inviscid flows. The left (@tex-math{L}) and right (@tex-math{R}) state is evaluated similarly to the MUSCL approach @link["blazek2005-r4-29"]{[29]}, using the limited interpolation (4.118)-(4.121). The two factors @tex-math{\alpha^{*}c} and @tex-math{\beta} in Eq. @link["blazek2005-ch04#eq-4-79"]{(4.79)} are defined as}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-79"]{(4.79)}中的@tex-math{\phi}项有两种选择:或取总能量@tex-math{E}ï¼或取总焓@tex-math{H}。第一种情形称为E-CUSP格式@link["blazek2005-r4-62"]{[62]}ï¼第二种相应称为H-CUSP格式。@tex-math{\phi = H}的表述保持总焓不变@link["blazek2005-r4-43"]{[43]}ï¼因而适用于无黏流动。左(@tex-math{L})、右(@tex-math{R})状态的计算与MUSCL方法@link["blazek2005-r4-29"]{[29]}类似ï¼采用限制插值(4.118)-(4.121)。方程@link["blazek2005-ch04#eq-4-79"]{(4.79)}中的两个因子@tex-math{\alpha^{*}c}与@tex-math{\beta}定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-80"]{\alpha^{*}c = \begin{cases}
+      |V| & \text{if } \beta = 0\\
+      -(1 + \beta)\Lambda^{-} & \text{if } \beta > 0 \text{ and } 0 < M_n < 1\\
+      +(1 - \beta)\Lambda^{+} & \text{if } \beta < 0 \text{ and } -1 < M_n < 0\\
+      0 & \text{if } |M_n| \ge 1
+    \end{cases} \tag{4.80}}
+
+    @bi{
+      @lang["en"]{and}
+      @lang["zh-CN"]{而}
+    }
+
+    @tex-display-math[#:id "eq-4-81"]{\beta = \begin{cases}
+      +\max\left(0,\,\dfrac{V + \Lambda^{-}}{V - \Lambda^{-}}\right) & \text{if } 0 \le M_n < 1\\
+      -\max\left(0,\,\dfrac{V + \Lambda^{+}}{V - \Lambda^{+}}\right) & \text{if } -1 < M_n < 0\\
+      \mathrm{sign}(M_n) & \text{if } |M_n| \ge 1
+    \end{cases} \tag{4.81}}
+
+    @bi{
+      @lang["en"]{with @tex-math{M_n = V/c}. The contravariant velocity @tex-math{V} in the above formulae @link["blazek2005-ch04#eq-4-80"]{(4.80)} and @link["blazek2005-ch04#eq-4-81"]{(4.81)} is computed from the arithmetic mean of the velocity components, i.e.,}
+      @lang["zh-CN"]{其中@tex-math{M_n = V/c}。上述公式@link["blazek2005-ch04#eq-4-80"]{(4.80)}与@link["blazek2005-ch04#eq-4-81"]{(4.81)}中的逆变量速度@tex-math{V}由速度分量的算术平均计算ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-82"]{V_{I+1/2} = \frac{1}{2}\left[(u_I + u_{I+1})n_x + (v_I + v_{I+1})n_y + (w_I + w_{I+1})n_z\right]. \tag{4.82}}
+
+    @bi{
+      @lang["en"]{The speed of sound @tex-math{c} in the evaluation of @tex-math{M_n} is also obtained from arithmetically averaged quantities. The positive and negative eigenvalues @tex-math{\Lambda^{+}} and @tex-math{\Lambda^{-}} in Eqs. @link["blazek2005-ch04#eq-4-80"]{(4.80)}, @link["blazek2005-ch04#eq-4-81"]{(4.81)} are those of the so-called @emph{Roe matrix} @link["blazek2005-r4-63"]{[63]}, which will be discussed in the Subsection 4.3.3. The eigenvalues are given by @link["blazek2005-r4-60"]{[60]}}
+      @lang["zh-CN"]{计算@tex-math{M_n}所用的声速@tex-math{c}同样由算术平均量得到。方程@link["blazek2005-ch04#eq-4-80"]{(4.80)}、@link["blazek2005-ch04#eq-4-81"]{(4.81)}中的正、负特征值@tex-math{\Lambda^{+}}与@tex-math{\Lambda^{-}}是所谓Roe矩阵(Roe matrix)@link["blazek2005-r4-63"]{[63]}的特征值,Roe矩阵将在4.3.3小节讨论。特征值为@link["blazek2005-r4-60"]{[60]}}
+    }
+
+    @tex-display-math[#:id "eq-4-83"]{\Lambda^{\pm} = \frac{\gamma + 1}{2\gamma}\tilde{V} \pm \sqrt{\left(\frac{\gamma - 1}{2\gamma}\tilde{V}\right)^2 + \frac{\tilde{c}^2}{\gamma}}\,, \tag{4.83}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\tilde{V}} denotes the contravariant velocity, @tex-math{\gamma} is the ratio of specific heat coefficients and @tex-math{\tilde{c}} stands for the speed of sound. The flow variables in Eq. @link["blazek2005-ch04#eq-4-83"]{(4.83)}, which have to be evaluated at the faces of the control volumes, are obtained using the so-called @emph{Roe averages} @link["blazek2005-r4-63"]{[63]}}
+      @lang["zh-CN"]{其中@tex-math{\tilde{V}}表示逆变量速度,@tex-math{\gamma}为比热比,@tex-math{\tilde{c}}表示声速。方程@link["blazek2005-ch04#eq-4-83"]{(4.83)}中的流动变量须在控制体面上计算ï¼采用所谓的Roe平均(Roe averages)@link["blazek2005-r4-63"]{[63]}得到}
+    }
+
+    @tex-display-math[#:id "eq-4-84"]{\begin{aligned}
+      \tilde{u}_{I+1/2} &= \frac{u_L\sqrt{\rho_L} + u_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{v}_{I+1/2} &= \frac{v_L\sqrt{\rho_L} + v_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{w}_{I+1/2} &= \frac{w_L\sqrt{\rho_L} + w_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{H}_{I+1/2} &= \frac{H_L\sqrt{\rho_L} + H_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{c}_{I+1/2} &= \sqrt{(\gamma - 1)\left(\tilde{H} - \frac{\tilde{u}^2 + \tilde{v}^2 + \tilde{w}^2}{2}\right)_{I+1/2}}\\
+      \tilde{V}_{I+1/2} &= \tilde{u}_{I+1/2}n_x + \tilde{v}_{I+1/2}n_y + \tilde{w}_{I+1/2}n_z\,.
+    \end{aligned} \tag{4.84}}
+
+    @bi{
+      @lang["en"]{The factors @tex-math{\alpha^{*}c} and @tex-math{\beta} are defined such that full upwinding of the convective fluxes results for supersonic flow, i.e., @tex-math{\alpha^{*}c = 0} and @tex-math{\beta = \mathrm{sign}(M_n)}. On the other hand, in subsonic flow (when @tex-math{\beta = 0}) the dissipation is scaled by @tex-math{|V|}. This is a desirable property for the computation of viscous layers. In cases of large aspect ratio cells, explicit time-stepping schemes usually require increased numerical dissipation in the direction of the longer cell side in order to stay robust. This can be accomplished by employing ratios of the spectral radii similar to Eq. @link["blazek2005-ch04#eq-4-57"]{(4.57)}. More details can be found in Ref. @link["blazek2005-r4-37"]{[37]}, which also contains comparisons between the CUSP scheme and the scalar as well as the matrix artificial dissipation (Subsection 4.3.1) scheme.}
+      @lang["zh-CN"]{因子@tex-math{\alpha^{*}c}与@tex-math{\beta}的定义使得:对超声速流动ï¼对流通量完全上风ï¼即@tex-math{\alpha^{*}c = 0}且@tex-math{\beta = \mathrm{sign}(M_n)};而在亚声速流动(@tex-math{\beta = 0})中ï¼耗散由@tex-math{|V|}缩放。这对黏性层的计算是一个理想的性质。在大长宽比单元的情形ï¼为保持稳健性ï¼显式时间推进格式通常需要沿单元较长一侧方向增大数值耗散。这可以通过采用类似方程@link["blazek2005-ch04#eq-4-57"]{(4.57)}的谱半径之比来实现。更多细节见文献@link["blazek2005-r4-37"]{[37]}ï¼该文献还包含CUSP格式与标量及矩阵人工耗散格式(4.3.1小节)的比较。}
+    }
+
+    @bi{
+      @lang["en"]{The implementation of the CUSP scheme can be considerably simplified by replacing the Roe averages from Eq. @link["blazek2005-ch04#eq-4-84"]{(4.84)} by arithmetic averages and the eigenvalues from Eq. @link["blazek2005-ch04#eq-4-83"]{(4.83)} by @tex-math{\Lambda^{\pm} = V \pm c}. Introducing the definition}
+      @lang["zh-CN"]{把方程@link["blazek2005-ch04#eq-4-84"]{(4.84)}的Roe平均换成算术平均、方程@link["blazek2005-ch04#eq-4-83"]{(4.83)}的特征值换成@tex-math{\Lambda^{\pm} = V \pm c}ï¼可以大大简化CUSP格式的实现。引入定义}
+    }
+
+    @tex-display-math[#:id "eq-4-85"]{\alpha^{*}c = \alpha c - \beta V\,, \tag{4.85}}
+
+    @bi{
+      @lang["en"]{the factors of the modified scheme read @link["blazek2005-r4-60"]{[60]}, @link["blazek2005-r4-43"]{[43]}}
+      @lang["zh-CN"]{修改后格式的因子为@link["blazek2005-r4-60"]{[60]}、@link["blazek2005-r4-43"]{[43]}}
+    }
+
+    @tex-display-math[#:id "eq-4-86"]{\alpha = \begin{cases}
+      |M_n| & \text{if } |M_n| \ge \delta\\
+      \dfrac{M_n^2 + \delta^2}{2\delta} & \text{if } |M_n| < \delta\,,
+    \end{cases} \tag{4.86}}
+
+    @bi{
+      @lang["en"]{and}
+      @lang["zh-CN"]{而}
+    }
+
+    @tex-display-math[#:id "eq-4-87"]{\beta = \begin{cases}
+      \max(0,\, 2M_n - 1) & \text{if } 0 \le M_n < 1\\
+      \min(0,\, 2M_n + 1) & \text{if } -1 < M_n < 0\\
+      \mathrm{sign}(M_n) & \text{if } |M_n| \ge 1\,.
+    \end{cases} \tag{4.87}}
+
+    @bi{
+      @lang["en"]{The contravariant velocity in @tex-math{M_n = V/c} is still computed as indicated in Eq. @link["blazek2005-ch04#eq-4-82"]{(4.82)}. The parameter @tex-math{\delta} in Eq. @link["blazek2005-ch04#eq-4-86"]{(4.86)} is intended to prevent the dissipation from disappearing at stagnation points, but this does not seem to be always necessary. The above simplifications lead to a computationally very efficient scheme, however the shock resolution is slightly reduced as compared to the original formulation with Roe averages.}
+      @lang["zh-CN"]{@tex-math{M_n = V/c}中的逆变量速度仍按方程@link["blazek2005-ch04#eq-4-82"]{(4.82)}计算。方程@link["blazek2005-ch04#eq-4-86"]{(4.86)}中的参数@tex-math{\delta}意在防止耗散在驻点处消失ï¼但这似乎并不总是必要。上述简化得到计算上非常高效的格式ï¼不过与采用Roe平均的原始表述相比ï¼激波分辨率略有下降。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-4-3-3"]{
+    @title{4.3.3 Flux-Difference Splitting Schemes 通量差分分裂格式}
+
+    @bi{
+      @lang["en"]{The flux-difference splitting schemes evaluate the convective fluxes at a face of the control volume from the (in general discontinuous) left and right state by solving the Riemann (shock tube) problem. The idea was first introduced by Godunov @link["blazek2005-r4-64"]{[64]}. In contrast to the flux-vector splitting schemes, the flux-difference splitting considers not only the direction of wave (information) propagation, but also the waves themselves. In order to reduce the computational effort of Godunov's scheme for the exact solution of the Riemann problem, approximate Riemann solvers were developed, e.g., by Osher et al. @link["blazek2005-r4-65"]{[65]} and by Roe @link["blazek2005-r4-63"]{[63]}. In particular, Roe's method is applied quite often because of its high accuracy in boundary layer flows and good resolution of shocks. Therefore, the Roe solver shall be presented in more detail in the following subsection.}
+      @lang["zh-CN"]{通量差分分裂格式通过求解黎曼(激波管)问题ï¼由(一般不连续的)左、右状态计算控制体面上的对流通量。这一思想最早由Godunov@link["blazek2005-r4-64"]{[64]}提出。与通量向量分裂格式不同ï¼通量差分分裂不仅考虑波(信息)的传播方向ï¼还考虑波本身。为了降低Godunov精确求解黎曼问题格式的计算量ï¼人们发展了近似黎曼求解器ï¼例如Osher等人@link["blazek2005-r4-65"]{[65]}与Roe@link["blazek2005-r4-63"]{[63]}的工作。其中,Roe方法因其在边界层流动中的高精度和良好的激波分辨率而应用较多。因此ï¼下一小节将更详细地介绍Roe求解器。}
+    }
+
+    @emph{Roe Upwind Scheme Roe上风格式}
+
+    @bi{
+      @lang["en"]{Roe's approximate Riemann solver can be implemented either in the framework of the cell-centred scheme or the dual control-volume scheme. It is based on the decomposition of the flux difference over a face of the control volume into a sum of wave contributions, while ensuring the conservation properties of the Euler equations. On the face @tex-math{(I+1/2)} or @tex-math{(i+1/2)}, respectively, the difference is expressed as @link["blazek2005-r4-63"]{[63]}}
+      @lang["zh-CN"]{Roe近似黎曼求解器既可在单元中心格式框架下实现ï¼也可在对偶控制体格式框架下实现。它基于把控制体一个面上的通量差分解为若干波贡献之和ï¼同时保证欧拉方程的守恒性质。在面@tex-math{(I+1/2)}或@tex-math{(i+1/2)}上ï¼该差分表示为@link["blazek2005-r4-63"]{[63]}}
+    }
+
+    @tex-display-math[#:id "eq-4-88"]{(\vec{F}_c)_R - (\vec{F}_c)_L = (\bar{A}_{Roe})_{I+1/2}(\vec{W}_R - \vec{W}_L). \tag{4.88}}
+
+    @bi{
+      @lang["en"]{In the above Eq. @link["blazek2005-ch04#eq-4-88"]{(4.88)}, @tex-math{\bar{A}_{Roe}} denotes the so-called @emph{Roe matrix}, and @tex-math{L} or @tex-math{R} the left and right state (see Fig. 4.8), respectively. The Roe matrix is identical to the convective flux Jacobian @tex-math{\bar{A}_c} (see Appendix A.9), where the flow variables are replaced by the so-called @emph{Roe-averaged} variables. The flux difference in Eq. @link["blazek2005-ch04#eq-4-88"]{(4.88)} is exact, if the Roe's averages are computed from the left and the right state by the following formulae @link["blazek2005-r4-63"]{[63]}, @link["blazek2005-r4-66"]{[66]}}
+      @lang["zh-CN"]{在方程@link["blazek2005-ch04#eq-4-88"]{(4.88)}中,@tex-math{\bar{A}_{Roe}}表示所谓的Roe矩阵(Roe matrix),@tex-math{L}与@tex-math{R}分别表示左、右状态(见图4.8)。Roe矩阵与对流通量Jacobian@tex-math{\bar{A}_c}(见附录A.9)完全相同ï¼只是流动变量换成了所谓的Roe平均(Roe-averaged)变量。若Roe平均由左、右状态按以下公式计算@link["blazek2005-r4-63"]{[63]}、@link["blazek2005-r4-66"]{[66]}ï¼则方程@link["blazek2005-ch04#eq-4-88"]{(4.88)}中的通量差分是精确的}
+    }
+
+    @tex-display-math[#:id "eq-4-89"]{\begin{aligned}
+      \tilde{\rho} &= \sqrt{\rho_L\rho_R}\\
+      \tilde{u} &= \frac{u_L\sqrt{\rho_L} + u_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{v} &= \frac{v_L\sqrt{\rho_L} + v_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{w} &= \frac{w_L\sqrt{\rho_L} + w_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{H} &= \frac{H_L\sqrt{\rho_L} + H_R\sqrt{\rho_R}}{\sqrt{\rho_L} + \sqrt{\rho_R}}\\
+      \tilde{c} &= \sqrt{(\gamma - 1)\left(\tilde{H} - \tilde{q}^2/2\right)}\\
+      \tilde{V} &= \tilde{u}n_x + \tilde{v}n_y + \tilde{w}n_z\\
+      \tilde{q}^2 &= \tilde{u}^2 + \tilde{v}^2 + \tilde{w}^2\,.
+    \end{aligned} \tag{4.89}}
+
+    @bi{
+      @lang["en"]{We can make the decomposition into waves in Roe's scheme clearer when we insert the diagonalisation of the Roe matrix, i.e., @tex-math{\bar{A}_{Roe} = \bar{T}\bar{\Lambda}_c\bar{T}^{-1}}, into the Eq. @link["blazek2005-ch04#eq-4-88"]{(4.88)}}
+      @lang["zh-CN"]{把Roe矩阵的对角化形式@tex-math{\bar{A}_{Roe} = \bar{T}\bar{\Lambda}_c\bar{T}^{-1}}代入方程@link["blazek2005-ch04#eq-4-88"]{(4.88)}ï¼可以更清楚地看出Roe格式中的波分解}
+    }
+
+    @tex-display-math[#:id "eq-4-90"]{(\vec{F}_c)_R - (\vec{F}_c)_L = \bar{T}\bar{\Lambda}_c(\vec{C}_R - \vec{C}_L)\,. \tag{4.90}}
+
+    @bi{
+      @lang["en"]{The matrix of left @tex-math{(\bar{T}^{-1})} and right @tex-math{(\bar{T})} eigenvectors, as well as the diagonal matrix of eigenvalues @tex-math{(\bar{\Lambda}_c)} are evaluated using Roe's averaging @link["blazek2005-ch04#eq-4-89"]{(4.89)}. In the above Eq. @link["blazek2005-ch04#eq-4-90"]{(4.90)}, the characteristic variables @tex-math{\vec{C}} represent the wave amplitudes, the eigenvalues @tex-math{\bar{\Lambda}_c} are the associated wave speeds of the approximate Riemann problem, and finally the right eigenvectors are the waves themselves.}
+      @lang["zh-CN"]{左特征向量矩阵@tex-math{(\bar{T}^{-1})}、右特征向量矩阵@tex-math{(\bar{T})}以及特征值对角矩阵@tex-math{(\bar{\Lambda}_c)}都用Roe平均@link["blazek2005-ch04#eq-4-89"]{(4.89)}计算。在方程@link["blazek2005-ch04#eq-4-90"]{(4.90)}中ï¼特征变量@tex-math{\vec{C}}代表波幅ï¼特征值@tex-math{\bar{\Lambda}_c}是近似黎曼问题相应的波速ï¼而右特征向量就是波本身。}
+    }
+
+    @bi{
+      @lang["en"]{Following from the previous discussion, the convective fluxes are evaluated at the faces of a control volume faces according to the formula @link["blazek2005-r4-63"]{[63]}}
+      @lang["zh-CN"]{根据以上讨论ï¼控制体各面上的对流通量按下式计算@link["blazek2005-r4-63"]{[63]}}
+    }
+
+    @tex-display-math[#:id "eq-4-91"]{(\vec{F}_c)_{I+1/2} = \frac{1}{2}\left[\vec{F}_c(\vec{W}_R) + \vec{F}_c(\vec{W}_L) - \left|\bar{A}_{Roe}\right|_{I+1/2}(\vec{W}_R - \vec{W}_L)\right]. \tag{4.91}}
+
+    @bi{
+      @lang["en"]{The product of @tex-math{|\bar{A}_{Roe}|} and the difference of the left and right state can be efficiently evaluated as follows}
+      @lang["zh-CN"]{@tex-math{|\bar{A}_{Roe}|}与左、右状态之差的乘积可以高效地计算如下}
+    }
+
+    @tex-display-math[#:id "eq-4-92"]{\left|\bar{A}_{Roe}\right|(\vec{W}_R - \vec{W}_L) = \left|\Delta\vec{F}_1\right| + \left|\Delta\vec{F}_{2,3,4}\right| + \left|\Delta\vec{F}_5\right|, \tag{4.92}}
+
+    @bi{
+      @lang["en"]{where}
+      @lang["zh-CN"]{其中}
+    }
+
+    @tex-display-math[#:id "eq-4-93"]{\left|\Delta\vec{F}_1\right| = \left|\tilde{V} - \tilde{c}\right|\left(\frac{\Delta p - \tilde{\rho}\tilde{c}\Delta V}{2\tilde{c}^2}\right)\begin{bmatrix}
+      1\\ \tilde{u} - \tilde{c}n_x\\ \tilde{v} - \tilde{c}n_y\\ \tilde{w} - \tilde{c}n_z\\ \tilde{H} - \tilde{c}\tilde{V}
+    \end{bmatrix} \tag{4.93}}
+
+    @tex-display-math[#:id "eq-4-94"]{\begin{aligned}
+      \left|\Delta\vec{F}_{2,3,4}\right| = {}& \left|\tilde{V}\right|\left\{\left(\Delta\rho - \frac{\Delta p}{\tilde{c}^2}\right)\begin{bmatrix}
+        1\\ \tilde{u}\\ \tilde{v}\\ \tilde{w}\\ \tilde{q}^2/2
+      \end{bmatrix}\right.\\
+      &\left.+ \tilde{\rho}\begin{bmatrix}
+        0\\ \Delta u - \Delta V n_x\\ \Delta v - \Delta V n_y\\ \Delta w - \Delta V n_z\\ \tilde{u}\Delta u + \tilde{v}\Delta v + \tilde{w}\Delta w - \tilde{V}\Delta V
+      \end{bmatrix}\right\} \tag{4.94}
+    \end{aligned}}
+
+    @tex-display-math[#:id "eq-4-95"]{\left|\Delta\vec{F}_5\right| = \left|\tilde{V} + \tilde{c}\right|\left(\frac{\Delta p + \tilde{\rho}\tilde{c}\Delta V}{2\tilde{c}^2}\right)\begin{bmatrix}
+      1\\ \tilde{u} + \tilde{c}n_x\\ \tilde{v} + \tilde{c}n_y\\ \tilde{w} + \tilde{c}n_z\\ \tilde{H} + \tilde{c}\tilde{V}
+    \end{bmatrix}. \tag{4.95}}
+
+    @bi{
+      @lang["en"]{The jump condition is defined as @tex-math{\Delta(\bullet) = (\bullet)_R - (\bullet)_L} and the Roe-averaged variables are given in Eq. @link["blazek2005-ch04#eq-4-89"]{(4.89)}, respectively.}
+      @lang["zh-CN"]{跳跃条件定义为@tex-math{\Delta(\bullet) = (\bullet)_R - (\bullet)_L},Roe平均变量由方程@link["blazek2005-ch04#eq-4-89"]{(4.89)}给出。}
+    }
+
+    @bi{
+      @lang["en"]{The left and the right state are determined using the MUSCL scheme @link["blazek2005-r4-29"]{[29]}, which is given in Eq. @link["blazek2005-ch04#eq-4-46"]{(4.46)}. All higher-order schemes (@tex-math{\hat{\kappa} = -1}, @tex-math{\hat{\kappa} = 0}, and @tex-math{\hat{\kappa} = 1/3}) have to be supplemented by limiters (Subsection 4.3.5), if the flow field contains any discontinuities.}
+      @lang["zh-CN"]{左、右状态用MUSCL格式@link["blazek2005-r4-29"]{[29]}确定ï¼即方程@link["blazek2005-ch04#eq-4-46"]{(4.46)}。若流场存在任何间断ï¼所有高阶格式(@tex-math{\hat{\kappa} = -1}、@tex-math{\hat{\kappa} = 0}与@tex-math{\hat{\kappa} = 1/3})都必须辅以限制器(4.3.5小节)。}
+    }
+
+    @bi{
+      @lang["en"]{Because of the formulation in Eq. @link["blazek2005-ch04#eq-4-88"]{(4.88)}, Roe's approximate Riemann solver will produce an unphysical expansion shock in the case of stationary expansion, for which @tex-math{(\vec{F}_c)_L = (\vec{F}_c)_R} but @tex-math{\vec{W}_L \ne \vec{W}_R}. Furthermore, the so-called @emph{carbuncle phenomenon} may occur, where a perturbation grows ahead of a strong bow shock along the stagnation line @link["blazek2005-r4-67"]{[67]}, @link["blazek2005-r4-68"]{[68]}. See also the discussion in Ref. @link["blazek2005-r4-69"]{[69]}. The underlying difficulty is that the original scheme does not recognise the sonic point. In order to solve this problem, the modulus of the eigenvalues @tex-math{|\bar{\Lambda}_c| = |\tilde{V} \pm \tilde{c}|} is modified using Harten's @emph{entropy correction} @link["blazek2005-r4-70"]{[70]}, @link["blazek2005-r4-71"]{[71]}}
+      @lang["zh-CN"]{由于方程@link["blazek2005-ch04#eq-4-88"]{(4.88)}的构造,Roe近似黎曼求解器在定常膨胀情形会产生非物理的膨胀激波ï¼此时@tex-math{(\vec{F}_c)_L = (\vec{F}_c)_R}但@tex-math{\vec{W}_L \ne \vec{W}_R}。此外ï¼可能出现所谓的carbuncle现象(“红玉”现象)ï¼即扰动沿滞止线在强弓形激波前增长@link["blazek2005-r4-67"]{[67]}、@link["blazek2005-r4-68"]{[68]};另见文献@link["blazek2005-r4-69"]{[69]}的讨论。其内在困难在于原始格式不能识别声速点。为解决这一问题ï¼特征值的模@tex-math{|\bar{\Lambda}_c| = |\tilde{V} \pm \tilde{c}|}用Harten熵修正(entropy correction)@link["blazek2005-r4-70"]{[70]}、@link["blazek2005-r4-71"]{[71]}加以修改}
+    }
+
+    @tex-display-math[#:id "eq-4-96"]{\left|\Lambda_c\right| = \begin{cases}
+      \left|\Lambda_c\right| & \text{if } |\Lambda_c| > \delta\\
+      \dfrac{\Lambda_c^2 + \delta^2}{2\delta} & \text{if } |\Lambda_c| \le \delta\,,
+    \end{cases} \tag{4.96}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\delta} is a small value, which can be conveniently set equal to some fraction (e.g., 1/10) of the local speed of sound. In order to prevent the linear waves @tex-math{|\Delta\vec{F}_{2,3,4}|} from disappearing for @tex-math{\tilde{V} \rightarrow 0} (e.g., at stagnation points or for grid-aligned flow), the above modification can also be applied to @tex-math{|\tilde{V}|}. A clear disadvantage of the Roe solver as compared to the central scheme or to the flux-vector splitting schemes shows up for a real gas simulation. Namely, the Roe matrix and averaging have to be changed correspondingly, which may become quite complicated. The reader may find examples of formulations for equilibrium as well as non-equilibrium real gas flows in @link["blazek2005-r4-72"]{[72]}-@link["blazek2005-r4-75"]{[75]} and in the references cited therein. An implementation of Roe's scheme for arbitrary compressible and incompressible fluids was recently described in Ref. @link["blazek2005-r4-76"]{[76]}.}
+      @lang["zh-CN"]{其中@tex-math{\delta}是一个小值ï¼可方便地取为当地声速的某一分数(例如1/10)。为防止线性波@tex-math{|\Delta\vec{F}_{2,3,4}|}在@tex-math{\tilde{V} \rightarrow 0}时消失(例如在驻点或网格对齐流动处)ï¼上述修正也可应用于@tex-math{|\tilde{V}|}。与中心格式或通量向量分裂格式相比,Roe求解器的一个明显缺点出现在真实气体模拟中:Roe矩阵与平均必须相应改变ï¼这可能变得相当复杂。平衡与非平衡真实气体流动的公式示例可在文献@link["blazek2005-r4-72"]{[72]}-@link["blazek2005-r4-75"]{[75]}及其引用的文献中找到。文献@link["blazek2005-r4-76"]{[76]}最近描述了Roe格式对任意可压缩与不可压缩流体的实现。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-4-3-4"]{
+    @title{4.3.4 Total Variation Diminishing Schemes 总变差减小(TVD)格式}
+
+    @bi{
+      @lang["en"]{The idea of Total Variation Diminishing (TVD) schemes was first pursued by Harten @link["blazek2005-r4-77"]{[77]}. The TVD schemes are based on a concept aimed at preventing the generation of new extrema in the flow solution. The principal condition for a TVD scheme is that the total variation of the solution, defined as}
+      @lang["zh-CN"]{总变差减小(TVD)格式的思想最早由Harten@link["blazek2005-r4-77"]{[77]}提出。TVD格式基于旨在防止流动解中产生新极值的概念。TVD格式的基本条件是:解的总变差ï¼定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-97"]{\mathrm{TV} \equiv \sum_{I}\left|U_{I+1} - U_I\right| \tag{4.97}}
+
+    @bi{
+      @lang["en"]{for a scalar conservation equation, decreases in time. This implies that maxima in the solution must be non-increasing and minima non-decreasing. Hence no new local extrema may be created during the time evolution. Thus, a discretisation methodology with TVD properties allows it to resolve strong shock waves accurately, without any spurious oscillations of the solution, as they are for example generated by the central scheme with scalar or matrix artificial dissipation (Subsection 4.3.1).}
+      @lang["zh-CN"]{对标量守恒方程而言ï¼须随时间减小。这意味着解中的极大值必须不增ï¼极小值必须不减ï¼因而在时间演化过程中不得产生新的局部极值。这样ï¼具有TVD性质的离散方法能够准确分辨强激波ï¼而不会产生解的任何虚假振荡——例如标量或矩阵人工耗散中心格式(4.3.1小节)就会产生这类振荡。}
+    }
+
+    @bi{
+      @lang["en"]{The TVD schemes are implemented as an average of the convective fluxes combined with an additional dissipation term (flux-limited dissipation), which complies with the TVD conditions @link["blazek2005-r4-77"]{[77]}, @link["blazek2005-r4-78"]{[78]}. If the dissipation term depends on the sign of the characteristic speeds, we speak of a @emph{symmetric} TVD scheme @link["blazek2005-r4-79"]{[79]}, @link["blazek2005-r4-80"]{[80]}, otherwise of an @emph{upwind} TVD scheme @link["blazek2005-r4-81"]{[81]}-@link["blazek2005-r4-85"]{[85]}. Experience shows that the upwind TVD scheme offers higher accuracy than the symmetric TVD scheme @link["blazek2005-r4-86"]{[86]}. The upwind TVD scheme is particularly suitable for the simulation of supersonic and hypersonic flow fields @link["blazek2005-r4-87"]{[87]}. It is also capable of accurate resolution of boundary layers @link["blazek2005-r4-53"]{[53]}, especially if the modification described in Ref. @link["blazek2005-r4-88"]{[88]} is applied.}
+      @lang["zh-CN"]{TVD格式实现为对流通量的平均再加上一个满足TVD条件的附加耗散项(通量限制耗散)@link["blazek2005-r4-77"]{[77]}、@link["blazek2005-r4-78"]{[78]}。若耗散项依赖于特征速度的符号ï¼则称为对称(symmetric)TVD格式@link["blazek2005-r4-79"]{[79]}、@link["blazek2005-r4-80"]{[80]};否则称为上风(upwind)TVD格式@link["blazek2005-r4-81"]{[81]}-@link["blazek2005-r4-85"]{[85]}。经验表明ï¼上风TVD格式比对称TVD格式精度更高@link["blazek2005-r4-86"]{[86]}。上风TVD格式特别适合模拟超声速与高超声速流场@link["blazek2005-r4-87"]{[87]};它也能精确分辨边界层@link["blazek2005-r4-53"]{[53]}ï¼尤其在采用文献@link["blazek2005-r4-88"]{[88]}所述修改时。}
+    }
+
+    @emph{Upwind TVD Scheme 上风TVD格式}
+
+    @bi{
+      @lang["en"]{In this framework, the convective fluxes through the face @tex-math{(I+1/2)} of the control volume (see Fig. 4.8) can be expressed as}
+      @lang["zh-CN"]{在此框架下ï¼通过控制体面@tex-math{(I+1/2)}(见图4.8)的对流通量可表示为}
+    }
+
+    @tex-display-math[#:id "eq-4-98"]{(\vec{F}_c)_{I+1/2} = \frac{1}{2}\left[(\vec{F}_c)_{I+1} + (\vec{F}_c)_I\right] + \frac{1}{2}\bar{T}_{I+1/2}\vec{\Theta}_{I+1/2}. \tag{4.98}}
+
+    @bi{
+      @lang["en"]{In the case of the cell-vertex scheme with dual control volumes (Subsection 4.2.3), the indices would read @tex-math{(i+1/2)}, @tex-math{(i+1)}, etc. The matrix @tex-math{\bar{T}} contains the right eigenvectors of the Jacobian @tex-math{\bar{A}_c = \partial\vec{F}_c/\partial\vec{W}}. The entries of the matrix can be found in the Appendix A.11. In Equation @link["blazek2005-ch04#eq-4-98"]{(4.98)}, the term @tex-math{\vec{\Theta}} takes account of the direction of the characteristic speeds. It controls the upwind direction of the difference operator. The @emph{l}-th component of the vector @tex-math{\vec{\Theta}} is defined as (cf. @link["blazek2005-r4-84"]{[84]})}
+      @lang["zh-CN"]{在采用对偶控制体的单元顶点格式(4.2.3小节)情形ï¼指标应为@tex-math{(i+1/2)}、@tex-math{(i+1)}等。矩阵@tex-math{\bar{T}}包含Jacobian@tex-math{\bar{A}_c = \partial\vec{F}_c/\partial\vec{W}}的右特征向量ï¼其元素见附录A.11。方程@link["blazek2005-ch04#eq-4-98"]{(4.98)}中的@tex-math{\vec{\Theta}}项考虑特征速度的方向ï¼控制差分算子的上风方向。向量@tex-math{\vec{\Theta}}的第@emph{l}个分量定义为(参见@link["blazek2005-r4-84"]{[84]})}
+    }
+
+    @tex-display-math[#:id "eq-4-99"]{\Theta^{l}_{I+1/2} = \frac{1}{2}\psi(\Lambda^{l}_{I+1/2})\left(\Psi^{l}_{I+1} + \Psi^{l}_{I}\right) - \psi(\Lambda^{l}_{I+1/2} + \chi^{l}_{I+1/2})\Delta C^{l}_{I+1/2}, \tag{4.99}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\Lambda^{l}} represents the individual eigenvalues of the diagonal matrix @tex-math{\bar{\Lambda}_c} (see Appendix A.11), and @tex-math{\Psi} the limiter function (Eq. @link["blazek2005-ch04#eq-4-122"]{(4.122)}), respectively. Furthermore,}
+      @lang["zh-CN"]{其中@tex-math{\Lambda^{l}}表示对角矩阵@tex-math{\bar{\Lambda}_c}的各特征值(见附录A.11),@tex-math{\Psi}为限制器函数(方程@link["blazek2005-ch04#eq-4-122"]{(4.122)})。此外,}
+    }
+
+    @tex-display-math[#:id "eq-4-100"]{\chi^{l}_{I+1/2} = \frac{1}{2}\psi(\Lambda^{l}_{I+1/2})\cdot\begin{cases}
+      \dfrac{\Psi^{l}_{I+1} - \Psi^{l}_{I}}{\Delta C^{l}_{I+1/2}} & \text{if } \Delta C^{l}_{I+1/2} \ne 0\\
+      0 & \text{if } \Delta C^{l}_{I+1/2} = 0\,,
+    \end{cases} \tag{4.100}}
+
+    @bi{
+      @lang["en"]{and finally @tex-math{\Delta C^{l}} are the elements of the difference of characteristic variables, i.e.,}
+      @lang["zh-CN"]{最后,@tex-math{\Delta C^{l}}是特征变量之差的元素ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-101"]{\Delta\vec{C}_{I+1/2} = \bar{T}^{-1}_{I+1/2}(\vec{W}_{I+1} - \vec{W}_I) \tag{4.101}}
+
+    @bi{
+      @lang["en"]{with @tex-math{\bar{T}^{-1}} being the matrix of left eigenvectors. The so-called @emph{entropy correction} of Harten @link["blazek2005-r4-70"]{[70]}, @link["blazek2005-r4-71"]{[71]}, i.e.,}
+      @lang["zh-CN"]{其中@tex-math{\bar{T}^{-1}}为左特征向量矩阵。Harten所谓的熵修正(entropy correction)@link["blazek2005-r4-70"]{[70]}、@link["blazek2005-r4-71"]{[71]}ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-102"]{\psi(z) = \begin{cases}
+      |z| & \text{if } |z| > \delta_1\\
+      \dfrac{z^2 + \delta_1^2}{2\delta_1} & \text{if } |z| \le \delta_1
+    \end{cases} \tag{4.102}}
+
+    @bi{
+      @lang["en"]{prevents the value @tex-math{\psi(z)} from vanishing for @tex-math{|z| \rightarrow 0}. The parameter @tex-math{\delta_1} is best formulated as function of the velocity components and the speed of sound @link["blazek2005-r4-84"]{[84]}}
+      @lang["zh-CN"]{可防止@tex-math{|z| \rightarrow 0}时@tex-math{\psi(z)}变为零。参数@tex-math{\delta_1}最好表示为速度分量与声速的函数@link["blazek2005-r4-84"]{[84]}}
+    }
+
+    @tex-display-math[#:id "eq-4-103"]{(\delta_1)_{I+1/2} = \delta\left(\left|u_{I+1/2}\right| + \left|v_{I+1/2}\right| + \left|w_{I+1/2}\right| + c_{I+1/2}\right), \tag{4.103}}
+
+    @bi{
+      @lang["en"]{where @tex-math{0.05 \le \delta \le 0.5}. Values of the primitive variables at the face @tex-math{(I+1/2)} are obtained either from Roe's @link["blazek2005-ch04#eq-4-89"]{(4.89)} or from simple arithmetic averaging of the states at @tex-math{I} and @tex-math{(I+1)}. The limiter function @tex-math{\Psi}, which prevents the generation of spurious solutions near strong gradients, will be presented in the next subsection. It should be stressed that the above upwind TVD scheme does not employ the MUSCL approach to achieve higher order accuracy.}
+      @lang["zh-CN"]{其中@tex-math{0.05 \le \delta \le 0.5}。面@tex-math{(I+1/2)}处原始变量的值既可由Roe平均@link["blazek2005-ch04#eq-4-89"]{(4.89)}得到ï¼也可由@tex-math{I}与@tex-math{(I+1)}处状态的简单算术平均得到。防止在强梯度附近产生虚假解的限制器函数@tex-math{\Psi}将在下一小节介绍。应当强调ï¼上述上风TVD格式并不借助MUSCL方法来获得高阶精度。}
+    }
+
+    @bi{
+      @lang["en"]{One can show that the upwind TVD method is precisely of first-order in space when the limiter function @tex-math{\Psi} in Eqs. @link["blazek2005-ch04#eq-4-99"]{(4.99)}, @link["blazek2005-ch04#eq-4-100"]{(4.100)} is set equal to zero @link["blazek2005-r4-89"]{[89]}, which happens at discontinuities. Otherwise, the upwind TVD scheme, as presented above, is second-order accurate in smooth flow regions.}
+      @lang["zh-CN"]{可以证明ï¼当方程@link["blazek2005-ch04#eq-4-99"]{(4.99)}、@link["blazek2005-ch04#eq-4-100"]{(4.100)}中的限制器函数@tex-math{\Psi}取为零时(这恰好发生在间断处)ï¼上风TVD方法在空间上恰为一阶精度@link["blazek2005-r4-89"]{[89]};除此之外ï¼如上所述的上风TVD格式在流动光滑区域具有二阶精度。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-4-3-5"]{
+    @title{4.3.5 Limiter Functions 限制器函数}
+
+    @bi{
+      @lang["en"]{Second- and higher-order upwind spatial discretisations require the use of so-called limiters or limiter functions in order to prevent the generation of oscillations and spurious solutions in regions with large gradients (e.g., at shocks). Hence, what we are looking for is at least a @emph{monotonicity preserving} scheme. This means that maxima in the flow field must be non-increasing, minima non-decreasing, and no new local extrema may be created during the time evolution. Or in other words, if the initial data is monotone then the solution has to remain monotone. The rather stringent conditions for monotonicity preserving schemes (or the more rigorous ones for TVD schemes) are often given up in favour of the @emph{Local Extremum Diminishing} (LED) conditions @link["blazek2005-r4-60"]{[60]}. Here, a local extremum contained only @emph{within} the stencil has to decrease.}
+      @lang["zh-CN"]{二阶及更高阶的上风空间离散需要使用所谓的限制器(limiter)或限制器函数(limiter function)ï¼以防止在大梯度区域(如激波处)产生振荡和虚假解。因此ï¼我们至少要寻找保持单调性(monotonicity preserving)的格式。这意味着流场中的极大值必须不增ï¼极小值必须不减ï¼且时间演化过程中不得产生新的局部极值;换言之ï¼若初始数据单调ï¼则解必须保持单调。保持单调性格式的相当苛刻的条件(或TVD格式更严格的条件)常常被放弃ï¼转而采用局部极值减小(Local Extremum Diminishing,LED)条件@link["blazek2005-r4-60"]{[60]}。此时ï¼只要求包含@emph{在模板之内}的局部极值减小。}
+    }
+
+    @image["blazek2005/fig-4-10.png"]{图4.10:有与无限制器的无黏跨声速流动计算比较:NACA 0012翼型,M∞=0.85,α=1°}
+
+    @emph{图4.10:有与无限制器的无黏跨声速流动计算比较。NACA 0012翼型,@tex-math{M_\infty} = 0.85,@tex-math{\alpha} = 1°。}图例:纵轴为马赫数(Mach number)ï¼横轴为弦向位置(chord);带空心方块的折线为无限制器(without limiter)的结果ï¼实线为采用Van Albada限制器(with Van Albada limiter)的结果。
+
+    @bi{
+      @lang["en"]{However, due to Godunov's theorem there is no possibility for a higher-order linear scheme (such as the MUSCL approach) to be monotonicity preserving @link["blazek2005-r4-90"]{[90]}. It is therefore necessary to employ non-linear limiter functions in order to construct a monotonicity preserving or a TVD discretisation. This is demonstrated in Fig. 4.10, where the upwind TVD scheme of Eq. @link["blazek2005-ch04#eq-4-98"]{(4.98)} was used with and without a limiter to compute 2-D transonic flow past the NACA 0012 airfoil. It can be clearly seen that without limiter, the solution exhibits large oscillations in the neighbourhood of the shocks on the upper and the lower side of the airfoil. On the other hand, the limited and the unlimited solutions become nearly identical away from the shocks.}
+      @lang["zh-CN"]{然而ï¼根据Godunov定理ï¼高阶线性格式(如MUSCL方法)不可能保持单调性@link["blazek2005-r4-90"]{[90]}。因此ï¼必须采用非线性限制器函数来构造保持单调性或TVD的离散。图4.10演示了这一点:用方程@link["blazek2005-ch04#eq-4-98"]{(4.98)}的上风TVD格式ï¼分别在有与无限制器的条件下计算NACA 0012翼型的二维跨声速流动。可以清楚看到ï¼无限制器时ï¼解在翼型上、下表面激波附近出现大幅振荡;而在远离激波处ï¼带限制器与不带限制器的解几乎相同。}
+    }
+
+    @bi{
+      @lang["en"]{The purpose of a limiter is to reduce the slopes (i.e., @tex-math{(U_{I+1} - U_I)/\Delta x}) used to interpolate a flow variable to the face of a control volume in order to constrain the solution variations. At strong discontinuities, the limiter has to reduce the slopes to zero to prevent the generation of new extrema. This implies for the MUSCL approach as well as for the TVD schemes that the (monotone) first-order upwind scheme (@tex-math{\epsilon = 0} in Eq. @link["blazek2005-ch04#eq-4-46"]{(4.46)}) is recovered in the immediate vicinity of large gradients. The last requirement to be imposed on a limiter is quite obvious - the original unlimited discretisation has to be obtained in smooth flow regions, in order to keep the amount of numerical dissipation as low as possible. The effect of a limiter on the interpolation of the left and right states is sketched in Fig. 4.11. The example shows the slope reduction at the local minimum at @tex-math{I} and the change of the slope at the cells @tex-math{(I+1)}, @tex-math{(I+2)} to achieve a monotone solution. It is important to realise that a difference between the left and right state at a face may (and generally will) still be present.}
+      @lang["zh-CN"]{限制器的目的是减小用于把流动变量插值到控制体面的斜率(即@tex-math{(U_{I+1} - U_I)/\Delta x})ï¼以约束解的变化。在强间断处ï¼限制器必须把斜率减为零ï¼以防产生新极值。这意味着无论对MUSCL方法还是对TVD格式ï¼在大梯度的紧邻区域都退回到(单调的)一阶上风格式(方程@link["blazek2005-ch04#eq-4-46"]{(4.46)}中@tex-math{\epsilon = 0})。对限制器的最后一项要求显而易见——在流动光滑区域必须还原为原始的无限制离散ï¼以使数值耗散量尽可能低。限制器对左、右状态插值的影响示于图4.11。例子显示了在局部极小值@tex-math{I}处斜率的减小ï¼以及在单元@tex-math{(I+1)}、@tex-math{(I+2)}处为获得单调解而对斜率的改变。重要的是要认识到ï¼面上左、右状态之间的差仍可能(而且一般将会)存在。}
+    }
+
+    @image["blazek2005/fig-4-11.png"]{图4.11:向单元面直接插值(左)与限制插值(右)的比较}
+
+    @emph{图4.11:向单元面直接插值(左)与限制插值(右)的比较。}图例:粗线表示斜率@tex-math{\Delta U/\Delta x}ï¼竖条表示单元中心处的值;横轴为@tex-math{I-1}、@tex-math{I}、@tex-math{I+1}、@tex-math{I+2}与@tex-math{x},L、R标记面上的左、右状态。
+
+    @bi{
+      @lang["en"]{In the following, we shall describe four different limiter functions, which are well-established and proven in practice. We shall consider limiters for the second-order MUSCL, for the CUSP and for the upwind TVD scheme.}
+      @lang["zh-CN"]{下面我们描述四种业已确立并经实践检验的限制器函数:分别针对二阶MUSCL、CUSP以及上风TVD格式。}
+    }
+
+    @emph{Limiter Functions for MUSCL Interpolation 用于MUSCL插值的限制器函数}
+
+    @bi{
+      @lang["en"]{Van Leer's MUSCL approach @link["blazek2005-r4-29"]{[29]} is turned into a monotonicity preserving scheme by employing a limiter function to reduce the differences @tex-math{\Delta_{+}U_I} and @tex-math{\Delta_{-}U_I} in Eq. @link["blazek2005-ch04#eq-4-47"]{(4.47)} when necessary. Introducing slope limiters @tex-math{\Phi^{\pm}}, the MUSCL interpolation formulae in Eq. @link["blazek2005-ch04#eq-4-46"]{(4.46)} are modified as follows (see also Fig. 4.8)}
+      @lang["zh-CN"]{Van Leer的MUSCL方法@link["blazek2005-r4-29"]{[29]}通过在必要时用限制器函数缩小方程@link["blazek2005-ch04#eq-4-47"]{(4.47)}中的差分@tex-math{\Delta_{+}U_I}与@tex-math{\Delta_{-}U_I}ï¼即可成为保持单调性的格式。引入斜率限制器(slope limiter)@tex-math{\Phi^{\pm}}后ï¼方程@link["blazek2005-ch04#eq-4-46"]{(4.46)}中的MUSCL插值公式修改如下(另见图4.8)}
+    }
+
+    @tex-display-math[#:id "eq-4-104"]{\begin{aligned}
+      U_R &= U_{I+1} - \frac{1}{4}\left[(1+\hat{\kappa})\Phi^{+}_{I+1/2}\Delta_{-} + (1-\hat{\kappa})\Phi^{-}_{I+3/2}\Delta_{+}\right] U_{I+1}\\
+      U_L &= U_{I}\ \;+ \frac{1}{4}\left[(1+\hat{\kappa})\Phi^{-}_{I+1/2}\Delta_{+} + (1-\hat{\kappa})\Phi^{+}_{I-1/2}\Delta_{-}\right] U_I\,,
+    \end{aligned} \tag{4.104}}
+
+    @bi{
+      @lang["en"]{The parameter @tex-math{\epsilon} in Eq. @link["blazek2005-ch04#eq-4-46"]{(4.46)} was set equal to unity. The slope limiters are functions of the ratios of the consecutive solution variations, i.e., @tex-math{\Phi^{\pm}_{I+1/2} = \Phi(r^{\pm}_{I+1/2})}, with the definitions @link["blazek2005-r4-1"]{[1]}}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-46"]{(4.46)}中的参数@tex-math{\epsilon}取为1。斜率限制器是相邻解变分之比的函数ï¼即@tex-math{\Phi^{\pm}_{I+1/2} = \Phi(r^{\pm}_{I+1/2})}ï¼其定义@link["blazek2005-r4-1"]{[1]}为}
+    }
+
+    @tex-display-math[#:id "eq-4-105"]{\begin{aligned}
+      r^{+}_{I+1/2} &= \frac{U_{I+2} - U_{I+1}}{U_{I+1} - U_I}\\
+      r^{-}_{I+1/2} &= \frac{U_I - U_{I-1}}{U_{I+1} - U_I}\,, \text{ etc.}
+    \end{aligned} \tag{4.105}}
+
+    @bi{
+      @lang["en"]{If we substitute now @tex-math{r_L} for @tex-math{r^{+}_{I-1/2}} and @tex-math{r_R} for @tex-math{r^{-}_{I+3/2}}, thus}
+      @lang["zh-CN"]{若现在以@tex-math{r_L}替代@tex-math{r^{+}_{I-1/2}}、以@tex-math{r_R}替代@tex-math{r^{-}_{I+3/2}}ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-106"]{\begin{aligned}
+      r_R &= \frac{U_{I+1} - U_I}{U_{I+2} - U_{I+1}} = \frac{\Delta_{-}}{\Delta_{+}}\,U_{I+1}\\
+      r_L &= \frac{U_{I+1} - U_I}{U_I - U_{I-1}} = \frac{\Delta_{+}}{\Delta_{-}}\,U_I\,,
+    \end{aligned} \tag{4.106}}
+
+    @bi{
+      @lang["en"]{we can write Eq. @link["blazek2005-ch04#eq-4-104"]{(4.104)} in the form}
+      @lang["zh-CN"]{则可把方程@link["blazek2005-ch04#eq-4-104"]{(4.104)}写成}
+    }
+
+    @tex-display-math[#:id "eq-4-107"]{\begin{aligned}
+      U_R &= U_{I+1} - \frac{1}{4}\left[(1+\hat{\kappa})r_R\Phi(1/r_R) + (1-\hat{\kappa})\Phi(r_R)\right](U_{I+2} - U_{I+1})\\
+      U_L &= U_{I}\ \;+ \frac{1}{4}\left[(1+\hat{\kappa})r_L\Phi(1/r_L) + (1-\hat{\kappa})\Phi(r_L)\right](U_I - U_{I-1})\,.
+    \end{aligned} \tag{4.107}}
+
+    @bi{
+      @lang["en"]{The above relationships Eq. @link["blazek2005-ch04#eq-4-107"]{(4.107)} can be simplified if we consider only slope limiters with the symmetry property}
+      @lang["zh-CN"]{若只考虑具有如下对称性质的斜率限制器ï¼则上述关系式@link["blazek2005-ch04#eq-4-107"]{(4.107)}可以简化}
+    }
+
+    @tex-display-math[#:id "eq-4-108"]{\Phi(r) = \Phi(1/r). \tag{4.108}}
+
+    @bi{
+      @lang["en"]{With this definition, the limited MUSCL interpolation Eq. @link["blazek2005-ch04#eq-4-104"]{(4.104)} becomes @link["blazek2005-r4-91"]{[91]}}
+      @lang["zh-CN"]{在此定义下ï¼带限制的MUSCL插值方程@link["blazek2005-ch04#eq-4-104"]{(4.104)}变为@link["blazek2005-r4-91"]{[91]}}
+    }
+
+    @tex-display-math[#:id "eq-4-109"]{\begin{aligned}
+      U_R &= U_{I+1} - \frac{1}{2}\Psi_R(U_{I+2} - U_{I+1})\\
+      U_L &= U_{I}\ \;+ \frac{1}{2}\Psi_L(U_I - U_{I-1})
+    \end{aligned} \tag{4.109}}
+
+    @bi{
+      @lang["en"]{with the @emph{limiter function} defined as}
+      @lang["zh-CN"]{其中限制器函数(limiter function)定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-110"]{\Psi_{L/R} = \frac{1}{2}\left[(1+\hat{\kappa})r_{L/R} + (1-\hat{\kappa})\right]\Phi_{L/R}. \tag{4.110}}
+
+    @bi{
+      @lang["en"]{Different formulations of the slope limiter @tex-math{\Phi} in Eq. @link["blazek2005-ch04#eq-4-110"]{(4.110)} are now possible, which can be tailored to specific values of @tex-math{\hat{\kappa}} to give the most accurate but stable and monotonicity preserving MUSCL scheme.}
+      @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-110"]{(4.110)}中斜率限制器@tex-math{\Phi}现在可以有不同的表述ï¼可针对特定的@tex-math{\hat{\kappa}}值加以定制ï¼以得到最精确同时稳定且保持单调性的MUSCL格式。}
+    }
+
+    @emph{MUSCL scheme with @tex-math{\hat{\kappa}} = 0 @tex-math{\hat{\kappa}}=0的MUSCL格式}
+
+    @bi{
+      @lang["en"]{One particularly suitable combination for the second-order, upwind-biased scheme with @tex-math{\hat{\kappa} = 0} is @link["blazek2005-r4-92"]{[92]}}
+      @lang["zh-CN"]{对@tex-math{\hat{\kappa} = 0}的二阶上风偏置格式ï¼一种特别合适的组合是@link["blazek2005-r4-92"]{[92]}}
+    }
+
+    @tex-display-math[#:id "eq-4-111"]{\Phi(r) = \frac{2r}{r^2 + 1}. \tag{4.111}}
+
+    @bi{
+      @lang["en"]{In this case, the function @tex-math{\Psi(r)} corresponds to the Van Albada limiter @link["blazek2005-r4-93"]{[93]}}
+      @lang["zh-CN"]{此时ï¼函数@tex-math{\Psi(r)}对应于Van Albada限制器@link["blazek2005-r4-93"]{[93]}}
+    }
+
+    @tex-display-math[#:id "eq-4-112"]{\Psi(r) = \frac{r^2 + r}{1 + r^2}, \tag{4.112}}
+
+    @bi{
+      @lang["en"]{and we obtain with Eq. @link["blazek2005-ch04#eq-4-109"]{(4.109)} the following expressions for the left and right state}
+      @lang["zh-CN"]{并且由方程@link["blazek2005-ch04#eq-4-109"]{(4.109)}得到左、右状态的如下表达式}
+    }
+
+    @tex-display-math[#:id "eq-4-113"]{\begin{aligned}
+      U_R &= U_{I+1} - \frac{1}{2}\delta_R\\
+      U_L &= U_{I}\ \;+ \frac{1}{2}\delta_L\,.
+    \end{aligned} \tag{4.113}}
+
+    @bi{
+      @lang["en"]{The function @tex-math{\delta} is formally identical for both states. It reads}
+      @lang["zh-CN"]{函数@tex-math{\delta}对两种状态在形式上完全相同ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-114"]{\delta = \frac{a(b^2 + \epsilon) + b(a^2 + \epsilon)}{a^2 + b^2 + 2\epsilon}. \tag{4.114}}
+
+    @bi{
+      @lang["en"]{The coefficients @tex-math{a} and @tex-math{b} are defined for the left and right state as}
+      @lang["zh-CN"]{系数@tex-math{a}与@tex-math{b}对左、右状态定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-115"]{\begin{aligned}
+      a_R &= \Delta_{+}U_{I+1}, & b_R &= \Delta_{-}U_{I+1},\\
+      a_L &= \Delta_{+}U_{I}, & b_L &= \Delta_{-}U_I
+    \end{aligned} \tag{4.115}}
+
+    @bi{
+      @lang["en"]{and the difference operators @tex-math{\Delta_{\pm}} are given by Eq. @link["blazek2005-ch04#eq-4-47"]{(4.47)}. The additional parameter @tex-math{\epsilon} in Eq. @link["blazek2005-ch04#eq-4-114"]{(4.114)} prevents the activation of the limiter in smooth flow regions due to small-scale oscillations @link["blazek2005-r4-92"]{[92]}. This is sometimes necessary in order to achieve a fully converged steady-state solution. The parameter @tex-math{\epsilon} is conveniently set proportional to the local grid scale, in 3D for example to @tex-math{\Omega^{1/3}} @link["blazek2005-r4-92"]{[92]}, @link["blazek2005-r4-94"]{[94]}. Additional scaling of the parameter @tex-math{\epsilon} is required if the particular state variable @tex-math{U} is given in physical units. It can be shown that the relations in Eq. @link["blazek2005-ch04#eq-4-113"]{(4.113)} are identical to the original (unlimited) MUSCL scheme @link["blazek2005-ch04#eq-4-46"]{(4.46)} with @tex-math{\hat{\kappa} = 0} for smoothly varying flow. Thus, the accuracy of the solution is not influenced. On the other hand, the function @tex-math{\delta} becomes zero at local extrema, reducing the accuracy to first order as desired.}
+      @lang["zh-CN"]{差分算子@tex-math{\Delta_{\pm}}由方程@link["blazek2005-ch04#eq-4-47"]{(4.47)}给出。方程@link["blazek2005-ch04#eq-4-114"]{(4.114)}中的附加参数@tex-math{\epsilon}防止限制器在流动光滑区域因小尺度振荡而被激活@link["blazek2005-r4-92"]{[92]};为获得完全收敛的定常解ï¼有时需要这样做。参数@tex-math{\epsilon}宜取为与当地网格尺度成比例ï¼例如三维中取@tex-math{\Omega^{1/3}}@link["blazek2005-r4-92"]{[92]}、@link["blazek2005-r4-94"]{[94]}。若状态变量@tex-math{U}以物理单位给出ï¼则参数@tex-math{\epsilon}还需附加缩放。可以证明ï¼对光滑变化的流动ï¼方程@link["blazek2005-ch04#eq-4-113"]{(4.113)}的关系式与@tex-math{\hat{\kappa} = 0}的原始(无限制)MUSCL格式@link["blazek2005-ch04#eq-4-46"]{(4.46)}完全相同ï¼因此解的精度不受影响;另一方面ï¼函数@tex-math{\delta}在局部极值处变为零ï¼如所期望地把精度降为一阶。}
+    }
+
+    @emph{MUSCL scheme with @tex-math{\hat{\kappa}} = 1/3 @tex-math{\hat{\kappa}}=1/3的MUSCL格式}
+
+    @bi{
+      @lang["en"]{Another limiter function was devised for the three-point, second-order accurate upwind-biased MUSCL scheme with @tex-math{\hat{\kappa} = 1/3}. Here, the slope limiter is given by}
+      @lang["zh-CN"]{针对@tex-math{\hat{\kappa} = 1/3}的三点二阶精度上风偏置MUSCL格式ï¼设计了另一种限制器函数。此时斜率限制器为}
+    }
+
+    @tex-display-math[#:id "eq-4-116"]{\Phi(r) = \frac{3r}{2r^2 - r + 2}. \tag{4.116}}
+
+    @bi{
+      @lang["en"]{In this case, the function @tex-math{\Psi(r)} corresponds to the limiter of Hemker and Koren @link["blazek2005-r4-95"]{[95]}. Following the same way as in the previous case, we obtain formulae for the left and right state at the face @tex-math{(I+1/2)} which are identical to Eq. @link["blazek2005-ch04#eq-4-113"]{(4.113)}, but now with @link["blazek2005-r4-92"]{[92]}}
+      @lang["zh-CN"]{此时ï¼函数@tex-math{\Psi(r)}对应于Hemker与Koren的限制器@link["blazek2005-r4-95"]{[95]}。按照与前一种情形相同的步骤ï¼得到的面@tex-math{(I+1/2)}处左、右状态公式与方程@link["blazek2005-ch04#eq-4-113"]{(4.113)}相同ï¼只是@tex-math{\delta}改为@link["blazek2005-r4-92"]{[92]}}
+    }
+
+    @tex-display-math[#:id "eq-4-117"]{\delta = \frac{(2a^2 + \epsilon)b + (b^2 + 2\epsilon)a}{2a^2 + 2b^2 - ab + 3\epsilon}. \tag{4.117}}
+
+    @bi{
+      @lang["en"]{The definitions of the coefficients @tex-math{a}, @tex-math{b}, and of the parameter @tex-math{\epsilon} are retained.}
+      @lang["zh-CN"]{系数@tex-math{a}、@tex-math{b}以及参数@tex-math{\epsilon}的定义保持不变。}
+    }
+
+    @emph{Limiter for CUSP Scheme CUSP格式的限制器}
+
+    @bi{
+      @lang["en"]{In the framework of the CUSP scheme (Subsection 4.3.2), the left (@tex-math{L}) and right (@tex-math{R}) states are evaluated to second-order accuracy according to @link["blazek2005-r4-43"]{[43]}}
+      @lang["zh-CN"]{在CUSP格式(4.3.2小节)框架下ï¼左(@tex-math{L})、右(@tex-math{R})状态按@link["blazek2005-r4-43"]{[43]}以二阶精度计算}
+    }
+
+    @tex-display-math[#:id "eq-4-118"]{\begin{aligned}
+      U_R &= U_{I+1} - \frac{1}{2}L(\Delta U_{I+3/2},\, \Delta U_{I-1/2})\\
+      U_L &= U_{I}\ \;+ \frac{1}{2}L(\Delta U_{I+3/2},\, \Delta U_{I-1/2})\,,
+    \end{aligned} \tag{4.118}}
+
+    @bi{
+      @lang["en"]{where}
+      @lang["zh-CN"]{其中}
+    }
+
+    @tex-display-math[#:id "eq-4-119"]{\begin{aligned}
+      \Delta U_{I-1/2} &= U_I - U_{I-1}\\
+      \Delta U_{I+3/2} &= U_{I+2} - U_{I+1}\,.
+    \end{aligned} \tag{4.119}}
+
+    @bi{
+      @lang["en"]{In the above Eqs. @link["blazek2005-ch04#eq-4-118"]{(4.118)} and @link["blazek2005-ch04#eq-4-119"]{(4.119)}, @tex-math{U} represents a dependent variable and @tex-math{L()} the limited average}
+      @lang["zh-CN"]{在方程@link["blazek2005-ch04#eq-4-118"]{(4.118)}与@link["blazek2005-ch04#eq-4-119"]{(4.119)}中,@tex-math{U}代表因变量,@tex-math{L()}为限制平均(limited average)}
+    }
+
+    @tex-display-math[#:id "eq-4-120"]{L(\Delta_1,\, \Delta_2) = \frac{1}{2}\Psi(\Delta_1,\, \Delta_2)(\Delta_1 + \Delta_2), \tag{4.120}}
+
+    @bi{
+      @lang["en"]{respectively. The limiter itself is defined as}
+      @lang["zh-CN"]{限制器本身定义为}
+    }
+
+    @tex-display-math[#:id "eq-4-121"]{\Psi(\Delta_1,\, \Delta_2) = 1 - \left|\frac{\Delta_1 - \Delta_2}{|\Delta_1| + |\Delta_2| + \epsilon}\right|^{\sigma}, \tag{4.121}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\sigma} is a positive coefficient which is usually set equal to two. The constant @tex-math{\epsilon} is required to prevent division by zero (e.g., @tex-math{\epsilon = 10^{-20}}). If @tex-math{\Delta_1} and @tex-math{\Delta_2} happen to have opposite sign but the same magnitude, the limiter becomes @tex-math{\Psi = 0}. This means that we obtain only a first-order accurate approximation for the left and the right state.}
+      @lang["zh-CN"]{其中@tex-math{\sigma}为正常系数ï¼通常取2。常数@tex-math{\epsilon}用于防止除零(例如@tex-math{\epsilon = 10^{-20}})。若@tex-math{\Delta_1}与@tex-math{\Delta_2}恰好符号相反、大小相同ï¼则限制器变为@tex-math{\Psi = 0}ï¼这意味着左、右状态只能得到一阶精度近似。}
+    }
+
+    @bi{
+      @lang["en"]{It should be mentioned that it is also possible to employ the MUSCL scheme with @tex-math{\hat{\kappa} = 0} and the Van Albada limiter from Eqs. (4.113)-(4.115) instead of the above relations.}
+      @lang["zh-CN"]{应当指出ï¼也可以不用上述关系ï¼而代之以@tex-math{\hat{\kappa} = 0}并采用方程(4.113)-(4.115)中Van Albada限制器的MUSCL格式。}
+    }
+
+    @emph{Limiter for TVD Scheme TVD格式的限制器}
+
+    @bi{
+      @lang["en"]{In comparison to the previous cases, the limiter here acts not on the conservative or the primitive variables, but on the characteristic variables @tex-math{\vec{C}}. One particularly suitable limiter function is given by @link["blazek2005-r4-84"]{[84]}}
+      @lang["zh-CN"]{与前几种情形相比ï¼这里的限制器不作用于守恒变量或原始变量ï¼而是作用于特征变量@tex-math{\vec{C}}。一种特别合适的限制器函数由@link["blazek2005-r4-84"]{[84]}给出}
+    }
+
+    @tex-display-math[#:id "eq-4-122"]{\Psi^{l}_{I} = \frac{\Delta C^{l}_{I-1/2}\Delta C^{l}_{I+1/2} + \left|\Delta C^{l}_{I-1/2}\Delta C^{l}_{I+1/2}\right|}{\Delta C^{l}_{I-1/2} + \Delta C^{l}_{I+1/2} + \epsilon}, \tag{4.122}}
+
+    @bi{
+      @lang["en"]{where the @tex-math{\Delta C^{l}_{I+1/2}} represents the difference of the characteristic variables at face @tex-math{(I+1/2)} of the control volume (Eq. @link["blazek2005-ch04#eq-4-101"]{(4.101)}). The positive constant @tex-math{\epsilon \approx 10^{-20}} in the denominator prevents division by zero. In regions with high gradients, the limiter function becomes zero, which leads with Eq. @link["blazek2005-ch04#eq-4-99"]{(4.99)} and Eq. @link["blazek2005-ch04#eq-4-98"]{(4.98)} to first-order accurate upwind scheme. The upwind TVD scheme in Eq. @link["blazek2005-ch04#eq-4-98"]{(4.98)} retains second-order accuracy in areas with smoothly varying flow variables, where @tex-math{\Psi^{l}_{I} = C^{l}_{I} - C^{l}_{I-1}}.}
+      @lang["zh-CN"]{其中@tex-math{\Delta C^{l}_{I+1/2}}表示控制体面@tex-math{(I+1/2)}处特征变量之差(方程@link["blazek2005-ch04#eq-4-101"]{(4.101)})。分母中的正常数@tex-math{\epsilon \approx 10^{-20}}防止除零。在高梯度区域ï¼限制器函数变为零ï¼由方程@link["blazek2005-ch04#eq-4-99"]{(4.99)}与方程@link["blazek2005-ch04#eq-4-98"]{(4.98)}导致一阶精度的上风格式。当流动变量光滑变化时ï¼方程@link["blazek2005-ch04#eq-4-98"]{(4.98)}的上风TVD格式保持二阶精度ï¼此时@tex-math{\Psi^{l}_{I} = C^{l}_{I} - C^{l}_{I-1}}。}
+    }
+  }
+}
+
+@subtree[#:id "blazek2005-4-4"]{
+  @title{4.4 Discretisation of the Viscous Fluxes 黏性通量的离散化}
+
+  @bi{
+    @lang["en"]{The control volume for the viscous fluxes is generally chosen to be the same as for the convective fluxes in order to obtain a consistent spatial discretisation. An exception is made only in the case of the cell-vertex scheme with overlapping control volumes (Subsection 4.2.2), where the dual control volume (Subsection 4.2.3) is employed instead, primarily due to stability reasons @link["blazek2005-r4-96"]{[96]}-@link["blazek2005-r4-98"]{[98]}. The viscous fluxes @tex-math{\vec{F}_v} in the discretised governing equations @link["blazek2005-ch04#eq-4-2"]{(4.2)} are, similar to Eqs. @link["blazek2005-ch04#eq-4-17"]{(4.17)}, @link["blazek2005-ch04#eq-4-22"]{(4.22)}, (4.37), (4.42), evaluated from variables averaged at the faces of the control volume. This is in line with the elliptic nature of the viscous fluxes. Thus, values of the velocity components @tex-math{(u, v, w)}, the dynamic viscosity @tex-math{\mu}, and of the heat conduction coefficient @tex-math{k}, which are required for the computation of the viscous terms (2.23), (2.24) and of the stresses (2.15), are simply averaged at a face. In the case of the cell-centred scheme (Figs. 4.3 and 4.8), the values at the face @tex-math{(I+1/2)} of the control volume result from}
+    @lang["zh-CN"]{为了得到一致的空间离散ï¼黏性通量的控制体一般选取与对流通量相同。唯一的例外是采用重叠控制体的单元顶点格式(4.2.2小节)ï¼出于稳定性考虑@link["blazek2005-r4-96"]{[96]}-@link["blazek2005-r4-98"]{[98]}ï¼此时改用对偶控制体(4.2.3小节)。离散化控制方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}中的黏性通量@tex-math{\vec{F}_v}ï¼与方程@link["blazek2005-ch04#eq-4-17"]{(4.17)}、@link["blazek2005-ch04#eq-4-22"]{(4.22)}、(4.37)、(4.42)类似ï¼由在控制体面上平均的变量计算。这与黏性通量的椭圆性质相符。因此ï¼计算黏性项(2.23)、(2.24)以及应力(2.15)所需的速度分量@tex-math{(u, v, w)}、动力黏度@tex-math{\mu}与热传导系数@tex-math{k}的值ï¼直接在面上取平均。在单元中心格式(图4.3与图4.8)情形ï¼控制体面@tex-math{(I+1/2)}处的值由下式给出}
+  }
+
+  @tex-display-math[#:id "eq-4-123"]{U_{I+1/2} = \frac{1}{2}(U_I + U_{I+1})\,, \tag{4.123}}
+
+  @bi{
+    @lang["en"]{where @tex-math{U} is any of the above flow variables. The same holds in the case of both cell-vertex schemes for the face @tex-math{(i+1/2)} - see Figs. 4.5 and 4.8, respectively.}
+    @lang["zh-CN"]{其中@tex-math{U}为上述任一流动变量。两种单元顶点格式在面@tex-math{(i+1/2)}处同样如此——分别见图4.5与图4.8。}
+  }
+
+  @bi{
+    @lang["en"]{The remaining task is the evaluation of the first derivatives (gradients) of the velocity components in Eq. (2.15) and of the temperature in Eq. (2.24). This can be accomplished in one of two ways, i.e., by using
+      @itemize{
+        @item{finite differences, or}
+        @item{Green's theorem.}
+      }
+    }
+    @lang["zh-CN"]{剩下的任务是计算方程(2.15)中速度分量的一阶导数(梯度)与方程(2.24)中温度的一阶导数。这可以用以下两种方法之一完成:
+      @itemize{
+        @item{有限差分;或}
+        @item{Green定理。}
+      }
+    }
+  }
+
+  @bi{
+    @lang["en"]{The first approach applies a local transformation from Cartesian coordinates @tex-math{(x, y, z)} to the curvilinear coordinates @tex-math{(\xi, \eta, \zeta)}, e.g.,}
+    @lang["zh-CN"]{第一种方法采用从笛卡尔坐标@tex-math{(x, y, z)}到曲线坐标@tex-math{(\xi, \eta, \zeta)}的局部变换ï¼例如}
+  }
+
+  @tex-display-math[#:id "eq-4-124"]{\frac{\partial U}{\partial x} = \frac{\partial U}{\partial\xi}\frac{\partial\xi}{\partial x} + \frac{\partial U}{\partial\eta}\frac{\partial\eta}{\partial x} + \frac{\partial U}{\partial\zeta}\frac{\partial\zeta}{\partial x}\,, \text{ etc.} \tag{4.124}}
+
+  @bi{
+    @lang["en"]{The derivatives @tex-math{U_\xi}, @tex-math{U_\eta} and @tex-math{U_\zeta} are obtained from finite difference approximations. More details can be found in Refs. @link["blazek2005-r4-96"]{[96]}-@link["blazek2005-r4-98"]{[98]}. See Appendix A.1 for the derivatives of the coordinates and for the Jacobian of the transformation. Here, we prefer the second approach, which is more in line with the finite volume methodology treated in this book. However, it requires the construction of an additional control volume for the computation of the derivatives. This will be discussed below for the cell-centred and the cell-vertex scheme. Once we obtained the values of the flow variables and of the first derivatives at the faces of the control volume, we can sum up the contributions due to the viscous fluxes according to Eq. @link["blazek2005-ch04#eq-4-2"]{(4.2)}. By adding the sum of the contributions to the inviscid fluxes, we completed the spatial discretisation, and we can thus integrate the approximated governing equations in time.}
+    @lang["zh-CN"]{导数@tex-math{U_\xi}、@tex-math{U_\eta}与@tex-math{U_\zeta}由有限差分近似得到ï¼更多细节见文献@link["blazek2005-r4-96"]{[96]}-@link["blazek2005-r4-98"]{[98]};坐标的导数与变换的Jacobian见附录A.1。本书更倾向于第二种方法ï¼它与本书讨论的有限体积方法学更为一致;不过ï¼它需要为导数的计算构造一个附加控制体。下面将针对单元中心格式与单元顶点格式分别讨论。一旦得到了控制体面上流动变量与一阶导数的值ï¼就可以按方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}把黏性通量的贡献累加起来;把这部分贡献加到无黏通量上ï¼空间离散即告完成ï¼随后便可对近似的控制方程进行时间积分。}
+  }
+
+  @image["blazek2005/fig-4-12.png"]{图4.12:用于计算一阶导数的辅助控制体Ω'(填充部分ï¼二维):(a)单元中心格式;(b)单元顶点格式}
+
+  @emph{图4.12:用于计算一阶导数的辅助控制体@tex-math{\Omega'}(填充部分ï¼二维):(a)单元中心格式;(b)单元顶点格式。}图例:菱形符号标记一阶导数的计算位置;(a)中@tex-math{\Omega_{I,J}}为单元控制体ï¼单元中心以方块标记(@tex-math{I,J}、@tex-math{I+1,J}、@tex-math{I,J+1}、@tex-math{I+1,J+1}等)ï¼网格点以圆点标记(@tex-math{i,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i+1,j+1})ï¼面中点标记为@tex-math{1/2};(b)中网格点为@tex-math{i,j}、@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i+1,j+1}、@tex-math{i,j-1}ï¼边中点以@tex-math{1/2}标记。
+
+  @subtree[#:id "blazek2005-4-4-1"]{
+    @title{4.4.1 Cell-Centred Scheme 单元中心格式}
+
+    @bi{
+      @lang["en"]{In order to apply Green's theorem, which relates the volume integral of the first derivative to the surface integral of @tex-math{U}, we have to define a suitable control volume first. Since we need the derivatives at the midpoints of the faces for the summation in Eq. @link["blazek2005-ch04#eq-4-2"]{(4.2)}, we construct an auxiliary control volume centred at the face by connecting the midpoints of the edges defining adjacent grid cells @link["blazek2005-r4-31"]{[31]}, @link["blazek2005-r4-19"]{[19]}, @link["blazek2005-r4-98"]{[98]} as shown in Fig. 4.12a. In order to evaluate the first derivative at the face @tex-math{(I+1/2)} - marked by a diamond symbol in Fig. 4.12a - we have to integrate the corresponding flow variable @tex-math{U} over the boundary of the auxiliary control volume (denoted by the superscript @code{' } in the following). Thus, e.g., for the derivative in the @emph{x}-direction}
+      @lang["zh-CN"]{为了应用把一阶导数的体积分与@tex-math{U}的面积分联系起来的Green定理ï¼必须先定义一个合适的控制体。由于方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}中的求和需要面中点处的导数ï¼我们通过连接定义相邻网格单元的各边的中点ï¼构造一个以该面为中心的辅助控制体@link["blazek2005-r4-31"]{[31]}、@link["blazek2005-r4-19"]{[19]}、@link["blazek2005-r4-98"]{[98]}ï¼如图4.12a所示。为了计算面@tex-math{(I+1/2)}处的一阶导数——在图4.12a中以菱形符号标记——必须把相应的流动变量@tex-math{U}沿辅助控制体的边界积分(以下以上标@code{' }表示)。例如ï¼对@emph{x}方向的导数}
+    }
+
+    @tex-display-math[#:id "eq-4-125"]{\frac{\partial U}{\partial x} = \frac{1}{\Omega'}\int_{\partial\Omega'} U\,dS'_x \approx \frac{1}{\Omega'}\sum_{m=1}^{N_F} U_m\,S'_{x,m}\,, \tag{4.125}}
+
+    @bi{
+      @lang["en"]{where @tex-math{N_F} stands for the number of faces (@tex-math{N_F = 4} in 2D and @tex-math{N_F = 6} in 3D). The volume @tex-math{\Omega'} and the components of the face vector @tex-math{\vec{S}'_m = [S'_{x,m}, S'_{y,m}, S'_{z,m}]^T}, respectively, are computed as already presented in Section 4.1. The face values @tex-math{U_m} are obtained either directly as cell-centred values (i.e., @tex-math{U_{i,j}} and @tex-math{U_{i+1,j}} on the left and the right face), or by averaging like on the upper and the lower face, e.g., at @tex-math{J+1/2}}
+      @lang["zh-CN"]{其中@tex-math{N_F}表示面的数目(二维@tex-math{N_F = 4}ï¼三维@tex-math{N_F = 6})。体积@tex-math{\Omega'}与面向量@tex-math{\vec{S}'_m = [S'_{x,m}, S'_{y,m}, S'_{z,m}]^T}的分量按4.1节中已介绍的方法计算。面值@tex-math{U_m}或直接取单元中心值(即左、右面上的@tex-math{U_{i,j}}与@tex-math{U_{i+1,j}})ï¼或在上面与下面的面上取平均ï¼例如在@tex-math{J+1/2}处}
+    }
+
+    @tex-display-math[#:id "eq-4-126"]{U_{m_{I,J+1/2}} = \frac{1}{4}(U_{I,J} + U_{I+1,J} + U_{I,J+1} + U_{I+1,J+1})\,, \text{ etc.} \tag{4.126}}
+
+    @bi{
+      @lang["en"]{We can apply the same approach in three dimensions, where again four cell-centred values can be utilised for the averaging. Hence,}
+      @lang["zh-CN"]{同样的方法可用于三维ï¼此时同样可用四个单元中心值作平均ï¼即}
+    }
+
+    @tex-display-math[#:id "eq-4-127"]{\begin{aligned}
+      U_{m_{I,J+1/2,K}} &= \frac{1}{4}(U_{I,J,K} + U_{I+1,J,K} + U_{I,J+1,K} + U_{I+1,J+1,K})\,,\\
+      U_{m_{I,J+1/2,K+1/2}} &= \frac{1}{4}(U_{I,J,K} + U_{I,J,K+1} + U_{I,J+1,K} + U_{I,J+1,K+1})\,,
+    \end{aligned} \tag{4.127}}
+
+    @bi{
+      @lang["en"]{The above scheme is quite compact, with the computational stencil extending over only nine cells in two dimensions and over 15 in three dimensions. It should be noted that this approach for computing the first derivatives cannot suppress the generation of two types of spurious modes (decoupled solutions at neighbouring cell centres) @link["blazek2005-r4-99"]{[99]}, @link["blazek2005-r4-19"]{[19]}: the chequer-board mode, arising from the form of the integral around the control volume, and a pair of corrugated or washboard modes, arising from the averaging of values in neighbouring cells. However, there are generally no difficulties with this in practice. A more serious problem would occur, if the gradients would be first evaluated for each cell (similar to the convective fluxes) and then averaged at the cell faces. Although this approach may appear more attractive than the current methodology, it is not recommended since it leads to strong odd-even decoupling.}
+      @lang["zh-CN"]{上述格式相当紧凑ï¼计算模板在二维只覆盖9个单元ï¼三维为15个。注意ï¼这种计算一阶导数的方法无法抑制两类虚假模态(相邻单元中心处解的失联)的产生@link["blazek2005-r4-99"]{[99]}、@link["blazek2005-r4-19"]{[19]}:一是棋盘格模态(chequer-board mode)ï¼源于围绕控制体的积分形式;二是一对波纹(搓衣板)模态ï¼源于相邻单元值的平均。不过ï¼实践中一般不会因此遇到困难。更严重的问题会出现在先把每个单元的梯度算出(类似对流通量的做法)、再在单元面上平均的做法中;这种做法看似更有吸引力ï¼但由于会导致强烈的奇偶失联ï¼并不推荐。}
+    }
+
+    @bi{
+      @lang["en"]{A disadvantage of above scheme is a loss of accuracy if the grid is not uniform @link["blazek2005-r4-98"]{[98]}, @link["blazek2005-r4-99"]{[99]}. Namely, for arbitrarily stretched grids the approximation of the derivatives becomes inconsistent (the centroid of the auxiliary control volume does no longer correspond to the face centre). Thus, the viscous fluxes are discretised with second-order accuracy only for moderately and smoothly stretched grids. Finally, it should be noted that the TSL approximation of the Navier-Stokes equations (Subsection 2.4.3) can easily be realised by omitting the appropriate contributions when computing the gradients. For example, if the boundary layer would be oriented along the @tex-math{I}-direction in Fig. 4.12a, contributions from the left @tex-math{(I, J)} and the right side @tex-math{(I+1, J)} of the auxiliary control volume would be dropped.}
+      @lang["zh-CN"]{上述格式的缺点是:当网格不均匀时精度会下降@link["blazek2005-r4-98"]{[98]}、@link["blazek2005-r4-99"]{[99]}。就是说ï¼对任意拉伸的网格ï¼导数近似变得不相容(辅助控制体的形心不再对应面中心)。因此ï¼只有对适度且光滑拉伸的网格ï¼黏性通量才具有二阶精度的离散。最后ï¼应当指出,Navier-Stokes方程的TSL近似(2.4.3小节)很容易实现ï¼只需在计算梯度时略去相应的贡献即可。例如ï¼若边界层沿图4.12a的@tex-math{I}方向ï¼则辅助控制体左侧@tex-math{(I, J)}与右侧@tex-math{(I+1, J)}的贡献将被略去。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-4-4-2"]{
+    @title{4.4.2 Cell-Vertex Scheme 单元顶点格式}
+
+    @bi{
+      @lang["en"]{As already mentioned, both types of cell-vertex schemes resort to the dual control volume (Subsection 4.2.3) for the discretisation of the viscous fluxes. Hence, the question is how to evaluate the first derivatives at the faces of this control volume. Considering Fig. 4.12b, one possible alternative is to calculate the gradients at the cell centres first by integrating over the grid cells, which yields first-order accuracy on arbitrarily stretched grids. In a next step, the cell-based gradients are averaged at the faces of the control volume @tex-math{\Omega} like in Refs. @link["blazek2005-r4-31"]{[31]}, @link["blazek2005-r4-100"]{[100]}. However, this approach cannot prevent an odd-even decoupling of the solution.}
+      @lang["zh-CN"]{如前所述ï¼两种单元顶点格式的黏性通量离散都借助对偶控制体(4.2.3小节)。于是问题是如何在该控制体的面上计算一阶导数。考虑图4.12bï¼一种可能的做法是先在网格单元上积分求出单元中心处的梯度ï¼这在任意拉伸网格上具有一阶精度;下一步再像文献@link["blazek2005-r4-31"]{[31]}、@link["blazek2005-r4-100"]{[100]}那样ï¼把基于单元的梯度在控制体@tex-math{\Omega}的面上平均。然而ï¼这种做法无法防止解的奇偶失联。}
+    }
+
+    @bi{
+      @lang["en"]{Another possibility, similar to the cell-centred scheme, is to construct an auxiliary control volume around the face by connecting the midpoints of the edges defining adjacent grid cells @link["blazek2005-r4-101"]{[101]}, @link["blazek2005-r4-102"]{[102]}. This is depicted in Fig. 4.12b. The evaluation of the first differences proceeds along the same lines as discussed for the cell-centred scheme, with averaged quantities where necessary. It should be noted that this approach is formally identical to the finite difference approximation @link["blazek2005-r4-96"]{[96]}-@link["blazek2005-r4-98"]{[98]}. This scheme leads to first-order accurate discretisation of the viscous fluxes on arbitrarily stretched grids and to second-order accuracy on smooth grids @link["blazek2005-r4-96"]{[96]}, @link["blazek2005-r4-98"]{[98]}. Another positive feature is that the computational stencil is confined to only nine nodes in two dimensions and to 15 nodes in three dimensions.}
+      @lang["zh-CN"]{另一种与单元中心格式类似的做法ï¼是通过连接定义相邻网格单元的各边的中点ï¼围绕该面构造辅助控制体@link["blazek2005-r4-101"]{[101]}、@link["blazek2005-r4-102"]{[102]}ï¼如图4.12b所示。一阶差分的计算与单元中心格式的讨论相同ï¼必要时采用平均量。注意ï¼这一做法在形式上与有限差分近似完全相同@link["blazek2005-r4-96"]{[96]}-@link["blazek2005-r4-98"]{[98]}。该格式在任意拉伸网格上给出黏性通量的一阶精度离散ï¼在光滑网格上达到二阶精度@link["blazek2005-r4-96"]{[96]}、@link["blazek2005-r4-98"]{[98]}。另一个优点是计算模板很小:二维只有9个节点ï¼三维15个节点。}
+    }
+
+    @bi{
+      @lang["en"]{Finally, one further approach should be mentioned, where a more complex integration path was chosen, with averaging incorporating all neighbouring nodes @link["blazek2005-r4-20"]{[20]}. A serious disadvantage of this scheme is that it encompasses a 25-point stencil even in two dimensions, which adds in general more numerical diffusion than compact stencils. Furthermore, if an implicit scheme would be envisioned for the time integration, the bandwidth of the flux Jacobian would become prohibitively large. A detailed discussion of various methodologies for the gradient evaluation can also be found in Ref. @link["blazek2005-r4-103"]{[103]}.}
+      @lang["zh-CN"]{最后ï¼还应提到另一种方法ï¼它选择了更复杂的积分路径ï¼平均时纳入所有相邻节点@link["blazek2005-r4-20"]{[20]}。该格式的一个严重缺点是ï¼即使在二维也包含25点模板ï¼通常比紧凑模板引入更多数值扩散;此外ï¼若时间积分采用隐式格式ï¼通量Jacobian的带宽将变得过大而无法接受。关于梯度计算各种方法的详细讨论还可参见文献@link["blazek2005-r4-103"]{[103]}。}
+    }
+  }
+}

@@ -1,0 +1,67 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{关系查询参考：DSL与项目谓词}
+@summary{汇总miniKanren查询语法、规则目录与项目自定义谓词。}
+@taxon["reference"]
+
+本页是关系查询的速查表。示例式讲解见@link["math-0009"]{用miniKanren查询规则}与@link["math-000A"]{查询没有入向引用的页面}；这里集中列出语法与可用谓词。
+
+@subtree{
+  @title{查询DSL}
+
+  @itemize{
+    @item{@code{query}／@code{run*}：声明要返回的逻辑变量并收集全部解。}
+    @item{@code{fresh}：引入只在当前目标内可见的存在量词变量。}
+    @item{@code{conde}：析取，列出多个可接受的目标分支。}
+    @item{@code{==}：统一两个项；@code{=/=}约束两项不相等。}
+    @item{@code{fail}／@code{succeed}：失败与成功的空目标，用作条件选择。}
+  }
+
+  目标顺序会影响效率：先把变量限定到可索引的类别，再调用@code{nodeo}，可以避免枚举全站节点。
+}
+
+@subtree{
+  @title{规则目录}
+
+  @code{ruleo}把数学规则目录公开为关系，参数依次是名称、类别、适用模式与docstring：
+
+  @code-block[#:language 'scheme "(query (name modes documentation)
+  (ruleo name 'differentiate modes documentation))"]
+
+  @code{math-rule->content}把规则名转成文章内容（结构化模式与说明），因此文档与运行时目录来自同一份定义。详见@link["math-0009"]{规则查询}。
+}
+
+@subtree{
+  @title{内容节点关系}
+
+  分析阶段为每篇文章IR生成@code{content-node relation}，记录所属页面、父节点、同级位置、类型、属性、纯文本投影与字符数。常用入口：
+
+  @itemize{
+    @item{@code{pageo}：页面事实，包括ID、标题与元数据。}
+    @item{@code{nodeo}：内容节点事实，包括节点ID、类别与属性。}
+    @item{@code{node-propertyo}：读取节点的某个属性，例如链接目标。}
+    @item{@code{source-locationo}：节点的源文件、行与列。}
+    @item{@code{math-containing-paragrapho}、@code{shorter-than-o}、@code{plain-text-paragrapho}、@code{contains-texto}、@code{topic-membero}：段落与主题的现成谓词。}
+  }
+
+  跨文章的查询必须在项目的@code{#:analyze}阶段运行，因为此时整个站点才分析完成。
+}
+
+@subtree{
+  @title{项目自定义谓词}
+
+  项目可以基于这些事实定义自己的算子。Flora的@code{project.scm}就是例子：
+
+  @itemize{
+    @item{@code{incoming-pageo}：合并link与transclude两种入向引用。}
+    @item{@code{not-membero}：递归检查一个值不在有限列表中，用作miniKanren的集合差。}
+    @item{@code{authored-pageo}：用@code{pageo}排除inline subtree自动生成的页面。}
+    @item{@code{orphan-pageo}：没有入向引用的文章页面。}
+  }
+}
+
+@subtree{
+  @title{边界}
+
+  @code{node-id}只在本次分析结果中有效，不应保存为外部引用。关系查询在有限事实集合上计算，不是对无限输入的证明。把项目概念（例如孤立页面）表达为关系，不需要Grove预先知道它。
+}

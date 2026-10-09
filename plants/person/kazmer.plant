@@ -1,0 +1,7 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{David O. Kazmer}
+@summary{塑料工程学者，《Injection Mold Design Engineering》作者。}
+@taxon["person"]
+
+David O. Kazmer，塑料工程学者，麻省大学洛威尔校区（UMass Lowell）塑料工程教授，研究方向为注塑成型工艺、模具工程与制造系统。所著《Injection Mold Design Engineering》（第二版，Hanser, 2016）是注塑模具设计的标准教材，本站计划中的译本（树前缀 kazmer2016）即以该书为底本。

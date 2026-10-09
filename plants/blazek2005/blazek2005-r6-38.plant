@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Curtis, A.R.; Powell, M.D.; Reid, J.K.: On the Estimation of Sparse Jacobian Matrices. J. Inst. Maths. Applics., 13 (1974), pp. 117-119.}
+@taxon["reference"]

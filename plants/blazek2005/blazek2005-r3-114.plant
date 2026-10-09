@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Shu, C.W.; Osher, S.: Efficient Implementation of Essentially Non-Oscillatory Shock Capturing Schemes. J. Computational Physics, 77 (1988), pp. 439-471.}
+@taxon["reference"]

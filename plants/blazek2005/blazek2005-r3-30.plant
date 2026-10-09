@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Pearce, D.G.; et al.: Development of a Large Scale Chimera Grid System for the Space Shuttle Launch Vehicle. AIAA Paper 93-0533, 1993.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Vreman, B.; Geurts, B.; Kuerten, H.; Broeze, J.; Wasistho, B.; Streng, M.: Dynamic Subgrid-Scale Models for LES of Transitional and Turbulent Compressible Flow in 3-D Shear Layers. 10th Symposium on Turbulent Shear Flows, The Pennsylvania State University, PA, August 14-16, 1995, Volume 1.}
+@taxon["reference"]

@@ -1,0 +1,51 @@
+@use-modules[(flora commands) (lp checked) (flora expression-language) (language scribble commands)]
+
+@title{从文章模块导入程序定义}
+@summary{从文学化文章导入真实binding，让文档与可复用程序保持同源。}
+@taxon["tutorial"]
+
+@link["lp-0003"]{解释器与简化器文章}声明了@code{(flora expression-language)}模块。消费者通过Scheme模块导入interpret与simplify。阅读引用与程序导入分别建立；transclude不提供函数binding。
+
+模块文章用define-module声明模块与公共接口。消费者的导入写法是：
+
+@verbatim["@use-modules[(flora expression-language) (flora commands) (lp checked) (language scribble commands)]"]
+
+@checked-example["lp-import-eval" "导入的算术 interpret 结果为 21"
+  (interpret '(* (+ x 2) y) '((x 5) (y 3))) 21]
+
+@checked-example["lp-import-simplify" "导入的算术 simplify 结果为 (+ x 6)"
+  (simplify '(+ (* x 1) (+ 0 6))) '(+ x 6)]
+
+@program["lp-module-client" "算术模块的 simplify-and-run 定义"]{
+@(define (simplify-and-run expression environment)
+   ;; simplify 和 interpret 来自同一篇文学化模块文章。
+   (interpret (simplify expression) environment))
+}
+
+@checked-example["lp-import-compose" "导入的算术函数组合结果为 35"
+  (simplify-and-run '(* (+ x 0) (+ 2 3)) '((x 7))) 35]
+
+@checked-error["lp-import-error" "算术模块组合保留 unbound-name 异常"
+  (simplify-and-run '(* 0 missing) '()) 'unbound-name]
+
+@subtree{
+  @title{算术简化器的阅读嵌入与binding导入}
+
+  算术简化器来自(flora expression-language)。transclude展示其代码tree，interpret与simplify的调用则依赖use-modules；两种复用的来源相同，作用不同。
+
+  @transclude["lp-simplify"]
+
+  use-modules建立程序依赖；link与transclude建立阅读关系。后者不会偷偷改变当前环境，前者也不自动决定文章在哪里展示代码。这个区别让阅读顺序可以不同于程序依赖顺序。
+}
+
+@subtree{
+  @title{算术模块文章的构建准备}
+
+  本项目使用Grove的make-scribble-module-session，在prepare阶段读取指定的模块文章，建立真实Scheme模块与内容IR，供消费者导入。站点读取到模块文章时直接复用已生成的文档，因此每轮构建不会为了展示它而再次执行定义或核验。
+
+  目前模块文章清单由project.scm显式登记，并按顺序准备，没有自动推断依赖图。普通笔记仍各用独立环境，只有define-module明确声明的文章成为共享模块。模块的内部lookup、rewrite和样本生成函数没有导出，消费者只依赖两个公共接口。
+
+  这个模块由Flora的准备流程加载，尚不能让一个未经准备的独立Guile进程仅凭use-modules自动找到.plant。它验证的是项目内可导入的文学化模块，而不是完整的Scheme包安装机制。
+
+  Grove reader自动追踪导入模块的真实源文件；session在复用文档时重放文件依赖与缓存退出状态。LP宏与核心通过普通use-modules加载，reader同时追踪这些.scm文件，不再让所有普通文章依赖全部模块文章。每次preparation仍会执行模块文章的性质核验，普通消费者可以复用依赖未变的结果；这里是文件级依赖，不是按binding精确增量计算。
+}

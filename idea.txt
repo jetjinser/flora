@@ -1,0 +1,24 @@
+--- considering ---
+
+[ ] Pipeline Typst/LaTeX/... integrated
+[ ] Info renderer
+[ ] text/markdown MIME, needs edge function
+[ ] plant in docstring, API documentation generation
+[ ] JMS Forester's Canonical URI? Canonical URIs could give pages in independent forests a shared identity. This would make cross-forest links unambiguous; exchanging backlinks would additionally require a way to publish or query relations, while transclusion would require a content-fetching and format convention.
+[ ] Optional Scheme CSS DSL for user-defined components: compose and compute styles as ordinary values, emit CSS through the existing style API, and keep plain CSS available.
+[ ] Interactive knowledge graph as a view of Grove relations: explore the context of an article or a query-defined topic, distinguish links, transclusion and tree containment, and make each connection explainable. Authors could embed these views in plants alongside ordinary query results. Keep content and relations as the source of truth; RDF may be useful for interchange later, but is not required for this view.
+[x] strip fonts automaticaly
+[x] Gemini Protocol
+[x] SSH access?
+[x] Custom element in Flora (User Site)?
+[x] Scoped style attach?
+
+--- delaying ---
+
+project.scm as project.plant?
+
+changelog.plant or news.plant
+
+Federation? Fun but not that useful? (Seems forester has supportation)
+
+User Comments? not a very wanting feature / as library outside of grove

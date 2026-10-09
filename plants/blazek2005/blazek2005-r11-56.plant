@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Samet, H.: The Quadtree and Related Hierarchical Data Structures. Computing Surveys, 16 (1984), pp. 188-260.}
+@taxon["reference"]

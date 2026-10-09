@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Engquist, B.; Majda, A.: Absorbing Boundary Conditions for Numerical Simulation of Waves. Mathematics of Computations, 31 (1977), pp. 629-651.}
+@taxon["reference"]

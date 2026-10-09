@@ -1,0 +1,85 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Introduction 第1章 引言}
+@summary{CFD的历史沿革、数值方法与网格技术的发展脉络，以及本书的结构安排。}
+@taxon["chapter"]
+
+@bi{
+  @lang["en"]{The history of the Computational Fluid Dynamics, or CFD for short, started in the early 1970's. Around that time, it became an acronym for the combination of physics, numerical mathematics, and, to some extent, computer sciences all employed to simulate fluid flows. The beginning of CFD was triggered by the availability of increasingly more powerful mainframes and the advances in CFD are still tightly coupled to the evolution of the computer technology. Among the first applications of the CFD methods was the simulation of transonic flows based on the solution of the non-linear potential equation. With the beginning of the 1980's, the solution of first two-dimensional (2-D) and later also three-dimensional (3-D) Euler equations became feasible. Thanks to the rapidly increasing speed of supercomputers, and due to the development of a variety of numerical acceleration techniques like multigrid, it was possible to compute inviscid flows past complete aircraft configurations or inside of turbomachines. With the mid 1980's, the focus started to shift to the significantly more demanding simulations of viscous flows governed by the Navier-Stokes equations. Together with this, a variety of turbulence models evolved with different degree of numerical complexity and accuracy. The leading edge in turbulence modelling is represented by the Direct Numerical Simulation (DNS) and the Large Eddy Simulation (LES).}
+  @lang["zh-CN"]{计算流体力学（Computational Fluid Dynamics，简称CFD）的历史始于20世纪70年代初。大约在那个时期，它成了一个首字母缩略词，代表把物理学、数值数学以及在一定程度上还包括计算机科学结合起来、用于模拟流体流动的一门学问。CFD的发端源于日益强大的大型计算机的出现，而CFD的进展至今仍与计算机技术的演进紧密相连。CFD方法最早的应用之一，是基于非线性位势方程求解的跨声速流动模拟。进入20世纪80年代之后，先求解二维（2-D）、随后又求解三维（3-D）欧拉方程逐渐成为可能。得益于超级计算机运算速度的迅速提升，以及多重网格等多种数值加速技术的发展，人们对完整飞机外形绕流或涡轮机械内部无黏流动的计算得以实现。从20世纪80年代中期开始，研究重心开始转向由纳维–斯托克斯方程控制的、对计算要求显著更高的黏性流动模拟。与此相伴，各种数值复杂程度和精度各不相同的湍流模型相继发展起来。湍流建模的最前沿是直接数值模拟（Direct Numerical Simulation，DNS）和大涡模拟（Large Eddy Simulation，LES）。}
+}
+
+@bi{
+  @lang["en"]{With the advances of the numerical methodologies, particularly of the implicit schemes, the solution of flow problems which require real gas modelling became also feasible by the end of 1980's. Among the first large scale application, 3-D hypersonic flow past re-entry vehicles, like the European HERMES shuttle, was computed using equilibrium and later non-equilibrium chemistry models. Many research activities were and still are devoted to the numerical simulation of combustion and particularly to flame modelling. These efforts are very important for the development of low emission gas turbines and engines. Also, the modelling of steam and in particular of condensing steam became a key for the design of efficient steam turbines.}
+  @lang["zh-CN"]{随着数值方法特别是隐式格式的进步，到20世纪80年代末，需要真实气体建模的流动问题的求解也成为可能。在最早的大规模应用中，人们先用平衡化学模型、随后又用非平衡化学模型，计算了再入飞行器（如欧洲的HERMES航天飞机）的三维高超声速绕流。燃烧的数值模拟，尤其是火焰建模，曾经是并且至今仍是众多研究活动的主题。这些工作对低排放燃气轮机和发动机的研制十分重要。此外，蒸汽的建模，特别是凝结蒸汽的建模，已成为设计高效汽轮机的关键。}
+}
+
+@bi{
+  @lang["en"]{Due to the steadily increasing demands on the complexity and the fidelity of flow simulations, grid generation methods became more and more sophisticated.}
+  @lang["zh-CN"]{由于对流动模拟复杂度和保真度的要求不断提高，网格生成方法也变得越来越精细。}
+}
+
+@bi{
+  @lang["en"]{The development started first with relatively simple structured meshes, constructed either by algebraic methods or by using partial differential equations. But with the increasing geometrical complexity of the configurations, the grids had to be divided into a number of topologically simpler blocks (multiblock approach). The next logical step was to allow for non-matching interfaces between the grid blocks in order to relieve the constraints imposed on the grid generation in a single block. Finally, solution methodologies were introduced which can deal with grids overlapping each other (Chimera technique). This allowed, for example, to simulate the flow past the complete Space Shuttle vehicle with the external tank and boosters attached. However, the generation of a structured, multiblock grid for a complicated geometry may still take weeks to accomplish. Therefore, the research also focused on the development of unstructured grid generators and flow solvers, which promise significantly reduced setup times, with only a minor user intervention. Another very important feature of the unstructured methodology is the possibility of solution based grid adaptation. The first unstructured grids consisted exclusively of isotropic tetrahedra, which was fully sufficient for inviscid flows governed by the Euler equations. However, the solution of the Navier-Stokes equations requires for higher Reynolds numbers grids, which are highly stretched in the shear layers. Although such grids can also be constructed from tetrahedral elements, it is advisable to use prisms or hexahedra in the viscous flow regions and tetrahedra outside. This improves not only the solution accuracy, but it also saves the number of elements, faces and edges. Thus, the memory and run-time requirements of the simulation are significantly reduced.}
+  @lang["zh-CN"]{这一发展最初从相对简单的结构网格起步，这些网格或用代数方法构造，或借助偏微分方程构造。但随着外形几何复杂程度的提高，网格不得不划分成若干拓扑上更简单的块（多块方法，multiblock approach）。下一个合乎逻辑的步骤，是允许网格块之间的界面不相匹配，以减轻施加在单块网格生成上的限制。最后，出现了能够处理相互重叠网格的求解方法（Chimera技术），这使得诸如对带有外挂贮箱和助推器的完整Space Shuttle航天飞机的绕流模拟成为可能。然而，对复杂几何外形而言，生成结构多块网格可能仍需耗费数周时间。因此，研究工作也集中于开发非结构网格生成器和流动求解器，它们只需很少的用户干预，就有望大幅缩短准备时间。非结构方法的另一个极为重要的特点，是具备进行基于解的网格自适应的可能性。最早的非结构网格完全由各向同性的四面体组成，这对由欧拉方程控制的无黏流动而言已完全足够。然而，纳维–斯托克斯方程的求解在高雷诺数下要求网格在剪切层内高度拉伸。尽管这类网格同样可以由四面体单元构造出来，但更可取的做法是在黏性流动区域采用棱柱或六面体单元，而在其外部采用四面体单元。这不仅提高了求解精度，还节省了单元、面和边的数量，从而显著降低了模拟对内存和运行时间的需求。}
+}
+
+@bi{
+  @lang["en"]{Nowadays, CFD methodologies are routinely employed in the fields of aircraft, turbomachinery, car, and ship design. Furthermore, CFD is also applied in meteorology, oceanography, astrophysics, biology, oil recovery, and in architecture. Many numerical techniques developed for CFD are also used in the solution of the Maxwell equations or in aeroacoustics. Hence, CFD is becoming an increasingly important design tool in engineering, and also a substantial research tool in various sciences. Due to the advances in numerical solution methods and in the computer technology, geometrically and physically complex cases can be run even on PC's or on PC clusters. Large scale simulations of viscous flows on grids consisting of dozens of millions of elements can be accomplished within only a few hours on today's supercomputers. However, it would be completely wrong to think that CFD represents a mature technology now, like for example the finite element methods in solid mechanics. No, there are still many open questions like turbulence and combustion modelling, heat transfer, efficient solution techniques for viscous flows, robust but accurate discretisation methods, etc. The coupling between CFD and other disciplines (like the solid mechanics) requires further research as well. Quite new opportunities also arise in the design optimisation by using CFD.}
+  @lang["zh-CN"]{如今，CFD方法已常规地应用于飞机、涡轮机械、汽车和船舶设计等领域。此外，CFD还被应用于气象学、海洋学、天体物理学、生物学、石油开采以及建筑学。许多为CFD开发的数值技术，也被用于求解麦克斯韦（Maxwell）方程组或应用于气动声学。因此，CFD正在成为工程领域日益重要的设计工具，也是众多科学领域的重要研究工具。得益于数值求解方法和计算机技术的进步，几何和物理上都很复杂的算例甚至可以在PC或PC机群上运行。在由数千万个单元构成的网格上开展的大规模黏性流动模拟，如今在超级计算机上只需几个小时即可完成。然而，如果认为CFD如今已经是一门成熟的技术——就像例如固体力学中的有限元方法那样——那就大错特错了。不，仍有许多悬而未决的问题，例如湍流与燃烧建模、传热、适用于黏性流动的高效求解技术、稳健而又精确的离散化方法，等等。CFD与其他学科（如固体力学）的耦合同样需要进一步研究。利用CFD进行设计优化，也带来了全新的机遇。}
+}
+
+@bi{
+  @lang["en"]{The objective of this book is to provide university students with a solid foundation for understanding the numerical methods employed in today's CFD and to familiarise them with modern CFD codes by hands-on experience. The book is also intended for engineers and scientists starting to work in the field of CFD, or who are applying CFD codes. The mathematics used is always connected to the underlying physics to facilitate the understanding of the matter. The text can serve as a reference handbook too. Each chapter contains an extensive bibliography, which may form the basis for further studies.}
+  @lang["zh-CN"]{本书的目的是为高校学生打下坚实的基础，使其理解当今CFD所采用的数值方法，并通过动手实践熟悉现代CFD代码。本书也适合刚开始进入CFD领域工作、或正在使用CFD代码的工程师和科学家。书中所用的数学始终与其背后的物理相结合，以便于理解相关内容。本书还可以作为参考手册使用。每章都附有详尽的参考文献目录，可作为进一步研究的起点。}
+}
+
+@bi{
+  @lang["en"]{CFD methods are concerned with the solution of equations of fluid motion as well as with the interaction of the fluid with solid bodies. The equations governing the motion of an inviscid fluid (Euler equations) and of viscous fluid (Navier-Stokes equations) are derived in Chapter 2. Additional thermodynamic relations for a perfect gas as well as for a real gas are also discussed. Chapter 3 deals with the principles of solution of the governing equations. The most important methodologies are briefly described and the corresponding references are included. Chapter 3 can be used together with Chapter 2 to get acquainted with the fundamental principles of CFD.}
+  @lang["zh-CN"]{CFD方法既涉及流体运动方程的求解，也涉及流体与固体之间的相互作用。控制无黏流体运动（欧拉方程）和黏性流体运动（纳维–斯托克斯方程）的方程将在第2章中导出，此外还将讨论完全气体以及真实气体的其他热力学关系式。第3章论述控制方程求解的基本原理，简要描述了最重要的方法，并给出了相应的文献。第3章可与第2章配合阅读，以熟悉CFD的基本原理。}
+}
+
+@bi{
+  @lang["en"]{A series of different schemes was developed for the spatial discretisation of the Euler and the Navier-Stokes equations. A unique feature of the present book is that it deals with both the structured (Chapter 4) as well as with the unstructured finite volume schemes (Chapter 5), because of their broad application possibilities, especially for the treatment of complex flow problems routinely encountered in an industrial environment. The attention is particularly devoted to the definition of the various types of control volumes together with spatial discretisation methodologies for convective and viscous fluxes. The 3-D finite volume formulations of the most popular central and upwind schemes are presented in detail.}
+  @lang["zh-CN"]{针对欧拉方程和纳维–斯托克斯方程的空间离散，人们已经发展出一系列不同的格式。本书的一个独特之处，在于它既讨论结构网格有限体积格式（第4章），也讨论非结构网格有限体积格式（第5章），因为二者都有着广泛的适用范围，尤其适合处理工业环境中经常遇到的复杂流动问题。书中特别关注各类控制体的定义，以及对流通量和黏性通量的空间离散方法，并详细给出了最流行的中心格式与上风格式的三维有限体积表述。}
+}
+
+@bi{
+  @lang["en"]{The methodologies for the temporal discretisation of the governing equations can be divided into two classes. One class comprises explicit time-stepping schemes (Section 6.1), and the other one consists of implicit schemes (Section 6.2). In order to provide a more complete overview, recently developed solution methods based on the Newton-iteration as well as standard techniques like the explicit Runge-Kutta schemes are discussed.}
+  @lang["zh-CN"]{控制方程时间离散的方法可以分为两类：一类是显式时间推进格式（6.1节），另一类是隐式格式（6.2节）。为了给出更全面的概览，书中讨论了基于牛顿（Newton）迭代的较新求解方法，以及显式Runge-Kutta格式等标准技术。}
+}
+
+@bi{
+  @lang["en"]{Two qualitatively different types of viscous fluid flows are encountered in general: laminar and turbulent. The solution of the Navier-Stokes equations does not raise any fundamental difficulties in the case of laminar flows. However, the simulation of turbulent flows continues to present a significant challenge as before. A relatively simple way of modelling the turbulence is offered by the so-called Reynolds-averaged Navier-Stokes equations. On the other hand, Reynolds stress models or LES enable considerably more accurate predictions of turbulent flows. In Chapter 7, various well-proven and widely applied turbulence models of varying level of complexity are presented in detail.}
+  @lang["zh-CN"]{一般会遇到两类性质不同的黏性流体流动：层流和湍流。对层流而言，纳维–斯托克斯方程的求解不存在任何根本性的困难。然而，湍流模拟至今仍是一项重大挑战。所谓雷诺平均纳维–斯托克斯方程提供了一种相对简单的湍流建模途径；另一方面，雷诺应力模型或大涡模拟（LES）能够对湍流流动作出精确得多的预测。第7章详细介绍了各种久经考验且应用广泛的、复杂程度不等的湍流模型。}
+}
+
+@bi{
+  @lang["en"]{In order to account for the specific features of a particular problem, and to obtain an unique solution of the governing equations, it is necessary to specify appropriate boundary conditions. Basically, there are two types of boundary conditions: physical and numerical. Chapter 8 deals with both types for different situations like solid walls, inlet, outlet, injection and farfield. Symmetry planes, periodic and block boundaries are treated as well.}
+  @lang["zh-CN"]{为了顾及具体问题的特殊性，并获得控制方程的唯一解，必须规定适当的边界条件。边界条件基本上分为两类：物理边界条件和数值边界条件。第8章针对固体壁面、入口、出口、喷注和远场等不同情形讨论这两类边界条件，同时也论及对称面、周期边界和块边界。}
+}
+
+@bi{
+  @lang["en"]{In order to reduce the computer time required to solve the governing equations for complex flow problems, it is quite essential to employ numerical acceleration technique. Chapter 9 deals extensively, among others, with approaches like the implicit residual smoothing and multigrid. Another important technique which is also described in Chapter 9 is preconditioning. It allows to use the same numerical scheme for flows, where the Mach number varies between nearly zero and transonic or higher values.}
+  @lang["zh-CN"]{为了缩短求解复杂流动问题的控制方程所需的计算时间，采用数值加速技术十分关键。第9章除其他内容外，还广泛讨论了隐式残差光顺和多重网格等方法。第9章所描述的另一项重要技术是预处理（preconditioning），它使同一种数值格式能够用于马赫数从接近零一直变化到跨声速甚至更高范围的流动。}
+}
+
+@bi{
+  @lang["en"]{Each discretisation of the governing equations introduces a certain error - the discretisation error. Several consistency requirements have to be fulfilled by the discretisation scheme in order to ensure that the solution of the discretised equations closely approximates the solution of the original equations. This problem is addressed in the first two parts of Chapter 10. Before a particular numerical solution method is implemented, it is important to know, at least approximately, how the method will influence the stability and the convergence behaviour of the CFD code. It was frequently confirmed that the Von Neumann stability analysis can provide a good assessment of the properties of a numerical scheme. Therefore, the third part of Chapter 10 deals with stability analysis for various model equations.}
+  @lang["zh-CN"]{控制方程的每一次离散化都会引入一定的误差——离散化误差。离散化格式必须满足若干相容性要求，才能保证离散方程的解充分逼近原方程的解。这一问题在第10章的前两部分中讨论。在具体实现某个数值求解方法之前，至少要大致了解该方法将如何影响CFD代码的稳定性和收敛行为。实践一再证实，Von Neumann稳定性分析能够对数值格式的特性给出良好的评估。因此，第10章的第三部分讨论针对各种模型方程的稳定性分析。}
+}
+
+@bi{
+  @lang["en"]{One of the challenging tasks in CFD is the generation of structured or unstructured body-fitted grids around complex geometries. The grid is used to discretise the governing equations in space. The accuracy of the flow solution is therefore tightly coupled to the quality of the grid. In Chapter 11, the most important methodologies for the generation of structured as well as unstructured grids are discussed in depth.}
+  @lang["zh-CN"]{CFD中一项富有挑战性的任务，是围绕复杂几何外形生成结构或非结构贴体网格。网格用于在空间上离散控制方程，因此流动解的精度与网格质量紧密相关。第11章深入讨论生成结构网格与非结构网格的最重要的方法。}
+}
+
+@bi{
+  @lang["en"]{In order to demonstrate the practical aspects of different numerical solution methodologies, various source codes are provided on the accompanying CD-ROM. Contained are the sources of quasi 1-D Euler, as well as of 2-D Euler and Navier-Stokes structured and unstructured flow solvers. Furthermore, source codes of 2-D structured algebraic and elliptic grid generators are included together with a converter from structured to unstructured grids. Furthermore, two programs are provided to conduct the linear stability analysis of explicit and implicit time-stepping schemes. The source codes are completed by a set of worked out examples including the grids, the input files and the results. The CD-ROM also contains the source code of a visualisation tool with an easy-to-use GUI. Chapter 12 describes the contents of the CD-ROM and the capabilities of the particular programs.}
+  @lang["zh-CN"]{为了展示不同数值求解方法的实际使用，随书CD-ROM提供了多个源代码，其中包括准一维欧拉以及二维欧拉和纳维–斯托克斯的结构与非结构流动求解器的源代码；二维结构代数网格生成器和椭圆网格生成器的源代码，以及一个从结构网格到非结构网格的转换器；此外还提供了两个程序，用于对显式和隐式时间推进格式进行线性稳定性分析。源代码还配有一组完整的示例算例，包括网格、输入文件和计算结果。CD-ROM上还包含一个带有易用图形用户界面（GUI）的可视化工具的源代码。第12章介绍CD-ROM的内容以及各个程序的功能。}
+}
+
+@bi{
+  @lang["en"]{The present book is finalised by the Appendix and the Index. The Appendix contains the governing equations presented in a differential form as well as their characteristic properties. Formulations of the governing equations in rotating frame of reference and for moving grids are discussed along with some simplified forms. Furthermore, Jacobian and transformation matrices from conservative to characteristic variables are presented for two and three dimensions. The GMRES conjugate gradient method for the solution of linear equations systems is described next. The Appendix closes with the explanation of the tensor notation.}
+  @lang["zh-CN"]{本书以附录（Appendix）和索引（Index）收尾。附录给出了以微分形式表述的控制方程及其特征性质，讨论了控制方程在旋转参考系中以及运动网格情形下的表述形式，以及一些简化形式；还针对二维和三维情形给出了从守恒变量到特征变量的雅可比（Jacobian）矩阵和变换矩阵；随后介绍了求解线性方程组的GMRES共轭梯度法。附录最后以张量记号的说明作结。}
+}

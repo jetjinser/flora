@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Spalart, P.R.: Strategies for Turbulence Modelling and Simulations. Int. J. Heat Fluid Flow, 21 (2000), pp. 252-263.}
+@taxon["reference"]

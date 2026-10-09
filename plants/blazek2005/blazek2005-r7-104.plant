@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Kravchenko, A.G.; Moin, P.: On the Effect of Numerical Errors in Large Eddy Simulations of Turbulent Flow. J. Computational Physics, 131 (1997), pp. 310-322.}
+@taxon["reference"]

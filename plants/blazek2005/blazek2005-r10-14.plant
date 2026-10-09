@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lötstedt, P.; Gustafsson, B.: Fourier Analysis of Multigrid Methods for General Systems of PDE. Report No. 129/1990, Dept. Scientific Computing, Uppsala University, Sweden, 1990.}
+@taxon["reference"]

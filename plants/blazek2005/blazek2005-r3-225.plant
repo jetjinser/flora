@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Shih, T.H.; Zhu, J.; Liou, W.W.; Chen, K.-H.; Liu, N.-S.; Lumley, J.: Modeling of Turbulent Swirling Flows. Proc. 11th Symposium on Turbulent Shear Flows, Grenoble, France, 1997; also NASA TM-113112, 1997.}
+@taxon["reference"]

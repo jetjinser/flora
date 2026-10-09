@@ -1,0 +1,47 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Flora：用Grove构建可执行文档}
+@summary{从内容树、数学计算与文学编程三个方向认识Grove。}
+@taxon["tutorial"]
+
+Flora是一个用Grove构建的文档森林。每篇文章都来自一份@code{.plant}源文件；普通文字、内容命令和Scheme计算共同组成内容树，再由Grove分析、执行并渲染为HTML。
+
+Grove的写作模型、数学语言、文学编程实验与英语写作翻译彼此独立，也彼此链接。可以从感兴趣的主题索引进入；每篇文章和具名小节都能单独阅读。
+
+@subtree{
+  @title{主题索引}
+
+  @itemize{
+    @item{@link["grove"]{Grove文档}：.plant源码、命令、Scheme求值、tree身份与内容组合。}
+    @item{@link["math"]{数学语言}：Formula、Semantic与Notation表示，构造、计算、推导和关系查询。}
+    @item{@link["lp"]{文学编程}：从文章中的可执行定义到可复用片段、程序装配和元循环解释器。}
+    @item{@link["strunk1999"]{英语写作}：Strunk与White的@emph{The Elements of Style}第四版双语翻译。}
+    @item{@link["blazek2005"]{计算流体力学}：Blazek的@emph{Computational Fluid Dynamics}第二版双语翻译，含可跳转的编号公式与逐条文献树。}
+  }
+}
+
+@subtree{
+  @title{术语表}
+
+  三个主题共用的术语集中解释于@link["glossary"]{术语表}，例如tree、片段、计划、实例、taxon与Formula。
+}
+
+@subtree{
+  @title{同一内容可以有多种阅读位置}
+
+  下面这段定义来自@link["grove-0001"]{Grove文档写作}。它保留在来源树中，也嵌入在这里；@sidenote{嵌入保留来源：分析阶段会从这次嵌入建立一条指向来源树的阅读关系，但不导入任何程序binding。}点击标题或地址可以回到独立页面。
+
+  @transclude["source-shape"]
+}
+
+@subtree{
+  @title{项目与构建}
+
+  @code{project.scm}声明源目录、模块和首页，并将Forester的文档分析接入Grove构建。@sidenote{.plant是Scribble风格的文档语法：@"@"命令产生内容节点，Scheme表达式在读取时求值。}文章中的Scheme表达式在读取时执行；构建产物包括HTML页面及可选的程序源码。项目配置和命令见仓库根目录的README。
+}
+
+@subtree{
+  @title{文档森林的边界}
+
+  一棵tree是可独立寻址的内容；它可以链接、嵌入或被查询。阅读关系不会自动成为Scheme依赖，嵌入代码也不会导入程序binding。Flora的实验围绕这些可组合边界展开。
+}

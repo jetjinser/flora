@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Fezoui, L.; Stoufflet, B.: A Class of Implicit Upwind Schemes for Euler Simulations with Unstructured Meshes. J. Computational Physics, 84 (1989), pp. 174-206.}
+@taxon["reference"]

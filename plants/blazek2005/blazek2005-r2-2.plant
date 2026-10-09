@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Aris, R.: Vectors, Tensors and the Basic Equations of Fluid Mechanics. Dover Publ. Inc., New York, 1989.}
+@taxon["reference"]
+
+R. Aris关于张量与流体力学基本方程的经典教材，本章单位张量、应力张量等张量记号的参考来源。

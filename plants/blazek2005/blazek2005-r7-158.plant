@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Forsythe, J.; Squires, K.; Wurtzler, K.; Spalart, P.R.: Detached Eddy Simulation of Fighter Aircraft at High Alpha. AIAA Paper 2002-0591, 2002.}
+@taxon["reference"]

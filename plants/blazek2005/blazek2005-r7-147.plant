@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mason, P.J.; Callen, N.S.: On the Magnitude of the Subgrid-Scale Eddy Coefficient in Large-Eddy Simulations of Turbulent Channel Flow. J. Fluid Mechanics, 162 (1986), pp. 439-462.}
+@taxon["reference"]

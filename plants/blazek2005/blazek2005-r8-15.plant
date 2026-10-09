@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hayder, M.E.; Hu, F.Q.; Hussaini, M.Y.: Towards Perfectly Absorbing Boundary Conditions for Euler Equations. ICASE Report No. 97-25, 1997.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Barth, T.J.: Randomized Multigrid. AIAA Paper 95-0207, 1995.}
+@taxon["reference"]

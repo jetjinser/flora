@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Shimada, K.; et al.: Anisotropic Triangular Meshing of Parametric Surfaces via Close Packing of Ellipsoidal Bubbles. Proc. 16th Int. Meshing Roundtable, Park City, Utah, Oct. 13-15, 1997, pp. 375-390.}
+@taxon["reference"]

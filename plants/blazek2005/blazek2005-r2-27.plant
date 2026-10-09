@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Bakhtar, F.; So, K.S.: A Study of Nucleating Flow of Steam in a Cascade of Supersonic Blading by the Time-Marching Method. Int. J. Heat and Fluid Flow 12 (1991), pp. 54-62.}
+@taxon["reference"]
+
+Bakhtar与So用时间推进法研究超声速叶栅中的成核蒸汽流动。

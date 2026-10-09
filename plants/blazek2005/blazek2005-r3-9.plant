@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Chorin, A.J.: A Numerical Method for Solving Incompressible Viscous Flow Problems. J. Computational Physics, 2 (1967), pp. 12-26.}
+@taxon["reference"]

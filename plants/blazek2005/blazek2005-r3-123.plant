@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Blazek, J.; Kroll, N.; Rossow, C.-C.: A Comparison of Several Implicit Smoothing Methods. Proc. ICFD Conf. on Numerical Meth. for Fluid Dynamics, Reading, 1992, pp. 451-460.}
+@taxon["reference"]

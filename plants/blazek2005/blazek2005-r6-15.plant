@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Zhong, X.: Additive Semi-Implicit Runge-Kutta Schemes for Computing High-Speed Nonequilibrium Reactive Flows. J. Computational Physics, 128 (1996), pp. 19-31.}
+@taxon["reference"]

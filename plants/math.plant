@@ -1,0 +1,52 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Grove数学语言：表示、计算与核验}
+@summary{用Formula、Semantic和Notation组织可计算的数学内容。}
+@taxon["index"]
+
+数学页面把输入语法、运算对象和排版结果分开表示。Formula读取公式文本；Semantic保存可计算的结构及其条件；Notation描述数学输出。Scheme连接这些表示，执行明确的计算步骤，并保留来源与诊断。
+
+@subtree{
+  @title{表示与执行}
+
+  @itemize{
+    @item{@link["math-0001"]{Formula、Semantic与Notation}：三种表示各自承担什么职责。}
+    @item{@link["math-0002"]{在Scheme中执行数学计算}：构造IR、运行pipeline并读取计算结果。}
+  }
+}
+
+@subtree{
+  @title{推导与微分算子}
+
+  @itemize{
+    @item{@link["math-0003"]{推导、搜索与独立核验}：对推导链求导、搜索目标并独立重放。}
+    @item{@link["math-0004"]{从向量场计算Cartesian算子}：从分量构造grad、div、curl与Laplacian。}
+    @item{@link["math-0005"]{向量分量与显式偏导}：检查向量值、坐标分量及偏导项。}
+    @item{@link["math-0006"]{Cartesian算子的计算追踪}：查看pass、规则路径和证书。}
+  }
+}
+
+@subtree{
+  @title{多项式与一般函数}
+
+  @itemize{
+    @item{@link["math-0007"]{多项式积分与Poisson特解}：用专用多项式表示计算积分与特解。}
+    @item{@link["math-0008"]{多变量函数与正则性}：处理符号偏导、链式法则与参数。}
+  }
+}
+
+@subtree{
+  @title{以关系组织数学知识}
+
+  @itemize{
+    @item{@link["math-0009"]{用miniKanren查询规则}：将规则与目录事实组合为关系查询。}
+    @item{@link["math-000A"]{查询没有入向引用的页面}：以同一查询机制检查项目中的孤立树。}
+    @item{@link["math-000B"]{关系查询参考}：DSL、规则目录与项目谓词的速查。}
+  }
+}
+
+@subtree{
+  @title{术语表}
+
+  Formula、Semantic、Notation、pass与report等术语汇总于@link["glossary"]{术语表}；关系查询的术语也在其中。
+}

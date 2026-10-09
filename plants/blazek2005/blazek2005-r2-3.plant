@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Schlichting, H.: Boundary Layer Theory. 7th edition, McGraw-Hill, New York, 1979.}
+@taxon["reference"]
+
+Schlichting《边界层理论》第七版，边界层理论的权威教科书。

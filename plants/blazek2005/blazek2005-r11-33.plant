@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mavriplis, D.J.: An Advancing Front Delaunay Triangulation Algorithm Designed for Robustness. ICASE Report No. 92-49, 1992; also AIAA Paper 93-0671, 1993; also J. Computational Physics, 117 (1995), pp. 90-101.}
+@taxon["reference"]

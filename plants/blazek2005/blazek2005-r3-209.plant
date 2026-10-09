@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Gerlinger, P.; Stoll, P.; Brüggemann, D.: An Implicit Multigrid Method for the Simulation of Chemically Reacting Flows. J. Computational Physics, 146 (1998), pp. 322-345.}
+@taxon["reference"]

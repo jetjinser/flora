@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Jameson, A.: Analysis and Design of Numerical Schemes for Gas Dynamics II: Artificial Diffusion and Discrete Shock Structure. Int. J. Computational Fluid Dynamics, 5 (1995), pp. 1-38.}
+@taxon["reference"]

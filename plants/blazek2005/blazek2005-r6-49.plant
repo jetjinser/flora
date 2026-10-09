@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Jameson, A.; Turkel, E.: Implicit Scheme and LU-Decompositions. Mathematics of Computation 37 (1981), pp. 385-397.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Turkel, E.: Preconditioned Methods for Solving the Incompressible and Low Speed Compressible Equations. J. Computational Physics, 72 (1987), pp. 277-298.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{McDonald, P.W.: The Computation of Transonic Flow through Two-Dimensional Gas Turbine Cascades. ASME Paper 71-GT-89, 1971.}
+@taxon["reference"]

@@ -1,0 +1,113 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{术语表：文档、文学编程与数学}
+@summary{集中解释全站共用的术语，并链接到展开讨论的页面。}
+@taxon["reference"]
+
+本页汇总Flora各主题共用的术语。条目按主题分组，给出简短定义；需要展开时链接到相应页面。术语名以代码格式写出，中文释名放在括号中。主题入口是@link["grove"]{Grove文档}、@link["math"]{数学语言}与@link["lp"]{文学编程}。
+
+@subtree[#:id "glossary-grove"]{
+  @title{Grove与文档模型}
+
+  @itemize{
+    @item{@defn{@code{tree}}（树）：可独立寻址的一段内容，有地址、标题和可选元数据。}
+    @item{@code{root page}（页面）：一个@code{.plant}文件对应的顶层tree；文件名就是页面地址。}
+    @item{@code{subtree}：在文档中声明一棵嵌套tree的命令；需要长期引用时用@code{#:id}给稳定地址。}
+    @item{@code{address}（地址）：具名tree的@code{#:id}或页面的文件名；未命名tree获得@code{unstable-NNNN}形式的临时地址。}
+    @item{@code{transclude}（嵌入）：按ID查询森林，把目标tree的正文放在当前位置，并保留来源；不导入程序binding。}
+    @item{@code{link}（链接）：指向tree ID的阅读引用，不建立Scheme依赖。}
+    @item{@code{taxon}：tree的种类；写小写英文名，大小写不敏感，显示时首字母大写并加句点。}
+    @item{@code{tag}：主题标签，和taxon一样是可查询的内容节点。}
+    @item{@code{frontmatter}（元数据）：title、summary、published、updated等，属于各自的tree。}
+    @item{@code{content tree}（内容树）：命令与文本解析后的结构化结果，是分析和渲染的输入。}
+    @item{@code{forest}（森林）：全站页面与tree组成的内容集合；跨文章查询在分析阶段基于它。}
+    @item{读取（reading）：解析@code{.plant}并对其中Scheme求值；示例核验也在此进行。}
+    @item{分析（analyzing）：建立forest与关系，例如@code{content-node relation}。}
+    @item{渲染（rendering）：把内容树生成HTML或其他artifact。}
+    @item{@code{checked}：读取时通过核验；不表示浏览器实时运行，也不等于形式化证明。}
+    @item{@code{backlinks}／@code{related}／@code{context}：森林中的阅读关系，可折叠查看；不等于程序@code{requires}。}
+  }
+}
+
+@subtree[#:id "glossary-writing"]{
+  @title{写作命令与内容}
+
+  @itemize{
+    @item{@code{at-exp}：以at符号开头的Scribble语法；命令产生内容节点，Scheme表达式在读取时求值。}
+    @item{@code{content command}（内容命令）：如title、paragraph、link、subtree，产生内容节点而非直接输出HTML。}
+    @item{@code{paragraph}：显式声明段落；普通文本按空行自动分段。}
+    @item{@code{verbatim}：原样保留空白与换行的代码或文本块。}
+    @item{@code{code-block}：带语言高亮的代码块；构建时高亮，不执行其中代码。}
+    @item{@code{#:style}：为内容指定命名样式或HTML属性；class与渲染器的结构性class合并。}
+    @item{@code{flow}：段落与行内内容的排布处理；文本块据此解码为段落。}
+    @item{@code{inline-subtree}：正文中可独立寻址的小节；它有自己的页面，查询时可与文章页面区分。}
+  }
+}
+
+@subtree[#:id "glossary-build"]{
+  @title{构建、准备与缓存}
+
+  @itemize{
+    @item{@code{renderer}（渲染器）：把内容树生成HTML或其他artifact；routes决定页面路径。}
+    @item{@code{artifact}（产物）：构建输出，如HTML页面、CSS、字体和@code{build/programs/}下的源码。}
+    @item{@code{prepare}（准备阶段）：读页之前准备命令模块与模块文章。}
+    @item{@code{session}（会话）：保存模块文章的文档与依赖，供读页复用，不为展示重复执行。}
+    @item{@code{depend-on!}：把额外数据文件登记为依赖；文件变化后相关文章与输出一起失效。}
+    @item{@code{disable-cache!}：让文章在每次构建中重新求值，用于时间、随机数或副作用。}
+    @item{@code{grove check}／@code{grove build}：前者始终重新求值并完整核验，后者可复用输入未变的结果。}
+  }
+
+  阶段分工、缓存复用与失效的完整说明见@link["grove-0003"]{构建阶段与缓存}。
+}
+
+@subtree[#:id "glossary-lp"]{
+  @title{文学编程}
+
+  @itemize{
+    @item{@code{fragment}（片段）：保存完整Scheme define的语法、原文与来源；声明时不执行。}
+    @item{@code{code-fragment}：插入Scheme定义并建立片段的宏；@code{make-fragment}从datum建立片段。}
+    @item{@code{program}（计划）：声明片段的装配顺序与导出，只声明不执行。详见@link["lp-model"]{片段、计划与实例}。}
+    @item{@code{instance}（实例）：按计划在新命名空间执行定义后得到的、有运行状态的集合；@code{instantiate-program}创建它。}
+    @item{@code{instance-binding}：从实例取得已声明的入口，不重新执行定义。}
+    @item{@code{requires}／@code{initial-requires}：作者声明的运行依赖／初始化前依赖；不是自动自由变量分析。}
+    @item{@code{Program.}／@code{Module.}／@code{Project.}／@code{Example.}／@code{Code.}：LP案例中的taxon标签，表示内容种类而非运行按钮。}
+    @item{@code{define-module}（模块文章）：在@code{.plant}中声明真实Scheme模块与公共接口。详见@link["lp-0004"]{模块导入}。}
+    @item{@code{project}（工程）：多个计划组成的模块工程；@code{make-project}与@code{instantiate-project}组织并实例化。详见@link["lp-000A"]{多文件工程}。}
+    @item{@code{code-chunk}（文本片段）：命名源码字符串，只做文本组合与输出，不提供作用域。详见@link["lp-0005"]{文本片段组合}。}
+    @item{@code{program-output}：声明@code{.scm}构建产物并生成Download链接；下载或展示不触发实例化。}
+    @item{@code{checked-example}／@code{checked-property}／@code{checked-error}：分别核验值、有限样本性质和异常key。}
+  }
+}
+
+@subtree[#:id "glossary-math"]{
+  @title{数学语言}
+
+  @itemize{
+    @item{@code{Formula}（φ:）：从数学文本读出Semantic值的入口。}
+    @item{@code{Semantic}（◆:）：可计算的数学对象，核心计算API的输入。}
+    @item{@code{Notation}（◇:）：描述排版结构的构造器，生成MathML。}
+    @item{@code{term}：Semantic值的内部结构，供关系与规则处理；来源和显示偏好保存在旁侧metadata中。}
+    @item{@code{pass}：计算的单个阶段；报告记录各pass的名称与规则路径。}
+    @item{@code{report}（报告）：多阶段计算的结果、完成状态与derivation。}
+    @item{@code{derivation}（推导）：可逐步重放的规则步骤；@code{math-verify-derivation}独立验证它。}
+    @item{核心API：@code{math-calculate}、@code{math-simplify}、@code{math-differentiate}等接收Semantic值并返回可读取的报告；@code{assumptions}声明事实，@code{coordinate}声明坐标。}
+  }
+}
+
+@subtree[#:id "glossary-relations"]{
+  @title{关系查询}
+
+  @itemize{
+    @item{@code{query}／@code{run*}：声明要返回的逻辑变量并收集解。}
+    @item{@code{fresh}／@code{conde}：引入存在量词变量／表示析取。}
+    @item{@code{==}／@code{=/=}：统一两个项／约束两项不相等。}
+    @item{@code{fail}／@code{succeed}：失败与成功的空目标。}
+    @item{@code{ruleo}：数学规则目录事实（名称、类别、模式、docstring）。}
+    @item{@code{pageo}／@code{nodeo}／@code{node-propertyo}：页面与内容节点的关系。}
+    @item{@code{content-node relation}：分析阶段为每篇文章IR生成的节点关系。}
+    @item{@code{source-locationo}：返回节点对应的源文件、行与列。}
+    @item{@code{query-link}：查询结果专用链接节点，不会被记为文章创建的入向引用。}
+  }
+
+  DSL与可用谓词的速查见@link["math-000B"]{关系查询参考}。
+}

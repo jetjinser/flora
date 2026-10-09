@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Tai, C.-H.; Sheu, J.-H.; van Leer, B.: Optimal Multistage Schemes for Euler Equations with Residual Smoothing. AIAA Journal, 33 (1995), pp. 1008-1016.}
+@taxon["reference"]

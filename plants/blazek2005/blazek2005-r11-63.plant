@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Weatherill, N.P.; Hassan, O.; Marcum, D.L.: Calculation of Steady Compressible Flowfields with the Finite-Element Method. AIAA Paper 93-0341, 1993.}
+@taxon["reference"]

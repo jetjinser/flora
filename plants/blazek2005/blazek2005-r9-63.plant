@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Ollivier-Gooch, C.F.: Multigrid Acceleration of an Upwind Euler Solver on Unstructured Meshes. AIAA Journal, 33 (1995), pp. 1822-1827.}
+@taxon["reference"]

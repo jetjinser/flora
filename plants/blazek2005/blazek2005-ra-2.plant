@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Courant, R.; Hilbert, D.: Methods of Mathematical Physics. Interscience, New York, 1962.}
+@taxon["reference"]

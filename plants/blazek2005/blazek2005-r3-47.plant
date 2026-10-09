@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Pironneau, O.: Finite Element Methods for Fluids. John Wiley, Chichester, 1989.}
+@taxon["reference"]

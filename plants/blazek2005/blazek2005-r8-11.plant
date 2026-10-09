@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Bayliss, A.; Turkel, E.: Far Field Boundary Conditions for Compressible Flow. J. Computational Physics, 48 (1982), pp. 182-199.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Enander, R.; Karlsson, A.R.: Implicit Explicit Residual Smoothing in Multigrid Cycle. AIAA Paper 95-0204, 1995.}
+@taxon["reference"]

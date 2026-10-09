@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Usab, W.J.; Murman, E.M.: Embedded Mesh Solution of the Euler Equations Using a Multiple-Grid Method. AIAA Paper 83-1946, 1983.}
+@taxon["reference"]

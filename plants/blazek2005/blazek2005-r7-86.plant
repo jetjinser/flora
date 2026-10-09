@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lund, T.S.; Moin, P.: Large Eddy Simulation of a Boundary Layer on a Concave Surface. 10th Symposium on Turbulent Shear Flows, The Pennsylvania State University, PA, August 14-16, 1995, Volume 1.}
+@taxon["reference"]

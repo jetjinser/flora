@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Baker, T.J.: Discretization of the Navier-Stokes Equations and Mesh Induced Errors. Proc. 5th Int. Conf. on Numerical Grid Generation in CFD, Mississipi State University, Mississipi, April 1996.}
+@taxon["reference"]

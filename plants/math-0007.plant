@@ -1,0 +1,97 @@
+@use-modules[(flora commands) (language scribble commands) (grove math pipeline)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math formula) #:prefix φ:)]
+
+@title{多项式积分与Poisson方程}
+@summary{观察Semantic IR如何经过专用稀疏多项式IR，再回到数学值。}
+@taxon["tutorial"]
+
+求导关系并不适合直接承担所有多项式算法。积分pass把有限多项式lowering到专用稀疏多项式IR，在该表示上做精确运算，再生成Semantic值。本页展示这条表示转换路径及其适用边界。
+
+@(define x (◆:coordinate 'x))
+
+@(define source
+  (◆:add (◆:power x (◆:constant 3))
+          (◆:multiply (◆:constant 2) x)))
+
+@(define primitive-report
+  (math-antiderivative source x #:assumptions (list x)))
+
+@(define primitive (math-report-result primitive-report))
+
+@subtree{
+  @title{构造一个被积表达式}
+  @taxon["example"]
+
+  @math[source]关于@code{x}的选定原函数是 @math[primitive]。
+
+  这里返回满足@code{x=0}时值为零的规范原函数。更一般的原函数还可以加上任意不依赖@code{x}的函数；Grove不会把这族函数假装成一个唯一结果。
+
+}
+
+@(define residual
+  (math-check-equation source
+    (◆:partial primitive x)
+    #:assumptions (list x)))
+
+@subtree{
+  @title{查看lowering与重新构造}
+
+  @verbatim[(format #f "passes: ~s\nreplay: ~s"
+    (map math-report-name (math-report-passes primitive-report))
+    (math-verification-valid? (math-verify-derivation
+      (math-report-derivation primitive-report))))]
+
+  报告列出原函数计算及后续化简所用的pass，并附带可重放证书。专用IR让指数向量和精确系数可直接操作；它不在MathML节点或排版字符串中寻找@code{x}。
+
+  可以用另一个pass检查原函数是否恢复被积项：
+
+  @math[(math-report-result residual)]
+
+  @code{◆:partial}在这里构造形式偏导；@code{math-check-equation}接收两个Semantic值并计算残差。若结果为零，等式在当前规则范围内核验成功。
+
+}
+
+@(define r3 (◆:space 'x 'y 'z))
+
+@(define rhs (φ:read "y^2"))
+
+@(define poisson-report
+  (math-solve-poisson rhs #:assumptions (list r3)))
+
+@(define potential (math-report-result poisson-report))
+
+@(define check (math-check-equation rhs (◆:laplacian potential)
+                   #:assumptions (list r3)))
+
+@subtree{
+  @title{一个受限的Poisson求解器}
+  @taxon["example"]
+
+  Grove还能为三维欧氏Cartesian空间的多项式右侧@code{f}构造@code{Δu=f}的特解。空间和源项都是输入值：
+
+  方程@code{Δu = y²}的一个特解是 @math[potential]。
+
+  求解器采用明确规范：选定坐标上的值及一阶导数在坐标为零处锚定为零。它没有求边界条件，也不声称返回全体解。
+
+  @(paragraph (format #f "Laplacian residual is zero: ~a"
+    (equal? (math-report-final check) '(num "0"))))
+
+  这一步使用独立的Semantic等式核验接口检查解。构造器内部也会拒绝无法转为有限多项式IR的输入；例如@code{sin(x)}不会被错误地当成多项式。
+
+}
+
+@subtree{
+  @title{实现范围}
+  @taxon["remark"]
+
+  当前支持精确多项式、参数系数和有限的Cartesian Poisson子集。一般函数积分、边值问题、其他PDE、数值近似与一般矩阵代数需要其他IR和算法；它们不属于这个pass。
+
+}
+
+@subtree{
+  @title{函数与正则性}
+
+  @link["math-0008"]{多变量函数}展示另一条路径：保留未知函数的符号偏导，而不是把函数硬塞进多项式表示。
+
+}

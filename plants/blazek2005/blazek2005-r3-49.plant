@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Reddy, J.N.; Gartling, D.K.: The Finite Element Method in Heat Transfer and Fluid Dynamics. CRC Press, 1994.}
+@taxon["reference"]

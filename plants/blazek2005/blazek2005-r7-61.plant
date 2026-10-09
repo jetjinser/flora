@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Kunz, R.F.; Lakshminarayana, B.: Explicit Navier-Stokes Computation of Cascade Flows Using the k-ε Turbulence Model. AIAA Journal, 30 (1992), pp. 13-22.}
+@taxon["reference"]

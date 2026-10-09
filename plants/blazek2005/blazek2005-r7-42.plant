@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Chou, P.Y.: On Velocity Correlations and the Solutions of the Equations of Turbulent Fluctuations. Quart. of Appl. Math., 3 (1945), pp. 38-54.}
+@taxon["reference"]

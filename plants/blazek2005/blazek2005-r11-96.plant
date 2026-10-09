@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Chen, H.; Bishop, J.: Delaunay Triangulation for Curved Surfaces. Proc. 6th Internat. Meshing Roundtable '97, October 13-15, 1997, Park City, Utah, USA, pp. 115-127.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Jaberi, F.A.: Large Eddy Simulation of Turbulent Premixed Flames via Filtered Mass Density Function. AIAA Paper 99-0199, 1999.}
+@taxon["reference"]

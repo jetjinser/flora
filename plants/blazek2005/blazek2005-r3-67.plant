@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Haselbacher, A.; Blazek, J.: On the Accurate and Efficient Discretisation of the Navier-Stokes Equations on Mixed Grids. AIAA Paper 99-3363, 1999; also AIAA Journal, 38 (2000), pp. 2094-2102.}
+@taxon["reference"]

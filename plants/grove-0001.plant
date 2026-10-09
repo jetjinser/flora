@@ -1,0 +1,146 @@
+@use-modules[(flora commands) (language scribble commands) (grove style) (grove style html)]
+
+@title{用.plant写作：元数据、命令与Scheme}
+@summary{认识页面元数据、自动段落、at-exp命令和源码展示。}
+@taxon["tutorial"]
+
+一篇Grove文章通常从title和summary命令开始。接下来的普通文本会被解释成段落；Scribble命令以at符号开头，Scheme表达式采用at-exp的括号形式。
+
+例如，@code{math-0001}是行内代码；@link["math-0001"]{数学表示与计算}是同一段中的链接。Grove会把两种at-exp命令都保留在当前段落里，分别渲染成代码标记和链接。
+
+本项目的@code{flora commands}模块显式声明@code{link}命令替换Guile的同名文件系统函数，因此文章仍可直接使用@code{link}。链接目标和生成的HTML不受影响。
+
+@subtree{
+  @title{中西文混排的源码约定}
+
+  正文和标题不在中文与英文、数字之间手动加入空格，例如写作“已有Scheme经验的读者”或“核验11个样本”。站点使用CSS的text-autospace在排版时提供间距，源码保留内容本身；不支持该属性的浏览器仍能阅读，但间距会更紧。
+
+  英文短语内部保留词间空格，例如literate programming。行内代码、代码块和示例源码保留语言需要的空格，不按正文规则整理。链接和行内代码与中文正文相接时，也不额外插入分隔空格。
+}
+
+@subtree{
+  @title{最小页面}
+  @taxon["example"]
+
+  下面是一个可以独立保存为@code{plants/hello.plant}的最小示例：
+
+  @verbatim["@use-modules[(flora commands) (language scribble commands)]
+
+  @title{Hello}
+  @summary{My first Grove page.}
+
+  This sentence becomes a paragraph.
+
+  @subtree{
+    @title{A tree}
+    This text becomes another paragraph.
+  }"]
+
+  第一行载入本项目的命令模块。title与summary是文档元数据；空行把普通文字分成段落；subtree命令建立嵌套的tree，title为这棵tree提供标题。HTML的结构由renderer生成，作者不需要手写@code{<p>}或@code{<h2>}。
+
+}
+
+@subtree{
+  @title{命令与Scheme表达式}
+  @taxon["example"]
+
+  at-exp命令产生内容节点。例如link命令产生一个链接节点，subtree命令产生一棵嵌套的tree。Scheme表达式则能先计算，再把结果交给内容命令：
+
+  @verbatim["@(define greeting (string-append \"Hello, \" \"Grove!\"))
+
+  @paragraph{The Scheme value is: @code[greeting]}"]
+
+  这里@code{define}在当前页面求值环境中绑定@code{greeting}；@code{string-append}返回字符串；code命令把该值作为行内代码显示。构建后的段落显示为“The Scheme value is: Hello, Grove!”。
+
+  命令和Scheme不会互相替代：命令描述要生成哪种内容，Scheme适合在读取时计算命令的输入。
+
+}
+
+@subtree{
+  @title{普通文本如何成为段落}
+
+  Grove将文本块解码为段落，因此通常直接写文字即可。需要明确段落边界、包装Scheme生成的文本或插入结构化内容时，可以使用paragraph命令。这和Scribble的写作习惯相近：作者组织语义内容，renderer决定具体标记。
+
+  @subtree[#:id "source-shape"]{
+    @title{一份页面源码的形状}
+  @taxon["definition"]
+    @paragraph{页面源码由元数据、内容命令、普通文本和可选的Scheme计算组成。它保留为内容树，之后才交给分析和渲染阶段。}
+    @verbatim["@use-modules[(flora commands) (language scribble commands)]
+
+  @title{Page title}
+  @summary{One-sentence description.}
+
+  A paragraph written as ordinary text.
+
+  @(define value (+ 20 22))
+  @paragraph{The result is @code[value].}"]
+    @paragraph{这个例子包含模块导入、元数据、普通段落和Scheme计算；输出是一篇有标题、摘要和显示“The result is 42.”段落的页面。}
+  }
+
+}
+
+@subtree{
+  @title{组合内容树}
+
+  这一页定义的@code{source-shape} subtree既有独立地址，也被@link["flora"]{首页}嵌入。有关定义与嵌入的语义见@link["grove-0002"]{组合tree}。
+
+}
+
+@(define note-style
+  (make-content-style 'tutorial-note
+    (list (make-html-attributes
+            (list (cons 'id "style-example") (cons 'role "note"))))))
+
+@subtree{
+  @title{为元素指定样式}
+  @taxon["example"]
+
+  常用正文命令、link、image、subtree、transclude和数学排版命令接受@code{#:style}。符号或字符串表示命名样式；HTML将这个名字映射为class：
+
+  @verbatim["@paragraph[#:style 'tutorial-note]{这是一段提示。}"]
+
+  @paragraph[#:style 'tutorial-note]{这是一段提示。边线与缩进来自Flora自己的CSS。}
+
+  需要HTML专用属性时，使用同一个style对象携带属性：
+
+  @verbatim["@(define note-style
+  (make-content-style 'tutorial-note
+    (list (make-html-attributes '((id . \"style-example\") (role . \"note\"))))))
+@paragraph[#:style note-style]{这是一段具名提示。}"]
+
+  @paragraph[#:style note-style]{这是一段具名提示。它保留role与独立的HTML ID。}
+
+  class会与renderer的结构性class合并。tree被嵌入时，HTML ID会加上展示位置前缀，避免多次transclude产生重复ID；跨文章引用仍使用tree的@code{#:id}。已经由renderer生成的导航ID不能被样式覆盖。
+
+  Flora在@code{project.scm}中通过@code{compose-html-styles}组合@code{default-html-style}与@code{flora.css}。项目的@code{style.css}包含：
+
+  @verbatim[".tutorial-note {
+  background: var(--wash);
+  padding: .3lh 1ic;
+}"]
+
+  元素样式不会改变查询事实或数学语义，文本输出也不会显示HTML属性。Scheme代码得到的元素可以交给@code{content-with-style}设置样式，无须重新构造正文或丢失源码位置。
+}
+
+@subtree{
+  @title{展示代码与语法高亮}
+  @taxon["example"]
+
+  纯Scheme示例可以使用@code{code-block}，并指定@code{#:language 'scheme}。代码在构建时高亮，正文是纯文本，不会被执行；原有空白、换行和Unicode字符保留。
+
+  @verbatim["@code-block[#:language 'scheme]{
+; 中文注释与函数名也可以保留
+(define (平方 x)
+  (* x x))
+}"]
+
+  上面的命令显示为：
+
+  @code-block[#:language 'scheme]{
+; 中文注释与函数名也可以保留
+(define (平方 x)
+  (* x x))
+}
+
+  不指定语言时显示普通代码；尚未配置的语言会产生构建warning，并显示原文。当前提供Scheme高亮，整份.plant或at-exp示例仍使用verbatim，以免被误当作Scheme。
+}

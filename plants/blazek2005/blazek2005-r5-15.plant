@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Blazek, J.; Irmisch, S.; Haselbacher, A.: Unstructured Mixed-Grid Navier-Stokes Solver for Turbomachinery Applications. AIAA Paper 99-0664, 1999.}
+@taxon["reference"]

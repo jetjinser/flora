@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Thompson, K.W.: Time Dependent Boundary Conditions for Hyperbolic Systems. J. Computational Physics, 68 (1987), pp. 1-24.}
+@taxon["reference"]

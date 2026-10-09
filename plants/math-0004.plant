@@ -1,0 +1,100 @@
+@use-modules[(flora commands) (language scribble commands) (grove math pipeline)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math formula) #:prefix φ:)
+             ((grove math notation) #:prefix ◇:)]
+
+@title{从向量场计算Cartesian算子}
+@summary{声明有序坐标系，计算具体场的grad、div、curl和Laplacian。}
+@taxon["tutorial"]
+
+空间计算依赖坐标的类型、顺序和正则性。Grove不会从向量箭头猜这些信息；作者显式构造空间、分量和前提，计算器才展开算子。
+
+@(define r3 (◆:space 'x 'y 'z))
+
+@(define v (◆:components
+             (φ:read "x^2")
+             (φ:read "y")
+             (φ:read "z")
+             #:space r3))
+
+@subtree{
+  @title{声明有序Cartesian空间}
+
+  这里@code{◆:space}的三个参数定义有序坐标；@code{◆:components}需要三个Semantic标量值和对应空间。@code{v}是具体向量场@code{(x²,y,z)}，不是排版用的列向量。
+
+  其Semantic term是：
+
+  @verbatim[(format #f "~s" (◆:math-value-term v))]
+
+  有序空间作为值的requirement携带。它不会因为被写入@code{v}就自动启用；下面的计算显式把@code{r3}放入假设列表。
+
+}
+
+@(define norm-square
+  (◆:add (◆:power (φ:read "x") (◆:constant 2))
+          (◆:add (◆:power (φ:read "y") (◆:constant 2))
+                 (◆:power (φ:read "z") (◆:constant 2)))))
+
+@(define gradient-report (math-compute (◆:grad norm-square) #:assumptions (list r3)))
+
+@(define divergence-report (math-compute (◆:divergence v) #:assumptions (list r3)))
+
+@(define laplacian-report (math-compute (◆:laplacian norm-square) #:assumptions (list r3)))
+
+@subtree{
+  @title{计算空间算子}
+  @taxon["example"]
+
+  @itemize{
+    @item{grad of @code{x²+y²+z²}: @math[(math-report-result gradient-report)]}
+    @item{div of @code{(x²,y,z)}: @math[(math-report-result divergence-report)]}
+    @item{Laplacian of @code{x²+y²+z²}: @math[(math-report-result laplacian-report)]}
+  }
+
+  结果分别是@code{(2x,2y,2z)}、@code{2x+2}、以及@code{6}。算子先展开成坐标偏导，再由标量规则计算。分量求值并没有通过预设答案替换。
+
+}
+
+@subtree{
+  @title{结果为什么要求differentiable}
+  @taxon["counterexample"]
+
+  梯度、散度和旋度至少需要一阶导数；Laplacian需要二阶正则性。坐标空间提供独立坐标事实，但场是否可微仍需作者声明。以下故意缺少所需条件：
+
+  @compute[#:assumptions (list r3) #:on-error 'show]{laplacian(x^2+y^2+z^2)}
+
+  诊断说明缺失前提或不完整的坐标声明。@code{on-error}让此处把失败作为教材内容展示。
+
+}
+
+@subtree{
+  @title{向量排版和向量语义}
+
+  Notation的列布局只表达怎么显示：
+
+  @◇:display-math{@◇:column{a+b}{c}{d}}
+
+  Semantic的@code{components}则表达一个恰有三个标量分量、依赖特定有序空间的向量对象。列布局可以包含任意内容，但不能用于@code{math-compute}；Semantic向量可以参与加法、数乘、点积和叉积。
+
+}
+
+@subtree{
+  @title{检查计算证书}
+
+  @(paragraph (format #f "curl/grad 类空间计算都会保留可重放证书。当前散度计算 replay：~a"
+    (math-verification-valid? (math-verify-derivation
+      (math-report-derivation divergence-report)))))
+
+  独立重放检查每个rewrite edge；测试套件另有独立的精确多项式解释器，用来避免只用生产规则验证生产规则。
+
+}
+
+@subtree{
+  @title{范围}
+  @taxon["remark"]
+
+  这里实现的是欧氏Cartesian坐标。将名字换成@code{r,θ,z}不会自动得到柱坐标度量；一般曲线坐标、联络和边界条件都需要不同的语义与算法。
+
+  向量表示细节见@link["math-0005"]{分量与显式偏导}；运算过程可沿@link["math-0006"]{计算追踪}查看pass、规则路径和证书。@link["math-0007"]{多项式积分与Poisson特解}展示另一类多项式运算。
+
+}

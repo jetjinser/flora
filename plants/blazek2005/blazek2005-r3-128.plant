@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Brandt, A.: Multi-Level Adaptive Solutions to Boundary-Value Problems. Math. Comp., 31 (1977), pp. 333-390.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Shih, S.-C.; Lin, S.-Y.: A Weighting Least Squares Method for Euler and Navier-Stokes Equations. AIAA Paper 94-0522, 1994.}
+@taxon["reference"]

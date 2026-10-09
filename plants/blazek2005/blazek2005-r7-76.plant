@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Deardorff, J.W.: A Numerical Study of Three-Dimensional Turbulent Channel Flow at Large Reynolds Numbers. J. Fluid Mechanics, 41 (1970), pp. 453-480.}
+@taxon["reference"]

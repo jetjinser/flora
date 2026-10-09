@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Rieger, H.; Jameson, A.: Solution of Steady 3-D Compressible Euler and Navier-Stokes Equations by an Implicit LU Scheme. AIAA Paper 88-0619, 1988.}
+@taxon["reference"]

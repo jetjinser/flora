@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Luo, H.; Baum, J.D.; Löhner, R.; Cabello, J.: Adaptive Edge-Based Finite Element Schemes for the Euler and Navier-Stokes Equations on Unstructured Grids. AIAA Paper 93-0336, 1993.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Ajmani, K.; Liou, M.-S.: Implicit Conjugate Gradient Solvers on Distributed-Memory Architectures. AIAA Paper 95-1695, 1995.}
+@taxon["reference"]

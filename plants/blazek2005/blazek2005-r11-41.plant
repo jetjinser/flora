@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Weatherill, N.P.; Hassan, O.; Morgan, K.; Peraire, J.; Peiro, J.; Marchant, M.J.: Unstructured Grid Generation. COSMASE: Short Course on Grid Generation, Automation and Parallel Utilisation, Lausanne, Switzerland, Sept. 23-27, 1996.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Wang, Z.J.: Improved Formulation for Geometric Properties of Arbitrary Polyhedra. AIAA Journal, 37 (1999), pp. 1326-1327.}
+@taxon["reference"]

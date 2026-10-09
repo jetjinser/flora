@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Buning, P.G.; Chu, I.T.; Obayashi, S.; Rizk, Y.M.; Steger, J.L.: Numerical Simulation of the Integrated Space Shuttle Vehicle in Ascent. AIAA Paper 88-4359-CP, 1988.}
+@taxon["reference"]

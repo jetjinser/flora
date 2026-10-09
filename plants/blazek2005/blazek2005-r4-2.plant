@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mohanraj, R.; Neumeier, Y.; Zinn, B.T.: Characteristic-Based Treatment of Source Terms in Euler Equations for Roe Scheme. AIAA Journal, 37 (1999), pp. 417-424.}
+@taxon["reference"]

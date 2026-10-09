@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hirsch, C.: Numerical Computation of Internal and External Flows. Vols. 1 and 2, John Wiley and Sons, 1988.}
+@taxon["reference"]
+
+Hirsch两卷本CFD权威教材，涵盖内流与外流的数值计算；旋转参考系等内容可参见该书。

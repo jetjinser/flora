@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Gad-el-Hak, M.: Questions in Fluid Mechanics: Stokes' Hypothesis for a Newtonian, Isotropic Fluid. J. of Fluids Engineering, 117 (1995), pp. 3-5.}
+@taxon["reference"]
+
+Gad-el-Hak关于牛顿各向同性流体中Stokes假设适用性的讨论。

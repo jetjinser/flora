@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Chung, H.-T.; Baek, J.-H.: Influence of Trailing-Edge Grid Structure on Navier-Stokes Computation of Turbomachinery Cascade Flow. Int. J. Numerical Methods in Fluids, 15 (1992), pp. 883-894.}
+@taxon["reference"]

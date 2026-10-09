@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Rosenfeld, M.; Yassour, Y.: The Alternating Direction Multi-Zone Implicit Method. J. Computational Physics, 110 (1994), pp. 212-220.}
+@taxon["reference"]

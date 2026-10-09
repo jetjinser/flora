@@ -1,0 +1,118 @@
+@(define-module (flora expression-language)
+  #:use-module (flora commands)
+  #:use-module (lp checked)
+  #:use-module (language scribble commands)
+  #:use-module (ice-9 match)
+  #:use-module (srfi srfi-1)
+  #:export (interpret simplify))
+
+@title{算术解释器与简化器}
+@summary{定义表达式语义，组合重写规则，并检查结果保持、幂等性与预期异常。}
+@taxon["tutorial"]
+
+算术解释器定义表达式的值，简化器改变表达式结构。LP让两种程序与它们的解释、示例和性质核验来自同一份.plant。代码使用@link["lp-0002"]{文章内定义}，检查值、有限样本和异常分别对应三种核验方式。
+
+表达式只有整数、变量、加法与乘法。例如@code{(* (+ x 0) 1)}；环境是变量与数值组成的association list。
+
+@program["lp-eval" "算术表达式解释器 interpret 的定义"]{
+@(define (lookup variable environment)
+   ;; 不把未绑定的变量默认为零。
+   (let ((entry (assq variable environment)))
+     (if entry (cadr entry) (throw 'unbound-name variable))))
+
+@(define (interpret expression environment)
+   (match expression
+     ((? integer? n) n)
+     ((? symbol? name) (lookup name environment))
+     (('+ left right)
+      (+ (interpret left environment) (interpret right environment)))
+     (('* left right)
+      (* (interpret left environment) (interpret right environment)))
+     (_ (throw 'invalid-expression expression))))
+}
+
+@checked-example["lp-eval-test" "算术 interpret 的环境求值结果为 20" (interpret '(* (+ x 2) y) '((x 3) (y 4))) 20]
+
+@checked-error["lp-unbound" "算术变量 missing 的未绑定异常" (interpret 'missing '()) 'unbound-name]
+@checked-error["lp-invalid" "算术减法表达式的未知语法异常" (interpret '(- 1 2) '()) 'invalid-expression]
+
+@link["lp-eval"]{解释器}把语言允许的输入限定下来。重写规则应该保留这个语义，而不只是让显示出来的表达式更短。
+
+@program["lp-rewrite" "算术简化的局部 rewrite 规则"]{
+@(define (rewrite operation left right)
+   (cond
+     ((and (integer? left) (integer? right))
+      ((if (eq? operation '+) + *) left right))
+     ((and (eq? operation '+) (equal? left 0)) right)
+     ((and (eq? operation '+) (equal? right 0)) left)
+     ((and (eq? operation '*) (equal? left 1)) right)
+     ((and (eq? operation '*) (equal? right 1)) left)
+     (else (list operation left right))))
+}
+
+算术重写规则不使用@code{(* 0 x) → 0}。如果x没有绑定，原表达式会报错，改写后却得到零：这会改变错误语义。保留这个边界比增加一条看起来显然的规则更重要。
+
+@program["lp-simplify" "算术简化器 simplify 的递归定义"]{
+@(define (simplify expression)
+   (match expression
+     ((? integer? n) n)
+     ((? symbol? name) name)
+     ((operation left right)
+      (if (memq operation '(+ *))
+          (rewrite operation (simplify left) (simplify right))
+          (throw 'invalid-expression expression)))
+     (_ (throw 'invalid-expression expression))))
+}
+
+@link["lp-simplify"]{简化器}调用@link["lp-rewrite"]{局部规则}，普通Scheme binding承担程序组合。代码tree的链接负责解释的导航。
+
+@checked-example["lp-simplify-test" "算术 simplify 的结果为 x" (simplify '(* (+ x 0) (+ 1 0))) 'x]
+@checked-error["lp-zero-error" "算术零乘法保留 unbound-name 异常" (interpret (simplify '(* 0 missing)) '()) 'unbound-name]
+
+算术性质检查使用有限枚举，样本深度与环境显式固定，构建时可复现。结果保持检查简化前后的值，幂等性检查重复简化得到的结构。
+
+@program["lp-cases" "算术性质检查的表达式与环境样本"]{
+@(define (expressions depth)
+   (let ((atoms '(-1 0 1 x y)))
+     (if (= depth 0) atoms
+         (let ((smaller (expressions (- depth 1))))
+           (append atoms
+             (append-map
+               (lambda (operation)
+                 (append-map
+                   (lambda (left)
+                     (map (lambda (right) (list operation left right)) smaller))
+                   smaller))
+               '(+ *)))))))
+
+@(define environments
+   '(((x -2) (y 3)) ((x 0) (y 0)) ((x 4) (y -1))))
+
+@(define cases
+   (append-map
+     (lambda (expression)
+       (map (lambda (environment) (list expression environment)) environments))
+     (expressions 2)))
+}
+
+@checked-property["lp-preserve" "算术简化的 18165 项结果保持核验" cases
+  (lambda (sample)
+    (let ((expression (car sample)) (environment (cadr sample)))
+      (= (interpret expression environment)
+         (interpret (simplify expression) environment))))]
+
+@checked-property["lp-idempotent" "算术 simplify 的幂等性核验" (expressions 2)
+  (lambda (expression)
+    (equal? (simplify expression) (simplify (simplify expression))))]
+
+这分别检查18,165组表达式与环境，以及6,055个表达式。有限枚举是证据，不是对所有表达式的证明；未绑定变量和错误语义由unbound-name与invalid-expression异常案例另外检查。
+
+@subtree{
+  @title{算术核验的模块作用域与构建结果}
+
+  checked-property遇到不满足谓词的样本就中止构建，并报告property ID与反例；checked-error只接受指定的异常key，其他异常继续向外传播，没有抛出异常同样失败。
+
+  本文同时定义@code{(flora expression-language)}模块，导出interpret与simplify。另一篇文章transclude @link["lp-simplify"]{简化器}只会展示代码；调用binding则需显式导入这个模块。@link["lp-0004"]{模块导入教程}实际使用这些定义，无须另外维护一份.scm。
+
+  确定性的核验结果可以随内容IR缓存。@code{grove check}会重新求值文章；正常build可能复用输入未变的结果。如果计算读取额外文件，要调用depend-on! 登记依赖；读取时间、随机数或外部状态的实验应调用disable-cache!。checked表示读取时核验通过，不表示浏览器中实时运行。
+}

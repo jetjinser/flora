@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Sharov, D.; Nakahashi, K.: Low Speed Preconditioning and LU-SGS Scheme for 3-D Viscous Flow Computations on Unstructured Grids. AIAA Paper 98-0614, 1998.}
+@taxon["reference"]

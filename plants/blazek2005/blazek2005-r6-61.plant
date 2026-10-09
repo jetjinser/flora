@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lee, B.-S.; Lee, D.H.: Data Parallel Symmetric Gauss-Seidel Algorithm for Efficient Distributed Computing Using Massively Parallel Supercomputers. AIAA Paper 97-2138, 1997.}
+@taxon["reference"]

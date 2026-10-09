@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Gerolymos, G.A.; Vallet, I.: Implicit Computation of Three-Dimensional Compressible Navier-Stokes Equations Using k-ε Closure. AIAA Journal, 34 (1996), pp. 1321-1330.}
+@taxon["reference"]

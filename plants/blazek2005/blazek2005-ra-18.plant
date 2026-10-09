@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Koobus, B.; Farhat, C.: Second-Order Time-Accurate and Geometrically Conservative Implicit Schemes for Flow Computations on Unstructured Dynamic Meshes. Comp. Meths. Appl. Mech. Eng., 170 (1999), pp. 103-130.}
+@taxon["reference"]

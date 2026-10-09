@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Crumpton, P.I.; Mackenzie, J.A.; Morton, K.W.: Cell Vertex Algorithms for the Compressible Navier-Stokes Equations. J. Computational Physics, 109 (1993), pp. 1-15.}
+@taxon["reference"]

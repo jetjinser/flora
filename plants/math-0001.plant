@@ -1,0 +1,108 @@
+@use-modules[(flora commands) (language scribble commands) (grove math pipeline)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math formula) #:prefix φ:)
+             ((grove math notation) #:prefix ◇:)]
+
+@title{数学表示：Formula、Semantic与Notation}
+@summary{一段数学源码如何成为可计算的对象，再成为MathML。}
+@taxon["tutorial"]
+
+Grove的数学接口把“作者写下的公式”“公式表达的数学对象”和“对象如何排版”分开。Formula DSL读入方便的数学文本；Semantic DSL构造可计算对象；Notation DSL描述展示结构。低层计算API接收Semantic值，Formula façade提供自动读取文本的便捷入口。
+
+@subtree{
+  @title{Notation：明确写出排版结构}
+  @taxon["example"]
+
+  这一组Maxwell方程用对齐点、向量箭头和分数构造排版：
+
+  @◇:display-math{@◇:align{
+    ∇ · @◇:vec{D} &= ρ
+    ∇ × @◇:vec{E} &= −@◇:frac{∂@◇:vec{B}}{∂t}
+    ∇ · @◇:vec{B} &= 0
+    ∇ × @◇:vec{H} &= @◇:vec{J} + @◇:frac{∂@◇:vec{D}}{∂t}
+  }}
+
+  @code{◇:align}、@code{◇:vec}与@code{◇:frac}构造的是Notation节点。它们能生成MathML，但不会因此获得向量类型或求导语义。需要证明公式时，应该使用Semantic表达式和计算pass。
+
+}
+
+@(define x (◆:coordinate 'x))
+
+@(define polynomial
+  (◆:add (◆:power x (◆:constant 3))
+          (◆:multiply (◆:constant 2) x)))
+
+@subtree{
+  @title{Semantic：构造可计算的值}
+  @taxon["example"]
+
+  下面的Scheme代码建立多项式。每个构造器都接收Semantic值；数值用精确有理数表示：
+
+  @verbatim["@(define x (◆:coordinate 'x))
+  @(define polynomial
+    (◆:add
+      (◆:power x (◆:constant 3))
+      (◆:multiply (◆:constant 2) x)))
+
+  @math[polynomial]"]
+
+  @code{◆:coordinate}返回一个携带“独立坐标”声明的数学值；@code{◆:constant}建立精确常数；@code{◆:power}和@code{◆:multiply}构造子项；@code{◆:add}组合它们。最后的math命令只显示这个值，不执行化简。
+
+  表达式的内部term可检查为sexp：
+
+  @verbatim[(format #f "~s" (◆:math-value-term polynomial))]
+
+  它大致是@code{(+ (^ (var x) (num "3")) (* (num "2") (var x)))}。来源位置、显示偏好和声明保存在值的旁侧metadata中，不混进关系规则处理的term。
+
+}
+
+@(define parsed (φ:read "x^3 + 2*x"))
+
+@(define formula-report
+  (φ:differentiate parsed "x"
+    #:assumptions (φ:assumptions "coordinate(x)")))
+
+@(define semantic-report
+  (math-differentiate parsed x #:assumptions (list x)))
+
+@subtree{
+  @title{Formula：用文本作为另一种入口}
+  @taxon["example"]
+
+  写短公式时，Formula DSL更方便。@code{φ:read}读出Semantic值；同一个文本也可以交给@code{φ:simplify}这样的便捷包装：
+
+  @verbatim["@(define parsed (φ:read \"x^3 + 2*x\"))
+  @(define formula-report
+    (φ:differentiate parsed \"x\" #:assumptions (φ:assumptions \"coordinate(x)\")))
+  @math[(math-report-result formula-report)]"]
+
+  Formula reader负责把文本解析一次。@code{φ:differentiate}是Formula façade：它将输入和坐标读为Semantic值，再调用核心计算API。若要使用底层API，则明确传入Semantic值和事实：
+
+  @math[(math-report-result formula-report)]
+
+  底层入口也计算同一对象：
+
+  @math[(math-report-result semantic-report)]
+
+  核心@code{math-differentiate}不解析字符串，也不依赖Formula模块；它只消费数学值。这让文本文法可以独立演进，而计算保持稳定的输入契约。
+
+}
+
+@subtree{
+  @title{可计算和可排版是不同能力}
+  @taxon["remark"]
+
+  可以直接把Semantic值交给Notation包装：
+
+  @◇:display-math{@◇:parens[polynomial]}
+
+  括号只影响排版偏好，不修改多项式term。相反，@code{◆:group}会把显式分组记录在Semantic值的展示属性中，数学等式仍基于term判断。排版节点不可以传进数学计算API。
+
+}
+
+@subtree{
+  @title{使用建议}
+
+  在文章中，Formula文本适合简短的手写表达式；Semantic构造器适合要复用、组合或交给低层计算的值；Notation构造器适合纯布局需求。代码示例和输出都是本页构建的一部分，而不是手工维护的副本。
+
+}

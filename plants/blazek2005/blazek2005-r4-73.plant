@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Vinokur, M.; Montagné, J.-L.: Generalized Flux-Vector Splitting and Roe Average for an Equilibrium Real Gas. J. Computational Physics, 89 (1990), pp. 276-300.}
+@taxon["reference"]

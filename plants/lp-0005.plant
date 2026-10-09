@@ -1,0 +1,89 @@
+@use-modules[(flora commands) (flora literate) (language scribble commands)]
+
+@title{文本片段与源码生成}
+@summary{用命名代码片段组织解释，组合为Scheme源码，再独立执行导出的程序。}
+@taxon["tutorial"]
+
+文本片段把命名源码字符串组合成外部文件，与@link["lp-0001"]{完整Scheme定义的装配}形成对照。code-chunk不提供程序作用域，程序是否有效由外部运行时判断；站点只展示并输出文本。
+
+这个案例生成squares.scm，独立运行后输出(1 4 9 16)。它说明阅读引用、文本组合和执行是不同的动作；页面标记见@link["lp-results"]{LP结果与依赖说明}。
+
+@(define square
+   (code-chunk "lp-square" "源码文本：平方函数 square"
+     "; 单个数的平方
+(define (square x)
+  (* x x))
+"))
+@(define squares
+   (code-chunk "lp-squares" "源码文本：包含 square 的 squares 定义"
+     square "
+(define (squares xs)
+  (map square xs))
+"))
+@(define program
+   (code-chunk "lp-program" "源码文本：平方列表的独立入口"
+     squares "
+(write (squares '(1 2 3 4)))
+(newline)
+"))
+
+@subtree{
+  @title{平方函数的源码文本片段}
+
+  square片段保存平方函数的源码字符串。Code tree的地址可以独立打开、链接或嵌入；声明code-chunk和展示chunk-tree都不执行字符串中的Scheme。
+
+  @chunk-tree[square]
+}
+
+@subtree{
+  @title{平方列表的文本组合与Uses链接}
+
+  squares片段的组成值包含square，因此展开文本同时包含两个函数。square的源码变化会影响squares和程序入口的输出；Uses链接来自文本组合中的片段关系，而不是对Scheme调用的分析。
+
+  @chunk-tree[squares]
+
+  平方列表Code tree展示展开后的源码；Uses链接可以回到片段的解释位置。它们也是普通Forester入链，因此会参与backlinks查询。
+}
+
+@subtree{
+  @title{squares.scm的文本输出与独立结果}
+
+  程序入口加入输入与输出。组合采用精确的文本拼接，片段自己的换行和缩进不会被重新格式化。
+
+  @chunk-tree[program]
+
+  program-code在内容IR中声明squares.scm输出，lp-artifacts renderer从该结构生成文件；@link["lp-program"]{平方列表入口}和代码框显示同一文本：
+
+  @program-code["squares.scm" program]
+
+  构建产物是@code{build/programs/squares.scm}，可以独立运行：
+
+  @verbatim{guile --no-auto-compile build/programs/squares.scm}
+
+  输出应为@code{(1 4 9 16)}。导出不等于执行：站点构建只生成文件，执行检查在构建之外完成。
+}
+
+@subtree{
+  @title{文本片段的接口与输出约定}
+
+  @code{modules/literate.plant}提供code-chunk、chunk-tree和program-code。片段是不可变的Scheme值，子片段通过值引用组合；所有HTML内容都使用既有subtree、paragraph、link和code-block节点，不需要修改Grove renderer。
+
+  code-chunk接受字符串和已有片段值，文本按参数顺序拼接。这个写法在声明时需要片段值已经可用：
+
+  @code-block[#:language 'scheme]{
+(define helper
+  (code-chunk "lp-helper" "辅助函数"
+    "(define (identity x) x)
+"))
+(define main
+  (code-chunk "lp-main" "入口" helper
+    "(write (identity 42))
+"))
+}
+
+  在文章中调用@code{chunk-tree}展示片段，调用@code{program-code}指定输出文件。展示用的代码框不会执行内容；真正调用code-chunk会创建片段值，字符串内的Scheme定义仍不执行。
+
+  @code{program-code}在code-block上附加项目属性literate-output；(lp forester)的lp-artifacts renderer遍历内容IR生成源码artifact，Flora在project.scm登记它。片段样式通过具名style literate-code与literate-uses接入，继续使用当前日夜配色。
+
+  文本片段的范围是值组合与源码输出，不建立LP实例或检查Scheme binding。引用必须指向已定义的片段值，因此不会出现依赖环；缺失变量会在读取文章时失败。跨文章展示可以使用Forester link或transclude，跨文章的代码值复用则应抽到项目模块中。
+}

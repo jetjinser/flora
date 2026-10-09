@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Jameson, A.; Baker, T.J.: Solution of the Euler Equations for Complex Configurations. AIAA Paper 83-1929, 1983.}
+@taxon["reference"]

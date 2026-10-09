@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Aslan, A.R.; Grundmann, R.: Computation of Three-Dimensional Subsonic Flows in Ducts Using the PNS Approach. ZFW, 14 (1990), Springer Verlag, pp. 373-380.}
+@taxon["reference"]
+
+Aslan与Grundmann用PNS方法计算管道内三维亚声速流动的论文。

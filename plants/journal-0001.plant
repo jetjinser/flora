@@ -1,0 +1,7 @@
+@use-modules[(flora commands)]
+
+@title{尝试使用Grove}
+@summary{从计算、排版与计划三个平台设想Grove，以及同像性带来的能力。}
+@taxon["journal"]
+
+在设想中，Grove是一个平台，或者说是三个平台的结合：计算、排版和计划。这三个平台各自表示了一些Grove提供的功能，与此同时这种结合产生的交互又带来了一些新的能力。计算来自于Scribble这套eDSL本身的固有能力，而Scribble的能力源自Scheme，具体地说，是Guile Scheme（是的，不是Racket）的能力，这个能力的名字叫做同像性：代码与数据是同像的。这意味着，此刻我正在编写代码，或者说我正在编写文档（数据）。

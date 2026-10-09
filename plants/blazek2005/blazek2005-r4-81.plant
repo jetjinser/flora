@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yee, H.C.; Kutler, P.: Application of Second-Order Accurate Total Variation Diminishing (TVD) Schemes to the Euler Equations in General Geometries. NASA TM-85845, 1983.}
+@taxon["reference"]

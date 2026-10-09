@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Thomas, J.L.; van Leer, B.; Walters, R.W.: Implicit Flux-Split Schemes for the Euler Equations. AIAA Paper 85-1680, 1985.}
+@taxon["reference"]

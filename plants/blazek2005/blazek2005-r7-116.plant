@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lund, T.S.; Kaltenbach, H.-J.: Experiments with Explicit Filtering for LES Using a Finite-Difference Method. Annual Research Briefs, Center for Turbulence Research, NASA Ames/Stanford Univ., 1995, pp. 91-105.}
+@taxon["reference"]

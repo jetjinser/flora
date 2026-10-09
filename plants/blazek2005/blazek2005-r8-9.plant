@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mazaheri, K.; Roe, P.L.: Numerical Wave Propagation and Steady-State Solutions: Soft Wall and Outer Boundary Conditions. AIAA Journal, 35 (1997), pp. 965-975.}
+@taxon["reference"]

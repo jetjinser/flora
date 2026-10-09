@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Young, J.B.: Two-Dimensional Non-Equilibrium Wet-Steam Calculations for Nozzles and Turbine Cascades. Trans. ASME, J. Turbomachinery, 114 (1992), pp. 569-579.}
+@taxon["reference"]
+
+Young关于喷管与涡轮叶栅二维非平衡湿蒸汽计算的论文。

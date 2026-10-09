@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Dick, E.: A Multigrid Method for Steady Incompressible Navier-Stokes Equations Based on Partial Flux Splitting. Int. J. Numerical Methods in Fluids, 9 (1989), pp. 113-120.}
+@taxon["reference"]

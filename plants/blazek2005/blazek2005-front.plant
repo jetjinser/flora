@@ -1,0 +1,225 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Acknowledgements · List of Symbols · Abbreviations 致谢 · 符号表 · 缩写}
+@summary{本书致谢、全部符号的中文名称与缩写对照表。}
+
+编者说明：原书前置材料还包含出版社宣传页、版权页与目录，此处从略；本页收录致谢、符号表与缩写表三部分，分别位于原书第xi、xiii—xvii与xix—xx页。致谢为段落级双语，符号表与缩写表为单语对照，全部符号字形均已对照原书扫描件核实。
+
+@subtree[#:id "blazek2005-front-ack"]{
+  @title{Acknowledgements 致谢}
+
+  @bi{
+    @lang["en"]{First of all, I would like to thank my father for the initial motivation to start this project, as well as for his continuous help with the text and especially with the drawings. Further, I wish to thank my former colleagues Norbert Kroll, Cord Rossow, Jose Longo, Rolf Radespiel and others from the Institute of Design Aerodynamics at the DLR in Braunschweig, Germany for the opportunity to learn a lot about CFD and for the stimulating atmosphere. I also gratefully acknowledge the help of Olaf Brodersen from the DLR in Braunschweig and of Dimitri Mavriplis from the University of Wyoming, who kindly provided several pictures of surface grids of transport aircraft configurations.}
+    @lang["zh-CN"]{首先，我要感谢我的父亲：是他最初激励我着手这一项目，并始终协助整理文稿，尤其是绘制插图。其次，我要感谢昔日的研究所同事Norbert Kroll、Cord Rossow、Jose Longo、Rolf Radespiel以及德国布伦瑞克DLR设计空气动力学研究所的其他各位同事，感谢他们给了我深入学习CFD的机会，也感谢他们营造的令人振奋的研究氛围。我还诚挚感谢布伦瑞克DLR的Olaf Brodersen和美国怀俄明大学的Dimitri Mavriplis，他们慷慨提供了多幅运输类飞机外形的表面网格图片。}
+  }
+}
+
+@subtree[#:id "blazek2005-front-symbols"]{
+  @title{List of Symbols 符号表}
+
+  以下按原书顺序与分组逐条列出符号及其中文含义；条目后括注的式子为原书给出的定义或取值。
+
+  @itemize{
+    @item{@tex-math{\bar{A}_{c}}：对流通量的雅可比矩阵。}
+    @item{@tex-math{\bar{A}_{v}}：黏性通量的雅可比矩阵。}
+    @item{b：控制体在二维情形下的恒定厚度。}
+    @item{c：声速。}
+    @item{@tex-math{c_{p}}：定压比热系数。}
+    @item{@tex-math{c_{v}}：定容比热系数。}
+    @item{@tex-math{\vec{C}}：特征变量向量。}
+    @item{@tex-math{C_{m}}：组分m的摩尔浓度（@tex-math{=\rho Y_{m}/W_{m}}）。}
+    @item{@tex-math{C_{S}}：Smagorinsky常数。}
+    @item{d：距离。}
+    @item{@tex-math{\mathbf{D}}：隐式算子的对角部分。}
+    @item{@tex-math{\vec{D}}：人工耗散。}
+    @item{@tex-math{D_{m}}：组分m的有效二元扩散系数。}
+    @item{e：单位质量内能。}
+    @item{E：单位质量总能量。}
+    @item{f：时间推进算子的傅里叶符号。}
+    @item{@tex-math{\vec{f}_{e}}：外部体积力向量。}
+    @item{@tex-math{\vec{F}}：通量向量。}
+    @item{@tex-math{\overline{\overline{F}}}：通量张量。}
+    @item{g：放大因子。}
+    @item{@tex-math{\vec{g}}：网格速度。}
+    @item{h：焓。}
+    @item{@tex-math{\Delta h}：局部网格（单元）尺寸。}
+    @item{H：总（滞止）焓。}
+    @item{@tex-math{\bar{H}}：黑塞矩阵（二阶导数矩阵）。}
+    @item{@tex-math{I}：虚数单位（@tex-math{I=\sqrt{-1}}）。}
+    @item{@tex-math{\bar{I}}：单位矩阵。}
+    @item{@tex-math{\overline{\overline{I}}}：单位张量。}
+    @item{@tex-math{\hat{I}_{h}^{2h}}：插值算子。}
+    @item{@tex-math{I_{h}^{2h}}：限制算子。}
+    @item{@tex-math{I_{2h}^{h}}：延拓算子。}
+    @item{@tex-math{\bar{J}}：系统矩阵（隐式算子）。}
+    @item{@tex-math{J^{-1}}：坐标变换雅可比行列式的倒数。}
+    @item{k：热传导系数。}
+    @item{K：湍动能。}
+    @item{@tex-math{K_{f},\,K_{b}}：正向与逆向反应速率常数。}
+    @item{@tex-math{l_{T}}：湍流长度尺度。}
+    @item{@tex-math{\mathbf{L}}：隐式算子的严格下三角部分。}
+    @item{@tex-math{L_{ij}}：Leonard应力张量的分量。}
+    @item{M：马赫数。}
+    @item{@tex-math{\bar{M}}：质量矩阵。}
+    @item{@tex-math{\vec{n}}：控制体面的单位法向向量（指向外侧）。}
+    @item{@tex-math{n_{x},\,n_{y},\,n_{z}}：单位法向向量在x、y、z方向的分量。}
+    @item{N：网格点、单元或控制体的数目。}
+    @item{@tex-math{N_{A}}：相邻控制体的数目。}
+    @item{@tex-math{N_{F}}：控制体面的数目。}
+    @item{p：静压。}
+    @item{P：湍动能的生成项。}
+    @item{@tex-math{\bar{P}}：由原始变量到守恒变量的变换矩阵。}
+    @item{@tex-math{\bar{P}_{L},\,\bar{P}_{R}}：左、右预处理矩阵（Krylov子空间方法）。}
+    @item{Pr：普朗特数。}
+    @item{@tex-math{\dot{q}_{h}}：辐射、化学反应等引起的热流。}
+    @item{Q：源项。}
+    @item{@tex-math{\vec{r}}：位置向量（笛卡尔坐标）；残差（GMRES）。}
+    @item{@tex-math{\vec{r}_{ij}}：由点i指向点j的向量。}
+    @item{R：比气体常数。}
+    @item{@tex-math{R_{u}}：通用气体常数（=8314.34 J/kg-mole K）。}
+    @item{@tex-math{\vec{R}}：残差、右端项。}
+    @item{@tex-math{\vec{R}^{*}}：平滑后的残差。}
+    @item{@tex-math{\bar{R}}：旋转矩阵。}
+    @item{Re：雷诺数。}
+    @item{@tex-math{\dot{s}_{m}}：组分m因化学反应而发生的变化率。}
+    @item{@tex-math{\vec{S}}：面向量（@tex-math{=\vec{n}\,\Delta S}）。}
+    @item{@tex-math{S_{ij}}：应变率张量的分量。}
+    @item{@tex-math{S_{x},\,S_{y},\,S_{z}}：面向量的笛卡尔分量。}
+    @item{dS：表面微元。}
+    @item{@tex-math{\Delta S}：控制体一个面的长度/面积。}
+    @item{t：时间。}
+    @item{@tex-math{t_{T}}：湍流时间尺度。}
+    @item{@tex-math{\Delta t}：时间步长。}
+    @item{T：静温。}
+    @item{@tex-math{\bar{T}}：右特征向量矩阵。}
+    @item{@tex-math{\bar{T}^{-1}}：左特征向量矩阵。}
+    @item{u、v、w：笛卡尔速度分量。}
+    @item{@tex-math{u_{\tau}}：壁面摩擦速度（@tex-math{=\sqrt{\tau_{w}/\rho}}）。}
+    @item{U：一般（标量）流动变量。}
+    @item{@tex-math{\mathbf{U}}：隐式算子的严格上三角部分。}
+    @item{@tex-math{\vec{U}}：一般流动变量向量。}
+    @item{@tex-math{\vec{v}}：速度向量，其分量为u、v和w。}
+    @item{V：逆变速度。}
+    @item{@tex-math{V_{r}}：相对网格运动的逆变速度。}
+    @item{@tex-math{V_{t}}：控制体一个面的逆变速度。}
+    @item{@tex-math{\mathrm{curl}\,\vec{v}}：@tex-math{\vec{v}}的旋度（@tex-math{=\vec{\nabla}\times\vec{v}=[\partial w/\partial y-\partial v/\partial z,\ \partial u/\partial z-\partial w/\partial x,\ \partial v/\partial x-\partial u/\partial y]}）。}
+    @item{@tex-math{\mathrm{div}\,\vec{v}}：@tex-math{\vec{v}}的散度（@tex-math{=\vec{\nabla}\cdot\vec{v}=\partial u/\partial x+\partial v/\partial y+\partial w/\partial z}）。}
+    @item{@tex-math{W_{m}}：组分m的分子量。}
+    @item{@tex-math{\vec{W}}：守恒变量向量（@tex-math{=[\rho,\,\rho u,\,\rho v,\,\rho w,\,\rho E]^{T}}）。}
+    @item{@tex-math{\vec{W}_{p}}：原始变量向量（@tex-math{=[p,\,u,\,v,\,w,\,T]^{T}}）。}
+    @item{x、y、z：笛卡尔坐标系。}
+    @item{@tex-math{\Delta x}：x方向单元尺寸。}
+    @item{@tex-math{y^{+}}：无量纲壁面坐标（@tex-math{=\rho y u_{\tau}/\mu_{w}}）。}
+    @item{@tex-math{Y_{m}}：组分m的质量分数。}
+    @item{z：空间算子的傅里叶符号。}
+    @item{@tex-math{\alpha}：攻角、进口角。}
+    @item{@tex-math{\alpha_{m}}：Runge-Kutta格式的系数（第m级）。}
+    @item{@tex-math{\beta}：控制隐式格式时间精度的参数。}
+    @item{@tex-math{\beta_{m}}：混合系数（Runge-Kutta格式的第m级）。}
+    @item{@tex-math{\gamma}：定压与定容比热系数之比。}
+    @item{@tex-math{\Gamma}：环量。}
+    @item{@tex-math{\bar{\Gamma}}：预处理矩阵（低马赫数流动）。}
+    @item{@tex-math{\delta_{ij}}：Kronecker符号。}
+    @item{@tex-math{\varepsilon}：湍流能量的耗散率。}
+    @item{@tex-math{\epsilon}：平滑系数（隐式残差平滑）；参数。}
+    @item{@tex-math{\kappa}：热扩散系数。}
+    @item{@tex-math{\lambda}：第二黏性系数。}
+    @item{@tex-math{\Lambda_{c}}：对流通量雅可比矩阵的特征值。}
+    @item{@tex-math{\bar{\Lambda}_{c}}：由对流通量雅可比矩阵特征值构成的对角矩阵。}
+    @item{@tex-math{\hat{\Lambda}_{c}}：对流通量雅可比矩阵的谱半径。}
+    @item{@tex-math{\hat{\Lambda}_{v}}：黏性通量雅可比矩阵的谱半径。}
+    @item{@tex-math{\mu}：动力黏性系数。}
+    @item{@tex-math{\nu}：运动黏性系数（@tex-math{=\mu/\rho}）。}
+    @item{@tex-math{\xi,\,\eta,\,\zeta}：曲线坐标系。}
+    @item{@tex-math{\rho}：密度。}
+    @item{@tex-math{\sigma}：库朗–弗里德里希斯–列维（Courant-Friedrichs-Lewy，CFL）数。}
+    @item{@tex-math{\sigma^{*}}：经残差平滑修正的CFL数。}
+    @item{@tex-math{\tau}：黏性应力。}
+    @item{@tex-math{\tau_{w}}：壁面切应力。}
+    @item{@tex-math{\overline{\overline{\tau}}}：黏性应力张量（法向应力与切向应力）。}
+    @item{@tex-math{\tau_{ij}}：黏性应力张量的分量。}
+    @item{@tex-math{\tau_{ij}^{F}}：Favre平均雷诺应力张量的分量。}
+    @item{@tex-math{\tau_{ij}^{R}}：雷诺应力张量的分量。}
+    @item{@tex-math{\tau_{ij}^{S}}：亚格子应力张量的分量。}
+    @item{@tex-math{\tau_{ij}^{SF}}：Favre滤波亚格子应力张量的分量。}
+    @item{@tex-math{\tau_{ij}^{SR}}：亚格子雷诺应力张量的分量。}
+    @item{@tex-math{\omega}：单位湍动能的耗散率（@tex-math{=\varepsilon/K}）。}
+    @item{@tex-math{\Upsilon}：压力传感器。}
+    @item{@tex-math{\Omega}：控制体。}
+    @item{@tex-math{\Omega_{ij}}：旋转率张量的分量。}
+    @item{@tex-math{\partial\Omega}：控制体的边界。}
+    @item{@tex-math{\Psi}：限制器函数。}
+    @item{@tex-math{\vec{\nabla}U}：标量U的梯度（@tex-math{=[\partial U/\partial x,\ \partial U/\partial y,\ \partial U/\partial z]}）。}
+    @item{@tex-math{\nabla^{2}U}：标量U的拉普拉斯算子（@tex-math{=\partial^{2}U/\partial x^{2}+\partial^{2}U/\partial y^{2}+\partial^{2}U/\partial z^{2}}）。}
+    @item{@tex-math{\|\vec{U}\|_{2}}：向量@tex-math{\vec{U}}的2-范数（@tex-math{=\sqrt{\vec{U}\cdot\vec{U}}}）。}
+  }
+
+  下标（Subscripts）
+
+  @itemize{
+    @item{C：对流部分。}
+    @item{c：与对流有关。}
+    @item{D：扩散部分。}
+    @item{i、j、k：节点索引。}
+    @item{I、J、K：控制体索引。}
+    @item{L：层流；左。}
+    @item{m：控制体面的索引；组分。}
+    @item{R：右。}
+    @item{T：湍流。}
+    @item{v：黏性部分。}
+    @item{V：与体积有关。}
+    @item{w：壁面。}
+    @item{x、y、z：x、y、z方向的分量。}
+    @item{@tex-math{\infty}：无穷远处（远场）。}
+  }
+
+  上标（Superscripts）
+
+  @itemize{
+    @item{I、J、K：计算空间中的方向。}
+    @item{n：上一时间层。}
+    @item{n+1：新时间层。}
+    @item{T：转置。}
+    @item{@tex-math{\widetilde{(\cdot)}}：Favre平均值；Favre滤波值（LES）。}
+    @item{@tex-math{(\cdot)''}：Favre分解的脉动部分；亚格子尺度（LES）。}
+    @item{@tex-math{\overline{(\cdot)}}：雷诺平均值；滤波值（LES）。}
+    @item{@tex-math{(\cdot)'}：雷诺分解的脉动部分；亚格子尺度（LES）。}
+  }
+}
+
+@subtree[#:id "blazek2005-front-abbrev"]{
+  @title{Abbreviations 缩写表}
+
+  @itemize{
+    @item{AIAA：美国航空航天学会（American Institute of Aeronautics and Astronautics）。}
+    @item{AGARD：航空航天研究与发展咨询组（Advisory Group for Aerospace Research and Development），隶属北大西洋公约组织（NATO）。}
+    @item{ARC：英国航空研究理事会（Aeronautical Research Council, UK）。}
+    @item{ASME：美国机械工程师学会（The American Society of Mechanical Engineers）。}
+    @item{CERCA：计算应用研究中心（Centre de Recherche en Calcul Applique，即Centre for Research on Computation and its Applications），加拿大蒙特利尔。}
+    @item{CERFACS：欧洲科学计算研究与培训中心（Centre Europeen de Recherche et de Formation Avancee en Calcul Scientifique，即European Centre for Research and Advanced Training in Scientific Computation），法国。}
+    @item{DFVLR：德国航空航天研究试验院（Deutsche Forschungs- und Versuchsanstalt für Luft- und Raumfahrt，German Aerospace Research Establishment），即今DLR。}
+    @item{DLR：德国宇航中心（Deutsches Zentrum für Luft- und Raumfahrt，German Aerospace Center）。}
+    @item{ERCOFTAC：欧洲流动、湍流与燃烧研究联合体（European Research Community on Flow, Turbulence and Combustion）。}
+    @item{ESA：欧洲空间局（European Space Agency）。}
+    @item{FFA：瑞典航空研究所（Flygtekniska Försöksanstalten，The Aeronautical Research Institute of Sweden）。}
+    @item{GAMM：应用数学与力学学会（Gesellschaft für Angewandte Mathematik und Mechanik，German Society of Applied Mathematics and Mechanics），德国。}
+    @item{ICASE：科学与工程计算机应用研究所（Institute for Computer Applications in Science and Engineering），美国NASA兰利研究中心，汉普顿，弗吉尼亚州，美国。}
+    @item{INRIA：法国国家信息与自动化研究所（Institut National de Recherche en Informatique et en Automatique，The French National Institute for Research in Computer Science and Control）。}
+    @item{ISABE：国际吸气式发动机学会（International Society for Air Breathing Engines）。}
+    @item{MAE：机械与航空航天工程系（Department of Mechanical and Aerospace Engineering），美国普林斯顿大学，普林斯顿，美国。}
+    @item{NACA：美国国家航空咨询委员会（The National Advisory Committee for Aeronautics，今NASA），美国。}
+    @item{NASA：美国国家航空航天局（National Aeronautics and Space Administration），美国。}
+    @item{NLR：荷兰国家航空航天实验室（Nationaal Lucht en Ruimtevaartlaboratorium，National Aerospace Laboratory），荷兰。}
+    @item{ONERA：法国国家航空航天研究局（Office National d'Etudes et de Recherches Aerospatiales，National Institute for Aerospace Studies and Research），法国。}
+    @item{SIAM：工业与应用数学学会（Society of Industrial and Applied Mathematics），美国。}
+    @item{VKI：冯·卡门流体动力学研究所（Von Karman Institute for Fluid Dynamics），比利时。}
+    @item{ZAMM：《应用数学与力学杂志》（Zeitschrift für angewandte Mathematik und Mechanik，Journal of Applied Mathematics and Mechanics），德国。}
+    @item{ZFW：《航空科学与空间研究杂志》（Zeitschrift für Flugwissenschaften und Weltraumforschung，Journal of Aeronautics and Space Research），德国。}
+    @item{1D：一维（one dimension）。}
+    @item{1-D：一维的（one-dimensional）。}
+    @item{2D：二维（two dimensions）。}
+    @item{2-D：二维的（two-dimensional）。}
+    @item{3D：三维（three dimensions）。}
+    @item{3-D：三维的（three-dimensional）。}
+  }
+}

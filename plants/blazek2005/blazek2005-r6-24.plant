@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{George, A.; Liu, J.W.: Computer Solution of Large Sparse Positive Definite Systems. Prentice Hall Series in Comput. Math., Englewood Cliffs, N.J., 1981.}
+@taxon["reference"]

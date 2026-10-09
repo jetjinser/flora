@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Piomelli, U.; Liu, J.: Large-Eddy Simulation of Rotating Channel Flows Using a Localized Dynamic Model. Physics of Fluids, 7 (1995), pp. 839-848.}
+@taxon["reference"]

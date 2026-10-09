@@ -1,0 +1,244 @@
+@use-modules[(flora commands)
+             (language scribble commands)
+             (grove math pipeline)
+             (grove math proof)
+             (grove math layout)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math notation) #:prefix ◇:)
+             ((grove math formula)  #:prefix φ:)
+             (srfi srfi-1)
+             (ice-9 pretty-print)]
+
+@title{符号推导：求导、搜索与核验}
+@summary{把计算写成可重放的规则链，而不只展示答案。}
+@taxon["tutorial"]
+
+计算能返回正确终点，但教程还应该让读者看见“为什么”。Grove的derivation certificate记录输入、输出、规则、操作路径和适用事实；检查器可以在离开原计算后重放它。
+
+@(define x (◆:coordinate 'x))
+
+@(define p
+  (◆:add (◆:power x (◆:constant 3))
+          (◆:multiply (◆:constant 2) x)))
+
+@(define derivative-report (math-differentiate p x #:assumptions (list x)))
+
+@(define derivative-audit (math-report-audit derivative-report))
+
+@(define cutoff-report
+  (math-differentiate p x #:assumptions (list x) #:max-steps 0))
+
+@(define cutoff-audit (math-report-audit cutoff-report))
+
+@subtree{
+  @title{从Semantic多项式求导}
+
+  本例把坐标与多项式作为Semantic值构造，然后调用只接受Semantic输入的核心API：
+
+  @math[p]的求导结果是 @math[(math-report-result derivative-report)]。
+
+  @code{◆:coordinate}同时携带变量身份和独立坐标声明，所以@code{#:assumptions (list x)}足以告诉计算器对哪个量求导。@code{math-differentiate}先产生形式导数，再交给化简pass。结果是@code{3*x^2 + 2}。
+
+  查看执行结构，而不是猜测内部做了什么：
+
+  @verbatim[(format #f "passes: ~s\ncomplete: ~s"
+    (map math-report-name (math-report-passes derivative-report))
+    (math-report-complete? derivative-report))]
+
+  计算报告还分别保留三种核验结果：证书边是否可重放、求导契约是否通过，以及Proof IR是否能把每条边解释为已证明的规则应用。
+
+  用@code{math-report-audit}可以从求导或积分的报告中取得这一组独立结果。重放检查逐条边是否符合记录的规则；契约检查用独立的多项式算法语义核对输入与终值；Proof IR检查所用规则是否有可核验的定理和前提。三个字段回答不同问题，不能压成一个“已验证”布尔值。报告本身的@code{math-report-status}仍回答计算是否完成或触及限制；例如一个可重放的前缀不代表它已经算出了满足契约的结果。
+
+  各层状态也要分别读：重放以布尔值表示证书是否通过；契约状态@code{semantically-checked}表示契约成立，@code{rejected}表示证据与契约冲突，@code{unsupported}表示检查器不能判断该对象；Proof IR的@code{checked}表示整条等式推理链有已检查的依据，@code{unsupported}表示至少有一步还没有这样的依据。因而此例的Proof IR为@code{unsupported}不表示求导结果错误，而是表示现有定理库尚未为若干求导算法规则提供证明。
+
+  遇到步数上限时，报告仍附有当前证书的audit；读者可以区分“已有前缀可重放”与“求导尚未完成”：
+
+  @verbatim[(format #f "calculation: ~a; replay: ~a; contract: ~a"
+    (math-report-status cutoff-report)
+    (math-calculation-audit-replay-valid? cutoff-audit)
+    (math-calculation-audit-contract-status cutoff-audit))]
+
+  @verbatim[(format #f "replay: ~a; contract: ~a; Proof IR: ~a (~s)"
+    (math-calculation-audit-replay-valid? derivative-audit)
+    (math-calculation-audit-contract-status derivative-audit)
+    (math-calculation-audit-proof-status derivative-audit)
+    (math-calculation-audit-proof-errors derivative-audit))]
+
+  第一行列出报告经过的pass，第二行说明结果是否完整。求导项的生成和代数化简是不同工作，所以保留为不同pass。
+
+}
+
+@(define expected (φ:read "3*x^2+2"))
+
+@(define equation-report
+  (math-check-equation (math-report-result derivative-report) expected
+    #:assumptions (list x)))
+
+@subtree{
+  @title{核验结果方程}
+
+  把计算结果与预期式比较，可以检查差是否化简为零：
+
+  @math[(math-report-result equation-report)]
+
+  此处展示的是方程残差报告。残差为零意味着在当前支持的规则与事实下等式成立；它不会证明未被规则解释的任意恒等式。
+
+}
+
+@(define certificate (math-report-derivation derivative-report))
+
+@(define polynomial-check (math-calculation-audit-contract derivative-audit))
+
+@(define false-polynomial-check
+  (φ:check-polynomial-derivative "x^3+2*x" 'x "x^2+2"))
+
+@(define derivative-evidence (math-semantic-check-subject polynomial-check))
+
+@(define (derivative-cases evidence)
+  (cons (math-derivative-evidence-case evidence)
+    (append-map derivative-cases (math-derivative-evidence-children evidence))))
+
+@(define primitive-report (math-antiderivative p x #:assumptions (list x)))
+
+@(define primitive-audit (math-report-audit primitive-report))
+
+@(define primitive-check (math-calculation-audit-contract primitive-audit))
+
+@(define primitive-evidence (math-semantic-check-subject primitive-check))
+
+@(define noncanonical-primitive
+  (φ:check-polynomial-antiderivative p 'x "x^4/4+x^2+7"))
+
+@subtree{
+  @title{查看并独立重放证书}
+
+  @verbatim[(format #f "derivation steps: ~s"
+    (length (math-derivation-steps certificate)))]
+
+  @(paragraph (format #f "replay valid: ~a"
+    (math-verification-valid? (math-verify-derivation certificate))))
+
+  @code{math-report-derivation}取出证书；@code{math-verify-derivation}使用规则目录重新检查证书中的每条边。验证使用证书自己的假设快照，因此不要求原来的动态假设作用域仍然打开。
+
+  求导audit中的contract层就是多项式递归契约检查。检查器沿着原始表达式树递归：常数与变量是基例，加减、乘法、常数除法和自然数幂分别使用对应的递归契约。它把独立构造的结构证据与实际求导证书的终值比较：
+
+  @verbatim[(format #f "certificate check: ~a; structural cases present (power, product, sum): ~s; wrong result: ~a; diagnostic: ~s"
+    (math-semantic-check-status polynomial-check)
+    (map (lambda (case) (memq case (derivative-cases derivative-evidence)))
+      '(natural-power product sum))
+    (math-semantic-check-status false-polynomial-check)
+    (math-semantic-check-diagnostics false-polynomial-check))]
+
+  这次检查覆盖有理系数标量多项式：常数、变量、加减、乘法、常数除法和自然数幂。它直接检查实际运行的求导证书，并以独立递归语义计算预期导数。错误结果会被标为@code{rejected}，诊断说明终值与精确多项式导数不一致。这里的归纳由Grove检查器执行；它不是对Guile/Scheme实现本身的机器证明，也不覆盖多项式域之外的函数求导。
+
+  这里的subject是Contract Evidence IR的@code{math-derivative-evidence}记录。每个节点显式保存当前规则分支、原表达式、求导坐标、该子表达式的精确多项式结果和子节点。例如和式节点必须有左右两个有效子证据，且结果必须是两边导数之和；乘积节点还会独立解释两个操作数并检查乘积法则。验证器递归重算每一节点，而不是信任生成证据的过程。公开的记录字段也让文章可以直接按结构查询case，而不用把记录打印成字符串再搜索名称。
+
+  积分的验证还可以检查算法如何处理每个单项式。对于@code{c*x^n}，积分规则将幂次加一，并把系数除以新的幂次。检查器把实际antiderivative pass的证书与这些逐项契约比较，再检查原点归一化和求导恢复输入：
+
+  @verbatim[(format #f "primitive: ~s; replay: ~a; contract: ~a; Proof IR: ~a (~s); per-term evidence: ~a; bad constant: ~a; diagnostic: ~s"
+    (math-report-final primitive-report)
+    (math-calculation-audit-replay-valid? primitive-audit)
+    (math-calculation-audit-contract-status primitive-audit)
+    (math-calculation-audit-proof-status primitive-audit)
+    (math-calculation-audit-proof-errors primitive-audit)
+    (length (math-antiderivative-evidence-monomials primitive-evidence))
+    (math-semantic-check-status noncanonical-primitive)
+    (math-semantic-check-diagnostics noncanonical-primitive))]
+
+  当前积分器选取在坐标原点取零的多项式原函数，因此这里验证的是Grove规定的规范结果；若要表示其他积分常数，那会是另一个结果契约。上面的错误例子导数仍然正确，但不满足原点归一化，所以检查器会拒绝它。
+
+  积分的Contract Evidence IR以每个规范输入单项式为一条记录，保存输入项与声称的输出项。独立检查器重新算出积分坐标的原幂次、加一后的幂次和除以新幂次的系数，再确认没有遗漏或多出输入项、这些输出组成了报告中的原函数，并且对积分坐标求导后恢复原多项式。原点归一化是单独检查的条件，因此错误常数有明确的归一化诊断。
+
+}
+
+@(define proof-report (math-proof-elaborate-derivation certificate))
+
+@(define proof-step-evidence
+  (map (lambda (step)
+         (list (math-proof-step-report-index step)
+               (math-proof-step-report-rule step)
+               (math-proof-step-report-theorem-status step)
+               (math-proof-step-report-premises step)
+               (math-proof-step-report-status step)
+               (math-proof-step-report-errors step)))
+    (math-proof-derivation-report-steps proof-report)))
+
+@subtree{
+  @title{把执行步骤elaboration为proof}
+
+  重放检查证书中的每条边能否被规则目录复现；Proof IR再把声明式规则实例、其定理依据和使用的前提引用连接起来。逐步elaboration会保留每一步的检查状态，即使部分算法步骤暂时没有可检查的定理：
+
+  Proof IR是等式推理的表示，节点包含前提引用、规则实例、反身、对称、传递，以及把等式提升到子表达式上下文中的congruence。elaboration把证书的规则边映射到这些节点，并检查规则规范和必要前提；只有所有步骤都有已检查的规则依据时，才会生成整条链的proof。因此重放通过描述证书边可被Grove的规则实现复现；Proof IR通过则进一步说明每条边都有已检查的数学依据。
+
+  @verbatim[(format #f "elaboration: ~s\nchecked proof available: ~s\nstep evidence: ~s"
+    (math-proof-derivation-report-status proof-report)
+    (and (math-proof-derivation-report-proof proof-report) #t)
+    proof-step-evidence)]
+
+  本例的整体状态是@code{unsupported}：幂法则、乘积法则和求导规则目前还没有由标量代数检查器证明；归一化过程中的过程式规则也没有固定的@code{RuleSpec}。报告仍会标出已独立检查的代数步骤，例如@code{multiply-one}、@code{zero-multiply}和@code{zero-add}。每条已检查步骤的rule-instance都引用规则名，checker会重新检查其@code{RuleSpec}定理；步骤所需的前提则以proof premise节点引用derivation保存的假设。由于这条执行轨迹含有尚未证明的算法步骤，报告不会生成整条链的checked proof。
+
+}
+
+@subtree{
+  @title{自动计算并折叠展示步骤}
+
+  上面通过Scheme保存了计算报告。命令接口也能自动执行同样的求导，并默认把规则步骤放入可展开的说明块：
+
+  @◇:display-math{
+    @◇:frac{d}{dx}
+    @◇:parens{@◇:sup{x}{3} + 2x}
+    =
+    3 @◇:sup{x}{2} + 2
+  }
+
+  这里的结果由两个pass计算得到；页面先显示最终MathML，打开“Show steps”可逐步查看证书。这个折叠仅影响阅读展示，不会隐藏或省略计算步骤。
+
+}
+
+@subtree{
+  @title{手写一条链}
+  @taxon["example"]
+
+  对于教学或解释，也可以亲自列出每一步。下面刻意拆开幂法则、常数倍和常数导数：
+
+  @check-derive[#:assumptions "coordinate(x)" #:view 'full]{
+    differentiate(x^3,x)
+    3*x^2*differentiate(x,x)
+    3*x^2*1
+    3*x^2
+  }
+
+  第一行是待求导项；第二行应用幂法则；第三行用坐标求导规则；最后一步消去乘法单位元。核验器要求相邻两行分别有规则支持，不会替作者省略中间步骤。若删掉中间项，失败报告会指出链条断在哪里。
+
+}
+
+@subtree{
+  @title{搜索规则路径}
+  @taxon["example"]
+
+  有时作者知道想要的结论，却不想手工写所有步骤：
+
+  @search-derive["1" #:assumptions "coordinate(x)" #:max-depth 4]{differentiate(x,x)}
+
+  命令从左侧源项搜索到目标项，并展示找到的证书。这个最小例子找到从形式导数到1的规则路径；上面的多项式则使用确定性的求导pass。通用搜索面对分支较多的项可能触及状态上限，搜索停止不等同于数学上的不可达证明。
+
+}
+
+@subtree{
+  @title{让失败可读}
+  @taxon["counterexample"]
+
+  去掉坐标声明后，系统无法断言@code{x}是求导变量：
+
+  @differentiate["x" #:on-error 'show]{x^3+2*x}
+
+  @code{#:on-error 'show}把结构化诊断呈现在页面上。这适合教程中的反例；正式推导默认失败时中止构建，避免错误结果悄悄进入成品。
+
+}
+
+@subtree{
+  @title{向量场与Cartesian算子}
+
+  @link["math-0004"]{空间算子和分量计算}会把同样的pass、来源和核验机制用于具体向量场。
+
+}

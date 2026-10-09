@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Vanden, K.J.; Whitfield, D.L.: Direct and Iterative Algorithms for the Three-Dimensional Euler Equations. AIAA Journal, 33 (1995), pp. 851-858.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Leonard, A.: Energy Cascade in Large-Eddy Simulations of Turbulent Fluid Flows. Advances in Geophysics, 18 (1974), pp. 237-248.}
+@taxon["reference"]

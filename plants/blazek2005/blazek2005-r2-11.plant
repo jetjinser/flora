@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lesoinne, M.; Farhat, C.: Geometric Conservation Laws for Flow Problems with Moving Boundaries and Deformable Meshes and their Impact on Aeroelastic Computations. AIAA Paper 95-1709, 1995; also in Comp. Meth. Appl. Mech. Eng., 134 (1996), pp. 71-90.}
+@taxon["reference"]
+
+Lesoinne与Farhat针对动边界与变形网格的几何守恒定律及其对气动弹性计算影响的工作。

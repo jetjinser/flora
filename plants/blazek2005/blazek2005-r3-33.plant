@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Thompson, J.F.; Weatherill, N.P.: Aspects of Numerical Grid Generation: Current Science and Art. AIAA Paper 93-3539, 1993.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Vreman, A.W.: Direct and Large-Eddy Simulation of the Compressible Turbulent Mixing Layer. PhD Thesis, Dept. of Applied Mathematics, University of Twente Enschede, The Netherlands, 1995.}
+@taxon["reference"]

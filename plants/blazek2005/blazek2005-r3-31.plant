@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Kao, H.-J.; Liou, M.-S.; Chow, C.-Y.: Grid Adaptation using Chimera Composite Overlapping Meshes. AIAA Journal, 32 (1994), pp. 942-949.}
+@taxon["reference"]

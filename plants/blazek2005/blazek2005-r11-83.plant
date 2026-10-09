@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Piegl, L.; Tiller, W.: The NURBS Book. 2nd edition, Springer, 1997.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lynn, J.F.; van Leer, B.: A Semi-Coarsened Multigrid Solver for the Euler and Navier-Stokes Equations with Local Preconditioning. AIAA Paper 95-1667, 1995.}
+@taxon["reference"]

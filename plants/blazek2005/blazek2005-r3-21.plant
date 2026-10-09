@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Rossow, C.-C.: Efficient Computation of Inviscid Flow Fields Around Complex Configurations Using a Multiblock Multigrid Method. Comm. in Appl. Num. Methods, 8 (1992), pp. 735-747.}
+@taxon["reference"]

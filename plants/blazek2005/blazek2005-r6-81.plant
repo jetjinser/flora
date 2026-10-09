@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Walker, H.F.: Implementation of the GMRES Method Using Householder Transformations. SIAM J. Scientific Computing, 9 (1988), p. 152.}
+@taxon["reference"]

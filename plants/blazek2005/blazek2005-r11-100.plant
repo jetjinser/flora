@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Weatherill, N.P.: Mixed Structured-Unstructured Meshes for Aerodynamic Flow Simulations. Aeronautical Journal, 94 (1990), pp. 111-123.}
+@taxon["reference"]

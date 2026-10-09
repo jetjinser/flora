@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yu, S.-T.; Chang, S.-C.; Jorgenson, P.C.E.; Park, S.-J.; Lai, M.-C.: Basic Equations of Chemically Reactive Flow for Computational Fluid Dynamics. AIAA Paper 98-1051, 1998.}
+@taxon["reference"]
+
+Yu等人给出CFD用化学反应流基本方程（含通量Jacobian矩阵及其特征值）的AIAA会议论文。

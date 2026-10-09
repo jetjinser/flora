@@ -1,0 +1,77 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{文学编程库：接口与构建约定}
+@summary{说明LP模块职责、身份、源码范围、模块准备、缓存与支持边界。}
+@taxon["reference"]
+
+LP库位于项目的lp/目录。它使用普通Guile模块加载；片段、计划和实例是不同的值，HTML展示与源码artifact由适配器产生。使用案例见@link["lp-0001"]{累计器教程}，页面标记见@link["lp-results"]{核验与依赖说明}。
+
+@subtree{
+  @title{LP库的模块职责}
+
+  @itemize{
+    @item{@code{(lp core)}：make-fragment、make-program、make-import、instantiate-program、instance-binding；fragment-*与program-*访问身份、源码、来源、导入和装配信息。没有Grove依赖。}
+    @item{@code{(lp project)}：make-module-output、make-project、instantiate-project、project-binding；组织显式有序的Guile模块工程，检查项目内导出与模块依赖，不依赖Grove。}
+    @item{@code{(lp check)}：check-equal返回核验值，check-samples返回通过的样本数，check-error返回指定的异常key。失败抛出异常，不生成文档。}
+    @item{@code{(lp scribble)}：code-fragment保存完整定义的syntax、原文、范围、#:requires和#:initial-requires，声明时不执行定义。}
+    @item{@code{(lp forester)}：fragment-tree、program-tree、project-tree产生内容树；program-output、source-output、project-output声明.scm输出，lp-artifacts生成文件；program-check关联已经核验的tree。lp-enrich-site从可缓存的IR建立程序关系导航。}
+    @item{@code{(lp checked)}：program执行文章内表达式并展示；checked-example、checked-property、checked-error将核验写成Example tree。}
+  }
+
+  Flora的project.scm把仓库根目录加入Guile模块搜索路径，在森林分析之前调用lp-enrich-site，并在renderers中登记lp-artifacts。导航来自片段、计划、输出和核验的普通数据，不依赖全局注册表。其他项目需要配置这些接入点，并为展示选择CSS；纯核心使用guile -L库所在目录即可加载。
+}
+
+@subtree{
+  @title{LP身份、依赖与命名空间}
+
+  片段和计划的ID使用简短ASCII字母、数字与连字符，标题表达内容含义。相同ID在森林中表示同一个阅读目标，命名不能依赖文章的章节序号。片段来源由原始文件与字符范围定位，不通过标题猜测。
+
+  make-program拒绝重复片段、重复定义、未知或重复导出、导入与本地定义冲突，以及未满足的显式依赖。requires由作者声明，可以指向计划中的定义、选定的模块导入或宿主默认接口；initial-requires要求依赖在整个片段开始初始化时已经可用。二者不是自动自由变量分析，同一片段内部的顺序仍由执行检查。
+
+  instantiate-program将完整定义放入共同的新命名空间，连接计划显式导入的名称并按顺序执行。声明处的词法binding和文章导入不自动进入实例。每次实例化创建新的本地定义，外部模块可能共享状态。当前接口不支持宏装配和任意表达式的卫生插入。
+
+  make-project保留作者声明的模块顺序，拒绝项目内消费者在提供者之前出现、循环导入和导入未公开的名称。instantiate-project创建私有模块接口，不注册全局模块；生成文件则使用普通Guile模块加载。项目内片段可共享原文，模块之间只共享显式公开的binding，详见@link["lp-000A"]{解释器多文件工程}。
+}
+
+@subtree{
+  @title{LP源码文本与来源范围}
+
+  (language scribble source)的source-text与source-range在宏展开期间提供原文和半开范围。范围含一基行列与字符偏移；tab列遵循Guile规则，不能把列号当字符偏移。
+
+  source-text保留表达式内部的注释与排版，可能包含at-exp的 @ 转义前缀，LP展示去掉该前缀。语法对象的起始位置通过当前求值的局部范围表解析，原文应在展开期间取出保存。缺少范围时使用pretty-print；表达式外的注释不自动归入代码。
+
+  Scribble保留普通Scheme语法，支持dotted pair、rest参数和宏省略号；这不等于LP片段接口接受所有形式。LP的make-program仍要求片段由完整define组成。
+}
+
+@subtree{
+  @title{LP模块文章的准备与内容复用}
+
+  .plant可以通过define-module提供公共binding，包括函数和片段值。Flora的literate-module-sources按依赖顺序登记模块文章；make-scribble-module-session在preparation中读取并保存文档，正式读页复用内容，不为展示重复执行。
+
+  新一轮preparation会重置session并重新执行模块文章。该流程不提供自动排序、循环分析或独立Guile的.plant自动加载。普通.scm LP库与需要项目准备的模块文章有不同的加载方式。
+}
+
+@subtree{
+  @title{LP构建核验与缓存依赖}
+
+  grove check重新求值文章；普通build可以复用依赖未变的内容。reader自动追踪导入的模块源文件，session在复用文档时重放文件依赖与缓存退出状态。改变模块或LP实现会让相关消费者重新核验，失败构建不会发布新的错误结果。
+
+  Scheme的任意I/O不会自动被拦截。额外文件使用depend-on! 登记，依赖时间、随机数等未追踪状态时使用disable-cache!。文件级依赖不是binding级增量计算。
+
+  核验协议也有边界：equal?比较值，性质只覆盖给定样本，异常只比较key。checked表示读取时核验通过，不代表浏览器实时运行或形式化证明。
+
+  通用约定见@link["grove-0003"]{构建阶段与缓存}。
+}
+
+@subtree{
+  @title{LP库与独立源码的核验命令}
+
+  在Flora根目录检查纯核心和站点：
+
+  @verbatim{guile --no-auto-compile -L . tests/lp-core.scm
+guile --no-auto-compile -L . tests/lp-project.scm
+grove check
+grove build}
+
+  核心套件不加载Grove，覆盖延迟执行、实例隔离、身份与依赖诊断以及源码一致性。独立代码交付见@link["lp-0009"]{解释器的三层核验与源码输出}；有限测试不会扩大接口声明的支持范围。
+}

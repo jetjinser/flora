@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Chapman, D.R.; Kuhn, G.D.: The Limiting Behavior of Turbulence Near a Wall. J. Fluid Mechanics, 70 (1986), pp. 265-292.}
+@taxon["reference"]

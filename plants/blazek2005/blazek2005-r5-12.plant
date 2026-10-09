@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Haselbacher, A.C.; McGuirk, J.J.; Page, G.J.: Finite Volume Discretisation Aspects for Viscous Flows on Mixed Unstructured Grids. AIAA Paper 97-1946, 1997; also AIAA Journal, 37 (1999), pp. 177-184.}
+@taxon["reference"]

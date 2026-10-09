@@ -1,0 +1,154 @@
+@(define-module (flora metacircular-self)
+  #:use-module (flora commands)
+  #:use-module (lp core)
+  #:use-module (lp forester)
+  #:use-module (lp checked)
+  #:use-module (flora metacircular)
+  #:use-module (language scribble commands)
+  #:export (examples errors))
+
+@title{Scheme元循环解释器的自解释与核验}
+@summary{比较宿主Scheme、元循环解释器与解释器中的解释器，并导出可独立核验的源码。}
+@taxon["tutorial"]
+
+(flora metacircular)导出@link["mce-module"]{Scheme解释器计划}与run-scheme。program-datums提供同一计划的定义列表；自解释使用这份列表，.scm输出使用其原文，不维护另一份简化版解释器。
+
+@program["mce-self-driver" "Scheme 一层自解释的 run-inside 定义"]{
+@(define source-definitions (program-datums interpreter))
+@(define (run-inside program)
+   (run-scheme (append source-definitions
+                (list (list 'run (list 'quote program))))))
+}
+
+@subtree{
+  @title{Scheme解释器执行自身定义的阶乘结果}
+
+  @link["mce-self-driver"]{run-inside}将Scheme解释器计划的完整定义放入外层解释器，并在该环境中调用run。外层解释器处理内层解释器的代码，内层处理用户程序：
+
+  @checked-example["mce-self-factorial" "Scheme 自解释的阶乘结果为 120"
+    (run-inside '((define (factorial n)
+                   (if (= n 0) 1 (* n (factorial (- n 1)))))
+                 (factorial 5))) 120]
+
+  特殊形式、闭包应用和环境查找都经过解释器；数值、列表和可变框架原语仍由宿主提供。这是本子集的一层自解释，不是完整Scheme兼容性或独立运行时的自举。
+}
+
+@program["mce-self-cases" "Scheme 三层结果的案例与 agrees? 定义"]{
+@(define examples
+   '((factorial
+      ((define (factorial n) (if (= n 0) 1 (* n (factorial (- n 1))))) (factorial 6))
+      720)
+     (lexical
+      ((define x 10) (define add-x (lambda (y) (+ x y)))
+       ((lambda (x) (add-x 2)) 100))
+      12)
+     (closure
+      ((define (make-adder x) (lambda (y) (+ x y)))
+       (define add-three (make-adder 3)) (add-three 4))
+      7)
+     (lazy-if ((if #t 7 missing)) 7)
+     (truth ((if 0 1 2)) 1)
+     (mapping ((map (lambda (x) (* x x)) '(1 2 3 4))) (1 4 9 16))
+     (application ((apply + '(1 2 3))) 6)
+     (named-let ((let loop ((n 5) (total 0))
+                  (if (= n 0) total (loop (- n 1) (+ total n))))) 15)
+     (let-star ((let* ((x 3) (y (+ x 4))) (* x y))) 21)
+     (short-circuit ((list (and #f missing) (or 9 missing))) (#f 9))
+     (conditional ((cond ((= 1 2) missing) ((= 2 2) 8) (else 0))) 8)))
+
+@(define (run-host program)
+   (eval (cons 'begin program) (make-fresh-user-module)))
+@(define (agrees? example)
+   (let ((program (cadr example)) (expected (caddr example)))
+     (and (equal? (run-host program) expected)
+          (equal? (run-scheme program) expected)
+          (equal? (run-inside program) expected))))
+}
+
+@subtree{
+  @title{Scheme宿主与两层解释器的11项值核验}
+
+  @checked-property["mce-three-levels" "Scheme 三层结果的 11 项一致性核验" examples agrees?]
+
+  @link["mce-self-cases"]{examples与agrees?}声明输入、预期值及比较函数。宿主run-host直接求值，run-scheme执行用户程序，run-inside通过一层自解释执行它。
+
+  11个案例包含词法遮蔽、返回闭包、短路、map／apply、命名let与let*。每例的三种执行方式分别与显式预期比较；有限案例不能证明完整等价。宿主比较只使用共同支持的形式，不把我们教学子集的define扩展当作标准Scheme。
+}
+
+@program["mce-self-error-cases" "Scheme 两层异常的案例与比较函数"]{
+@(define errors
+   '((missing (missing) mce-unbound)
+     (arity (((lambda (x) x) 1 2)) mce-arity)
+     (call ((1 2)) mce-not-procedure)
+     (syntax ((if #t 1)) mce-syntax)
+     (parameters ((lambda (x x) x)) mce-syntax)))
+@(define (error-key thunk)
+   (catch #t (lambda () (thunk) 'returned)
+     (lambda (key . arguments) key)))
+@(define (errors-agree? example)
+   (let ((program (cadr example)) (expected (caddr example)))
+     (and (eq? (error-key (lambda () (run-scheme program))) expected)
+          (eq? (error-key (lambda () (run-inside program))) expected))))
+}
+
+@subtree{
+  @title{Scheme两层解释器的5项异常核验}
+
+  @checked-property["mce-self-errors" "Scheme 两层解释器的 5 项异常核验" errors errors-agree?]
+
+  @link["mce-self-error-cases"]{errors与errors-agree?}同时调用普通解释器与一层自解释，比较显式声明的异常。五个失败案例核验异常key，不比较异常参数，也不要求与Guile的异常名称相同。throw是显式提供的原语，没有把宿主eval放进对象语言的原语表。
+}
+
+@(define checks-source
+   (call-with-output-string
+     (lambda (port)
+       (for-each
+         (lambda (form) (write form port) (newline port) (newline port))
+         (list
+           '(primitive-load (string-append (dirname (current-filename)) "/metacircular.scm"))
+           (list 'define 'examples (list 'quote examples))
+           (list 'define 'errors (list 'quote errors))
+           (list 'define 'source-definitions (list 'quote source-definitions))
+           '(define (run-inside program)
+              (run (append source-definitions (list (list 'run (list 'quote program))))))
+           '(define (run-host program)
+              (eval (cons 'begin program) (make-fresh-user-module)))
+           '(define (error-key thunk)
+              (catch #t (lambda () (thunk) 'returned) (lambda (key . args) key)))
+           '(for-each
+              (lambda (example)
+                (let ((program (cadr example)) (expected (caddr example)))
+                  (unless (and (equal? (run-host program) expected)
+                               (equal? (run program) expected)
+                               (equal? (run-inside program) expected))
+                    (error "Three-level result mismatch" (car example))))) examples)
+           '(for-each
+              (lambda (example)
+                (let ((program (cadr example)) (expected (caddr example)))
+                  (unless (and (eq? (error-key (lambda () (run program))) expected)
+                               (eq? (error-key (lambda () (run-inside program))) expected))
+                    (error "Self-interpretation error mismatch" (car example))))) errors)
+           '(display "11 three-level cases and 5 error cases passed.")
+           '(newline))))))
+
+@subtree{
+  @title{Scheme解释器与独立核验文件的输出}
+
+  @source-output["metacircular-checks.scm" checks-source
+    (map (lambda (fragment) (assq-ref (fragment-origin fragment) 'file))
+         (program-fragments interpreter))]
+
+  构建生成/programs/metacircular.scm和/programs/metacircular-checks.scm。前者由同一个装配的原文产生；核验文件从examples、errors和同一计划的datum生成独立入口。两个文件放在同一目录，在Flora根目录运行：
+
+  @verbatim{guile --no-auto-compile build/programs/metacircular-checks.scm}
+
+  成功输出11 three-level cases and 5 error cases passed.失败则以非零状态退出。运行独立文件不需要Grove；它使用Guile的标准环境，不是可移植到任意Scheme的包。
+}
+
+@subtree{
+  @title{Scheme自解释的支持范围与证据边界}
+
+  片段接口区分身份、原文、定义datum、来源与作者声明的requires。跨文章导入依靠实际模块，transclude只负责展示；导出顺序遵循装配清单。正文可以按理解顺序安排，但初始化依赖并不会因此消失。
+
+  新特殊形式的支持范围有限：闭包只接受固定参数，cond不支持 =>，apply只接受一个参数列表，map要求列表等长。完整Scheme的宏、continuation、内部定义规则和reader扩展都未纳入。这些约定限定了核验结论：案例覆盖不能证明完整Scheme等价，宿主原语仍是自解释所需的基础。
+}

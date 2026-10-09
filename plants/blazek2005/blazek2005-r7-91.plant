@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Kim, W.-W.; Menon, S.; Mongia, H.C.: Large Eddy Simulations of Reacting Flows in a Dump Combustor. AIAA Paper 98-2432, 1998.}
+@taxon["reference"]

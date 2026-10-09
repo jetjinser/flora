@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Beam, R.; Warming, R.F.: An Implicit Factored Scheme for the Compressible Navier-Stokes Equations. AIAA Journal, 16 (1978), pp. 393-402.}
+@taxon["reference"]

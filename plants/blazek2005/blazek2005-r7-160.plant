@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hamba, F.: A Hybrid RANS/LES Simulation of Turbulent Channel Flow. Theoret. Comput. Fluid Dynamics, 16 (2003), pp. 387-403.}
+@taxon["reference"]

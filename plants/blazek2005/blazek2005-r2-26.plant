@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Young, J.B.; Snoeck, J.: Aerothermodynamics of Low Pressure Steam Turbines and Condensers. Eds. Moore, M.J.; Sieverding, C.H.; Springer Verlag, N.Y., 1987, pp. 87-133.}
+@taxon["reference"]
+
+Young与Snoeck撰写的低压汽轮机与凝汽器气动热力学书章（Moore与Sieverding主编）。

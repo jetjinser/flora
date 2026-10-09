@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Batina, J.T.: Implicit Upwind Solution Algorithms for Three-Dimensional Unstructured Meshes. AIAA Journal, 31 (1993), pp. 801-805.}
+@taxon["reference"]

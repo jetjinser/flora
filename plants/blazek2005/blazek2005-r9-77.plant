@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Okamoto, N.; Nakahashi, K.; Obayashi, S.: A Coarse Grid Generation Algorithm for Agglomeration Multigrid Method on Unstructured Grids. AIAA Paper 98-0615, 1998.}
+@taxon["reference"]

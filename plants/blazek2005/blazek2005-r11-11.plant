@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Carey, G.F.: Computational Grids: Generation, Adaption, and Solution Strategies. Taylor & Francis, 1997.}
+@taxon["reference"]

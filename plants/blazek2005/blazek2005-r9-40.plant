@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Nishikawa, H.; van Leer, B.: Optimal Multigrid Convergence by Elliptic/Hyperbolic Splitting. AIAA Paper 2002-2951, 2002.}
+@taxon["reference"]

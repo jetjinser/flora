@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Liou, M.S.; Van Leer, B.: Choice of Implicit and Explicit Operators for the Upwind Differencing Method. AIAA Paper 88-0624, 1988.}
+@taxon["reference"]

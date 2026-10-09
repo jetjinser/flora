@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Ruge, J.W.; Stüben, K.: Algebraic Multigrid. Multigrid Methods, SIAM Frontiers in Applied Math., McCormick, S.F. (ed.), 1987, pp. 73-131.}
+@taxon["reference"]

@@ -1,0 +1,28 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Grove文档：写作模型与tree组合}
+@summary{认识.plant页面、结构化内容、稳定地址与嵌入。}
+@taxon["index"]
+
+本主题介绍Grove如何把Scribble风格的@code{.plant}源码解释为内容树。页面可包含普通段落、命令和读取时求值的Scheme计算；子树可以独立寻址，并在其他位置嵌入。
+
+@subtree{
+  @title{文档源码}
+
+  @itemize{
+    @item{@link["grove-0001"]{用.plant写作}：元数据、段落、at-exp命令、Scheme表达式、样式与代码高亮。}
+    @item{@link["grove-0002"]{组合tree}：subtree定义、稳定ID、transclude、HTML呈现和缓存依赖。}
+  }
+}
+
+@subtree{
+  @title{构建与缓存}
+
+  @link["grove-0003"]{构建阶段与缓存}说明读取、分析、渲染的分工，以及内容IR的复用、依赖登记与失效。
+}
+
+@subtree{
+  @title{与其他主题的连接}
+
+  @link["math"]{数学语言}展示内容树如何承载可计算的IR；@link["lp"]{文学编程}展示同一篇文章如何解释并生成程序。本文档模型的术语（tree、subtree、transclude、taxon等）汇总于@link["glossary"]{术语表}。
+}

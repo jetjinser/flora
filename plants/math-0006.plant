@@ -1,0 +1,73 @@
+@use-modules[(flora commands) (language scribble commands) (grove math pipeline)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math formula) #:prefix φ:)]
+
+@title{Cartesian算子的计算追踪}
+@summary{从具体分量开始，查看多pass计算和推导核验。}
+@taxon["tutorial"]
+
+这里跟踪向量场@code{(−y,x,0)}的curl计算。坐标空间明确给出后，系统展开向量分量、计算偏导并化简；页面展示每个pass及其核验信息。
+
+@(define r3 (◆:space 'x 'y 'z))
+@(define field (◆:components
+                 (φ:read "-y")
+                 (φ:read "x")
+                 (◆:constant 0)
+                 #:space r3))
+@(define input (◆:curl field))
+@(define report (math-compute input #:assumptions (list r3)))
+
+输入是 @math[input]；计算得到 @math[(math-report-result report)]。
+
+此向量场在z轴方向的旋度分量是2，因此结果为@code{(0,0,2)}。重要的是，输入是由构造器产生的Semantic值，核心@code{math-compute}不接收也不解析公式字符串。
+
+@subtree{
+  @title{检查pass与来源记录}
+
+  @verbatim[(format #f "passes: ~s\ncomplete: ~s"
+    (map math-report-name (math-report-passes report))
+    (math-report-complete? report))]
+
+  空间计算按职责经过组件展开、偏导和化简等pass。报告会显示本次实际运行的pass；遇到步数或表达式大小上限时，@code{complete?}会是false。
+
+  每条derivation step还保留规则名和输入树中的路径：
+
+  @verbatim[(format #f "first rule/path: ~s"
+    (let ((step (car (math-derivation-steps (math-report-derivation report)))))
+      (list (math-derivation-step-rule step) (math-derivation-step-path step))))]
+
+  路径说明规则改写了输入表达式的哪个子项。来源映射让诊断和推导步骤能够关联回文章里的公式。
+
+}
+
+@subtree{
+  @title{证书和独立oracle}
+
+  @(paragraph (format #f "certificate replay: ~a"
+    (math-verification-valid? (math-verify-derivation (math-report-derivation report)))))
+
+  这里的replay检查记录的每一步是否符合规则。测试还用独立实现的多项式解释器核验向量分量结果；它不复用生产规则，因此能发现生产规则和生产证书验证器共同犯错的情况。
+
+}
+
+@(define identity-source (φ:read "div(curl(components(x*y,y*z,z*x)))"))
+
+@(define identity-report (math-compute identity-source #:assumptions (list r3)))
+
+@subtree{
+  @title{把示例延伸为恒等式}
+
+  对于具体向量场，可直接计算@code{div(curl(v))}并观察零结果。对于含未知函数的抽象表达式，则需要vector/smooth等类型与正则性事实，算法保留明确前提，不凭记号外观猜测。
+
+  @math[(math-report-result identity-report)]
+
+  本例中的坐标多项式足以完全展开。若把分量替换为未知场@code{E}，就不再有具体多项式可求；系统会要求相应的计算语义或前提。
+
+}
+
+@subtree{
+  @title{模型边界}
+
+  算法以坐标顺序解释分量，并采用标准欧氏Cartesian算子。相同名字可以被作者放进别的模型，但这不会自动引入非欧氏度量。建立圆柱或球坐标需要把相应度量因子与规则明确加入模型。
+
+}

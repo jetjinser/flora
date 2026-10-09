@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mani, M.: Hybrid Turbulence Models for Unsteady Flow Simulation. J. Aircraft, 41 (2004), pp. 110-118.}
+@taxon["reference"]

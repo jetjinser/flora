@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Edwards, J.R.: A Low-Diffusion Flux-Splitting Scheme for Navier-Stokes Calculations. Computers & Fluids, 26 (1997), pp. 653-659.}
+@taxon["reference"]

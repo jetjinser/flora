@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Dick, E.: A Flux-Vector Splitting Method for Steady Navier-Stokes Equations. Int. J. Numerical Methods in Fluids, 8 (1988), pp. 317-326.}
+@taxon["reference"]

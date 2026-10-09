@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Crumpton, P.I.; Shaw, G.J.: A Vertex-Centred Finite Volume Method with Shock Detection. Int. J. Numerical Methods in Fluids, 18 (1994), pp. 605-625.}
+@taxon["reference"]

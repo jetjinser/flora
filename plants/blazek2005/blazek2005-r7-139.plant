@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Germano, M.: Turbulence: The Filtering Approach. J. Fluid Mechanics, 238 (1992), pp. 325-336.}
+@taxon["reference"]

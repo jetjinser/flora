@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Srinivasan S.; Weilmuenster, K.J: Simplified Curve Fits for the Thermodynamic Properties of Equilibrium Air. NASA RP-1181, 1987.}
+@taxon["reference"]
+
+Srinivasan与Weilmuenster为平衡空气热力学性质给出的简化曲线拟合（NASA参考出版物）。

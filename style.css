@@ -1,0 +1,520 @@
+/* SPDX-FileCopyrightText: 2026 Jinser Kafka <aimer@purejs.icu> */
+/* SPDX-License-Identifier: CC0-1.0 */
+
+@import url("/fonts/inria.css");
+@import url("/fonts/cjk.css");
+
+:root {
+  color-scheme: light dark;
+
+  /* Base colors: light keeps the existing neutral paper/ink; night is a
+     low-luminance blue (ink-blue "quiet night" palette, candidate C). */
+  --paper: light-dark(oklch(100% 0 0), oklch(20% .012 260));
+  --ink: light-dark(oklch(28.1% 0 0), oklch(89% .006 255));
+  --hover-color: light-dark(oklch(55% .22 260), oklch(80% .09 230));
+
+  /* Derive reading hierarchy in a perceptual color space, rather than new hex values. */
+  --muted: light-dark(
+    color-mix(in oklab, var(--ink) 68%, var(--paper)),
+    color-mix(in oklab, var(--ink) 76%, var(--paper)));
+  --taxon: light-dark(
+    color-mix(in oklab, var(--ink) 77%, var(--paper)),
+    color-mix(in oklab, var(--ink) 87%, var(--paper)));
+  --quiet: light-dark(
+    color-mix(in oklab, var(--ink) 55%, var(--paper)), var(--muted));
+  --link: light-dark(
+    color-mix(in oklab, var(--ink) 41%, var(--paper)),
+    color-mix(in oklab, var(--ink) 50%, var(--paper)));
+  --rule: light-dark(
+    color-mix(in oklab, var(--ink) 14%, var(--paper)),
+    color-mix(in oklab, var(--ink) 22%, var(--paper)));
+  --code-rule: light-dark(
+    color-mix(in oklab, var(--ink) 9%, var(--paper)),
+    color-mix(in oklab, var(--ink) 17%, var(--paper)));
+
+  /* Relative channels keep surfaces and focus colors tied to their base. */
+  --wash: light-dark(
+    oklch(from var(--paper) calc(l - .028) c h),
+    oklch(from var(--paper) calc(l + .040) c h));
+  --focus: light-dark(
+    oklch(from var(--ink) calc(l + .17) c h),
+    oklch(from var(--ink) calc(l - .06) c h));
+  --hover: light-dark(
+    oklch(from var(--hover-color) l c h / .04),
+    oklch(from var(--hover-color) l c h / .08));
+}
+
+/* The theme control only chooses a scheme; the palette is defined once. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+@media (prefers-reduced-motion: no-preference) {
+  a {
+    transition: color 120ms ease-out, text-decoration-color 120ms ease-out;
+  }
+  .flora-sidenote-number::after {
+    transition: color 120ms ease-out;
+  }
+  .flora-sidenote::after {
+    transition: box-shadow 120ms ease-out;
+  }
+  .forest-tree-block {
+    transition: background-color 120ms ease-out;
+  }
+  .theme-transition body,
+  .theme-transition body * {
+    transition-property: color, background-color, border-color, text-decoration-color;
+    transition-duration: 180ms;
+    transition-timing-function: ease-out;
+  }
+}
+
+html { line-height: 1.8; scroll-padding-block-start: 1lh; }
+body {
+  /* Match the reading measure to CJK glyphs; let outer gutters follow the viewport. */
+  --page-gutter: clamp(1ic, 3vi, 1.5ic);
+  max-inline-size: 62ic;
+  margin-block: 1.25lh 2.5lh;
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Inria Serif", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  overflow-wrap: normal;
+  word-break: normal;
+  line-break: normal;
+  text-autospace: normal;
+  /* Progressive enhancement: trim punctuation where the browser supports it. */
+  text-spacing-trim: trim-start;
+  display: grid;
+  /* Named lanes: contents | article | notes. The notes lane is empty on
+     pages without margin notes; the theme controls stay viewport-fixed in
+     the nav above. */
+  grid-template-columns:
+    [contents] minmax(0, 12ic) [article] minmax(0, 38ic) [notes] minmax(0, 1fr);
+  /* Mirror of the contents lane and column gap for margin notes, in rem:
+     the note's own smaller face would rescale ic-based lengths. */
+  --notes-w: 13.5rem;
+  --notes-gap: clamp(1.125rem, 3vi, 2.8125rem);
+  column-gap: clamp(1ic, 3vi, 2.5ic);
+  align-items: start;
+}
+body > header { grid-column: 2; margin-block-end: .8lh; }
+body > article { grid-column: 2; min-inline-size: 0; }
+body > header nav {
+  position: absolute;
+  inset-block-start: .5rem;
+  inset-inline: var(--page-gutter);
+  margin: 0;
+  font-size: .85rem;
+}
+body > header nav > a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+  color: var(--ink);
+  font-family: "Inria Serif", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-block-end: 1px solid transparent;
+}
+.home-icon { flex: none; color: var(--muted); font-weight: 400; }
+body > header nav > a:hover { border-block-end-color: currentColor; }
+body > header nav, .table-of-contents {
+  font-family: "Inria Sans", "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+h1 { font-size: 1.8rem; line-height: 1.35; margin: 0; font-weight: 700; }
+h2, h3, h4, h5, h6 { line-height: 1.4; }
+/* Override the renderer's emergency wrapping for prose and headings. */
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: normal; }
+p { margin-block: 0 .55lh; }
+ul, ol { padding-inline-start: 1.5ic; margin-block: .35lh .55lh; }
+li { margin-block: .14lh; }
+a { color: inherit; text-decoration-color: var(--link); text-underline-offset: .18em; }
+a[href^="http://"], a[href^="https://"], a[href^="mailto:"] { overflow-wrap: anywhere; }
+a:hover { color: var(--ink); text-decoration-color: currentColor; }
+a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+
+.table-of-contents {
+  grid-column: 1;
+  grid-row: 2;
+  position: sticky;
+  inset-block-start: 1.25rem;
+  max-block-size: calc(100svb - 2.5rem);
+  overflow-y: auto;
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--muted);
+  padding-inline-end: 1ic;
+  /* Opaque paper keeps the contents legible over anything that scrolls
+     behind it; margin notes layer above it as translucent cards instead. */
+  background: var(--paper);
+  padding-block-end: 1lh;
+}
+.table-of-contents h2 { font-size: .85rem; margin-block: 0 .6lh; }
+.table-of-contents ol { list-style: none; padding: 0; margin: 0; }
+.table-of-contents ol ol { padding-inline-start: 1ic; margin-block: .25lh; }
+.table-of-contents li { margin-block: .3lh; }
+.table-of-contents a { text-decoration: none; }
+.table-of-contents a:hover { text-decoration: underline; }
+/* While a margin note crosses the lane, the JS dodge tracks the scroll 1:1
+   with no transition; only the settle-back after the note leaves is eased.
+   dodge-engage softens the single jump when a note enters from the top edge
+   on upward scrolls and demands the full push at once. Both classes are
+   applied by the script, which refuses reduced motion. */
+.table-of-contents.dodge-return {
+  transition: transform 320ms ease-out;
+}
+.table-of-contents.dodge-engage {
+  transition: transform 160ms ease-out;
+}
+
+/* ---- Margin notes ----
+   A sidenote is authored inside its anchor paragraph. On wide viewports it
+   floats into the contents lane at its anchor's line: the article measure
+   keeps its full width because the floated box sits entirely outside it.
+   Consecutive notes cascade downward through clear. Near the page top a
+   note may slide beneath the sticky contents list; authored sparingly, this
+   reads as intentional layering rather than a collision. */
+body { counter-reset: sidenote-counter; }
+.flora-sidenote-number { counter-increment: sidenote-counter; }
+/* The anchor label follows Tufte's scale: a full-size numeral raised out of
+   the line, ink-colored, not a shrunken superscript. */
+.flora-sidenote-number::after {
+  content: counter(sidenote-counter);
+  position: relative;
+  top: -0.4em;
+  line-height: 0;
+  margin-inline-start: .1em;
+  padding-inline: .18em;
+  border-radius: 2px;
+  color: inherit;
+  font-variant-numeric: oldstyle-nums;
+  cursor: default;
+}
+.flora-sidenote::before {
+  content: counter(sidenote-counter) " ";
+  font-size: 1.2em;
+  line-height: 0;
+  color: var(--ink);
+  font-variant-numeric: oldstyle-nums;
+}
+.flora-sidenote-number:hover::after,
+p:has(> .flora-sidenote:hover) > .flora-sidenote-number::after {
+  color: var(--hover-color);
+}
+.flora-sidenote:hover::after,
+.flora-sidenote-number:hover + .flora-sidenote::after {
+  box-shadow: inset 0 0 0 999px var(--hover);
+}
+/* A note rides ABOVE the sticky contents, and where the two overlap the
+   entries are ERASED — not covered by a card. The eraser is a paper-tinted
+   veil on ::after: no border, no radius, no blur; its mask feathers the
+   veil in over ~14px so there is no contour to see, only entries fading
+   out. backdrop-filter is deliberately not used: an element's own mask
+   turns it into a backdrop root, which silently disables its own backdrop
+   blur — the frost looked like raw doubled text. The veil must stay opaque
+   enough that the covered text cannot be read through it. */
+.flora-sidenote {
+  display: block;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  float: left;
+  clear: left;
+  inline-size: var(--notes-w);
+  margin-inline-start: calc(-1 * (var(--notes-w) + var(--notes-gap)));
+  margin-block: .2lh 0;
+  padding: .1em .35em .2em;
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.flora-sidenote::after {
+  content: "";
+  position: absolute;
+  inset: -.4em -.6em;
+  z-index: -1;
+  background-color: color-mix(in oklab, var(--paper) 88%, transparent);
+  mask-image:
+    linear-gradient(to right, transparent 0, black 14px, black calc(100% - 14px), transparent 100%),
+    linear-gradient(to bottom, transparent 0, black 14px, black calc(100% - 14px), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.flora-sidenote::before {
+  content: counter(sidenote-counter) " ";
+  font-size: 1.2em;
+  line-height: 0;
+  color: var(--ink);
+  font-variant-numeric: oldstyle-nums;
+}
+
+/* <dfn> marks the defining occurrence of a term; its face comes from the
+   wrapped content, so only the default slant is suppressed (CJK italics
+   are synthesized, not designed). */
+dfn { font-style: normal; }
+
+.forest-tree-block { margin-block: .85lh; border-radius: 0; }
+.forest-tree-block:hover { background-color: var(--hover); }
+.page-tree { margin-block-end: 0; }
+/* Standalone titles now live in the article as collapsible trees. Align the
+   contents list with the title through the shared body grid row. */
+body:has(> article > .page-tree) > article > .page-tree { margin-block-start: 0; }
+body:has(> article > .page-tree) > .table-of-contents { margin-block-start: 0; }
+.page-tree + .backmatter { margin-block-start: .85lh; }
+.forest-tree-block > details > summary {
+  display: block;
+  cursor: pointer;
+  line-height: 1.5;
+  margin-block-end: .4lh;
+}
+.forest-tree-title { font-size: 1rem; font-weight: 700; }
+.page-tree > details > summary .forest-tree-title { font-size: 1.8rem; line-height: 1.35; }
+.page-tree > details > summary .forest-tree-id { font-size: .62em; vertical-align: -.12em; }
+.forest-tree-content { padding-block: 0 .4lh; padding-inline: .9ic; }
+.forest-tree-content > :last-child { margin-bottom: 0; }
+.forest-tree-id {
+  display: inline-block;
+  /* Clipped inline blocks use their bottom edge as the baseline. Restore the
+     text baseline while retaining ellipsis for long addresses. */
+  vertical-align: -.2em;
+  max-inline-size: min(20ch, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-inline-start: .25em;
+  color: var(--muted);
+  opacity: 1;
+  font-size: 1em;
+  font-weight: 300;
+  line-height: 1.3;
+  text-decoration-style: dotted;
+}
+
+code, pre {
+  font-family: "DejaVu Sans Mono", "Noto Sans Mono", monospace;
+  font-size: .78em;
+  text-autospace: no-autospace;
+  text-spacing-trim: space-all;
+}
+code { background: var(--wash); padding: .1em .25em; border-radius: 2px; overflow-wrap: anywhere; }
+.emph { font-style: italic; }
+pre {
+  --syntax-comment: var(--muted);
+  --syntax-keyword: light-dark(oklch(43% .12 320), oklch(79% .10 320));
+  --syntax-string: light-dark(oklch(43% .09 150), oklch(79% .09 150));
+  --syntax-number: light-dark(oklch(44% .10 50), oklch(80% .09 65));
+  --syntax-function: light-dark(oklch(44% .10 255), oklch(79% .09 255));
+  --syntax-operator: light-dark(oklch(44% .08 75), oklch(80% .08 75));
+  --syntax-punctuation: var(--muted);
+  line-height: 1.65;
+  margin-block: .7lh;
+  padding-block: .6lh;
+  padding-inline: 2ch;
+  background: var(--wash);
+  border: 1px solid var(--code-rule);
+  overflow-x: auto;
+  white-space: pre;
+}
+pre code { font-size: inherit; padding: 0; background: transparent; overflow-wrap: normal; }
+.literate-code { border: 0; }
+.literate-uses { font-size: .85em; color: var(--muted); margin-block-end: .4lh; }
+.literate-result { color: var(--muted); margin-block: .3lh 0; font-size: .9em; }
+.math-display { margin-block: .65lh; padding-block: .175lh; overflow-x: auto; }
+.math-display > math { inline-size: max-content; min-inline-size: 100%; }
+.math-inline { display: inline-block; max-inline-size: 100%; overflow-x: auto; vertical-align: middle; }
+math { font-size: 1.08em; }
+.math-diagnostic, .tutorial-note {
+  padding-block: .3lh;
+  padding-inline: 1ic;
+  margin-block: .7lh;
+  background: var(--wash);
+}
+.math-diagnostic { font-size: .85rem; }
+.math-diagnostic p { margin-block-end: .3lh; }
+.math-diagnostic details { color: var(--muted); }
+.backmatter { border: 0; padding: 0; margin-block-start: 1.5lh; color: var(--ink); font-size: inherit; }
+.backmatter .forest-tree-title { margin: 0; font-size: 1rem; font-weight: 700; }
+/* ---- Backmatter anatomy ----
+   Entries follow the forester anatomy — taxon, title link, address chip,
+   then a quiet metadata line — so the list marker is dropped: the taxon and
+   the address carry the structure bullets used to fake. */
+.backmatter ul { list-style: none; padding-inline-start: 0; margin-block: 0; }
+.backmatter li { margin-block: .32lh; }
+.backmatter li > .taxon { font-size: .92em; }
+.backmatter .metadata,
+.forest-tree-block > details > summary > .metadata {
+  margin-block: .05lh 0;
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.metadata ul { list-style: none; padding: 0; margin: 0; }
+.metadata li { display: inline; margin-block: 0; }
+.metadata li + li::before { content: " · "; color: var(--quiet); }
+blockquote { margin-inline: 0; padding-inline-start: 1ic; }
+img { height: auto; }
+
+@media (width <= 60rem) {
+  body { display: block; max-inline-size: calc(38ic + 2 * var(--page-gutter)); margin-block-start: 2.5lh; }
+  .table-of-contents { position: static; max-block-size: none; padding-block: .75lh; padding-inline: 0; margin-block-end: 1lh; border-block: 1px solid var(--rule); }
+  .table-of-contents > ol { columns: 2; column-gap: 1.5ic; }
+  .table-of-contents li { break-inside: avoid; }
+  /* No lane to float into: the note folds into the reading flow as a quiet
+     surface block. */
+  .flora-sidenote {
+    position: static;
+    float: none;
+    inline-size: auto;
+    margin-inline: 0;
+    margin-block: .35lh .55lh;
+    padding-block: .3lh .35lh;
+    padding-inline: 1ic;
+    background: var(--wash);
+    color: var(--ink);
+    font-size: .85rem;
+  }
+  .flora-sidenote::after { content: none; }
+}
+@media (width <= 30rem) {
+  body { font-size: 1.0625rem; --notes-w: 12.75rem; }
+  h1 { font-size: 1.5rem; }
+  .table-of-contents > ol { columns: 1; }
+  .forest-tree-content { padding-inline: .5ic; }
+  .forest-tree-id { max-inline-size: min(14ch, 100%); }
+}
+@media print {
+  :root, :root[data-theme] { color-scheme: light; }
+  html, body { background: white; color: black; }
+  body {
+    display: block;
+    max-inline-size: none;
+    margin: 0;
+    padding: 0;
+    font-size: 11pt;
+  }
+  body > header, .table-of-contents, .theme-controls { display: none !important; }
+  body > article { inline-size: auto; }
+  /* Notes run inline in the text flow, set off by a rule. */
+  .flora-sidenote {
+    float: none;
+    inline-size: auto;
+    margin-inline: 0;
+    margin-block: .4em;
+    padding-inline-start: .8em;
+    border-inline-start: 1px solid #bbb;
+    color: black;
+    font-size: .85em;
+  }
+  .flora-sidenote::after { content: none; }
+  /* Print every tree, including those that are collapsed in the browser. */
+  details > :not(summary) { display: block !important; }
+  .forest-tree-block { margin-block: .7em; border: 0; }
+  .forest-tree-block > details > summary {
+    cursor: default;
+    break-after: avoid-page;
+  }
+  .forest-tree-content { padding-block: 0; padding-inline: .8em; }
+  .forest-tree-block:hover { background: transparent; }
+  a { color: inherit; }
+  .forest-tree-id { max-inline-size: none; white-space: normal; }
+  pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    break-inside: avoid;
+    color: black;
+    background: #f3f3f3;
+  }
+}
+
+/* Forester taxa describe the kind of tree, rather than decorative badges. */
+.taxon { color: var(--taxon); font-weight: 700; margin-inline-end: .25em; text-transform: capitalize; }
+body > header h1 > .taxon { display: block; font-size: .9em; line-height: 1.2; color: var(--quiet); margin-block-end: .15em; }
+.page-tree > details > summary .taxon { display: block; font-size: .9em; line-height: 1.2; color: var(--quiet); margin-block-end: .15em; }
+.table-of-contents .taxon { font-weight: 700; }
+
+
+body > header nav { display: flex; justify-content: space-between; align-items: center; gap: 1ic; flex-wrap: wrap; }
+.theme-controls { display: flex; align-items: center; gap: .65ic; margin-inline-start: auto; flex-wrap: wrap; min-inline-size: 0; max-inline-size: 100%; font-size: .8rem; color: var(--muted); }
+.theme-controls[hidden] { display: none; }
+.theme-options { display: inline-flex; flex-wrap: wrap; max-inline-size: 100%; border: 1px solid var(--rule); border-radius: 3px; }
+.theme-options label { position: relative; cursor: pointer; }
+.theme-options input { position: absolute; inline-size: 1px; block-size: 1px; opacity: 0; }
+.theme-options span { display: block; padding-block: .2lh; padding-inline: .65em; white-space: nowrap; }
+.theme-options input:checked + span { color: var(--ink); background: var(--wash); font-weight: 700; }
+.theme-options input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+.theme-options label:hover { background: var(--hover); }
+@media (width <= 30rem) {
+  .theme-controls { gap: .25ic; flex-direction: column; align-items: flex-end; }
+}
+@media print {
+  :root, :root[data-theme] {
+    color-scheme: light;
+    --paper: oklch(100% 0 0);
+    --ink: oklch(0% 0 0);
+    --hover: transparent;
+  }
+}
+/* MathJax 4 的 CDN 构建默认开启语音/盲文增强,但未附带隐藏 <mjx-speech> 的规则,
+   导致每个公式旁渲染出一个可见小方块;按标准 visually-hidden 模式收纳,保留可访问性。 */
+mjx-container > mjx-speech {
+  clip-path: inset(50%);
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* Grove 的 .math-inline 用 overflow-x:auto 承载窄屏长公式,但 CSS 会把 overflow-y
+   一并抬为 auto;MathJax 容器(组合字符)比中文行框高约 4px,于是每个行内公式
+   都渲染出一条纵向滚动条。纵向改为隐藏:行内公式靠横向滚动即可,字形不受影响。 */
+.math-inline { overflow-y: hidden; }
+
+/* ---- 双语折叠(bilingual fold)视觉层 ----
+   Grove 的 i18n.css 只提供 reset 基线;视觉设计归项目。 */
+
+/* 展开后的原文 lane:静音文字式——无装饰,靠色调与字号区分 */
+.bilingual-pair > summary ~ .bilingual-lane {
+  margin-block-start: 0.25rem;
+  padding-inline-start: 0.5rem;
+  color: var(--muted);
+  font-size: 0.92em;
+}
+
+/* 悬停反馈接 flora 主题变量,昼夜一致。
+   焦点态不用背景:部分浏览器鼠标点击 <summary> 也匹配 :focus-visible,
+   背景会一直挂到焦点离开;键盘焦点改用轮廓线。 */
+.bilingual-pair > summary:hover {
+  background: var(--hover);
+}
+.bilingual-pair > summary:focus-visible {
+  background: transparent;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* 段落以列表等块结尾时,hint 独占一行,收紧其间距 */
+.bilingual-pair > summary > .bilingual-more {
+  display: block;
+  margin-block-start: 0.15rem;
+}
+
+/* 展示公式夹在双语块之间时,收一点上下节奏 */
+.bilingual + .math-display { margin-block-start: 0.45em; }
+.math-display + .bilingual { margin-block-start: 0.45em; }
+
+/* 文献条目整条是链接,常驻下划线在多行条目上过于吵闹;悬停时再显示 */
+.backmatter.references a { text-decoration: none; }
+.backmatter.references a:hover { text-decoration: underline; }
+
+/* 嵌入的书本插图:居中、限宽;扫描图稍降强度以融入版面 */
+.article img {
+  display: block;
+  max-inline-size: 88%;
+  block-size: auto;
+  margin-inline: auto;
+  margin-block: 0.35lh;
+}

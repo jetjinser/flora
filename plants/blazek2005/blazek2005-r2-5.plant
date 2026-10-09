@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Stokes, G.G.: On the Theories of Internal Friction of Fluids in Motion. Trans. Cambridge Phil. Soc., 8 (1845), pp. 287-305.}
+@taxon["reference"]
+
+Stokes 1845年的原始论文，提出了关于第二黏性系数的著名假设（Stokes假设）。

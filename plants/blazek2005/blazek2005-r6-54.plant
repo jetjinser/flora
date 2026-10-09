@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yoon, S.; Kwak, D.: 3-D Incompressible Navier-Stokes Solver using Lower-Upper Symmetric-Gauss-Seidel Algorithm. AIAA Journal 29 (1991).}
+@taxon["reference"]

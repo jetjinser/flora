@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Frink, N.T.: Recent Progress Toward a Three-Dimensional Navier-Stokes Solver. AIAA Paper 94-0061, 1994.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Gueziec, A.; Taubin, G.; Lazarus, F.; Horn, W.: Cutting and Stitching: Efficient Conversion of a Non-Manifold Polygonal Surface to a Manifold. IBM-RC-20935, IBM Research Div., Yorktown Heights, 1997.}
+@taxon["reference"]

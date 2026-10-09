@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{White, A.J.; Young, J.B.; Walters, P.T.: Experimental Validation of Condensing Flow Theory for a Stationary Cascade of Steam Turbine Blades. Phil. Trans. R. Soc., London, A 354 (1996), pp. 59-88.}
+@taxon["reference"]
+
+White、Young与Walters对汽轮机静止叶栅凝结流动理论的实验验证。

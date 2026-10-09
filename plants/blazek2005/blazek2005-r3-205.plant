@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Brieger, L.; Lecca, G.: Parallel Multigrid Preconditioning of the Conjugate Gradient Method for Systems of Subsurface Hydrology. J. Computational Physics, 142 (1998), pp. 148-162.}
+@taxon["reference"]

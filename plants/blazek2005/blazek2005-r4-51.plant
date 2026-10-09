@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hänel, D.; Schwane, R.: An Implicit Flux-Vector Scheme for the Computation of Viscous Hypersonic Flows. AIAA Paper 89-0274, 1989.}
+@taxon["reference"]

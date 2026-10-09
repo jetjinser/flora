@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lin, H.C.: Dissipation Additions to Flux-Difference Splitting. AIAA Paper 91-1544, 1991.}
+@taxon["reference"]

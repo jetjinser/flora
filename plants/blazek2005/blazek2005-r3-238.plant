@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Kroll, N.; Jain, R.K.: Solution of Two-Dimensional Euler Equations - Experience with a Finite Volume Code. DFVLR-FB 87-41, 1987.}
+@taxon["reference"]

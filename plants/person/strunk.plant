@@ -1,0 +1,7 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{William Strunk Jr.}
+@summary{康奈尔大学英语教授，《The Elements of Style》的最初作者。}
+@taxon["person"]
+
+William Strunk Jr.（1869–1946），康奈尔大学英语教授。1918 年为授课自印小册子《The Elements of Style》，提出"省略多余的词"等用法规则，即本书之源。他的学生 E. B. White（@link["white"]{E. B. White}）于 1919 年在康奈尔修读其课；近四十年后 White 应约将这本小册子修订扩充为通行至今的经典。本站 @link["strunk1999"]{《英语写作》译本}所依据的第四版（1999）即在 Strunk 原文与 White 历次修订的基础上形成。

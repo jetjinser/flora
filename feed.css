@@ -1,0 +1,86 @@
+/* SPDX-FileCopyrightText: 2026 Jinser Kafka <aimer@purejs.icu> */
+/* SPDX-License-Identifier: CC0-1.0 */
+
+@import url("fonts/inria.css");
+
+rss {
+  display: block;
+  box-sizing: border-box;
+  min-block-size: 100vh;
+  padding: clamp(1.25rem, 5vi, 4rem) clamp(1rem, 6vi, 5rem);
+  color-scheme: light dark;
+  color: light-dark(oklch(28.1% 0 0), oklch(89.8% .011 107));
+  background: light-dark(oklch(100% 0 0), oklch(24.6% .004 129));
+  font-family: "Inria Serif", "Noto Serif CJK SC", "Source Han Serif SC", serif;
+  font-size: clamp(1rem, calc(1rem + .2vi), 1.2rem);
+  line-height: 1.75;
+  text-autospace: normal;
+}
+
+channel {
+  display: block;
+  max-inline-size: 68ch;
+  margin-inline: auto;
+}
+
+channel > title {
+  display: block;
+  font-size: clamp(2rem, 5vi, 3.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+channel > link {
+  display: block;
+  margin-block-start: .6lh;
+  color: light-dark(oklch(48% .13 255), oklch(78% .08 255));
+  font-family: "Inria Sans", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+  font-size: .9rem;
+  overflow-wrap: anywhere;
+}
+
+channel > description {
+  display: block;
+  margin-block: .4lh 1.8lh;
+  color: light-dark(oklch(48% 0 0), oklch(72% .01 107));
+}
+
+item {
+  display: block;
+  padding-block: 1.15lh;
+  border-block-start: 1px solid light-dark(oklch(88% 0 0), oklch(38% .006 129));
+}
+
+item > title {
+  display: block;
+  font-size: 1.25em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+item > link {
+  display: block;
+  margin-block-start: .25lh;
+  color: light-dark(oklch(48% .13 255), oklch(78% .08 255));
+  font-family: "Inria Sans", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+  font-size: .78em;
+  overflow-wrap: anywhere;
+}
+
+item > pubDate {
+  display: block;
+  margin-block-start: .2lh;
+  color: light-dark(oklch(52% 0 0), oklch(69% .01 107));
+  font-family: "Inria Sans", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+  font-size: .8em;
+}
+
+item > description {
+  display: block;
+  margin-block-start: .45lh;
+  max-inline-size: 68ch;
+}
+
+item > guid {
+  display: none;
+}

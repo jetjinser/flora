@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Spekreijse, S.P.: Multigrid Solution of the Steady Euler Equations. Ph.D. Dissertation, Centrum voor Wiskunde en Informatica, Amsterdam, The Netherlands, 1987.}
+@taxon["reference"]

@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Thomas, P.D.; Lombard, C.K.: Geometric Conservation Law and Its Application to Flow Computations on Moving Grids. AIAA Journal, 17 (1979), pp. 1030-1037.}
+@taxon["reference"]
+
+Thomas与Lombard提出几何守恒定律（GCL）的原始文献。

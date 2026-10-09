@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hackbusch, W.: Iterative Solution of Large Sparse Systems of Equations. Springer Verlag, New York, 1994.}
+@taxon["reference"]

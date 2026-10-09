@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Rossow, C.-C.: Berechnung von Strömungsfeldern durch Lösung der Euler-Gleichungen mit einer erweiterten Finite-Volumen Diskretisierungsmethode (Calculation of Flow Fields by the Solution of Euler Equations Using an Extended Finite Volume Discretisation Scheme). DLR Research Report, No. 89-38, 1989.}
+@taxon["reference"]

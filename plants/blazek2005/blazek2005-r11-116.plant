@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Smith, R.J.; Leschziner, M.A.: Automatic Grid Generation for Complex Geometries. Aeronautical Journal, 100 (1996), pp. 7-14.}
+@taxon["reference"]

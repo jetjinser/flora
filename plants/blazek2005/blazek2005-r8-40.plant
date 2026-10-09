@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Jacquotte, O.P.: Generation, Optimization and Adaptation of Multiblock Grids Around Complex Configurations in Computational Fluid Dynamics. Int. J. Numerical Methods in Engineering, 34 (1992), pp. 443-454.}
+@taxon["reference"]

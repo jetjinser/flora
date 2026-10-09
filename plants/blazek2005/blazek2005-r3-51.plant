@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Maday, Y.; Patera, A.T.: Spectral Element Methods for the Incompressible Navier-Stokes Equations. ASME, State of the art surveys on Computational Mechanics, 1987, pp. 71-143.}
+@taxon["reference"]

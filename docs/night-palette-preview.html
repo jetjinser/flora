@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Night 配色候选对比 — Flora</title>
+<style>
+  /* 本页把 style.css 的 night 推导规则原样搬来：三个锚点(—paper/—ink/—hover-color)
+     逐候选给定，其余全部用与 style.css 完全相同的 color-mix / 相对 oklch 表达式求值，
+     color-scheme 钉在 dark。看到什么，换上去就是什么。 */
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Georgia, "Noto Serif CJK SC", "Source Han Serif SC", serif;
+  }
+
+  .page-header {
+    background: #fff; color: #222;
+    padding: 1.2rem 1.5rem;
+    font-size: .95rem; line-height: 1.7;
+    border-bottom: 1px solid #ccc;
+  }
+  .page-header code { background: #f0f0f0; padding: .05em .3em; border-radius: 3px; font-size: .9em; }
+
+  /* —— 与 style.css 完全一致的推导规则（night 列比例） —— */
+  .palette {
+    color-scheme: dark;
+    --muted:     color-mix(in oklab, var(--ink) 76%, var(--paper));
+    --taxon:     color-mix(in oklab, var(--ink) 87%, var(--paper));
+    --link:      color-mix(in oklab, var(--ink) 50%, var(--paper));
+    --rule:      color-mix(in oklab, var(--ink) 22%, var(--paper));
+    --code-rule: color-mix(in oklab, var(--ink) 17%, var(--paper));
+    --wash:      oklch(from var(--paper) calc(l + .040) c h);
+    --focus:     oklch(from var(--ink)  calc(l - .06)  c h);
+    --hover:     oklch(from var(--hover-color) l c h / .08);
+    --syntax-keyword:   oklch(79% .10 320);
+    --syntax-string:    oklch(79% .09 150);
+    --syntax-number:    oklch(80% .09 65);
+    --syntax-function:  oklch(79% .09 255);
+    --syntax-comment:   var(--muted);
+    background: var(--paper);
+    color: var(--ink);
+    padding: 2rem 1.5rem 2.5rem;
+  }
+  .palette h2 {
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: .5rem; margin: 0 0 .3rem;
+    font-family: ui-monospace, monospace;
+  }
+  .anchors {
+    font-family: ui-monospace, monospace;
+    font-size: .78rem; color: var(--muted);
+    margin: 0 0 1.4rem; line-height: 1.6;
+  }
+  .sample { max-inline-size: 42rem; margin-inline: auto; line-height: 1.8; }
+  .sample .taxon { color: var(--taxon); font-weight: 700; text-transform: capitalize; font-size: .9em; }
+  .sample h3 { font-size: 1.35rem; margin: .1em 0 .6em; font-weight: 600; }
+  .sample p { margin: 0 0 1em; }
+  .sample .muted { color: var(--muted); }
+  .sample a { color: var(--link); text-decoration-color: color-mix(in oklab, var(--link) 45%, transparent); }
+  .sample a:hover { background: var(--hover); color: var(--hover-color); }
+  .sample code {
+    background: var(--wash); padding: .1em .25em; border-radius: 2px;
+    font-family: ui-monospace, monospace; font-size: .9em;
+  }
+  .sample hr { border: 0; border-top: 1px solid var(--rule); margin: 1.2em 0; }
+  .sample pre {
+    --code-border: var(--code-rule);
+    background: var(--wash);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: .8em 1em;
+    font-family: ui-monospace, monospace; font-size: .85em; line-height: 1.65;
+    overflow-x: auto;
+  }
+  .kw { color: var(--syntax-keyword); } .str { color: var(--syntax-string); }
+  .fn { color: var(--syntax-function); } .cm { color: var(--syntax-comment); }
+  .hoverdemo {
+    display: inline-block; padding: .2em .6em; border-radius: 3px;
+    border: 1px solid var(--rule); cursor: default;
+  }
+  .hoverdemo:hover { background: var(--hover); }
+  .focusdemo:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <strong>Night 配色候选对比</strong> — 每一节都是完整套用 style.css 现行推导规则的 night 面板（只换 <code>--paper</code> / <code>--ink</code> / <code>--hover-color</code> 三个锚点）。把鼠标悬停在链接和「悬停区域」上感受交互色；大面积底色正是观感差异所在。选定后我把对应锚点写回 <code>style.css</code> 的 dark 列。
+</div>
+
+<!-- 0 现状 -->
+<section class="palette" id="p0">
+  <div class="sample">
+    <h2>0 · 现状（基线）</h2>
+    <p class="anchors">paper oklch(24.6% .004 129) · ink oklch(89.8% .011 107) · hover oklch(78% .07 255)<br>绿相底 + 黄绿相文字 = 轻微橄榄色偏</p>
+    <div class="taxon">Chapter. 7</div>
+    <h3>湍流建模</h3>
+    <p>湍流模型有五个主要类别：<span class="muted">代数模型、一方程模型、两方程模型、雷诺应力模型与大涡模拟</span>。相关研究至今仍在继续，详见<a href="#">文献综述</a>与第 7 章各节。</p>
+    <p>内联代码如 <code>QUICK</code> 格式与 <code>MUSCL</code> 外推；悬停区域：<span class="hoverdemo">悬停我</span>；焦点 <a class="focusdemo" href="#" tabindex="0">用 Tab 感受 outline</a>。</p>
+    <pre><span class="cm">; 显式多步格式系数</span>
+(<span class="kw">define</span> (<span class="fn">multistage</span> n)
+  (<span class="kw">let</span> ((coeff <span class="str">"4.25 -3.75 0.5"</span>)) coeff))</pre>
+    <hr>
+  </div>
+</section>
+
+<!-- A 中性 -->
+<section class="palette" id="pa">
+  <div class="sample">
+    <h2>A · 纯中性</h2>
+    <p class="anchors">paper oklch(21% 0 0) · ink oklch(90% 0 0) · hover oklch(78% .07 255)<br>彻底去色偏——纯中性深灰底，是否显得"干净"或"寡淡"由你判断</p>
+    <div class="taxon">Chapter. 7</div>
+    <h3>湍流建模</h3>
+    <p>湍流模型有五个主要类别：<span class="muted">代数模型、一方程模型、两方程模型、雷诺应力模型与大涡模拟</span>。相关研究至今仍在继续，详见<a href="#">文献综述</a>与第 7 章各节。</p>
+    <p>内联代码如 <code>QUICK</code> 格式与 <code>MUSCL</code> 外推；悬停区域：<span class="hoverdemo">悬停我</span>；焦点 <a class="focusdemo" href="#" tabindex="0">用 Tab 感受 outline</a>。</p>
+    <pre><span class="cm">; 显式多步格式系数</span>
+(<span class="kw">define</span> (<span class="fn">multistage</span> n)
+  (<span class="kw">let</span> ((coeff <span class="str">"4.25 -3.75 0.5"</span>)) coeff))</pre>
+    <hr>
+  </div>
+</section>
+
+<!-- B 暖棕 -->
+<section class="palette" id="pb">
+  <div class="sample">
+    <h2>B · 暖棕（琥珀相）</h2>
+    <p class="anchors">paper oklch(22% .006 75) · ink oklch(90% .008 85) · hover oklch(78% .07 255)<br>保留"暖"但把色相从绿系(129°/107°)转到琥珀系(75°/85°)——纸感、烛光感</p>
+    <div class="taxon">Chapter. 7</div>
+    <h3>湍流建模</h3>
+    <p>湍流模型有五个主要类别：<span class="muted">代数模型、一方程模型、两方程模型、雷诺应力模型与大涡模拟</span>。相关研究至今仍在继续，详见<a href="#">文献综述</a>与第 7 章各节。</p>
+    <p>内联代码如 <code>QUICK</code> 格式与 <code>MUSCL</code> 外推；悬停区域：<span class="hoverdemo">悬停我</span>；焦点 <a class="focusdemo" href="#" tabindex="0">用 Tab 感受 outline</a>。</p>
+    <pre><span class="cm">; 显式多步格式系数</span>
+(<span class="kw">define</span> (<span class="fn">multistage</span> n)
+  (<span class="kw">let</span> ((coeff <span class="str">"4.25 -3.75 0.5"</span>)) coeff))</pre>
+    <hr>
+  </div>
+</section>
+
+<!-- C 墨蓝 -->
+<section class="palette" id="pc">
+  <div class="sample">
+    <h2>C · 墨蓝（静夜蓝调）</h2>
+    <p class="anchors">paper oklch(20% .012 260) · ink oklch(89% .006 255) · hover oklch(80% .09 230)<br>低亮度蓝底——编辑器暗色主题的主流方向，夜间刺眼感最低</p>
+    <div class="taxon">Chapter. 7</div>
+    <h3>湍流建模</h3>
+    <p>湍流模型有五个主要类别：<span class="muted">代数模型、一方程模型、两方程模型、雷诺应力模型与大涡模拟</span>。相关研究至今仍在继续，详见<a href="#">文献综述</a>与第 7 章各节。</p>
+    <p>内联代码如 <code>QUICK</code> 格式与 <code>MUSCL</code> 外推；悬停区域：<span class="hoverdemo">悬停我</span>；焦点 <a class="focusdemo" href="#" tabindex="0">用 Tab 感受 outline</a>。</p>
+    <pre><span class="cm">; 显式多步格式系数</span>
+(<span class="kw">define</span> (<span class="fn">multistage</span> n)
+  (<span class="kw">let</span> ((coeff <span class="str">"4.25 -3.75 0.5"</span>)) coeff))</pre>
+    <hr>
+  </div>
+</section>
+
+<!-- D 中性更深 -->
+<section class="palette" id="pd">
+  <div class="sample">
+    <h2>D · 纯中性，更深的底</h2>
+    <p class="anchors">paper oklch(16% 0 0) · ink oklch(88% 0 0) · hover oklch(78% .07 255)<br>与 A 同为中性，但底压到 16%——感受"灰底白字"亮度轴的另一端</p>
+    <div class="taxon">Chapter. 7</div>
+    <h3>湍流建模</h3>
+    <p>湍流模型有五个主要类别：<span class="muted">代数模型、一方程模型、两方程模型、雷诺应力模型与大涡模拟</span>。相关研究至今仍在继续，详见<a href="#">文献综述</a>与第 7 章各节。</p>
+    <p>内联代码如 <code>QUICK</code> 格式与 <code>MUSCL</code> 外推；悬停区域：<span class="hoverdemo">悬停我</span>；焦点 <a class="focusdemo" href="#" tabindex="0">用 Tab 感受 outline</a>。</p>
+    <pre><span class="cm">; 显式多步格式系数</span>
+(<span class="kw">define</span> (<span class="fn">multistage</span> n)
+  (<span class="kw">let</span> ((coeff <span class="str">"4.25 -3.75 0.5"</span>)) coeff))</pre>
+    <hr>
+  </div>
+</section>
+
+<script>
+  // 给每个候选拼上各自的锚点值（放在这里便于集中调整）
+  const palettes = {
+    p0: ['oklch(24.6% .004 129)', 'oklch(89.8% .011 107)', 'oklch(78% .07 255)'],
+    pa: ['oklch(21% 0 0)',        'oklch(90% 0 0)',         'oklch(78% .07 255)'],
+    pb: ['oklch(22% .006 75)',    'oklch(90% .008 85)',     'oklch(78% .07 255)'],
+    pc: ['oklch(20% .012 260)',   'oklch(89% .006 255)',    'oklch(80% .09 230)'],
+    pd: ['oklch(16% 0 0)',        'oklch(88% 0 0)',         'oklch(78% .07 255)'],
+  };
+  for (const [id, [paper, ink, hover]] of Object.entries(palettes)) {
+    const el = document.getElementById(id);
+    el.style.setProperty('--paper', paper);
+    el.style.setProperty('--ink', ink);
+    el.style.setProperty('--hover-color', hover);
+  }
+</script>
+</body>
+</html>

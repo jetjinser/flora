@@ -1,0 +1,69 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{查询没有入向引用的tree}
+@summary{在Flora项目中定义关系谓词，并查询没有被链接或transclude的文章。}
+@taxon["tutorial"]
+
+一个页面既没有被其他页面链接，也没有被transclude时，我们称它为orphan page。transclude也会把目标页面引入当前页面，因此应当算作一种入向引用。这个查询需要同时查看全站页面、链接和transclusion，所以必须等所有文章都读入并建立Forest后再运行。
+
+本页由Flora的@code{project.scm}在分析阶段生成查询结果。项目代码组合Forester提供的@code{pageo}、@code{nodeo}和@code{node-propertyo}，定义自己的关系算子；Grove不需要预先知道“孤立页面”这个项目概念。
+
+@subtree{
+  @title{把链接和transclusion都表示为入向关系}
+
+  link和transclude都直接指向tree ID；不再有heading fragment。@code{incoming-pageo}将两种入向引用合并：
+
+  @code-block[#:language 'scheme "(define-relation (incoming-pageo nodes page-id)
+    (exists (node-id kind)
+      (either ((== kind 'link)) ((== kind 'transclude)))
+      (nodeo nodes (node-id node-id) (kind kind))
+      (node-propertyo nodes node-id 'target page-id)))"]
+
+  先将@code{kind}限定为@code{link}或@code{transclude}，再调用@code{nodeo}，它就可以使用kind索引，而不必枚举全站所有节点。miniKanren的目标顺序会影响执行效率。
+
+  这里的@code{nodes}是Forest中的content-node relation。@code{nodeo}找出两类节点，@code{node-propertyo}读取目标；两种节点使用同一种tree身份，不需要解析目标字符串。
+
+}
+
+@subtree{
+  @title{对有限页面集合做差集}
+
+  miniKanren的@code{=/=}表示两个项不相等，并不表示“某个关系中不存在匹配行”。这里先查询所有被link或transclude的页面ID，再用递归的@code{not-membero}检查一个页面ID不在该有限列表中：
+
+  @code-block[#:language 'scheme "(define-relation (not-membero value values)
+    (either
+      ((== '() values))
+      ((exists (head tail)
+         (== `(,head . ,tail) values)
+         (=/= value head)
+         (not-membero value tail)))))
+
+  (define-relation (authored-pageo page-data page-id title)
+    (exists (metadata)
+      (pageo page-data
+             (page-id page-id)
+             (title title)
+             (metadata metadata))
+      (project (metadata)
+        (if (assq-ref metadata 'inline-subtree) fail succeed))))
+
+  (define-relation (orphan-pageo page-data incoming-page-ids page-id title)
+    (authored-pageo page-data page-id title)
+    (not-membero page-id incoming-page-ids))"]
+
+  @code{authored-pageo}通过@code{pageo}排除inline subtree自动生成的页面。这样列出的都是项目中的文章页面，而不是正文里可独立寻址的小节。结果里的链接使用查询专用节点，不会被误记为文章作者创建的入链。
+
+}
+
+@subtree{
+  @title{查看当前结果}
+
+  构建过程先用@code{incoming-pageo}查询入向引用目标，再用@code{orphan-pageo}查询剩余文章。结果中的展示链接使用Forester专用的查询链接节点，不会反过来改变入向引用数据：
+
+  @orphan-page-results{}
+
+  如果列表为空，说明每篇文章都至少被link或transclude一次。新增文章后，它会自动出现在本页；从其他页面链接或transclude它之后，它会从列表中消失。这一查询展示了项目自定义关系的边界：Forester提供文章与内容节点事实，项目用miniKanren定义自己的谓词，并在有限事实集合上计算结果。
+
+  @link["math-0009"]{关系查询}使用同一类事实与逻辑规则；@link["flora"]{Flora首页}提供全部主题索引。
+
+}

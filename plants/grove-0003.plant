@@ -1,0 +1,48 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{构建阶段与缓存：读取、分析、渲染}
+@summary{说明Grove构建的阶段分工，以及内容IR的复用、依赖登记与失效。}
+@taxon["reference"]
+
+Grove的一次构建分为读取、分析、渲染三个主动阶段，最后校验输出。各阶段职责不同，缓存和核验的作用范围也不同。本页集中说明这些约定。
+
+@subtree{
+  @title{三个主动阶段}
+
+  @itemize{
+    @item{读取（reading）：解析@code{.plant}，解释内容命令，并对文章中的Scheme求值。@code{checked}核验与规则目录查询等读取时工作都在这里完成。}
+    @item{分析（analyzing）：链接所有页面，建立森林与内容关系（例如@code{content-node relation}）；跨文章的查询依赖这一步。}
+    @item{渲染（rendering）：把内容树交给renderer，生成HTML页面与其他artifact；routes决定页面路径。}
+  }
+
+  Grove先读取全部文件，再分析，最后渲染并校验；文章的阅读排列不改变这个顺序。
+}
+
+@subtree{
+  @title{缓存的复用与失效}
+
+  普通build会缓存读取并求值后得到的Content IR。再次构建时，如果文章、导入的模块、编译代码和配置都没有变化，就直接复用；数学计算、规则查询与示例核验不必每次重做。整个Forest仍会重新分析，因此查询、链接和transclude看到的是当前的文章集合。
+
+  计算如果读取文章之外的数据文件，要在读取前登记它：
+
+  @verbatim["@use-modules[(grove input scribble) (ice-9 textual-ports)]
+@(define data
+   (call-with-input-file (depend-on! \"data.txt\") get-string-all))"]
+
+  @code{depend-on!}返回文件的绝对路径，并把该文件登记为依赖。文件变化后，文章结果与渲染输出会一起失效，@code{grove serve}也会监视它。
+
+  对时间、随机数、网络请求，或必须每次执行的副作用，应主动退出缓存：
+
+  @verbatim["@use-modules[(grove input scribble)]
+@(disable-cache!)"]
+
+  这篇文章会在每次构建中重新求值，也重新生成渲染输出。只因为一个结果可以保存，并不意味着任意Scheme程序都可以安全地跳过执行。
+}
+
+@subtree{
+  @title{核验边界与check}
+
+  @code{grove build}可以复用输入未变的结果；@code{grove check}始终重新求值和渲染，用于完整核验。两者都会重新分析Forest，所以链接与查询始终反映当前内容。
+
+  依赖是文件级的，不是按binding精确增量计算；任意I/O也不会被自动拦截。改变模块或LP实现会让相关消费者重新核验，失败的构建不会发布新的错误结果。@code{checked}表示读取时核验通过，不表示浏览器实时运行或形式化证明。
+}

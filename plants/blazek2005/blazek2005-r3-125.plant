@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Enander, E.; Sjögreen, B.: Implicit Explicit Residual Smoothing for Upwind Schemes. Internal Report 96-179, Department of Scientific Computing, Uppsala University, Sweden, 1996.}
+@taxon["reference"]

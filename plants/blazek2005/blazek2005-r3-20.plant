@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lee, K.D.; Rubbert, P.E.: Transonic Flow Computations Using Grid Systems with Block Structure. Lecture Notes in Physics, 141 (1981), Springer Verlag, pp. 266-271.}
+@taxon["reference"]

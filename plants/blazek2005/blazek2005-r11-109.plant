@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Nakahashi, K.: Computations of Three-Dimensional Navier-Stokes Equations by Using a Prismatic Mesh. Proc. 6th NAL Symposium on Aircraft Computational Aerodynamics, Tokyo, Japan, June 1988.}
+@taxon["reference"]

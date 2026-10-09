@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hollenbäck, D.M.; Blom, G.A.: Application of a Parabolized Navier-Stokes Code to an HSCT Configuration and Comparison to Wind Tunnel Test Data. AIAA Paper 93-3537, 1993.}
+@taxon["reference"]
+
+Hollenbäck与Blom将抛物化纳维–斯托克斯代码应用于HSCT构型并与风洞试验数据比较。

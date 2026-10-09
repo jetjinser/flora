@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yoon, S.; Kwak, D.: Artificial Dissipation Models for Hypersonic External Flow. AIAA Paper 88-3708, 1988.}
+@taxon["reference"]

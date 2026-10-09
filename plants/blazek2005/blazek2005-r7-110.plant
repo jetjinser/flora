@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Ferziger, J.H.: Direct and Large Eddy Simulation of Turbulence. In "Numerical Methods in Fluid Mechanics", A. Vincent (ed.), Centre de Recherches Mathématiques Université de Montréal, Proceedings and Lecture Notes, 16 (1998), pp. 53-97.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Saad, Y.; Schulz, M.H.: GMRES: A Generalized Minimum Residual Algorithm for Solving Nonsymmetric Linear Systems. SIAM J. Sci. Stat. Comp. 7 (1986), pp. 856-869.}
+@taxon["reference"]

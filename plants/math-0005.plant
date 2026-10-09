@@ -1,0 +1,93 @@
+@use-modules[(flora commands) (language scribble commands) (grove math pipeline)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math formula) #:prefix φ:)
+             ((grove math notation) #:prefix ◇:)]
+
+@title{向量表示：分量与显式偏导}
+@summary{构造具体向量，区分偏导项与执行偏导，并查看来源和前提。}
+@taxon["tutorial"]
+
+本页聚焦两类对象：按坐标排列的Cartesian向量分量，以及保留变量和方向的显式偏导项。构造器只描述数学对象；pipeline调用才执行计算。
+
+@(define r3 (◆:space 'x 'y 'z))
+
+@(define x (◆:coordinate 'x))
+
+@(define y (◆:coordinate 'y))
+
+@(define z (◆:coordinate 'z))
+
+@(define a (◆:parameter 'a))
+
+@(define v (◆:components
+             (◆:power x (◆:constant 2))
+             (◆:add y a)
+             (φ:read "sin(z)")
+             #:space r3))
+
+@subtree{
+  @title{构造向量场}
+
+  @code{x}、@code{y}、@code{z}是独立坐标，@code{a}是常数参数。三个Semantic分量按空间顺序组成向量@code{v}。这里Formula reader只负责@code{sin(z)}这个方便的短写；其结果仍是Semantic值。
+
+  @math[v]
+  @verbatim[(format #f "term: ~s\nspace requirement: ~s"
+    (◆:math-value-term v) (◆:math-value-requirements v))]
+
+  math命令用当前布局把向量渲染为列；term保留@code{components}的三个标量表达式；requirement记住它所依赖的Cartesian空间。声明没有自动进入所有计算，所以仍要显式传入事实。
+
+}
+
+@(define p
+  (◆:add (◆:power x (◆:constant 3))
+          (◆:multiply a (◆:multiply x y))))
+
+@(define formal (◆:partial p x))
+
+@(define partial-report (math-partial p x #:assumptions (list r3 a)))
+
+@subtree{
+  @title{构造偏导，不要和执行混淆}
+
+  @code{◆:partial}只构造待计算的偏导项。它不会执行求导：
+
+  @math[formal]
+  @verbatim[(format #f "~s" (◆:math-value-term formal))]
+
+  要执行偏导，调用pipeline：
+
+  @math[(math-report-result partial-report)]
+
+  输出对应@code{3*x² + a*y}。@code{math-partial}的坐标参数和被求导表达式都是Semantic值；空间与参数作为假设提供。对@code{y}或@code{z}求偏导会分别得到@code{a*x}和@code{0}。
+
+}
+
+@subtree{
+  @title{为什么参数声明重要}
+
+  若只知道@code{a}是scalar，系统无法推出它对@code{x}的导数为零。参数值的声明明确表达它相对独立坐标保持不变：
+
+  @verbatim[(format #f "result requirements: ~s"
+    (◆:math-value-requirements (math-report-result partial-report)))]
+
+  偏导结果保留来源值的语义条件。之后复用结果时，调用者仍须提供适合当前计算的事实；不会因为以前某次计算声明过参数，就永久污染全局状态。
+
+}
+
+@subtree{
+  @title{用列向量展示不同内容}
+
+  Notation列布局不携带向量语义：
+
+  @◇:display-math{@◇:column{x^2}{y+a}{sin(z)}}
+
+  这适合手工排版。若后续要计算div或curl，则应构造@code{◆:components}并附上有序@code{space}。
+
+}
+
+@subtree{
+  @title{相关数学主题}
+
+  @link["math-0004"]{空间算子}展示grad、div、curl和Laplacian的分量计算。@link["math-0007"]{多项式计算}则将Semantic IR lower到专用多项式IR。
+
+}

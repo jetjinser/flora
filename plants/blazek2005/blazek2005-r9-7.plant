@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Tai, C.-H.; Sheu, J.-H.; Tzeng, P.-Y.: Improvement of Explicit Multistage Schemes for Central Spatial Discretization. AIAA Journal, 34 (1996), pp. 185-188.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Donea, J.: An Arbitrary Lagrangian-Eulerian Finite Element Method for Transient Fluid-Structure Interactions. Comp. Meths. Appl. Mech. Eng., 33 (1982), pp. 689-723.}
+@taxon["reference"]

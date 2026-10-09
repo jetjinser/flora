@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mavriplis, D.J.: Three-Dimensional Multigrid for the Euler Equations. AIAA Journal, 30 (1992), pp. 1753-1761.}
+@taxon["reference"]

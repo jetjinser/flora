@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Pulliam, T.H.; Steger, J.L.: Implicit Finite Difference Simulations of Three-Dimensional Compressible Flows. AIAA Journal, 18 (1980), pp. 159-167.}
+@taxon["reference"]
+
+Pulliam与Steger关于三维可压缩流动隐式有限差分模拟的论文，薄剪切层近似的参考来源之一。

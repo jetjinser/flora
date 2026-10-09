@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Holmes, D.G.; Snyder, D.D.: The Generation of Unstructured Meshes Using Delaunay Triangulation. Proc. 2nd Int. Conf. on Numerical Grid Generation in CFD, Pineridge, Swansea, Wales, UK, 1988, pp. 643-652.}
+@taxon["reference"]

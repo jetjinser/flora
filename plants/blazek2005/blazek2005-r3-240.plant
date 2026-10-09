@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hirsch, C.; Verhoff, A.: Far Field Numerical Boundary Conditions for Internal and Cascade Flow Computations. AIAA Paper 89-1943, 1989.}
+@taxon["reference"]

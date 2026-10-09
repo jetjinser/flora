@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Marcum, D.L.: Advancing-Front/Local-Reconnection (AFLR) Unstructured Grid Generation. CFD Review 1998, Part I. Hafez, M.; Oshima, K. (eds.), World Scientific Computing Co., 1998.}
+@taxon["reference"]

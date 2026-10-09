@@ -1,0 +1,7 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{E. B. White}
+@summary{美国散文家，修订《The Elements of Style》使其通行于世。}
+@taxon["person"]
+
+E. B. White（1899–1985），美国散文家，《纽约客》长期撰稿人，亦著有童话《夏洛的网》。他是 William Strunk（@link["strunk"]{William Strunk Jr.}）在康奈尔的学生；1959 年应约将老师的小册子修订扩充为《The Elements of Style》，此后各版续经其手增订，1999 年第四版即本站 @link["strunk1999"]{《英语写作》译本}的底本。

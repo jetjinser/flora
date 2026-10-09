@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yamaleev, N.K.; Ballmann, J.: Space-Marching Method for Calculating Steady Supersonic Flows on a Grid Adapted to the Solution. J. Computational Physics, 146 (1998), pp. 436-463.}
+@taxon["reference"]
+
+Yamaleev与Ballmann在解自适应网格上计算定常超声速流动的空间推进方法。

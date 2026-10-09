@@ -1,0 +1,103 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{文学编程：文章、程序与核验}
+@summary{探索代码与解释如何共用来源，并按主题阅读可执行案例。}
+@taxon["index"]
+
+文学编程（literate programming，LP）让程序与解释共享来源，同时允许面向读者的叙述顺序与程序的依赖结构各自组织。Flora提供可执行定义、可复用片段、装配计划、运行实例和源码输出。下面按读者会遇到的问题组织这些功能；文章可独立阅读，也可以通过具名tree引用。
+
+需要了解文档语法时，可阅读@link["grove-0001"]{用.plant写作}。已有Scheme经验的读者可从@link["lp-0001"]{片段、计划与实例}开始。示例在读取时核验；浏览器负责展示结果，不执行这些程序。
+
+@subtree[#:id "lp-reading"]{
+  @title{如何阅读这些页面}
+
+  Flora的LP页面是可展开的内容树。正文中小节的标题控制展开与折叠；悬停背景显示该tree的范围，背景本身不是运行按钮。页面顶部的主标题是文章标题，不负责折叠整篇文章。
+
+  @itemize{
+    @item{@code{[lp-accumulate]}这样的地址链接打开tree的独立页面；点击地址不会执行程序。@code{[#N]}是自动分配的临时地址，可能随内容结构变化，不适合作为长期引用。}
+    @item{@code{Program.}表示代码内容，不单凭这个标签判断代码是否已执行。program会在读取文章时执行，code-fragment保存定义，fragment-tree只展示片段。}
+    @item{@code{Module.}在LP案例中标记装配计划的展示。它不是一个名为Module的Scheme模块，也不意味着实例已经创建。}
+    @item{@code{Project.}展示多个计划组成的模块工程。每个Module有独立命名空间和输出路径；工程本身也不表示已经运行。}
+    @item{@code{Example.}标记构建核验的展示；@code{Code.}用于文本片段对照教程。这些英文种类来自taxon，末尾的点是排版。}
+    @item{等宽代码框是可阅读的源码或核验表达式。颜色帮助识别Scheme语法，不表示执行覆盖率。长行可在框内横向滚动。}
+  }
+
+  Contents链接跳到当前页面的小节；Flora返回站点首页；Auto／Day／Night控制站点自身配色，选中项以颜色与字重区分。标题也可用键盘聚焦后按Enter或Space切换。
+
+  tree地址标识阅读内容；Scheme名称如accumulate标识程序binding。两者可以取不同的名字，也有不同的作用域。这些标记与LP术语（片段、计划、实例等）汇总于@link["glossary"]{术语表}。
+}
+
+@subtree[#:id "lp-results"]{
+  @title{核验结果与程序关系标记}
+
+  @itemize{
+    @item{@code{⇒ 120 · checked}表示表达式在文章读取时得到120，并通过equal?与作者给定的预期比较。结果不相等会中止构建。}
+    @item{@code{⇒ "11 cases passed" · checked}表示谓词在给定的11个样本上通过。引号来自Scheme字符串的显示；有限核验不是对无限输入的证明。}
+    @item{@code{expected exception: mce-unbound}表示核验捕获了指定的异常key。它是成功的错误路径测试，不是页面构建失败；异常参数不在这项比较中。}
+    @item{@code{Defines}列出片段提供的名称；@code{Assembled in}链接所有使用它的计划，不表示新的执行。@code{Requires}是作者声明的binding依赖，不是自动自由变量分析；可定位的本地提供者会显示为链接。@code{Initial requires}要求名称在整个片段初始化之前可用。}
+    @item{@code{Imports}列出计划显式导入的模块与名称；项目内模块链接到对应计划。@code{Initialization order}给出定义建立顺序，不能据此交换有状态的初始化。@code{Outputs}打开同源文件，@code{Checks}打开作者明确关联的核验结果，不代表自动分析出的完整测试覆盖。}
+    @item{@code{Exports: (run)}列出实例允许通过instance-binding取得的入口。片段列表链接到定义的阅读位置。}
+    @item{@code{Download accumulator.scm}链接构建产物。该文件来自计划中的定义，不保存文章内实例的当前状态；下载或查看文件不会运行它。}
+  }
+
+  累计器的实际结果tree可直接阅读，也可以点击地址单独打开：
+
+  @transclude["lp-accumulator-test"]
+
+  Backlinks、Related和Context是森林中的阅读关系，可折叠查看。它们不等于程序的requires，也不会导入Scheme binding。缓存可以复用已经核验的内容，checked不表示每次访问页面都会运行代码。
+}
+
+@subtree[#:id "lp-model"]{
+  @title{程序如何从片段走向实例}
+
+  片段保存完整的Scheme define、原文、来源和显式依赖。make-program验证片段身份、重复定义与导出，建立不执行的计划；instantiate-program按计划顺序在新的命名空间中执行定义，得到有运行状态的实例。
+
+  @code{片段 → 装配计划 → 执行实例}描述程序的生命周期。fragment-tree、program-tree和源码输出读取片段或计划，不触发实例化；instance-binding则从实例取得已声明的入口。
+
+  累计器的实际计划展示如下，片段列表中的链接可以打开定义：
+
+  @transclude["lp-accumulator"]
+
+  @link["lp-0001"]{累计器教程}把这些操作写成一个完整案例，结果@code{(2 5 10)}展示同一实例保留状态、不同实例互相隔离。@link["lp-0002"]{文章内直接执行}介绍较轻的program写法，适合函数说明与可核验计算，不建立独立的装配计划。
+}
+
+@subtree{
+  @title{文章中的可执行定义}
+
+  @itemize{
+    @item{@link["lp-0001"]{片段、计划与实例}：模块导入、源码写法、装配、展示、实例化和.scm输出。}
+    @item{@link["lp-0002"]{文章内定义与核验}：真实Scheme函数、结果预期，以及transclude不重复执行的含义。}
+    @item{@link["lp-0003"]{算术解释器与简化器}：通过解释语义理解重写规则、有限性质和错误路径。}
+  }
+
+  结果值、性质谓词和异常key回答不同的问题。示例中的ID是可引用的内容身份，预期值是作者对程序行为的断言；名称和断言都应明确到能够单独阅读。
+}
+
+@subtree{
+  @title{跨文章复用程序定义}
+
+  @link["lp-0004"]{模块文章与程序导入}说明define-module、公共接口和准备流程。use-modules导入真实的函数或片段值，link与transclude建立阅读引用；嵌入某段代码不会把该段定义加入当前环境。
+
+  @link["lp-0008"]{Scheme解释器的闭包与环境}是一篇导出片段值的模块文章。@link["lp-0007"]{Scheme元循环解释器}将这些片段与求值器组合，展示顺序与装配清单分别声明。稳定ID和来源范围让片段能被跨文章定位。
+}
+
+@subtree{
+  @title{元循环解释器案例}
+
+  @itemize{
+    @item{@link["lp-0007"]{Scheme子集的求值与装配}：递归、词法作用域、入口函数、原语和语义核验。}
+    @item{@link["lp-0008"]{闭包应用与环境框架}：解释递归binding和跨文章片段。}
+    @item{@link["lp-0009"]{同源输出与一层自解释}：同一装配在宿主、解释器及解释器中的解释器上比较结果。}
+    @item{@link["lp-000A"]{多文件工程与模块边界}：复用同一片段，输出环境、原语、求值器、入口和核验模块；阅读关系不必跟随文件划分。}
+  }
+
+  阶乘的120、词法遮蔽的12、11个三层结果案例和5个异常案例都来自可执行核验。自解释仍借用显式宿主原语，不等于完整Scheme实现或独立运行时自举。
+}
+
+@subtree{
+  @title{源码输出与接口边界}
+
+  @link["lp-0005"]{文本片段组合}解释按原文拼接生成程序的方式。它适合把文本交给外部工具，但不提供Scheme作用域检查；本LP库的完整定义装配是不同的组合方式。
+
+  @link["lp-0006"]{LP接口与构建约定}集中说明模块职责、源码范围、依赖缓存和支持边界。站点内执行不要求生成另一份代码文件；外部交付或独立核验时，可从同一计划导出源码。
+}

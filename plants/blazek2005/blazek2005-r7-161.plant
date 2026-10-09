@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Georgiadis, N.J.; Alexander, J.I.D.; Reshotko, E.: Hybrid Reynolds-Averaged Navier-Stokes/Large-Eddy Simulations of Supersonic Turbulent Mixing. AIAA Journal, 41 (2003), pp. 218-229.}
+@taxon["reference"]

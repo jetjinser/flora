@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Nakahashi, K.: FDM-FEM Zonal Approach for Computations of Compressible Viscous Flows. Lecture Notes in Physics, 264 (1986), Springer Verlag, pp. 494-498.}
+@taxon["reference"]

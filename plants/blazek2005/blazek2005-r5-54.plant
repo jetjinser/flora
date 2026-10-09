@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Whitaker D.L.; Slack, D.C.; Walters, R.W.: Solution Algorithms for the Two-Dimensional Euler Equations on Unstructured Meshes. AIAA Paper 90-0697, 1990.}
+@taxon["reference"]

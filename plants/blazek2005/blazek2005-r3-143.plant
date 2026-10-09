@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mavriplis, D.J.; Venkatakrishnan, V.: A 3D Agglomeration Multigrid Solver for the Reynolds-Averaged Navier-Stokes Equations on Unstructured Meshes. Int. J. Numerical Methods in Fluids, 23 (1996), pp. 527-544.}
+@taxon["reference"]

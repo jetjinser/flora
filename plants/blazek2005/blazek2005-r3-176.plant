@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Anderson, W.K.: A Grid Generation and Flow Solution Method for the Euler Equations on Unstructured Grids. J. Computational Physics, 110 (1994), pp. 23-38.}
+@taxon["reference"]

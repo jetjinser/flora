@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Tucker, P.G.; Liu, Y.; Chung, Y.M.; Jouvray, A.: Computation of an Unsteady Complex Geometry Flow Using Novel Non-Linear Turbulence Models. Int. J. Numer. Meth. Fluids, 43 (2003), pp. 979-1001.}
+@taxon["reference"]

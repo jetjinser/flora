@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Schmatz, M.A.: Hypersonic Three-Dimensional Navier-Stokes Calculations for Equilibrium Gas. AIAA Paper 89-2183, 1989.}
+@taxon["reference"]
+
+Schmatz关于平衡气体三维纳维–斯托克斯计算的高超声速AIAA会议论文。

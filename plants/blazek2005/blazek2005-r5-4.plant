@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Frink, N.T.; Pirzadeh, S.Z.: Tetrahedral Finite-Volume Solutions to the Navier-Stokes Equations on Complex Configurations. 10th Int. Conf. on Finite Elements in Fluids, Tucson, USA, 1998.}
+@taxon["reference"]

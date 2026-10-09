@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Koeck, C.: Computation of Three-Dimensional Flow Using the Euler Equations and a Multiple-Grid Scheme. Int. Journal for Numerical Methods in Fluids, 5 (1985), pp. 483-500.}
+@taxon["reference"]

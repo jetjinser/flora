@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Peraire, J.; Peiró, J.; Morgan, K.: A 3D Finite-Element Multigrid Solver for the Euler Equations. AIAA Paper 92-0449, 1992.}
+@taxon["reference"]

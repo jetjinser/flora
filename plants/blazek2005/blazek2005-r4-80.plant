@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yee, H.C.: Construction of Implicit and Explicit Symmetric TVD Schemes and Their Applications. J. Computational Physics, 68 (1987), pp. 151-179.}
+@taxon["reference"]

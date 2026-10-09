@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Krishnan, R.R.; Eidson, T.M.: An Efficient, Parallel Space-Marching Euler Solver for HSCT Research. AIAA Paper 95-1749, 1995.}
+@taxon["reference"]
+
+Krishnan与Eidson为HSCT研究开发的高效并行空间推进Euler求解器。

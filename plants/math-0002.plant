@@ -1,0 +1,138 @@
+@use-modules[(flora commands) (language scribble commands) (grove math pipeline)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math formula) #:prefix φ:)]
+
+@title{构造并执行数学计算}
+@summary{从Semantic输入到多pass报告：精确计算、化简、结果复用。}
+@taxon["tutorial"]
+
+本页展示Scheme API的一次完整计算：构造值、调用计算pass并读取报告；报告中的结果可以继续传入其他计算。构造和显示不会偷偷化简，只有显式调用才会执行计算。
+
+@(define exact-report (φ:calculate "1/3 + 1/6"))
+
+@subtree{
+  @title{精确常数}
+  @taxon["example"]
+
+  Formula façade适合快速试算。这里的结果仍来自构建时的计算：
+
+  @math[(math-report-result exact-report)]
+
+  结果是精确的1/2，不是浮点近似。@code{φ:calculate}读取Formula文本，然后执行精确常数计算。除零等错误会成为结构化诊断。
+
+  也可以从头构造相同的值，并直接调用Semantic pipeline：
+
+  @verbatim["@(define half
+    (math-calculate
+      (◆:add (◆:divide (◆:constant 1) (◆:constant 3))
+             (◆:divide (◆:constant 1) (◆:constant 6)))))
+  @math[(math-report-result half)]"]
+
+  @code{math-calculate}的参数是一个Semantic值。构造器只接受Semantic操作数，所以误把字符串传入核心API会立即得到契约错误；要解析文本，就在边界使用@code{φ:read}或@code{φ:calculate}。
+
+}
+
+@(define x (◆:coordinate 'x))
+
+@(define unreduced
+  (◆:add (◆:negate (◆:negate x))
+          (◆:multiply (◆:constant 0) x)))
+
+@(define reduction-report
+  (math-simplify unreduced #:assumptions (list x)))
+
+@(define derivative-report
+  (math-differentiate (φ:read "x^3+2*x") x #:assumptions (list x)))
+
+@subtree{
+  @title{化简由规则完成}
+
+  原始值：@math[unreduced]。显式调用@code{math-simplify}后：@math[(math-report-result reduction-report)]。
+
+  前一个表达式仍保留双重负号和零乘积；后一个报告结果才经过化简规则。这里的@code{x}是带坐标声明的Semantic值，因此可直接作为计算事实传入。
+
+}
+
+@subtree{
+  @title{报告不仅是最终公式}
+
+  一个多阶段计算报告包含完成状态、各pass的名称、每一步应用的规则与路径，以及可重放的derivation。检查求导示例：
+
+  @verbatim[(format #f "passes: ~s\ncomplete: ~s\nsteps: ~s"
+    (map math-report-name (math-report-passes derivative-report))
+    (math-report-complete? derivative-report)
+    (length (math-derivation-steps (math-report-derivation derivative-report))))]
+
+  此处显示本次调用实际经过的pass、是否完整，以及derivation的步数。步数可能随规则集发展而变化；阅读时应关注pass职责和完成状态，而非把某个步数当成数学定理。
+
+  @(paragraph (format #f "独立 replay：~a"
+    (math-verification-valid? (math-verify-derivation (math-report-derivation derivative-report)))))
+
+  Replay通过表示验证器逐步重放规则后接受该报告。它不是对任意数学命题的通用证明，而是针对系统有限规则目录的证书检查。
+
+  @math[(math-report-result derivative-report)]
+
+  这里可以同时读到每个pass的名称和最终Semantic值。简单的@code{math-simplify}只运行单一化简阶段，报告会直接记录它的rewrite steps。
+
+}
+
+@subtree{
+  @title{组合Formula便利接口与Semantic核心}
+
+  如果源表达式最初来自文章正文，可以先读取并保存：
+
+  @verbatim["@(define source (φ:read \"2*x + 3*x\"))
+  @(define collection (math-collect source
+    #:assumptions (φ:assumptions \"coordinate(x)\")))
+  @math[(math-report-result collection)]"]
+
+  这里Formula reader仅在第一行接触字符串。后续@code{math-collect}接收@code{source}这个Semantic值；计算事实也是解析后的term。把结果保存为值后，它还可以继续参与@code{◆:}构造器、Notation排版或另一个pass。
+
+}
+
+@(define failure (φ:calculate "1/0"))
+
+@subtree{
+  @title{失败也要保留为内容}
+  @taxon["counterexample"]
+
+  Formula façade可以让失败报告继续用于文章展示：
+
+  @(math-completed-report->content failure #:on-error 'show)
+
+  该输入产生定义域诊断，不会被伪装成普通答案。实际文章命令可使用@code{#:on-error 'show}显示诊断；默认行为则会让构建失败，适合把错误当作必须修复的问题。
+
+}
+
+@subtree{
+  @title{从计算报告到推导证书}
+
+  @link["math-0003"]{推导、搜索与独立核验}复用同一报告模型，搜索目标、检查手写链并独立验证derivation。
+
+}
+
+
+@subtree{
+  @title{构建中的计算与缓存}
+
+  普通文章默认缓存求值后得到的Content IR。再次构建时，如果文章、导入的模块、编译代码和配置没有变化，就直接复用结果；上面的数学例子不必每次重新计算。整个Forest仍会重新分析，所以查询、链接和transclude能看到当前的文章集合。
+
+  不需要写cache key，也不需要手动增加版本号。修改代码或配置后，Grove根据输入指纹自动失效；@code{grove check}则始终重新求值和渲染，用于完整核验。
+
+  如果计算读取额外的数据文件，要在读取前登记它：
+
+  @verbatim["@use-modules[(grove input scribble) (ice-9 textual-ports)]
+@(define data
+   (call-with-input-file (depend-on! \"data.txt\") get-string-all))"]
+
+  @code{depend-on!}返回文件的绝对路径，并把文件内容登记为依赖。文件变化后，文章结果和渲染输出会一起失效，serve也会监视它。
+
+  对时间、随机数、网络请求，或者必须每次执行的副作用，应当主动退出缓存：
+
+  @verbatim["@use-modules[(grove input scribble)]
+@(disable-cache!)"]
+
+  这样会在每次构建中重新执行这篇文章，也重新生成渲染输出。只因为一个结果可以保存，并不意味着任意Scheme程序都可以安全地跳过执行。
+
+  通用约定见@link["grove-0003"]{构建阶段与缓存}。
+}

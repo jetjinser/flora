@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Vinokur, M.: Conservation Equations of Gas Dynamics in Curvilinear Coordinate Systems. J. Computational Physics, 14 (1974), pp. 105-125.}
+@taxon["reference"]
+
+Vinokur关于曲线坐标系下气体动力学守恒方程形式的论文，与经Gauss定理导出微分形式有关。

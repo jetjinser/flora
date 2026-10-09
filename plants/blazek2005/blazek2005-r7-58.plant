@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Luo, H.; Baum, J.D.; Löhner, R.: Computation of Compressible Flows Using a Two-Equation Turbulence Model on Unstructured Grids. AIAA Paper 97-0430, 1997.}
+@taxon["reference"]

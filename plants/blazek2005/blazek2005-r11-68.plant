@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Löhner, R.: Progress in Grid Generation via the Advancing Front Technique. Engineering with Computers, 12 (1996), pp. 186-210.}
+@taxon["reference"]

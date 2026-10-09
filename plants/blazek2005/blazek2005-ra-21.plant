@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Steger, J.L.: Implicit Finite Difference Simulation of Flows About Arbitrary Geometries. AIAA Journal 17 (1978) 679-686.}
+@taxon["reference"]

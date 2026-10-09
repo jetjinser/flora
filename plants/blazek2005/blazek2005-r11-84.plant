@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Whitmire, J.B.; Dollar, T.W.: Prismatic Grid Generation for NURBS Bounded Triangulations. AIAA Paper 98-0219, 1998.}
+@taxon["reference"]

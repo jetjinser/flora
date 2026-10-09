@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{White, A.J.; Young, J.B.: Time-Marching Method for the Prediction of Two-Dimensional, Unsteady Flows of Condensing Steam. AIAA J. Propulsion and Power, 9 (1993), pp. 579-587.}
+@taxon["reference"]
+
+White与Young提出预测二维非定常凝结蒸汽流动的时间推进方法。

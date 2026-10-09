@@ -1,0 +1,510 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{An Approach to Style 第五章 风格的探索}
+@summary{关于风格本质的讨论，以及二十一条写作提醒。}
+@taxon["reference"]
+
+@bi{
+  @lang["en"]{@bold{(With a List of Reminders)}}
+  @lang["zh-CN"]{@bold{第五章 风格的探索（附一份提醒清单）}}
+}
+
+@bi{
+  @lang["en"]{Up to this point, the book has been concerned with what is correct, or acceptable, in the use of English. In this final chapter, we approach style in its broader meaning: style in the sense of what is distinguished and distinguishing. Here we leave solid ground. Who can confidently say what ignites a certain combination of words, causing them to explode in the mind? Who knows why certain notes in music are capable of stirring the listener deeply, though the same notes slightly rearranged are impotent? These are high mysteries, and this chapter is a mystery story, thinly disguised. There is no satisfactory explanation of style, no infallible guide to good writing, no assurance that a person who thinks clearly will be able to write clearly, no key that unlocks the door, no inflexible rule by which writers may shape their course. Writers will often find themselves steering by stars that are disturbingly in motion.}
+  @lang["zh-CN"]{到目前为止，本书关注的是英语使用中何谓正确、何谓可接受。在这最后一章里，我们探讨的是更宽泛意义上的风格：那种与众不同、又使事物彼此区分的风格。在这里，我们离开了坚实的地面。谁能有把握地说，是什么点燃了某个词与词的组合，使它们在头脑中炸裂开来？谁又知道，为什么音乐中的某些音符能够深深打动听者，而同样的音符稍作重新排列便毫无力量？这些都是高深的奥秘，而本章是一个稍加伪装的谜案故事。对风格没有令人满意的解释，没有写出好文章的万无一失的指南，没有人能保证一个思路清晰的人就一定写得清晰，没有一把能开门的钥匙，也没有一条可供写作者塑造其道路的僵硬规则。写作者常会发现自己要靠那些令人不安地移动着的星辰来导航。}
+}
+
+@bi{
+  @lang["en"]{The preceding chapters contain instructions drawn from established English usage; this one contains advice drawn from a writer's experience of writing. Since the book is a rule book, these cautionary remarks, these subtly dangerous hints, are presented in the form of rules, but they are, in essence, mere gentle reminders: they state what most of us know and at times forget.}
+  @lang["zh-CN"]{前面几章包含的是从既定的英语用法中提炼出的指示；这一章包含的是从一位写作者的写作经验中得来的建议。由于本书是一本规则书，这些告诫性的话、这些暗藏玄机的提示，都以规则的形式呈现，但它们本质上只是一些温和的提醒：它们道出的是我们大多数人都知道、却时常忘记的东西。}
+}
+
+@bi{
+  @lang["en"]{Style is an increment in writing. When we speak of Fitzgerald's style, we don't mean his command of the relative pronoun, we mean the sound his words make on paper. All writers, by the way they use the language, reveal something of their spirits, their habits, their capacities, and their biases. This is inevitable as well as enjoyable. All writing is communication; creative writing is communication through revelation—it is the Self escaping into the open. No writer long remains incognito.}
+  @lang["zh-CN"]{风格是写作中的一种增值。当我们谈到菲茨杰拉德的风格时，我们指的不是他对关系代词的掌握，而是他的词落在纸面上所发出的声音。所有写作者，以其使用语言的方式，都透露出各自精神、习惯、能力和偏见的一些东西。这既是不可避免的，也是令人愉快的。一切写作都是交流；创造性写作是通过揭示来交流——是自我逃逸到开阔之处。没有哪个写作者能长久隐姓埋名。}
+}
+
+@bi{
+  @lang["en"]{If you doubt that style is something of a mystery, try rewriting a familiar sentence and see what happens. Any much-quoted sentence will do. Suppose we take "These are the times that try men's souls." Here we have eight short, easy words, forming a simple declarative sentence. The sentence contains no flashy ingredient such as "Damn the torpedoes!" and the words, as you see, are ordinary. Yet in that arrangement, they have shown great durability; the sentence is into its third century. Now compare a few variations:}
+  @lang["zh-CN"]{如果你怀疑风格带有某种神秘色彩，不妨试着改写一个熟悉的句子，看看会发生什么。任何被广泛引用的句子都行。假设我们取"These are the times that try men's souls."。这里有八个简短、易懂的词，构成一个简单的陈述句。这个句子不含诸如"Damn the torpedoes!"之类花哨的成分，而如你所见，这些词都平平无奇。然而在这样的排列中，它们展现出了极强的持久力；这个句子已经进入它的第三个世纪。现在比较几个变体：}
+}
+
+@blockquote{
+Times like these try men's souls.
+How trying it is to live in these times!
+These are trying times for men's souls.
+Soulwise, these are trying times.
+}
+
+@bi{
+  @lang["en"]{It seems unlikely that Thomas Paine could have made his sentiment stick if he had couched it in any of these forms. But why not? No fault of grammar can be detected in them, and in every case the meaning is clear. Each version is correct, and each, for some reason that we can't readily put our finger on, is marked for oblivion. We could, of course, talk about "rhythm" and "cadence," but the talk would be vague and unconvincing. We could declare @emph{soulwise} to be a silly word, inappropriate to the occasion; but even that won't do—it does not answer the main question. Are we even sure @emph{soulwise} is silly? If @emph{otherwise} is a serviceable word, what's the matter with @emph{soulwise}?}
+  @lang["zh-CN"]{托马斯·潘恩若把他的情感用上面这些形式中的任何一种来表达，似乎都不大可能让它站住脚。可为什么不行呢？这些句子里挑不出任何语法错误，而且在每一种情况下意思都清楚。每个版本都正确，可每一个都因为某种我们难以确切指出的原因，被判定了湮没的命运。我们当然可以谈论"rhythm"和"cadence"，但那样谈会含糊而没有说服力。我们可以宣称@emph{soulwise}是个愚蠢的词，不合这样的场合；可即便如此也无济于事——它回答不了主要问题。我们甚至能确定@emph{soulwise}愚蠢吗？如果@emph{otherwise}是个有用的词，那么@emph{soulwise}又有什么毛病呢？}
+}
+
+@bi{
+  @lang["en"]{Here is another sentence, this one by a later Tom. It is not a famous sentence, although its author (Thomas Wolfe) is well known. "Quick are the mouths of earth, and quick the teeth that fed upon this loveliness." The sentence would not take a prize for clarity, and rhetorically it is at the opposite pole from "These are the times." Try it in a different form, without the inversions:}
+  @lang["zh-CN"]{这里还有另一个句子，出自一位较晚的Tom之手。它不是一句名言，尽管其作者（托马斯·沃尔夫）很有名。"Quick are the mouths of earth, and quick the teeth that fed upon this loveliness."这个句子不会因清晰而获奖，在修辞上它也与"These are the times."处在相反的两极。试着把它换一种形式，去掉那些倒装：}
+}
+
+@blockquote{The mouths of earth are quick, and the teeth that fed upon this loveliness are quick, too.}
+
+@bi{
+  @lang["en"]{The author's meaning is still intact, but not his overpowering emotion. What was poetical and sensuous has become @emph{prosaic} and wooden; instead of the secret sounds of beauty, we are left with the simple crunch of mastication. (Whether Mr. Wolfe was guilty of overwriting is, of course, another question—one that is not pertinent here.)}
+  @lang["zh-CN"]{作者的意思仍然完好无损，可他那压倒一切的情感却没了。原本富有诗意和感官之美的东西变得@bold{平淡无奇}而又呆板；我们听到的不再是美那隐秘的声音，只剩下咀嚼时简单的嘎吱声。（沃尔夫先生是否犯有写得过分的毛病，当然是另一个问题——一个与这里无关的问题。）}
+}
+
+@bi{
+  @lang["en"]{With some writers, style not only reveals the spirit of the man but reveals his identity, as surely as would his fingerprints. Here, following, are two brief passages from the works of two American novelists. The subject in each case is languor. In both, the words used are ordinary, and there is nothing eccentric about the construction.}
+  @lang["zh-CN"]{对某些写作者来说，风格不仅揭示一个人的精神，也揭示他的身份，其确实程度不亚于指纹。下面是从两位美国小说家作品中摘出的两段简短文字。两段的主题都是倦怠。两段中所用的词都平平无奇，结构上也没有任何古怪之处。}
+}
+
+@blockquote{He did not still feel weak, he was merely luxuriating in that supremely gutful lassitude of convalescence in which time, hurry, doing, did not exist, the accumulating seconds and minutes and hours to which in its well state the body is slave both waking and sleeping, now reversed and time now the lip-server and mendicant to the body's pleasure instead of the body thrall to time's headlong course.}
+
+@blockquote{Manuel drank his brandy. He felt sleepy himself. It was too hot to go out into the town. Besides there was nothing to do. He wanted to see Zurito. He would go to sleep while he waited.}
+
+@bi{
+  @lang["en"]{Anyone acquainted with Faulkner and Hemingway will have recognized them in these passages and perceived which was which. How different are their languors!}
+  @lang["zh-CN"]{任何熟悉福克纳和海明威的人，都会在这两段文字中认出他们，并分辨出哪段是谁的。他们的倦怠何其不同！}
+}
+
+@bi{
+  @lang["en"]{Or take two American poets, stopping at evening. One stops by woods, the other by laughing flesh.}
+  @lang["zh-CN"]{或者拿两位美国诗人来说，他们在黄昏时停下。一位停驻在树林边，另一位停驻在欢笑的血肉之躯旁。}
+}
+
+@blockquote{
+My little horse must think it queer
+To stop without a farmhouse near
+Between the woods and frozen lake
+The darkest evening of the year.*
+}
+
+@bi{
+  @lang["en"]{From "Stopping by Woods on a Snowy Evening" from @emph{The Poetry of Robert Frost}, edited by Edward Connery Lathem. Copyright 1923, © 1969 by Henry Holt and Company, LLC. Reprinted by permission of Henry Holt and Company, LLC.}
+  @lang["zh-CN"]{摘自罗伯特·弗罗斯特《@emph{The Poetry of Robert Frost}》中的"Stopping by Woods on a Snowy Evening"，由Edward Connery Lathem编辑。版权所有1923，©1969 by Henry Holt and Company, LLC。经Henry Holt and Company, LLC许可转载。}
+}
+
+@blockquote{
+I have perceived that to be with those I like is enough,
+To stop in company with the rest at evening is enough,
+To be surrounded by beautiful, curious, breathing, laughing flesh is enough…
+}
+
+@bi{
+  @lang["en"]{Because of the characteristic styles, there is little question about identity here, and if the situations were reversed, with Whitman stopping by woods and Frost by laughing flesh (not one of his regularly scheduled stops), the reader would know who was who.}
+  @lang["zh-CN"]{由于风格各有特征，这里的身份几乎没有疑问；而且如果把情形对调，让惠特曼停在树林边、弗罗斯特停在欢笑的血肉旁（那并非他例行的停靠点之一），读者也知道谁是谁。}
+}
+
+@bi{
+  @lang["en"]{Young writers often suppose that style is a garnish for the meat of prose, a sauce by which a dull dish is made palatable. Style has no such separate entity; it is nondetachable, unfilterable. The beginner should approach style warily, realizing that it is an expression of self, and should turn resolutely away from all devices that are popularly believed to indicate style—all mannerisms, tricks, adornments. The approach to style is by way of plainness, simplicity, orderliness, sincerity.}
+  @lang["zh-CN"]{年轻写作者常以为风格是散文这份正餐上的装饰，是一种让寡淡菜肴变得可口的酱汁。风格并没有这样独立的实体；它不可剥离，不可滤除。初学者应当谨慎地接近风格，要认识到它是自我的一种表达，并应坚决地远离一切被大众认为能标示风格的技巧——所有做作、花样和装饰。通往风格之路，靠的是朴素、简洁、有序、真诚。}
+}
+
+@bi{
+  @lang["en"]{Writing is, for most, laborious and slow. The mind travels faster than the pen; consequently, writing becomes a question of learning to make occasional wing shots, bringing down the bird of thought as it flashes by. A writer is a gunner, sometimes waiting in the blind for something to come in, sometimes roaming the countryside hoping to scare something up. Like other gunners, the writer must cultivate patience, working many covers to bring down one partridge. Here, following, are some suggestions and cautionary hints that may help the beginner find the way to a satisfactory style.}
+  @lang["zh-CN"]{对大多数人来说，写作是费力而缓慢的。思绪比笔跑得快；因此，写作就成了学会偶尔打飞靶的问题，在思想的鸟儿一闪而过时将它击落。写作者像一个枪手，有时在掩体里静候什么进入视野，有时在乡野间游荡，希望能把什么惊起来。像其他枪手一样，写作者必须培养耐心，走遍许多片灌木丛，只为击落一只山鹑。下面是一些建议和告诫性提示，也许能帮助初学者找到通往令人满意风格的路。}
+}
+
+@subtree[#:id "strunk1999-reminder-1"]{
+  @title{提醒1 把自己置于背景}
+
+  @bi{
+    @lang["en"]{Write in a way that draws the reader's attention to the sense and substance of the writing, rather than to the mood and temper of the author. If the writing is solid and good, the mood and temper of the writer will eventually be revealed and not at the expense of the work. Therefore, the first piece of advice is this: to achieve style, begin by affecting none—that is, place yourself in the background. A careful and honest writer does not need to worry about style. As you become proficient in the use of language, your style will emerge, because you yourself will emerge, and when this happens you will find it increasingly easy to break through the barriers that separate you from other minds, other hearts—which is, of course, the purpose of writing, as well as its principal reward. Fortunately, the act of composition, or creation, disciplines the mind; writing is one way to go about thinking, and the practice and habit of writing not only drain the mind but supply it, too.}
+    @lang["zh-CN"]{用这样的方式写作：它把读者的注意力引向文章的意义和实质，而不是作者的心境与性情。如果作品扎实而优秀，作者的心境与性情最终自会显露，而不必以牺牲作品为代价。因此，第一条建议是：要获得风格，先从毫不做作开始——也就是把自己置于背景中。一位细心而诚实的写作者不需要为风格担忧。随着你在语言使用上变得娴熟，你的风格自会显现，因为你本人自会显现；而当这一切发生时，你会发现越来越容易冲破那些把你与他人心灵、他人心扉隔开的壁垒——这当然正是写作的目的，也是它的主要回报。幸运的是，写作或创作这一行为能锻炼心智；写作是进行思考的一种方式，而写作的练习和习惯不仅消耗心智，也供给心智。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-2"]{
+  @title{提醒2 以自然的方式写作}
+
+  @bi{
+    @lang["en"]{Write in a way that comes easily and naturally to you, using words and phrases that come readily to hand. But do not assume that because you have acted naturally your product is without flaw.}
+    @lang["zh-CN"]{以对你来说轻松自然的方式写作，使用手边就能想到的词和短语。但不要因为你是自然而然地写的，就以为你的作品没有瑕疵。}
+  }
+
+  @bi{
+    @lang["en"]{The use of language begins with imitation. The infant imitates the sounds made by its parents; the child imitates first the spoken language, then the stuff of books. The imitative life continues long after the writer is secure in the language, for it is almost impossible to avoid imitating what one admires. Never imitate consciously, but do not worry about being an imitator; take pains instead to admire what is good. Then when you write in a way that comes naturally, you will echo the halloos that bear repeating.}
+    @lang["zh-CN"]{语言的使用始于模仿。婴儿模仿父母发出的声音；孩子先模仿口语，再模仿书中的东西。即便写作者已经在语言上站稳脚跟，这种模仿的生活仍会持续很久，因为几乎不可能不去模仿自己所钦佩的东西。永远不要有意识地模仿，但也不要担心自己是个模仿者；相反，要用心去钦佩好的东西。这样，当你以自然的方式写作时，你便会应和那些值得重复的吆喝声。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-3"]{
+  @title{提醒3 从合适的设计入手}
+
+  @bi{
+    @lang["en"]{Before beginning to compose something, gauge the nature and extent of the enterprise and work from a suitable design. (See Chapter II, @link["strunk1999-rule-12"]{Rule 12}.) Design informs even the simplest structure, whether of brick and steel or of prose. You raise a pup tent from one sort of vision, a cathedral from another. This does not mean that you must sit with a blueprint always in front of you, merely that you had best anticipate what you are getting into. To compose a laundry list, you can work directly from the pile of soiled garments, ticking them off one by one. But to write a biography, you will need at least a rough scheme; you cannot plunge in blindly and start ticking off fact after fact about your subject, lest you miss the forest for the trees and there be no end to your labors.}
+    @lang["zh-CN"]{在开始写作某样东西之前，先估量这件事的性质和规模，然后从合适的设计入手。（见第二章@link["strunk1999-rule-12"]{规则12}。）设计赋予最单纯的结构以形式，无论是砖石钢铁的结构还是散文的结构。你用某种构想搭起一顶小帐篷，用另一种构想建起一座大教堂。这并不意味着你必须始终坐在一张蓝图前，只是说你最好预先想清楚自己将要进入什么。要列一张洗衣清单，你可以直接对着那堆脏衣服，一件件勾掉。但要写一部传记，你至少需要一个粗略的框架；你不能盲目地一头扎进去，一条接一条地罗列关于传主的事实，免得只见树木不见森林，而且工作永无止境。}
+  }
+
+  @bi{
+    @lang["en"]{Sometimes, of course, impulse and emotion are more compelling than design. If you are deeply troubled and are composing a letter appealing for mercy or for love, you had best not attempt to organize your emotions; the prose will have a better chance if the emotions are left in disarray—which you'll probably have to do anyway, since feelings do not usually lend themselves to rearrangement. But even the kind of writing that is essentially adventurous and impetuous will on examination be found to have a secret plan: Columbus didn't just sail, he sailed west, and the New World took shape from this simple and, we now think, sensible design.}
+    @lang["zh-CN"]{当然，有时冲动和情感比设计更有驱动力。如果你心烦意乱，正在写一封恳求怜悯或爱情的信，你最好不要试图去组织自己的情感；若让情感保持混乱，行文反而更有可能成功——反正你多半也不得不如此，因为情感通常不乐于被重新安排。但即便是那种本质上冒险而冲动的写作，细加审视也会发现有某种隐秘的方案：哥伦布并非只是出海，他向西航行，而新世界正是从这个简单、且在我们今天看来明智的设计中成形的。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-4"]{
+  @title{提醒4 用名词和动词写作}
+
+  @bi{
+    @lang["en"]{Write with nouns and verbs, not with adjectives and adverbs. The adjective hasn't been built that can pull a weak or inaccurate noun out of a tight place. This is not to disparage adjectives and adverbs; they are indispensable parts of speech. Occasionally they surprise us with their power, as in @emph{Up the airy mountain, Down the rushy glen, We daren't go a-hunting For fear of little men…}. The nouns @emph{mountain} and @emph{glen} are accurate enough, but had the mountain not become airy, the glen rushy, William Allingham might never have got off the ground with his poem. In general, however, it is nouns and verbs, not their assistants, that give good writing its toughness and color.}
+    @lang["zh-CN"]{用名词和动词写作，不要用形容词和副词。还没有哪个形容词被造出来，能把一个虚弱或不准的名词从困境中拉出来。这并不是贬低形容词和副词；它们是不可或缺的词类。偶尔它们会以自身的力量令我们惊讶，如在Up the airy mountain, Down the rushy glen, We daren't go a-hunting For fear of little men…中那样。名词@emph{mountain}和@emph{glen}已经够准确了，但若那座山不曾变得airy、那条峡谷不曾变得rushy，威廉·阿林厄姆也许就永远无法让他的诗飞起来。不过总的来说，赋予优秀作品以力度和色彩的是名词和动词，而不是它们的助手。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-5"]{
+  @title{提醒5 修改再修改}
+
+  @bi{
+    @lang["en"]{Revising is part of writing. Few writers are so expert that they can produce what they are after on the first try. Quite often you will discover, on examining the completed work, that there are serious flaws in the arrangement of the material, calling for transpositions. When this is the case, a word processor can save you time and labor as you rearrange the manuscript. You can select material on your screen and move it to a more appropriate spot, or, if you cannot find the right spot, you can move the material to the end of the manuscript until you decide whether to delete it. Some writers find that working with a printed copy of the manuscript helps them to visualize the process of change; others prefer to revise entirely on screen. Above all, do not be afraid to experiment with what you have written. Save both the original and the revised versions; you can always use the computer to restore the manuscript to its original condition, should that course seem best. Remember, it is no sign of weakness or defeat that your manuscript ends up in need of major surgery. This is a common occurrence in all writing, and among the best writers.}
+    @lang["zh-CN"]{修改是写作的一部分。很少有作家高明到第一遍就能写出自己想要的东西。你常常会在检查完成的作品时发现，材料的安排存在严重缺陷，需要做调换。遇到这种情况，文字处理软件可以在你重新安排稿件时为你省时省力。你可以在屏幕上选中材料，把它移到更合适的位置；或者，如果你找不到合适的位置，可以先把材料移到稿件的末尾，直到你决定是否删掉它。有些作家发现，对着稿件的打印稿工作，有助于他们想象修改的过程；另一些人则宁愿完全在屏幕上修改。最重要的是，不要害怕对你写下的东西做试验。把原稿和修改稿都保存下来；如果觉得恢复原状最好，你随时可以用电脑把稿件还原到最初状态。记住，你的稿件最终需要一场大手术，这并不是软弱或失败的标志。这在所有写作中都很常见，在最优秀的作家当中也是如此。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-6"]{
+  @title{提醒6 不要写得过分}
+
+  @bi{
+    @lang["en"]{Rich, ornate prose is hard to digest, generally unwholesome, and sometimes nauseating. If the sickly-sweet word, the overblown phrase are your natural form of expression, as is sometimes the case, you will have to compensate for it by a show of vigor, and by writing something as meritorious as the Song of Songs, which is Solomon's.}
+    @lang["zh-CN"]{华丽繁复的散文难以下咽，通常也不健康，有时甚至令人作呕。如果那种甜腻腻的词、浮夸的短语是你天生的表达方式（有时确实如此），你就必须靠展示力度来补偿，并且写出一些像《雅歌》——即所罗门的歌——那样有价值的东西。}
+  }
+
+  @bi{
+    @lang["en"]{When writing with a computer, you must guard against wordiness. The click and flow of a word processor can be seductive, and you may find yourself adding a few unnecessary words or even a whole passage just to experience the pleasure of running your fingers over the keyboard and watching your words appear on the screen. It is always a good idea to reread your writing later and ruthlessly delete the excess.}
+    @lang["zh-CN"]{用电脑写作时，你必须防范啰嗦。文字处理软件的咔嗒声和流动感可能很诱人，你可能会发现自己多加几个不必要的词，甚至整整一段，只为体验手指在键盘上飞舞、看自己的文字出现在屏幕上的快感。稍后重读自己的作品并无情地删掉多余部分，永远是个好主意。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-7"]{
+  @title{提醒7 不要夸大}
+
+  @bi{
+    @lang["en"]{When you overstate, readers will be instantly on guard, and everything that has preceded your overstatement as well as everything that follows it will be suspect in their minds because they have lost confidence in your judgment or your poise. Overstatement is one of the common faults. A single overstatement, wherever or however it occurs, diminishes the whole, and a single carefree superlative has the power to destroy, for readers, the object of your enthusiasm.}
+    @lang["zh-CN"]{当你夸大时，读者会立刻警觉起来，而你夸大之前的一切、以及夸大之后的一切，在他们心中都会变得可疑，因为他们已对你的判断力或沉稳失去了信心。夸大是常见的毛病之一。一次夸大，无论出现在哪里、以何种方式出现，都会削弱整体；而一个漫不经心的最高级，就有能力为读者毁掉你所热情赞美的对象。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-8"]{
+  @title{提醒8 避免使用限定词}
+
+  @bi{
+    @lang["en"]{@emph{Rather}, @emph{very}, @emph{little}, @emph{pretty}—these are the leeches that infest the pond of prose, sucking the blood of words. The constant use of the adjective @emph{little} (except to indicate size) is particularly debilitating; we should all try to do a little better, we should all be very watchful of this rule, for it is a rather important one, and we are pretty sure to violate it now and then.}
+    @lang["zh-CN"]{@emph{Rather}、@emph{very}、@emph{little}、@emph{pretty}——这些是寄生在散文池塘里的水蛭，吸食词语的血。形容词@emph{little}的频繁使用（除非用来表示大小）尤其削弱文气；我们都该设法做得稍好一点，都该对这条规则格外留心，因为它相当重要，而我们又几乎肯定会时不时违反它。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-9"]{
+  @title{提醒9 不要故作轻松}
+
+  @bi{
+    @lang["en"]{The volume of writing is enormous, these days, and much of it has a sort of windiness about it, almost as though the author were in a state of euphoria. "Spontaneous me," sang Whitman, and, in his innocence, let loose the hordes of uninspired scribblers who would one day confuse spontaneity with genius.}
+    @lang["zh-CN"]{如今写作的数量极为庞大，其中许多都带着一种飘忽之气，几乎像是作者处于欣快的状态。"Spontaneous me,"惠特曼唱道，而他出于天真，放出了一群没有灵感的涂鸦者，这些人有朝一日会把率性当成天才。}
+  }
+
+  @bi{
+    @lang["en"]{The breezy style is often the work of an egocentric, the person who imagines that everything that comes to mind is of general interest and that uninhibited prose creates high spirits and carries the day. Open any alumni magazine, turn to the class notes, and you are quite likely to encounter old Spontaneous Me at work—an aging collegian who writes something like this:}
+    @lang["zh-CN"]{那种轻佻的文风往往出自一个自我中心者之手，这种人以为凡是他想到的就具有普遍趣味，以为毫无约束的散文能带来高涨的情绪并赢得喝彩。随便翻开一本校友杂志，翻到班级通讯，你很可能会撞见"Spontaneous Me"老先生在工作——一位上了年纪的校友，写下这样一类东西：}
+  }
+
+  @blockquote{Well, guys, here I am again dishing the dirt about your disorderly classmates, after passing a weekend in the Big Apple trying to catch the Columbia hoops tilt and then a cab-ride from hell through the West Side casbah. And speaking of news, howzabout tossing a few primo items this way?}
+
+  @bi{
+    @lang["en"]{This is an extreme example, but the same wind blows, at lesser velocities, across vast expanses of journalistic prose. The author in this case has managed in two sentences to commit most of the unpardonable sins: he obviously has nothing to say, he is showing off and directing the attention of the reader to himself, he is using slang with neither provocation nor ingenuity, he adopts a patronizing air by throwing in the word @emph{primo}, he is humorless (though full of @emph{fun}), dull, and empty. He has not done his work. Compare his opening remarks with the following—a plunge directly into the news:}
+    @lang["zh-CN"]{这是一个极端的例子，但同样的风以较低的速度吹过新闻散文的广袤天地。这个例子里的作者用两句话就犯下了大多数不可饶恕的罪过：他显然无话可说，他在炫耀并把读者的注意力引向自己，他使用俚语既无来由也无巧思，他抛出@emph{primo}一词，摆出一副居高临下的姿态，他毫无幽默感（尽管满纸@bold{fun}），沉闷而空洞。他没有做好自己的工作。把他的开场白和下面这段比较一下——直接一头扎进新闻：}
+  }
+
+  @blockquote{Clyde Crawford, who stroked the varsity shell in 1958, is swinging an oar again after a lapse of forty years. Clyde resigned last spring as executive sales manager of the Indiana Flotex Company and is now a gondolier in Venice.}
+
+  @bi{
+    @lang["en"]{This, although conventional, is compact, informative, unpretentious. The writer has dug up an item of news and presented it in a straightforward manner. What the first writer tried to accomplish by cutting rhetorical capers and by breeziness, the second writer managed to achieve by good reporting, by keeping a tight rein on his material, and by staying out of the act.}
+    @lang["zh-CN"]{这段虽然老套，却紧凑、有信息量、不装腔作势。作者挖出一条新闻，并用直截了当的方式呈现出来。第一位作者试图靠耍修辞花招和轻佻来达到的效果，第二位作者靠出色的报道、靠对材料严加约束、靠不亲自登场，成功地做到了。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-10"]{
+  @title{提醒10 使用规范拼写}
+
+  @bi{
+    @lang["en"]{In ordinary composition, use orthodox spelling. Do not write @emph{nite} for @emph{night}, @emph{thru} for @emph{through}, @emph{pleez} for @emph{please}, @emph{unless} you plan to introduce a complete system of simplified spelling and are prepared to take the consequences.}
+    @lang["zh-CN"]{在普通写作中，使用规范拼写。不要用@emph{nite}代替@emph{night}、@emph{thru}代替@emph{through}、@emph{pleez}代替@emph{please}，@bold{除非}你打算引入一整套简化拼写体系，并准备好承担后果。}
+  }
+
+  @bi{
+    @lang["en"]{In the original edition of @emph{The Elements of Style}, there was a chapter on spelling. In it, the author had this to say:}
+    @lang["zh-CN"]{在《The Elements of Style》最初的版本里，有一章讲拼写。作者在其中这样说：}
+  }
+
+  @blockquote{The spelling of English words is not fixed and invariable, nor does it depend on any other authority than general agreement. At the present day there is practically unanimous agreement as to the spelling of most words… At any given moment, however, a relatively small number of words may be spelled in more than one way. Gradually, as a rule, one of these forms comes to be generally preferred, and the less customary form comes to look obsolete and is discarded. From time to time new forms, mostly simplifications, are introduced by innovators, and either win their place or die of neglect.}
+
+  这段引文的意思是：英语单词的拼写并非固定不变，也不取决于除普遍约定之外的任何其他权威。在当今，绝大多数单词的拼写实际上已取得一致意见……然而在任何特定时刻，都可能有相对少量单词存在不止一种拼法。通常，渐渐地，其中一种形式会变得普遍更受青睐，而较不常用的形式就显得过时并被弃用。新形式时而被创新者引入，其中大多为简化形式，它们要么赢得一席之地，要么因无人理会而死掉。
+
+  @bi{
+    @lang["en"]{The practical objection to unaccepted and oversimplified spellings is the disfavor with which they are received by the reader. They distract his attention and exhaust his patience. He reads the form @emph{though} automatically, without thought of its needless complexity; he reads the abbreviation @emph{tho} and mentally supplies the missing letters, at the cost of a fraction of his attention. The writer has defeated his own purpose.}
+    @lang["zh-CN"]{对未被接受和过度简化的拼写的实际反对理由，是读者对它们抱有的不悦。它们分散读者的注意力，耗尽他的耐心。他读到@emph{though}这个形式时会自动识别，完全不觉得它无谓的复杂；而他读到缩写@emph{tho}时，则要用心补上缺失的字母，代价是分掉他一丝注意力。作者于是打败了自己的目的。}
+  }
+
+  @bi{
+    @lang["en"]{The language manages somehow to keep pace with events. A word that has taken hold in our century is @emph{thru-way}; it was born of necessity and is apparently here to stay. In combination with @emph{way}, @emph{thru} is more serviceable than @emph{through}; it is a high-speed word for readers who are going sixty-five. @emph{Throughway} would be too long to fit on a road sign, too slow to serve the speeding eye. It is conceivable that because of our thruways, @emph{through} will eventually become @emph{thru}—after many more thousands of miles of travel.}
+    @lang["zh-CN"]{语言不知怎么总能跟上事件的变化。我们这一世纪站稳脚跟的一个词是@emph{thru-way}；它因需要而生，显然会留存下去。与@emph{way}组合时，@emph{thru}比@emph{through}更合用；它是一个高速词，适合时速六十五英里的读者。@emph{Throughway}对路牌来说太长，对飞速扫过的眼睛来说太慢。可以想见，由于我们有thruway，@emph{through}最终会变成@emph{thru}——在又行驶了成千上万英里之后。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-11"]{
+  @title{提醒11 不要解释过多}
+
+  @bi{
+    @lang["en"]{It is seldom advisable to tell all. Be sparing, for instance, in the use of adverbs after "he said," "she replied," and the like: "he said consolingly"; "she replied grumblingly." Let the conversation itself disclose the speaker's manner or condition. Dialogue heavily weighted with adverbs after the attributive verb is cluttery and annoying. Inexperienced writers not only overwork their adverbs but load their attributives with explanatory verbs: "he consoled," "she congratulated." They do this, apparently, in the belief that the word @emph{said} is always in need of support, or because they have been told to do it by experts in the art of bad writing.}
+    @lang["zh-CN"]{把所有话都说出来，很少是可取的。比如，在"he said""she replied"这类词语之后使用副词时要节制："he said consolingly"；"she replied grumblingly"。让对话本身来透露说话者的态度或状态。在定语动词之后堆满副词的对话，杂乱而恼人。缺乏经验的写作者不仅滥用副词，还给他们的定语动词加上解释性的动词："he consoled""she congratulated"。他们这样做，显然是相信@emph{said}这个词总需要支撑，或者是因为写坏文章的行家们叫他们这么做。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-12"]{
+  @title{提醒12 不要生造别扭的副词}
+
+  @bi{
+    @lang["en"]{Adverbs are easy to build. Take an adjective or a participle, add @emph{-ly}, and behold! you have an adverb. But you'd probably be better off without it. Do not write @emph{tangledly}. The word itself is a tangle. Do not even write @emph{tiredly}. Nobody says @emph{tangledly} and not many people say @emph{tiredly}. Words that are not used orally are seldom the ones to put on paper.}
+    @lang["zh-CN"]{副词很容易造。拿一个形容词或分词，加上@emph{-ly}，瞧！你就有了一个副词。但省掉它，你大概会更好。不要写@emph{tangledly}。这个词本身就是一团乱麻。连@emph{tiredly}也不要写。没人说@emph{tangledly}，也没多少人会说@emph{tiredly}。不用于口语的词，很少是适合写到纸上的词。}
+  }
+
+  @itemize{
+    @item{误：He climbed tiredly to bed.}
+    @item{正：He climbed wearily to bed.}
+  }
+
+  @itemize{
+    @item{误：The lamp cord lay tangledly beneath her chair.}
+    @item{正：The lamp cord lay in tangles beneath her chair.}
+  }
+
+  @bi{
+    @lang["en"]{Do not dress words up by adding @emph{-ly} to them, as though putting a hat on a horse.}
+    @lang["zh-CN"]{不要靠加@emph{-ly}来给词打扮，就像给马戴上一顶帽子。}
+  }
+
+  @itemize{
+    @item{误：overly；正：over}
+    @item{误：muchly；正：much}
+    @item{误：thusly；正：thus}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-13"]{
+  @title{提醒13 确保读者知道是谁在说话}
+
+  @bi{
+    @lang["en"]{Dialogue is a total loss unless you indicate who the speaker is. In long dialogue passages containing no attributives, the reader may become lost and be compelled to go back and reread in order to puzzle the thing out. Obscurity is an imposition on the reader, to say nothing of its damage to the work.}
+    @lang["zh-CN"]{除非你指明说话者是谁，否则对话就彻底失效。在没有定语动词的长篇对话段落中，读者可能会迷失，不得不回头重读，好把事情弄明白。含糊不清是对读者的强加，更不用说它对作品的损害了。}
+  }
+
+  @bi{
+    @lang["en"]{In dialogue, make sure that your attributives do not awkwardly interrupt a spoken sentence. Place them where the break would come naturally in speech—that is, where the speaker would pause for emphasis, or take a breath. The best test for locating an attributive is to speak the sentence aloud.}
+    @lang["zh-CN"]{在对话中，要确保你的定语动词不会别扭地打断一句说出来的话。把它们放在说话时自然会有的停顿处——也就是说话者会为了强调或换气而停顿的地方。确定定语动词位置的最佳检验方法，是把句子大声说出来。}
+  }
+
+  @itemize{
+    @item{误："Now, my boy, we shall see," he said, "how well you have learned your lesson."}
+    @item{正："Now, my boy," he said, "we shall see how well you have learned your lesson."}
+  }
+
+  @itemize{
+    @item{误："What's more, they would never," she added, "consent to the plan."}
+    @item{正："What's more," she added, "they would never consent to the plan."}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-14"]{
+  @title{提醒14 避免花哨的词}
+
+  @bi{
+    @lang["en"]{Avoid the elaborate, the pretentious, the coy, and the cute. Do not be tempted by a twenty-dollar word when there is a ten-center handy, ready and able. Anglo-Saxon is a livelier tongue than Latin, so use Anglo-Saxon words. In this, as in so many matters pertaining to style, one's ear must be one's guide: @emph{gut} is a lustier noun than @emph{intestine}, but the two words are not interchangeable, because @emph{gut} is often inappropriate, being too coarse for the context. Never call a stomach a tummy without good reason.}
+    @lang["zh-CN"]{避免繁复、张扬、忸怩和@bold{俏皮}。当手边就有一个十分钱的词、随时可用又合适时，别被一个二十块钱的词诱惑。盎格鲁-撒克逊语比拉丁语更有活力，所以要用盎格鲁-撒克逊词。在这件事上，如同在许多与风格相关的事情上一样，必须让自己的耳朵当向导：@emph{gut}是个比@emph{intestine}更带劲的名词，但这两个词并不能互换，因为@emph{gut}常常不恰当，对语境来说太粗俗。没有充分的理由，永远不要把胃叫tummy。}
+  }
+
+  @bi{
+    @lang["en"]{If you admire fancy words, if every @emph{sky is beauteous}, every blonde @emph{curvaceous}, every intelligent child @emph{prodigious}, if you are tickled by @emph{discombobulate}, you will have a bad time with @link["strunk1999-reminder-14"]{Reminder 14}. What is wrong, you ask, with @emph{beauteous}? No one knows, for sure. There is nothing wrong, really, with any word—all are good, but some are better than others. A matter of ear, a matter of reading the books that sharpen the ear.}
+    @lang["zh-CN"]{如果你欣赏花哨的词，如果每个@emph{sky is beauteous}、每个金发女郎@emph{curvaceous}、每个聪明的孩子@emph{prodigious}，如果你被@emph{discombobulate}逗乐，那么你会和@link["strunk1999-reminder-14"]{提醒14}过不去。你问，@emph{beauteous}有什么毛病？没人确切知道。任何词其实都没有毛病——所有词都是好的，只是有些比另一些更好。这是耳朵的问题，是读那些能磨利耳朵的书的问题。}
+  }
+
+  @bi{
+    @lang["en"]{The line between the fancy and the plain, between the atrocious and the felicitous, is sometimes alarmingly fine. The opening phrase of the Gettysburg address is close to the line, at least by our standards today, and Mr. Lincoln, knowingly or unknowingly, was flirting with disaster when he wrote "Four score and seven years ago." The President could have got into his sentence with plain "Eighty-seven"—a saving of two words and less of a strain on the listeners' powers of multiplication. But Lincoln's ear must have told him to go ahead with four score and seven. By doing so, he achieved cadence while skirting the edge of fanciness. Suppose he had blundered over the line and written, "In the year of our Lord seventeen hundred and seventy-six." His speech would have sustained a heavy blow. Or suppose he had settled for "Eighty-seven." In that case he would have got into his introductory sentence too quickly; the timing would have been bad.}
+    @lang["zh-CN"]{花哨与朴素之间、恶劣与贴切之间的界线，有时细得令人吃惊。葛底斯堡演说开篇的短语就贴近这条界线，至少按我们今天的标准是如此；林肯先生无论有意还是无意，在写下"Four score and seven years ago."时都在与灾难调情。总统本可以用朴素的"Eighty-seven"进入他的句子——省下两个词，也让听者做乘法不那么费力。但林肯的耳朵一定告诉他要继续用four score and seven。这样做，他在掠过花哨边缘的同时获得了节奏。假设他失足越过了界线，写成"In the year of our Lord seventeen hundred and seventy-six."他的演说就会遭受沉重打击。又假设他满足于"Eighty-seven"。那样的话，他进入开场句就太快了，时机不对。}
+  }
+
+  @bi{
+    @lang["en"]{The question of ear is vital. Only the writer whose ear is reliable is in a position to use bad grammar deliberately; this writer knows for sure when a colloquialism is better than formal phrasing and is able to sustain the work at a level of good taste. So cock your ear. Years ago, students were warned not to end a sentence with a preposition; time, of course, has softened that rigid decree. Not only is the preposition acceptable at the end, sometimes it is more effective in that spot than anywhere else. "A claw hammer, not an ax, was the tool he murdered her with." This is preferable to "A claw hammer, not an ax, was the tool with which he murdered her." Why? Because it sounds more violent, more like murder. A matter of ear.}
+    @lang["zh-CN"]{耳朵的问题至关重要。只有耳朵可靠的写作者，才能有把握地故意使用不合语法的表达；这样的写作者确切地知道什么时候口语比正式措辞更好，并能把作品维持在一个良好品位的水平上。所以要竖起你的耳朵。多年前，学生们被警告不要用介词结束句子；时间当然软化了那条僵硬的命令。介词不仅可以用在句末，有时放在那个位置比放在任何别处都更有效。"A claw hammer, not an ax, was the tool he murdered her with."这比"A claw hammer, not an ax, was the tool with which he murdered her."更可取。为什么？因为它听起来更暴烈，更像谋杀。这是耳朵的问题。}
+  }
+
+  @bi{
+    @lang["en"]{And would you write "The worst tennis player around here is I" or "The worst tennis player around here is me"? The first is good grammar, the second is good judgment—although the @emph{me} might not do in all contexts.}
+    @lang["zh-CN"]{那么你会写"The worst tennis player around here is I"还是"The worst tennis player around here is me"？前者语法正确，后者判断得当——尽管@emph{me}也许并非在所有语境中都用得。}
+  }
+
+  @bi{
+    @lang["en"]{The split infinitive is another trick of rhetoric in which the ear must be quicker than the handbook. Some infinitives seem to improve on being split, just as a stick of round stovewood does. "I cannot bring myself to really like the fellow." The sentence is relaxed, the meaning is clear, the violation is harmless and scarcely perceptible. Put the other way, the sentence becomes stiff, needlessly formal. A matter of ear.}
+    @lang["zh-CN"]{分裂不定式是修辞的另一种技巧，在这方面耳朵必须比手册更灵敏。有些不定式在分裂之后似乎更好，就像一截圆木柴被劈开一样。"I cannot bring myself to really like the fellow."这个句子松弛，意思清楚，违例无伤大雅且几乎察觉不到。换一种说法，句子就变得僵硬、不必要地正式。这是耳朵的问题。}
+  }
+
+  @bi{
+    @lang["en"]{There are times when the ear not only guides us through difficult situations but also saves us from minor or major embarrassments of prose. The ear, for example, must decide when to omit @emph{that} from a sentence, when to retain it. "She knew she could do it" is preferable to "She knew that she could do it"—simpler and just as clear. But in many cases the @emph{that} is needed. "He felt that his big nose, which was sunburned, made him look ridiculous." Omit the @emph{that} and you have "He felt his big nose…"}
+    @lang["zh-CN"]{有时耳朵不仅引导我们穿过困难的处境，还使我们免于散文的轻微或严重尴尬。例如，耳朵必须决定何时从句子中省略@emph{that}、何时保留它。"She knew she could do it"比"She knew that she could do it"更可取——更简单，也同样清楚。但在许多情况下@emph{that}是必需的。"He felt that his big nose, which was sunburned, made him look ridiculous."省略@emph{that}，你就有了"He felt his big nose…"}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-15"]{
+  @title{提醒15 除非语感好否则不要用方言}
+
+  @bi{
+    @lang["en"]{Do not attempt to use dialect unless you are a devoted student of the tongue you hope to reproduce. If you use dialect, be consistent. The reader will become impatient or confused upon finding two or more versions of the same word or expression. In dialect it is necessary to spell phonetically, or at least ingeniously, to capture unusual inflections. Take, for example, the word @emph{once}. It often appears in dialect writing as @emph{oncet}, but @emph{oncet} looks as though it should be pronounced "onset." A better spelling would be @emph{wunst}. But if you write it @emph{oncet} once, write it that way throughout.}
+    @lang["zh-CN"]{除非你是你希望再现的那种语言的专心学生，否则不要尝试使用方言。如果使用方言，就要始终一致。当读者发现同一个词或表达有两种或更多版本时，会变得不耐烦或困惑。在方言中，必须按发音拼写，或至少拼得巧妙，以捕捉不寻常的屈折变化。以@emph{once}这个词为例。它在方言写作中常写作@emph{oncet}，但@emph{oncet}看起来像是应该读作"onset"。更好的拼法是@emph{wunst}。但如果你把@emph{oncet}写了一次，就通篇都那样写。}
+  }
+
+  @bi{
+    @lang["en"]{The best dialect writers, by and large, are economical of their talents; they use the minimum, not the maximum, of deviation from the norm, thus sparing their readers as well as convincing them.}
+    @lang["zh-CN"]{总的来说，最好的方言写作者对他们的才能是用得很省的；他们使用的是对常规的最小偏离，而非最大偏离，从而既让读者省力，又令读者信服。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-16"]{
+  @title{提醒16 要清晰}
+
+  @bi{
+    @lang["en"]{Clarity is not the prize in writing, nor is it always the principal mark of a good style. There are occasions when obscurity serves a literary yearning, if not a literary purpose, and there are writers whose mien is more overcast than clear. But since writing is communication, clarity can only be a virtue. And although there is no substitute for merit in writing, clarity comes closest to being one. Even to a writer who is being intentionally obscure or wild of tongue we can say, "Be obscure clearly! Be wild of tongue in a way we can understand!" Even to writers of market letters, telling us (but not telling us) which securities are promising, we can say, "Be cagey plainly! Be elliptical in a straightforward fashion!"}
+    @lang["zh-CN"]{清晰不是写作中的奖品，也不总是一种好风格的首要标志。有些时候，含糊服务于某种文学上的渴求——即便不是文学上的目的；也有些写作者，其神情比清晰更为阴沉。但既然写作是交流，清晰就只能是一种美德。而且，尽管写作中没有什么能代替价值，清晰却最接近能代替它的东西。即便对一位有意含糊或舌灿狂言的写作者，我们也可以说："Be obscure clearly! Be wild of tongue in a way we can understand!"即便对写市场通讯的人，他们告诉我们（却又没有告诉我们）哪些证券有前途，我们也可以说："Be cagey plainly! Be elliptical in a straightforward fashion!"}
+  }
+
+  @bi{
+    @lang["en"]{Clarity, clarity, clarity. When you become hopelessly mired in a sentence, it is best to start fresh; do not try to fight your way through against the terrible odds of syntax. Usually what is wrong is that the construction has become too involved at some point; the sentence needs to be broken apart and replaced by two or more shorter sentences.}
+    @lang["zh-CN"]{清晰，清晰，清晰。当你无可救药地陷入一个句子时，最好重新开始；不要试图顶着句法的可怕劣势硬闯过去。通常问题出在某个地方结构变得太复杂了；这个句子需要拆开，换成两个或更多更短的句子。}
+  }
+
+  @bi{
+    @lang["en"]{Muddiness is not merely a disturber of prose, it is also a destroyer of life, of hope: death on the highway caused by a badly worded road sign, heartbreak among lovers caused by a misplaced phrase in a well-intentioned letter, anguish of a traveler expecting to be met at a railroad station and not being met because of a slipshod telegram. Think of the tragedies that are rooted in ambiguity, and be clear! When you say something, make sure you have said it. The chances of your having said it are only fair.}
+    @lang["zh-CN"]{含糊不仅扰乱散文，也是生命与希望的摧毁者：一块措辞糟糕的路牌造成的公路上的死亡，一封善意信件中一个位置不当的短语造成的恋人之间的心碎，一位在火车站等候接站、却因一封措辞马虎的电报而无人来接的旅客的痛苦。想想那些根植于歧义的悲剧，然后做到清晰！当你说出某件事时，确保你把它说出来了。你能把话说清楚的概率不过是五五开。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-17"]{
+  @title{提醒17 不要注入个人意见}
+
+  @bi{
+    @lang["en"]{Unless there is a good reason for its being there, do not inject opinion into a piece of writing. We all have opinions about almost everything, and the temptation to toss them in is great. To air one's views gratuitously, however, is to imply that the demand for them is brisk, which may not be the case, and which, in any event, may not be relevant to the discussion. Opinions scattered indiscriminately about leave the mark of egotism on a work. Similarly, to air one's views at an improper time may be in bad taste. If you have received a letter inviting you to speak at the dedication of a new cat hospital, and you hate cats, your reply, declining the invitation, does not necessarily have to cover the full range of your emotions. You must make it clear that you will not attend, but you do not have to let fly at cats. The writer of the letter asked a civil question; attack cats, then, only if you can do so with good humor, good taste, and in such a way that your answer will be courteous as well as responsive. Since you are out of sympathy with cats, you may quite properly give this as a reason for not appearing at the dedicatory ceremonies of a cat hospital. But bear in mind that your opinion of cats was not sought, only your services as a speaker. Try to keep things straight.}
+    @lang["zh-CN"]{除非有充分的理由，不要把个人意见注入一篇文章。我们几乎对一切都抱有看法，而把它们抛进去的诱惑很大。然而，无缘无故地发表自己的观点，等于在暗示人们对这些观点的需求很旺，而情况未必如此，而且无论如何，这些观点都可能与讨论无关。随处乱撒意见，会在作品上留下自我中心的印记。同样，在不恰当的时候发表观点，可能有失得体。假如你收到一封信，邀请你在一所新猫医院的落成典礼上讲话，而你又讨厌猫，那么你婉拒邀请的回信并不一定非得涵盖你情绪的全部范围。你必须表明你不会出席，但你不必对猫发一通火。写信的人问的是一个礼貌的问题；那么，只有在你能带着好性情、好品位，并且使你的回答既有礼貌又切题的情况下，才去攻击猫。既然你对猫没有好感，你完全可以以此为理由不出席一所猫医院的落成典礼。但要记住，对方寻求的不是你对猫的看法，只是你作为演讲者的服务。尽量把事情理清楚。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-18"]{
+  @title{提醒18 节制使用修辞格}
+
+  @bi{
+    @lang["en"]{The simile is a common device and a useful one, but similes coming in rapid fire, one right on top of another, are more distracting than illuminating. Readers need time to catch their breath; they can't be expected to compare everything with something else, and no relief in sight.}
+    @lang["zh-CN"]{明喻是一种常见而有用的手法，但明喻如果连珠炮般一个接一个地来，就比照亮更让人分神。读者需要时间喘口气；不能指望他们拿每样东西去和另一样东西比较，而且看不到缓解的希望。}
+  }
+
+  @bi{
+    @lang["en"]{When you use metaphor, do not mix it up. That is, don't start by calling something a swordfish and end by calling it an hourglass.}
+    @lang["zh-CN"]{使用隐喻时，不要把它混在一起。也就是说，不要开头把某样东西叫做剑鱼，结尾又叫它沙漏。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-19"]{
+  @title{提醒19 不要以清晰为代价走捷径}
+
+  @bi{
+    @lang["en"]{Do not use initials for the names of organizations or movements unless you are certain the initials will be readily understood. Write things out. Not everyone knows that MADD means Mothers Against Drunk Driving, and even if everyone did, there are babies being born every minute who will someday encounter the name for the first time. They deserve to see the words, not simply the initials. A good rule is to start your article by writing out names in full, and then, later, when your readers have got their bearings, to shorten them.}
+    @lang["zh-CN"]{除非你确信缩写能被轻易理解，否则不要用首字母缩写来指组织或运动的名称。把名称写全。不是每个人都知道MADD是Mothers Against Drunk Driving（母亲反对酒后驾车）的意思，即便人人都知道，每分钟也有婴儿在出生，他们总有一天会第一次遇到这个名称。他们理应看到完整的词，而不只是首字母缩写。一条好的规则是：文章开头把名称写全，然后，等读者找到方位之后，再加以简写。}
+  }
+
+  @bi{
+    @lang["en"]{Many shortcuts are self-defeating; they waste the reader's time instead of conserving it. There are all sorts of rhetorical stratagems and devices that attract writers who hope to be pithy, but most of them are simply bothersome. The longest way round is usually the shortest way home, and the one truly reliable shortcut in writing is to choose words that are strong and surefooted to carry readers on their way.}
+    @lang["zh-CN"]{许多捷径是自拆台脚的；它们浪费读者的时间，而不是节省时间。有各种各样吸引那些希望自己简洁有力的写作者的修辞策略和手法，但其中大多数只是惹人烦。最长的路往往是回家最短的路；而在写作中真正可靠的捷径，是选择那些有力而稳当的词，载着读者一路前行。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-20"]{
+  @title{提醒20 避免使用外语}
+
+  @bi{
+    @lang["en"]{The writer will occasionally find it convenient or necessary to borrow from other languages. Some writers, however, from sheer exuberance or a desire to show off, sprinkle their work liberally with foreign expressions, with no regard for the reader's comfort. It is a bad habit. Write in English.}
+    @lang["zh-CN"]{写作者偶尔会觉得从其他语言借用词方便或必要。然而，有些写作者出于纯粹的兴致或炫耀的欲望，在自己的作品里大量撒入外来表达，毫不顾及读者的舒适。这是个坏习惯。用英语写作。}
+  }
+
+}
+
+@subtree[#:id "strunk1999-reminder-21"]{
+  @title{提醒21 宁用标准而非怪异}
+
+  @bi{
+    @lang["en"]{Young writers will be drawn at every turn toward eccentricities in language. They will hear the beat of new vocabularies, the exciting rhythms of special segments of their society, each speaking a language of its own. All of us come under the spell of these unsettling drums; the problem for beginners is to listen to them, learn the words, feel the vibrations, and not be carried away.}
+    @lang["zh-CN"]{年轻写作者会时时被语言中的怪癖所吸引。他们会听到新词汇的节拍，听到他们社会中某些特殊群体令人兴奋的节奏，每个群体都说着自己的语言。我们所有人都会受到这些令人不安的鼓点的蛊惑；对初学者来说，问题在于倾听它们、学会那些词、感受那些震动，而不被冲昏头脑。}
+  }
+
+  @bi{
+    @lang["en"]{Youths invariably speak to other youths in a tongue of their own devising: they renovate the language with a wild vigor, as they would a basement apartment. By the time this paragraph sees print, @emph{psyched}, @emph{nerd}, @emph{ripoff}, @emph{dude}, @emph{geek}, and @emph{funky} will be the words of yesteryear, and we will be fielding more recent ones that have come bouncing into our speech—some of them into our dictionary as well. A new word is always up for survival. Many do survive. Others grow stale and disappear. Most are, at least in their infancy, more appropriate to conversation than to composition.}
+    @lang["zh-CN"]{年轻人之间总是用一种自己发明的语言交谈：他们以狂野的活力翻新语言，就像他们翻新一间地下室公寓一样。等这段文字印出来的时候，@emph{psyched}、@emph{nerd}、@emph{ripoff}、@emph{dude}、@emph{geek}和@emph{funky}都将是去年的词了，而我们将要招架更多新近蹦进我们话语里的词——其中一些也会蹦进我们的词典。一个新词总在等待生死考验。许多存活下来。另一些变得陈旧而消失。大多数词，至少在其幼年时期，更适合对话而非写作。}
+  }
+
+  @bi{
+    @lang["en"]{Today, the language of advertising enjoys an enormous circulation. With its deliberate infractions of grammatical rules and its crossbreeding of the parts of speech, it profoundly influences the tongues and pens of children and adults. Your new kitchen range is so revolutionary it @emph{obsoletes} all other ranges. Your counter top is beautiful because it is @emph{accessorized} with gold-plated faucets. Your cigarette tastes good @emph{like} a cigarette should. And, @emph{like the man says}, you will want to try one. You will also, in all probability, want to try writing that way, using that language. You do so at your peril, for it is the language of mutilation.}
+    @lang["zh-CN"]{今天，广告语言享有极大的流通量。它故意违反语法规则，把各种词类杂交在一起，深刻影响着儿童和成人的口舌与笔头。你的新厨房炉灶如此具有革命性，它@emph{obsoletes}（淘汰）了所有其他炉灶。你的台面很美，因为它@emph{accessorized}（配上了）镀金水龙头。你的香烟味道好得@emph{like}（就像）一支香烟应有的那样。而且，@emph{like the man says}（就像那人说的），你会想试试。你十有八九也会想那样写，使用那种语言。你这样做的风险自负，因为那是肢解的语言。}
+  }
+
+  @bi{
+    @lang["en"]{Advertisers are quite understandably interested in what they call "attention getting." The man photographed must have lost an eye or grown a pink beard, or he must have three arms or be sitting wrong-end-to on a horse. This technique is proper in its place, which is the world of selling, but the young writer had best not adopt the device of mutilation in ordinary composition, whose purpose is to engage, not paralyze, the reader's senses. Buy the gold-plated faucets if you will, but do not accessorize your prose. To use the language well, do not begin by hacking it to bits; accept the whole body of it, cherish its classic form, its variety, and its richness.}
+    @lang["zh-CN"]{广告商对他们所谓的"吸引注意"感兴趣，这是完全可以理解的。被拍照的人必须少了一只眼睛，要么长出一撮粉红胡子，要么必须有三条胳膊，要么必须倒坐在马背上。这种技巧在其合适的位置——销售的世界——是恰当的，但年轻写作者最好不要在普通写作中采用这种肢解手法，因为普通写作的目的是调动而非麻痹读者的感官。你要是愿意就买镀金水龙头，但不要给你的散文@emph{accessorize}。要把语言用好，不要一开始就把它砍成碎块；接受它的整个躯体，珍视它经典的形式、它的多样性和它的丰富。}
+  }
+
+  @bi{
+    @lang["en"]{Another segment of society that has constructed a language of its own is business. People in business say that toner cartridges are @emph{in short supply}, that they have @emph{updated} the next shipment of these cartridges, and that they will @emph{finalize} their recommendations at the next meeting of the board. They are speaking a language familiar and dear to them. Its portentous nouns and verbs invest ordinary events with high adventure; executives walk among toner cartridges, caparisoned like knights. We should tolerate them—every person of spirit wants to ride a white horse. The only question is whether business vocabulary is helpful to ordinary prose. Usually, the same ideas can be expressed less formidably, if one makes the effort. A good many of the special words of business seem designed more to express the user's dreams than to express a precise meaning. Not all such words, of course, can be dismissed summarily; indeed, no word in the language can be dismissed offhand by anyone who has a healthy curiosity. @emph{Update} isn't a bad word; in the right setting it is useful. In the wrong setting, though, it is destructive, and the trouble with adopting coinages too quickly is that they will bedevil one by insinuating themselves where they do not belong. This may sound like rhetorical snobbery, or plain stuffiness; but you will discover, in the course of your work, that the setting of a word is just as restrictive as the setting of a jewel. The general rule here is to prefer the standard. @emph{Finalize}, for instance, is not standard; it is special, and it is a peculiarly fuzzy and silly word. Does it mean "terminate," or does it mean "put into final form"? One can't be sure, really, what it means, and one gets the impression that the person using it doesn't know, either, and doesn't want to know.}
+    @lang["zh-CN"]{社会中另一个为自己构建了一套语言的部分是商界。商界的人说碳粉盒@emph{in short supply}（供应短缺），说他们已经@emph{updated}（更新）了下一批碳粉盒的发货，说他们将在下次董事会上@emph{finalize}（敲定）他们的建议。他们说的是他们熟悉且珍爱的语言。它那些浮夸的名词和动词给平常的事件披上了高度冒险的色彩；高管们行走在碳粉盒之间，像骑士一样盛装华饰。我们应当容忍他们——每个有血性的人都想骑一匹白马。唯一的问题是，商务词汇对普通散文是否有帮助。通常，同样的意思只要肯花力气，都能用不那么吓人的方式表达出来。商界许多特殊词汇，似乎更多是为了表达使用者的梦想，而不是表达精确的含义。当然，并非所有这类词都能一概弃之不顾；事实上，凡是有着健康好奇心的人，都不能随手否定语言中的任何词。@emph{Update}不是个坏词；在合适的场合它很有用。但在不合适的场合，它具有破坏性；而太快采纳新造词的问题在于，它们会钻进不属于它们的地方，从而折磨人。这听起来可能像修辞上的势利，或者干脆是古板；但你会在工作过程中发现，一个词的场合就像宝石的镶座一样具有限定性。这里的一般规则是宁取标准。比如@emph{finalize}就不标准；它是特殊的，而且是个格外模糊而愚蠢的词。它的意思是"terminate"（终止），还是"put into final form"（定稿）？人实在无法确定它是什么意思，而且给人的印象是，用它的人自己也不知道，并且不想知道。}
+  }
+
+  @bi{
+    @lang["en"]{The special vocabularies of the law, of the military, of government are familiar to most of us. Even the world of criticism has a modest pouch of private words (@emph{luminous}, @emph{taut}), whose only virtue is that they are exceptionally nimble and can escape from the garden of meaning over the wall. Of these critical words, Wolcott Gibbs once wrote, "… they are detached from the language and inflated like little balloons." The young writer should learn to spot them—words that at first glance seem freighted with delicious meaning but that soon burst in air, leaving nothing but a memory of bright sound.}
+    @lang["zh-CN"]{法律、军队、政府各自的特殊词汇，我们大多数人都熟悉。就连批评界也有一个小小的囊袋，装着一些私房词（@emph{luminous}、@emph{taut}），它们唯一的优点就是格外灵巧，能越过围墙从意义的花园里逃出去。关于这类批评用词，沃尔科特·吉布斯曾写道："……它们脱离了语言，像小气球一样膨胀起来。"年轻写作者应当学会辨认它们——那些乍看之下似乎满载着美味含义、但很快就会在空中爆掉，只留下一缕响亮声响之记忆的词。}
+  }
+
+  @bi{
+    @lang["en"]{The language is perpetually in flux: it is a living stream, shifting, changing, receiving new strength from a thousand tributaries, losing old forms in the backwaters of time. To suggest that a young writer not swim in the main stream of this turbulence would be foolish indeed, and such is not the intent of these cautionary remarks. The intent is to suggest that in choosing between the formal and the informal, the regular and the offbeat, the general and the special, the orthodox and the heretical, the beginner err on the side of conservatism, on the side of established usage. No idiom is taboo, no accent forbidden; there is simply a better chance of doing well if the writer holds a steady course, enters the stream of English quietly, and does not thrash about.}
+    @lang["zh-CN"]{语言永远处于流变之中：它是一条活水，漂移、变化，从千百条支流获得新的力量，又在时间的回水湾中失去旧的形式。要建议年轻写作者不要在这股湍流的主河道中游泳，那确实愚蠢，而这些告诫性话语的用意也并非如此。其用意是建议：在正式与非正式、常规与怪异、一般与特殊、正统与异端之间做选择时，初学者应往保守的一边、往既定用法的一边犯错。没有哪种习语是禁忌，没有哪种口音被禁止；只是如果写作者保持稳定的航向、安静地汇入英语的水流、不胡乱扑腾，做好的机会就更大一些。}
+  }
+
+  @bi{
+    @lang["en"]{"But," you may ask, "what if it comes natural to me to experiment rather than conform? What if I am a pioneer, or even a genius?" Answer: then be one. But do not forget that what may seem like pioneering may be merely evasion, or laziness—the disinclination to submit to discipline. Writing good standard English is no cinch, and before you have managed it you will have encountered enough rough country to satisfy even the most adventurous spirit.}
+    @lang["zh-CN"]{"可是，"你也许会问，"如果我天生就爱试验而非遵从呢？如果我是一个先锋，甚至是一个天才呢？"回答是：那就做一个吧。但别忘了，看似先锋的东西可能只是逃避，或者懒惰——是一种不愿服从纪律的倾向。写出优秀的标准英语绝非轻而易举，而在你做到之前，你会遇上足够多的崎岖乡野，连最富冒险精神的人也会满足。}
+  }
+
+  @bi{
+    @lang["en"]{Style takes its final shape more from attitudes of mind than from principles of composition, for, as an elderly practitioner once remarked, "Writing is an act of faith, not a trick of grammar." This moral observation would have no place in a rule book were it not that style @emph{is} the writer, and therefore what you are, rather than what you know, will at last determine your style. If you write, you must believe—in the truth and worth of the scrawl, in the ability of the reader to receive and decode the message. No one can write decently who is distrustful of the reader's intelligence, or whose attitude is patronizing.}
+    @lang["zh-CN"]{风格最终的成形，更多取决于心态而非写作原则，因为正如一位年长的从业者曾说过的："Writing is an act of faith, not a trick of grammar."若不是因为风格@emph{就是}写作者本人，因而最终决定你风格的是你是什么样的人、而不是你知道什么，这条道德层面的观察本不该出现在一本规则书里。如果你写作，你就必须相信——相信这潦草文字的真实与价值，相信读者有能力接收并解读信息。凡是不信任读者智力的人，或态度居高临下的人，都写不出像样的东西。}
+  }
+
+  @bi{
+    @lang["en"]{Many references have been made in this book to "the reader," who has been much in the news. It is now necessary to warn you that your concern for the reader must be pure: you must sympathize with the reader's plight (most readers are in trouble about half the time) but never seek to know the reader's wants. Your whole duty as a writer is to please and satisfy yourself, and the true writer always plays to an audience of one. Start sniffing the air, or glancing at the Trend Machine, and you are as good as dead, although you may make a nice living.}
+    @lang["zh-CN"]{本书中多次提到"读者"，读者在新闻里也频频露面。现在有必要提醒你，你对读者的关心必须是纯粹的：你必须同情读者的处境（大多数读者大约有一半时间处于困境之中），但绝不要去探知读者想要什么。作为写作者，你的全部职责就是取悦并满足你自己，而真正的写作者总是为一个人的观众表演。一旦你开始嗅探风向，或去瞄一眼"趋势机器"，你就等于死了，尽管你可能过得不错。}
+  }
+
+  @bi{
+    @lang["en"]{Full of belief, sustained and elevated by the power of purpose, armed with the rules of grammar, you are ready for exposure. At this point, you may well pattern yourself on the fully exposed cow of Robert Louis Stevenson's rhyme. This friendly and commendable animal, you may recall, was "blown by all the winds that pass / And wet with all the showers." And so must you as a young writer be. In our modern idiom, we would say that you must get wet all over. Mr. Stevenson, working in a plainer style, said it with felicity, and suddenly one cow, out of so many, received the gift of immortality. Like the steadfast writer, she is at home in the wind and the rain; and, thanks to one moment of felicity, she will live on and on and on.}
+    @lang["zh-CN"]{满怀信念，被目标的力量支撑和托举，又装备着语法规则，你已经准备好去暴露了。此时，你大可以效法罗伯特·路易斯·史蒂文森那首韵诗里那头充分暴露的牛。你或许还记得，这头友善而值得赞美的牲口"blown by all the winds that pass / And wet with all the showers."作为年轻写作者，你也必须如此。用我们现代的说法，我们会说，你必须浑身湿透。史蒂文森先生用更朴素的风格写作，却把它说得恰到好处，于是一头牛，在那么多牛之中，忽然获得了不朽的馈赠。像那位坚定的写作者一样，它在风里雨里怡然自得；而且，凭着一瞬间的恰到好处，它将长存，长存，长存。}
+  }
+
+}

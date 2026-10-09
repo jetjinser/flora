@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yoshizawa, A.; Fujiwara, H.; Hamba, F.; Nisizima, S.; Kumagai, Y.: Nonequilibrium Turbulent-Viscosity Model for Supersonic Free-Shear Layer/Wall-Bounded Flows. AIAA Journal, 41 (2003), pp. 1029-1036.}
+@taxon["reference"]

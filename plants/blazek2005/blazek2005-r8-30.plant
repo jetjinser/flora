@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Holmes, D.G.: Inviscid 2D Solutions on Unstructured, Adaptive Grids. Numerical Methods for Flows in Turbomachinery, VKI-LS 1989-06, 1989.}
+@taxon["reference"]

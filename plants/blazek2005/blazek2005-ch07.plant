@@ -1,0 +1,1535 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Turbulence Modelling 第7章 湍流建模}
+@summary{湍流的基本方程：平均方法、涡黏性假设与雷诺应力输运。}
+@taxon["chapter"]
+
+@bi{
+  @lang["en"]{The outstanding feature of a turbulent flow, in the opposite to a laminar flow, is that the molecules move in a chaotic fashion along complex irregular paths. The strong chaotic motion causes the various layers of the fluid to mix together intensely. Because of the increased momentum and energy exchange between the molecules and solid walls, turbulent flow leads at the same conditions to higher skin friction and heat transfer as compared to laminar flow.}
+  @lang["zh-CN"]{与层流相反，湍流的突出特征是分子沿复杂而不规则的路径以混乱的方式运动。强烈的混乱运动使流体的各个层强烈地混合在一起。由于分子与固体壁面之间的动量和能量交换增强，在相同条件下，湍流导致的壁面摩擦和传热都比层流更高。}
+}
+
+@bi{
+  @lang["en"]{Although the chaotic fluctuations of the flow variables are of deterministic nature, the simulation of turbulent flows still continues to present a significant problem. Despite the performance of modern supercomputers, a direct simulation of turbulence by the time-dependent Navier-Stokes equations (2.19) -- known as the @emph{Direct Numerical Simulation} (DNS) @link["blazek2005-r7-1"]{[1]}--@link["blazek2005-r7-10"]{[10]} -- is applicable only to relatively simple flow problems at low Reynolds numbers (@tex-math{Re}) in the order of @tex-math{10^4-10^5}. A more widespread utilisation of the DNS is prevented by the fact that the number of grid points needed for sufficient spatial resolution scales as @tex-math{Re^{9/4}} and the CPU-time as @tex-math{Re^3}. Therefore, we are forced to account for the effects of turbulence in an approximate manner. For this purpose, a large variety of @emph{turbulence models} was developed and the research still goes on. There are five principal classes of turbulence models:
+    @itemize{
+      @item{algebraic,}
+      @item{one-equation,}
+      @item{multiple-equation,}
+      @item{@emph{second-order} closures (Reynolds-stress models),}
+      @item{@emph{Large-Eddy Simulation} (LES).}
+    }
+  }
+  @lang["zh-CN"]{尽管流动变量的混沌脉动具有确定性的本质，湍流的模拟至今仍是一个重大难题。尽管现代超级计算机性能强大，但利用含时的Navier-Stokes方程(2.19)对湍流进行直接模拟——即所谓直接数值模拟（@emph{Direct Numerical Simulation}，DNS）@link["blazek2005-r7-1"]{[1]}–@link["blazek2005-r7-10"]{[10]}——只适用于雷诺数（@tex-math{Re}）在@tex-math{10^4-10^5}量级的较为简单的流动问题。DNS之所以未能得到更广泛的应用，是因为要获得足够的空间分辨率，所需网格点数按@tex-math{Re^{9/4}}标度，而CPU时间按@tex-math{Re^3}标度。因此，我们不得不以近似的方式计及湍流的影响。为此，人们发展了种类繁多的@emph{湍流模型}，相关研究至今仍在继续。湍流模型有五个主要类别：
+    @itemize{
+      @item{代数模型；}
+      @item{一方程模型；}
+      @item{多方程模型；}
+      @item{@emph{二阶}封闭（雷诺应力模型）；}
+      @item{大涡模拟（@emph{Large-Eddy Simulation}，LES）。}
+    }
+  }
+}
+
+@bi{
+  @lang["en"]{The first tree models belong to the so-called @emph{first-order} closures. They are based mostly on the @emph{eddy-viscosity} hypothesis of Boussinesq @link["blazek2005-r7-11"]{[11]}, @link["blazek2005-r7-12"]{[12]}, but for certain applications also on @emph{non-linear eddy-viscosity} formulations. An overview of the classes of turbulence models, which are sorted according to their decreasing level of complexity, is displayed in Fig. 7.1.}
+  @lang["zh-CN"]{前三类模型属于所谓的@emph{一阶}封闭（first-order closures）。它们主要基于Boussinesq的@emph{涡黏性}假设@link["blazek2005-r7-11"]{[11]}、@link["blazek2005-r7-12"]{[12]}，但对某些应用也基于@emph{非线性涡黏性}表述。图7.1给出了按复杂程度递减排序的各类湍流模型的概览。}
+}
+
+@image["blazek2005/fig-7-1.png"]{图7.1:湍流模型的层级}
+
+@emph{图7.1:湍流模型的层级。}缩写:DNS——直接数值模拟(Direct Numerical Simulation);LES——大涡模拟(Large-Eddy Simulation);RANS——雷诺平均Navier-Stokes方程(Reynolds-Averaged Navier-Stokes equations);1st-order——一阶封闭(first-order closures);2nd-order——二阶封闭(second-order closures);RST——雷诺应力输运模型(Reynolds-Stress Transport models);ARS——代数雷诺应力模型(Algebraic Reynolds-Stress models);0-、1-、2-Eq.——零方程(代数)、一方程、两方程模型。
+
+@bi{
+  @lang["en"]{One should be aware of the fact that there is no single turbulence model, which can predict reliably all kinds of turbulent flows. Each of the models has its strengths and weaknesses. For example, if a particular model works perfectly in the case of attached boundary layers, it may fail completely for separated flows. Thus, it is important always to ask whether the model includes all the significant features of the flow being investigated. Another point which should be taken into consideration is the computational effort versus the accuracy required by the particular application. We mean by this that in many cases a numerically inexpensive turbulence model can predict some global measures with the same accuracy as a more complex model.}
+  @lang["zh-CN"]{应当意识到，不存在能够可靠预测所有类型湍流的单一湍流模型。每种模型都有其长处和短处。例如，某个模型如果在附着边界层的情形下工作得很好，它对分离流动则可能完全失效。因此，始终应当问一问：该模型是否包含了所研究流动的全部重要特征。此外还应考虑的一点是计算量与特定应用所需精度之间的权衡。我们的意思是，在许多情况下，数值上廉价的湍流模型预测某些全局量所能达到的精度，与更复杂的模型相同。}
+}
+
+@bi{
+  @lang["en"]{In the following, we first introduce the basic equations of turbulence as they result from time and mass averaging of the governing equations. Then, we present the Boussinesq's and the non-linear eddy-viscosity approaches. After that, we briefly discuss the Reynolds-stress transport equation, which forms the basis of the algebraic and differential Reynolds-stress models. In Section 7.2, we present few wide-spread one- and two-equation first-order closures. Finally, we discuss LES and related approaches in some detail because of the growing number of engineering applications.}
+  @lang["zh-CN"]{下面，我们先介绍对控制方程作时间平均和质量平均而得到的湍流基本方程。然后，我们介绍Boussinesq涡黏性方法和非线性涡黏性方法。随后，我们简要讨论雷诺应力输运方程，它构成代数和微分雷诺应力模型的基础。在7.2节中，我们介绍几种广泛使用的一方程和两方程一阶封闭。最后，由于工程应用日益增多，我们将较为详细地讨论LES及相关方法。}
+}
+
+@subtree[#:id "blazek2005-7-1"]{
+  @title{7.1 Basic Equations of Turbulence 湍流的基本方程}
+
+  @bi{
+    @lang["en"]{First of all, let us rewrite the governing equations (2.19) in differential form (see Appendix A.1), since this is used very often in literature on turbulence modelling. Furthermore, it allows for a compact and clear notation. However, we will also provide examples of turbulence equations in integral form.}
+    @lang["zh-CN"]{首先，让我们把控制方程(2.19)改写成微分形式（见附录A.1），因为湍流建模文献中经常使用这种形式；此外，它还使记号紧凑而清晰。不过，我们也会给出湍流方程积分形式的例子。}
+  }
+
+  @bi{
+    @lang["en"]{In the case of a compressible Newtonian fluid, the Navier-Stokes equations read in the absence of source terms in coordinate invariant formulation as}
+    @lang["zh-CN"]{对于可压缩Newton流体，在无源项的情形下，Navier-Stokes方程按坐标不变量形式写为}
+  }
+
+  @tex-display-math[#:id "eq-7-1"]{\begin{aligned}
+  &\frac{\partial\rho}{\partial t}+\frac{\partial}{\partial x_i}\left(\rho v_i\right)=0\\
+  &\frac{\partial}{\partial t}\left(\rho v_i\right)+\frac{\partial}{\partial x_j}\left(\rho v_j v_i\right)=-\frac{\partial p}{\partial x_i}+\frac{\partial\tau_{ij}}{\partial x_j}\\
+  &\frac{\partial}{\partial t}\left(\rho E\right)+\frac{\partial}{\partial x_j}\left(\rho v_j H\right)=\frac{\partial}{\partial x_j}\left(v_i\tau_{ij}\right)+\frac{\partial}{\partial x_j}\left(k\frac{\partial T}{\partial x_j}\right).
+  \end{aligned} \tag{7.1}}
+
+  @bi{
+    @lang["en"]{In above Eq. @link["blazek2005-ch07#eq-7-1"]{(7.1)}, @tex-math{v_i} denotes a velocity component (@tex-math{\vec{v}=\left[v_1,v_2,v_3\right]^T}), and @tex-math{x_i} stands for a coordinate direction, respectively. An explanation of the compact tensor notation can be found in Appendix A.13.}
+    @lang["zh-CN"]{在上述方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}中，@tex-math{v_i}表示一个速度分量（@tex-math{\vec{v}=\left[v_1,v_2,v_3\right]^T}），@tex-math{x_i}代表一个坐标方向。关于紧凑张量记号的说明见附录A.13。}
+  }
+
+  @bi{
+    @lang["en"]{The components of the @emph{viscous stress tensor} @tex-math{\tau_{ij}} in Eq. @link["blazek2005-ch07#eq-7-1"]{(7.1)} are defined as}
+    @lang["zh-CN"]{方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}中@emph{黏性应力张量}（viscous stress tensor）@tex-math{\tau_{ij}}的分量定义为}
+  }
+
+  @tex-display-math[#:id "eq-7-2"]{\tau_{ij}=2\mu S_{ij}+\lambda\frac{\partial v_k}{\partial x_k}\delta_{ij}=2\mu S_{ij}-\left(\frac{2\mu}{3}\right)\frac{\partial v_k}{\partial x_k}\delta_{ij}, \tag{7.2}}
+
+  @bi{
+    @lang["en"]{where we utilised the Stokes's hypothesis (Eq. (2.17)). In Cartesian coordinates, Eq. @link["blazek2005-ch07#eq-7-2"]{(7.2)} is equivalent to Eq. (2.15). The second term in Eq. @link["blazek2005-ch07#eq-7-2"]{(7.2)}, i.e., @tex-math{\partial v_k/\partial x_k}, which corresponds to the divergence of the velocity, disappears for incompressible flows. The components of the @emph{strain-rate tensor} are given by}
+    @lang["zh-CN"]{其中利用了Stokes假设（式(2.17)）。在直角坐标系下，式@link["blazek2005-ch07#eq-7-2"]{(7.2)}与式(2.15)等价。式@link["blazek2005-ch07#eq-7-2"]{(7.2)}中的第二项，即@tex-math{\partial v_k/\partial x_k}，对应于速度的散度，在不可压缩流动中为零。@emph{应变率张量}（strain-rate tensor）的分量由下式给出}
+  }
+
+  @tex-display-math[#:id "eq-7-3"]{S_{ij}=\frac{1}{2}\left(\frac{\partial v_i}{\partial x_j}+\frac{\partial v_j}{\partial x_i}\right). \tag{7.3}}
+
+  @bi{
+    @lang["en"]{In this connection, let us also define the @emph{rotation-rate tensor} (antisymmetric part of the velocity gradient tensor) with the following components}
+    @lang["zh-CN"]{与此同时，让我们再定义@emph{旋转率张量}（rotation-rate tensor，即速度梯度张量的反对称部分），其分量为}
+  }
+
+  @tex-display-math[#:id "eq-7-4"]{\Omega_{ij}=\frac{1}{2}\left(\frac{\partial v_i}{\partial x_j}-\frac{\partial v_j}{\partial x_i}\right). \tag{7.4}}
+
+  @bi{
+    @lang["en"]{The total energy @tex-math{E} and the total enthalpy @tex-math{H} in Eq. @link["blazek2005-ch07#eq-7-1"]{(7.1)} are obtained from the formulae}
+    @lang["zh-CN"]{方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}中的总能量@tex-math{E}和总焓@tex-math{H}由下列公式求得}
+  }
+
+  @tex-display-math[#:id "eq-7-5"]{E=e+\frac{1}{2}v_iv_i\,,\qquad H=h+\frac{1}{2}v_iv_i \tag{7.5}}
+
+  @bi{
+    @lang["en"]{which correspond in Cartesian coordinate system to Eq. (2.6) and Eq. (2.12), respectively.}
+    @lang["zh-CN"]{它们在直角坐标系中分别对应于式(2.6)和式(2.12)。}
+  }
+
+  @bi{
+    @lang["en"]{For incompressible flows, we can reduce Eq. @link["blazek2005-ch07#eq-7-1"]{(7.1)} to the form}
+    @lang["zh-CN"]{对于不可压缩流动，可以把方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}约化为如下形式}
+  }
+
+  @tex-display-math[#:id "eq-7-6"]{\begin{aligned}
+  &\frac{\partial v_i}{\partial x_i}=0\\
+  &\frac{\partial v_i}{\partial t}+v_j\frac{\partial v_i}{\partial x_j}=-\frac{1}{\rho}\frac{\partial p}{\partial x_i}+\nu\nabla^2 v_i\\
+  &\frac{\partial T}{\partial t}+v_j\frac{\partial T}{\partial x_j}=k\nabla^2 T
+  \end{aligned} \tag{7.6}}
+
+  @bi{
+    @lang["en"]{with @tex-math{\nu=\mu/\rho} being the kinematic viscosity coefficient and @tex-math{\nabla^2} denoting the Laplace operator. In the absence of buoyancy effects, the equation for the temperature @tex-math{T} becomes decoupled from the mass conservation and momentum equations.}
+    @lang["zh-CN"]{其中@tex-math{\nu=\mu/\rho}为运动黏性系数，@tex-math{\nabla^2}表示拉普拉斯算子。在没有浮力效应时，温度@tex-math{T}的方程与质量守恒方程和动量方程解耦。}
+  }
+
+  @subtree[#:id "blazek2005-7-1-1"]{
+    @title{7.1.1 Reynolds Averaging 雷诺平均}
+
+    @bi{
+      @lang["en"]{The first approach for the approximate treatment of turbulent flows was presented by Reynolds in 1895. The methodology is based on the decomposition of the flow variables into a mean and a fluctuating part. The governing equations @link["blazek2005-ch07#eq-7-1"]{(7.1)} are then solved for the mean values, which are the most interesting for engineering applications. Thus, considering first incompressible flows, the velocity components and the pressure in Eq. @link["blazek2005-ch07#eq-7-1"]{(7.1)} are substituted by @link["blazek2005-r7-13"]{[13]}}
+      @lang["zh-CN"]{对湍流进行近似处理的第一种方法由Reynolds于1895年提出。该方法基于把流动变量分解为平均值与脉动值两部分。随后求解控制方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}的平均值——平均值对工程应用最有意义。这样，首先考虑不可压缩流动，方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}中的速度分量和压力用下式替代@link["blazek2005-r7-13"]{[13]}}
+    }
+
+    @tex-display-math[#:id "eq-7-7"]{v_i=\bar{v}_i+v'_i\,,\qquad p=\bar{p}+p'\,, \tag{7.7}}
+
+    @bi{
+      @lang["en"]{where the mean value is denoted by an overbar and the turbulent fluctuations by a prime. The mean values are obtained by an averaging procedure. There are three different forms of the @emph{Reynolds averaging}:}
+      @lang["zh-CN"]{其中平均值用上划线表示，湍流脉动用撇号表示。平均值通过平均过程求得。@emph{雷诺平均}（Reynolds averaging）有三种不同的形式：}
+    }
+
+    @bi{
+      @lang["en"]{1. @emph{Time averaging} -- appropriate for stationary turbulence (statistically steady turbulence)}
+      @lang["zh-CN"]{1. @emph{时间平均}（time averaging）——适用于定常湍流（统计定常湍流）}
+    }
+
+    @tex-display-math[#:id "eq-7-8"]{\bar{v}_i=\lim_{T\to\infty}\frac{1}{T}\int_t^{t+T}v_i\,dt. \tag{7.8}}
+
+    @bi{
+      @lang["en"]{As a consequence, the mean value @tex-math{\bar{v}_i} does not vary in time, but only in space. The situation is sketched in Fig. 7.2. In practice, @tex-math{T\to\infty} means that the time interval @tex-math{T} should be large as compared to the typical time-scale of the turbulent fluctuations.}
+      @lang["zh-CN"]{其结果是，平均值@tex-math{\bar{v}_i}不随时间变化，而只随空间变化。情形如图7.2所示。实践中，@tex-math{T\to\infty}意味着时间间隔@tex-math{T}应远大于湍流脉动的典型时间尺度。}
+    }
+
+    @bi{
+      @lang["en"]{2. @emph{Spatial averaging} -- appropriate for homogeneous turbulence}
+      @lang["zh-CN"]{2. @emph{空间平均}（spatial averaging）——适用于均匀湍流}
+    }
+
+    @tex-display-math[#:id "eq-7-9"]{\bar{v}_i=\lim_{\Omega\to\infty}\frac{1}{\Omega}\int_{\Omega}v_i\,d\Omega \tag{7.9}}
+
+    @bi{
+      @lang["en"]{with @tex-math{\Omega} being a control volume. In this case, @tex-math{\bar{v}_i} is uniform in space, but it is allowed to vary in time.}
+      @lang["zh-CN"]{其中@tex-math{\Omega}为控制体。此时@tex-math{\bar{v}_i}在空间上均匀，但允许随时间变化。}
+    }
+
+    @image["blazek2005/fig-7-2.png"]{图7.2:雷诺平均——湍流速度脉动与统计平均值的示意图}
+
+    @emph{图7.2:雷诺平均——湍流速度脉动@tex-math{v'}与统计平均值@tex-math{\bar{v}}的示意图。}
+
+    @bi{
+      @lang["en"]{3. @emph{Ensemble averaging} -- appropriate for general turbulence}
+      @lang["zh-CN"]{3. @emph{系综平均}（ensemble averaging）——适用于一般湍流}
+    }
+
+    @tex-display-math[#:id "eq-7-10"]{\bar{v}_i=\lim_{N\to\infty}\frac{1}{N}\sum_{m=1}^{N}v_i. \tag{7.10}}
+
+    @bi{
+      @lang["en"]{Here, the mean value @tex-math{\bar{v}_i} still remains a function of time and of space coordinates.}
+      @lang["zh-CN"]{这里，平均值@tex-math{\bar{v}_i}仍然是时间和空间坐标的函数。}
+    }
+
+    @bi{
+      @lang["en"]{For all three approaches, the average of the fluctuating part is zero, i.e., @tex-math{\overline{v'_i}=0}. However, it can be easily seen that @tex-math{\overline{v'_iv'_i}\neq 0}. The same is true for @tex-math{\overline{v'_iv'_j}}, if both turbulent velocity components are correlated.}
+      @lang["zh-CN"]{对所有这三种方法，脉动部分的平均值都为零，即@tex-math{\overline{v'_i}=0}。然而，容易看出@tex-math{\overline{v'_iv'_i}\neq 0}。若两个湍流速度分量相关，则对@tex-math{\overline{v'_iv'_j}}同样如此。}
+    }
+
+    @bi{
+      @lang["en"]{In cases where the turbulent flow is both stationary and homogeneous, all three averaging forms are equivalent. This is called the @emph{ergodic hypothesis}.}
+      @lang["zh-CN"]{当湍流既是定常的又是均匀的时候，三种平均形式彼此等价。这称为@emph{各态历经假设}（ergodic hypothesis）。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-1-2"]{
+    @title{7.1.2 Favre (Mass) Averaging Favre(质量)平均}
+
+    @bi{
+      @lang["en"]{In cases where the density is not constant, it is advisable to apply the @emph{density (mass) weighted} or Favre decomposition @link["blazek2005-r7-14"]{[14]}, @link["blazek2005-r7-15"]{[15]} to certain quantities in Eq. @link["blazek2005-ch07#eq-7-1"]{(7.1)} instead of Reynolds averaging. Otherwise, the averaged governing equations would become considerably more complicated due to additional correlations involving density fluctuations. The most convenient way is to employ Reynolds averaging for density and pressure, and Favre averaging for other variables such as velocity, internal energy, enthalpy and temperature. Favre averaged quantities, for example the velocity components, are obtained from the relation @link["blazek2005-r7-14"]{[14]}, @link["blazek2005-r7-15"]{[15]}}
+      @lang["zh-CN"]{在密度不为常数的情形下，对方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}中的某些量，宜采用@emph{密度（质量）加权}即Favre分解@link["blazek2005-r7-14"]{[14]}、@link["blazek2005-r7-15"]{[15]}来代替雷诺平均。否则，由于出现涉及密度脉动的额外关联，平均后的控制方程会变得复杂得多。最方便的做法是：对密度和压力采用雷诺平均，对速度、内能、焓和温度等其他变量采用Favre平均。Favre平均量（例如速度分量）由如下关系求得@link["blazek2005-r7-14"]{[14]}、@link["blazek2005-r7-15"]{[15]}}
+    }
+
+    @tex-display-math[#:id "eq-7-11"]{\tilde{v}_i=\frac{1}{\bar{\rho}}\lim_{T\to\infty}\frac{1}{T}\int_t^{t+T}\rho v_i\,dt, \tag{7.11}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\bar{\rho}} denotes the Reynolds-averaged density. Hence, the Favre decomposition reads}
+      @lang["zh-CN"]{其中@tex-math{\bar{\rho}}表示雷诺平均密度。于是，Favre分解写为}
+    }
+
+    @tex-display-math[#:id "eq-7-12"]{v_i=\tilde{v}_i+v''_i, \tag{7.12}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\tilde{v}_i} represents the mean value and @tex-math{v''_i} the fluctuating part of the velocity @tex-math{v_i}. Again, the average of the fluctuating part is zero, i.e., @tex-math{\widetilde{v''_i}=0}. Furthermore, the average of the product of two fluctuating quantities is not zero, if the quantities are correlated. Hence, for example, @tex-math{\widetilde{v''_iv''_i}\neq 0} and in general @tex-math{\widetilde{v''_iv''_j}\neq 0}.}
+      @lang["zh-CN"]{其中@tex-math{\tilde{v}_i}表示平均值，@tex-math{v''_i}表示速度@tex-math{v_i}的脉动部分。同样，脉动部分的平均值为零，即@tex-math{\widetilde{v''_i}=0}。此外，若两个脉动量相关，则其乘积的平均值不为零。例如，@tex-math{\widetilde{v''_iv''_i}\neq 0}，并且一般地@tex-math{\widetilde{v''_iv''_j}\neq 0}。}
+    }
+
+    @bi{
+      @lang["en"]{The following relationships can be derived for a mix between Favre and Reynolds averaging}
+      @lang["zh-CN"]{对于Favre平均与雷诺平均的混合使用，可以导出如下关系}
+    }
+
+    @tex-display-math[#:id "eq-7-13"]{\widetilde{\rho v_i}=\bar{\rho}\tilde{v}_i\,,\qquad \overline{\rho v''_i}=0\,,\qquad \text{but }\overline{v''_i}\neq 0. \tag{7.13}}
+
+    @bi{
+      @lang["en"]{These relations will be utilised in later subsections.}
+      @lang["zh-CN"]{这些关系将在后面的小节中用到。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-1-3"]{
+    @title{7.1.3 Reynolds-Averaged Navier-Stokes Equations 雷诺平均Navier-Stokes方程}
+
+    @bi{
+      @lang["en"]{If we apply either the time averaging Eq. @link["blazek2005-ch07#eq-7-8"]{(7.8)} or the ensemble averaging Eq. @link["blazek2005-ch07#eq-7-10"]{(7.10)} to the incompressible Navier-Stokes equations @link["blazek2005-ch07#eq-7-6"]{(7.6)}, we obtain the following relations for the mass and momentum conservation}
+      @lang["zh-CN"]{如果把时间平均（式@link["blazek2005-ch07#eq-7-8"]{(7.8)}）或系综平均（式@link["blazek2005-ch07#eq-7-10"]{(7.10)}）应用于不可压缩Navier-Stokes方程@link["blazek2005-ch07#eq-7-6"]{(7.6)}，便得到质量守恒和动量守恒的如下关系}
+    }
+
+    @tex-display-math[#:id "eq-7-14"]{\begin{aligned}
+    &\frac{\partial\bar{v}_i}{\partial x_i}=0\\
+    &\rho\frac{\partial\bar{v}_i}{\partial t}+\rho\bar{v}_j\frac{\partial\bar{v}_i}{\partial x_j}=-\frac{\partial\bar{p}}{\partial x_i}+\frac{\partial}{\partial x_j}\left(\tau_{ij}-\rho\overline{v'_iv'_j}\right).
+    \end{aligned} \tag{7.14}}
+
+    @bi{
+      @lang["en"]{These are known as the @emph{Reynolds-Averaged Navier-Stokes equations} (RANS). The equations @link["blazek2005-ch07#eq-7-14"]{(7.14)} are formally identical to the Navier-Stokes equations @link["blazek2005-ch07#eq-7-6"]{(7.6)} with the exception of the additional term}
+      @lang["zh-CN"]{这就是著名的@emph{雷诺平均Navier-Stokes方程}（@emph{Reynolds-Averaged Navier-Stokes equations}，RANS）。方程@link["blazek2005-ch07#eq-7-14"]{(7.14)}在形式上与Navier-Stokes方程@link["blazek2005-ch07#eq-7-6"]{(7.6)}完全相同，只是多出如下一项}
+    }
+
+    @tex-display-math[#:id "eq-7-15"]{\tau^R_{ij}=-\rho\overline{v'_iv'_j}=-\rho\left(\overline{v_iv_j}-\bar{v}_i\bar{v}_j\right), \tag{7.15}}
+
+    @bi{
+      @lang["en"]{which constitutes the so-called @emph{Reynolds-stress tensor}. It represents the transfer of momentum due to turbulent fluctuations. The laminar viscous stresses are evaluated according to Eqs. @link["blazek2005-ch07#eq-7-2"]{(7.2)} and @link["blazek2005-ch07#eq-7-3"]{(7.3)} using Reynolds-averaged velocity components, i.e.,}
+      @lang["zh-CN"]{该项构成所谓的@emph{雷诺应力张量}（Reynolds-stress tensor），它表示由湍流脉动引起的动量输运。层流黏性应力仍按式@link["blazek2005-ch07#eq-7-2"]{(7.2)}和@link["blazek2005-ch07#eq-7-3"]{(7.3)}用雷诺平均速度分量计算，即}
+    }
+
+    @tex-display-math[#:id "eq-7-16"]{\bar{\tau}_{ij}=2\mu\,\overline{S}_{ij}=\mu\left(\frac{\partial\bar{v}_i}{\partial x_j}+\frac{\partial\bar{v}_j}{\partial x_i}\right) \tag{7.16}}
+
+    @bi{
+      @lang["en"]{The Reynolds-stress tensor consists in 3D of the nine components}
+      @lang["zh-CN"]{雷诺应力张量在三维情形下由九个分量组成}
+    }
+
+    @tex-display-math[#:id "eq-7-17"]{\rho\overline{v'_iv'_j}=\begin{bmatrix}
+    \rho\overline{(v'_1)^2} & \rho\overline{v'_1v'_2} & \rho\overline{v'_1v'_3}\\
+    \rho\overline{v'_2v'_1} & \rho\overline{(v'_2)^2} & \rho\overline{v'_2v'_3}\\
+    \rho\overline{v'_3v'_1} & \rho\overline{v'_3v'_2} & \rho\overline{(v'_3)^2}
+    \end{bmatrix}. \tag{7.17}}
+
+    @bi{
+      @lang["en"]{However, since @tex-math{v'_i} and @tex-math{v'_j} in the correlations can be interchanged, the Reynolds-stress tensor contains only six independent components. The sum of the normal stresses divided by density defines the @emph{turbulent kinetic energy}, i.e.,}
+      @lang["zh-CN"]{不过，由于关联中的@tex-math{v'_i}与@tex-math{v'_j}可以互换，雷诺应力张量只包含六个独立分量。各法向应力之和除以密度即定义为@emph{湍动能}（turbulent kinetic energy），即}
+    }
+
+    @tex-display-math[#:id "eq-7-18"]{K=\frac{1}{2}\overline{v'_iv'_i}=\frac{1}{2}\left[\overline{(v'_1)^2}+\overline{(v'_2)^2}+\overline{(v'_3)^2}\right]. \tag{7.18}}
+
+    @bi{
+      @lang["en"]{As we can see, the fundamental problem of turbulence modelling based on the Reynolds-averaged Navier-Stokes equations is to find six additional relations in order to close the equations @link["blazek2005-ch07#eq-7-14"]{(7.14)}. We shall introduce the basic methodologies in the Subsections 7.1.5--7.1.7.}
+      @lang["zh-CN"]{如我们所见，基于雷诺平均Navier-Stokes方程的湍流建模，其根本问题在于找出六个附加关系式，以使方程@link["blazek2005-ch07#eq-7-14"]{(7.14)}封闭。我们将在7.1.5–7.1.7小节中介绍基本方法。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-1-4"]{
+    @title{7.1.4 Favre- and Reynolds-Averaged Navier-Stokes Equations Favre平均与雷诺平均Navier-Stokes方程}
+
+    @bi{
+      @lang["en"]{In turbulence modelling, it is quite common to assume that @emph{Morkovin's hypothesis} @link["blazek2005-r7-16"]{[16]} is valid. It states that the turbulent structure of a boundary layer is not notably influenced by density fluctuations if @tex-math{\rho'\ll\bar{\rho}}. This is generally true for wall-bounded flows up to a Mach number of about five. However, in the case of hypersonic flows or for compressible free shear layers, density fluctuations have to be taken into account. The same holds also for flows with combustion or with significant heat transfer.}
+      @lang["zh-CN"]{在湍流建模中，通常假设@emph{Morkovin假设}@link["blazek2005-r7-16"]{[16]}成立。该假设指出：若@tex-math{\rho'\ll\bar{\rho}}，边界层的湍流结构不会受到密度脉动的显著影响。对于壁面约束流动，直到马赫数约为5这一结论一般都成立。然而，对于高超声速流动或可压缩自由剪切层，则必须计及密度脉动。对于有燃烧或有显著传热的流动，情况也是如此。}
+    }
+
+    @bi{
+      @lang["en"]{Application of the Reynolds averaging (Eq. @link["blazek2005-ch07#eq-7-8"]{(7.8)} or @link["blazek2005-ch07#eq-7-10"]{(7.10)}) to density and pressure, and of the Favre averaging Eq. @link["blazek2005-ch07#eq-7-11"]{(7.11)} to the remaining flow variables in the compressible Navier-Stokes equations @link["blazek2005-ch07#eq-7-1"]{(7.1)} yields @link["blazek2005-r7-17"]{[17]}}
+      @lang["zh-CN"]{对可压缩Navier-Stokes方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}中的密度和压力应用雷诺平均（式@link["blazek2005-ch07#eq-7-8"]{(7.8)}或@link["blazek2005-ch07#eq-7-10"]{(7.10)}），对其余流动变量应用Favre平均（式@link["blazek2005-ch07#eq-7-11"]{(7.11)}），便得到@link["blazek2005-r7-17"]{[17]}}
+    }
+
+    @tex-display-math[#:id "eq-7-19"]{\begin{aligned}
+    &\frac{\partial\bar{\rho}}{\partial t}+\frac{\partial}{\partial x_i}\left(\bar{\rho}\tilde{v}_i\right)=0\\
+    &\frac{\partial}{\partial t}\left(\bar{\rho}\tilde{v}_i\right)+\frac{\partial}{\partial x_j}\left(\bar{\rho}\tilde{v}_j\tilde{v}_i\right)=-\frac{\partial\bar{p}}{\partial x_i}+\frac{\partial}{\partial x_j}\left(\bar{\tau}_{ij}-\bar{\rho}\widetilde{v''_iv''_j}\right)\\
+    &\frac{\partial}{\partial t}\left(\bar{\rho}\tilde{E}\right)+\frac{\partial}{\partial x_j}\left(\bar{\rho}\tilde{v}_j\tilde{H}\right)=\frac{\partial}{\partial x_j}\left(k\frac{\partial\tilde{T}}{\partial x_j}-\bar{\rho}\widetilde{v''_jh''}+\widetilde{\tau_{ij}v''_i}-\bar{\rho}\widetilde{v''_jK}\right)\\
+    &\qquad+\frac{\partial}{\partial x_j}\left[\tilde{v}_i\left(\bar{\tau}_{ij}-\bar{\rho}\widetilde{v''_iv''_j}\right)\right].
+    \end{aligned} \tag{7.19}}
+
+    @bi{
+      @lang["en"]{These are the @emph{Favre- and Reynolds-Averaged Navier-Stokes} equations. Similarly to the Reynolds averaging, the viscous stress tensor in the momentum (and energy) equation is extended by the @emph{Favre-averaged Reynolds-stress} tensor, i.e.,}
+      @lang["zh-CN"]{这就是@emph{Favre平均与雷诺平均Navier-Stokes方程}。与雷诺平均类似，动量（和能量）方程中的黏性应力张量要再加上@emph{Favre平均雷诺应力}张量，即}
+    }
+
+    @tex-display-math[#:id "eq-7-20"]{\tau^F_{ij}=-\bar{\rho}\,\widetilde{v''_iv''_j}. \tag{7.20}}
+
+    @bi{
+      @lang["en"]{Its form is similar to Eq. @link["blazek2005-ch07#eq-7-17"]{(7.17)} with Favre instead of Reynolds averaging. The components of the laminar (molecular) viscous stress tensor @tex-math{\bar{\tau}_{ij}} are evaluated by Eq. @link["blazek2005-ch07#eq-7-2"]{(7.2)} using Favre-averaged velocity components.}
+      @lang["zh-CN"]{其形式与式@link["blazek2005-ch07#eq-7-17"]{(7.17)}类似，只是把雷诺平均换成了Favre平均。层流（分子）黏性应力张量@tex-math{\bar{\tau}_{ij}}的分量按式@link["blazek2005-ch07#eq-7-2"]{(7.2)}用Favre平均速度分量计算。}
+    }
+
+    @bi{
+      @lang["en"]{If we employ the definition of the Favre-averaged turbulent kinetic energy, i.e.,}
+      @lang["zh-CN"]{如果采用Favre平均湍动能的定义，即}
+    }
+
+    @tex-display-math[#:id "eq-7-21"]{\bar{\rho}\tilde{K}=\frac{1}{2}\,\bar{\rho}\,\widetilde{v''_iv''_i}, \tag{7.21}}
+
+    @bi{
+      @lang["en"]{we can express the total energy in Eq. @link["blazek2005-ch07#eq-7-19"]{(7.19)} as}
+      @lang["zh-CN"]{就可以把方程@link["blazek2005-ch07#eq-7-19"]{(7.19)}中的总能量表示为}
+    }
+
+    @tex-display-math[#:id "eq-7-22"]{\bar{\rho}\tilde{E}=\bar{\rho}\tilde{e}+\frac{1}{2}\bar{\rho}\tilde{v}_i\tilde{v}_i+\frac{1}{2}\bar{\rho}\widetilde{v''_iv''_i}=\bar{\rho}\tilde{e}+\frac{1}{2}\bar{\rho}\tilde{v}_i\tilde{v}_i+\bar{\rho}\tilde{K}. \tag{7.22}}
+
+    @bi{
+      @lang["en"]{The total enthalpy is defined as}
+      @lang["zh-CN"]{总焓定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-23"]{\bar{\rho}\tilde{H}=\bar{\rho}\tilde{h}+\frac{1}{2}\bar{\rho}\tilde{v}_i\tilde{v}_i+\frac{1}{2}\bar{\rho}\widetilde{v''_iv''_i}=\bar{\rho}\tilde{h}+\frac{1}{2}\bar{\rho}\tilde{v}_i\tilde{v}_i+\bar{\rho}\tilde{K}. \tag{7.23}}
+
+    @bi{
+      @lang["en"]{The individual parts of the Favre- and Reynolds-averaged Navier-Stokes equations @link["blazek2005-ch07#eq-7-19"]{(7.19)} have the following physical meaning @link["blazek2005-r7-17"]{[17]}:
+        @itemize{
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(k\dfrac{\partial\tilde{T}}{\partial x_j}\right)} - molecular diffusion of heat}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\bar{\rho}\widetilde{v''_jh''}\right)} - turbulent transport of heat}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\widetilde{\tau_{ij}v''_i}\right)} - molecular diffusion of @tex-math{\tilde{K}}}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\bar{\rho}\widetilde{v''_jK}\right)} - turbulent transport of @tex-math{\tilde{K}}}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\tilde{v}_i\bar{\tau}_{ij}\right)} - work done by the molecular stresses}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\tilde{v}_i\tau^F_{ij}\right)} - work done by the Favre-averaged Reynolds stresses}
+        }
+      }
+      @lang["zh-CN"]{Favre平均与雷诺平均Navier-Stokes方程@link["blazek2005-ch07#eq-7-19"]{(7.19)}的各个部分具有如下物理意义@link["blazek2005-r7-17"]{[17]}：
+        @itemize{
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(k\dfrac{\partial\tilde{T}}{\partial x_j}\right)}——热的分子扩散}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\bar{\rho}\widetilde{v''_jh''}\right)}——热的湍流输运}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\widetilde{\tau_{ij}v''_i}\right)}——@tex-math{\tilde{K}}的分子扩散}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\bar{\rho}\widetilde{v''_jK}\right)}——@tex-math{\tilde{K}}的湍流输运}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\tilde{v}_i\bar{\tau}_{ij}\right)}——分子应力做的功}
+          @item{@tex-math{\dfrac{\partial}{\partial x_j}\left(\tilde{v}_i\tau^F_{ij}\right)}——Favre平均雷诺应力做的功}
+        }
+      }
+    }
+
+    @bi{
+      @lang["en"]{The molecular diffusion and turbulent transport of @tex-math{\tilde{K}} are very often neglected. This is a valid approximation for transonic and supersonic flows. In order to close the Favre- and Reynolds-averaged equations @link["blazek2005-ch07#eq-7-19"]{(7.19)}, we also have to supply six components of the Favre-averaged Reynolds-stress tensor (Eq. @link["blazek2005-ch07#eq-7-20"]{(7.20)}) and three components of the turbulent heat-flux vector. We shall discuss the three basic approaches in the next subsections.}
+      @lang["zh-CN"]{@tex-math{\tilde{K}}的分子扩散和湍流输运在很多时候都可以忽略。对于跨声速和超声速流动，这是有效的近似。为使Favre平均与雷诺平均方程@link["blazek2005-ch07#eq-7-19"]{(7.19)}封闭，还必须提供Favre平均雷诺应力张量（式@link["blazek2005-ch07#eq-7-20"]{(7.20)}）的六个分量以及湍流热通量向量的三个分量。我们将在后面几个小节中讨论这三种基本方法。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-1-5"]{
+    @title{7.1.5 Eddy-Viscosity Hypothesis 涡黏性假设}
+
+    @bi{
+      @lang["en"]{One of the most significant contributions to turbulence modelling was presented in 1877 by Boussinesq @link["blazek2005-r7-11"]{[11]}, @link["blazek2005-r7-12"]{[12]}. His idea is based on the observation that the momentum transfer in a turbulent flow is dominated by the mixing caused by large energetic turbulent eddies. The Boussinesq hypothesis assumes that the turbulent shear stress depends linearly on the mean rate of strain, as in a laminar flow. The proportionality factor is the @emph{eddy viscosity}. The Boussinesq hypothesis for Reynolds averaged incompressible flow (Eq. @link["blazek2005-ch07#eq-7-14"]{(7.14)}) can be written as}
+      @lang["zh-CN"]{湍流建模领域最重要的贡献之一由Boussinesq于1877年作出@link["blazek2005-r7-11"]{[11]}、@link["blazek2005-r7-12"]{[12]}。他的想法基于如下观察：湍流中的动量输运由大而高能的湍流涡所引起的混合主导。Boussinesq假设湍流剪应力像层流中那样线性地依赖于平均应变率，其比例系数就是@emph{涡黏性}（eddy viscosity）。对于雷诺平均不可压缩流动（式@link["blazek2005-ch07#eq-7-14"]{(7.14)}），Boussinesq假设可以写为}
+    }
+
+    @tex-display-math[#:id "eq-7-24"]{\tau^R_{ij}=-\rho\overline{v'_iv'_j}=2\mu_T\overline{S}_{ij}-\frac{2}{3}\rho K\delta_{ij}, \tag{7.24}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\overline{S}_{ij}} denotes the Reynolds-averaged strain-rate tensor (Eq. @link["blazek2005-ch07#eq-7-3"]{(7.3)}, cf. also Eq. @link["blazek2005-ch07#eq-7-16"]{(7.16)}), @tex-math{K} is the turbulent kinetic energy (@tex-math{K=(1/2)\overline{v'_iv'_i}}), and @tex-math{\mu_T} stands for the eddy viscosity. Unlike the molecular viscosity @tex-math{\mu}, the eddy viscosity @tex-math{\mu_T} represents no physical characteristic of the fluid, but it is a function of the local flow conditions. Additionally, @tex-math{\mu_T} is also strongly affected by flow history effects.}
+      @lang["zh-CN"]{其中@tex-math{\overline{S}_{ij}}表示雷诺平均应变率张量（式@link["blazek2005-ch07#eq-7-3"]{(7.3)}，另见式@link["blazek2005-ch07#eq-7-16"]{(7.16)}），@tex-math{K}为湍动能（@tex-math{K=(1/2)\overline{v'_iv'_i}}），@tex-math{\mu_T}代表涡黏性。与分子黏性@tex-math{\mu}不同，涡黏性@tex-math{\mu_T}不是流体的物理特性，而是局部流动条件的函数。此外，@tex-math{\mu_T}还受到流动历史效应的强烈影响。}
+    }
+
+    @bi{
+      @lang["en"]{In the case of the compressible Favre- and Reynolds-averaged Navier-Stokes equations @link["blazek2005-ch07#eq-7-19"]{(7.19)}, the Boussinesq eddy-viscosity hypothesis reads}
+      @lang["zh-CN"]{对于可压缩Favre平均与雷诺平均Navier-Stokes方程@link["blazek2005-ch07#eq-7-19"]{(7.19)}，Boussinesq涡黏性假设写为}
+    }
+
+    @tex-display-math[#:id "eq-7-25"]{\tau^F_{ij}=-\bar{\rho}\,\widetilde{v''_iv''_j}=2\mu_T\tilde{S}_{ij}-\left(\frac{2\mu_T}{3}\right)\frac{\partial\tilde{v}_k}{\partial x_k}\delta_{ij}-\frac{2}{3}\bar{\rho}\tilde{K}\delta_{ij}, \tag{7.25}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\tilde{S}_{ij}} and @tex-math{\tilde{K}} are the Favre-averaged strain rate and turbulent kinetic energy, respectively. Note the similarity to Eq. @link["blazek2005-ch07#eq-7-2"]{(7.2)}. The term @tex-math{(2/3)\rho K\delta_{ij}} in Eqs. @link["blazek2005-ch07#eq-7-24"]{(7.24)} and @link["blazek2005-ch07#eq-7-25"]{(7.25)} is required in order to obtain the proper trace of @tex-math{\tau^R_{ij}} or @tex-math{\tau^F_{ij}}. This means that we must have}
+      @lang["zh-CN"]{其中@tex-math{\tilde{S}_{ij}}和@tex-math{\tilde{K}}分别为Favre平均应变率和Favre平均湍动能。注意它与式@link["blazek2005-ch07#eq-7-2"]{(7.2)}的相似性。式@link["blazek2005-ch07#eq-7-24"]{(7.24)}和@link["blazek2005-ch07#eq-7-25"]{(7.25)}中的@tex-math{(2/3)\rho K\delta_{ij}}项是为了得到@tex-math{\tau^R_{ij}}或@tex-math{\tau^F_{ij}}的正确迹（trace）所必需的。这意味着，我们必须有}
+    }
+
+    @tex-display-math{\tau^R_{ii}=-2\rho K \qquad\text{or}\qquad \tau^F_{ii}=-2\bar{\rho}\tilde{K}}
+
+    @bi{
+      @lang["en"]{in the case of @tex-math{\overline{S}_{ii}=0} (continuity equation) or @tex-math{\tilde{S}_{ii}=0}, in order to fulfil the relations Eq. @link["blazek2005-ch07#eq-7-18"]{(7.18)} or @link["blazek2005-ch07#eq-7-21"]{(7.21)} for the turbulent kinetic energy. However, the term @tex-math{(2/3)\rho K\delta_{ij}} is often neglected, particularly in connection with simpler turbulence models (like algebraic ones).}
+      @lang["zh-CN"]{即在@tex-math{\overline{S}_{ii}=0}（连续方程）或@tex-math{\tilde{S}_{ii}=0}的情形下，以满足湍动能的关系式@link["blazek2005-ch07#eq-7-18"]{(7.18)}或@link["blazek2005-ch07#eq-7-21"]{(7.21)}。然而，@tex-math{(2/3)\rho K\delta_{ij}}这一项常常被忽略，特别是在与较简单的湍流模型（如代数模型）联用时。}
+    }
+
+    @bi{
+      @lang["en"]{The approximation, which is commonly used for the modelling of the turbulent heat-flux vector, is based on the classical Reynolds analogy @link["blazek2005-r7-18"]{[18]}. Hence, we may write}
+      @lang["zh-CN"]{对湍流热通量向量建模时常用的近似基于经典的Reynolds比拟@link["blazek2005-r7-18"]{[18]}。于是，我们可以写}
+    }
+
+    @tex-display-math[#:id "eq-7-26"]{\bar{\rho}\,\widetilde{v''_jh''}=-k_T\frac{\partial\tilde{T}}{\partial x_j} \tag{7.26}}
+
+    @bi{
+      @lang["en"]{with the @emph{turbulent thermal conductivity coefficient} @tex-math{k_T} being defined as}
+      @lang["zh-CN"]{其中@emph{湍流热导率系数}（turbulent thermal conductivity coefficient）@tex-math{k_T}定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-27"]{k_T=c_p\frac{\mu_T}{Pr_T}. \tag{7.27}}
+
+    @bi{
+      @lang["en"]{In Equation @link["blazek2005-ch07#eq-7-27"]{(7.27)}, @tex-math{c_p} denotes the specific heat coefficient at constant pressure and @tex-math{Pr_T} is the turbulent Prandtl number. The turbulent Prandtl number is in general assumed to be constant over the flow field (@tex-math{Pr_T=0.9} for air).}
+      @lang["zh-CN"]{在方程@link["blazek2005-ch07#eq-7-27"]{(7.27)}中，@tex-math{c_p}表示定压比热系数，@tex-math{Pr_T}为湍流Prandtl数。一般假设湍流Prandtl数在整个流场中为常数（对空气@tex-math{Pr_T=0.9}）。}
+    }
+
+    @bi{
+      @lang["en"]{By applying the eddy-viscosity approach to the Reynolds- (and Favre-) averaged form of the governing equations (2.19) or Eq. @link["blazek2005-ch07#eq-7-1"]{(7.1)}, the dynamic viscosity coefficient @tex-math{\mu} in the viscous stress tensor Eq. (2.15) or Eq. @link["blazek2005-ch07#eq-7-2"]{(7.2)} is simply replaced by the sum of a laminar and a turbulent component, i.e.,}
+      @lang["zh-CN"]{把涡黏性方法应用于控制方程(2.19)或方程@link["blazek2005-ch07#eq-7-1"]{(7.1)}的雷诺（及Favre）平均形式时，黏性应力张量式(2.15)或式@link["blazek2005-ch07#eq-7-2"]{(7.2)}中的动力黏性系数@tex-math{\mu}被简单地替换为层流分量与湍流分量之和，即}
+    }
+
+    @tex-display-math[#:id "eq-7-28"]{\mu=\mu_L+\mu_T. \tag{7.28}}
+
+    @bi{
+      @lang["en"]{The laminar viscosity @tex-math{\mu_L} is computed, for example, with the aid of the Sutherland formula (2.30). Furthermore, according to the Reynolds analogy given by Eq. @link["blazek2005-ch07#eq-7-26"]{(7.26)}, the thermal conductivity coefficient @tex-math{k} in Eq. (2.24) or Eq. @link["blazek2005-ch07#eq-7-2"]{(7.2)} is evaluated as}
+      @lang["zh-CN"]{层流黏性@tex-math{\mu_L}例如可用Sutherland公式(2.30)计算。此外，根据式@link["blazek2005-ch07#eq-7-26"]{(7.26)}给出的Reynolds比拟，式(2.24)或式@link["blazek2005-ch07#eq-7-2"]{(7.2)}中的热导率系数@tex-math{k}按下式计算}
+    }
+
+    @tex-display-math[#:id "eq-7-29"]{k=k_L+k_T=c_p\left(\frac{\mu_L}{Pr_L}+\frac{\mu_T}{Pr_T}\right). \tag{7.29}}
+
+    @bi{
+      @lang["en"]{The eddy-viscosity concept of Boussinesq is, at least from the engineering point of view, very attractive since it requires ``only'' the determination of @tex-math{\mu_T} (the turbulent kinetic energy @tex-math{K} needed for the term @tex-math{(2/3)\rho K\delta_{ij}} in Eq. @link["blazek2005-ch07#eq-7-24"]{(7.24)} or @link["blazek2005-ch07#eq-7-25"]{(7.25)} is either obtained as a by-product of the turbulence model or is simply omitted). Once we know the eddy viscosity @tex-math{\mu_T}, we can easily extend the Navier-Stokes equations (2.19) or @link["blazek2005-ch07#eq-7-1"]{(7.1)} to the simulation of turbulent flows by introducing averaged flow variables and by adding @tex-math{\mu_T} to the laminar viscosity. Therefore, Boussinesq's approach became the basis for a large variety of first-order turbulence closures. However, there are applications for which the Boussinesq hypothesis is no longer valid (see, e.g., @link["blazek2005-r7-17"]{[17]} p. 214 or @link["blazek2005-r7-19"]{[19]} p. 111):
+        @itemize{
+          @item{flows with sudden change of mean strain rate,}
+          @item{flows with significant streamline curvature,}
+          @item{flows with rotation and stratification,}
+          @item{secondary flows in ducts and in turbomachinery,}
+          @item{flows with boundary layer separation and reattachment.}
+        }
+      }
+      @lang["zh-CN"]{至少从工程的角度看，Boussinesq的涡黏性概念非常有吸引力，因为它“只”需要确定@tex-math{\mu_T}（式@link["blazek2005-ch07#eq-7-24"]{(7.24)}或@link["blazek2005-ch07#eq-7-25"]{(7.25)}中@tex-math{(2/3)\rho K\delta_{ij}}项所需的湍动能@tex-math{K}，或者作为湍流模型的副产物得到，或者干脆略去）。一旦知道了涡黏性@tex-math{\mu_T}，通过引入平均流动变量并把@tex-math{\mu_T}加到层流黏性上，我们就能容易地把Navier-Stokes方程(2.19)或@link["blazek2005-ch07#eq-7-1"]{(7.1)}扩展用于湍流模拟。因此，Boussinesq方法成为了大量一阶湍流封闭的基础。然而，对某些应用而言，Boussinesq假设不再成立（例如见@link["blazek2005-r7-17"]{[17]}第214页或@link["blazek2005-r7-19"]{[19]}第111页）：
+        @itemize{
+          @item{平均应变率发生突然变化的流动；}
+          @item{具有显著流线曲率的流动；}
+          @item{具有旋转和分层的流动；}
+          @item{管道和透平机械中的二次流；}
+          @item{边界层分离与再附的流动。}
+        }
+      }
+    }
+
+    @bi{
+      @lang["en"]{The limitations of the eddy-viscosity approach are caused by the assumption of equilibrium between the turbulence and the mean strain field, as well as by the independence on system rotation. The results can be notably improved by using appropriate correction terms in the turbulence models @link["blazek2005-r7-20"]{[20]}, @link["blazek2005-r7-21"]{[21]}. Further increased accuracy of predictions can be achieved through the application of non-linear eddy-viscosity models which are described next.}
+      @lang["zh-CN"]{涡黏性方法的局限源于把湍流与平均应变场视为处于平衡状态的假设，以及其结果与系统旋转无关的假定。通过在湍流模型中加入适当的修正项，结果可以明显改善@link["blazek2005-r7-20"]{[20]}、@link["blazek2005-r7-21"]{[21]}。采用下面要介绍的非线性涡黏性模型，可以进一步提高预测精度。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-1-6"]{
+    @title{7.1.6 Non-Linear Eddy Viscosity 非线性涡黏性}
+
+    @bi{
+      @lang["en"]{In order to remove the restrictions imposed by the assumption of equilibrium between the turbulence and the mean strain rate, Lumley @link["blazek2005-r7-22"]{[22]}, @link["blazek2005-r7-23"]{[23]} proposed to extend the linear Boussinesq approach by higher-order products of strain and rotation tensors. This can viewed as a Taylor series expansion. Following the idea of Lumley, numerous non-linear eddy-viscosity models were proposed, see, for example, Refs. @link["blazek2005-r7-24"]{[24]}--@link["blazek2005-r7-29"]{[29]}.}
+      @lang["zh-CN"]{为了消除湍流与平均应变率之间平衡假设所强加的限制，Lumley@link["blazek2005-r7-22"]{[22]}、@link["blazek2005-r7-23"]{[23]}提议用应变张量与旋转张量的高阶乘积来扩展线性的Boussinesq方法。这可以视为一种Taylor级数展开。沿着Lumley的思路，人们提出了众多非线性涡黏性模型，例如文献@link["blazek2005-r7-24"]{[24]}–@link["blazek2005-r7-29"]{[29]}。}
+    }
+
+    @bi{
+      @lang["en"]{In the following, we shall present one recent approach proposed by Shih et al. @link["blazek2005-r7-25"]{[25]}. It includes up to third-order terms in the general eddy-viscosity formulation and is particularly suited to swirling flows. As already pointed out in @link["blazek2005-r7-19"]{[19]}, p. 194, cubic terms are essential for high accuracy. The Reynolds stresses @tex-math{\tau^R_{ij}} can be expressed as @link["blazek2005-r7-25"]{[25]}, @link["blazek2005-r7-30"]{[30]} (cf. Eq. @link["blazek2005-ch07#eq-7-24"]{(7.24)})}
+      @lang["zh-CN"]{下面我们介绍由Shih等人@link["blazek2005-r7-25"]{[25]}提出的一种较新的方法。它在一般涡黏性表述中包含直至三阶的项，特别适合于旋转流（swirling flows）。正如文献@link["blazek2005-r7-19"]{[19]}第194页所指出的，三次项对高精度至关重要。雷诺应力@tex-math{\tau^R_{ij}}可以表示为@link["blazek2005-r7-25"]{[25]}、@link["blazek2005-r7-30"]{[30]}（对照式@link["blazek2005-ch07#eq-7-24"]{(7.24)}）}
+    }
+
+    @tex-display-math[#:id "eq-7-30"]{\begin{aligned}
+    \rho\overline{v'_iv'_j}={}&\frac{2}{3}\rho K\delta_{ij}-C_1\frac{\rho K^2}{\varepsilon}\,2S^*_{ij}-C_3\frac{\rho K^3}{\varepsilon^2}\left[\overline{S}_{ik}\overline{\Omega}_{kj}-\overline{\Omega}_{ik}\overline{S}_{kj}\right]\\
+    &-C_4\frac{\rho K^4}{\varepsilon^3}\left[(\overline{S}_{ik})^2\overline{\Omega}_{kj}-\overline{\Omega}_{ik}(\overline{S}_{kj})^2\right]\\
+    &+C_5\frac{\rho K^4}{\varepsilon^3}\left[\overline{\Omega}_{ik}\overline{S}_{km}\overline{\Omega}_{mj}-\frac{1}{3}\overline{\Omega}_{kl}\overline{S}_{lm}\overline{\Omega}_{mk}\delta_{ij}+I_sS^*_{ij}\right]
+    \end{aligned} \tag{7.30}}
+
+    @bi{
+      @lang["en"]{with @tex-math{\overline{S}_{ij}}, @tex-math{\overline{\Omega}_{ij}} according to Eqs. @link["blazek2005-ch07#eq-7-3"]{(7.3)} and @link["blazek2005-ch07#eq-7-4"]{(7.4)}. Furthermore,}
+      @lang["zh-CN"]{其中@tex-math{\overline{S}_{ij}}、@tex-math{\overline{\Omega}_{ij}}按式@link["blazek2005-ch07#eq-7-3"]{(7.3)}和@link["blazek2005-ch07#eq-7-4"]{(7.4)}。此外}
+    }
+
+    @tex-display-math[#:id "eq-7-31"]{\begin{aligned}
+    I_s&=\frac{1}{2}\left[\overline{S}_{kk}\overline{S}_{ll}-(\overline{S}_{kk})^2\right]S^*_{ij}\\
+    S^*_{ij}&=\overline{S}_{ij}-\frac{1}{3}\overline{S}_{kk}\delta_{ij}.
+    \end{aligned} \tag{7.31}}
+
+    @bi{
+      @lang["en"]{The values of the turbulent kinetic energy @tex-math{K} and the @emph{dissipation rate} @tex-math{\varepsilon} are obtained from low-Reynolds @tex-math{K}-@tex-math{\varepsilon} turbulence model (cf. Subsection 7.2.2). The factors @tex-math{C_1} to @tex-math{C_5} in Eq. @link["blazek2005-ch07#eq-7-30"]{(7.30)} are provided in Refs. @link["blazek2005-r7-25"]{[25]}, @link["blazek2005-r7-30"]{[30]}.}
+      @lang["zh-CN"]{湍动能@tex-math{K}和@emph{耗散率}（dissipation rate）@tex-math{\varepsilon}的值由低雷诺数@tex-math{K}-@tex-math{\varepsilon}湍流模型给出（参见7.2.2小节）。式@link["blazek2005-ch07#eq-7-30"]{(7.30)}中的系数@tex-math{C_1}至@tex-math{C_5}见文献@link["blazek2005-r7-25"]{[25]}、@link["blazek2005-r7-30"]{[30]}。}
+    }
+
+    @bi{
+      @lang["en"]{In comparison to the linear eddy-viscosity approach, the non-linear models are computationally only slightly more expensive, but they offer a substantially improved prediction capabilities for complex turbulent flows.}
+      @lang["zh-CN"]{与线性涡黏性方法相比，非线性模型的计算代价只略微增大，但对复杂湍流的预测能力却有显著提高。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-1-7"]{
+    @title{7.1.7 Reynolds-Stress Transport Equation 雷诺应力输运方程}
+
+    @bi{
+      @lang["en"]{It is possible to derive @emph{exact} equations for the Reynolds stresses by taking the time average (second-order moment)}
+      @lang["zh-CN"]{通过取时间平均（二阶矩），可以为雷诺应力导出@emph{精确}方程}
+    }
+
+    @tex-display-math[#:id "eq-7-32"]{\overline{v'_i\mathcal{N}(v_j)+v'_j\mathcal{N}(v_i)}=0, \tag{7.32}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\mathcal{N}(v_i)} denotes the Navier-Stokes operator, i.e.,}
+      @lang["zh-CN"]{其中@tex-math{\mathcal{N}(v_i)}表示Navier-Stokes算子，即}
+    }
+
+    @tex-display-math[#:id "eq-7-33"]{\mathcal{N}(v_i)=\rho\frac{\partial v_i}{\partial t}+\rho v_j\frac{\partial v_i}{\partial x_j}+\frac{\partial p}{\partial x_i}-\mu\nabla^2 v_i. \tag{7.33}}
+
+    @bi{
+      @lang["en"]{Using the average Eq. @link["blazek2005-ch07#eq-7-32"]{(7.32)} together with Eq. @link["blazek2005-ch07#eq-7-33"]{(7.33)}, we obtain the following @emph{Reynolds-stress transport equation} @link["blazek2005-r7-31"]{[31]}}
+      @lang["zh-CN"]{把平均式@link["blazek2005-ch07#eq-7-32"]{(7.32)}与式@link["blazek2005-ch07#eq-7-33"]{(7.33)}联立，便得到如下@emph{雷诺应力输运方程}（@emph{Reynolds-stress transport equation}）@link["blazek2005-r7-31"]{[31]}}
+    }
+
+    @tex-display-math[#:id "eq-7-34"]{\frac{\partial\tau^R_{ij}}{\partial t}+\bar{v}_k\frac{\partial\tau^R_{ij}}{\partial x_k}=P_{ij}+\Pi_{ij}-\varepsilon_{ij}-\frac{\partial C_{ijk}}{\partial x_k}+\mu\nabla^2\tau^R_{ij} \tag{7.34}}
+
+    @bi{
+      @lang["en"]{for incompressible flow. The formulation for compressible flows can be found in Ref. @link["blazek2005-r7-17"]{[17]}, p. 179, or in @link["blazek2005-r7-32"]{[32]}, @link["blazek2005-r7-33"]{[33]}. The production of the turbulent kinetic energy @tex-math{P_{ij}}, the pressure-strain term @tex-math{\Pi_{ij}}, the dissipation-rate term @tex-math{\varepsilon_{ij}}, and the third-order diffusion term @tex-math{C_{ijk}} in Eq. @link["blazek2005-ch07#eq-7-34"]{(7.34)} are defined as}
+      @lang["zh-CN"]{它适用于不可压缩流动。可压缩流动的表述见文献@link["blazek2005-r7-17"]{[17]}第179页，或@link["blazek2005-r7-32"]{[32]}、@link["blazek2005-r7-33"]{[33]}。方程@link["blazek2005-ch07#eq-7-34"]{(7.34)}中，湍动能的生成项@tex-math{P_{ij}}、压力—应变项@tex-math{\Pi_{ij}}、耗散率项@tex-math{\varepsilon_{ij}}以及三阶扩散项@tex-math{C_{ijk}}定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-35"]{\begin{aligned}
+    P_{ij}&=-\tau^R_{ik}\frac{\partial\bar{v}_j}{\partial x_k}-\tau^R_{jk}\frac{\partial\bar{v}_i}{\partial x_k}\\
+    \Pi_{ij}&=\overline{p'\left(\frac{\partial v'_i}{\partial x_j}+\frac{\partial v'_j}{\partial x_i}\right)}=2\,\overline{p'S'_{ij}}\\
+    \varepsilon_{ij}&=2\mu\,\overline{\frac{\partial v'_i}{\partial x_k}\frac{\partial v'_j}{\partial x_k}}\\
+    C_{ijk}&=\rho\overline{v'_iv'_jv'_k}+\overline{p'v'_i}\,\delta_{jk}+\overline{p'v'_j}\,\delta_{ik}.
+    \end{aligned} \tag{7.35}}
+
+    @bi{
+      @lang["en"]{In Eq. @link["blazek2005-ch07#eq-7-35"]{(7.35)}, @tex-math{S'_{ij}} denotes the fluctuating part of the strain-rate tensor. The first part of @tex-math{C_{ijk}}, the triple velocity term, represents transport driven by fluctuating convection, the two other parts are the pressure transport terms (pressure-velocity correlations), respectively.}
+      @lang["zh-CN"]{在方程@link["blazek2005-ch07#eq-7-35"]{(7.35)}中，@tex-math{S'_{ij}}表示应变率张量的脉动部分。@tex-math{C_{ijk}}的第一部分（三重速度项）表示由脉动对流驱动的输运，另外两部分则分别是压力输运项（压力—速度关联）。}
+    }
+
+    @bi{
+      @lang["en"]{As we can see, the exact Reynolds-stress equation contains new unknown higher-order correlations (e.g., @tex-math{\overline{v'_iv'_jv'_k}}). Therefore, Equation @link["blazek2005-ch07#eq-7-34"]{(7.34)} can be closed only by using @emph{empirical} models. This is caused by the non-linear nature of the Navier-Stokes equations. The second-order closures -- the Reynolds-stress models -- provide the necessary framework for solving Eq. @link["blazek2005-ch07#eq-7-34"]{(7.34)}. Examples of implementations can be found, e.g., in Refs. @link["blazek2005-r7-34"]{[34]}--@link["blazek2005-r7-36"]{[36]}.}
+      @lang["zh-CN"]{如我们所见，精确的雷诺应力方程包含新的未知高阶关联（例如@tex-math{\overline{v'_iv'_jv'_k}}）。因此，方程@link["blazek2005-ch07#eq-7-34"]{(7.34)}只能借助@emph{经验}模型来封闭。这是由Navier-Stokes方程的非线性本质造成的。二阶封闭——雷诺应力模型——为求解方程@link["blazek2005-ch07#eq-7-34"]{(7.34)}提供了必要的框架。实施的例子可参见文献@link["blazek2005-r7-34"]{[34]}–@link["blazek2005-r7-36"]{[36]}。}
+    }
+  }
+}
+@subtree[#:id "blazek2005-7-2"]{
+  @title{7.2 First-Order Closures 一阶封闭}
+
+  @bi{
+    @lang["en"]{The first-order closures represent the easiest way to approximate the Reynolds stresses in the Reynolds-/Favre-averaged Navier-Stokes equations. They are based on Boussinesq or non-linear eddy-viscosity models, which we discussed in the Subsections 7.1.5 and 7.1.6, respectively. Consequently, the task of an associated turbulence model is to compute the eddy viscosity @tex-math{\mu_T}.}
+    @lang["zh-CN"]{一阶封闭（first-order closures）是在雷诺/Favre平均Navier-Stokes方程中近似雷诺应力的最简单方法。它们基于Boussinesq涡黏性模型或非线性涡黏性模型，我们分别在小节7.1.5和7.1.6中讨论过。因此，相应湍流建模的任务就是计算涡黏性@tex-math{\mu_T}。}
+  }
+
+  @bi{
+    @lang["en"]{From the large variety of first-order closure models, we selected three widely-used approaches which represent the current state-of-the-art. All three models can be implemented easily on structured as well as on unstructured grids. First, we shall discuss the one-equation model due to Spalart and Allmaras. Second, we shall present the well-known K-@tex-math{\varepsilon} two-equation model. Finally, we shall consider the K-@tex-math{\omega} SST (Shear-Stress Transport) two-equation model proposed by Menter. A detailed comparison of this turbulence models for various cases can be found in @link["blazek2005-r7-37"]{[37]}.}
+    @lang["zh-CN"]{从种类繁多的一阶封闭模型中，我们选出了三种广泛使用、代表当前技术水平的方法。这三种模型都可以方便地在结构网格和非结构网格上实现。首先，我们讨论Spalart和Allmaras提出的单方程模型；其次，我们介绍著名的K-@tex-math{\varepsilon}双方程模型；最后，我们考察由Menter提出的K-@tex-math{\omega} SST（剪切应力输运，Shear-Stress Transport）双方程模型。关于这些湍流模型在各种算例下的详细比较可参见@link["blazek2005-r7-37"]{[37]}。}
+  }
+
+  @bi{
+    @lang["en"]{In the following, the density and the velocity components should be understood as Reynolds-/Favre-averaged, although the corresponding notation is omitted for convenience.}
+    @lang["zh-CN"]{在下文中，密度和速度分量都应理解为雷诺平均/Favre平均量，只是为简便起见省略了相应的记号。}
+  }
+
+  @subtree[#:id "blazek2005-7-2-1"]{
+    @title{7.2.1 Spalart-Allmaras One-Equation Model Spalart-Allmaras 单方程模型}
+
+    @bi{
+      @lang["en"]{The Spalart-Allmaras one-equation turbulence model @link["blazek2005-r7-38"]{[38]} employs transport equation for an eddy-viscosity variable @tex-math{\tilde{\nu}}. It was developed based on empiricism, dimensional analysis and Galilean invariance. It was calibrated using results for 2-D mixing layers, wakes and flat-plate boundary layers. The Spalart-Allmaras model also allows for reasonably accurate predictions of turbulent flows with adverse pressure gradients. Furthermore, it is capable of smooth transition from laminar to turbulent flow at user specified locations. The Spalart-Allmaras model has several favourable numerical features. It is "local" which means that the equation at one point does not depend on the solution at other points. Therefore, it can be readily implemented on structured multi-block or on unstructured grids. It is also robust, converges fast to steady-state and requires only moderate grid resolution in the near-wall region.}
+      @lang["zh-CN"]{Spalart-Allmaras单方程湍流模型@link["blazek2005-r7-38"]{[38]}对涡黏性变量@tex-math{\tilde{\nu}}求解输运方程。它是在经验、量纲分析和伽利略不变性的基础上发展起来的，并利用二维混合层、尾流和平板边界层的结果进行了标定。Spalart-Allmaras模型还能对具有逆压梯度的湍流流动给出相当准确的预测。此外，它能够在用户指定的位置实现从层流到湍流的平滑转捩。Spalart-Allmaras模型具有若干良好的数值特性：它是“局部的”，即某一点处的方程不依赖于其他点上的解，因此可以方便地在结构多块网格或非结构网格上实现；它还稳健、向定态收敛快，并且近壁区域只需适中的网格分辨率。}
+    }
+
+    @emph{Differential Form 微分形式}
+
+    @bi{
+      @lang["en"]{The Spalart-Allmaras turbulence model can be written in tensor notation as follows @link["blazek2005-r7-38"]{[38]}}
+      @lang["zh-CN"]{Spalart-Allmaras湍流模型用张量记号可以写成如下形式@link["blazek2005-r7-38"]{[38]}}
+    }
+
+    @tex-display-math[#:id "eq-7-36"]{
+      \begin{aligned}
+        \frac{\partial \tilde{\nu}}{\partial t} + \frac{\partial}{\partial x_j}\left(\tilde{\nu}\, v_j\right) &= C_{b1}\left(1 - f_{t2}\right)\tilde{S}\,\tilde{\nu} \\
+        &+ \frac{1}{\sigma}\left\{ \frac{\partial}{\partial x_j}\left[\left(\nu_L + \tilde{\nu}\right)\frac{\partial\tilde{\nu}}{\partial x_j}\right] + C_{b2}\frac{\partial\tilde{\nu}}{\partial x_j}\frac{\partial\tilde{\nu}}{\partial x_j} \right\} \\
+        &- \left[C_{w1} f_w - \frac{C_{b1}}{\kappa^2} f_{t2}\right]\left(\frac{\tilde{\nu}}{d}\right)^2 + f_{t1}\|\Delta\vec{v}\|_2^2.
+      \end{aligned}
+      \tag{7.36}
+    }
+
+    @bi{
+      @lang["en"]{The terms on the right-hand side represent eddy-viscosity production, conservative diffusion, non-conservative diffusion, near-wall turbulence destruction, transition damping of production, and transition source of turbulence. Furthermore, @tex-math{\nu_L = \mu_L/\rho} denotes the laminar kinematic viscosity and @tex-math{d} is the distance to the closest wall (for the computation of wall distances see Ref. @link["blazek2005-r7-39"]{[39]}). The turbulent eddy viscosity in Eq. (7.28) and (7.29) is obtained from}
+      @lang["zh-CN"]{右端各项分别代表涡黏性生成、守恒性扩散、非守恒性扩散、近壁湍流破坏、生成的转捩阻尼以及湍流的转捩源。此外，@tex-math{\nu_L = \mu_L/\rho}表示层流运动黏度，@tex-math{d}为到最近壁面的距离（壁面距离的计算见文献@link["blazek2005-r7-39"]{[39]}）。式(7.28)和(7.29)中的湍流涡黏性由下式得到}
+    }
+
+    @tex-display-math[#:id "eq-7-37"]{\mu_T = f_{v1}\,\rho\,\tilde{\nu}. \tag{7.37}}
+
+    @bi{
+      @lang["en"]{The production term is evaluated with the following formulae}
+      @lang["zh-CN"]{生成项用下列公式求值}
+    }
+
+    @tex-display-math[#:id "eq-7-38"]{
+      \begin{aligned}
+        \tilde{S} &= f_{v3}\, S + \frac{\tilde{\nu}}{\kappa^2 d^2}\, f_{v2}, \\
+        f_{v1} &= \frac{\chi^3}{\chi^3 + C_{v1}^3}, \qquad f_{v2} = \left(1 + \frac{\chi}{C_{v2}}\right)^{-3}, \\
+        f_{v3} &= \frac{\left(1 + \chi f_{v1}\right)\left(1 - f_{v2}\right)}{\max(\chi,\, 0.001)}, \qquad \chi = \frac{\tilde{\nu}}{\nu_L}
+      \end{aligned}
+      \tag{7.38}
+    }
+
+    @bi{
+      @lang["en"]{In Equation @link["blazek2005-ch07#eq-7-38"]{(7.38)}, @tex-math{S} stands for the magnitude of the mean rotation rate, i.e.,}
+      @lang["zh-CN"]{在方程@link["blazek2005-ch07#eq-7-38"]{(7.38)}中，@tex-math{S}表示平均旋转率的大小，即}
+    }
+
+    @tex-display-math{S = \sqrt{2\,\Omega_{ij}\Omega_{ij}},}
+
+    @bi{
+      @lang["en"]{where @tex-math{\Omega_{ij}} is given by Eq. (7.4). Note that @tex-math{\tilde{S}} differs from its original definition in @link["blazek2005-r7-38"]{[38]}. The modification was suggested by Spalart in order to prevent @tex-math{\tilde{S}} from reaching zero (cf. Ref. @link["blazek2005-r7-40"]{[40]}, p. 155).}
+      @lang["zh-CN"]{其中@tex-math{\Omega_{ij}}由式(7.4)给出。注意@tex-math{\tilde{S}}与文献@link["blazek2005-r7-38"]{[38]}中的原始定义不同，这一修改是Spalart提出的，目的是防止@tex-math{\tilde{S}}变为零（参见文献@link["blazek2005-r7-40"]{[40]}，第155页）。}
+    }
+
+    @bi{
+      @lang["en"]{The terms controlling the destruction of the eddy viscosity read}
+      @lang["zh-CN"]{控制涡黏性破坏的项为}
+    }
+
+    @tex-display-math[#:id "eq-7-39"]{
+      \begin{aligned}
+        f_w &= g\left(\frac{1 + C_{w3}^6}{g^6 + C_{w3}^6}\right)^{1/6}, \\
+        g &= r + C_{w2}\left(r^6 - r\right), \qquad r = \frac{\tilde{\nu}}{\tilde{S}\,\kappa^2 d^2}.
+      \end{aligned}
+      \tag{7.39}
+    }
+
+    @bi{
+      @lang["en"]{Functions used for modelling the laminar-turbulent transition are given by}
+      @lang["zh-CN"]{用于模拟层流-湍流转捩的函数为}
+    }
+
+    @tex-display-math[#:id "eq-7-40"]{
+      \begin{aligned}
+        f_{t1} &= g_t\, C_{t1}\exp\left(-C_{t2}\,\frac{\omega_t^2}{\Delta U^2}\left(d^2 + g_t^2 d_t^2\right)\right), \\
+        f_{t2} &= C_{t3}\exp\left(-C_{t4}\,\chi^2\right), \qquad g_t = \min\left[0.1,\ \|\Delta\vec{v}\|_2/(\omega_t\,\Delta x_t)\right],
+      \end{aligned}
+      \tag{7.40}
+    }
+
+    @bi{
+      @lang["en"]{where @tex-math{\omega_t} represents the vorticity at the wall at the trip point (position has to be specified by the user), @tex-math{\|\Delta\vec{v}\|_2} denotes the 2-norm of the difference between the velocity at the trip point and the current field point, @tex-math{d_t} is the distance to the nearest trip point, and @tex-math{\Delta x_t} stands for the spacing along the wall at the trip point.}
+      @lang["zh-CN"]{其中@tex-math{\omega_t}表示转捩触发点（trip point，位置须由用户指定）处壁面上的涡量，@tex-math{\|\Delta\vec{v}\|_2}表示触发点速度与当前流场点速度之差的2-范数，@tex-math{d_t}为到最近触发点的距离，@tex-math{\Delta x_t}表示触发点处沿壁面的网格间距。}
+    }
+
+    @bi{
+      @lang["en"]{Finally, the various constants in Eqs. @link["blazek2005-ch07#eq-7-36"]{(7.36)}-@link["blazek2005-ch07#eq-7-40"]{(7.40)} are defined as}
+      @lang["zh-CN"]{最后，式@link["blazek2005-ch07#eq-7-36"]{(7.36)}-@link["blazek2005-ch07#eq-7-40"]{(7.40)}中的各个常数定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-41"]{
+      \begin{aligned}
+        &C_{b1} = 0.1355, \qquad C_{b2} = 0.622, \\
+        &C_{v1} = 7.1, \qquad C_{v2} = 5, \qquad \sigma = 2/3, \qquad \kappa = 0.41, \\
+        &C_{w1} = C_{b1}/\kappa^2 + (1 + C_{b2})/\sigma, \qquad C_{w2} = 0.3, \qquad C_{w3} = 2, \\
+        &C_{t1} = 1, \qquad C_{t2} = 2, \qquad C_{t3} = 1.3, \qquad C_{t4} = 0.5.
+      \end{aligned}
+      \tag{7.41}
+    }
+
+    @bi{
+      @lang["en"]{In order to account for non-equilibrium effects on the production term, it was recently proposed to express @tex-math{C_{b1}} as a function of the strain rate @link["blazek2005-r7-41"]{[41]}.}
+      @lang["zh-CN"]{为了考虑非平衡效应对生成项的影响，最近有文献提出把@tex-math{C_{b1}}表示为应变率的函数@link["blazek2005-r7-41"]{[41]}。}
+    }
+
+    @bi{
+      @lang["en"]{As pointed out in @link["blazek2005-r7-38"]{[38]}, it is convenient to substitute the non-conservative diffusion term in Eq. @link["blazek2005-ch07#eq-7-36"]{(7.36)}, i.e.,}
+      @lang["zh-CN"]{正如文献@link["blazek2005-r7-38"]{[38]}所指出的，把方程@link["blazek2005-ch07#eq-7-36"]{(7.36)}中的非守恒性扩散项，即}
+    }
+
+    @tex-display-math{\frac{1}{\sigma}\left\{ \frac{\partial}{\partial x_j}\left[\left(\nu_L + \tilde{\nu}\right)\frac{\partial\tilde{\nu}}{\partial x_j}\right] + C_{b2}\frac{\partial\tilde{\nu}}{\partial x_j}\frac{\partial\tilde{\nu}}{\partial x_j} \right\}}
+
+    @bi{
+      @lang["en"]{by the following expression}
+      @lang["zh-CN"]{用下面的表达式来代替}
+    }
+
+    @tex-display-math[#:id "eq-7-42"]{\frac{1 + C_{b2}}{\sigma}\frac{\partial}{\partial x_j}\left[\left(\nu_L + \tilde{\nu}\right)\frac{\partial\tilde{\nu}}{\partial x_j}\right] - \frac{C_{b2}}{\sigma}\left(\nu_L + \tilde{\nu}\right)\nabla^2\tilde{\nu}. \tag{7.42}}
+
+    @bi{
+      @lang["en"]{In this way, difficulties with the discretisation of the term @tex-math{\left(\partial\tilde{\nu}/\partial x_j\right)^2} are circumvented.}
+      @lang["zh-CN"]{这样就可以避开对项@tex-math{\left(\partial\tilde{\nu}/\partial x_j\right)^2}做离散化的困难。}
+    }
+
+    @emph{Integral Form 积分形式}
+
+    @bi{
+      @lang["en"]{The Spalart-Allmaras turbulence model (Eq. @link["blazek2005-ch07#eq-7-36"]{(7.36)}) reads after the transformation into the finite-volume framework as follows}
+      @lang["zh-CN"]{把Spalart-Allmaras湍流模型（方程@link["blazek2005-ch07#eq-7-36"]{(7.36)}）变换到有限体积框架后，形式如下}
+    }
+
+    @tex-display-math[#:id "eq-7-43"]{\frac{\partial}{\partial t}\int_{\Omega}\tilde{\nu}\ d\Omega + \oint_{\partial\Omega}\left(F_{c,T} - F_{v,T}\right)dS = \int_{\Omega}Q_T\ d\Omega, \tag{7.43}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\Omega} represents the control volume, @tex-math{\partial\Omega} its surface, and @tex-math{dS} is a surface element of @tex-math{\Omega}. The convective flux is defined as}
+      @lang["zh-CN"]{其中@tex-math{\Omega}表示控制体，@tex-math{\partial\Omega}为其表面，@tex-math{dS}是@tex-math{\Omega}的面元。对流通量定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-44"]{F_{c,T} = \tilde{\nu}\, V \tag{7.44}}
+
+    @bi{
+      @lang["en"]{with @tex-math{V} being the contravariant velocity (see Eq. (2.22)). The convective flux is in general discretised using a first-order upwind scheme. The viscous flux is given by}
+      @lang["zh-CN"]{其中@tex-math{V}为逆变速度（见式(2.22)）。对流通量一般用一阶上风格式离散。黏性通量为}
+    }
+
+    @tex-display-math[#:id "eq-7-45"]{F_{v,T} = n_x\tau_{xx}^T + n_y\tau_{yy}^T + n_z\tau_{zz}^T, \tag{7.45}}
+
+    @bi{
+      @lang["en"]{where @tex-math{n_x}, @tex-math{n_y}, and @tex-math{n_z} are the components of the unit normal vector. The normal viscous stresses read}
+      @lang["zh-CN"]{其中@tex-math{n_x}、@tex-math{n_y}和@tex-math{n_z}是单位法向量的分量。法向黏性应力为}
+    }
+
+    @tex-display-math[#:id "eq-7-46"]{
+      \begin{aligned}
+        \tau_{xx}^T &= \frac{1}{\sigma}\left(\nu_L + \tilde{\nu}\right)\frac{\partial\tilde{\nu}}{\partial x}, \qquad \tau_{yy}^T = \frac{1}{\sigma}\left(\nu_L + \tilde{\nu}\right)\frac{\partial\tilde{\nu}}{\partial y}, \\
+        \tau_{zz}^T &= \frac{1}{\sigma}\left(\nu_L + \tilde{\nu}\right)\frac{\partial\tilde{\nu}}{\partial z}.
+      \end{aligned}
+      \tag{7.46}
+    }
+
+    @bi{
+      @lang["en"]{Finally, the source term in Eq. @link["blazek2005-ch07#eq-7-43"]{(7.43)} becomes}
+      @lang["zh-CN"]{最后，方程@link["blazek2005-ch07#eq-7-43"]{(7.43)}中的源项为}
+    }
+
+    @tex-display-math[#:id "eq-7-47"]{
+      \begin{aligned}
+        Q_T &= C_{b1}\left(1 - f_{t2}\right)\tilde{S}\,\tilde{\nu} + \frac{C_{b2}}{\sigma}\left[\left(\frac{\partial\tilde{\nu}}{\partial x}\right)^2 + \left(\frac{\partial\tilde{\nu}}{\partial y}\right)^2 + \left(\frac{\partial\tilde{\nu}}{\partial z}\right)^2\right] \\
+        &- \left[C_{w1} f_w - \frac{C_{b1}}{\kappa^2} f_{t2}\right]\left(\frac{\tilde{\nu}}{d}\right)^2 + f_{t1}\|\Delta\vec{v}\|_2^2.
+      \end{aligned}
+      \tag{7.47}
+    }
+
+    @bi{
+      @lang["en"]{Alternatively, the non-conservative diffusion can be formulated as suggested by Eq. @link["blazek2005-ch07#eq-7-42"]{(7.42)}. The model constants are provided in Eq. @link["blazek2005-ch07#eq-7-41"]{(7.41)}.}
+      @lang["zh-CN"]{另一种做法是按方程@link["blazek2005-ch07#eq-7-42"]{(7.42)}所建议的方式来表述非守恒性扩散。模型常数由方程@link["blazek2005-ch07#eq-7-41"]{(7.41)}给出。}
+    }
+
+    @emph{Initial and Boundary Conditions 初始条件与边界条件}
+
+    @bi{
+      @lang["en"]{The initial value of @tex-math{\tilde{\nu}} is usually taken as @tex-math{\tilde{\nu} = 0.1\,\nu_L}. The same value is also specified at inflow boundaries. At outflow boundaries, @tex-math{\tilde{\nu}} is simply extrapolated from the interior of the computational domain. At solid walls, it is appropriate to set @tex-math{\tilde{\nu} = 0} and hence @tex-math{\mu_T = 0}.}
+      @lang["zh-CN"]{@tex-math{\tilde{\nu}}的初值通常取@tex-math{\tilde{\nu} = 0.1\,\nu_L}。入口边界上也指定同样的值。在出口边界上，@tex-math{\tilde{\nu}}直接由计算域内部外推。在固体壁面上，宜取@tex-math{\tilde{\nu} = 0}，从而@tex-math{\mu_T = 0}。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-2-2"]{
+    @title{7.2.2 K-ε Two-Equation Model K-ε 双方程模型}
+
+    @bi{
+      @lang["en"]{The K-@tex-math{\varepsilon} turbulence model is the most widely employed two-equation eddy-viscosity model. It is based on the solution of equations for the turbulent kinetic energy @tex-math{K} and the turbulent dissipation rate @tex-math{\varepsilon}. The historic roots of the K-@tex-math{\varepsilon} model reach to the work of Chou @link["blazek2005-r7-42"]{[42]}. During the 1970's, various formulations of the model were proposed. The most important contributions were due to Jones and Launder @link["blazek2005-r7-43"]{[43]}, @link["blazek2005-r7-44"]{[44]}, Launder and Sharma @link["blazek2005-r7-45"]{[45]} as well as due to Launder and Spalding @link["blazek2005-r7-46"]{[46]}.}
+      @lang["zh-CN"]{K-@tex-math{\varepsilon}湍流模型是应用最广泛的双方程涡黏性模型。它基于对湍动能@tex-math{K}和湍流耗散率@tex-math{\varepsilon}的方程求解。K-@tex-math{\varepsilon}模型的历史渊源可以追溯到周培源的工作@link["blazek2005-r7-42"]{[42]}。20世纪70年代期间，该模型的多种形式被提出，其中最重要的贡献来自Jones和Launder@link["blazek2005-r7-43"]{[43]}、@link["blazek2005-r7-44"]{[44]}，Launder和Sharma@link["blazek2005-r7-45"]{[45]}，以及Launder和Spalding@link["blazek2005-r7-46"]{[46]}。}
+    }
+
+    @bi{
+      @lang["en"]{The K-@tex-math{\varepsilon} turbulence model requires addition of the so-called @emph{damping functions} in order to stay valid through the viscous sublayer to the wall. The aim of the damping functions is to assure proper limiting behaviour of @tex-math{K} and @tex-math{\varepsilon} at the wall, i.e.,}
+      @lang["zh-CN"]{K-@tex-math{\varepsilon}湍流模型需要加入所谓的阻尼函数（damping functions），才能在黏性底层内一直有效直至壁面。阻尼函数的目的是保证@tex-math{K}和@tex-math{\varepsilon}在壁面处具有正确的极限行为，即}
+    }
+
+    @tex-display-math[#:id "eq-7-48"]{K \sim y^2 \quad \text{and} \quad \frac{\varepsilon}{K} \sim \frac{2\nu}{y^2} \quad \text{for} \quad y \rightarrow 0, \tag{7.48}}
+
+    @bi{
+      @lang["en"]{where @tex-math{y} represents the coordinate normal to the wall. Further, it can be shown that the Reynolds shear stress behaves like (see, e.g., @link["blazek2005-r7-17"]{[17]} pp. 138-139)}
+      @lang["zh-CN"]{其中@tex-math{y}表示垂直于壁面的坐标。此外还可以证明，雷诺剪切应力在近壁处的行为如（参见例如@link["blazek2005-r7-17"]{[17]}，第138-139页）}
+    }
+
+    @tex-display-math[#:id "eq-7-49"]{\tau_{ij}^R \sim y^3 \quad \text{for} \quad y \rightarrow 0,\ i \neq j. \tag{7.49}}
+
+    @bi{
+      @lang["en"]{The K-@tex-math{\varepsilon} models with damping functions are also denoted as @emph{low Reynolds number} models. The most widely used formulations of the damping functions were proposed by Jones and Launder @link["blazek2005-r7-43"]{[43]}, Launder and Sharma @link["blazek2005-r7-45"]{[45]}, Lam and Bremhorst @link["blazek2005-r7-47"]{[47]}, and by Chien @link["blazek2005-r7-48"]{[48]}. The reader may find a comparison of seven different low Reynolds number K-@tex-math{\varepsilon} models in Ref. @link["blazek2005-r7-49"]{[49]}.}
+      @lang["zh-CN"]{带阻尼函数的K-@tex-math{\varepsilon}模型也被称为低雷诺数（low Reynolds number）模型。使用最广泛的阻尼函数形式由Jones和Launder@link["blazek2005-r7-43"]{[43]}、Launder和Sharma@link["blazek2005-r7-45"]{[45]}、Lam和Bremhorst@link["blazek2005-r7-47"]{[47]}以及Chien@link["blazek2005-r7-48"]{[48]}提出。七种不同的低雷诺数K-@tex-math{\varepsilon}模型的比较可在文献@link["blazek2005-r7-49"]{[49]}中找到。}
+    }
+
+    @bi{
+      @lang["en"]{The K-@tex-math{\varepsilon} turbulence model is more difficult to solve numerically than the previously discussed Spalart-Allmaras model (Subsection 7.2.1). Particularly, the damping functions lead to turbulence equations with stiff source terms. This, and the necessary high grid resolution nearby walls (in order to resolve the viscous sublayer), requires the utilisation of at least point-implicit or better full-implicit time-stepping schemes. Reference @link["blazek2005-r7-50"]{[50]} contains useful hints on the explicit time discretisation of the K-@tex-math{\varepsilon} equations. Examples of implementations of the K-@tex-math{\varepsilon} model on structured as well as on unstructured grids can be found, e.g., in @link["blazek2005-r7-51"]{[51]}-@link["blazek2005-r7-59"]{[59]}. Finally, it is important to note that the accuracy of the K-@tex-math{\varepsilon} model degrades for flows with adverse pressure gradient @link["blazek2005-r7-49"]{[49]}, @link["blazek2005-r7-17"]{[17]}.}
+      @lang["zh-CN"]{K-@tex-math{\varepsilon}湍流模型在数值求解上比前述Spalart-Allmaras模型（小节7.2.1）更困难。特别是，阻尼函数使湍流方程带有刚性源项。这一点，加上壁面附近为解析黏性底层所必需的高网格分辨率，要求至少采用点隐式、最好采用全隐式的时间推进格式。文献@link["blazek2005-r7-50"]{[50]}给出了关于K-@tex-math{\varepsilon}方程显式时间离散的有用提示。K-@tex-math{\varepsilon}模型在结构网格和非结构网格上实现的例子可参见例如@link["blazek2005-r7-51"]{[51]}-@link["blazek2005-r7-59"]{[59]}。最后，需要特别指出，对于具有逆压梯度的流动，K-@tex-math{\varepsilon}模型的精度会下降@link["blazek2005-r7-49"]{[49]}、@link["blazek2005-r7-17"]{[17]}。}
+    }
+
+    @emph{Differential Form 微分形式}
+
+    @bi{
+      @lang["en"]{A low Reynolds number K-@tex-math{\varepsilon} model can be written as}
+      @lang["zh-CN"]{一个低雷诺数K-@tex-math{\varepsilon}模型可以写成}
+    }
+
+    @tex-display-math[#:id "eq-7-50"]{
+      \begin{aligned}
+        \frac{\partial\rho K}{\partial t} + \frac{\partial}{\partial x_j}\left(\rho v_j K\right) &= \frac{\partial}{\partial x_j}\left[\left(\mu_L + \frac{\mu_T}{\sigma_K}\right)\frac{\partial K}{\partial x_j}\right] + \tau_{ij}^F S_{ij} - \rho\varepsilon \\
+        \frac{\partial\rho\varepsilon^{*}}{\partial t} + \frac{\partial}{\partial x_j}\left(\rho v_j\varepsilon^{*}\right) &= \frac{\partial}{\partial x_j}\left[\left(\mu_L + \frac{\mu_T}{\sigma_{\varepsilon}}\right)\frac{\partial\varepsilon^{*}}{\partial x_j}\right] + C_{\varepsilon1} f_{\varepsilon1}\frac{\varepsilon^{*}}{K}\tau_{ij}^F S_{ij} \\
+        &- C_{\varepsilon2} f_{\varepsilon2}\,\rho\,\frac{(\varepsilon^{*})^2}{K} + \phi_{\varepsilon}.
+      \end{aligned}
+      \tag{7.50}
+    }
+
+    @bi{
+      @lang["en"]{The terms on the right-hand side represent conservative diffusion, eddy-viscosity production and dissipation, respectively. Furthermore, @tex-math{\phi_{\varepsilon}} denotes the so-called explicit wall term. The Favre-averaged turbulent stresses @tex-math{\tau_{ij}^F} are given by Eq. (7.25) and the strain-rate tensor @tex-math{S_{ij}} follows from Eq. (7.3). The turbulent eddy viscosity in Eq. (7.28) and (7.29) results from}
+      @lang["zh-CN"]{右端各项分别代表守恒性扩散、涡黏性生成和耗散。此外，@tex-math{\phi_{\varepsilon}}表示所谓的显式壁面项。Favre平均湍流应力@tex-math{\tau_{ij}^F}由式(7.25)给出，应变率张量@tex-math{S_{ij}}由式(7.3)得到。式(7.28)和(7.29)中的湍流涡黏性由下式求得}
+    }
+
+    @tex-display-math[#:id "eq-7-51"]{\mu_T = C_{\mu} f_{\mu}\,\rho\,\frac{K^2}{\varepsilon^{*}}. \tag{7.51}}
+
+    @bi{
+      @lang["en"]{The turbulent kinetic energy is also employed for the evaluation of the eddy viscosity according to Eq. (7.24) or Eq. (7.25). The quantity @tex-math{\varepsilon^{*}} is related to the turbulent dissipation rate @tex-math{\varepsilon} by}
+      @lang["zh-CN"]{按式(7.24)或式(7.25)计算涡黏性时也要用到湍动能。量@tex-math{\varepsilon^{*}}与湍流耗散率@tex-math{\varepsilon}通过下式相联系}
+    }
+
+    @tex-display-math[#:id "eq-7-52"]{\varepsilon = \varepsilon_w + \varepsilon^{*}. \tag{7.52}}
+
+    @bi{
+      @lang["en"]{The term @tex-math{\varepsilon_w} is the value of the dissipation rate at the wall. The definition in Eq. @link["blazek2005-ch07#eq-7-52"]{(7.52)} greatly simplifies the application of wall-boundary conditions (see further below).}
+      @lang["zh-CN"]{其中@tex-math{\varepsilon_w}是耗散率在壁面上的取值。方程@link["blazek2005-ch07#eq-7-52"]{(7.52)}的定义大大简化了壁面边界条件的施加（见下文）。}
+    }
+
+    @bi{
+      @lang["en"]{The constants, the near-wall damping functions as well as the wall term differ between the various K-@tex-math{\varepsilon} models. Here, we choose the Launder-Sharma model because it gives good results for a wide range of applications @link["blazek2005-r7-49"]{[49]}. For the Launder-Sharma model, the constants and the turbulent Prandtl number are given by @link["blazek2005-r7-45"]{[45]}}
+      @lang["zh-CN"]{在不同的K-@tex-math{\varepsilon}模型中，常数、近壁阻尼函数以及壁面项各不相同。这里我们选择Launder-Sharma模型，因为它在很宽的应用范围内都给出良好结果@link["blazek2005-r7-49"]{[49]}。对Launder-Sharma模型，常数和湍流Prandtl数为@link["blazek2005-r7-45"]{[45]}}
+    }
+
+    @tex-display-math[#:id "eq-7-53"]{
+      \begin{aligned}
+        &C_{\mu} = 0.09, \qquad C_{\varepsilon1} = 1.44, \qquad C_{\varepsilon2} = 1.92, \\
+        &\sigma_K = 1.0, \qquad \sigma_{\varepsilon} = 1.3, \qquad Pr_T = 0.9.
+      \end{aligned}
+      \tag{7.53}
+    }
+
+    @bi{
+      @lang["en"]{Furthermore, the near-wall damping functions read}
+      @lang["zh-CN"]{此外，近壁阻尼函数为}
+    }
+
+    @tex-display-math[#:id "eq-7-54"]{
+      \begin{aligned}
+        f_{\mu} &= \exp\left(\frac{-3.4}{\left(1 + 0.02\,Re_T\right)^2}\right) \\
+        f_{\varepsilon1} &= 1 \\
+        f_{\varepsilon2} &= 1 - 0.3\exp\left(Re_T^2\right)
+      \end{aligned}
+      \tag{7.54}
+    }
+
+    @bi{
+      @lang["en"]{with @tex-math{Re_T = \rho K^2/(\varepsilon^{*}\mu_L)} being the turbulent Reynolds number.}
+      @lang["zh-CN"]{其中@tex-math{Re_T = \rho K^2/(\varepsilon^{*}\mu_L)}为湍流雷诺数。（译注：@tex-math{f_{\varepsilon2}}中的指数项原书印作@tex-math{\exp(Re_T^2)},无负号；按Launder–Sharma模型的通行形式应为@tex-math{\exp(-Re_T^2)},疑为原书排印疏漏,此处照录原书。）}
+    }
+
+    @bi{
+      @lang["en"]{Finally, the explicit wall term @tex-math{\phi_{\varepsilon}} and the value @tex-math{\varepsilon_w} are defined as}
+      @lang["zh-CN"]{最后，显式壁面项@tex-math{\phi_{\varepsilon}}和@tex-math{\varepsilon_w}的值定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-55"]{\phi_{\varepsilon} = 2\mu_T\frac{\mu_L}{\rho}\left(\frac{\partial^2 v_s}{\partial y_n^2}\right)^2 \quad \text{and} \quad \varepsilon_w = \frac{2\mu_L}{\rho}\left(\frac{\partial\sqrt{K}}{\partial y_n}\right)^2, \tag{7.55}}
+
+    @bi{
+      @lang["en"]{where @tex-math{v_s} stands for the velocity parallel to the wall, and @tex-math{y_n} represents the coordinate normal to the wall. In order to avoid an explicit knowledge of the wall distance and orientation, it is common to compute the wall term and @tex-math{\varepsilon_w} from the following Cartesian tensor form @link["blazek2005-r7-60"]{[60]}, @link["blazek2005-r7-57"]{[57]}}
+      @lang["zh-CN"]{其中@tex-math{v_s}表示平行于壁面的速度，@tex-math{y_n}表示垂直于壁面的坐标。为了避免显式地知道壁面距离和壁面取向，通常用下面的笛卡尔张量形式@link["blazek2005-r7-60"]{[60]}、@link["blazek2005-r7-57"]{[57]}来计算壁面项和@tex-math{\varepsilon_w}}
+    }
+
+    @tex-display-math[#:id "eq-7-56"]{\phi_{\varepsilon} = 2\mu_T\frac{\mu_L}{\rho}\left(\frac{\partial^2 v_i}{\partial x_j \partial x_k}\right)^2 \quad \text{and} \quad \varepsilon_w = \frac{2\mu_L}{\rho}\left(\frac{\partial\sqrt{K}}{\partial x_j}\right)^2 \tag{7.56}}
+
+    @bi{
+      @lang["en"]{instead of Eq. @link["blazek2005-ch07#eq-7-55"]{(7.55)}.}
+      @lang["zh-CN"]{以代替方程@link["blazek2005-ch07#eq-7-55"]{(7.55)}。}
+    }
+
+    @emph{Integral Form 积分形式}
+
+    @bi{
+      @lang["en"]{Written in time-dependent integral form for a control volume @tex-math{\Omega} with a surface element @tex-math{dS}, the low Reynolds number K-@tex-math{\varepsilon} turbulence model reads}
+      @lang["zh-CN"]{对控制体@tex-math{\Omega}（面元为@tex-math{dS}）写成随时间变化的积分形式，低雷诺数K-@tex-math{\varepsilon}湍流模型为}
+    }
+
+    @tex-display-math[#:id "eq-7-57"]{\frac{\partial}{\partial t}\int_{\Omega}\vec{W}_T\ d\Omega + \oint_{\partial\Omega}\left(\vec{F}_{c,T} - \vec{F}_{v,T}\right)dS = \int_{\Omega}\vec{Q}_T\ d\Omega. \tag{7.57}}
+
+    @bi{
+      @lang["en"]{The vector of the conservative variables takes the form}
+      @lang["zh-CN"]{守恒变量向量取如下形式}
+    }
+
+    @tex-display-math[#:id "eq-7-58"]{\vec{W}_T = \begin{bmatrix} \rho K \\ \rho\varepsilon^{*} \end{bmatrix}. \tag{7.58}}
+
+    @bi{
+      @lang["en"]{The vector of the convective fluxes is defined}
+      @lang["zh-CN"]{对流通量向量定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-59"]{\vec{F}_{c,T} = \begin{bmatrix} \rho K V \\ \rho\varepsilon^{*} V \end{bmatrix}, \tag{7.59}}
+
+    @bi{
+      @lang["en"]{where @tex-math{V} denotes the contravariant velocity (see Eq. (2.22)). The vector of the viscous fluxes is given by}
+      @lang["zh-CN"]{其中@tex-math{V}表示逆变速度（见式(2.22)）。黏性通量向量为}
+    }
+
+    @tex-display-math[#:id "eq-7-60"]{\vec{F}_{v,T} = \begin{bmatrix} n_x\tau_{xx}^K + n_y\tau_{yy}^K + n_z\tau_{zz}^K \\ n_x\tau_{xx}^{\varepsilon} + n_y\tau_{yy}^{\varepsilon} + n_z\tau_{zz}^{\varepsilon} \end{bmatrix} \tag{7.60}}
+
+    @bi{
+      @lang["en"]{with the normal turbulent viscous stresses}
+      @lang["zh-CN"]{其中的法向湍流黏性应力为}
+    }
+
+    @tex-display-math[#:id "eq-7-61"]{
+      \begin{aligned}
+        \tau_{xx}^K &= \left(\mu_L + \frac{\mu_T}{\sigma_K}\right)\frac{\partial K}{\partial x},\ \cdots \\
+        \tau_{xx}^{\varepsilon} &= \left(\mu_L + \frac{\mu_T}{\sigma_{\varepsilon}}\right)\frac{\partial\varepsilon^{*}}{\partial x},\ \cdots
+      \end{aligned}
+      \tag{7.61}
+    }
+
+    @bi{
+      @lang["en"]{In Eq. @link["blazek2005-ch07#eq-7-60"]{(7.60)}, @tex-math{n_x}, @tex-math{n_y}, @tex-math{n_z} represent the components of the outward-facing unit normal vector of the surface @tex-math{\partial\Omega}. The source term is evaluated from}
+      @lang["zh-CN"]{在方程@link["blazek2005-ch07#eq-7-60"]{(7.60)}中，@tex-math{n_x}、@tex-math{n_y}、@tex-math{n_z}表示表面@tex-math{\partial\Omega}外指单位法向量的分量。源项由下式求值}
+    }
+
+    @tex-display-math[#:id "eq-7-62"]{\vec{Q}_T = \begin{bmatrix} P - \rho\varepsilon \\ \left(C_{\varepsilon1} f_{\varepsilon1} P - C_{\varepsilon2} f_{\varepsilon2}\,\rho\varepsilon^{*}\right)\dfrac{\varepsilon^{*}}{K} + \phi_{\varepsilon} \end{bmatrix}, \tag{7.62}}
+
+    @bi{
+      @lang["en"]{where @tex-math{P} denotes the production term of the turbulent kinetic energy. It is defined as}
+      @lang["zh-CN"]{其中@tex-math{P}表示湍动能的生成项，其定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-63"]{
+      \begin{aligned}
+        P &= \tau_{xx}^F\frac{\partial u}{\partial x} + \tau_{yy}^F\frac{\partial v}{\partial y} + \tau_{zz}^F\frac{\partial w}{\partial z} \\
+        &+ \tau_{xy}^F\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right) + \tau_{xz}^F\left(\frac{\partial u}{\partial z} + \frac{\partial w}{\partial x}\right) + \tau_{yz}^F\left(\frac{\partial v}{\partial z} + \frac{\partial w}{\partial y}\right)
+      \end{aligned}
+      \tag{7.63}
+    }
+
+    @bi{
+      @lang["en"]{with the Favre-averaged turbulent stresses @tex-math{\tau_{ij}^F} given by Eq. (7.25). The constants, the near-wall damping functions as well as the wall term follow for the Launder-Sharma model from the definitions in Eqs. @link["blazek2005-ch07#eq-7-52"]{(7.52)}-@link["blazek2005-ch07#eq-7-56"]{(7.56)}. The turbulent eddy viscosity @tex-math{\mu_T} is obtained from Eq. @link["blazek2005-ch07#eq-7-51"]{(7.51)}.}
+      @lang["zh-CN"]{其中Favre平均湍流应力@tex-math{\tau_{ij}^F}由式(7.25)给出。对Launder-Sharma模型，常数、近壁阻尼函数以及壁面项均按式@link["blazek2005-ch07#eq-7-52"]{(7.52)}-@link["blazek2005-ch07#eq-7-56"]{(7.56)}中的定义取值。湍流涡黏性@tex-math{\mu_T}由方程@link["blazek2005-ch07#eq-7-51"]{(7.51)}求得。}
+    }
+
+    @emph{Initial and Boundary Conditions 初始条件与边界条件}
+
+    @bi{
+      @lang["en"]{The simplest approach is to initialise @tex-math{K} and @tex-math{\varepsilon^{*}} with their freestream values. A better alternative consists of prescribing profiles for @tex-math{K} and @tex-math{\varepsilon^{*}} near solid walls. The profiles can be obtained from analogy to turbulent flat-plate boundary layer @link["blazek2005-r7-51"]{[51]}. However, this requires the knowledge of wall distances which may not be readily available like it is the case on unstructured grids.}
+      @lang["zh-CN"]{最简单的做法是用自由来流值初始化@tex-math{K}和@tex-math{\varepsilon^{*}}。更好的替代方案是在固体壁面附近为@tex-math{K}和@tex-math{\varepsilon^{*}}指定分布。该分布可以通过与湍流平板边界层的类比得到@link["blazek2005-r7-51"]{[51]}。但这需要知道壁面距离，而在非结构网格上壁面距离未必容易获得。}
+    }
+
+    @bi{
+      @lang["en"]{The proper boundary conditions at solid walls are @tex-math{K = 0} and @tex-math{\varepsilon^{*} = 0}, provided the transformation in Eq. @link["blazek2005-ch07#eq-7-52"]{(7.52)} is utilised. This also implies @tex-math{\mu_T = 0} at walls. At inflow boundaries, @tex-math{K} and @tex-math{\varepsilon^{*}} can be computed from relations for the turbulent intensity and length scale, i.e.,}
+      @lang["zh-CN"]{若采用方程@link["blazek2005-ch07#eq-7-52"]{(7.52)}的变换，固体壁面上的正确边界条件为@tex-math{K = 0}和@tex-math{\varepsilon^{*} = 0}，这也意味着壁面上@tex-math{\mu_T = 0}。在入口边界上，@tex-math{K}和@tex-math{\varepsilon^{*}}可以由湍流强度和长度尺度的关系式计算，即}
+    }
+
+    @tex-display-math[#:id "eq-7-64"]{\left(T_u\right)_{\infty} = \frac{\sqrt{\dfrac{2}{3}K_{\infty}}}{\|\vec{v}_{\infty}\|_2}, \qquad \left(l_T\right)_{\infty} = \frac{C_{\mu}K_{\infty}^{3/2}}{\varepsilon_{\infty}^{*}}, \tag{7.64}}
+
+    @bi{
+      @lang["en"]{where we assumed @tex-math{\varepsilon_{\infty}^{*} = \varepsilon_{\infty}}. In turbomachinery, @tex-math{\left(l_T\right)_{\infty}} is chosen between @tex-math{10^{-3}} and @tex-math{10^{-2}} times the mean radial blade spacing @link["blazek2005-r7-61"]{[61]}. The values of @tex-math{K} and @tex-math{\varepsilon^{*}} are extrapolated from the interior at outflow boundaries.}
+      @lang["zh-CN"]{这里假定了@tex-math{\varepsilon_{\infty}^{*} = \varepsilon_{\infty}}。在叶轮机械中，@tex-math{\left(l_T\right)_{\infty}}取为平均径向叶片间距的@tex-math{10^{-3}}至@tex-math{10^{-2}}倍@link["blazek2005-r7-61"]{[61]}。在出口边界上，@tex-math{K}和@tex-math{\varepsilon^{*}}的值由计算域内部外推。}
+    }
+
+    @emph{Wall functions 壁面函数}
+
+    @bi{
+      @lang["en"]{As we already noted, the low Reynolds number models require very fine grids at walls. The standard condition is that the first node (or cell centroid) should be located at the distance @tex-math{y^{+} \le 1} from the wall. In order to reduce the the stiffness of the turbulence equations and to save a number of grid points/cells, coarser grids with @tex-math{10 \le y^{+} \le 100} are often employed. In such a case, the K-@tex-math{\varepsilon} model Eq. @link["blazek2005-ch07#eq-7-50"]{(7.50)} or Eq. @link["blazek2005-ch07#eq-7-57"]{(7.57)} is applied without the damping functions (@tex-math{f_{\mu} = f_{\varepsilon1} = f_{\varepsilon2} = 1}; @tex-math{\varepsilon_w = 0}) and the wall term (@tex-math{\phi_{\varepsilon} = 0}). We speak here of a @emph{high Reynolds number} turbulence model. Apparently, the distance between the first node (cell centroid) and the wall has to be bridged by the so-called @emph{wall functions}. The wall functions deliver the values of @tex-math{K} and @tex-math{\varepsilon^{*}} at the node (cell centroid) adjacent to the wall. The turbulence equations are not solved at the wall itself and at the first layer of nodes (cells). Various formulation of the wall functions are used, in general based on the logarithmic wall-law. One example is the function of Spalding @link["blazek2005-r7-62"]{[62]}, which models the viscous sublayer, the transition region as well as the logarithmic layer. Implementations of high Reynolds number models were described, e.g., in @link["blazek2005-r7-63"]{[63]}-@link["blazek2005-r7-67"]{[67]} or @link["blazek2005-r7-58"]{[58]}.}
+      @lang["zh-CN"]{如前所述，低雷诺数模型要求壁面处的网格非常细。标准条件是第一个节点（或单元质心）距壁面@tex-math{y^{+} \le 1}。为了降低湍流方程的刚性并节省网格点/单元数量，常采用@tex-math{10 \le y^{+} \le 100}的较粗网格。在这种情形下，K-@tex-math{\varepsilon}模型——方程@link["blazek2005-ch07#eq-7-50"]{(7.50)}或方程@link["blazek2005-ch07#eq-7-57"]{(7.57)}——在不含阻尼函数（@tex-math{f_{\mu} = f_{\varepsilon1} = f_{\varepsilon2} = 1}；@tex-math{\varepsilon_w = 0}）和壁面项（@tex-math{\phi_{\varepsilon} = 0}）的情况下使用。这就是所谓的高雷诺数（high Reynolds number）湍流模型。显然，第一个节点（单元质心）与壁面之间的距离必须由所谓的壁面函数（wall functions）来弥合。壁面函数给出紧邻壁面的节点（单元质心）处@tex-math{K}和@tex-math{\varepsilon^{*}}的值。湍流方程不在壁面本身以及第一层节点（单元）上求解。壁面函数有多种形式，一般基于对数壁面律。一个例子是Spalding的函数@link["blazek2005-r7-62"]{[62]}，它同时模拟了黏性底层、过渡区和对数层。高雷诺数模型的实现可参见例如@link["blazek2005-r7-63"]{[63]}-@link["blazek2005-r7-67"]{[67]}或@link["blazek2005-r7-58"]{[58]}。}
+    }
+
+    @bi{
+      @lang["en"]{The application of the wall functions leads (provided the grid is not too coarse) to reasonably accurate results for attached boundary layers. It also allows the utilisation of purely explicit time-stepping schemes. However, the use of wall functions becomes highly questionable for separated flows.}
+      @lang["zh-CN"]{只要网格不太粗，使用壁面函数对附着边界层可以得到相当准确的结果。它还允许采用纯显式时间推进格式。然而，对分离流动而言，壁面函数的使用就非常成问题了。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-2-3"]{
+    @title{7.2.3 SST Two-Equation Model of Menter Menter 的 SST 双方程模型}
+
+    @bi{
+      @lang["en"]{The K-@tex-math{\omega} Shear Stress Transport (SST) turbulence model of Menter @link["blazek2005-r7-68"]{[68]}, @link["blazek2005-r7-69"]{[69]} merges the K-@tex-math{\omega} model of Wilcox @link["blazek2005-r7-70"]{[70]}, @link["blazek2005-r7-17"]{[17]} with a high Reynolds number K-@tex-math{\varepsilon} model (transformed into the K-@tex-math{\omega} formulation). The SST model seeks to combine the positive features of both models. Therefore, the K-@tex-math{\omega} approach is employed in the sublayer of the boundary layer. The reason is that the K-@tex-math{\omega} model needs no damping function. This leads, for similar accuracy, to significantly higher numerical stability in comparison to the K-@tex-math{\varepsilon} model. Furthermore, the K-@tex-math{\omega} model is also utilised in logarithmic part of the boundary layer, where it is superior to the K-@tex-math{\varepsilon} approach in adverse pressure flows and in compressible flows. On the other hand, the K-@tex-math{\varepsilon} model is employed in the wake region of the boundary layer because the K-@tex-math{\omega} model is strongly sensitive to the freestream value of @tex-math{\omega} @link["blazek2005-r7-71"]{[71]}. The K-@tex-math{\varepsilon} approach is also used in free shear layers since it represents a fair compromise in accuracy for wakes, jets, and mixing layers.}
+      @lang["zh-CN"]{Menter的K-@tex-math{\omega}剪切应力输运（SST）湍流模型@link["blazek2005-r7-68"]{[68]}、@link["blazek2005-r7-69"]{[69]}把Wilcox的K-@tex-math{\omega}模型@link["blazek2005-r7-70"]{[70]}、@link["blazek2005-r7-17"]{[17]}与一个高雷诺数K-@tex-math{\varepsilon}模型（变换为K-@tex-math{\omega}形式）合并在一起。SST模型力求结合两种模型的优点。因此，在边界层的底层内采用K-@tex-math{\omega}方法，原因是K-@tex-math{\omega}模型不需要阻尼函数，这使得在精度相近的情况下，数值稳定性比K-@tex-math{\varepsilon}模型显著提高。此外，在边界层的对数区内也使用K-@tex-math{\omega}模型，因为在逆压流动和可压缩流动中它优于K-@tex-math{\varepsilon}方法。另一方面，在边界层的尾迹区采用K-@tex-math{\varepsilon}模型，因为K-@tex-math{\omega}模型对@tex-math{\omega}的自由来流值非常敏感@link["blazek2005-r7-71"]{[71]}。自由剪切层中也使用K-@tex-math{\varepsilon}方法，因为它对尾流、射流和混合层的精度是一个较好的折中。}
+    }
+
+    @bi{
+      @lang["en"]{One distinct feature of the SST turbulence model is the modified turbulent eddy-viscosity function. The purpose is to improve the accuracy of prediction of flows with strong adverse pressure gradients and of pressure-induced boundary layer separation. The modification accounts for the transport of the turbulent shear stress. It is based on the observation of Bradshaw that the principal shear stress is proportional to the turbulent kinetic energy.}
+      @lang["zh-CN"]{SST湍流模型的一个独特之处是修改了的湍流涡黏性函数，其目的是提高对强逆压梯度流动和压力诱导边界层分离的预测精度。这一修改考虑了湍流剪切应力的输运，其依据是Bradshaw的观察：主剪切应力与湍动能成正比。}
+    }
+
+    @bi{
+      @lang["en"]{A certain disadvantage of the SST model is that distances to the nearest wall have to be known explicitly. This requires special provisions on multiblock structured or on unstructured grids. See, e.g., Ref. @link["blazek2005-r7-39"]{[39]} for the computation of wall distances. Examples for applications of the SST turbulence model can be found in @link["blazek2005-r7-72"]{[72]}-@link["blazek2005-r7-74"]{[74]}.}
+      @lang["zh-CN"]{SST模型的一个缺点是必须显式地知道到最近壁面的距离，这在多块结构网格或非结构网格上需要特殊处理。壁面距离的计算参见例如文献@link["blazek2005-r7-39"]{[39]}。SST湍流模型的应用实例可见@link["blazek2005-r7-72"]{[72]}-@link["blazek2005-r7-74"]{[74]}。}
+    }
+
+    @emph{Differential Form 微分形式}
+
+    @bi{
+      @lang["en"]{The transport equations for the turbulent kinetic energy and the specific dissipation of turbulence read in differential form @link["blazek2005-r7-68"]{[68]}}
+      @lang["zh-CN"]{湍动能与湍流比耗散率的输运方程的微分形式为@link["blazek2005-r7-68"]{[68]}}
+    }
+
+    @tex-display-math[#:id "eq-7-65"]{
+      \begin{aligned}
+        \frac{\partial\rho K}{\partial t} + \frac{\partial}{\partial x_j}\left(\rho v_j K\right) &= \frac{\partial}{\partial x_j}\left[\left(\mu_L + \sigma_K\mu_T\right)\frac{\partial K}{\partial x_j}\right] + \tau_{ij}^F S_{ij} - \beta^{*}\rho\omega K \\
+        \frac{\partial\rho\omega}{\partial t} + \frac{\partial}{\partial x_j}\left(\rho v_j\omega\right) &= \frac{\partial}{\partial x_j}\left[\left(\mu_L + \sigma_{\omega}\mu_T\right)\frac{\partial\omega}{\partial x_j}\right] + \frac{C_{\omega}\rho}{\mu_T}\tau_{ij}^F S_{ij} \\
+        &- \beta\rho\omega^2 + 2\left(1 - f_1\right)\frac{\rho\sigma_{\omega2}}{\omega}\frac{\partial K}{\partial x_j}\frac{\partial\omega}{\partial x_j}.
+      \end{aligned}
+      \tag{7.65}
+    }
+
+    @bi{
+      @lang["en"]{The terms on the right-hand side of Eq. @link["blazek2005-ch07#eq-7-65"]{(7.65)} represent conservative diffusion, eddy-viscosity production and dissipation, respectively. Furthermore, the last term in the @tex-math{\omega}-equation describes the cross diffusion. The Favre-averaged turbulent stresses @tex-math{\tau_{ij}^F} are given by Eq. (7.25) and the strain-rate tensor @tex-math{S_{ij}} follows from Eq. (7.3). The turbulent eddy viscosity in Eq. (7.28) and (7.29) is obtained from @link["blazek2005-r7-68"]{[68]}}
+      @lang["zh-CN"]{方程@link["blazek2005-ch07#eq-7-65"]{(7.65)}右端各项分别代表守恒性扩散、涡黏性生成和耗散；此外，@tex-math{\omega}方程中的最后一项描述交叉扩散（cross diffusion）。Favre平均湍流应力@tex-math{\tau_{ij}^F}由式(7.25)给出，应变率张量@tex-math{S_{ij}}由式(7.3)得到。式(7.28)和(7.29)中的湍流涡黏性由下式得到@link["blazek2005-r7-68"]{[68]}}
+    }
+
+    @tex-display-math[#:id "eq-7-66"]{\mu_T = \frac{a_1\rho K}{\max\left(a_1\omega,\ f_2\|\text{curl}\,\vec{v}\|_2\right)}. \tag{7.66}}
+
+    @bi{
+      @lang["en"]{This definition of the turbulent viscosity guarantees that in an adverse pressure gradient boundary layer, where the production of @tex-math{K} is larger than its dissipation @tex-math{\omega} (hence @tex-math{a_1\omega < \|\text{curl}\,\vec{v}\|_2}), Bradshaw's assumption, i.e., @tex-math{\tau = a_1\rho K} (shear stress proportional to turbulent kinetic energy) is satisfied.}
+      @lang["zh-CN"]{湍流黏性的这一定义保证了在逆压梯度边界层内——那里@tex-math{K}的生成大于其耗散@tex-math{\omega}（因而@tex-math{a_1\omega < \|\text{curl}\,\vec{v}\|_2}）——Bradshaw假设，即@tex-math{\tau = a_1\rho K}（剪切应力正比于湍动能）得到满足。}
+    }
+
+    @bi{
+      @lang["en"]{The function @tex-math{f_1} in Eq. @link["blazek2005-ch07#eq-7-65"]{(7.65)}, which blends the model coefficients of the K-@tex-math{\omega} model in boundary layers with the transformed K-@tex-math{\varepsilon} model in free-shear layers and freestream zones, is defined as}
+      @lang["zh-CN"]{方程@link["blazek2005-ch07#eq-7-65"]{(7.65)}中的函数@tex-math{f_1}用于把边界层内K-@tex-math{\omega}模型的模型系数与自由剪切层及自由来流区中变换后的K-@tex-math{\varepsilon}模型的系数混合起来，其定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-67"]{
+      \begin{aligned}
+        f_1 &= \tanh\left(arg_1^4\right) \\
+        arg_1 &= \min\left[\max\left(\frac{\sqrt{K}}{0.09\,\omega d},\ \frac{500\,\mu_L}{\rho\omega d^2}\right),\ \frac{4\rho\sigma_{\omega2}K}{CD_{K\omega}d^2}\right],
+      \end{aligned}
+      \tag{7.67}
+    }
+
+    @bi{
+      @lang["en"]{where @tex-math{d} stands for the distance to the nearest wall and @tex-math{CD_{K\omega}} is the positive part of the cross-diffusion term in Eq. @link["blazek2005-ch07#eq-7-65"]{(7.65)}, i.e.,}
+      @lang["zh-CN"]{其中@tex-math{d}表示到最近壁面的距离，@tex-math{CD_{K\omega}}是方程@link["blazek2005-ch07#eq-7-65"]{(7.65)}中交叉扩散项的正部，即}
+    }
+
+    @tex-display-math[#:id "eq-7-68"]{CD_{K\omega} = \max\left(2\,\frac{\rho\sigma_{\omega2}}{\omega}\frac{\partial K}{\partial x_j}\frac{\partial\omega}{\partial x_j},\ 10^{-20}\right). \tag{7.68}}
+
+    @bi{
+      @lang["en"]{The auxiliary function @tex-math{f_2} in Eq. @link["blazek2005-ch07#eq-7-66"]{(7.66)} is given by}
+      @lang["zh-CN"]{方程@link["blazek2005-ch07#eq-7-66"]{(7.66)}中的辅助函数@tex-math{f_2}由下式给出}
+    }
+
+    @tex-display-math[#:id "eq-7-69"]{
+      \begin{aligned}
+        f_2 &= \tanh\left(arg_2^2\right) \\
+        arg_2 &= \max\left(\frac{2\sqrt{K}}{0.09\,\omega d},\ \frac{500\,\mu_L}{\rho\omega d^2}\right).
+      \end{aligned}
+      \tag{7.69}
+    }
+
+    @bi{
+      @lang["en"]{The model constants are as follows}
+      @lang["zh-CN"]{模型常数如下}
+    }
+
+    @tex-display-math[#:id "eq-7-70"]{a_1 = 0.31, \qquad \beta^{*} = 0.09, \qquad \kappa = 0.41. \tag{7.70}}
+
+    @bi{
+      @lang["en"]{Finally, the coefficients of the SST turbulence model @tex-math{\beta}, @tex-math{C_{\omega}}, @tex-math{\sigma_K}, and @tex-math{\sigma_{\omega}} are obtained by blending the coefficients of the K-@tex-math{\omega} model, denoted as @tex-math{\phi_1}, with those of the transformed K-@tex-math{\varepsilon} model (@tex-math{\phi_2}). The corresponding relation reads}
+      @lang["zh-CN"]{最后，SST湍流模型的系数@tex-math{\beta}、@tex-math{C_{\omega}}、@tex-math{\sigma_K}和@tex-math{\sigma_{\omega}}由K-@tex-math{\omega}模型的系数（记作@tex-math{\phi_1}）与变换后的K-@tex-math{\varepsilon}模型的系数（@tex-math{\phi_2}）混合得到。相应的关系式为}
+    }
+
+    @tex-display-math[#:id "eq-7-71"]{\phi = f_1\phi_1 + \left(1 - f_1\right)\phi_2. \tag{7.71}}
+
+    @bi{
+      @lang["en"]{The coefficients of the inner model (K-@tex-math{\omega}) are given by}
+      @lang["zh-CN"]{内层模型（K-@tex-math{\omega}）的系数为}
+    }
+
+    @tex-display-math[#:id "eq-7-72"]{
+      \begin{aligned}
+        &\sigma_{K1} = 0.85, \qquad \sigma_{\omega1} = 0.5, \qquad \beta_1 = 0.075, \\
+        &C_{\omega1} = \beta_1/\beta^{*} - \sigma_{\omega1}\kappa^2/\sqrt{\beta^{*}} = 0.533.
+      \end{aligned}
+      \tag{7.72}
+    }
+
+    @bi{
+      @lang["en"]{The coefficients of the outer model (K-@tex-math{\varepsilon}) are defined as}
+      @lang["zh-CN"]{外层模型（K-@tex-math{\varepsilon}）的系数定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-73"]{
+      \begin{aligned}
+        &\sigma_{K2} = 1.0, \qquad \sigma_{\omega2} = 0.856, \qquad \beta_2 = 0.0828, \\
+        &C_{\omega2} = \beta_2/\beta^{*} - \sigma_{\omega2}\kappa^2/\sqrt{\beta^{*}} = 0.440.
+      \end{aligned}
+      \tag{7.73}
+    }
+
+    @bi{
+      @lang["en"]{The integral formulation of the SST turbulence model corresponds, in principle, to that of the K-@tex-math{\varepsilon} model from Subsection 7.2.2. Therefore, it is not repeated here.}
+      @lang["zh-CN"]{SST湍流模型的积分形式原则上与小节7.2.2中K-@tex-math{\varepsilon}模型的积分形式相同，故此处不再重复。}
+    }
+
+    @emph{Boundary Conditions 边界条件}
+
+    @bi{
+      @lang["en"]{The boundary conditions for the kinetic turbulent energy and the specific dissipation at solid walls are}
+      @lang["zh-CN"]{固体壁面上湍动能与比耗散率的边界条件为}
+    }
+
+    @tex-display-math[#:id "eq-7-74"]{K = 0 \qquad \text{and} \qquad \omega = 10\,\frac{6\mu_L}{\rho\beta_1\left(d_1\right)^2} \tag{7.74}}
+
+    @bi{
+      @lang["en"]{with @tex-math{d_1} being the distance of the first node (cell centroid) from the wall. The grid has to be refined such that @tex-math{y^{+} < 3}.}
+      @lang["zh-CN"]{其中@tex-math{d_1}为第一个节点（单元质心）到壁面的距离。网格须加密至@tex-math{y^{+} < 3}。}
+    }
+
+    @bi{
+      @lang["en"]{For the inflow boundaries, the following freestream values are recommended}
+      @lang["zh-CN"]{对入口边界，建议采用如下自由来流值}
+    }
+
+    @tex-display-math[#:id "eq-7-75"]{\omega_{\infty} = C_1\frac{\|\vec{v}_{\infty}\|_2}{L}, \qquad \left(\mu_T\right)_{\infty} = \left(\mu_L\right)_{\infty}10^{-C_2}, \qquad K_{\infty} = \frac{\left(\mu_T\right)_{\infty}}{\rho_{\infty}}\,\omega_{\infty}, \tag{7.75}}
+
+    @bi{
+      @lang["en"]{where @tex-math{L} denotes the length of the computational domain, @tex-math{1 \le C_1 \le 10} and @tex-math{2 \le C_2 \le 5}, respectively. The values of @tex-math{K} and @tex-math{\omega} are extrapolated from the interior at outflow boundaries.}
+      @lang["zh-CN"]{其中@tex-math{L}表示计算域的长度，@tex-math{1 \le C_1 \le 10}，@tex-math{2 \le C_2 \le 5}。在出口边界上，@tex-math{K}和@tex-math{\omega}的值由计算域内部外推。}
+    }
+  }
+}
+
+@subtree[#:id "blazek2005-7-3"]{
+  @title{7.3 Large-Eddy Simulation 大涡模拟}
+
+  @bi{
+    @lang["en"]{The @emph{Large-Eddy Simulation} (LES) methodology was employed already in 1963 by Smagorinsky in meteorology @link["blazek2005-r7-75"]{[75]} (circulation of the atmosphere). The first engineering application of LES (turbulent channel flow) was presented by Deardorff in 1970 @link["blazek2005-r7-76"]{[76]}. His method was later extended and improved by Schumann @link["blazek2005-r7-77"]{[77]}. During 1980's, the research focus in the simulation of turbulence shifted from LES to Direct Numerical Simulation (DNS). However, some important work was still conducted, e.g., by Bardina et al. @link["blazek2005-r7-78"]{[78]}, Moin and Kim @link["blazek2005-r7-79"]{[79]}. The interest in LES returned back at the beginning of 1990's @link["blazek2005-r7-80"]{[80]}-@link["blazek2005-r7-86"]{[86]}. Nowadays, LES is increasingly employed for physically and geometrically complex flows of engineering relevance like, e.g., in combustion chambers. Examples can be found in Refs. @link["blazek2005-r7-87"]{[87]}-@link["blazek2005-r7-98"]{[98]}. Certainly, this trend is supported by the availability of low-cost, highly powerful computers. Additionally, today's engineers are also often faced with flow problems, for which the standard turbulence models fail. Furthermore, in certain cases the mean flow frequencies are in the same order as the turbulent fluctuations. Hence, the time averaging looses its sense and we have to employ either LES or DNS.}
+    @lang["zh-CN"]{大涡模拟（Large-Eddy Simulation，LES）方法早在1963年就由Smagorinsky在气象学中（大气环流）采用@link["blazek2005-r7-75"]{[75]}。LES的第一个工程应用（湍流槽道流）由Deardorff于1970年给出@link["blazek2005-r7-76"]{[76]}，其方法后来由Schumann加以扩展和改进@link["blazek2005-r7-77"]{[77]}。20世纪80年代，湍流模拟的研究重心从LES转向直接数值模拟（DNS）。不过，一些重要工作仍在进行，例如Bardina等@link["blazek2005-r7-78"]{[78]}、Moin和Kim@link["blazek2005-r7-79"]{[79]}的工作。20世纪90年代初，对LES的兴趣重新回升@link["blazek2005-r7-80"]{[80]}-@link["blazek2005-r7-86"]{[86]}。如今，LES越来越多地用于具有工程意义的物理和几何复杂流动，例如燃烧室内的流动，实例可见文献@link["blazek2005-r7-87"]{[87]}-@link["blazek2005-r7-98"]{[98]}。这一趋势无疑得益于低成本、高能力计算机的普及。此外，如今的工程师也常常遇到标准湍流模型失效的流动问题；而且在某些情形下，平均流动频率与湍流脉动处于同一量级，此时时间平均失去意义，我们只能采用LES或DNS。}
+  }
+
+  @bi{
+    @lang["en"]{LES is based on the observation that the small turbulent structures are more universal in character than the large eddies. Therefore, the idea is to compute the contributions of the large, energy-carrying structures to momentum and energy transfer and to model the effects of the small structures, which are not resolved by the numerical scheme. Due to the more homogeneous and universal character of the small scales, we may expect that the so called @emph{subgrid-scale} models can be kept much simpler than the turbulence models for the RANS equations.}
+    @lang["zh-CN"]{LES基于这样一个观察：小的湍流结构比大涡在性质上更具普适性。因此，其思想是计算出大的、承载能量的结构对动量和能量输运的贡献，而把数值格式无法解析的小结构的影响建模。由于小尺度具有更均匀、更普适的性质，我们可以期望所谓的亚网格尺度（subgrid-scale）模型能够比RANS方程的湍流模型简单得多。}
+  }
+
+  @bi{
+    @lang["en"]{LES represents a 3-D, time-dependent solution of the governing equations. In comparison to turbulence modelling based on the RANS equations, LES requires high grid resolution also in the streamwise (@tex-math{50 \le x^{+} \le 150}) and in the cross-flow direction (@tex-math{15 \le z^{+} < 40}). However, LES is computationally considerably cheaper than DNS. The number of grid points (cells) required to resolve the outer layer is proportional to @tex-math{Re^{0.4}} @link["blazek2005-r7-99"]{[99]}. The resolution has to be increased like @tex-math{Re^{1.8}} in the viscous sublayer. Thus, if compared to @tex-math{Re^{9/4}} required by DNS, LES can be applied at Reynolds numbers at least one order of magnitude higher. In order to further reduce the requirements on grid resolution, LES can be used in conjunction with approximate wall models (Subsection 7.3.4), or coupled with a RANS model (Subsection 7.3.5). Both approaches allow for LES of engineering problems at reasonable computational costs.}
+    @lang["zh-CN"]{LES是控制方程的三维、随时间变化的解。与基于RANS方程的湍流建模相比，LES在流向（@tex-math{50 \le x^{+} \le 150}）和横向（@tex-math{15 \le z^{+} < 40}）也要求高网格分辨率。不过，LES的计算代价仍比DNS低得多。解析外层所需的网格点（单元）数正比于@tex-math{Re^{0.4}}@link["blazek2005-r7-99"]{[99]}；在黏性底层内分辨率须按@tex-math{Re^{1.8}}提高。因此，与DNS所需的@tex-math{Re^{9/4}}相比，LES可以应用于至少高一个量级的雷诺数。为了进一步降低对网格分辨率的要求，LES可以与近似壁面模型联用（小节7.3.4），或与RANS模型耦合（小节7.3.5）。这两种途径都能以合理的计算代价对工程问题进行LES。}
+  }
+
+  @bi{
+    @lang["en"]{An accurate resolution of high wave-number turbulent fluctuations requires spatial discretisation schemes with corresponding properties in the wave-number space (cf., e.g., @link["blazek2005-r7-100"]{[100]} or @link["blazek2005-r7-101"]{[101]}). Therefore, spectral methods are often employed. However, spectral methods are applicable only to geometrically simple domains with (quasi-)periodic boundaries. This is the reason why finite difference or finite volume spatial discretisations are becoming increasingly popular. Central differencing schemes proved to be more suitable than upwind schemes. The reason is that upwind schemes (regardless of the order of accuracy) dissipate too much energy over a significant portion of the turbulent spectra due to the inherent numerical damping @link["blazek2005-r7-102"]{[102]}, @link["blazek2005-r7-103"]{[103]}. A discussion of numerical errors of spectral and finite difference methods can be found in @link["blazek2005-r7-104"]{[104]}.}
+    @lang["zh-CN"]{要准确解析高波数的湍流脉动，要求空间离散格式在波数空间具有相应的性质（参见例如@link["blazek2005-r7-100"]{[100]}或@link["blazek2005-r7-101"]{[101]}）。因此谱方法常被采用。但谱方法只适用于具有（准）周期边界、几何形状简单的域。这正是有限差分和有限体积空间离散日益流行的原因。事实证明，中心差分格式比上风格式更合适，因为上风格式（无论精度阶数如何）由于其固有的数值阻尼，会在湍流谱的相当大一部分上耗散掉过多的能量@link["blazek2005-r7-102"]{[102]}、@link["blazek2005-r7-103"]{[103]}。关于谱方法与有限差分方法数值误差的讨论可参见@link["blazek2005-r7-104"]{[104]}。}
+  }
+
+  @bi{
+    @lang["en"]{The implementation of LES methods on unstructured grids @link["blazek2005-r7-105"]{[105]}-@link["blazek2005-r7-109"]{[109]} represents a particular challenge. However, it allows for the treatment of highly complex geometries, moving boundaries or for dynamic grid adaptation. The research topic consists of the development of numerically efficient, high-order spatial discretisation on mixed-element grids.}
+    @lang["zh-CN"]{在非结构网格上实现LES方法@link["blazek2005-r7-105"]{[105]}-@link["blazek2005-r7-109"]{[109]}是一个特别的挑战，但它能处理高度复杂的几何外形、运动边界以及动态网格自适应。其研究课题是在混合单元网格上发展数值高效的高阶空间离散。}
+  }
+
+  @bi{
+    @lang["en"]{An introduction to LES can be found in Ref. @link["blazek2005-r7-19"]{[19]}, pp. 269-336, and in @link["blazek2005-r7-110"]{[110]}-@link["blazek2005-r7-112"]{[112]} or @link["blazek2005-r7-90"]{[90]}. An overview of the present state of LES was given in @link["blazek2005-r7-113"]{[113]}.}
+    @lang["zh-CN"]{LES的入门介绍可见文献@link["blazek2005-r7-19"]{[19]}第269-336页，以及@link["blazek2005-r7-110"]{[110]}-@link["blazek2005-r7-112"]{[112]}或@link["blazek2005-r7-90"]{[90]}。LES现状的综述见@link["blazek2005-r7-113"]{[113]}。}
+  }
+
+  @subtree[#:id "blazek2005-7-3-1"]{
+    @title{7.3.1 Spatial Filtering 空间滤波}
+
+    @bi{
+      @lang["en"]{LES is based on a spatial filtering operation, which decomposes any flow variable @tex-math{U} into a filtered (large-scale, resolved) part @tex-math{\overline{U}} and into a sub-filter (unresolved) part @tex-math{U'}, i.e.,}
+      @lang["zh-CN"]{LES基于空间滤波（spatial filtering）操作，它把任意流动变量@tex-math{U}分解为滤波后（大尺度、可解析）的部分@tex-math{\overline{U}}与亚滤波（不可解析）的部分@tex-math{U'}，即}
+    }
+
+    @tex-display-math[#:id "eq-7-76"]{U = \overline{U} + U' \tag{7.76}}
+
+    @bi{
+      @lang["en"]{The filtered variable at the location @tex-math{\vec{r}_0} in space is defined as}
+      @lang["zh-CN"]{空间中@tex-math{\vec{r}_0}处的滤波变量定义为}
+    }
+
+    @tex-display-math[#:id "eq-7-77"]{\overline{U}(\vec{r}_0, t) = \int_{D} U(\vec{r}, t)\, G(\vec{r}_0, \vec{r}, \Delta)\, d\vec{r}, \tag{7.77}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\Omega} denotes the entire flow domain, @tex-math{G} represents the filter function, and @tex-math{\vec{r}} is the position vector, respectively. The filter function determines the structure and size of the small scales. The filter function depends on the difference @tex-math{\vec{r}_0 - \vec{r}} and on the filter width @tex-math{\Delta = \left(\Delta_1\,\Delta_2\,\Delta_3\right)^{1/3}}, with @tex-math{\Delta_i} being the filter width in the @tex-math{i}-th spatial coordinate. The following filter functions are the mostly used ones (see Fig. 7.3):
+        @itemize{
+          @item{the tophat filter:}
+          @item{The sharp Fourier cut-off filter:}
+          @item{The Gaussian filter:}
+        }
+      }
+      @lang["zh-CN"]{其中@tex-math{\Omega}表示整个流动域，@tex-math{G}表示滤波函数，@tex-math{\vec{r}}为位置向量。滤波函数决定小尺度的结构与大小，它依赖于差@tex-math{\vec{r}_0 - \vec{r}}以及滤波宽度@tex-math{\Delta = \left(\Delta_1\,\Delta_2\,\Delta_3\right)^{1/3}}，@tex-math{\Delta_i}为第@tex-math{i}个空间坐标方向的滤波宽度。最常用的滤波函数有如下几种（见图7.3）：
+        @itemize{
+          @item{tophat（盒式）滤波：}
+          @item{锐利傅里叶截断滤波：}
+          @item{Gaussian滤波：}
+        }
+      }
+    }
+
+    @tex-display-math[#:id "eq-7-78"]{G = \begin{cases} 1/\Delta^3 & \text{if } |(x_0)_i - x_i| \le \Delta_i/2 \\ 0 & \text{otherwise.} \end{cases} \tag{7.78}}
+
+    @tex-display-math[#:id "eq-7-79"]{G = \prod_{i=1}^{3}\frac{\sin\left(\dfrac{\pi}{\Delta_i}\left[(x_0)_i - x_i\right]\right)}{\pi\left[(x_0)_i - x_i\right]}. \tag{7.79}}
+
+    @tex-display-math[#:id "eq-7-80"]{G = \left(\frac{6}{\pi\Delta^2}\right)^{3/2}\exp\left(\frac{-6\,\|\vec{r}_0 - \vec{r}\|_2^2}{\Delta^2}\right). \tag{7.80}}
+
+    @bi{
+      @lang["en"]{The tophat and the Gaussian filter smooth the large-scale fluctuations as well as the small scales below the filter width. The cut-off filter affects only the scales below the cut-off wave-number. In practice, the Gaussian filter is always employed in conjunction with a sharp Fourier cut-off. Filters suitable for grids with varying cell sizes were proposed in Refs. @link["blazek2005-r7-114"]{[114]}, @link["blazek2005-r7-115"]{[115]}.}
+      @lang["zh-CN"]{tophat滤波和Gaussian滤波会平滑大尺度脉动以及滤波宽度以下的小尺度。截断滤波只影响截止波数以下的尺度。实际中，Gaussian滤波总是与锐利傅里叶截断配合使用。适用于单元尺寸变化的网格的滤波函数见文献@link["blazek2005-r7-114"]{[114]}、@link["blazek2005-r7-115"]{[115]}。}
+    }
+
+    @image["blazek2005/fig-7-3.png"]{图7.3:物理空间中的LES滤波函数}
+
+    @emph{图7.3:物理空间中的LES滤波函数:tophat (a),cut-off (b),Gaussian (c)。}图例:G——滤波函数;x——空间坐标;@tex-math{-\Delta/2}、@tex-math{+\Delta/2}——tophat滤波的支撑区间;@tex-math{-\Delta}、@tex-math{+\Delta}——滤波宽度标记。
+  }
+
+  @subtree[#:id "blazek2005-7-3-2"]{
+    @title{7.3.2 Filtered Governing Equations 滤波控制方程}
+
+    @bi{
+      @lang["en"]{The spatial filtering, defined by Eq. @link["blazek2005-ch07#eq-7-76"]{(7.76)} and Eq. @link["blazek2005-ch07#eq-7-77"]{(7.77)}, has to be applied to the Navier-Stokes equations in order to remove the small turbulent scales. The filter width @tex-math{\Delta} as well as the filter function are considered as free parameters. In fact, the governing equations are usually not explicitly filtered. Instead, the grid as well as the discretisation errors are assumed to define the filter @tex-math{G}. For the discussion of explicit filtering see Refs. @link["blazek2005-r7-116"]{[116]}, @link["blazek2005-r7-117"]{[117]}.}
+      @lang["zh-CN"]{为了去除小的湍流尺度，必须把由方程@link["blazek2005-ch07#eq-7-76"]{(7.76)}和方程@link["blazek2005-ch07#eq-7-77"]{(7.77)}定义的空间滤波作用于Navier-Stokes方程。滤波宽度@tex-math{\Delta}和滤波函数都被视为自由参数。实际上，控制方程通常并不显式滤波，而是假定网格以及离散误差定义了滤波函数@tex-math{G}。关于显式滤波的讨论见文献@link["blazek2005-r7-116"]{[116]}、@link["blazek2005-r7-117"]{[117]}。}
+    }
+
+    @bi{
+      @lang["en"]{Because of the differing treatment, we shall distinguish in the following between compressible (7.1) and incompressible (7.6) formulation of the Navier-Stokes equations.}
+      @lang["zh-CN"]{由于处理方式不同，下文中我们将区分Navier-Stokes方程的可压缩形式(7.1)与不可压缩形式(7.6)。}
+    }
+
+    @emph{Incompressible Navier-Stokes Equations 不可压 Navier-Stokes 方程}
+
+    @bi{
+      @lang["en"]{For an incompressible flow of a Newtonian fluid, the filtered governing equations (7.6) take the form}
+      @lang["zh-CN"]{对牛顿流体的不可压缩流动，滤波后的控制方程(7.6)取如下形式}
+    }
+
+    @tex-display-math[#:id "eq-7-81"]{
+      \begin{aligned}
+        \frac{\partial\overline{v}_i}{\partial x_i} &= 0 \\
+        \frac{\partial\overline{v}_i}{\partial t} + \frac{\partial}{\partial x_j}\left(\overline{v}_i\overline{v}_j\right) &= -\frac{1}{\rho}\frac{\partial\overline{p}}{\partial x_i} + \nu\nabla^2\overline{v}_i - \frac{\partial\tau_{ij}^S}{\partial x_j},
+      \end{aligned}
+      \tag{7.81}
+    }
+
+    @bi{
+      @lang["en"]{where @tex-math{\nu} denotes the kinematic viscosity coefficient. The equations @link["blazek2005-ch07#eq-7-81"]{(7.81)} describe the temporal and spatial evolution of the large, energy-carrying scales of motion. The non-linearity of the convective term leads to the appearance of the so-called @emph{subgrid-scale stress} (SGS) tensor}
+      @lang["zh-CN"]{其中@tex-math{\nu}表示运动黏度系数。方程@link["blazek2005-ch07#eq-7-81"]{(7.81)}描述了承载能量的大尺度运动的时空演化。对流项的非线性导致出现所谓的亚网格尺度应力（subgrid-scale stress，SGS）张量}
+    }
+
+    @tex-display-math[#:id "eq-7-82"]{\tau_{ij}^S = \overline{v_i v_j} - \overline{v}_i\,\overline{v}_j, \tag{7.82}}
+
+    @bi{
+      @lang["en"]{which describes the effects of the unresolved scales. The SGS tensor has to be modelled (see Subsection 7.3.3) in order to close the equations.}
+      @lang["zh-CN"]{它描述不可解析尺度的影响。为了使方程封闭，必须对SGS张量建模（见小节7.3.3）。}
+    }
+
+    @bi{
+      @lang["en"]{The SGS tensor can be decomposed into three parts @link["blazek2005-r7-118"]{[118]}, namely}
+      @lang["zh-CN"]{SGS张量可以分解为三个部分@link["blazek2005-r7-118"]{[118]}，即}
+    }
+
+    @tex-display-math[#:id "eq-7-83"]{\tau_{ij}^S = L_{ij} + C_{ij} + \tau_{ij}^{SR}. \tag{7.83}}
+
+    @bi{
+      @lang["en"]{The individual parts have the following physical meaning:}
+      @lang["zh-CN"]{各部分的物理含义如下：}
+    }
+
+    @tex-display-math[#:id "eq-7-84"]{L_{ij} = \overline{\overline{v}_i\,\overline{v}_j} - \overline{v}_i\,\overline{v}_j \tag{7.84}}
+
+    @bi{
+      @lang["en"]{is the so-called @emph{Leonard stress} term and represents the interactions between large-scale eddies which produce small-scale turbulence. This term only can be evaluated explicitly from the filtered velocity field @tex-math{v_i}. Further, the cross-stress term}
+      @lang["zh-CN"]{为所谓的Leonard应力（Leonard stress）项，它代表产生小尺度湍流的大涡之间的相互作用。只有这一项可以由滤波速度场@tex-math{v_i}显式求出。其次，交叉应力（cross-stress）项}
+    }
+
+    @tex-display-math[#:id "eq-7-85"]{C_{ij} = \overline{\overline{v}_i\,v'_j} + \overline{v'_i\,\overline{v}_j} \tag{7.85}}
+
+    @bi{
+      @lang["en"]{describes interactions between large- and small-scale eddies. Finally,}
+      @lang["zh-CN"]{描述大涡与小涡之间的相互作用。最后，}
+    }
+
+    @tex-display-math[#:id "eq-7-86"]{\tau_{ij}^{SR} = \overline{v'_i v'_j} \tag{7.86}}
+
+    @bi{
+      @lang["en"]{is the so-called @emph{SGS Reynolds-stress} tensor. It reflects interactions between the small-scale structures. The above decomposition @link["blazek2005-ch07#eq-7-83"]{(7.83)} is no longer used mainly because @tex-math{L_{ij}} and @tex-math{C_{ij}} are not invariant with respect to Galilean transformation¹.}
+      @lang["zh-CN"]{为所谓的SGS雷诺应力（SGS Reynolds-stress）张量，它反映小尺度结构之间的相互作用。上述分解@link["blazek2005-ch07#eq-7-83"]{(7.83)}如今已不再使用，主要原因是@tex-math{L_{ij}}和@tex-math{C_{ij}}在伽利略变换¹下不具有不变性。}
+    }
+
+    @emph{¹原书脚注:Galilean invariance means that all frames of reference which are translating uniformly with respect to each other are equivalent.(伽利略不变性指的是,彼此做匀速平移的所有参考系都是等价的。)}
+
+    @emph{Compressible Navier-Stokes Equations 可压缩 Navier-Stokes 方程}
+
+    @bi{
+      @lang["en"]{If LES is to be applied to compressible flows, we have to apply Favre averaging (Subsection 7.1.2) together with the spatial filtering to the Equations (7.1). Otherwise, the filtered Navier-Stokes equations would contain products between density and other variables like velocity or temperature. Thus, the velocity components, the energy and the temperature in Eq. (7.1) is decomposed as}
+      @lang["zh-CN"]{若要将LES应用于可压缩流动，就必须在对方程(7.1)做空间滤波的同时施加Favre平均（小节7.1.2）。否则，滤波后的Navier-Stokes方程将包含密度与速度、温度等其他变量的乘积。于是，式(7.1)中的速度分量、能量和温度按如下方式分解}
+    }
+
+    @tex-display-math[#:id "eq-7-87"]{U = \tilde{U} + U''. \tag{7.87}}
+
+    @bi{
+      @lang["en"]{The filtered variable at the location @tex-math{\vec{r}_0} in space is given by}
+      @lang["zh-CN"]{空间中@tex-math{\vec{r}_0}处的Favre滤波变量由下式给出}
+    }
+
+    @tex-display-math[#:id "eq-7-88"]{\tilde{U}(\vec{r}_0, t) = \frac{\overline{\rho U}}{\overline{\rho}} = \frac{1}{\overline{\rho}}\int_{D}\rho(\vec{r}, t)\, U(\vec{r}, t)\, G(\vec{r}_0, \vec{r}, \Delta)\, d\vec{r}, \tag{7.88}}
+
+    @bi{
+      @lang["en"]{where the overbar denotes the filtering in Eq. @link["blazek2005-ch07#eq-7-77"]{(7.77)}. The Favre-filtered Navier-Stokes equations (7.1) read @link["blazek2005-r7-111"]{[111]}, @link["blazek2005-r7-113"]{[113]}}
+      @lang["zh-CN"]{其中上横线表示方程@link["blazek2005-ch07#eq-7-77"]{(7.77)}中的滤波。Favre滤波后的Navier-Stokes方程(7.1)为@link["blazek2005-r7-111"]{[111]}、@link["blazek2005-r7-113"]{[113]}}
+    }
+
+    @tex-display-math[#:id "eq-7-89"]{
+      \begin{aligned}
+        \frac{\partial\overline{\rho}}{\partial t} + \frac{\partial}{\partial x_j}\left(\overline{\rho}\,\tilde{v}_j\right) &= 0 \\
+        \frac{\partial\overline{\rho}\tilde{v}_i}{\partial t} + \frac{\partial\left(\overline{\rho}\tilde{v}_j\tilde{v}_i\right)}{\partial x_j} + \frac{\partial\overline{p}}{\partial x_i} - \frac{\partial\hat{\sigma}_{ij}}{\partial x_j} &= -\frac{\partial\tau_{ij}^{SF}}{\partial x_j} + \frac{\partial}{\partial x_j}\left(\overline{\sigma}_{ij} - \hat{\sigma}_{ij}\right) \\
+        \frac{\partial\overline{\rho}\tilde{e}}{\partial t} + \frac{\partial\left(\overline{\rho}\tilde{v}_j\tilde{e}\right)}{\partial x_j} + \frac{\partial\tilde{q}}{\partial x_j} + \overline{p}\tilde{S}_{kk} - \hat{\sigma}_{ij}\tilde{S}_{ij} &= -\mathcal{A} - \mathcal{B} - \mathcal{C} + \mathcal{D}
+      \end{aligned}
+      \tag{7.89}
+    }
+
+    @bi{
+      @lang["en"]{with the terms}
+      @lang["zh-CN"]{其中的各项为}
+    }
+
+    @tex-display-math{
+      \begin{aligned}
+        \mathcal{A} &= \frac{\partial}{\partial x_j}\left[\overline{\rho}\left(\widetilde{v_j e} - \tilde{v}_j\tilde{e}\right)\right] \quad \text{-- divergence of subgrid-scale heat flux} \\
+        \mathcal{B} &= \frac{\partial}{\partial x_j}\left[\overline{q}_j - \tilde{q}_j\right] \quad \text{-- divergence of SGS heat diffusion} \\
+        \mathcal{C} &= \left[\overline{p S_{kk}} - \overline{p}\,\tilde{S}_{kk}\right] \quad \text{-- SGS pressure-dilatation} \\
+        \mathcal{D} &= \left[\overline{\sigma_{ij} S_{ij}} - \hat{\sigma}_{ij}\tilde{S}_{ij}\right] \quad \text{-- SGS viscous dissipation}
+      \end{aligned}
+    }
+
+    @bi{
+      @lang["en"]{and}
+      @lang["zh-CN"]{以及}
+    }
+
+    @tex-display-math[#:id "eq-7-90"]{
+      \begin{aligned}
+        \overline{\sigma}_{ij} &= \overline{2\mu S_{ij}} + \overline{\left(\mu_B - \frac{2\mu}{3}\right)\delta_{ij}S_{kk}} \\
+        \hat{\sigma}_{ij} &= 2\tilde{\mu}\tilde{S}_{ij} + \left(\tilde{\mu}_B - \frac{2\tilde{\mu}}{3}\right)\delta_{ij}\tilde{S}_{kk} \\
+        \tilde{S}_{ij} &= \frac{1}{2}\left(\frac{\partial\tilde{v}_i}{\partial x_j} + \frac{\partial\tilde{v}_j}{\partial x_i}\right) \\
+        \overline{q}_j &= -k\,\frac{\partial\overline{T}}{\partial x_j}, \qquad \tilde{q}_j = -\tilde{k}\,\frac{\partial\tilde{T}}{\partial x_j}.
+      \end{aligned}
+      \tag{7.90}
+    }
+
+    @bi{
+      @lang["en"]{In the above equations @link["blazek2005-ch07#eq-7-89"]{(7.89)}-@link["blazek2005-ch07#eq-7-90"]{(7.90)}, @tex-math{e} denotes internal energy per unit mass, @tex-math{\tilde{S}_{ij}} is the Favre-filtered strain-rate tensor, and @tex-math{\tau_{ij}^{SF} = \overline{\rho}\left(\widetilde{v_i v_j} - \tilde{v}_i\tilde{v}_j\right)} represents the Favre-averaged subgrid-scale stress. Furthermore, @tex-math{\mu}, @tex-math{\mu_B}, and @tex-math{k} stand for the molecular viscosity, the bulk viscosity, and for the thermal conductivity, respectively. Finally, @tex-math{\tilde{\mu}}, @tex-math{\tilde{\mu}_B}, and @tex-math{\tilde{k}} are the corresponding values at the filtered temperature @tex-math{\tilde{T}}.}
+      @lang["zh-CN"]{在上述方程@link["blazek2005-ch07#eq-7-89"]{(7.89)}-@link["blazek2005-ch07#eq-7-90"]{(7.90)}中，@tex-math{e}表示单位质量的内能，@tex-math{\tilde{S}_{ij}}是Favre滤波应变率张量，@tex-math{\tau_{ij}^{SF} = \overline{\rho}\left(\widetilde{v_i v_j} - \tilde{v}_i\tilde{v}_j\right)}表示Favre平均的亚网格尺度应力。此外，@tex-math{\mu}、@tex-math{\mu_B}和@tex-math{k}分别表示分子黏度、体积黏度和热导率；而@tex-math{\tilde{\mu}}、@tex-math{\tilde{\mu}_B}和@tex-math{\tilde{k}}是它们在滤波温度@tex-math{\tilde{T}}下的对应取值。}
+    }
+
+    @bi{
+      @lang["en"]{The right-hand side of Eq. @link["blazek2005-ch07#eq-7-89"]{(7.89)} contains terms which have to be modelled. In the momentum equation, the SGS stresses @tex-math{\tau_{ij}^{SF}} are approximated, but the second term, i.e., @tex-math{\left(\overline{\sigma}_{ij} - \hat{\sigma}_{ij}\right)} is usually neglected. In the energy equation, term @tex-math{\mathcal{A}} can be expressed through the SGS stresses @link["blazek2005-r7-119"]{[119]}, term @tex-math{\mathcal{B}} can be neglected, and terms @tex-math{\mathcal{C}}, @tex-math{\mathcal{D}} can be modelled as proposed in @link["blazek2005-r7-120"]{[120]}.}
+      @lang["zh-CN"]{方程@link["blazek2005-ch07#eq-7-89"]{(7.89)}的右端含有必须建模的项。在动量方程中，SGS应力@tex-math{\tau_{ij}^{SF}}被近似，而第二项即@tex-math{\left(\overline{\sigma}_{ij} - \hat{\sigma}_{ij}\right)}通常被忽略。在能量方程中，项@tex-math{\mathcal{A}}可以通过SGS应力表达@link["blazek2005-r7-119"]{[119]}，项@tex-math{\mathcal{B}}可以忽略，项@tex-math{\mathcal{C}}、@tex-math{\mathcal{D}}可按文献@link["blazek2005-r7-120"]{[120]}所建议的方式建模。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-3-3"]{
+    @title{7.3.3 Subgrid-Scale Modelling 亚网格尺度建模}
+
+    @bi{
+      @lang["en"]{The main task of a subgrid-scale model is to simulate energy transfer between the large and the subgrid scales. On the average, the energy is transported from the large scales to the small ones (turbulent cascade process). Therefore, a subgrid-scale model has to provide means of adequate energy dissipation. However, in some instances the energy also flows from small to large scales - a process called @emph{backscatter}. Thus, the model should account for this effect as well. Backscatter models are discussed, e.g., in @link["blazek2005-r7-121"]{[121]}.}
+      @lang["zh-CN"]{亚网格尺度（subgrid-scale）模型的主要任务是模拟大尺度与亚网格尺度之间的能量传递。平均而言，能量从大尺度输运到小尺度（湍流串级过程）。因此，亚网格尺度模型必须提供充分的能量耗散手段。但在某些情形下，能量也会从小尺度流向大尺度——这一过程称为反向散射（backscatter）。因此模型也应当考虑这一效应。反向散射模型可参见例如@link["blazek2005-r7-121"]{[121]}。}
+    }
+
+    @bi{
+      @lang["en"]{Various subgrid-scale models were proposed in the past and the research still continues. The models can be divided into two basic classes. The first one consists of approaches which model the SGS tensor @tex-math{\tau_{ij}^S} explicitly. A necessary condition is then that the numerical dissipation caused by the spatial discretisation scheme must be much lower than the subgrid-scale dissipation. The majority of explicit SGS models is based on the eddy-viscosity concept, which is explained next. Furthermore, we shall present the @emph{Smagorinsky} model, which forms the basis of all subgrid-scale models. We shall also briefly discuss the basics of the so-called @emph{dynamic subgrid-scale} models. A comparison of six different explicit subgrid-scale models was presented recently in @link["blazek2005-r7-122"]{[122]}.}
+      @lang["zh-CN"]{过去已提出多种亚网格尺度模型，研究至今仍在继续。这些模型可分为两大类。第一类是显式地建模SGS张量@tex-math{\tau_{ij}^S}的方法，此时必要条件是空间离散格式引起的数值耗散必须远低于亚网格尺度耗散。大多数显式SGS模型基于涡黏性概念，下面将予以说明。此外，我们还将介绍构成所有亚网格尺度模型基础的Smagorinsky模型，并简要讨论所谓动力亚网格尺度（dynamic subgrid-scale）模型的基础。六种不同显式亚网格尺度模型的比较最近见于@link["blazek2005-r7-122"]{[122]}。}
+    }
+
+    @bi{
+      @lang["en"]{The second class of subgrid-scale models consists of approaches where the SGS stresses are modeled implicitly by an appropriate discretisation of the convective fluxes (thus @tex-math{\tau_{ij}^S} is omitted). These models are referred to as @emph{Monotonically Integrated LES} (MILES). The methodology was first presented by Boris et al. @link["blazek2005-r7-123"]{[123]} and recently advocated by Grinstein and Fureby @link["blazek2005-r7-124"]{[124]}, @link["blazek2005-r7-125"]{[125]}. The condition in this case is that the numerical dissipation correctly models the subgrid-scale dissipation. This is not quite easy to achieve, as the investigations in Ref. @link["blazek2005-r7-126"]{[126]} and @link["blazek2005-r7-127"]{[127]} prove. Nevertheless, MILES was applied with some success to a variety of flow problems @link["blazek2005-r7-128"]{[128]}-@link["blazek2005-r7-134"]{[134]}.}
+      @lang["zh-CN"]{第二类亚网格尺度模型是通过对流通量的适当离散来隐式地模拟SGS应力（即略去@tex-math{\tau_{ij}^S}）的方法。这类模型称为单调积分大涡模拟（Monotonically Integrated LES，MILES）。该方法最早由Boris等@link["blazek2005-r7-123"]{[123]}提出，近来由Grinstein和Fureby大力提倡@link["blazek2005-r7-124"]{[124]}、@link["blazek2005-r7-125"]{[125]}。此处的条件是数值耗散要正确地模拟亚网格尺度耗散。这并不容易做到，文献@link["blazek2005-r7-126"]{[126]}和@link["blazek2005-r7-127"]{[127]}的研究证明了这一点。尽管如此，MILES已在多种流动问题上取得了一定成功@link["blazek2005-r7-128"]{[128]}-@link["blazek2005-r7-134"]{[134]}。}
+    }
+
+    @emph{Eddy-Viscosity Models 涡黏性模型}
+
+    @bi{
+      @lang["en"]{These explicit models are able to represent the global dissipative effects of the small scales, but they cannot reproduce the local details of the energy exchange. In the case of incompressible flows, the eddy-viscosity models relate the SGS stresses to the large-scale strain-rate @tex-math{\overline{S}_{ij}} as follows}
+      @lang["zh-CN"]{这些显式模型能够表现小尺度的全局耗散效应，但无法再现能量交换的局部细节。对不可压缩流动，涡黏性模型把SGS应力与大尺度应变率@tex-math{\overline{S}_{ij}}联系起来如下}
+    }
+
+    @tex-display-math[#:id "eq-7-91"]{\tau_{ij}^S - \frac{\delta_{ij}}{3}\tau_{kk}^S = -2\nu_T\overline{S}_{ij}. \tag{7.91}}
+
+    @bi{
+      @lang["en"]{The strain-rate @tex-math{\overline{S}_{ij}} is obtained from Eq. (7.3) by using filtered velocity components. The eddy viscosity @tex-math{\nu_T} is in general evaluated from algebraic relations in order to save numerical costs. The isotropic part of the SGS stresses (@tex-math{\tau_{kk}^S}) can either be added to the filtered pressure @link["blazek2005-r7-135"]{[135]}, modelled @link["blazek2005-r7-136"]{[136]} or neglected.}
+      @lang["zh-CN"]{应变率@tex-math{\overline{S}_{ij}}由式(7.3)用滤波后的速度分量得到。为节省计算量，涡黏性@tex-math{\nu_T}一般用代数关系式求值。SGS应力的各向同性部分（@tex-math{\tau_{kk}^S}）可以并入滤波压力@link["blazek2005-r7-135"]{[135]}、单独建模@link["blazek2005-r7-136"]{[136]}或忽略。}
+    }
+
+    @bi{
+      @lang["en"]{Relation similar to Eq. @link["blazek2005-ch07#eq-7-91"]{(7.91)} applies also in the case of compressible Navier-Stokes equations. The components of the Favre-averaged SGS stress tensor are approximated as}
+      @lang["zh-CN"]{与方程@link["blazek2005-ch07#eq-7-91"]{(7.91)}类似的关系式也适用于可压缩Navier-Stokes方程。Favre平均SGS应力张量的分量近似为}
+    }
+
+    @tex-display-math[#:id "eq-7-92"]{\tau_{ij}^{SF} - \frac{\delta_{ij}}{3}\tau_{kk}^{SF} = -2\overline{\rho}\,\nu_T\tilde{S}_{ij} + \left(\frac{2\overline{\rho}\,\nu_T}{3}\right)\frac{\partial\tilde{v}_k}{\partial x_k}\delta_{ij}. \tag{7.92}}
+
+    @bi{
+      @lang["en"]{The components of the strain-rate tensor @tex-math{\tilde{S}_{ij}} are given in Eq. @link["blazek2005-ch07#eq-7-90"]{(7.90)}.}
+      @lang["zh-CN"]{应变率张量@tex-math{\tilde{S}_{ij}}的分量由方程@link["blazek2005-ch07#eq-7-90"]{(7.90)}给出。}
+    }
+
+    @emph{Smagorinsky SGS Model Smagorinsky SGS 模型}
+
+    @bi{
+      @lang["en"]{The Smagorinsky model @link["blazek2005-r7-75"]{[75]} is based on the equilibrium hypothesis which implies that the small scales dissipate entirely and instantaneously all the energy they receive from the large scales. The algebraic model assumes the form}
+      @lang["zh-CN"]{Smagorinsky模型@link["blazek2005-r7-75"]{[75]}基于平衡假设，即小尺度把从大尺度接收到的能量全部、瞬时地耗散掉。该代数模型取如下形式}
+    }
+
+    @tex-display-math[#:id "eq-7-93"]{\nu_T = \left(C_s\Delta\right)^2|\overline{S}|, \tag{7.93}}
+
+    @bi{
+      @lang["en"]{where @tex-math{|\overline{S}| = \left(2\overline{S}_{ij}\overline{S}_{ij}\right)^{1/2}} is the magnitude of the strain-rate tensor and @tex-math{C_s} denotes the @emph{Smagorinsky constant}. The theoretical value found by Lilly @link["blazek2005-r7-137"]{[137]} is @tex-math{C_s \approx 0.18}. However, the Smagorinsky constant depends on the type of the flow. For example, in shear flows @tex-math{C_s} has to be reduced to approximately 0.1. The filter width @tex-math{\Delta} in Eq. @link["blazek2005-ch07#eq-7-93"]{(7.93)} is usually chosen to be twice the average grid size, i.e., @tex-math{\Delta = 2\left(\Delta x_1\,\Delta x_2\,\Delta x_3\right)^{1/3}}.}
+      @lang["zh-CN"]{其中@tex-math{|\overline{S}| = \left(2\overline{S}_{ij}\overline{S}_{ij}\right)^{1/2}}为应变率张量的大小，@tex-math{C_s}为Smagorinsky常数（Smagorinsky constant）。Lilly@link["blazek2005-r7-137"]{[137]}求得的理论值为@tex-math{C_s \approx 0.18}。但Smagorinsky常数依赖于流动类型，例如在剪切流中@tex-math{C_s}须减小到约0.1。方程@link["blazek2005-ch07#eq-7-93"]{(7.93)}中的滤波宽度@tex-math{\Delta}通常取平均网格尺寸的两倍，即@tex-math{\Delta = 2\left(\Delta x_1\,\Delta x_2\,\Delta x_3\right)^{1/3}}。}
+    }
+
+    @bi{
+      @lang["en"]{In order to account for the reduced growth of the small scales near walls, the value of the eddy viscosity @tex-math{\nu_T} has to be reduced. Thus, the Smagorinsky model Eq. @link["blazek2005-ch07#eq-7-93"]{(7.93)} is modified according to Van Driest damping as}
+      @lang["zh-CN"]{为了体现近壁处小尺度增长的减弱，必须减小涡黏性@tex-math{\nu_T}的取值。于是，Smagorinsky模型——方程@link["blazek2005-ch07#eq-7-93"]{(7.93)}——按Van Driest阻尼修改为}
+    }
+
+    @tex-display-math[#:id "eq-7-94"]{\nu_T = \left[C_s\Delta\left(1 - e^{-y^{+}/25}\right)\right]^2|\overline{S}|, \tag{7.94}}
+
+    @bi{
+      @lang["en"]{where @tex-math{y^{+}} represents the dimensionless wall distance (for the computation of wall distances see, e.g., Ref. @link["blazek2005-r7-39"]{[39]}).}
+      @lang["zh-CN"]{其中@tex-math{y^{+}}表示无量纲壁面距离（壁面距离的计算参见例如文献@link["blazek2005-r7-39"]{[39]}）。}
+    }
+
+    @bi{
+      @lang["en"]{The Smagorinsky model is numerically cheap and easy to implement. However, it has several serious disadvantages:
+        @itemize{
+          @item{it is too dissipative in laminar regions with mean shear;}
+          @item{it requires special provisions near walls and at laminar-turbulent transition;}
+          @item{the parameter @tex-math{C_s} is not uniquely defined;}
+          @item{the process of energy backscatter is not modelled.}
+        }
+      }
+      @lang["zh-CN"]{Smagorinsky模型计算代价低、易于实现，但它有若干严重缺点：
+        @itemize{
+          @item{在有平均剪切的层流区域中它耗散过强；}
+          @item{在壁面附近以及层流-湍流转捩处需要特殊处理；}
+          @item{参数@tex-math{C_s}没有唯一定义；}
+          @item{没有模拟能量反向散射过程。}
+        }
+      }
+    }
+
+    @bi{
+      @lang["en"]{Because of these shortcomings, various other approaches were proposed (see, e.g., @link["blazek2005-r7-111"]{[111]}). Very popular are the following dynamic models.}
+      @lang["zh-CN"]{由于这些缺陷，人们提出了各种其他方法（参见例如@link["blazek2005-r7-111"]{[111]}）。下面这些动力模型非常流行。}
+    }
+
+    @emph{Dynamic SGS Models 动力 SGS 模型}
+
+    @bi{
+      @lang["en"]{The dynamic SGS models employ the same relation as the Smagorinsky model (Eq. @link["blazek2005-ch07#eq-7-93"]{(7.93)}) for the evaluation of the eddy viscosity @tex-math{\nu_T} in Eq. @link["blazek2005-ch07#eq-7-91"]{(7.91)} or @link["blazek2005-ch07#eq-7-92"]{(7.92)}. The difference is that the Smagorinsky constant (adjusted a priori) is replaced by a parameter, which evolves dynamically in space and in time. Hence,}
+      @lang["zh-CN"]{动力SGS模型在计算方程@link["blazek2005-ch07#eq-7-91"]{(7.91)}或@link["blazek2005-ch07#eq-7-92"]{(7.92)}中的涡黏性@tex-math{\nu_T}时，采用与Smagorinsky模型（方程@link["blazek2005-ch07#eq-7-93"]{(7.93)}）相同的关系式。区别在于：事先调整的Smagorinsky常数被一个在空间和时间中动态演化的参数所取代，即}
+    }
+
+    @tex-display-math[#:id "eq-7-95"]{\nu_T = C_d(\vec{r}, t)\,\Delta^2|\overline{S}|. \tag{7.95}}
+
+    @bi{
+      @lang["en"]{The parameter @tex-math{C_d} is computed based on the energy content of the smallest scale of the turbulence. For this purpose, Germano et al. @link["blazek2005-r7-138"]{[138]} proposed to employ a second filter - the so-called @emph{test filter} @tex-math{\hat{\Delta}}. The width of the test filter has to be larger than that of the filter @tex-math{\Delta} applied to the governing equations (usually @tex-math{\hat{\Delta} = 2\Delta}). The application of the test filter to the filtered equations leads to the so-called @emph{subtest-scale stresses} @tex-math{\tau_{ij}^{ST}}}
+      @lang["zh-CN"]{参数@tex-math{C_d}依据湍流最小尺度的能量含量来计算。为此，Germano等@link["blazek2005-r7-138"]{[138]}提出采用第二个滤波——所谓的测试滤波（test filter）@tex-math{\hat{\Delta}}。测试滤波的宽度必须大于作用于控制方程的滤波宽度@tex-math{\Delta}（通常@tex-math{\hat{\Delta} = 2\Delta}）。把测试滤波作用于已滤波的方程，便得到所谓的亚测试尺度应力（subtest-scale stresses）@tex-math{\tau_{ij}^{ST}}}
+    }
+
+    @tex-display-math[#:id "eq-7-96"]{\tau_{ij}^{ST} = \widehat{\overline{v}_i\,\overline{v}_j} - \hat{\overline{v}}_i\,\hat{\overline{v}}_j. \tag{7.96}}
+
+    @bi{
+      @lang["en"]{The subtest-scale stresses are related to the SGS stresses @tex-math{\tau_{ij}^S} (Eq. @link["blazek2005-ch07#eq-7-83"]{(7.83)}) via the @emph{Germano identity} @link["blazek2005-r7-139"]{[139]}}
+      @lang["zh-CN"]{亚测试尺度应力通过Germano恒等式（Germano identity）@link["blazek2005-r7-139"]{[139]}与SGS应力@tex-math{\tau_{ij}^S}（方程@link["blazek2005-ch07#eq-7-83"]{(7.83)}）相联系}
+    }
+
+    @tex-display-math[#:id "eq-7-97"]{\hat{L}_{ij} = \tau_{ij}^{ST} - \hat{\tau}_{ij}^S = \widehat{\overline{v}_i\,\overline{v}_j} - \hat{\overline{v}}_i\,\hat{\overline{v}}_j, \tag{7.97}}
+
+    @bi{
+      @lang["en"]{where @tex-math{\hat{L}_{ij}} denotes the Leonard stresses associated with the test filter. It represents the contribution to the Reynolds stresses by the scales whose length is intermediate between the filter width @tex-math{\Delta} and the test filter width @tex-math{\hat{\Delta}}.}
+      @lang["zh-CN"]{其中@tex-math{\hat{L}_{ij}}表示与测试滤波相关的Leonard应力，它代表长度介于滤波宽度@tex-math{\Delta}与测试滤波宽度@tex-math{\hat{\Delta}}之间的尺度对雷诺应力的贡献。}
+    }
+
+    @bi{
+      @lang["en"]{If we express the subtest-scale and SGS stresses in Eq. @link["blazek2005-ch07#eq-7-97"]{(7.97)} using the eddy-viscosity approach Eq. @link["blazek2005-ch07#eq-7-91"]{(7.91)} together with Eq. @link["blazek2005-ch07#eq-7-95"]{(7.95)}, we obtain}
+      @lang["zh-CN"]{若用涡黏性方法——方程@link["blazek2005-ch07#eq-7-91"]{(7.91)}连同方程@link["blazek2005-ch07#eq-7-95"]{(7.95)}——来表示方程@link["blazek2005-ch07#eq-7-97"]{(7.97)}中的亚测试尺度应力与SGS应力，便得到}
+    }
+
+    @tex-display-math[#:id "eq-7-98"]{\hat{L}_{ij} - \frac{\delta_{ij}}{3}L_{kk} = -2C_d M_{ij} \tag{7.98}}
+
+    @bi{
+      @lang["en"]{with}
+      @lang["zh-CN"]{其中}
+    }
+
+    @tex-display-math[#:id "eq-7-99"]{M_{ij} = \hat{\Delta}^2|\widehat{\overline{S}}|\,\widehat{\overline{S}}_{ij} - \left[\Delta^2|\overline{S}|\,\overline{S}_{ij}\right]^{\wedge}. \tag{7.99}}
+
+    @bi{
+      @lang["en"]{The notation @tex-math{[\,]^{\wedge}} means that the whole term enclosed in the square brackets is test-filtered. The parameter @tex-math{C_d} can be derived from Eq. @link["blazek2005-ch07#eq-7-98"]{(7.98)} by using the least-squares minimisation of Lilly @link["blazek2005-r7-140"]{[140]}. This leads to}
+      @lang["zh-CN"]{记号@tex-math{[\,]^{\wedge}}表示方括号中的整个项都经过测试滤波。参数@tex-math{C_d}可以利用Lilly的最小二乘极小化@link["blazek2005-r7-140"]{[140]}从方程@link["blazek2005-ch07#eq-7-98"]{(7.98)}导出，这给出}
+    }
+
+    @tex-display-math[#:id "eq-7-100"]{C_d(\vec{r}, t) = -\frac{1}{2}\frac{L_{ij}M_{ij}}{M_{mn}M_{mn}}. \tag{7.100}}
+
+    @bi{
+      @lang["en"]{The above formulation @link["blazek2005-ch07#eq-7-100"]{(7.100)} is mathematically inconsistent since the parameter @tex-math{C_d} was taken outside the test filter in Eq. @link["blazek2005-ch07#eq-7-98"]{(7.98)}. In practice, the numerator and denominator in Eq. @link["blazek2005-ch07#eq-7-100"]{(7.100)} are therefore ensemble-averaged in the homogeneous directions, i.e.,}
+      @lang["zh-CN"]{上述表述@link["blazek2005-ch07#eq-7-100"]{(7.100)}在数学上是不自洽的，因为在方程@link["blazek2005-ch07#eq-7-98"]{(7.98)}中参数@tex-math{C_d}被拿到了测试滤波之外。因此在实际中，方程@link["blazek2005-ch07#eq-7-100"]{(7.100)}的分子和分母都在均匀方向上做系综平均，即}
+    }
+
+    @tex-display-math[#:id "eq-7-101"]{C_d(\vec{r}, t) = -\frac{1}{2}\frac{\left\langle L_{ij}M_{ij}\right\rangle}{\left\langle M_{mn}M_{mn}\right\rangle}. \tag{7.101}}
+
+    @bi{
+      @lang["en"]{Improved dynamic SGS models were proposed, e.g., by Ghosal et al. @link["blazek2005-r7-141"]{[141]}, Carati et al. @link["blazek2005-r7-142"]{[142]}, Piomelli and Liu @link["blazek2005-r7-143"]{[143]}, and Held @link["blazek2005-r7-90"]{[90]}.}
+      @lang["zh-CN"]{改进的动力SGS模型由Ghosal等@link["blazek2005-r7-141"]{[141]}、Carati等@link["blazek2005-r7-142"]{[142]}、Piomelli和Liu@link["blazek2005-r7-143"]{[143]}以及Held@link["blazek2005-r7-90"]{[90]}等人提出。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-3-4"]{
+    @title{7.3.4 Wall Models 壁面模型}
+
+    @bi{
+      @lang["en"]{The computational costs of LES of wall-bounded flows at high Reynolds numbers (@tex-math{Re > 10^6}) are still too high for engineering purposes. The reason is the excessively large number of grid points (cells) required to resolve the wall layer appropriately. In order to reduce the costs, it is possible to model the wall layer by specifying a correlation between the velocity in the outer flow and the stress at the wall. This approach is quite similar to using wall functions in RANS simulations. The basic assumption is that there is only a weak interaction between the near-wall and the outer region, which is supported by the investigations in @link["blazek2005-r7-144"]{[144]} and @link["blazek2005-r7-145"]{[145]}.}
+      @lang["zh-CN"]{对高雷诺数（@tex-math{Re > 10^6}）有壁流动做LES的计算代价对工程应用而言仍然过高，原因在于恰当解析壁面层需要过多的网格点（单元）。为了降低代价，可以通过指定外流速度与壁面应力之间的关联来对壁面层建模。这一做法与RANS模拟中使用壁面函数相当类似。其基本假设是近壁区与外区之间只有弱的相互作用，文献@link["blazek2005-r7-144"]{[144]}和@link["blazek2005-r7-145"]{[145]}的研究支持这一假设。}
+    }
+
+    @bi{
+      @lang["en"]{Earlier implementations of the wall models were based on the assumption that the dynamics of the wall layer are universal and hence they can be approximated by a generalised law-of-the-wall. Basically, the models utilised the logarithmic law (see @link["blazek2005-r7-77"]{[77]} and @link["blazek2005-r7-146"]{[146]}-@link["blazek2005-r7-148"]{[148]}). Balaras et al. @link["blazek2005-r7-149"]{[149]} proposed recently a new zonal approach. Within the two-layer model, the filtered Navier-Stokes equations @link["blazek2005-ch07#eq-7-81"]{(7.81)} are solved up to the first grid point above the wall. From this point to the wall 2-D boundary layer equation are solved on a refined embedded grid. The solution on the embedded grid is then used to prescribe the wall shear stress as a boundary condition for the LES. The zonal approach of Balaras et al. @link["blazek2005-r7-149"]{[149]} allows it to place the first point in a region @tex-math{20 < y^{+} < 100}, which leads to significantly reduced grid size and hence computational time. The methodology was applied with success to turbulent flows in a plane channel, square duct and rotating channel. Later on, it was also employed for the LES of separated flows with encouraging results @link["blazek2005-r7-150"]{[150]}-@link["blazek2005-r7-153"]{[153]}.}
+      @lang["zh-CN"]{早期的壁面模型基于这样一种假设：壁面层的动力学是普适的，因而可以用广义壁面律来近似。这些模型基本上利用对数律（见@link["blazek2005-r7-77"]{[77]}和@link["blazek2005-r7-146"]{[146]}-@link["blazek2005-r7-148"]{[148]}）。Balaras等@link["blazek2005-r7-149"]{[149]}最近提出了一种新的分区（zonal）方法。在两层模型中，滤波后的Navier-Stokes方程@link["blazek2005-ch07#eq-7-81"]{(7.81)}一直求解到壁面上方第一个网格点；从该点到壁面之间，则在加密的嵌入网格上求解二维边界层方程。嵌入网格上的解随后用于给定壁面剪切应力，作为LES的边界条件。Balaras等@link["blazek2005-r7-149"]{[149]}的分区方法允许把第一个点放在@tex-math{20 < y^{+} < 100}的区域内，从而显著减小网格规模并缩短计算时间。该方法已成功应用于平面槽道、方形管道和旋转槽道中的湍流流动；后来又被用于分离流动的LES，结果令人鼓舞@link["blazek2005-r7-150"]{[150]}-@link["blazek2005-r7-153"]{[153]}。}
+    }
+  }
+
+  @subtree[#:id "blazek2005-7-3-5"]{
+    @title{7.3.5 Detached Eddy Simulation 脱体涡模拟}
+
+    @bi{
+      @lang["en"]{Even though the above wall models help to reduce the number of grid points (cells) considerably, LES still remains too costly for complex engineering configurations. For this reason, Spalart recently suggested another approach, the so-called @emph{Detached Eddy Simulation} (DES), which is aimed at the simulation of high Reynolds-number massively separated flows @link["blazek2005-r7-154"]{[154]}, @link["blazek2005-r7-155"]{[155]}. The methodology represents a hybrid between the RANS and LES. The idea is to employ highly stretched grids together with a RANS turbulence model (mostly the Spalart-Allmaras model from Subsection 7.2.1 or Menter's SST model from Subsection 7.2.3) to resolve the attached boundary layer(s), and to use LES outside the wall region together with an isotropic grid to capture the detached 3-D eddies. Thus, DES tries to combine the strengths of both methods in a single framework.}
+      @lang["zh-CN"]{尽管上述壁面模型有助于大幅减少网格点（单元）数量，但对于复杂的工程外形，LES仍然过于昂贵。为此，Spalart最近提出了另一种方法——所谓的脱体涡模拟（Detached Eddy Simulation，DES），其目标是高雷诺数大范围分离流动的模拟@link["blazek2005-r7-154"]{[154]}、@link["blazek2005-r7-155"]{[155]}。该方法可以说是RANS与LES的混合体：其思想是在强拉伸网格上配合RANS湍流模型（大多是Spalart-Allmaras模型，见小节7.2.1，或Menter的SST模型，见小节7.2.3）来解析附着边界层，而在壁面区之外配合各向同性网格使用LES来捕捉脱体的三维涡。这样，DES试图在一个统一框架内结合两种方法的长处。}
+    }
+
+    @bi{
+      @lang["en"]{The implementation of DES for the Spalart-Allmaras turbulence model consists of replacing the wall distance @tex-math{d} in the formulae @link["blazek2005-ch07#eq-7-36"]{(7.36)} and @link["blazek2005-ch07#eq-7-38"]{(7.38)}-@link["blazek2005-ch07#eq-7-40"]{(7.40)} by the DES length scale}
+      @lang["zh-CN"]{对Spalart-Allmaras湍流模型实现DES，就是把公式@link["blazek2005-ch07#eq-7-36"]{(7.36)}和@link["blazek2005-ch07#eq-7-38"]{(7.38)}-@link["blazek2005-ch07#eq-7-40"]{(7.40)}中的壁面距离@tex-math{d}替换为DES长度尺度}
+    }
+
+    @tex-display-math[#:id "eq-7-102"]{l = \min\left(d,\ C_{DES}\,\Delta\right). \tag{7.102}}
+
+    @bi{
+      @lang["en"]{The length scale is dependent on the largest dimension of the control volume, i.e., @tex-math{\Delta = \max(\Delta x, \Delta y, \Delta z)}. The constant @tex-math{C_{DES}} depends to some extent on the type of the flow. For a homogeneous turbulence, the value @tex-math{C_{DES} = 0.65} was found optimal @link["blazek2005-r7-156"]{[156]}. On the other hand, @tex-math{C_{DES} = 0.1} was recommended for transonic and supersonic jets @link["blazek2005-r7-157"]{[157]}. The definition of the length scale @tex-math{l} in Eq. @link["blazek2005-ch07#eq-7-102"]{(7.102)} makes sure that within the boundary layer, where @tex-math{d < C_{DES}\Delta} and hence @tex-math{l = d}, the original RANS model is recovered. On the other hand, outside the boundary layer @tex-math{l = C_{DES}\Delta} and the Spalart-Allmaras model serves as a one-equation SGS model for the LES (cf. Eq. @link["blazek2005-ch07#eq-7-91"]{(7.91)} and (7.24)). When integrating the governing equations in time, the global time step has to be adjusted such as to resolve the time scales of the detached eddies. This usually means that the time step would by far exceed the stability margin of an explicit scheme for the boundary layer region. It is therefore more efficient to employ a time-accurate implicit scheme, such as the dual time-stepping approach described in Section 6.3. More details regarding the DES methodology and examples of simulations can be found in the above references or in @link["blazek2005-r7-158"]{[158]}-@link["blazek2005-r7-161"]{[161]}.}
+      @lang["zh-CN"]{该长度尺度取决于控制体的最大尺寸，即@tex-math{\Delta = \max(\Delta x, \Delta y, \Delta z)}。常数@tex-math{C_{DES}}在一定程度上依赖于流动类型：对均匀湍流，发现@tex-math{C_{DES} = 0.65}最优@link["blazek2005-r7-156"]{[156]}；而对跨声速和超声速射流，则建议取@tex-math{C_{DES} = 0.1}@link["blazek2005-r7-157"]{[157]}。方程@link["blazek2005-ch07#eq-7-102"]{(7.102)}中长度尺度@tex-math{l}的定义保证了：在边界层内，那里@tex-math{d < C_{DES}\Delta}、因而@tex-math{l = d}，恢复出原始的RANS模型；而在边界层之外@tex-math{l = C_{DES}\Delta}，Spalart-Allmaras模型则充当LES的单方程SGS模型（对照方程@link["blazek2005-ch07#eq-7-91"]{(7.91)}和式(7.24)）。在时间方向积分控制方程时，全局时间步长必须调整到能够解析脱体涡的时间尺度。这通常意味着时间步长会远远超出显式格式在边界层区域的稳定裕度。因此更高效的做法是采用时间精确的隐式格式，例如6.3节所述的双时间步进方法。关于DES方法的更多细节和模拟实例可参见上述文献或@link["blazek2005-r7-158"]{[158]}-@link["blazek2005-r7-161"]{[161]}。}
+    }
+  }
+}

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Van Albada, G.D.; Van Leer, B.; Roberts, W.W.: A Comparative Study of Computational Methods in Cosmic Gas Dynamics. Astronomy and Astrophysics, 108 (1982), pp. 76-84.}
+@taxon["reference"]

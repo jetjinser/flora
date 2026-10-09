@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Slomski, J.F.; Anderson, J.D.; Gorski, J.J.: Effectiveness of Multigrid in Accelerating Convergence of Multidimensional Flows in Chemical Nonequilibrium. AIAA Paper 90-1575, 1990.}
+@taxon["reference"]

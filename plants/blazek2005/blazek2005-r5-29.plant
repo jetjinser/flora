@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Whitaker, D.L.; Grossman, B.; Löhner, R.: Two-Dimensional Euler Computations on a Triangular Mesh Using an Upwind, Finite-Volume Scheme. AIAA Paper 89-0470, 1989.}
+@taxon["reference"]

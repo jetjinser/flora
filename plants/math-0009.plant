@@ -1,0 +1,109 @@
+@use-modules[(flora commands) (language scribble commands) (grove math catalog) (grove relation dsl)]
+
+@title{用miniKanren查询数学规则}
+@summary{把规则目录当作关系查询，输出真正参与计算的规则说明。}
+@taxon["tutorial"]
+
+数学规则不是散落在文章里的字符串清单。Grove把规则以关系形式公开，因此文章可以查询名字、类别、适用模式和docstring。此处的输出由构建时查询生成。
+
+@(define rules
+  (query (name group modes documentation)
+    (ruleo name group modes documentation)))
+
+@subtree{
+  @title{一次查询得到所有规则元数据}
+
+  共查询到@code[(number->string (length rules))]条规则。每一行依次含有名称、类别、适用模式以及可选说明：
+
+  @verbatim[(format #f "~s" (list (car rules) (cadr rules) (caddr rules) (cadddr rules)))]
+
+  这个@code{format}仅把前四个关系结果转成可读Scheme数据供本页展示；它不参与规则执行。完整规则名称会由下面的查询渲染。
+
+}
+
+@(define differential-rules
+  (query (name modes documentation)
+    (ruleo name 'differentiate modes documentation)))
+
+@subtree{
+  @title{关系约束可以筛选结果}
+
+  下面查询微分规则：
+
+  @verbatim[(format #f "~s" differential-rules)]
+
+  @code{ruleo}描述规则目录中的事实；@code{query}声明要返回哪些逻辑变量；把类别固定为@code{differentiate}会只返回匹配的规则。关系可以进一步组合，而不需要手写列表过滤代码。
+
+  查询空间和分量规则：
+
+  @verbatim[(format #f "~s"
+    (run* (name group modes documentation)
+      (ruleo name group modes documentation)
+      (conde ((== group 'components))
+             ((== group 'spatial)))))]
+
+  @code{run*}收集满足目标的所有解；@code{conde}表示两种可接受类别；@code{==}统一类别变量与符号。以上目标只是在规则目录上查询，尚未对某个表达式运行计算。
+
+}
+
+@(define rule-names
+  (query (name)
+    (fresh (group modes documentation)
+      (ruleo name group modes documentation))))
+
+@subtree{
+  @title{让规则说明从docstring自动生成}
+
+  @(map math-rule->content rule-names)
+
+  @code{math-rule->content}把指定规则名转成文章内容：包括其结构化模式和可用说明。因此上面的规则卡片和运行时目录来自同一份定义，不会各自漂移。
+
+  若想只看写过说明的规则，可以约束documentation不等于@code{#f}：
+
+  @verbatim[(format #f "~s"
+    (query (name documentation)
+      (fresh (group modes)
+        (ruleo name group modes documentation)
+        (=/= documentation #f))))]
+
+  规则docstring解释其数学含义、适用条件或容易误解的细节，不会被当作新前提，也不会更改规则逻辑。这让说明可用于程序查询，同时保留普通Scheme函数的简单定义方式。
+
+}
+
+@subtree{
+  @title{文章内容本身也是查询数据}
+
+  规则目录不是唯一的数据源。Forester在分析阶段遍历每篇文章的内容IR，自动生成content-node relation。它记录节点所属页面、父节点、同级位置、类型、属性、纯文本投影和字符数；tag、taxon、link、subtree与math都是普通节点事实。
+
+  因为@code{.plant}在整个站点分析之前就已读取，跨文章查询应放在项目的@code{#:analyze}阶段。下面是Flora @code{project.scm}实际运行的查询：
+
+  @code-block[#:language 'scheme "(let ((nodes (content-node-relation forest)))
+    (query (node-id page-id position text line column)
+      (fresh (file)
+        (math-containing-paragrapho nodes node-id)
+        (shorter-than-o nodes node-id 120)
+        (source-locationo nodes node-id file line column)
+        (nodeo nodes
+               (node-id node-id)
+               (page-id page-id)
+               (position position)
+               (text text)))))"]
+
+  这会直接查询全站文章IR，不需要另外登记段落。查询结果由下面这个Flora项目本地的占位命令生成并放在此处：
+
+  @content-query-results{}
+
+  同一份节点关系也能查普通文本和metadata。@code{plain-text-paragrapho}选择只有文本子节点的段落；@code{contains-texto}检查文本投影中是否包含指定字符串；@code{topic-membero}通过相同的关系查询tag和taxon。例如把topic ID固定为@code{tutorial}，会返回所有相应页面。
+
+  @code{node-id}只在本次分析结果中有效，不应保存成外部引用。@code{source-locationo}会返回节点对应的源文件、行和列；Flora的结果列表会同时展示源码行列号与IR同级位置。若一个段落由多行文本和内联命令组成，段落位置取其第一个有位置的子节点，内联命令则保留自己的起始位置。若需要定位到IR中更具体的节点，可以沿@code{parent-id}与@code{position}回溯。公式的纯文本投影会保留幂、下标和分数的可读边界，例如@code{x^(2)}与@code{(a)/(b)}，避免把结构挤成难读的@code{x2}或@code{ab}。
+
+}
+
+@subtree{
+  @title{查询结果也是教程内容}
+
+  上面的模式串、行数、规则卡片和文章内容查询结果都在构建时现场计算。若文章或规则变化，查询结果会随之更新。它展示了Grove的通用写作方式：保留Scheme值与内容树，让renderer负责最终HTML。
+
+  从@link["flora"]{首页}回顾全站路线，或打开@link["math-0001"]{数学表示层}继续实验。
+
+}

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Baldwin, B.S.; Lomax, H.J.: Thin Layer Approximation and Algebraic Model for Separated Turbulent Flow. AIAA Paper 78-257, 1978.}
+@taxon["reference"]

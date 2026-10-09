@@ -1,0 +1,95 @@
+@use-modules[(flora commands) (language scribble commands) (grove math pipeline)
+             ((grove math semantic) #:prefix ◆:)
+             ((grove math formula) #:prefix φ:)]
+
+@title{多变量函数与正则性}
+@summary{当函数未知时保留符号导数；用有限前提描述可执行范围。}
+@taxon["tutorial"]
+
+并非每个表达式都能化成多项式。对未知函数，合理的计算结果往往是有意义的符号偏导项。Semantic IR让这些项可以被后续计算和核验，而不需要猜测函数的定义。
+
+@(define r3 (◆:space 'x 'y 'z))
+
+@(define f (◆:function 'f #:inputs '(scalar scalar) #:result 'scalar))
+
+@(define assumptions (append (list r3 f) (φ:assumptions "c2(f)")))
+
+@subtree{
+  @title{声明函数签名}
+
+  @code{◆:function}构造函数引用并附上两个标量输入、一个标量输出的签名。它没有定义@code{f}的实现。@code{c2(f)}声明二阶连续可微；它是计算前提，不是从名字自动推断的事实。
+
+}
+
+@(define fxy (φ:read "f(x,y)"))
+
+@(define report (math-partial fxy (◆:coordinate 'x)
+                  #:assumptions assumptions))
+
+@(define composite (φ:read "f(x^2,y)"))
+
+@(define composite-report
+  (math-partial composite (◆:coordinate 'x) #:assumptions assumptions))
+
+@subtree{
+  @title{位置偏导与链式法则}
+
+  对@code{x}求偏导，结果是 @math[(math-report-result report)]。
+
+  结果保留@code{f}在第一个参数槽的符号偏导。系统知道外层表达式如何求导，却不知道@code{f}的具体数值函数。若参数本身是复合表达式，链式法则会同时计算该参数的导数。
+
+  @math[(math-report-result composite-report)]
+
+  该结果包含@code{2*x}的链式因子。两个调用位置即使传入相同变量，也作为不同参数槽处理；这来自函数应用的结构，不是字符串替换。
+
+}
+
+@(define c1-assumptions
+   (append (list r3 f) (φ:assumptions "differentiable(f)")))
+
+@(define second-report
+  (math-partial (φ:read "partial(f(x,y),x)")
+    (◆:coordinate 'y) #:assumptions c1-assumptions))
+
+@subtree{
+  @title{正则性不是无限资源}
+  @taxon["counterexample"]
+
+  不同计算需要不同阶数的可微性。一次求导通常需要differentiable；连续交换混合二阶偏导需要C2。下面展示在缺少C2时计算会留下诊断：
+
+  @(math-completed-report->content second-report #:on-error 'show)
+
+  这里的报告状态会指出尚缺的正则性事实。文档使用@code{show}才能继续把失败当作示例展示；正常构建仍会拒绝无效推导。
+
+}
+
+@(define a (◆:parameter 'a))
+
+@(define coefficient-source
+  (◆:divide (◆:multiply a (◆:power (◆:coordinate 'x) (◆:constant 2)))
+             a))
+
+@(define coefficient-report
+  (math-simplify coefficient-source
+    #:assumptions (append (list a (◆:coordinate 'x))
+                          (φ:assumptions "nonzero(a)"))))
+
+@subtree{
+  @title{常数参数与非零前提}
+
+  一个独立参数不能随坐标变化。涉及分母时还需要非零事实：
+
+  @math[(math-report-result coefficient-report)]
+
+  参数声明表达@code{a}对坐标保持不变；@code{nonzero(a)}才授权约去分母。缺少后者时，简化器不会冒险把@code{a/a}改成1。
+
+}
+
+@subtree{
+  @title{明确语义带来可诊断边界}
+
+  未知函数可以显示，也可以保留符号偏导；它不会被假装成有限多项式。多项式积分pass会拒绝它，而关系式计算会在有对应规则和前提时继续处理。失败类型告诉作者缺的是输入定义、正则性前提还是算法规则。
+
+  有限规则也可以作为逻辑关系查询，参见@link["math-0009"]{用miniKanren查询数学规则}。
+
+}

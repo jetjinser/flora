@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Zienkiewicz, O.C.; Taylor, R.L.: The Finite Element Method. 4th edition, McGraw-Hill, Maidenhead, 1991.}
+@taxon["reference"]

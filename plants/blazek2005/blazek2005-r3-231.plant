@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Wilcox, D.C.: Reassessment of the Scale Determining Equation for Advanced Turbulence Models. AIAA Journal 26 (1988), pp. 1299-1310.}
+@taxon["reference"]

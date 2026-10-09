@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Calhoon, W.H.; Menon, S.: Subgrid Modeling for Reacting Large Eddy Simulations. AIAA Paper 96-0516, 1996.}
+@taxon["reference"]

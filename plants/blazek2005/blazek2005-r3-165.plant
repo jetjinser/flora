@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Thomas, J.L.; Walters, R.W.: Upwind Relaxation Algorithms for the Navier-Stokes Equations. AIAA Journal, 25 (1987), pp. 527-534.}
+@taxon["reference"]

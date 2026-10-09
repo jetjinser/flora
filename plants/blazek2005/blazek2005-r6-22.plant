@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Swanson, R.C.; Turkel, E.; White, J.A.: An Effective Multigrid Method for High-Speed Flows. Proc. 5th Copper Mountain Conf. on Multigrid Methods, 1991.}
+@taxon["reference"]

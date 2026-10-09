@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Bakhtar, F.; Tochai, M.T.M.: An Investigation of Two-Dimensional Flows of Nucleating and Wet Steam by the Time-Marching Method. Int. J. Heat and Fluid Flow 2 (1980), pp. 5-18.}
+@taxon["reference"]
+
+Bakhtar与Tochai用时间推进法研究成核与湿蒸汽二维流动的早期工作。

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Van der Vorst, H.A.: BiCGSTAB: A Fast and Smoothly Converging Variant of Bi-CG for the Solution of Nonsymmetric Linear Systems. SIAM J. Scientific and Statistical Computing, 13 (1992), pp. 631-644.}
+@taxon["reference"]

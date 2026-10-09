@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Boussinesq, J.: Théorie de l'écoulement tourbillonnant et tumultueux des liquides dans les lits rectilignes. Comptes Rendus de l'Acad. des Sciences, CXXII (1896), p. 1293.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Delanaye, M.; Essers, J.A.: Finite Volume Scheme with Quadratic Reconstruction on Unstructured Adaptive Meshes Applied to Turbomachinery Flows. ASME IGTI Gas Turbine Conference, Houston, USA, 1995.}
+@taxon["reference"]

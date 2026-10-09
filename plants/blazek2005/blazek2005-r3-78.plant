@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Osher, S.; Solomon, F.: Upwind Difference Schemes for Hyperbolic Systems of Conservation Laws. Math. Comp., 38 (1982), pp. 339-374.}
+@taxon["reference"]

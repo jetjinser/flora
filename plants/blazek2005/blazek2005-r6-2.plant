@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Van Leer, B.; Tai, C.-H.; Powell, K.G.: Design of Optimally Smoothing Multi-Stage Schemes for the Euler Equations. AIAA Paper 89-1933, 1989.}
+@taxon["reference"]

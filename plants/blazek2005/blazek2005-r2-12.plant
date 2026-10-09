@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Guillard, H.; Farhat, C.: On the Significance of the GCL for Flow Computations on Moving Meshes. AIAA Paper 99-0793, 1999.}
+@taxon["reference"]
+
+Guillard与Farhat讨论GCL对移动网格流动计算重要性的AIAA会议论文。

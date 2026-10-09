@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Klunker, E.B.; Harder, K.C.: Notes on Linearized Subsonic Wing Theory. Unpublished.}
+@taxon["reference"]

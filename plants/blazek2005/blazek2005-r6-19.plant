@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Courant, R.; Friedrichs, K.O.; Lewy, H.: Über die partiellen Differenzengleichungen der mathematischen Physik. Math. Ann., 100 (1928), pp. 32-74. Transl.: On the Partial Difference Equations of Mathematical Physics. IBM Journal, 11 (1967), pp. 215-234.}
+@taxon["reference"]

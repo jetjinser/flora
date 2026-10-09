@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mavriplis, D.J.: Adaptive Mesh Generation for Viscous Flows Using Delaunay Triangulation. J. Computational Physics, 90 (1990), pp. 271-291.}
+@taxon["reference"]

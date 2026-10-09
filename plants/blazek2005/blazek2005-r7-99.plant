@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Chapman, D.R.: Computational Aerodynamics Development and Outlook. AIAA Journal, 17 (1979), pp. 1293-1313.}
+@taxon["reference"]

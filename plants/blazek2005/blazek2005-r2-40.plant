@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Nakahashi, K.; Saitoh, E.: Space-Marching Method on Unstructured grid for Supersonic Flows with Embedded Subsonic Regions. AIAA Paper 96-0418, 1996.}
+@taxon["reference"]
+
+Nakahashi与Saitoh在非结构网格上处理含亚声速嵌入区的超声速流动空间推进方法。

@@ -1,0 +1,92 @@
+@(define-module (flora metacircular-runtime)
+  #:use-module (flora commands)
+  #:use-module (lp core)
+  #:use-module (lp scribble)
+  #:use-module (lp forester)
+  #:use-module (lp checked)
+  #:use-module (language scribble commands)
+  #:export (application-fragment environment-fragment))
+
+@title{Scheme解释器的闭包与环境}
+@summary{提供可跨文章导入的语法片段，不在声明时执行解释器定义。}
+@taxon["tutorial"]
+
+(flora metacircular-runtime)导出application-fragment与environment-fragment两个片段值。@link["lp-0007"]{Scheme解释器}通过use-modules导入它们，计划显式实例化时才建立lookup与apply-value的函数binding。transclude独立复用这些定义的阅读内容，不进行程序导入。
+
+@(define application-fragment
+   (code-fragment "mce-apply" "Scheme 闭包应用 apply-value 的定义"
+     #:requires (evaluate-sequence extend-environment)
+     (define (apply-value procedure arguments)
+       (cond
+         ((and (vector? procedure) (eq? (vector-ref procedure 0) 'primitive))
+          (let ((implementation (vector-ref procedure 1)))
+            (cond ((eq? implementation 'map)
+                   (map-values (car arguments) (cdr arguments)))
+                  ((eq? implementation 'apply)
+                   (unless (= (length arguments) 2) (throw 'mce-arity 'apply arguments))
+                   (apply-value (car arguments) (cadr arguments)))
+                  (else (apply implementation arguments)))))
+         ((and (vector? procedure) (eq? (vector-ref procedure 0) 'closure))
+          (evaluate-sequence (vector-ref procedure 2)
+            (extend-environment (vector-ref procedure 1) arguments
+                                (vector-ref procedure 3))))
+         (else (throw 'mce-not-procedure procedure))))
+     (define (map-values procedure lists)
+       (unless (and (pair? lists) (all-lists? lists)) (throw 'mce-arity 'map lists))
+       (if (null? (car lists))
+           (if (all-empty? lists) '() (throw 'mce-arity 'map lists))
+           (begin
+             (when (any-empty? lists) (throw 'mce-arity 'map lists))
+             (let ((value (apply-value procedure (map car lists))))
+               (cons value (map-values procedure (map cdr lists)))))))
+     (define (all-lists? xs)
+       (or (null? xs) (and (list? (car xs)) (all-lists? (cdr xs)))))
+     (define (all-empty? xs)
+       (or (null? xs) (and (null? (car xs)) (all-empty? (cdr xs)))))
+     (define (any-empty? xs)
+       (and (pair? xs) (or (null? (car xs)) (any-empty? (cdr xs)))))))
+
+@(define environment-fragment
+   (code-fragment "mce-env" "Scheme 环境查找、扩展与 define 的实现"
+     (define (extend-environment names values outer)
+       (unless (= (length names) (length values)) (throw 'mce-arity names values))
+       (cons (vector (map cons names values)) outer))
+     (define (lookup name environment)
+       (if (null? environment) (throw 'mce-unbound name)
+           (let ((binding (assq name (vector-ref (car environment) 0))))
+             (if binding (cdr binding) (lookup name (cdr environment))))))
+     (define (define-value! name value environment)
+       (let* ((frame (car environment)) (binding (assq name (vector-ref frame 0))))
+         (if binding (set-cdr! binding value)
+             (vector-set! frame 0 (cons (cons name value) (vector-ref frame 0))))))))
+
+@subtree{
+  @title{Scheme闭包应用与map／apply原语}
+
+  @fragment-tree[application-fragment]
+
+  Scheme解释器将闭包表示为带有参数、正文和定义环境的向量。apply-value区分宿主原语与对象语言闭包，闭包应用需要evaluate-sequence和extend-environment，片段的Requires显示这两个依赖。map与apply必须经过解释器自己的应用机制，才能接受对象语言闭包；直接借用宿主map会把闭包向量错误地当作宿主过程。当前apply支持过程与一个参数列表，map支持等长列表。
+}
+
+@subtree{
+  @title{Scheme递归定义的共享环境框架}
+
+  @fragment-tree[environment-fragment]
+
+  Scheme用户环境是框架链，每个框架保存可变的名字与值关联。闭包捕获框架链，define更新同一个框架，因此递归过程能够查找到自己的binding。框架内的binding使用dotted pair；环境实现保存原文、位置和片段身份，装配到新模块时不继承本文章的词法作用域。
+}
+
+片段值的查询接口来自(lp core)：fragment?、fragment-id、fragment-heading、fragment-origin、fragment-requires与fragment-datums。记录不提供setter；其中的语法与datum仍应当作为只读值使用。requires是作者声明的依赖，不是自动推断的完整自由变量集合。装配检查依赖是否来自同一装配或宿主默认接口。
+
+@subtree{
+  @title{Scheme运行时片段的跨文章导入}
+
+  声明模块并导出片段值，与直接导出解释器函数不同：
+
+  @verbatim["@(define-module (flora metacircular-runtime)
+  #:use-module (lp core)
+  #:use-module (lp scribble)
+  #:export (application-fragment environment-fragment))"]
+
+  消费者通过@code{(flora metacircular-runtime)}导入这两个值，将它们加入make-program的清单。实例化会在共同命名空间建立函数。片段tree在来源文章只展示代码与Requires；所属计划的链接由消费者的Module tree建立，来源关系可在Backlinks中查阅。
+}

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Elias, S.R.; Stubley, G.D.; Raithby, G.D.: An Adaptive Agglomeration Method for Additive Correction Multigrid. Int. J. Numerical Methods in Engineering, 40 (1997), pp. 887-903.}
+@taxon["reference"]

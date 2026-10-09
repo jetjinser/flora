@@ -1,0 +1,109 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{组合tree：subtree与transclude}
+@summary{把一段内容保留在原处、单独寻址，并在其他位置重复使用。}
+@taxon["tutorial"]
+
+subtree命令把一段内容声明为独立的树；transclude命令把那棵树的正文嵌入当前位置。它们保留来源与结构，不是复制粘贴HTML。
+
+@subtree{
+  @title{定义一段可复用内容}
+
+  下面定义一个有稳定ID的subtree：
+
+  @verbatim["@subtree[#:id \"tree-example\"]{
+    @title{从文本到内容树}
+    @taxon[\"definition\"]
+    @paragraph{普通文本先被解析为内容节点，再由页面分析器链接成森林。}
+    @itemize{
+      @item{源码：作者编写的 .plant 文件。}
+      @item{内容树：命令和文本的结构化结果。}
+      @item{输出：renderer 生成的 HTML 或其他 artifact。}
+    }
+  }
+
+  @transclude[\"tree-example\"]"]
+
+  @subtree[#:id "tree-example"]{
+    @title{从文本到内容树}
+    @taxon["definition"]
+    @paragraph{普通文本先被解析为内容节点，再由页面分析器链接成森林。}
+    @itemize{
+      @item{源码：作者编写的.plant文件。}
+      @item{内容树：命令和文本的结构化结果。}
+      @item{输出：renderer生成的HTML或其他artifact。}
+    }
+  }
+
+  @code{#:id}让这个subtree在移动和编辑后仍可被引用。title是subtree必需的直接子节点；它成为这棵树的标题。正文里的paragraph和itemize会一起保留；普通文本与根文档一样按空行自动解码为段落。
+
+  上面的定义留在原始页面里；真正的嵌入由transclude命令完成。它按ID查询分析后的森林，并把目标正文放在这里。该subtree同时有独立路由，所以内容仍可直接访问。
+
+}
+
+@subtree{
+  @title{嵌入不改变来源}
+
+  这是第二次嵌入同一个subtree：
+
+  @transclude["tree-example"]
+
+  @link["flora"]{首页}也使用相同方式嵌入了@link["source-shape"]{一份页面源码的形状}。链接、标题和来源仍属于定义subtree；renderer会为重复嵌入调整HTML锚点，避免重复ID。源文件变化也会使依赖它的页面重新构建。
+
+}
+
+@subtree{
+  @title{为什么显式命名}
+  @taxon["remark"]
+
+  普通subtree不必填写@code{#:id}：分析器会分配@code{unstable-N}形式的临时ID，让它也可以独立打开。这个编号随全站内容的增删与排列可能变化，不应用作长期引用。需要从别处transclude、链接或长期分享时，再指定稳定名字。
+
+  Flora为需要长期引用的文章采用短ASCII地址。教程文章使用@code{grove-NNNN}、@code{math-NNNN}和@code{lp-NNNN}前缀；数字部分按base36地址约定分配，不表达阅读顺序。页面地址同时也是对应的源文件名。普通小节继续使用Grove自动分配的临时ID；具名subtree则使用能提示内容的短名称，例如@code{source-shape}和@code{tree-example}。
+
+  共享的Scheme定义放在文档顶层，再把它们的值交给subtree正文；定义的位置不改变生成内容的tree归属。
+
+  文档结构统一由tree的嵌套表达。局部组织也使用subtree；需要跨页面引用时，为它指定稳定的ID。标题是tree的属性，显示层级由嵌套深度决定。
+
+}
+
+@subtree{
+  @title{用taxon和tag描述页面}
+
+  页面元数据也属于可查询的内容。taxon说明这棵tree的种类，例如教程、定义、示例或说明；tag则适合标注主题：
+
+  @verbatim["@taxon[\"tutorial\"]
+  @tag[\"composition\"]{Composition}"]
+
+  Flora的taxon只写一个小写英文名称，例如@code{definition}，同时用于分类查询与显示。样式将首字母大写，渲染层添加末尾句点。分类置于标题前，也放入目录；同一棵tree被嵌入时保留自己的分类，独立打开时则在主标题上方显示。上面的“从文本到内容树”因此显示为“Definition. 从文本到内容树”。这里不添加章节编号，分类说明的是内容种类而不是阅读顺序。
+
+  不必为每棵tree分类：只有种类明确、对阅读有帮助时才添加taxon。它仍是可查询的内容事实；文字外观由项目样式决定。
+
+}
+
+@subtree{
+  @title{关联数学主题}
+
+  @link["math"]{数学语言索引}汇集表示、计算、推导与查询主题；Formula、Semantic与Notation的关系见@link["math-0001"]{数学表示层}。
+
+}
+
+@subtree{
+  @title{每棵tree都有自己的属性}
+  @taxon["remark"]
+
+  根文章与subtree使用相同的frontmatter规则。summary、published、updated属于各自的tree；tag和taxon保留为可查询的内容节点。子tree的内容与引用归它自己所有。
+
+  @verbatim["@subtree[#:id \"named-lemma\" #:open? #f]{
+  @title{一条引理}
+  @summary{可复用的局部结论。}
+  @taxon[\"lemma\"]
+
+  这是第一段。
+
+  这是第二段。
+}
+@link[\"named-lemma\"]{引用引理}
+@transclude[\"named-lemma\"]"]
+
+  @code{#:open? #f}让展示默认折叠，不改变tree身份。目录按实际展示的嵌套顺序生成；相同tree展示多次时，各次展示拥有不同的局部锚点。
+}

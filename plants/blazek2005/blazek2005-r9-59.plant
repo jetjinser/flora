@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Riemslagh, K.; Dick, E.: A Multigrid Method for Steady Euler Equations on Unstructured Adaptive Grids. Proc. 6th Copper Mountain Conf. on Multigrid Methods, 1993, pp. 527-542.}
+@taxon["reference"]

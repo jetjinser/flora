@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lesoinne, M.; Farhat, C.: Geometric Conservation Laws for Flow Problems with Moving Boundaries and Deformable Meshes and their Impact on Aeroelastic Computations. AIAA Paper 95-1709, 1995; also in Comp. Meth. Appl. Mech. Eng., 134 (1996), pp. 71-90.}
+@taxon["reference"]

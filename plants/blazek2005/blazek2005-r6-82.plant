@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Morgan, R.B.: A Restarted GMRES Method Augmented with Eigenvectors. SIAM J. Matrix Anal. Appl., 16 (1995), pp. 1154-1171.}
+@taxon["reference"]

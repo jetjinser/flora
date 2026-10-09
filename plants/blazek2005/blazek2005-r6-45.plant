@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Pulliam, T.H.; Chaussee, D.S.: A Diagonal Form of an Implicit Approximate Factorization Algorithm. J. Computational Physics, 39 (1981), pp. 347-363.}
+@taxon["reference"]

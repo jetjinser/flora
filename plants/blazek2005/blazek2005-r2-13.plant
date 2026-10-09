@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Zierep, J.: Vorlesungen über theoretische Gasdynamik (Lectures on Theoretical Gas Dynamics). G. Braun Verlag, Karlsruhe, 1963.}
+@taxon["reference"]
+
+Zierep的德文气体动力学讲义，完全气体各热力学关系式的出处。

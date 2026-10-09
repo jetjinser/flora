@@ -1,0 +1,266 @@
+@(define-module (flora metacircular)
+  #:use-module (flora commands)
+  #:use-module (lp core)
+  #:use-module (lp scribble)
+  #:use-module (lp forester)
+  #:use-module (lp checked)
+  #:use-module (flora metacircular-runtime)
+  #:use-module (language scribble commands)
+  #:export (interpreter run-scheme entry-fragment evaluator-fragment primitives-fragment))
+
+@title{Scheme元循环解释器}
+@summary{按求值、环境和核验组织Scheme子集的解释，并装配成可执行程序。}
+@taxon["tutorial"]
+
+元循环解释器用Scheme实现Scheme子集的求值。这个案例包含递归定义、词法闭包、quote、if、lambda、begin，以及支持自解释所需的let、cond等形式。阅读围绕调用结果、语法和环境展开，程序组合使用@link["lp-model"]{片段、计划和实例}。
+
+程序入口run-scheme接受一个表达式列表，返回列表中最后一个表达式的值。表达式以quote传入，是解释器处理的数据；宿主Scheme不直接执行其中的factorial或lambda。运行时片段来自@link["lp-0008"]{闭包与环境模块文章}。
+
+@(define entry-fragment
+   (code-fragment "mce-entry" "Scheme 解释器的 run 入口"
+     #:requires (evaluate-sequence initial-environment)
+     (define (run expressions)
+       ;; 每次用户程序运行都有自己的初始环境。
+       (evaluate-sequence expressions (initial-environment)))))
+
+@(define evaluator-fragment
+   (code-fragment "mce-eval" "Scheme 求值器 evaluate 与特殊形式"
+     #:requires (lookup define-value! apply-value)
+     (define (syntax-check condition expression)
+       (unless condition (throw 'mce-syntax expression)))
+     (define (evaluate-sequence expressions environment)
+       (syntax-check (and (list? expressions) (pair? expressions)) expressions)
+       (let loop ((remaining expressions))
+         (let ((value (evaluate (car remaining) environment)))
+           (if (null? (cdr remaining)) value (loop (cdr remaining))))))
+     (define (evaluate-arguments expressions environment)
+       (if (null? expressions) '()
+           ;; 不依赖宿主的参数求值顺序。
+           (let ((value (evaluate (car expressions) environment)))
+             (cons value (evaluate-arguments (cdr expressions) environment)))))
+     (define (evaluate expression environment)
+       (cond
+         ((or (number? expression) (boolean? expression) (string? expression)) expression)
+         ((symbol? expression) (lookup expression environment))
+         ((not (and (list? expression) (pair? expression)))
+          (throw 'mce-syntax expression))
+         (else
+          (let ((head (car expression)) (arguments (cdr expression)))
+            (cond
+              ((eq? head 'quote)
+               (syntax-check (= (length arguments) 1) expression)
+               (car arguments))
+              ((eq? head 'if)
+               (syntax-check (= (length arguments) 3) expression)
+               (evaluate (if (eq? (evaluate (car arguments) environment) #f)
+                             (caddr arguments) (cadr arguments)) environment))
+              ((eq? head 'lambda)
+               (syntax-check (and (>= (length arguments) 2)
+                                  (list? (car arguments))
+                                  (every-symbol? (car arguments))
+                                  (unique-symbols? (car arguments))) expression)
+               (vector 'closure (car arguments) (cdr arguments) environment))
+              ((eq? head 'begin) (evaluate-sequence arguments environment))
+              ((eq? head 'let) (evaluate (expand-let arguments) environment))
+              ((eq? head 'let*)
+               (syntax-check (and (>= (length arguments) 2)
+                                  (valid-bindings? (car arguments))) expression)
+               (evaluate (expand-let-star (car arguments) (cdr arguments)) environment))
+              ((eq? head 'cond) (evaluate-cond arguments environment))
+              ((eq? head 'and) (evaluate-and arguments environment))
+              ((eq? head 'or) (evaluate-or arguments environment))
+              ((or (eq? head 'unless) (eq? head 'when))
+               (syntax-check (>= (length arguments) 2) expression)
+               (let ((truth (not (eq? (evaluate (car arguments) environment) #f))))
+                 (if (eq? truth (eq? head 'when))
+                     (evaluate-sequence (cdr arguments) environment) #f)))
+              ((eq? head 'define)
+               (syntax-check (>= (length arguments) 2) expression)
+               (let ((target (car arguments)))
+                 (cond
+                   ((symbol? target)
+                    (syntax-check (= (length arguments) 2) expression)
+                    (define-value! target (evaluate (cadr arguments) environment) environment)
+                    target)
+                   ((and (pair? target) (symbol? (car target)))
+                    (define-value! (car target)
+                      (evaluate (cons 'lambda (cons (cdr target) (cdr arguments))) environment)
+                      environment)
+                    (car target))
+                   (else (throw 'mce-syntax expression)))))
+              (else
+               (let ((procedure (evaluate head environment)))
+                 (apply-value procedure (evaluate-arguments arguments environment)))))))))
+     (define (valid-bindings? bindings)
+       (and (list? bindings)
+            (let loop ((remaining bindings))
+              (or (null? remaining)
+                  (and (list? (car remaining)) (= (length (car remaining)) 2)
+                       (symbol? (caar remaining)) (loop (cdr remaining)))))))
+     (define (expand-let arguments)
+       (syntax-check (>= (length arguments) 2) arguments)
+       (let* ((named? (symbol? (car arguments)))
+              (bindings (if named? (cadr arguments) (car arguments)))
+              (body (if named? (cddr arguments) (cdr arguments))))
+         (syntax-check (and (valid-bindings? bindings) (pair? body)
+                            (unique-symbols? (map car bindings))) arguments)
+         (let ((names (map car bindings)) (values (map cadr bindings)))
+           (if named?
+               (cons (list 'lambda names
+                           (list 'define (car arguments) (cons 'lambda (cons names body)))
+                           (cons (car arguments) names)) values)
+               (cons (cons 'lambda (cons names body)) values)))))
+     (define (expand-let-star bindings body)
+       (if (null? bindings) (cons 'begin body)
+           (list 'let (list (car bindings)) (expand-let-star (cdr bindings) body))))
+     (define (evaluate-cond clauses environment)
+       (if (null? clauses) #f
+           (let ((clause (car clauses)))
+             (syntax-check (and (list? clause) (pair? clause)) clause)
+             (if (eq? (car clause) 'else)
+                 (begin
+                   (syntax-check (and (null? (cdr clauses)) (pair? (cdr clause))) clause)
+                   (evaluate-sequence (cdr clause) environment))
+                 (let ((value (evaluate (car clause) environment)))
+                   (if (eq? value #f) (evaluate-cond (cdr clauses) environment)
+                       (if (null? (cdr clause)) value
+                           (evaluate-sequence (cdr clause) environment))))))))
+     (define (evaluate-and expressions environment)
+       (if (null? expressions) #t
+           (let ((value (evaluate (car expressions) environment)))
+             (if (or (eq? value #f) (null? (cdr expressions))) value
+                 (evaluate-and (cdr expressions) environment)))))
+     (define (evaluate-or expressions environment)
+       (if (null? expressions) #f
+           (let ((value (evaluate (car expressions) environment)))
+             (if (eq? value #f) (evaluate-or (cdr expressions) environment) value))))
+     (define (every-symbol? xs)
+       (or (null? xs) (and (symbol? (car xs)) (every-symbol? (cdr xs)))))
+     (define (unique-symbols? xs)
+       (or (null? xs) (and (not (memq (car xs) (cdr xs))) (unique-symbols? (cdr xs)))))))
+
+@(define primitives-fragment
+   (code-fragment "mce-primitives" "Scheme 解释器的初始原语环境"
+     #:requires (extend-environment)
+     (define (initial-environment)
+       (let ((bindings (list (cons '+ +) (cons '- -) (cons '* *) (cons '= =)
+                             (cons '< <) (cons 'cons cons) (cons 'car car)
+                             (cons 'cdr cdr) (cons 'null? null?) (cons 'list list)
+                             (cons 'cadr cadr) (cons 'caddr caddr) (cons 'cddr cddr)
+                             (cons 'caar caar) (cons 'length length) (cons '>= >=)
+                             (cons 'number? number?) (cons 'boolean? boolean?)
+                             (cons 'string? string?) (cons 'symbol? symbol?)
+                             (cons 'pair? pair?) (cons 'list? list?) (cons 'not not)
+                             (cons 'eq? eq?) (cons 'equal? equal?) (cons 'memq memq)
+                             (cons 'vector vector) (cons 'vector? vector?)
+                             (cons 'vector-ref vector-ref) (cons 'vector-set! vector-set!)
+                             (cons 'assq assq) (cons 'set-cdr! set-cdr!) (cons 'throw throw)
+                             (cons 'map 'map) (cons 'apply 'apply))))
+         (extend-environment (map car bindings)
+           (map (lambda (binding) (vector 'primitive (cdr binding))) bindings) '())))))
+
+@(define interpreter
+   (make-program "mce-module" "Scheme 解释器的装配计划"
+     (list primitives-fragment environment-fragment application-fragment evaluator-fragment entry-fragment)
+     '(run)))
+@(define interpreter-instance (instantiate-program interpreter))
+@(define run-scheme (instance-binding interpreter-instance 'run))
+
+@subtree{
+  @title{Scheme解释器的输入与调用结果}
+
+  run-scheme对表达式列表建立独立环境并求值。阶乘的define简写创建递归过程，列表平方检查递归构造，词法遮蔽检查闭包捕获。这些Example tree的 ⇒ 是构建结果；调用写法为(run-scheme '(...))，列表内的程序由解释器执行。
+
+  @checked-example["mce-factorial" "Scheme 阶乘 factorial(5) 的结果为 120"
+    (run-scheme '((define (factorial n)
+                   (if (= n 0) 1 (* n (factorial (- n 1)))))
+                 (factorial 5))) 120]
+
+  @checked-example["mce-map" "Scheme 列表平方的结果为 (1 4 9 16)"
+    (run-scheme '((define (map-square xs)
+                   (if (null? xs) '()
+                       (cons (* (car xs) (car xs)) (map-square (cdr xs)))))
+                 (map-square '(1 2 3 4)))) '(1 4 9 16)]
+
+  @checked-example["mce-lexical" "Scheme 词法遮蔽的调用结果为 12"
+    (run-scheme '((define x 10)
+                 (define add-x (lambda (y) (+ x y)))
+                 ((lambda (x) (add-x 2)) 100))) 12]
+
+  12而非102是关键：解释器中的闭包保存定义时的环境，不使用调用者当前的x。每次run都创建新环境。
+}
+
+@subtree{
+  @title{Scheme的入口函数与求值规则}
+
+  @fragment-tree[entry-fragment interpreter]
+
+  Scheme解释器的run调用initial-environment与evaluate-sequence。evaluate区分特殊形式与普通调用：特殊形式决定求值范围，普通调用求出操作符和从左到右的参数值，交给apply-value。入口依赖由Requires显示，阅读链接不会提供这些binding。
+
+  @fragment-tree[evaluator-fragment interpreter]
+
+  if只求值一个分支，只有 #f为假；quote保留数据。lambda创建闭包。这个子集的define是教学约定，不实现完整Scheme的内部定义标准。
+}
+
+@subtree{
+  @title{Scheme闭包、递归框架与原语}
+
+  @transclude["mce-apply"]
+
+  apply-value对原语调用宿主apply，对闭包则扩展闭包保存的环境，再进入evaluate-sequence。evaluate与apply-value相互调用，它们进入同一个装配模块，而不需要文章按依赖图排列。
+
+  @transclude["mce-env"]
+
+  环境是框架链，每个框架保存可变的association list。闭包捕获这条链；define把递归函数加入闭包捕获的同一个框架，所以函数体中的自引用能够找到它。对象语言环境保存用户程序的变量；宿主LP实例的binding保存解释器函数，两种作用域彼此区分。
+
+  @fragment-tree[primitives-fragment interpreter]
+
+  数值和列表原语借用宿主，eval、apply、环境与闭包机制由解释器实现。它不是完整Scheme实现。let、let*、cond、and／or和unless／when都由解释器处理，覆盖其自身源码所用的形式；初始原语表不提供宿主eval。@link["lp-0009"]{自解释案例}实际运行同一计划的定义。
+}
+
+@subtree{
+  @title{Scheme子集的值与错误路径核验}
+
+  Scheme子集的条件与闭包核验预期值，错误路径核验异常key。if不求值未选分支，只有 #f为假；返回闭包保留定义处的局部环境。每次run创建新用户环境。参数从左到右求值是这个子集的明确约定，define在表达式中的使用不声称符合完整Scheme标准。
+
+  @checked-example["mce-lazy-if" "Scheme if 的未选分支不求值"
+    (run-scheme '((if #t 7 missing))) 7]
+  @checked-example["mce-truth" "Scheme 真值：0 选择真分支"
+    (run-scheme '((if 0 1 2))) 1]
+  @checked-example["mce-closure" "Scheme 返回闭包的局部环境结果"
+    (run-scheme '((define (make-adder x) (lambda (y) (+ x y)))
+                 (define add-three (make-adder 3)) (add-three 4))) 7]
+  @checked-example["mce-order" "Scheme 参数从左到右的求值结果"
+    (run-scheme '((define x 0)
+                 (list (begin (define x (+ x 1)) x)
+                       (begin (define x (+ x 1)) x)))) '(1 2)]
+  @checked-error["mce-unbound-test" "Scheme missing 的未绑定异常" (run-scheme '(missing)) 'mce-unbound]
+  @checked-error["mce-arity-test" "Scheme 闭包的参数数量异常" (run-scheme '(((lambda (x) x) 1 2))) 'mce-arity]
+  @checked-error["mce-call-test" "Scheme 数值调用的非过程异常" (run-scheme '((1 2))) 'mce-not-procedure]
+  @checked-error["mce-syntax-test" "Scheme if 的语法异常" (run-scheme '((if #t 1))) 'mce-syntax]
+  @checked-error["mce-params-test" "Scheme lambda 的重复参数异常" (run-scheme '((lambda (x x) x))) 'mce-syntax]
+  @checked-error["mce-isolation" "Scheme run 的独立环境拒绝未定义 x" (run-scheme '(x)) 'mce-unbound]
+}
+
+@subtree{
+  @title{Scheme解释器的装配、实例与源码输出}
+
+  Scheme解释器的片段来自当前模块与(flora metacircular-runtime)。完整定义进入同一个LP计划，文章的阅读排列不控制实例化：
+
+  @verbatim["@(define interpreter
+   (make-program \"mce-module\" \"Scheme 解释器的装配计划\"
+     (list primitives-fragment environment-fragment application-fragment evaluator-fragment entry-fragment)
+     '(run)))
+@(define interpreter-instance (instantiate-program interpreter))
+@(define run-scheme (instance-binding interpreter-instance 'run))"]
+
+  @program-tree[interpreter]
+
+  Module tree显示公开入口run和片段链接。make-program只声明计划；instantiate-program执行定义，instance-binding取得运行入口。Assembled in指向计划，不能据此判断一个实例已经运行。
+
+  evaluate与apply-value相互调用；函数体在全部定义建立后才由入口执行。初始化表达式仍依赖声明顺序，不能把阅读顺序自由误解为任意交换初始化。计划不继承片段声明处的词法binding，也不自动导入该文章用过的模块。
+
+  @program-output["metacircular.scm" interpreter]
+
+  源码产物为build/programs/metacircular.scm，保留注释和片段来源。它与站点内实例来自同一计划，不是独立维护的解释器副本。@link["lp-0009"]{Scheme的同源输出与自解释}比较这份计划的三种执行方式；通用写法见@link["lp-0001"]{累计器教程}。
+}

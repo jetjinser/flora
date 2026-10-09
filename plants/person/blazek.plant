@@ -1,0 +1,7 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Jiri Blazek}
+@summary{计算流体力学研究者，《Computational Fluid Dynamics: Principles and Applications》作者。}
+@taxon["person"]
+
+Jiri Blazek，计算流体力学研究者，长期任职于德国航空航天中心（DLR），在隐式 LU-SSOR 格式与多重网格加速等方面发表过系列工作（本书参考文献中的多篇 DLR 研究报告即出自这一时期）。所著《Computational Fluid Dynamics: Principles and Applications》是 CFD 领域的标准教材，第 1 版由 Oxford University Press 出版（2001），第 2 版（Elsevier, 2005）即本站 @link["blazek2005"]{《计算流体力学》译本}的原书。

@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Bakhtar, F.; Mahpeykar, M.R.; Abbas, K.K.: An Investigation of Nucleating Flows of Steam in a Cascade of Turbine Blading - Theoretical Treatment. Transaction of the ASME 117 (1995), pp. 138-144.}
+@taxon["reference"]
+
+Bakhtar等人对汽轮机叶栅成核蒸汽流动的理论处理。

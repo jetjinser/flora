@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Xu, X.; Richards, B.E.: Simplified Procedure for Numerically Approximate Jacobian Matrix Generation in Newton's Method for Solving the Navier-Stokes Equations. GU Aero Report 9320, Dept. Aerospace Eng., University of Glasgow, 1993.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Forsythe, J.; Squires, K.; Wurtzler, K.; Spalart, P.R.: Prescribed Spin of the F-15E Using Detached-Eddy Simulation. AIAA Paper 2003-839, 2003.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Turner, M.G.; Jennions, I.K.: An Investigation of Turbulence Modeling in Transonic Fans Including a Novel Implementation of an Implicit k-ε Turbulence Model. J. of Turbomachinery, 115 (1993), pp. 249-260.}
+@taxon["reference"]

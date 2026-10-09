@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Spalart, S.R.; Allmaras, S.A.: A One-Equation Turbulence Model for Aerodynamic Flows. AIAA Paper 92-0439, 1992; also in La Recherche Aerospatiale, 1 (1994), pp. 5-21.}
+@taxon["reference"]

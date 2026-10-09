@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Nkonga, B.; Guillard, H.: Godunov Type Method on Non-Structured Meshes for Three-Dimensional Moving Boundary Problems. Comp. Meths. Appl. Mech. Eng., 113 (1994), pp. 183-204.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Blazek, J.: Methods to Accelerate the Solution of the Euler- and the Navier-Stokes Equations for Steady-State Super- and Hypersonic Flows. Translation of DLR Research Report, No. 94-35, ESA-TT-1331, 1995.}
+@taxon["reference"]

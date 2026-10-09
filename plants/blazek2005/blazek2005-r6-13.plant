@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Merci, B.; Steelant, J.; Vierendeels, J.; Riemslagh, K.; Dick, E.: Computational Treatment of Source Terms in Two-Equation Turbulence Models. AIAA Journal, 38 (2000), pp. 2085-2093.}
+@taxon["reference"]

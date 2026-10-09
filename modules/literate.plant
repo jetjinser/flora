@@ -1,0 +1,66 @@
+@(define-module (flora literate)
+  #:use-module (grove ir)
+  #:use-module (grove style)
+  #:use-module ((forester commands) #:prefix f:)
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-13)
+  #:use-module (lp forester)
+  #:use-module (lp checked)
+  #:export (code-chunk chunk-tree chunk-source program-code literate-artifacts)
+  #:re-export (program checked-example checked-property checked-error))
+
+@(begin
+;; Chunks are immutable values composed of strings and earlier chunks.
+;; No registry or evaluation of the displayed Scheme is needed.
+(define (chunk? value)
+  (and (list? value) (equal? (assq-ref value 'kind) 'flora-code-chunk)))
+
+(define* (code-chunk id title #:rest parts)
+  (unless (and (string? id) (not (string-null? id))
+               (string-every (lambda (c) (or (char<=? #\a c #\z)
+                                           (char<=? #\0 c #\9)
+                                           (char=? c #\-))) id)
+               (string? title) (not (string-null? title))
+               (every (lambda (part) (or (string? part) (chunk? part))) parts))
+    (error "code-chunk needs a short ASCII ID, title, and text or chunks" id))
+  `((kind . flora-code-chunk) (id . ,id) (title . ,title) (parts . ,parts)))
+
+(define (chunk-source chunk)
+  (unless (chunk? chunk) (error "expected code chunk" chunk))
+  (string-concatenate
+    (map (lambda (part) (if (string? part) part (chunk-source part)))
+         (assq-ref chunk 'parts))))
+
+(define (chunk-links chunk)
+  (let ((dependencies (delete-duplicates (filter chunk? (assq-ref chunk 'parts)))))
+    (and (pair? dependencies)
+         (make-content-element 'paragraph
+           (cons "Uses: "
+             (append-map (lambda (dependency)
+                           (list (f:link (assq-ref dependency 'id)
+                                         (assq-ref dependency 'title)) " "))
+                         dependencies))
+           #:style (make-content-style 'literate-uses) #:flow-kind 'block))))
+
+(define (chunk-tree chunk)
+  (let ((links (chunk-links chunk)))
+    (apply f:subtree #:id (assq-ref chunk 'id)
+      (append (list (f:title (assq-ref chunk 'title)) (f:taxon "code"))
+              (if links (list links) '())
+              (list (make-content-element 'code-block (list (chunk-source chunk))
+                      #:properties '((language . scheme))
+                      #:style (make-content-style 'literate-code) #:flow-kind 'block))))))
+
+(define (program-code filename chunk)
+  ;; Output names stay in a dedicated directory; reject paths and extensions.
+  (unless (and (string? filename) (string-suffix? ".scm" filename)
+               (not (string-index filename #\/))
+               (not (string-index filename #\\))
+               (not (string-prefix? "." filename)))
+    (error "program-code needs a .scm basename" filename))
+  (make-content-element 'code-block (list (chunk-source chunk))
+    #:properties `((language . scheme) (literate-output . ,filename))
+    #:style (make-content-style 'literate-code) #:flow-kind 'block))
+
+(define literate-artifacts lp-artifacts)
+)

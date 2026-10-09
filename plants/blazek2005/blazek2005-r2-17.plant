@@ -1,0 +1,6 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mundt, Ch.; Keraus, R.; Fischer, J.: New, Accurate, Vectorized Approximations of State Surfaces for the Thermodynamic and Transport Properties of Equilibrium Air. ZFW, 15 (1991), Springer Verlag, pp. 179-184.}
+@taxon["reference"]
+
+Mundt等人提出平衡空气热力学与输运性质状态面的新型高精度向量化逼近。

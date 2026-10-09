@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Spalding, D.B.: A Single Formula for the "Law of the Wall". ASME J. Applied Mechanics, No. 28, Sept. 1961, pp. 455-458.}
+@taxon["reference"]

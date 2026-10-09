@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Frink, N.T.: Upwind Scheme for Solving the Euler Equations on Unstructured Tetrahedral Meshes. AIAA Journal, 30 (1992), pp. 70-77.}
+@taxon["reference"]

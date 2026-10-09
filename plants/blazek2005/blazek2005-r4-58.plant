@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Edwards, J.R.: Numerical Implementation of a Modified Liou-Steffen Upwind Scheme. AIAA Journal, 32 (1994), pp. 2120-2122.}
+@taxon["reference"]

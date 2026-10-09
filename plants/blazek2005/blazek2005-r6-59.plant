@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Candler, G.V.; Wright, M.J.; McDonald, J.D.: A Data-Parallel LU-SGS Method for Reacting Flows. AIAA Paper 94-0410, 1994.}
+@taxon["reference"]

@@ -1,0 +1,33 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{英语写作：The Elements of Style}
+@summary{Strunk与White的英语写作指南第四版段落级双语翻译。}
+@taxon["index"]
+
+作者：@author["strunk"]、@author["white"]
+
+本主题是William Strunk Jr.与E. B. White合著的@emph{The Elements of Style}（第四版）的段落级双语翻译:每个段落默认显示中文译文,英文原文折叠可展开对照。原书以简短的规则和提醒,讲英语用法的基本要求与写作风格;误/正例句与文学引文保留英文原文。
+
+@subtree{
+  @title{全书结构}
+
+  @itemize{
+    @item{@link["strunk1999-front"]{前言与导言}：Roger Angell的前言与E. B. White为1979年版所写的导言。}
+    @item{@link["strunk1999-ch01"]{第一章 英语用法的基本规则}：规则1–11。}
+    @item{@link["strunk1999-ch02"]{第二章 写作的基本原理}：规则12–22。}
+    @item{@link["strunk1999-ch03"]{第三章 格式的若干问题}：标点、连字符、数字、引文等。}
+    @item{@link["strunk1999-ch04a"]{第四章 常被误用的词与短语（A–F）}}
+    @item{@link["strunk1999-ch04b"]{第四章 常被误用的词与短语（G–O）}}
+    @item{@link["strunk1999-ch04c"]{第四章 常被误用的词与短语（P–Z）}}
+    @item{@link["strunk1999-ch05"]{第五章 风格的探索}：二十一条写作提醒。}
+    @item{@link["strunk1999-back"]{后记与术语表}}
+  }
+}
+
+@subtree{
+  @title{阅读说明}
+
+  书中规则与提醒是可直接查阅的条目：每一章都把各条规则、提醒或词条写成可独立寻址的小节，因此正文里的交叉引用可以在文内跳转。英文例句一律保留原文。
+
+  本翻译依据第四版的扫描文本，部分OCR讹误已按原文校正，个别处参照PDF。版权归原作者与出版方所有。
+}

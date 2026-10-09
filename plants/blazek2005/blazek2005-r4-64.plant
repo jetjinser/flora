@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Godunov, S.K.: A Difference Scheme for Numerical Computation Discontinuous Solution of Hydrodynamic Equations. Math. Sbornik (in Russian), 47 (1959), pp. 271-306; translated US Joint Publ. Res. Service, JPRS 7226, 1969.}
+@taxon["reference"]

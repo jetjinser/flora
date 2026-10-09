@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Müller, J.D.: On Triangles and Flow. PhD Thesis, The University of Michigan, 1996.}
+@taxon["reference"]

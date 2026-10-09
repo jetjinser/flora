@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Shuen, J.-S.; Liou, M.-S.; Van Leer, B.: Inviscid Flux-Splitting Algorithms for Real Gases with Non-equilibrium Chemistry. J. Computational Physics, 90 (1990), pp. 371-395.}
+@taxon["reference"]

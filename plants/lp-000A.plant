@@ -1,0 +1,163 @@
+@use-modules[(flora commands) (lp core) (lp project) (lp scribble) (lp forester) (lp checked) (flora metacircular) (flora metacircular-runtime) (flora metacircular-self) (language scribble commands)]
+
+@title{Scheme解释器的多文件工程}
+@summary{用同一份片段组装独立Guile模块，明确导入、初始化顺序与核验入口。}
+@taxon["tutorial"]
+
+一个程序可以由多篇文章解释，也可以输出到多个文件。两种划分不必一一对应：@link["lp-0007"]{解释器的求值规则}、@link["lp-0008"]{闭包与环境}提供片段，本页把同一份定义组织成Guile模块。它不是复制出来的另一套解释器。
+
+@(define environment-plan
+   (make-program "mce-env-module" "Scheme环境模块"
+     (list environment-fragment) '(extend-environment lookup define-value!)))
+@(define primitives-plan
+   (make-program "mce-primitives-module" "Scheme原语模块"
+     (list primitives-fragment) '(initial-environment)
+     #:imports (list (make-import '(lp-example mce environment) '(extend-environment)))))
+@(define engine-plan
+   (make-program "mce-engine-module" "Scheme求值与闭包应用模块"
+     (list application-fragment evaluator-fragment) '(evaluate-sequence)
+     #:imports (list (make-import '(lp-example mce environment)
+                                  '(extend-environment lookup define-value!)))))
+@(define entry-plan
+   (make-program "mce-entry-module" "Scheme解释器入口模块"
+     (list entry-fragment) '(run)
+     #:imports (list (make-import '(lp-example mce primitives) '(initial-environment))
+                     (make-import '(lp-example mce engine) '(evaluate-sequence)))))
+
+@(define cases-fragment
+   (make-fragment "mce-project-cases" "Scheme工程复用的值与异常案例"
+     (list `(define examples ',examples) `(define errors ',errors))))
+@(define checks-fragment
+   (code-fragment "mce-project-checks" "Scheme工程的独立核验入口"
+     #:requires (run examples errors)
+     (define (caught-key thunk)
+       (catch #t (lambda () (thunk) 'returned)
+         (lambda (key . arguments) key)))
+     (define (run-checks)
+       (for-each
+         (lambda (example)
+           (unless (equal? (run (cadr example)) (caddr example))
+             (error "Result mismatch" (car example)))) examples)
+       (for-each
+         (lambda (example)
+           (unless (eq? (caught-key (lambda () (run (cadr example)))) (caddr example))
+             (error "Exception mismatch" (car example)))) errors)
+       (list (length examples) (length errors)))))
+@(define checks-plan
+   (make-program "mce-checks-module" "Scheme工程核验模块"
+     (list cases-fragment checks-fragment) '(run-checks)
+     #:imports (list (make-import '(lp-example mce entry) '(run)))))
+@(define interpreter-project
+   (make-project "mce-project" "Scheme解释器的模块工程"
+     (list (make-module-output '(lp-example mce environment) environment-plan)
+           (make-module-output '(lp-example mce primitives) primitives-plan)
+           (make-module-output '(lp-example mce engine) engine-plan)
+           (make-module-output '(lp-example mce entry) entry-plan)
+           (make-module-output '(lp-example mce checks) checks-plan))))
+
+@subtree{
+  @title{Scheme工程的文件与阅读关系}
+
+  环境、原语、求值器、入口与测试各有模块边界。evaluate与apply-value互相调用，所以进入同一个engine模块；内部递归不变成两个文件之间的循环导入。阅读仍可分别讨论求值和闭包，不需要按文件目录排列。
+
+  @verbatim{(make-program "mce-primitives-module" "Scheme原语模块"
+  (list primitives-fragment) '(initial-environment)
+  #:imports (list (make-import '(lp-example mce environment)
+                              '(extend-environment))))}
+
+  make-import声明实际导入的模块与名称，make-module-output将计划映射到Guile模块路径。make-project核验项目内的导出、重复身份和模块顺序；它不自动排序，也不猜测自由变量。外部模块在实例化或独立运行时由Guile解析。
+
+  @project-tree[interpreter-project]
+
+  Module的Exports是公开入口，Imports链接到提供名称的项目模块，Initialization order是定义建立顺序。Outputs直接打开生成文件。片段上的Assembled in列出所有使用它的计划，包含原来的单文件计划和本页的模块计划；这些信息来自装配数据，不需要另写索引。
+}
+
+@(define project-instance (instantiate-project interpreter-project))
+@(define run-project-checks (project-binding project-instance '(lp-example mce checks) 'run-checks))
+@(define seed-fragment
+   (code-fragment "lp-seed" "LP初始化示例的初始值"
+     (define seed 3)))
+@(define answer-fragment
+   (code-fragment "lp-answer" "LP初始化示例的依赖值"
+     #:initial-requires (seed)
+     (define answer (+ seed 1))))
+@(define initialization-plan
+   (make-program "lp-initialization" "LP初始化依赖的装配计划"
+     (list seed-fragment answer-fragment) '(answer)))
+
+@subtree{
+  @title{Scheme工程的模块隔离与构建核验}
+
+  instantiate-project为每个计划创建独立命名空间，只连接显式导出的binding；项目实例不会注册到宿主的全局模块表。不同项目实例有自己的本地定义，但外部导入的模块状态仍遵循Guile的共享规则。
+
+  @verbatim{(define instance (instantiate-project interpreter-project))
+(define run (project-binding instance '(lp-example mce entry) 'run))
+(run '((+ 1 2)))}
+
+  核验案例复用@link["mce-self-cases"]{11个值案例}和@link["mce-self-error-cases"]{5个异常案例}的实际数据；输出的是读取时的数据快照，不导入Flora模块。这里核验多模块解释器本身，自解释仍由@link["lp-0009"]{同源自解释案例}检查。
+
+  @fragment-tree[cases-fragment checks-plan]
+  @fragment-tree[checks-fragment checks-plan]
+
+  @program-check[(list environment-plan primitives-plan engine-plan entry-plan checks-plan)
+    (checked-example "mce-project-result" "Scheme工程的11项值与5项异常核验"
+      (run-project-checks) '(11 5))]
+
+  program-check将已经核验的结果tree关联到被测计划，使各Module的Checks指向这项证据；它本身不增加执行，也不自动推断测试覆盖范围。
+}
+
+@subtree{
+  @title{Scheme工程的源码下载与独立运行}
+
+  @project-output[interpreter-project]
+
+  五个.scm文件保留模块目录结构。Guile模块名(lp-example mce entry)对应lp-example/mce/entry.scm；生成文件中的define-module、导入和导出来自计划，定义来自原片段。下载单个文件并不包含依赖模块，独立运行需要保留这套目录。
+
+  在Flora根目录运行以下命令即可核验生成工程；这里不需要Grove或Flora模块：
+
+  @verbatim{guile --no-auto-compile -L build/programs -c '(use-modules (lp-example mce checks)) (write (run-checks)) (newline)'}
+
+  成功输出(11 5)，错误会以非零状态退出。也可用(use-modules (lp-example mce entry))取得run，用普通Scheme程序调用解释器。本实验面向Guile模块，不声称兼容其他Scheme实现。
+}
+
+@subtree{
+  @title{LP依赖声明与初始化错误}
+
+  Requires描述函数运行等阶段需要的名称；Initial requires描述整个片段开始建立时已经需要的名称。例如保存初始值的片段必须排在使用这个值的初始化片段之前：
+
+  @verbatim{(code-fragment "seed" "初始值"
+  (define seed 3))
+(code-fragment "answer" "初始化时读取初始值"
+  #:initial-requires (seed)
+  (define answer (+ seed 1)))}
+
+  顺序写反时，诊断包含计划、片段、缺少的名称与来源位置。重复定义会指出两个提供者及其来源；导入与本地定义重名、项目内名称未导出也会被拒绝。Initial requires是作者声明的片段级屏障，不是自动分析器：同一片段内部的初始化顺序、未声明依赖和运行时异常仍由执行核验发现。
+
+  以下实际片段展示Initial requires如何链接到提供者；正确顺序的实例得到4：
+
+  @fragment-tree[seed-fragment initialization-plan]
+  @fragment-tree[answer-fragment initialization-plan]
+  @program-tree[initialization-plan]
+  @program-check[initialization-plan
+    (checked-example "lp-initialization-result" "LP显式初始化依赖的结果为4"
+      (instance-binding (instantiate-program initialization-plan) 'answer) 4)]
+
+  错误顺序只构造计划就会被拒绝，不需要等到运行。这里捕获诊断以便阅读；普通构建中不捕获这个异常时，构建会失败：
+
+  @verbatim[(catch #t
+    (lambda () (make-program "lp-reversed" "LP错误初始化顺序"
+                 (list answer-fragment seed-fragment) '(answer)))
+    (lambda (key . arguments) (format #f "~s: ~s" key arguments)))]
+}
+
+@subtree[#:id "mce-env-semantics"]{
+  @title{Scheme环境片段的语义解释}
+
+  @link["mce-env"]{环境定义}中的框架保存可变binding。闭包捕获框架链，define更新同一个框架，让递归函数找到自身。这里的解释关注对象语言行为；@link["mce-env-engineering"]{模块接口解释}讨论同一份定义的工程用途，两篇解释不复制代码。
+}
+
+@subtree[#:id "mce-env-engineering"]{
+  @title{Scheme环境片段的模块接口解释}
+
+  @link["mce-env"]{环境定义}同时被单文件计划和多模块工程使用。在工程中，环境模块只导出extend-environment、lookup与define-value!；原语模块需要其中一个，求值模块需要三个。不同的导入范围不要求不同的源码副本。语义问题见@link["mce-env-semantics"]{环境的递归框架解释}。
+}

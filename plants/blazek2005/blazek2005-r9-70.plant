@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Lallemand, M.H.: Schémas décentrés multigrilles pour la résolution des équations d'Euler en éléments finis. PhD Thesis, Université de Provence, France, 1988.}
+@taxon["reference"]

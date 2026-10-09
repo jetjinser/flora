@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Hemker, P.W.; Koren, B.: Multigrid, Defect Correction and Upwind Schemes for the Steady Navier-Stokes Equations. Synopsis, HERMES Hypersonic Research Program Meeting, Stuttgart, Germany, 1987.}
+@taxon["reference"]

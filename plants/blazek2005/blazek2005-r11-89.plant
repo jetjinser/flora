@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Connell, S.D.; Braaten, M.E.: Semistructured Mesh Generation for Three-Dimensional Navier-Stokes Calculations. AIAA Journal, 33 (1995), pp. 1017-1024.}
+@taxon["reference"]

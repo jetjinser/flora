@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Erlebacher, G.; Hussaini, M.Y.; Speziale, C.G.; Zang, T.A.: On the Large-Eddy Simulation of Compressible Isotropic Turbulence. 12th International Conf. on Numerical Methods in Fluid Dynamics, Oxford, England, Lecture Notes in Physics, Vol. 371, Springer, 1990.}
+@taxon["reference"]

@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Shuen, J.-S.: Upwind Differencing and LU Factorization for Chemical Non-Equilibrium Navier-Stokes Equations. J. Computational Physics, 99 (1992), pp. 233-250.}
+@taxon["reference"]

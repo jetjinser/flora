@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Yee, H.C.; Klopfer, G.H.; Montagné, J.-L.: High-Resolution Shock-Capturing Schemes for Inviscid and Viscous Hypersonic Flows. NASA TM-100097, 1988.}
+@taxon["reference"]

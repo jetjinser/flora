@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Szmelter, J.; Marchant, M.J.; Evans, A.; Weatherill, N.P.: Two-Dimensional Navier-Stokes Equations with Adaptivity on Structured Meshes. Computer Methods in Applied Mechanics and Engineering, 101 (1992), pp. 355-368.}
+@taxon["reference"]

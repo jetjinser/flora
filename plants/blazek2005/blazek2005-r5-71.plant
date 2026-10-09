@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Mavriplis, D.J.: Three-Dimensional Multigrid Reynolds-Averaged Navier-Stokes Solver for Unstructured Meshes. AIAA Paper 94-1878, 1994; also AIAA Journal, 33 (1995), pp. 445-453.}
+@taxon["reference"]

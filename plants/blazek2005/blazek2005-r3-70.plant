@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Liou, M.-S.; Steffen, C.J. Jr.: A New Flux Splitting Scheme. NASA TM-104404, 1991; also J. Computational Physics, 107 (1993), pp. 23-39.}
+@taxon["reference"]

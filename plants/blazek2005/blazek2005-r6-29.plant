@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Löhner, R.: Some Useful Renumbering Strategies for Unstructured Grids. Int. J. Numerical Methods in Engineering, 36 (1993), pp. 3259-3270.}
+@taxon["reference"]

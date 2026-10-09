@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Roe, P.L.; Pike, J.: Efficient Construction and Utilisation of Approximate Riemann Solutions. Computing Methods in Applied Sciences and Engineering, R. Glowinski, J.L. Lions (eds.), North Holland Publishing, The Netherlands, 1984.}
+@taxon["reference"]

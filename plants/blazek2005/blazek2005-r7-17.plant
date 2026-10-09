@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Wilcox, D.C.: Turbulence Modeling for CFD. Published by DCW Industries, Inc., La Cañada, California, USA, 1993.}
+@taxon["reference"]

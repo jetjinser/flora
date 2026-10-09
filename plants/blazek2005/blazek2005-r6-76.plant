@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Sonneveld, P.: CGS, A Fast Lanczos-Type Solver for Nonsymmetric Linear Systems. SIAM J. Scientific and Statistical Computing, 10 (1989), pp. 36-52.}
+@taxon["reference"]

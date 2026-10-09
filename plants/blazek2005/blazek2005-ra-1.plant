@@ -1,0 +1,4 @@
+@use-modules[(flora commands) (language scribble commands)]
+
+@title{Sommerfeld, A.J.W.: Partial Differential Equations in Physics. Academic, New York, 1949.}
+@taxon["reference"]
