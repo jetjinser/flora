@@ -25,6 +25,21 @@ for the contract and `tests/unit/forester/render.scm` for coverage.
 
 ## Open
 
+### Inline script contents are HTML-escaped — Grove's own backmatter runtime is self-broken
+
+Every `<script>` element Grove emits has its text escaped by the serializer:
+`&&` becomes `&amp;&amp;`, so any script containing `&`, `<`, or `>` throws
+`SyntaxError` in the browser. This is not hypothetical — it breaks Grove's
+own backmatter runtime on every page with collapsible backmatter
+(`root &amp;&amp; root.querySelector('.forest-tree-content')` in
+`grove.html:18`), killing the fetch-full-content feature. Flora dodged the
+same bullet in its MathJax head configuration by avoiding those characters.
+
+Script elements should serialize their children as raw text (the standard
+HTML rule), or authors need an explicit raw-text script command. Everything
+else — the backmatter runtime, and any user script with real logic — starts
+working the day this lands.
+
 ### make-element ignores its #:flow-kind argument
 
 `(grove element)`'s `make-element` destructures `#:flow-kind` but never uses

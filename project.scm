@@ -88,7 +88,7 @@
               (list stylesheet-path)))
       #:assets
       (append
-        (list (make-artifact "flora.js"
+        (list (make-artifact "theme.js"
                 (call-with-input-file theme-script-path get-string-all)
                 (list theme-script-path))
               (make-artifact "feed.css"
@@ -144,7 +144,7 @@
         ;; 注意:script 内容会被 HTML 转义且浏览器不解码,须避开 => & < 等字符。
         '(script (@ (type "text/javascript"))
           "window.MathJax = { output: { displayOverflow: 'scale' }, startup: { pageReady: function () { return MathJax.startup.defaultPageReady().then(function () { var h = decodeURIComponent(location.hash.slice(1)); if (h) { var el = document.getElementById(h); if (el) el.scrollIntoView(); } }); } } };")
-        '(script (@ (src "/flora.js")) "")))
+        '(script (@ (src "/theme.js")) "")))
 
 (define theme-controls-sxml
   '(div (@ (class "theme-controls") (hidden "hidden")
