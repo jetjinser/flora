@@ -528,3 +528,9 @@ figcaption {
   font-size: 0.95em;
   line-height: 1.7;
 }
+
+/* 英文 lane 的 em dash 用西文字形:Inria Dash 只认 U+2014-2015,
+   其余字符落回 Inria Serif,中文语境的破折号不受影响。 */
+[lang="en"] {
+  font-family: "Inria Dash", "Inria Serif", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+}
