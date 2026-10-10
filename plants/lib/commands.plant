@@ -1,0 +1,110 @@
+@(define-module (flora commands)
+  #:use-module (forester commands)
+  #:use-module (forester i18n)
+  #:use-module (language scribble command)
+  #:use-module (grove element)
+  #:use-module (grove ir)
+  #:use-module (srfi srfi-1)
+  #:re-export (image tag taxon title subtree transclude summary published updated lipsum
+               bilingual lang term)
+  #:re-export-and-replace (link))
+
+@(define-public (bi . body)
+   "Folded bilingual block: show the Chinese lane, fold the sources.
+The fold hint defaults to the folded lanes' language codes (e.g. en)."
+   (apply bilingual #:reader "zh-CN" body))
+
+@(define-public (emph . body)
+   (set! body (command-body body))
+   (make-content-element 'emph body))
+
+@(define-public (author id . ignored)
+   "Authorship marker resolving to a person tree (taxon person,
+bare-surname id): @author[\"kazmer\"]. The display text is the person
+tree's own title, filled in at analyze time by modules/queries.plant."
+   (make-content-element 'flora-author '()
+     #:properties `((target . ,id))))
+
+@(define-public (figure source alt . rest)
+   "Semantic figure: <figure><img/><figcaption>…</figcaption></figure>.
+@figure[\"path\" \"alt-text\"]{ caption body } — the bracket arguments
+are the image source and its plain-text alternative text; the body is
+the caption (typically an @emph figure title followed by the legend)."
+   (let* ((caption (command-body rest))
+          ;; The reader delivers the braces body as one list argument;
+          ;; flatten so its items become figcaption children directly.
+          (caption (append-map (lambda (item)
+                                 (if (list? item) item (list item)))
+                               caption)))
+     ((make-element #:tag "figure" #:flow-kind 'block)
+      (image source alt)
+      (apply (make-element #:tag "figcaption" #:flow-kind 'block)
+             caption))))
+
+@(define-public (sidenote . body)
+   "A margin note anchored where it is authored. Emits a numbered marker
+inline (the counter is styled in CSS) followed by the note itself, so the
+margin text pairs with its anchor the way Tufte's sidenotes do."
+   (list ((make-element #:tag "span" #:class "flora-sidenote-number") "")
+         (apply (make-element #:tag "span" #:class "flora-sidenote"
+                              #:attributes '((role . "note")))
+                  body)))
+
+@(define-public defn
+   ;; Marks the defining occurrence of a term: rendered as <dfn>, so glossary
+   ;; semantics stay in the content tree without borrowing math's @term.
+   (make-element #:tag "dfn"))
+
+@(define-public (content-query-results)
+   (make-content-element 'flora-content-query-results '() #:flow-kind 'block))
+
+@(define-public (orphan-page-results)
+   (make-content-element 'flora-orphan-page-results '() #:flow-kind 'block))
+
+@title{flora commands：站点命令库}
+@summary{全站共用内容命令的定义与用法：双语块、作者标注、语义插图、边注与术语定义。}
+@taxon["reference"]
+
+本模块是 Flora 的命令词汇表，各页面在 @code{use-modules} 中引入 @code{(flora commands)}。本页逐个说明命令的来源与用法；定义在各节的说明之后，构建时求值。转发自 Grove/Forester 原语的命令（@code{image}、@code{tag}、@code{taxon}、@code{title}、@code{subtree}、@code{transclude}、@code{summary}、@code{published}、@code{updated}、@code{lipsum}、@code{bilingual}、@code{lang}、@code{term}）本页不再重复，另见 @link["grove"]{Grove 文档}。
+
+@subtree[#:id "lib-bi"]{
+  @title{bi：段落级双语折叠块}
+
+  用法：@code{@"@"bi{ @"@"lang["en"]{…} @"@"lang["zh-CN"]{…} }}。中文 lane 默认显示，英文原文折叠，折叠提示自动取被折叠 lane 的语言码（如 en ▸）。它是 @code{bilingual[#:reader "zh-CN"]} 的别名；除非要改阅读语言，不要传 @code{#:source-label}。规范与示例见 @link["blazek2005-front"]{任一译本}。
+}
+
+@subtree[#:id "lib-emph"]{
+  @title{emph：强调}
+
+  用法：@code{@"@"emph{…}}。转发为 @code{emph} 内容元素，由 CSS 渲染为斜体（@code{span.emph}）。显式定义是为了把命令体的原始结构转成内容值。
+}
+
+@subtree[#:id "lib-author"]{
+  @title{author：作者标注}
+
+  用法：@code{@"@"author["kazmer"]}——方括号参数是人物树（@code{taxon person}，裸姓氏 id）的 id，不写显示名：链接文本在分析期从人树标题回填，全名只存于 kazmer.plant 一处。目标树不存在时回退为裸 id 并在构建时告警。实现为占位元素 @code{flora-author}，回填逻辑见 @link["queries"]{flora queries}。
+}
+
+@subtree[#:id "lib-figure"]{
+  @title{figure：语义插图}
+
+  用法：@code{@"@"figure["blazek2005/fig-2-1.png" "图2.1:……"]{ @"@"emph{图2.1:……。}图例…… }}。方括号参数是图片路径与纯文本替代文本（替代文本内不能放链接），body 是图题——通常以 @emph{图 X.Y:…} 开头，后接图例。渲染为 @code{figure > img + figcaption}，样式见 @code{.article img} 与 @code{figcaption}。全书插图均由此命令书写。
+}
+
+@subtree[#:id "lib-sidenote"]{
+  @title{sidenote：页边注}
+
+  用法：@code{@"@"sidenote{译注：……}}。在锚点位置输出一个编号标记与浮动的边注本体（Tufte 式），编号计数与定位由 CSS 完成。原书排印疑误的提醒用它书写。
+}
+
+@subtree[#:id "lib-defn"]{
+  @title{defn：术语定义}
+
+  用法：@code{@"@"defn{术语}}。渲染为 @code{dfn}，标记术语的定义位置——语义留在内容树里，供将来的术语查询使用，不占用数学的 @code{term}。
+}
+
+@subtree[#:id "lib-query-markers"]{
+  @title{查询占位命令}
+
+  @code{content-query-results} 与 @code{orphan-page-results} 是两个内部占位命令：页面里放一个空标记，分析阶段（见 @link["queries"]{flora queries}）把标记替换为实际的查询结果。它们不面向正文写作。
+}

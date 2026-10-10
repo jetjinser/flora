@@ -31,10 +31,10 @@
   (string-append (dirname (current-filename)) subdir))
 (define output-directory (project-directory% "/build"))
 (define plant-directory (project-directory% "/plants"))
-(define module-directory (project-directory% "/modules"))
 (define literate-module-sources
   (map (lambda (name) (string-append plant-directory "/" name))
-       '("lp-0003.plant" "lp-0008.plant" "lp-0007.plant"
+       '("lib/commands.plant" "lib/queries.plant" "lib/literate.plant"
+         "lp-0003.plant" "lp-0008.plant" "lp-0007.plant"
          "lp-0009.plant")))
 (define read-flora-document
   (make-scribble-document-reader))
@@ -42,7 +42,7 @@
   (make-scribble-module-session literate-module-sources
     #:read-document read-flora-document))
 (define (prepare-flora)
-  (append ((make-scribble-module-setup module-directory)) (prepare-literate)))
+  (prepare-literate))
 
 (define stylesheet-path (project-directory% "/style.css"))
 (define feed-stylesheet-path (project-directory% "/feed.css"))

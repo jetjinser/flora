@@ -61,7 +61,7 @@ A glossary page (`glossary.plant`) collects the terms shared across these topics
 
 The numbered source files beneath each prefix are stable page identities, not a required reading order: `grove-NNNN`, `math-NNNN`, and `lp-NNNN`. Their four-character suffixes follow Grove's base-36 address convention. A file's name is its page address. Named subtrees use short, descriptive ASCII IDs only when they need a durable link or transclusion; other subtrees use Grove's generated addresses.
 
-`project.scm` declares the source modules, site routes, renderer adapter, and output assets. The sitemap and RSS renderers write `sitemap.xml` and `feed.xml` into the site output alongside the HTML pages, using `https://flora.purejs.icu` as the site URL. HTML pages advertise `feed.xml` for feed-reader autodiscovery; the RSS XML links `feed.css` for browser display. `plants/` contains pages, `modules/` contains project writing commands, `lp/` contains the experimental literate-programming library, and `tests/` contains its Guile checks. Generated HTML and programs are written to `build/`.
+`project.scm` declares the source modules, site routes, renderer adapter, and output assets. The sitemap and RSS renderers write `sitemap.xml` and `feed.xml` into the site output alongside the HTML pages, using `https://flora.purejs.icu` as the site URL. HTML pages advertise `feed.xml` for feed-reader autodiscovery; the RSS XML links `feed.css` for browser display. `plants/` contains pages, `plants/lib/` contains the site command library as self-documenting pages, `lp/` contains the experimental literate-programming library, and `tests/` contains its Guile checks. Generated HTML and programs are written to `build/`.
 
 ## Writing conventions
 

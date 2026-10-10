@@ -1,0 +1,230 @@
+@(define-module (flora queries)
+  #:use-module (ice-9 format)
+  #:use-module (forester relations)
+  #:use-module (forester site)
+  #:use-module (grove relation dsl)
+  #:use-module (grove ir)
+  #:use-module (grove site)
+  #:use-module (flora commands)
+  #:use-module (srfi srfi-1))
+
+@title{flora queries：站点分析管线}
+@summary{analyze-flora 的定义：author 标记解析、查询占位回填与关系驱动的孤儿检测。}
+@taxon["reference"]
+
+Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻全站内容可查，适合做跨页面的改写与统计。本模块的管线分两个阶段——先展开内容里的占位命令（@author 标记回填、查询结果替换），再把分析出的关系交给关系 DSL 做孤儿检测。命令词汇表见 @link["commands"]{flora commands}。
+
+@subtree[#:id "lib-queries-author"]{
+  @title{author 标记的解析}
+
+  @code{flora-author} 占位元素携带 @code{target} 属性（人物树 id）。读取阶段人树未必已读，标题无法就地取得；分析阶段按 @code{target} 查找页面，用人树的 @code{title} 生成原生链接——所以全名只在人树存一处。目标缺失时回退为裸 id 并告警。
+}
+
+@subtree[#:id "lib-queries-relations"]{
+  @title{关系查询：入链与孤儿}
+
+  关系 DSL 以逻辑变量描述「什么算一条关系」：@code{incoming-pageo} 把 link 与 transclude 两种节点都计为指向目标页的入链。孤儿检测是集合差——作者页减去有入链的页；成员判断全部走原生哈希表，逻辑查询只负责收集入链 id，避免页数 × 入链数的二次复杂度。@code{math-query-results} 收集「短于 120 字且含公式」的段落作为改写候选，每次展示前 6 条。
+}
+
+@subtree[#:id "lib-queries-expand"]{
+  @title{占位展开与站点重组}
+
+  @code{expand-query-markers} 递归遍历内容树：@code{flora-author} 标记就地解析为作者链接，@code{flora-content-query-results}/@code{flora-orphan-page-results} 两种标记由 @code{replacements} 表整块替换，其余节点原样重建。@code{analyze-flora} 是 Grove 调用的入口。
+}
+
+@(begin
+  ;; Project predicates over the content and page relation snapshots.
+  (define-relation (incoming-pageo nodes page-id)
+    (exists (node-id kind)
+      (either ((== kind 'link)) ((== kind 'transclude)))
+      (nodeo nodes (node-id node-id) (kind kind))
+      (node-propertyo nodes node-id 'target page-id)))
+
+  (define (source-dependencies site)
+    (map (lambda (page)
+           (make-content-text "" (site-page-source page)))
+         (site-pages site)))
+
+  (define (query-math-paragraphs forest)
+    (let ((nodes (content-node-relation forest)))
+      (delete-duplicates
+        (query (node-id page-id position text line column)
+          (fresh (file)
+            (math-containing-paragrapho nodes node-id)
+            (shorter-than-o nodes node-id 120)
+            (source-locationo nodes node-id file line column)
+            (nodeo nodes
+                   (node-id node-id)
+                   (page-id page-id)
+                   (position position)
+                   (text text))))
+        (lambda (left right) (= (car left) (car right))))))
+
+  (define (math-query-results site forest)
+    (let* ((rows (query-math-paragraphs forest))
+           (shown (take rows (min 6 (length rows))))
+           (dependencies (source-dependencies site))
+           (summary
+             (make-content-element
+               'paragraph
+               (append
+                 (list (format #f
+                         "匹配到 ~a 个短于 120 字且含公式的段落；下面展示前 ~a 个。"
+                         (length rows) (length shown)))
+                 dependencies))))
+      (list summary
+            (make-content-element
+              'itemize
+              (map (lambda (row)
+                     (let* ((page-id (cadr row))
+                            (position (caddr row))
+                            (text (cadddr row))
+                            (line (list-ref row 4))
+                            (column (list-ref row 5))
+                            (source (site-page-source
+                                      (find-page forest page-id))))
+                       (make-content-element
+                         'item
+                         (list
+                           (make-content-element
+                             'query-link (list page-id) source
+                             #:properties `((target . ,page-id)))
+                           (make-content-text
+                             (format #f " (line ~a, column ~a; IR position ~a): ~a"
+                                     line column position text)
+                             source)))))
+                   shown)
+              #:flow-kind 'block))))
+
+  (define (orphan-page-results site forest)
+    (let* ((nodes (content-node-relation forest))
+           (incoming-page-ids
+             (delete-duplicates
+               (query (page-id)
+                 (incoming-pageo nodes page-id))
+               string=?))
+           (incoming-set
+             (let ((table (make-hash-table)))
+               (for-each (lambda (id) (hash-set! table id #t)) incoming-page-ids)
+               table))
+           ;; 孤儿检测是集合差：作者页 − 有入链页。在 kanren 里对每个候选
+           ;; 页面做列表成员判断会退化为页数 × 入链数的统一量；这里全部
+           ;; 用原生哈希表完成，查询只负责收集入链 id。
+           (orphans
+             (filter-map
+               (lambda (page)
+                 (and (not (assq-ref (site-page-metadata page) 'inline-subtree))
+                      (not (hash-ref incoming-set (site-page-id page)))
+                      (list (site-page-id page) (site-page-title page))))
+               (site-pages site)))
+           (dependencies (source-dependencies site)))
+      (if (null? orphans)
+          (list (make-content-element
+                  'paragraph
+                  (append
+                    (list "No authored pages currently lack incoming links or transclusions.")
+                    dependencies)))
+          (list
+            (make-content-element
+              'paragraph
+              (append
+                (list (format #f
+                        "Found ~a authored pages with no incoming links or transclusions:"
+                        (length orphans)))
+                dependencies))
+            (make-content-element
+              'itemize
+              (map (lambda (row)
+                     (let ((page-id (car row))
+                           (title (cadr row)))
+                       (make-content-element
+                         'item
+                         (list
+                           (make-content-element
+                             'query-link (list title)
+                             (site-page-source (find-page forest page-id))
+                             #:properties `((target . ,page-id)))
+                           (make-content-text (format #f " (~a)" page-id))))))
+                   orphans)
+              #:flow-kind 'block)))))
+)
+
+@(begin
+  (define (author-link forest marker)
+    ;; Resolve an @author marker to a link whose text is the person tree's
+    ;; title; unknown targets fall back to the bare id with a warning.
+    (let* ((target (content-element-property marker 'target))
+           (person (false-if-exception (find-page forest target))))
+      (unless person
+        (format (current-error-port)
+                "WARNING: @author target is not a known tree: ~a~%" target))
+      (make-content-element
+        'link
+        (list (if person (site-page-title person)
+                  (make-content-text target #f)))
+        (content-element-source marker)
+        #:properties `((target . ,target)))))
+
+  (define (placeholder-kind content)
+    (define (marker-kind child)
+      (and (content-element? child)
+           (memq (content-element-kind child)
+                 '(flora-content-query-results flora-orphan-page-results))
+           (content-element-kind child)))
+    (cond
+      ((marker-kind content) (marker-kind content))
+      ((and (content-element? content)
+            (eq? (content-element-kind content) 'paragraph))
+       (any marker-kind (content-element-children content)))
+      (else #f)))
+
+  (define (expand-query-markers content replacements forest)
+    (cond
+      ((content-document? content)
+       (make-content-document
+         (append-map (lambda (child)
+                       (expand-query-markers child replacements forest))
+                     (content-document-children content))
+         (content-document-source content)))
+      ((content-element? content)
+       (if (eq? (content-element-kind content) 'flora-author)
+           (list (author-link forest content))
+           (let* ((kind (placeholder-kind content))
+                  (replacement (and kind (assq kind replacements))))
+             (if replacement
+                 (cdr replacement)
+                 (list
+                   (make-content-element
+                     (content-element-kind content)
+                     (append-map (lambda (child)
+                                   (expand-query-markers child replacements forest))
+                                 (content-element-children content))
+                     (content-element-source content)
+                     #:properties (content-element-properties content)
+                     #:style (content-element-style content)
+                     #:flow-kind (content-element-flow-kind content)))))))
+      (else (list content))))
+
+  (define (expand-site-query-markers site replacements forest)
+    (make-site
+      (map (lambda (page)
+             (make-site-page
+               (site-page-id page)
+               (site-page-title page)
+               (expand-query-markers (site-page-document page) replacements forest)
+               (site-page-source page)
+               #:metadata (site-page-metadata page)))
+           (site-pages site))
+      #:title (site-title site)
+      #:description (site-description site)
+      #:sources (site-sources site)))
+
+  (define-public (analyze-flora site)
+    (let* ((forest (make-forest site))
+           (replacements
+             `((flora-content-query-results
+                . ,(math-query-results site forest))
+               (flora-orphan-page-results
+                . ,(orphan-page-results site forest)))))
+      (make-forest (expand-site-query-markers site replacements forest))))
+)

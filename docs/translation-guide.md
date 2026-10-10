@@ -12,7 +12,7 @@
 
 - 所有可寻址树 id 一律以书前缀开头(`<书>-…`)且**全小写**(URL 大小写敏感);`unstable` 等位置生成的地址除外。**前缀用 Zotero 引用键:作者姓+出版年**(如 `blazek2005-`、`strunk1999-`):图书在英语引用实践中的通行"缩写"就是作者键(`[Blazek, 2005]`、bibtex `blazek2005`),多版本由年份天然区分;领域通称(`cfd` 这类)撞车风险高,不用。**裸姓氏保留给 `taxon person` 人物树**(`blazek`、`strunk`),书主页用完整键(`blazek2005`)。
 - 页面 id 结构自描述:前置材料 `<书>-front`、章节 `<书>-chNN`(两位补零,章号与 id 直接对应)、书索引 `<书>-index`、后记页 `<书>-back`;一章拆多页时加字母后缀(如 strunk1999 第四章三份 `strunk1999-ch04a/b/c`)。
-- 小节子树 `<书>-<章>-<节>`;词条型子树 `<书>-<类型>-<名称/编号>`(如 `strunk1999-rule-1`、`strunk1999-usage-aggravate`、`blazek2005-front-symbols`)。**禁止裸词 id**——早期 strunk1999 曾有 `foreword`、`rule-1` 这类无前缀子树,会直接污染全站顶层 URL。例外:人物树用裸姓氏(`blazek`、`strunk`、`white`),`@taxon["person"]`,中文小传,存 `plants/person/`;著作页用 `@author["<人树>"]` 标注作者——读取期只记录目标树,链接文本在分析期取自人树标题(实现见 `modules/commands.plant` 与 `modules/queries.plant`),即 jms forester `\author{kazmer}` 引用 `kazmer.plant` 的语义。
+- 小节子树 `<书>-<章>-<节>`;词条型子树 `<书>-<类型>-<名称/编号>`(如 `strunk1999-rule-1`、`strunk1999-usage-aggravate`、`blazek2005-front-symbols`)。**禁止裸词 id**——早期 strunk1999 曾有 `foreword`、`rule-1` 这类无前缀子树,会直接污染全站顶层 URL。例外:人物树用裸姓氏(`blazek`、`strunk`、`white`),`@taxon["person"]`,中文小传,存 `plants/person/`;著作页用 `@author["<人树>"]` 标注作者——读取期只记录目标树,链接文本在分析期取自人树标题(实现见 `plants/lib/commands.plant` 与 `plants/lib/queries.plant`(渲染为 /commands.html、/queries.html)),即 jms forester `\author{kazmer}` 引用 `kazmer.plant` 的语义。
 - 文献条目 `<书>-r<章>-<编号>`(附录章号小写,如 `blazek2005-ra-3`);公式锚点 `eq-<章>-<编号>` 是页内 fragment,不占树命名空间,无需前缀。
 
 ```scheme
@@ -31,7 +31,7 @@
 
 ## 2. 双语形式
 
-散文按原文自然段逐段做成双语块,`@bi` 是 `@bilingual[#:reader "zh-CN"]` 的别名(定义于 `modules/commands.plant`):
+散文按原文自然段逐段做成双语块,`@bi` 是 `@bilingual[#:reader "zh-CN"]` 的别名(定义于 `plants/lib/commands.plant`,文档页 /commands.html):
 
 ```
 @bi{
@@ -68,12 +68,12 @@
 
 ## 5. 插图
 
-插图从原书扫描页裁剪,嵌入双语块之外(与展示公式同策略),图下接中文图题与图例译文:
+插图从原书扫描页裁剪,嵌入双语块之外(与展示公式同策略),用 `@figure` 命令书写——方括号参数为图片路径与纯文本替代文本(替代文本内不能放链接),body 为图题:以 `@emph{图 X.Y:…}` 开头,后接图例译文:
 
 ```
-@image["blazek2005/fig-2-1.png"]{图2.1:有限控制体的定义(固定于空间中)}
-
-@emph{图2.1:有限控制体的定义(固定于空间中)。}图例:流线;@tex-math{\Omega}——控制体;…
+@figure["blazek2005/fig-2-1.png" "图2.1:有限控制体的定义(固定于空间中)"]{
+  @emph{图2.1:有限控制体的定义(固定于空间中)。}图例:流线;@tex-math{\Omega}——控制体;…
+}
 ```
 
 裁剪流程(全程可脚本化):
@@ -82,7 +82,7 @@
 2. Read 整页 PNG,按比例估算图形包围盒(**不含**英文 "Figure X.Y:" 图题行)。
 3. `convert -crop WxH+X+Y +repage -fuzz 8% -trim +repage` 输出到 `assets/blazek2005/fig-<章>-<图>.png`,`-trim` 自动去白边;结果必须 Read 目检:图形完整、无英文图题残留、轴标签/子图标注齐全。
 4. `assets/` 目录由 `project.scm` 递归扫描自动注册(URL 即 `/blazek2005/fig-X-Y.png`),新增图片无需改配置。
-5. 图片样式见 `style.css` 的 `.article img`(居中、88% 限宽);渲染时分析期自动把「图片段落 + 紧随的图题段落(以 `@emph` 开头)」配对为 `<figure>/<figcaption>`,内容侧保持 `@image` + 图题段落的原始写法,无需手工包 figure(实现见 `modules/queries.plant` 的 figure-site)。
+5. 图片样式见 `style.css`(`.article img` 居中、88% 限宽;`figcaption` 与图片对齐、字号略小)。`@figure` 定义于 `plants/lib/commands.plant`(渲染为 /commands.html),渲染为 `<figure>/<figcaption>` 语义标签。
 
 纯数值表格用 `@verbatim` 重建,不裁图。
 
