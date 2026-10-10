@@ -35,10 +35,9 @@
   @lang["zh-CN"]{前三类模型属于所谓的@emph{一阶}封闭（first-order closures）。它们主要基于Boussinesq的@emph{涡黏性}假设@link["blazek2005-r7-11"]{[11]}、@link["blazek2005-r7-12"]{[12]}，但对某些应用也基于@emph{非线性涡黏性}表述。图7.1给出了按复杂程度递减排序的各类湍流模型的概览。}
 }
 
-@image["blazek2005/fig-7-1.png"]{图7.1:湍流模型的层级}
-
+@figure["blazek2005/fig-7-1.png" "图7.1:湍流模型的层级"]{
 @emph{图7.1:湍流模型的层级。}缩写:DNS——直接数值模拟(Direct Numerical Simulation);LES——大涡模拟(Large-Eddy Simulation);RANS——雷诺平均Navier-Stokes方程(Reynolds-Averaged Navier-Stokes equations);1st-order——一阶封闭(first-order closures);2nd-order——二阶封闭(second-order closures);RST——雷诺应力输运模型(Reynolds-Stress Transport models);ARS——代数雷诺应力模型(Algebraic Reynolds-Stress models);0-、1-、2-Eq.——零方程(代数)、一方程、两方程模型。
-
+}
 @bi{
   @lang["en"]{One should be aware of the fact that there is no single turbulence model, which can predict reliably all kinds of turbulent flows. Each of the models has its strengths and weaknesses. For example, if a particular model works perfectly in the case of attached boundary layers, it may fail completely for separated flows. Thus, it is important always to ask whether the model includes all the significant features of the flow being investigated. Another point which should be taken into consideration is the computational effort versus the accuracy required by the particular application. We mean by this that in many cases a numerically inexpensive turbulence model can predict some global measures with the same accuracy as a more complex model.}
   @lang["zh-CN"]{应当意识到，不存在能够可靠预测所有类型湍流的单一湍流模型。每种模型都有其长处和短处。例如，某个模型如果在附着边界层的情形下工作得很好，它对分离流动则可能完全失效。因此，始终应当问一问：该模型是否包含了所研究流动的全部重要特征。此外还应考虑的一点是计算量与特定应用所需精度之间的权衡。我们的意思是，在许多情况下，数值上廉价的湍流模型预测某些全局量所能达到的精度，与更复杂的模型相同。}
@@ -161,10 +160,9 @@
       @lang["zh-CN"]{其中@tex-math{\Omega}为控制体。此时@tex-math{\bar{v}_i}在空间上均匀，但允许随时间变化。}
     }
 
-    @image["blazek2005/fig-7-2.png"]{图7.2:雷诺平均——湍流速度脉动与统计平均值的示意图}
-
+    @figure["blazek2005/fig-7-2.png" "图7.2:雷诺平均——湍流速度脉动与统计平均值的示意图"]{
     @emph{图7.2:雷诺平均——湍流速度脉动@tex-math{v'}与统计平均值@tex-math{\bar{v}}的示意图。}
-
+}
     @bi{
       @lang["en"]{3. @emph{Ensemble averaging} -- appropriate for general turbulence}
       @lang["zh-CN"]{3. @emph{系综平均}（ensemble averaging）——适用于一般湍流}
@@ -1192,10 +1190,9 @@
       @lang["zh-CN"]{tophat滤波和Gaussian滤波会平滑大尺度脉动以及滤波宽度以下的小尺度。截断滤波只影响截止波数以下的尺度。实际中，Gaussian滤波总是与锐利傅里叶截断配合使用。适用于单元尺寸变化的网格的滤波函数见文献@link["blazek2005-r7-114"]{[114]}、@link["blazek2005-r7-115"]{[115]}。}
     }
 
-    @image["blazek2005/fig-7-3.png"]{图7.3:物理空间中的LES滤波函数}
-
+    @figure["blazek2005/fig-7-3.png" "图7.3:物理空间中的LES滤波函数"]{
     @emph{图7.3:物理空间中的LES滤波函数:tophat (a),cut-off (b),Gaussian (c)。}图例:G——滤波函数;x——空间坐标;@tex-math{-\Delta/2}、@tex-math{+\Delta/2}——tophat滤波的支撑区间;@tex-math{-\Delta}、@tex-math{+\Delta}——滤波宽度标记。
-  }
+}  }
 
   @subtree[#:id "blazek2005-7-3-2"]{
     @title{7.3.2 Filtered Governing Equations 滤波控制方程}

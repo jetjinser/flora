@@ -4,6 +4,7 @@
   #:use-module (language scribble command)
   #:use-module (grove element)
   #:use-module (grove ir)
+  #:use-module (srfi srfi-1)
   #:re-export (image tag taxon title subtree transclude summary published updated lipsum
                bilingual lang term)
   #:re-export-and-replace (link))
@@ -43,3 +44,19 @@ bare-surname id): @author[\"kazmer\"]. The display text is the person
 tree's own title, filled in at analyze time by modules/queries.plant."
    (make-content-element 'flora-author '()
      #:properties `((target . ,id))))
+
+@(define-public (figure source alt . rest)
+   "Semantic figure: <figure><img/><figcaption>…</figcaption></figure>.
+@figure[\"path\" \"alt-text\"]{ caption body } — the bracket arguments
+are the image source and its plain-text alternative text; the body is
+the caption (typically an @emph figure title followed by the legend)."
+   (let* ((caption (command-body rest))
+          ;; The reader delivers the braces body as one list argument;
+          ;; flatten so its items become figcaption children directly.
+          (caption (append-map (lambda (item)
+                                 (if (list? item) item (list item)))
+                               caption)))
+     ((make-element #:tag "figure" #:flow-kind 'block)
+      (image source alt)
+      (apply (make-element #:tag "figcaption" #:flow-kind 'block)
+             caption))))

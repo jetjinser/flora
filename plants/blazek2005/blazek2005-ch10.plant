@@ -377,10 +377,9 @@
       @lang["zh-CN"]{图10.1给出了对流模型方程上风离散格式的Fourier符号与阻尼特性。两种情形都采用带优化系数的3步格式（表6.1）。一阶上风格式（式}
     }
 
-    @image["blazek2005/fig-10-1.png"]{图10.1:对流模型方程——显式(3,3)格式下空间算子的Fourier符号(z)与放大因子幅值(|g|)}
-
+    @figure["blazek2005/fig-10-1.png" "图10.1:对流模型方程——显式(3,3)格式下空间算子的Fourier符号(z)与放大因子幅值(|g|)"]{
     @emph{图10.1:对流模型方程——显式(3,3)格式下空间算子的Fourier符号(@tex-math{z})与放大因子幅值(@tex-math{|g|})。}(a)一阶上风离散化，@tex-math{\sigma = 1.5}，阶段系数:0.1481、0.4、1.0;(b)同(a)，但@tex-math{\sigma = 2.5};(c)二阶上风，@tex-math{\sigma = 0.69}，阶段系数:0.1918、0.4929、1.0。
-
+}
     @bi{
       @lang["en"]{upwind scheme Eq. @link["blazek2005-ch10#eq-10-16"]{(10.16)} is shown in Fig. 10.1a and 10.1b. As we can see, the locus of the Fourier symbol passes all three minima of @tex-math{|g|} (small circular areas on the isoplot). This leads to very low magnitude of the amplification factor for a phase angle @tex-math{\Phi > \pi/2}, which is particularly important for an efficient multigrid scheme (@tex-math{\Phi \ge \pi/2} on coarse grid corresponds to @tex-math{\Phi < \pi/2} on fine grid). We can also observe that the damping properties are poor for @tex-math{\Phi < \pi/2}. This behaviour is typical for the multistage schemes. It explains their low asymptotic convergence rate, which can be best improved by multigrid. It should be noted that the range @tex-math{0 \le \Phi \le \pi} represents the first half of the locus on the left-hand side.}
       @lang["zh-CN"]{@link["blazek2005-ch10#eq-10-16"]{(10.16)}）的行为示于图10.1a与图10.1b。可以看到，Fourier符号的轨迹通过了@tex-math{|g|}的全部三个极小值（等值线图上的小圆形区域）。这使得当相位角@tex-math{\Phi > \pi/2}时放大因子的幅值非常低，这对高效的多重网格尤为重要（粗网格上的@tex-math{\Phi \ge \pi/2}对应细网格上的@tex-math{\Phi < \pi/2}）。我们还可以观察到，@tex-math{\Phi < \pi/2}时阻尼特性较差。这一行为是多步格式的典型特征，也解释了其渐近收敛率偏低的原因——多重网格正是改善这一点的最佳手段。应当注意，@tex-math{0 \le \Phi \le \pi}的范围对应左图中轨迹的前一半。}
@@ -396,28 +395,25 @@
       @lang["zh-CN"]{图10.2中的各图显示了混合(5,3)-格式（小节6.1.2）施加于对流模型方程@link["blazek2005-ch10#eq-10-13"]{(10.13)}时的Fourier符号轨迹与阻尼特性，空间离散采用带人工耗散的中心格式（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）。为了展示耗散系数@tex-math{\epsilon^{(4)}}的影响，其取值从1/16（图10.2a）变到1/256（图10.2c）。由结果可以得出：随着人工耗散量的减小，轨迹沿实轴收缩——这是式@link["blazek2005-ch10#eq-10-15"]{(10.15)}中@tex-math{(1 - \cos\Phi)^2}项变小所致。更重要的是，人工耗散减小后阻尼特性会恶化；实际上，这意味着耗散水平越低，格式的收敛速度与鲁棒性就越差。}
     }
 
-    @image["blazek2005/fig-10-2.png"]{图10.2:对流模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)}
-
+    @figure["blazek2005/fig-10-2.png" "图10.2:对流模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)"]{
     @emph{图10.2:对流模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(@tex-math{z})与放大因子幅值(@tex-math{|g|})，@tex-math{\sigma = 3.6}，阶段系数与混合系数取自表6.2。}(a)@tex-math{\epsilon^{(4)} = 1/16};(b)@tex-math{\epsilon^{(4)} = 1/64};(c)@tex-math{\epsilon^{(4)} = 1/256}。
-
+}
     @bi{
       @lang["en"]{The properties of the hybrid (5,3)-scheme employed to solve the convection-diffusion equation @link["blazek2005-ch10#eq-10-20"]{(10.20)} are investigated next. At first, the scheme is coupled to the 1st-order upwind spatial discretisation Eq. @link["blazek2005-ch10#eq-10-16"]{(10.16)}. In Fig. 10.3, comparison is made between the cases @tex-math{\Lambda_v = 0} (pure convection) and @tex-math{\Lambda_v / \Lambda = 2} (denoted by dashed line). As we can see, the locus of the Fourier symbol is contracted along the imaginary axis due to the influence of the diffusion term @tex-math{z_v}, which has only a real component. The extension of the Fourier symbol along the real axis is kept, if the time step is computed according to Eq. @link["blazek2005-ch10#eq-10-31"]{(10.31)} with @tex-math{C = 2}. The damping of the scheme remains on about the same favourable level as for pure convection. This is caused by the optimised, flat minimum of @tex-math{|g|} in the region surrounded by the locus of @tex-math{z_c} (right-hand side of Fig. 10.3).}
       @lang["zh-CN"]{接下来考察用混合(5,3)-格式求解对流-扩散方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}时的特性。首先把该格式与一阶上风空间离散（式@link["blazek2005-ch10#eq-10-16"]{(10.16)}）相耦合。图10.3比较了@tex-math{\Lambda_v = 0}（纯对流）与@tex-math{\Lambda_v / \Lambda = 2}（虚线所示）两种情形。可以看到，由于扩散项@tex-math{z_v}（只有实部分量）的影响，Fourier符号的轨迹沿虚轴收缩。若时间步长按式@link["blazek2005-ch10#eq-10-31"]{(10.31)}取@tex-math{C = 2}计算，则Fourier符号沿实轴的伸展得以保持，格式的阻尼大致维持在纯对流时同样良好的水平上——其原因在于@tex-math{z_c}轨迹所围区域内@tex-math{|g|}具有优化过的平坦极小值（图10.3右图）。}
     }
 
-    @image["blazek2005/fig-10-3.png"]{图10.3:对流-扩散模型方程——一阶上风空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)}
-
+    @figure["blazek2005/fig-10-3.png" "图10.3:对流-扩散模型方程——一阶上风空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)"]{
     @emph{图10.3:对流-扩散模型方程——一阶上风空间离散下显式(5,3)格式的空间算子Fourier符号(@tex-math{z})与放大因子幅值(@tex-math{|g|})，@tex-math{\sigma = 2.0}，阶段系数与混合系数取自表6.2。}图例:convection——对流(实线);convection-diffusion——对流-扩散(虚线)。
-
+}
     @bi{
       @lang["en"]{The behaviour of the hybrid (5,3)-scheme with central discretisation (Eq. @link["blazek2005-ch10#eq-10-14"]{(10.14)}) is displayed in Fig. 10.4. The dissipation coefficient was set to @tex-math{\epsilon^{(4)} = 1/64} and the ratio of the eigenvalues to @tex-math{\Lambda_v / \Lambda = 2}, respectively. We can observe that the locus of the Fourier symbol changes its form completely as compared to the convection equation. In the limit case @tex-math{\Lambda_v \to \infty}, the locus would degrade to a line. Therefore, it is important that the time-stepping is optimised to have}
       @lang["zh-CN"]{采用中心离散（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）时混合(5,3)-格式的行为示于图10.4，其中耗散系数取@tex-math{\epsilon^{(4)} = 1/64}，特征值之比取@tex-math{\Lambda_v / \Lambda = 2}。可以观察到，与对流方程相比，Fourier符号的轨迹形状完全改变；在@tex-math{\Lambda_v \to \infty}的极限情形下，轨迹会退化成一条线。因此，重要的是把时间推进优化成具有}
     }
 
-    @image["blazek2005/fig-10-4.png"]{图10.4:对流-扩散模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)}
-
+    @figure["blazek2005/fig-10-4.png" "图10.4:对流-扩散模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)"]{
     @emph{图10.4:对流-扩散模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(@tex-math{z})与放大因子幅值(@tex-math{|g|})，@tex-math{\sigma = 3.6}，@tex-math{\epsilon^{(4)} = 1/64}，阶段系数与混合系数取自表6.2。}图例:convection——对流(实线);convection-diffusion——对流-扩散(虚线)。
-
+}
     @bi{
       @lang["en"]{a shallow minimum of @tex-math{|g|} along the real axis. It should be mentioned that the time step was evaluated with Eq. @link["blazek2005-ch10#eq-10-31"]{(10.31)} and @tex-math{C = 4}.}
       @lang["zh-CN"]{沿实轴的@tex-math{|g|}浅极小值。需要说明的是，这里的时间步长按式@link["blazek2005-ch10#eq-10-31"]{(10.31)}取@tex-math{C = 4}计算。}
@@ -519,28 +515,25 @@
     @lang["zh-CN"]{第二条曲线（虚线）表明人工耗散必须包含在隐式算子之内：当@tex-math{\epsilon^I=0}时，格式在高频段（@tex-math{\Phi\to\pi}）会变得不稳定。最后一条曲线（点划线）给出@tex-math{\beta=1/2}（即时间二阶精度）时@tex-math{g}的幅值。可以看到，其阻尼特性比@tex-math{\beta=1}时差得多，因此应优先选用后者。非定常流动用6.3.2节所述的双重时间推进（dual-time stepping）来求解更为高效。}
   }
 
-  @image["blazek2005/fig-10-5.png"]{图10.5:对流模型方程——隐式格式下放大因子的幅值}
-
+  @figure["blazek2005/fig-10-5.png" "图10.5:对流模型方程——隐式格式下放大因子的幅值"]{
   @emph{图10.5:对流模型方程——隐式格式下放大因子的幅值。}显式算子与隐式算子均采用中心格式离散，@tex-math{\sigma=20}，@tex-math{\epsilon^{(4)}=1/64}。图例：实线——@tex-math{\beta=1.0}，@tex-math{\epsilon^I=1/20}；虚线——@tex-math{\beta=1.0}，@tex-math{\epsilon^I=0}；点划线——@tex-math{\beta=0.5}，@tex-math{\epsilon^I=1/10}。纵轴：@tex-math{|g|}；横轴：相位角(phase angle)。
-
+}
   @bi{
     @lang["en"]{The effect of increasing CFL number is illustrated in Fig. 10.6. First-order upwind scheme (Eqs. (10.16) and (10.35)) is employed on both sides. The damping is very good due to the similarity between the explicit and the implicit operator. This confirms our remark with respect to Newton's scheme.}
     @lang["zh-CN"]{CFL数增大的影响如图10.6所示。两侧（显式算子与隐式算子）都采用一阶上风格式（式@link["blazek2005-ch10#eq-10-16"]{(10.16)}与式@link["blazek2005-ch10#eq-10-35"]{(10.35)}）。由于显式算子与隐式算子之间的相似性，阻尼非常好。这印证了我们前面关于Newton格式的评述。}
   }
 
-  @image["blazek2005/fig-10-6.png"]{图10.6:对流模型方程——隐式格式下放大因子的幅值}
-
+  @figure["blazek2005/fig-10-6.png" "图10.6:对流模型方程——隐式格式下放大因子的幅值"]{
   @emph{图10.6:对流模型方程——隐式格式下放大因子的幅值。}显式算子与隐式算子均采用一阶上风格式离散，@tex-math{\beta=1.0}；注意纵轴为对数刻度。图例：实线——@tex-math{\sigma=10}；虚线——@tex-math{\sigma=100}；点划线——@tex-math{\sigma=1000}。纵轴：@tex-math{\log(|g|)}；横轴：相位角(phase angle)。
-
+}
   @bi{
     @lang["en"]{In the next diagram (Fig. 10.7), we compare the amplification factors for two different discretisations of the implicit operator (the left-hand side - LHS). The explicit operator is in both cases discretised using 2nd-order upwind scheme Eq. (10.18). It is evident that the exact representation of the explicit operator on the LHS leads to significantly better damping properties and thus to faster convergence. This observation was often confirmed in practice. The damping properties of a mixed 1st-/2nd-order discretisation can be improved by increased overrelaxation as demonstrated for the LU-SGS scheme @link["blazek2005-r10-19"]{[19]}, @link["blazek2005-r10-20"]{[20]}.}
     @lang["zh-CN"]{在接下来的一幅图（图10.7）中，我们比较隐式算子（即左端项，left-hand side——LHS）两种不同离散化的放大因子。两种情形下，显式算子都采用二阶上风格式(10.18)离散。显式算子在LHS中得到精确表示时，阻尼特性明显更佳、收敛更快，这一点从图中显而易见。这一观察在实践中多次得到证实。对于一阶/二阶混合离散，可以通过加大超松弛来改善阻尼特性，LU-SGS格式@link["blazek2005-r10-19"]{[19]}、@link["blazek2005-r10-20"]{[20]}即为这样的例子。}
   }
 
-  @image["blazek2005/fig-10-7.png"]{图10.7:对流模型方程——隐式格式下放大因子的幅值}
-
+  @figure["blazek2005/fig-10-7.png" "图10.7:对流模型方程——隐式格式下放大因子的幅值"]{
   @emph{图10.7:对流模型方程——隐式格式下放大因子的幅值。}显式算子采用二阶上风格式离散，@tex-math{\sigma=10}，@tex-math{\beta=1.0}。图例：实线——LHS采用二阶上风格式(2nd-order upwind on LHS)；虚线——LHS采用一阶上风格式(1st-order upwind on LHS)。纵轴：@tex-math{|g|}；横轴：相位角(phase angle)。
-
+}
   @bi{
     @lang["en"]{The last example in Fig. 10.8 deals with the convection-diffusion model equation (10.20). We want to compare two cases. In the first one, the discretisation of the diffusion term is also contained in the implicit operator (solid line). We can observe that the damping properties are very favourable - similar to those found for the convection model problem. However, if the diffusion term is removed from the implicit operator (dashed line in Fig. 10.8, the scheme becomes unstable, even at this low ratio of viscous to convective eigenvalue (@tex-math{\Lambda_v/\Lambda = 2}). Therefore, the viscous fluxes should be always included in the approximation of the flux Jacobian to obtain a robust scheme.}
     @lang["zh-CN"]{图10.8中的最后一个例子考察对流-扩散模型方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}。我们比较两种情形。第一种情形把扩散项的离散也包含在隐式算子之内（实线）。可以看到，其阻尼特性非常好——与对流模型问题中的情形相似。然而，如果从隐式算子中去掉扩散项（图10.8中的虚线），格式就会变得不稳定，即使此时黏性特征值与对流特征值之比很低（@tex-math{\Lambda_v/\Lambda=2}）。因此，为了获得稳健的格式，黏性通量始终都应包含在通量Jacobian的近似之中。}
@@ -548,10 +541,9 @@
 
   @sidenote{译注：原书此处“(dashed line in Fig. 10.8,”之后缺少右括号，译文按文义补全。}
 
-  @image["blazek2005/fig-10-8.png"]{图10.8:对流-扩散模型方程——隐式格式下放大因子的幅值}
-
+  @figure["blazek2005/fig-10-8.png" "图10.8:对流-扩散模型方程——隐式格式下放大因子的幅值"]{
   @emph{图10.8:对流-扩散模型方程——隐式格式下放大因子的幅值。}显式算子与隐式算子均采用二阶上风格式离散，@tex-math{\sigma=10}，@tex-math{\beta=1.0}，@tex-math{\Lambda_v/\Lambda=2}。图例：实线——LHS含黏性项(viscous term on LHS)；虚线——LHS不含黏性项(no viscous term on LHS)。纵轴：@tex-math{|g|}；横轴：相位角(phase angle)。
-
+}
   @bi{
     @lang["en"]{In summary, we can state that the implicit operator should include at least the most important features of the spatial discretisation and of the physical problem. Rather crude approximations of the flux Jacobian @tex-math{\partial\tilde{R}/\partial\tilde{W}} can easily lead to an unstable scheme. Therefore, it is very important to find a reasonable compromise between the numerical effort and the accuracy of the numerical flux Jacobian.}
     @lang["zh-CN"]{综上所述：隐式算子至少应当包含空间离散和物理问题中最重要的特征。十分粗糙的通量Jacobian@tex-math{\partial\tilde{R}/\partial\tilde{W}}近似很容易导致格式不稳定。因此，在数值代价与数值通量Jacobian的精度之间找到合理的折中极为重要。}
@@ -573,10 +565,9 @@
 
   @tex-display-math[#:id "eq-10-41"]{\Lambda\Delta t \le \Delta x \quad\text{or}\quad \Delta t \le \frac{\Delta x}{\Lambda}\,. \tag{10.41}}
 
-  @image["blazek2005/fig-10-9.png"]{图10.9:显式时间推进格式的依赖域与对流方程依赖域的对比}
-
+  @figure["blazek2005/fig-10-9.png" "图10.9:显式时间推进格式的依赖域与对流方程依赖域的对比"]{
   @emph{图10.9:显式时间推进格式的依赖域(阴影区)与对流方程依赖域(粗线)的对比。}图中：纵轴为时间@tex-math{t}，标出@tex-math{t_0}与@tex-math{t_0+\Delta t}；横轴为空间坐标@tex-math{x}，标出格点@tex-math{i-1}、@tex-math{x^{*}}、@tex-math{i}与@tex-math{i+1}；粗斜线为特征线(characteristic: @tex-math{dx/dt=\Lambda})；阴影三角形为数值格式的依赖域；底部两段距离分别标注为@tex-math{\Lambda\Delta t}与@tex-math{\Delta x}。
-
+}
   @bi{
     @lang["en"]{This leads us to the CFL condition}
     @lang["zh-CN"]{由此得到CFL条件}

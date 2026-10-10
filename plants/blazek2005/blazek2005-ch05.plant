@@ -14,14 +14,12 @@
   @lang["zh-CN"]{本章讨论的有限体积格式建立在守恒定律的基础上ï¼即由Navier-Stokes方程(2.19)或欧拉方程(2.45)所表示的守恒定律。在前处理步骤中ï¼首先把物理域划分成若干元素(网格单元)。在二维情形ï¼元素为三角形ï¼有时与四边形组合使用。在三维情形ï¼最常采用的是四面体@link["blazek2005-r5-2"]{[2]}-@link["blazek2005-r5-7"]{[7]}。然而ï¼越来越多的流动求解器在模拟高雷诺数黏性流动时ï¼采用四面体、棱柱、四棱锥的混合ï¼某些情形还包括六面体(图5.1)@link["blazek2005-r5-8"]{[8]}-@link["blazek2005-r5-16"]{[16]}。由多种单元类型构成的非结构网格称为混合网格(mixed grids)。例子见图3.3和图5.2。“混合网格”这一名称不应与术语杂交网格(hybrid grids)相混淆ï¼后者指结构-非结构组合网格(例如@link["blazek2005-r5-17"]{[17]}-@link["blazek2005-r5-19"]{[19]})。}
 }
 
-@image["blazek2005/fig-5-1.png"]{图5.1:用于生成三维非结构网格的单元(elements)}
-
+@figure["blazek2005/fig-5-1.png" "图5.1:用于生成三维非结构网格的单元(elements)"]{
 @emph{图5.1:用于生成三维非结构网格的单元(elements)。}图例:四种单元分别为四面体(tetrahedron)、四棱锥(pyramid)、棱柱(prism)和六面体(hexahedron)。
-
-@image["blazek2005/fig-5-2.png"]{图5.2:绕压气机叶片三维非结构混合网格的平面剖切}
-
+}
+@figure["blazek2005/fig-5-2.png" "图5.2:绕压气机叶片三维非结构混合网格的平面剖切"]{
 @emph{图5.2:绕压气机叶片的三维非结构混合网格的平面剖切。}网格由CENTAUR™@link["blazek2005-r5-20"]{[20]}、@link["blazek2005-r5-21"]{[21]}生成。图例:注意绕叶身表面的四边形面层ï¼它由棱柱单元形成;四面体网格的不规则性由平面剖切造成。
-
+}
 @bi{
   @lang["en"]{The grid generation has to be done in a way that preserves the conservation properties of the governing equations, namely:
     @itemize{
@@ -178,10 +176,9 @@
       @lang["zh-CN"]{其中节点按图5.3b沿逆时针方向编号。上式中ï¼我们假定控制体位于@tex-math{x-y}平面内,@tex-math{z}坐标为对称轴。}
     }
 
-    @image["blazek2005/fig-5-3.png"]{图5.3:(a)三角形元素与(b)四边形元素的节点编号及面向量}
-
+    @figure["blazek2005/fig-5-3.png" "图5.3:(a)三角形元素与(b)四边形元素的节点编号及面向量"]{
     @emph{图5.3:节点编号与面向量:(a)三角形元素;(b)四边形元素。}C表示元素的(几何)中心。
-
+}
     @bi{
       @lang["en"]{The edges of a control volume are given by straight lines in 2D and therefore the unit normal vector is constant along them. When we integrate the fluxes according to the approximation of Eq. @link["blazek2005-ch05#eq-5-2"]{(5.2)}, we have to evaluate the product of the area of a face @tex-math{\Delta S} and the corresponding unit normal vector @tex-math{\vec{n}} which is the @emph{face vector} @tex-math{\vec{S}}. Considering Fig. 5.3, the outward pointing face vector, e.g., at the side 2-3 is given by}
       @lang["zh-CN"]{在二维情形ï¼控制体的各条边均为直线ï¼因此单位法向量沿边保持不变。当我们按照方程@link["blazek2005-ch05#eq-5-2"]{(5.2)}的近似对通量进行积分时ï¼需要计算面的面积@tex-math{\Delta S}与相应单位法向量@tex-math{\vec{n}}的乘积ï¼即面向量(face vector)@tex-math{\vec{S}}。参照图5.3ï¼例如边2-3处的外指面向量由下式给出}
@@ -254,10 +251,9 @@
 
     @tex-display-math[#:id "eq-5-11"]{\vec{S} = \frac{1}{2}\begin{bmatrix} \Delta yz_A + \Delta yz_B + \Delta yz_C \\ \Delta zx_A + \Delta zx_B + \Delta zx_C \\ \Delta xy_A + \Delta xy_B + \Delta xy_C \end{bmatrix}. \tag{5.11}}
 
-    @image["blazek2005/fig-5-4.png"]{图5.4:(a)四面体元素与(b)六面体元素的节点编号及面向量}
-
+    @figure["blazek2005/fig-5-4.png" "图5.4:(a)四面体元素与(b)六面体元素的节点编号及面向量"]{
     @emph{图5.4:节点编号与面向量:(a)四面体元素;(b)六面体元素。}图例:(a)中节点1—4为四面体的顶点,@tex-math{\vec{S}}为面向量;(b)中节点1—8为六面体的顶点,@tex-math{\vec{S}}为面5-6-7-8上的外指面向量。
-
+}
     @emph{Quadrilateral face 四边形面}
 
     @bi{
@@ -389,10 +385,9 @@
     @lang["zh-CN"]{关于计算域的边界ï¼认识到以下两点十分重要。第一ï¼存储边界面比只存储(边界)节点更为方便。考察图5.5所示的情景即可理解这一点。问题在于:节点@tex-math{P_1}被三条边界共享ï¼节点@tex-math{P_2}和@tex-math{P_3}被两条物理类型可能不同的边界共享。因此ï¼施加正确的边界条件可能变得非常繁琐。相反ï¼一个面只能属于一条边界ï¼例如@tex-math{P_1-P_2-P_4}属于边界1。}
   }
 
-  @image["blazek2005/fig-5-5.png"]{图5.5:相交于一个角点的三条边界——网格点相对于边界类型的二义性}
-
+  @figure["blazek2005/fig-5-5.png" "图5.5:相交于一个角点的三条边界——网格点相对于边界类型的二义性"]{
   @emph{图5.5:相交于一个角点的三条边界——网格点相对于边界类型的二义性(ambiguity)。}图例:三条边界分别标记为boundary 3、boundary 2、boundary 1;节点@tex-math{P_1}、@tex-math{P_2}、@tex-math{P_3}位于边界交汇处附近,@tex-math{P_4}为相邻内部节点;面@tex-math{P_1-P_2-P_4}属于边界1。
-
+}
   @bi{
     @lang["en"]{The second point concerns the numbering of the nodes of the boundary faces. This has to be done in a consistent way - e.g., anti-clockwise when viewed from outside the flow domain - in order to have all face vectors (Eqs. @link["blazek2005-ch05#eq-5-6"]{(5.6)}, @link["blazek2005-ch05#eq-5-11"]{(5.11)} or @link["blazek2005-ch05#eq-5-13"]{(5.13)}) either pointing outward or inward.}
     @lang["zh-CN"]{第二点涉及边界面节点的编号。编号必须以一致的方式进行——例如从流动域外侧看去为逆时针方向——以使所有面向量(方程@link["blazek2005-ch05#eq-5-6"]{(5.6)}、@link["blazek2005-ch05#eq-5-11"]{(5.11)}或@link["blazek2005-ch05#eq-5-13"]{(5.13)})一致地指向外侧或内侧。}
@@ -418,10 +413,9 @@
       }
     }
 
-    @image["blazek2005/fig-5-6.png"]{图5.6:单元中心格式的控制体(二维)}
-
+    @figure["blazek2005/fig-5-6.png" "图5.6:单元中心格式的控制体(二维)"]{
     @emph{图5.6:单元中心格式的控制体(二维)。}图例:网格节点用圆点表示ï¼单元中心用方块(C)表示;@tex-math{C_0}、@tex-math{C_1}、@tex-math{C_2}、@tex-math{C_3}为相邻单元的形心,@tex-math{M_{01}}为面01的中点,@tex-math{\vec{n}_{01}}为面01的单位法向量,@tex-math{\Omega}为控制体(阴影部分)。
-
+}
     @bi{
       @lang["en"]{Thus, considering for example the cell face with the unit normal vector @tex-math{\vec{n}_{01}} in Fig. 5.6, the first approach - average of fluxes - reads in two dimensions}
       @lang["zh-CN"]{于是ï¼以图5.6中具有单位法向量@tex-math{\vec{n}_{01}}的单元面为例ï¼第一种方法——通量平均——在二维情形下为}
@@ -555,18 +549,15 @@ ENDDO
       }
     }
 
-    @image["blazek2005/fig-5-7.png"]{图5.7:四面体(a)与六面体(b)的中位对偶格式的部分控制体及面(阴影)}
-
+    @figure["blazek2005/fig-5-7.png" "图5.7:四面体(a)与六面体(b)的中位对偶格式的部分控制体及面(阴影)"]{
     @emph{图5.7:四面体(a)与六面体(b)的中位对偶格式的部分控制体及面(阴影所示)。}P表示网格节点,C为单元形心(方程@link["blazek2005-ch05#eq-5-17"]{(5.17)}),F为面形心(方程@link["blazek2005-ch05#eq-5-8"]{(5.8)}或@link["blazek2005-ch05#eq-5-9"]{(5.9)}),M表示边中点。阴影部分表示分配给边@tex-math{P_1-P_3}或@tex-math{P_1-P_5}的控制体面的一部分。
-
-    @image["blazek2005/fig-5-8.png"]{图5.8:中位对偶格式的控制体(二维)}
-
+}
+    @figure["blazek2005/fig-5-8.png" "图5.8:中位对偶格式的控制体(二维)"]{
     @emph{图5.8:中位对偶格式的控制体(二维)。}@tex-math{C_1}、@tex-math{C_2}等表示单元中心(形心);@tex-math{P_1}、@tex-math{P_2}等表示网格节点。与边@tex-math{P_0-P_1}相关联的面面积用粗线标出。图中还标出了部分面的单位法向量@tex-math{\vec{n}_L}、@tex-math{\vec{n}_R}ï¼边@tex-math{P_0-P_1}的中点@tex-math{M_{01}}ï¼以及网格节点@tex-math{P_0}周围的控制体@tex-math{\Omega_0}。
-
-    @image["blazek2005/fig-5-9.png"]{图5.9:三维中位对偶单元顶点格式中与边ij相关联的总面面积与平均单位法向量}
-
+}
+    @figure["blazek2005/fig-5-9.png" "图5.9:三维中位对偶单元顶点格式中与边ij相关联的总面面积与平均单位法向量"]{
     @emph{图5.9:三维中位对偶单元顶点格式中与边@tex-math{ij}相关联的总面面积@tex-math{\Delta S_{ij}}与平均单位法向量@tex-math{\vec{n}_{ij}}。}
-
+}
     @bi{
       @lang["en"]{The computation of fluxes follows formally the same approaches as for the cell-centred scheme. Thus, the formulae @link["blazek2005-ch05#eq-5-18"]{(5.18)}-@link["blazek2005-ch05#eq-5-22"]{(5.22)} are applicable also in the case of the median-dual scheme. If we utilise the above approach which associates each edge with a mean unit normal, the most efficient methodology is to employ an edge-based data structure for the spatial discretisation. The edge-based data structure stores for each particular edge in the grid (cf. Fig. 5.9):
         @itemize{
@@ -644,14 +635,12 @@ ENDDO
       @lang["zh-CN"]{中位对偶格式在拉伸的三角形和四面体网格上存在一个特有的问题。例如考虑图5.10ï¼它显示了由直角三角形组成的网格剖分ï¼这种剖分常用于黏性流动中的固体壁面附近。从图5.10a可以看到ï¼面@tex-math{\Delta S_{ij}}相对于边@tex-math{ij}变得高度倾斜。然而ï¼空间离散格式大多假设通量与面正交(尤其是黎曼求解器)。由此引入的误差对一阶格式尤为显著@link["blazek2005-r5-38"]{[38]}。采用所谓的包含对偶(containment-dual)控制体@link["blazek2005-r5-39"]{[39]}可以改善这一状况。如图5.11所示ï¼包含对偶方法用最小外包圆/球的中心代替单元形心来定义面。这样得到的控制体与四边形网格上的相同(图5.10b)。注意ï¼像@tex-math{ij'}这样的对角边没有与之相关联的面面积。这需要额外的预处理工作量ï¼但解的精度可以得到明显改善@link["blazek2005-r5-40"]{[40]}。当然ï¼另一种可能的做法是直接在(边界层内)采用四边形或六面体}
     }
 
-    @image["blazek2005/fig-5-10.png"]{图5.10:拉伸直角三角形剖分下中位对偶(a)与包含对偶(b)控制体的比较}
-
+    @figure["blazek2005/fig-5-10.png" "图5.10:拉伸直角三角形剖分下中位对偶(a)与包含对偶(b)控制体的比较"]{
     @emph{图5.10:对拉伸直角三角形剖分ï¼中位对偶(a)与包含对偶(b)控制体的比较。}图例:阴影部分为控制体,@tex-math{i}、@tex-math{j}为节点,@tex-math{\Delta S_{ij}}为与边@tex-math{ij}相关联的(粗线所示)面;(b)中@tex-math{j'}为包含对偶在最长边上引入的节点。
-
-    @image["blazek2005/fig-5-11.png"]{图5.11:锐角(a)与钝角(c)三角形情形下包含对偶(虚线)的一部分}
-
+}
+    @figure["blazek2005/fig-5-11.png" "图5.11:锐角(a)与钝角(c)三角形情形下包含对偶(虚线)的一部分"]{
     @emph{图5.11:锐角(a)与钝角(c)三角形情形下包含对偶(虚线)的一部分@link["blazek2005-r5-40"]{[40]}。}包含圆(containment circle)是包含该三角形的最小圆;对钝角三角形ï¼它的圆心位于最长边上。
-
+}
     @bi{
       @lang["en"]{cells within the boundary layers. Further discussion of grid-induced errors can be found in Ref. @link["blazek2005-r5-22"]{[22]} and @link["blazek2005-r5-23"]{[23]}.}
       @lang["zh-CN"]{(单元)。关于网格诱导误差的进一步讨论可参见文献@link["blazek2005-r5-22"]{[22]}和@link["blazek2005-r5-23"]{[23]}。}
@@ -957,14 +946,12 @@ ENDDO
       @lang["zh-CN"]{出现强间断时,MUSCL插值@link["blazek2005-ch05#eq-5-39"]{(5.39)}必须辅以限制器函数(按照4.3.5小节)。这种方法的一个缺点是必须为每条边存储包含虚拟节点的单元。另一个概念上的缺点是:为一个控制体重构出的梯度并不唯一。此外ï¼在边界处可能出现困难ï¼因为此时某个虚拟点会落在物理域之外。}
     }
 
-    @image["blazek2005/fig-5-12.png"]{图5.12:基于沿边ij方向的单元插值确定左、右状态(二维中点对偶格式)}
-
+    @figure["blazek2005/fig-5-12.png" "图5.12:基于沿边ij方向的单元插值确定左、右状态(二维中点对偶格式)"]{
     @emph{图5.12:基于沿边ij方向的单元插值确定左、右状态(二维中点对偶格式)。}图例:@tex-math{i'}、@tex-math{i}、@tex-math{j}、@tex-math{j'}——虚拟节点与边ij的端点;@tex-math{U_L}、@tex-math{U_R}——控制体面上的左状态与右状态;着灰色的单元表示用于插值到虚拟节点的周围单元;虚线表示由边ij向两端延长所得的线段。
-
-    @image["blazek2005/fig-5-13.png"]{图5.13:二维单元中心格式(a)与中点对偶格式(b)的线性重构}
-
+}
+    @figure["blazek2005/fig-5-13.png" "图5.13:二维单元中心格式(a)与中点对偶格式(b)的线性重构"]{
     @emph{图5.13:二维单元中心格式(a)与中点对偶格式(b)的线性重构。}图例:(a)@tex-math{I}、@tex-math{J}——单元形心;@tex-math{U_L}、@tex-math{U_R}——面上的左、右状态;@tex-math{\vec{r}_L}、@tex-math{\vec{r}_R}——由形心指向面中点的向量;@tex-math{\Omega}——控制体。(b)@tex-math{i}、@tex-math{j}——节点;@tex-math{\vec{r}_{ij}}——由节点@tex-math{i}指向@tex-math{j}的边向量;@tex-math{U_L}、@tex-math{U_R}——面上的左、右状态;@tex-math{\Omega}——对偶控制体。
-
+}
     @emph{Piecewise Linear Reconstruction 分段线性重构}
 
     @bi{
@@ -1085,10 +1072,9 @@ ENDDO
       @lang["zh-CN"]{该矩阵在单元形心@tex-math{I}处取值。变量@tex-math{\Psi_{I,1}}与@tex-math{\Psi_{I,2}}分别表示用于线性项与二次项的两种不同限制器函数@link["blazek2005-r5-62"]{[62]}。二次重构方法在规则网格上为三阶精度;由于误差项相消ï¼在任意网格上至少为二阶精度@link["blazek2005-r5-63"]{[63]}。不过ï¼要达到这些性质ï¼必要条件是:式@link["blazek2005-ch05#eq-5-47"]{(5.47)}中的梯度@tex-math{\nabla U}至少以二阶精度计算,Hessian至少以一阶精度计算。这通过把Green-Gauss梯度计算与基于最小二乘的二阶导数近似相结合来实现@link["blazek2005-r5-62"]{[62]}、@link["blazek2005-r5-63"]{[63]}ï¼从而得到数值上高效的格式。但与线性重构相比ï¼其内存与CPU时间开销仍然相当可观。该方法使用由面相邻与节点相邻单元组成的固定模板。模板以及Green-Gauss梯度计算所用的积分路径示于图5.14。为了确定二次多项式的所有系数ï¼模板至少须提供六个(三维为十个)值。为了保持二次重构所提供的精度ï¼必须考虑解在面上的线性变化而不是常值。这意味着解必须在二维面的两个点——所谓Gauss求积点(参见图5.14)——处重构(三角面则为三个点)ï¼并且通量须在控制体面上分段积分@link["blazek2005-r5-37"]{[37]}。}
     }
 
-    @image["blazek2005/fig-5-14.png"]{图5.14:Delanaye二次重构方法的模板(二维ï¼实心矩形)}
-
+    @figure["blazek2005/fig-5-14.png" "图5.14:Delanaye二次重构方法的模板(二维ï¼实心矩形)"]{
     @emph{图5.14:Delanaye@link["blazek2005-r5-62"]{[62]}、@link["blazek2005-r5-63"]{[63]}二次重构方法在二维下的模板(实心矩形)。}图例:虚线表示Green-Gauss梯度计算的积分路径(控制体@tex-math{\Omega'});叉号表示通量积分的求积点;@tex-math{I}、@tex-math{\Omega}——中心单元及其控制体;@tex-math{J}、@tex-math{J+1}——模板中的远邻单元形心。
-  }
+}  }
 
   @subtree[#:id "blazek2005-5-3-4"]{
     @title{5.3.4 Evaluation of the Gradients 梯度的计算}
@@ -1293,10 +1279,9 @@ ENDDO
       @lang["zh-CN"]{经验还表明ï¼当黏性壁面上采用棱柱或六面体单元时ï¼中点对偶格式的最小二乘方法需要注意一些问题。考察图5.15ï¼假设我们要计算节点@tex-math{i}处速度分量的梯度。可以看出ï¼只有来自边@tex-math{ij}的贡献是有用的ï¼因为与@tex-math{i}通过边相连的其他节点上@tex-math{u = v = w = 0}。为了扩大模板的支持范围ï¼可以插入所谓的虚拟边(virtual edges)@link["blazek2005-r5-49"]{[49]}ï¼如图5.15中的虚线所示。虚拟边能显著改善离散格式的精度与稳健性。应当强调ï¼它们只用于梯度重构ï¼而不用于通量计算。}
     }
 
-    @image["blazek2005/fig-5-15.png"]{图5.15:用于计算节点i处梯度的虚拟边(虚线)}
-
+    @figure["blazek2005/fig-5-15.png" "图5.15:用于计算节点i处梯度的虚拟边(虚线)"]{
     @emph{图5.15:用于计算节点@tex-math{i}处梯度的虚拟边(虚线)@link["blazek2005-r5-49"]{[49]}。}图例:所示为边界上(阴影)的棱柱单元(a)与六面体单元(b);@tex-math{i}、@tex-math{j}——节点;虚线为虚拟边。
-  }
+}  }
 
   @subtree[#:id "blazek2005-5-3-5"]{
     @title{5.3.5 Limiter Functions 限制器函数}
@@ -1392,14 +1377,12 @@ ENDDO
       @lang["zh-CN"]{计算上述任一限制器函数的工作量都相当大。为了算出@tex-math{U_{max}}、@tex-math{U_{min}}以及限制器@tex-math{\Psi}本身ï¼需要对边循环两次(单元中心格式则对面循环)ï¼并对节点(单元)循环一次。此外,@tex-math{U_{max}}、@tex-math{U_{min}}与@tex-math{\Psi}必须按节点(单元)逐一存储ï¼而且要为每个流动变量分别存储。}
     }
 
-    @image["blazek2005/fig-5-16.png"]{图5.16:Venkatakrishnan限制器中常数K对圆弧无黏绕流解的影响}
-
+    @figure["blazek2005/fig-5-16.png" "图5.16:Venkatakrishnan限制器中常数K对圆弧无黏绕流解的影响"]{
     @emph{图5.16:Venkatakrishnan限制器中常数@tex-math{K}(由式@link["blazek2005-ch05#eq-5-67"]{(5.67)}给出)对圆弧无黏绕流解的影响。}图例:纵轴为马赫数(Mach number);曲线自左至右对应@tex-math{K = 0}、@tex-math{K = 5}、@tex-math{K = 20}、@tex-math{K = 50}及无限制(unlimited)。
-
-    @image["blazek2005/fig-5-17.png"]{图5.17:Venkatakrishnan限制器中常数K对圆弧无黏绕流收敛历史的影响}
-
+}
+    @figure["blazek2005/fig-5-17.png" "图5.17:Venkatakrishnan限制器中常数K对圆弧无黏绕流收敛历史的影响"]{
     @emph{图5.17:Venkatakrishnan限制器中常数@tex-math{K}对圆弧无黏绕流收敛历史的影响。}图例:纵轴为归一化密度残差的@tex-math{L_2}范数ï¼横轴为迭代次数(Iterations);@tex-math{K = 0}时残差停滞;@tex-math{K = 5}、@tex-math{20}、@tex-math{50}与无限制(unlimited)则收敛到机器零。
-  }
+}  }
 }
 
 @subtree[#:id "blazek2005-5-4"]{
@@ -1531,14 +1514,12 @@ ENDDO
       @lang["zh-CN"]{参照图5.19ï¼下标@tex-math{I}、@tex-math{J}表示单元形心ï¼下标@tex-math{1}、@tex-math{2}、@tex-math{3}分别表示节点@tex-math{P_1}、@tex-math{P_2}与@tex-math{P_3}。节点处的流动变量可由逆距离加权(式@link["blazek2005-ch05#eq-5-45"]{(5.45)})或伪拉普拉斯加权@link["blazek2005-r5-2"]{[2]}(类似于式@link["blazek2005-ch05#eq-5-24"]{(5.24)})确定。}
     }
 
-    @image["blazek2005/fig-5-18.png"]{图5.18:节点i处的黏性项:体积为Ωe的四面体及计算与边ij相关系数所涉及的三角面}
-
+    @figure["blazek2005/fig-5-18.png" "图5.18:节点i处的黏性项:体积为Ωe的四面体及计算与边ij相关系数所涉及的三角面"]{
     @emph{图5.18:节点@tex-math{i}处的黏性项:体积为@tex-math{\Omega_e}的四面体ï¼以及计算与边@tex-math{ij}相关系数所涉及的三角面@link["blazek2005-r5-71"]{[71]}。}图例:@tex-math{i}、@tex-math{j}——节点;@tex-math{\Omega_e}——共享边@tex-math{ij}的四面体的体积;@tex-math{\vec{S}_e^{i}}、@tex-math{\vec{S}_e^{j}}——外侧面向量。
-
-    @image["blazek2005/fig-5-19.png"]{图5.19:单元中心格式:四面体网格上梯度计算的模板}
-
+}
+    @figure["blazek2005/fig-5-19.png" "图5.19:单元中心格式:四面体网格上梯度计算的模板"]{
     @emph{图5.19:单元中心格式:四面体网格上梯度计算的模板@link["blazek2005-r5-4"]{[4]}。}图例:@tex-math{I}、@tex-math{J}——单元形心;@tex-math{P_1}、@tex-math{P_2}、@tex-math{P_3}——定义单元面的节点;叉号表示为计算黏性通量而求梯度的位置(面@tex-math{P_1P_2P_3}的中点);虚线为两形心连线。
-  }
+}  }
 
   @subtree[#:id "blazek2005-5-4-2"]{
     @title{5.4.2 Average of Gradients 梯度平均}

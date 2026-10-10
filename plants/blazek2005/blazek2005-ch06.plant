@@ -494,14 +494,12 @@ stage    alpha   beta      alpha   beta       alpha   beta
       @lang["zh-CN"]{其中@tex-math{\bar{I}}代表单位矩阵。应当注意ï¼每个矩阵@tex-math{\bar{A}_c}中的单位法向量都在与相应面积@tex-math{\Delta S}相同的控制体一侧求值。可以看到ï¼隐式算子涉及与空间离散化相同的三点模板(节点@tex-math{i-1}、@tex-math{i}和@tex-math{i+1})。}
     }
 
-    @image["blazek2005/fig-6-1.png"]{图6.1:一维结构网格及相应的三点模板隐式算子矩阵}
-
+    @figure["blazek2005/fig-6-1.png" "图6.1:一维结构网格及相应的三点模板隐式算子矩阵"]{
     @emph{图6.1:一维结构网格及相应的三点模板隐式算子矩阵。}图例:左上为模板(stencil)——节点@tex-math{L}(@tex-math{i-1})、@tex-math{D}(@tex-math{i})、@tex-math{U}(@tex-math{i+1});左下为网格(grid)——编号1至8的8个网格节点;右侧为隐式算子——@tex-math{8\times 8}块三对角矩阵ï¼非零块为@tex-math{L}、@tex-math{D}、@tex-math{U}ï¼角落处为0。
-
-    @image["blazek2005/fig-6-2.png"]{图6.2:二维结构网格(左)及相应的五点模板隐式算子矩阵(右)}
-
+}
+    @figure["blazek2005/fig-6-2.png" "图6.2:二维结构网格(左)及相应的五点模板隐式算子矩阵(右)"]{
     @emph{图6.2:二维结构网格(左)及相应的五点模板隐式算子矩阵(右)。}图例:模板(stencil)由节点@tex-math{i,j}及其四个邻居@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i,j-1}、@tex-math{i,j+1}组成;网格(grid)为@tex-math{8\times 4}个节点,@tex-math{i}方向编号1至8,@tex-math{j}方向编号1至4;右侧矩阵中非零块矩阵以实心方块表示。
-
+}
     @bi{
       @lang["en"]{In order to visualise the system matrix, we denote all terms in the implicit operator associated with the central node @tex-math{i} as @tex-math{\mathbf{D}}, i.e.,}
       @lang["zh-CN"]{为了将系统矩阵可视化ï¼把隐式算子中与中心节点@tex-math{i}相关联的所有项记为@tex-math{\mathbf{D}}ï¼即}
@@ -552,19 +550,17 @@ stage    alpha   beta      alpha   beta       alpha   beta
       @lang["zh-CN"]{从结构网格过渡到非结构网格时ï¼系统矩阵的外观完全改变。这一点可以借助图6.3所示的小型非结构网格来说明。设空间离散化由5.2.1小节的单元中心格式给出ï¼该格式只使用最近邻单元的流动值(例如像一阶上风格式那样——见5.3.2和5.3.3小节)。于是ï¼例如单元2的模板包括单元18、10和13。所得的系统矩阵显示在图6.3的右侧。显然ï¼由于网格单元(中位对偶格式情形下为节点)一般按任意顺序编号ï¼矩阵不会呈现出规则的模式。只有主对角线——它至少包含表达式@link["blazek2005-ch06#eq-6-35"]{(6.35)}ï¼可能还包含源项的导数——总是存在。}
     }
 
-    @image["blazek2005/fig-6-3.png"]{图6.3:二维非结构网格(左)及相应的最近邻模板隐式算子矩阵(右)}
-
+    @figure["blazek2005/fig-6-3.png" "图6.3:二维非结构网格(左)及相应的最近邻模板隐式算子矩阵(右)"]{
     @emph{图6.3:二维非结构网格(左)及相应的最近邻模板隐式算子矩阵(右)。}图例:左图三角形单元编号1至20;右侧矩阵中非零块矩阵以实心方块表示。
-
+}
     @bi{
       @lang["en"]{The quasi-random distribution of nonzero elements in the system matrix is undesirable. It slows down the convergence of iterative inversion methods like Gauss-Seidel. Furthermore, preconditioning techniques for Krylov-subspace methods like ILU (Incomplete Lower-Upper) factorisation scheme cannot be used efficiently. Therefore, strategies were developed where the cells (nodes) are renumbered such that the bandwidth of the system matrix is considerably reduced, i.e., the nonzero elements are clustered close to the main diagonal. The best-known renumbering strategy is the @emph{Reverse-Cuthill-McKee} (RCM) algorithm @link["blazek2005-r6-27"]{[27]}, @link["blazek2005-r6-28"]{[28]}. Figure 6.4 shows the resulting cell numbering and the system matrix when the RCM algorithm is applied to the example grid of Fig. 6.3. As we can see, the bandwidth of the matrix is significantly reduced and the matrix obtains a more regular structure.}
       @lang["zh-CN"]{系统矩阵中非零元素的准随机分布是不可取的。它会减慢Gauss-Seidel等迭代求逆方法的收敛速度。此外,ILU(不完全下-上三角分解,Incomplete Lower-Upper)这类Krylov子空间方法的预条件技术也无法高效使用。因此ï¼人们发展了通过对单元(节点)重新编号来大幅减小系统矩阵带宽的策略ï¼即使非零元素聚集到主对角线附近。最著名的重新编号策略是逆Cuthill-McKee(Reverse-Cuthill-McKee,RCM)算法@link["blazek2005-r6-27"]{[27]}、@link["blazek2005-r6-28"]{[28]}。图6.4给出了把RCM算法应用于图6.3示例网格后得到的单元编号和系统矩阵。可以看到ï¼矩阵的带宽显著减小ï¼矩阵获得了更规则的结构。}
     }
 
-    @image["blazek2005/fig-6-4.png"]{图6.4:用逆Cuthill-McKee排序把图6.3隐式算子的带宽从18减至5}
-
+    @figure["blazek2005/fig-6-4.png" "图6.4:用逆Cuthill-McKee排序把图6.3隐式算子的带宽从18减至5"]{
     @emph{图6.4:用逆Cuthill-McKee(reverse-Cuthill-McKee)排序把图6.3隐式算子的带宽从18减至5。}图例:左图为重新编号后的三角形单元网格(编号1至20);右侧矩阵中非零块矩阵以实心方块表示。
-
+}
     @bi{
       @lang["en"]{Several other renumbering strategies were developed in order to minimise cache misses or to allow for vectorisation of the numerical scheme. An overview can be found, e.g., in Ref. @link["blazek2005-r6-29"]{[29]}.}
       @lang["zh-CN"]{为了减少缓存未命中或允许数值格式向量化ï¼还发展了其他一些重新编号策略。综述可参见例如文献@link["blazek2005-r6-29"]{[29]}。}
@@ -879,14 +875,12 @@ stage    alpha   beta      alpha   beta       alpha   beta
     \mathbf{D}\Delta\vec{W}^{n}_{i,j,k} &= \mathbf{D}\Delta\vec{W}^{(1)}_{i,j,k} - \mathbf{U}\Delta\vec{W}^{n}.
   \end{aligned} \tag{6.54}}
 
-  @image["blazek2005/fig-6-5.png"]{图6.5:LU-SGS格式在计算空间中的扫掠方向}
-
+  @figure["blazek2005/fig-6-5.png" "图6.5:LU-SGS格式在计算空间中的扫掠方向"]{
   @emph{图6.5:LU-SGS格式在计算空间中的扫掠方向。}图例:@tex-math{\bullet}表示算子@tex-math{\mathbf{D}}当前被求逆的位置(直线@tex-math{i+j=\mathrm{const.}});@tex-math{\times}表示@tex-math{\mathbf{L}}的已更新值。
-
-  @image["blazek2005/fig-6-6.png"]{图6.6:三维隐式LU-SGS格式扫掠的对角面}
-
+}
+  @figure["blazek2005/fig-6-6.png" "图6.6:三维隐式LU-SGS格式扫掠的对角面"]{
   @emph{图6.6:三维隐式LU-SGS格式扫掠的对角面。}图内标注:@tex-math{i+j+k}=常数平面(i+j+k = constant plane)。
-
+}
   @bi{
     @lang["en"]{As we can see from Eq. @link["blazek2005-ch06#eq-6-54"]{(6.54)}, the only term which needs to be inverted is the diagonal term @tex-math{\mathbf{D}}. Thus, the LU-SGS methodology transforms the inversion of a sparse banded matrix into the inversion of a block-diagonal matrix. Furthermore, if the viscous flux Jacobians in Eq. @link["blazek2005-ch06#eq-6-53"]{(6.53)} are approximated by the viscous spectral radii, the operator @tex-math{\mathbf{D}} becomes a diagonal matrix (except for the source term). Hence, the LU-SGS scheme requires a very small computational effort as compared to other implicit schemes (e.g., the ADI scheme discussed previously). Furthermore, the inversion of the diagonal operator can be carried out independently for each node (cell) of the diagonal plane, which makes the scheme easy to vectorise. The indices of the nodes/cells on the diagonal planes can be obtained with the following pseudo-code @link["blazek2005-r6-72"]{[72]}:}
     @lang["zh-CN"]{由式@link["blazek2005-ch06#eq-6-54"]{(6.54)}可见ï¼唯一需要求逆的是对角项@tex-math{\mathbf{D}}。这样,LU-SGS方法把稀疏带状矩阵的求逆转化为块对角矩阵的求逆。此外ï¼若式@link["blazek2005-ch06#eq-6-53"]{(6.53)}中的黏性通量雅可比用黏性谱半径近似ï¼算子@tex-math{\mathbf{D}}便成为对角矩阵(源项除外)。因此ï¼与其他隐式格式(例如前面讨论过的ADI格式)相比,LU-SGS格式所需的计算量非常小。而且ï¼对角算子的求逆可以对角面上的每个节点(单元)独立进行ï¼这使该格式易于向量化。对角面上节点/单元的指标可用如下伪代码获得@link["blazek2005-r6-72"]{[72]}:}

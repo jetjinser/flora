@@ -29,10 +29,9 @@
   @lang["zh-CN"]{接下来ï¼我们将进一步了解各种求解方法学的基本原理:控制方程在空间与时间上的数值近似、湍流建模ï¼以及边界处理。}
 }
 
-@image["blazek2005/fig-3-1.png"]{图3.1:固体壁面附近的贴体网格(a)与笛卡尔网格(b)(此处以二维显示)}
-
+@figure["blazek2005/fig-3-1.png" "图3.1:固体壁面附近的贴体网格(a)与笛卡尔网格(b)(此处以二维显示)"]{
 @emph{图3.1:固体壁面附近的贴体网格(a)与笛卡尔网格(b)(此处以二维显示)。}图例:solid body——固体壁面;(a)中网格紧贴物面,(b)中网格线平行于笛卡尔坐标轴、在物面处被截断。
-
+}
 @subtree[#:id "blazek2005-3-1"]{
   @title{3.1 Spatial Discretisation 空间离散}
 
@@ -51,32 +50,28 @@
     }
   }
 
-  @image["blazek2005/fig-3-2.png"]{图3.2:结构化贴体网格方法(二维):(a)物理空间;(b)计算空间}
-
+  @figure["blazek2005/fig-3-2.png" "图3.2:结构化贴体网格方法(二维):(a)物理空间;(b)计算空间"]{
   @emph{图3.2:结构化贴体网格方法(二维):(a)为物理空间;(b)为计算空间;@tex-math{\xi}、@tex-math{\eta}表示一个曲线坐标系。}图例:(a)中@tex-math{\xi}、@tex-math{\eta}为沿网格方向的曲线坐标轴,solid body——固体壁面ï¼网格点标记为 i-1,j;i,j;i+1,j;i,j+1;i,j-1;(b)中坐标轴为 i(@tex-math{\xi})与 j(@tex-math{\eta})ï¼网格点标记同(a)。
-
-  @image["blazek2005/fig-3-3.png"]{图3.3:二维非结构混合网格;数字标记各个单元}
-
+}
+  @figure["blazek2005/fig-3-3.png" "图3.3:二维非结构混合网格;数字标记各个单元"]{
   @emph{图3.3:二维非结构混合网格方法;数字标记各个单元。}图例:solid body——固体壁面;图中数字(如1、56、119、6、32、88、10、203)为各单元编号ï¼近壁为四边形单元、外层为三角形与六边形单元的混合。
-
+}
   @bi{
     @lang["en"]{The main advantage of structured grids follows from the property that the indices @tex-math{i,j,k} represent a linear address space - also called the computational space, since it directly corresponds to how the flow variables are stored in the computer memory. This property allows it to access the neighbours of a grid point very quickly and easily, just by adding or subtracting an integer value to or from the corresponding index (e.g., like (i+1), (k-3), etc. - see Fig. 3.2). As one can imagine, the evaluation of gradients, fluxes, and also the treatment of boundary conditions is greatly simplified by this feature. The same holds for the implementation of an implicit scheme, because of the well-ordered, banded flux Jacobian matrix. But there is also a disadvantage. This is the generation of structured grids for complex geometries. As sketched in Fig. 3.4, one possibility is to divide the physical space into a number of topologically simpler parts - blocks - which can be more easily meshed. We therefore speak of multiblock approach @link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-24"]{[24]}. Of course, the complexity of the flow solver is increased, since special logic is required to exchange physical quantities or fluxes between the blocks. Additional flexibility is added, if the grid points at both sides of an interface can be placed independently of each other, i.e., if the grid lines are allowed not to meet at a block boundary (like inside C or F in Fig. 3.4). Those grid points, which are located only on one side of a block interface are called hanging nodes. The advantage of this approach is quite obvious - the number of grid lines can be chosen separately for each block as required. The price paid for the enhanced flexibility is an increased overhead for the conservative treatment of the hanging nodes @link["blazek2005-r3-25"]{[25]}, @link["blazek2005-r3-26"]{[26]}. The multiblock methodology also offers interesting possibilities with respect to the implementation of the flow solver on a parallel computer by means of domain decomposition. However, very long times (often weeks or months) are still required for the grid generation in the case of complex configurations.}
     @lang["zh-CN"]{结构网格的主要优点源于这样一个性质:索引@tex-math{i,j,k}构成一个线性地址空间——也称为计算空间(computational space)ï¼因为它直接对应于流动变量在计算机存储器中的存放方式。这一性质使得我们可以仅对相应的索引加减一个整数值ï¼就非常快捷、方便地访问某个网格点的邻居(例如(i+1)、(k-3)等——见图3.2)。可以想见ï¼梯度与通量的计算以及边界条件的处理都因这一特点而大为简化。隐式格式的实现也是如此ï¼因为通量雅可比矩阵排列规整、呈带状。但结构网格也有缺点ï¼那就是为复杂几何生成结构网格十分困难。如图3.4所示ï¼一种可能的做法是把物理空间划分成若干拓扑上更简单的部分——即块(blocks)——它们更容易被划分网格。因此我们称之为多块法(multiblock approach)@link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-24"]{[24]}。当然ï¼流动求解器的复杂性随之增加ï¼因为需要专门的逻辑在各块之间交换物理量或通量。如果界面两侧的网格点可以彼此独立布置ï¼即允许网格线在块边界处不相互对接(如图3.4中C或F内部那样)ï¼灵活性还会进一步增加。那些只位于块界面一侧的网格点称为悬挂节点(hanging nodes)。这种做法的优点显而易见——网格线的数目可以按需要逐块单独选取。为这种增强的灵活性所付出的代价ï¼是悬挂节点守恒处理的开销增大@link["blazek2005-r3-25"]{[25]}、@link["blazek2005-r3-26"]{[26]}。多块方法学还为借助区域分解(domain decomposition)在并行计算机上实现流动求解器提供了有吸引力的可能性。然而ï¼对于复杂外形ï¼网格生成仍然需要很长的时间(往往数周或数月)。}
   }
 
-  @image["blazek2005/fig-3-4.png"]{图3.4:具有相容/非相容块间界面的结构化多块网格;粗线表示块边界}
-
+  @figure["blazek2005/fig-3-4.png" "图3.4:具有相容/非相容块间界面的结构化多块网格;粗线表示块边界"]{
   @emph{图3.4:具有相容/非相容块间界面的结构化多块网格;粗线表示块边界。}图例:粗实线——块边界;字母C、F标示网格线在块边界处不相互对接(非相容界面)的区域。
-
+}
   @bi{
     @lang["en"]{Another methodology, related to block structured grids, represents the so-called Chimera technique @link["blazek2005-r3-27"]{[27]}-@link["blazek2005-r3-32"]{[32]}. The basic idea here is to generate first the grids separately around each geometrical entity in the domain. After that, the grids are combined together in such a way that they overlap each other where they meet. The situation is depicted in Fig. 3.5 for a simple configuration. The crucial operation is an accurate transfer of quantities between the different grids at the overlapping region. Therefore, the extension of the overlap is adjusted accordingly to the required interpolation order. The advantage of the Chimera technique over the multiblock approach is the possibility to generate the particular grids completely independent of each other, without having to take care of the interface between the grids. On the other hand, the problem of the Chimera technique is that the conservation properties of the governing equations are not satisfied through the overlapping region.}
     @lang["zh-CN"]{另一种与块结构网格相关联的方法学是所谓的 Chimera 技术(嵌合网格技术)@link["blazek2005-r3-27"]{[27]}-@link["blazek2005-r3-32"]{[32]}。其基本思想是:先在计算域中每个几何体周围分别生成网格ï¼然后再把这些网格组合起来ï¼使它们在相遇处彼此重叠。图3.5以一个简单外形展示了这一情形。关键操作是在重叠区域于不同网格之间准确传递物理量。因此ï¼重叠范围要按照所需的插值阶数相应调整。与多块方法相比,Chimera 技术的优点是各片网格可以完全独立地生成ï¼而不必操心网格之间的界面。另一方面,Chimera 技术的问题在于:控制方程的守恒性质在重叠区域内得不到满足。}
   }
 
-  @image["blazek2005/fig-3-5.png"]{图3.5:Chimera技术示意(二维示例)}
-
+  @figure["blazek2005/fig-3-5.png" "图3.5:Chimera技术示意(二维示例)"]{
   @emph{图3.5:Chimera技术示意(二维示例)。}图例:背景为均匀笛卡尔网格ï¼物面附近为贴体的极坐标型网格ï¼两者相互重叠。
-
+}
   @bi{
     @lang["en"]{The second type of grids are the unstructured grids. They offer the largest flexibility in the treatment of complex geometries @link["blazek2005-r3-33"]{[33]}. The main advantage of the unstructured grids is based on the fact that triangular (in 2-D) or tetrahedral grids (in 3-D) can be in principle generated automatically, independent of the complexity of the domain. In practice, it is of course still necessary to set some parameters appropriately, in order to obtain a good quality grid. Furthermore, in order to resolve the boundary layers accurately, it is advisable to employ in 2-D rectangular and in 3-D prismatic or hexahedral elements near solid walls @link["blazek2005-r3-34"]{[34]}-@link["blazek2005-r3-41"]{[41]}. Another benefit of such mixed grids is the reduction of the number of grid cells, edges, faces and possibly also of grid points. One should keep in mind though that the generation of mixed grids is not trivial for geometrically demanding cases. Nevertheless, the time required to built an unstructured, mixed grid for a complex configuration is still significantly lower than what is necessary for a multiblock structured grid. Since the geometrical fidelity of the flow simulations is nowadays rapidly increasing, the ability to generate grids fast and with minimum user interaction becomes more and more important. This is particularly true in industrial environment. Further advantage of unstructured grids is that solution dependent grid refinement and coarsening can be handled in a relatively native and seamless manner. To mention also the disadvantages of unstructured methods, one of them is the necessity to employ sophisticated data structures within the flow solver. Such data structures work with indirect addressing, which, depending on the computer hardware, leads to more or less reduced computational efficiency. The memory requirements are in general higher as compared to the structured schemes, too. But despite all difficulties, the capability to handle geometrically complex problems in short turn-around times still weights much more. From this point, it is not surprising that for example nearly all vendors of commercial CFD software switched over to unstructured flow solvers. A detailed review of various methodologies for spatial and temporal discretisation on unstructured grids appeared recently in @link["blazek2005-r3-42"]{[42]}.}
     @lang["zh-CN"]{第二类网格是非结构网格。它们在处理复杂几何方面提供了最大的灵活性@link["blazek2005-r3-33"]{[33]}。非结构网格的主要优点基于这样一个事实:三角形网格(二维)或四面体网格(三维)原则上可以自动生成ï¼而与计算域的复杂程度无关。当然ï¼实践中仍需适当设置一些参数才能获得高质量的网格。此外ï¼为了精确分辨边界层ï¼建议在固壁附近采用二维的矩形、三维的棱柱或六面体单元@link["blazek2005-r3-34"]{[34]}-@link["blazek2005-r3-41"]{[41]}。这类混合网格的另一个好处是减少了网格单元、棱边、面以及可能的网格点的数目。不过应当记住ï¼对于几何上要求苛刻的情形ï¼混合网格的生成并非易事。尽管如此ï¼为复杂外形生成非结构混合网格所需的时间仍显著低于多块结构网格所需的时间。由于流动模拟的几何保真度如今正在迅速提高ï¼快速、最少人机交互地生成网格的能力变得越来越重要ï¼在工业环境中尤其如此。非结构网格的又一优点是:与解相关的网格加密和粗化能够以相对自然、无缝的方式处理。谈及非结构方法的缺点ï¼其一是流动求解器内部必须采用复杂的数据结构。这类数据结构采用间接寻址ï¼依计算机硬件的不同ï¼会不同程度地降低计算效率。与结构格式相比ï¼内存需求一般也更高。尽管有种种困难ï¼在短时间内处理几何复杂问题的能力仍然重要得多。由此看来ï¼例如几乎所有商业 CFD 软件厂商都转而采用非结构流动求解器ï¼并不令人惊讶。关于非结构网格上空间与时间离散的各种方法学ï¼近期有一篇详细的综述见@link["blazek2005-r3-42"]{[42]}。}
@@ -148,10 +143,9 @@
       @lang["zh-CN"]{我们将在后面两章讨论空间离散的内容时ï¼再详细比较格心与格点两种表述的优缺点。}
     }
 
-    @image["blazek2005/fig-3-6.png"]{图3.6:格心格式(a)与格点格式(b)(对偶控制体)的控制体}
-
+    @figure["blazek2005/fig-3-6.png" "图3.6:格心格式(a)与格点格式(b)(对偶控制体)的控制体"]{
     @emph{图3.6:格心格式(a)与格点格式(b)(对偶控制体)的控制体。}图例:(a)中阴影四边形为控制体ï¼其四个角点(实心圆点)为网格点ï¼形心处的实心方块表示流动量的存储位置;(b)中阴影四边形为围绕中心网格点(实心圆点)的对偶控制体。
-
+}
     @bi{
       @lang["en"]{The main advantage of the finite volume method is that the spatial discretisation is carried out directly in the physical space. Thus, there are no problems with any transformation between the physical and the computational coordinate system, like in the case of the finite difference method. Compared to the finite differences, one further advantage of the finite volume method is that it is very flexible - it can be rather easily implemented on structured as well as on unstructured grids. This renders the finite volume method particularly suitable for the treatment of flows in complex geometries.}
       @lang["zh-CN"]{有限体积法的主要优点在于空间离散直接在物理空间中进行。因此ï¼不会像有限差分法那样遇到物理坐标系与计算坐标系之间的任何变换问题。与有限差分相比ï¼有限体积法的另一个优点是非常灵活——它既可以相当容易地在结构网格上实现ï¼也可以在非结构网格上实现。这使得有限体积法特别适合处理复杂几何中的流动。}
@@ -396,10 +390,9 @@
       @lang["zh-CN"]{这里应当提到的最后一种、大概也是最重要的收敛加速技术是多重网格法(multigrid method)。它由 Fedorenko@link["blazek2005-r3-126"]{[126]}与 Bakhvalov@link["blazek2005-r3-127"]{[127]}于20世纪60年代在苏联发展ï¼用于求解椭圆型边值问题。这一方法学后来由 Brandt@link["blazek2005-r3-128"]{[128]}、@link["blazek2005-r3-129"]{[129]}进一步发展并推广。多重网格的思想基于这样的观察:迭代格式通常能非常有效地消除解中的高频误差(即控制体之间的振荡)ï¼但在消减低频(即全局)误差方面却表现相当差。因此ï¼在给定网格上推进解之后ï¼把它转移到较粗的网格上——在粗网格上ï¼低频误差部分地变成高频误差ï¼从而再次被迭代求解器有效阻尼。该过程在逐级变粗的一系列网格上递归重复ï¼每一层多重网格都有助于消灭一定频带宽度的误差。到达最粗网格后ï¼依次收集解的修正并插值回初始细网格ï¼在那里更新解。这一完整的多重网格循环不断重复ï¼直到解的变化小于给定阈值。为了进一步加速收敛ï¼还可以先在粗网格上启动多重网格过程ï¼执行若干个循环ï¼然后把解转移到较细的网格上再次执行多重网格循环;如此逐级重复ï¼直到最细网格。这一方法学称为完全多重网格(Full Multigrid,FMG)@link["blazek2005-r3-129"]{[129]}。}
     }
 
-    @image["blazek2005/fig-3-7.png"]{图3.7:NACA 0012翼型无黏跨声速流动的收敛历史}
-
+    @figure["blazek2005/fig-3-7.png" "图3.7:NACA 0012翼型无黏跨声速流动的收敛历史"]{
     @emph{图3.7:NACA 0012翼型无黏跨声速流动的收敛历史;@tex-math{R}——密度残差,@tex-math{c_L}——升力系数。}图例:图题栏"Explicit multi-stage scheme"(显式多步格式):虚线——single grid(单层网格);实线——multigrid (5 levels)(多重网格,5层)。横轴:Iterations(迭代次数);左纵轴:@tex-math{\log(R/R_0)};右纵轴:@tex-math{c_L}。
-
+}
     @bi{
       @lang["en"]{As already mentioned, the multigrid method was originally developed for the solution of elliptic boundary-value problems (Poisson equation), where it is very efficient. Jameson first proposed to employ multigrid also for the solution of the Euler equations @link["blazek2005-r3-120"]{[120]}, @link["blazek2005-r3-130"]{[130]}. The approach was based on the so-called Full Approximation Storage (FAS) scheme @link["blazek2005-r3-129"]{[129]}, where multigrid is directly applied to the non-linear governing equations. Nowadays, multigrid represents a standard acceleration technique for the solution of the Navier-Stokes equations. Examples of implementations can be found in Refs. @link["blazek2005-r3-131"]{[131]}-@link["blazek2005-r3-136"]{[136]} for structured grids, and in Refs. @link["blazek2005-r3-137"]{[137]}-@link["blazek2005-r3-146"]{[146]} for unstructured grids. Although not as fast as in the case of elliptic differential equations, it was often demonstrated that multigrid can accelerate the solution of the Euler or the Navier-Stokes equations by a factor between 5 and 10. An example for transonic flow is shown in Fig. 3.7. Recent research also revealed that faster convergence can be achieved if the governing equations are decomposed into hyperbolic and elliptic parts @link["blazek2005-r3-147"]{[147]}. We shall return to the multigrid methodology again in Section 9.4.}
       @lang["zh-CN"]{如前所述ï¼多重网格法最初是为求解椭圆型边值问题(Poisson 方程)而发展的ï¼在那里它非常高效。Jameson 首先提议把多重网格也用于 Euler 方程的求解@link["blazek2005-r3-120"]{[120]}、@link["blazek2005-r3-130"]{[130]}ï¼其途径基于所谓的完全近似存储(Full Approximation Storage,FAS)格式@link["blazek2005-r3-129"]{[129]}ï¼即把多重网格直接应用于非线性控制方程。如今ï¼多重网格已成为求解 Navier-Stokes 方程的标准加速技术。结构网格上的实现例子见文献@link["blazek2005-r3-131"]{[131]}-@link["blazek2005-r3-136"]{[136]}ï¼非结构网格上的见文献@link["blazek2005-r3-137"]{[137]}-@link["blazek2005-r3-146"]{[146]}。虽然没有在椭圆型微分方程情形下那么快ï¼但已多次证明多重网格能把 Euler 或 Navier-Stokes 方程的求解加速5至10倍。跨声速流动的一个例子示于图3.7。近期研究还表明ï¼若把控制方程分解为双曲部分与椭圆部分ï¼可以实现更快的收敛@link["blazek2005-r3-147"]{[147]}。我们将在9.4节再次回到多重网格方法学。}

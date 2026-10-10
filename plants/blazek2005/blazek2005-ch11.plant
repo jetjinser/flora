@@ -19,22 +19,18 @@
     民用飞机结构网格的一个例子见文献@link["blazek2005-r11-1"]{[1]}、@link["blazek2005-r11-2"]{[2]}，示于图11.1和图11.2。作为对比，类似构型@link["blazek2005-r11-3"]{[3]}–@link["blazek2005-r11-4"]{[4]}–@link["blazek2005-r11-5"]{[5]}–@link["blazek2005-r11-6"]{[6]}的非结构表面网格与体积网格示于图11.3和图11.4。}
 }
 
-@image["blazek2005/fig-11-1.png"]{图11.1:机翼-机身组合体的结构表面网格与体积网格}
-
+@figure["blazek2005/fig-11-1.png" "图11.1:机翼-机身组合体的结构表面网格与体积网格"]{
 @emph{图11.1:机翼-机身组合体的结构表面网格与体积网格(由德国DLR的O. Brodersen提供)。}
-
-@image["blazek2005/fig-11-2.png"]{图11.2:机翼-机身组合体的结构表面网格与体积网格——挂架与发动机短舱的细节}
-
+}
+@figure["blazek2005/fig-11-2.png" "图11.2:机翼-机身组合体的结构表面网格与体积网格——挂架与发动机短舱的细节"]{
 @emph{图11.2:机翼-机身组合体的结构表面网格与体积网格——挂架与发动机短舱的细节(由德国DLR的O. Brodersen提供)。}
-
-@image["blazek2005/fig-11-3.png"]{图11.3:机翼-机身组合体的非结构表面网格}
-
+}
+@figure["blazek2005/fig-11-3.png" "图11.3:机翼-机身组合体的非结构表面网格"]{
 @emph{图11.3:机翼-机身组合体的非结构表面网格(由美国怀俄明大学的D. Mavriplis提供)。}
-
-@image["blazek2005/fig-11-4.png"]{图11.4:机翼-机身组合体的非结构网格——前缘缝翼细节及体积网格的粗切剖视}
-
+}
+@figure["blazek2005/fig-11-4.png" "图11.4:机翼-机身组合体的非结构网格——前缘缝翼细节及体积网格的粗切剖视"]{
 @emph{图11.4:机翼-机身组合体的非结构网格——前缘缝翼细节及体积网格的粗切剖视(由美国怀俄明大学的D. Mavriplis提供)。}
-
+}
 @bi{
   @lang["en"]{The structured as well as the unstructured grids have their specific advantages and shortcomings, which we mentioned in Section 3.1. However, regardless of the grid type, the main bottleneck is currently the quality of data being imported from a CAD (Computer Aided Design) system into the grid generation program. The surface description is usually transfered via a standard format like IGES @link["blazek2005-r11-7"]{[7]}. A direct transfer of CAD native data is rather rate @link["blazek2005-r11-8"]{[8]}. The experience shows that this process can impair the accuracy of the data. Furthermore, the surface representation in the CAD system itself is often imprecise. This leads mostly to gaps, overlaps or discontinuities between neighbouring surface patches. Such errors have to be eliminated before the surfaces can be discretised. We speak in this respect of "CAD repair" @link["blazek2005-r11-9"]{[9]}, @link["blazek2005-r11-10"]{[10]}.}
   @lang["zh-CN"]{结构网格与非结构网格各有其特定的优点和不足，我们在3.1节中已经提到。然而，无论采用哪类网格，当前的主要瓶颈都是从CAD（Computer Aided Design，计算机辅助设计）系统导入网格生成程序的数据质量。表面描述通常经由IGES@link["blazek2005-r11-7"]{[7]}之类的标准格式传递；直接传输CAD原生数据的情况还相当少见@link["blazek2005-r11-8"]{[8]}。@sidenote{译注：原书印作“A direct transfer of CAD native data is rather rate”，其中“rate”应为“rare”（少见）之排印误。}经验表明，这一过程会损害数据的精度。此外，CAD系统内部对表面的表示本身也常常不精确，这多半会导致相邻曲面片之间出现缝隙、重叠或不连续。在这些表面能够被离散之前，必须先消除此类误差——这方面我们称之为“CAD修复”（CAD repair）@link["blazek2005-r11-9"]{[9]}、@link["blazek2005-r11-10"]{[10]}。}
@@ -125,14 +121,12 @@
     @lang["zh-CN"]{在C拓扑中，气动体由一族网格线包围，这族网格线同时构成尾流区（如果存在的话）。图11.5示意了这一情形。可以看到，@tex-math{\eta} = const.的网格线从远场（@tex-math{\xi = 0}）出发，沿尾流前进，经过尾缘（节点@tex-math{b}），沿顺时针方向绕过物体，最后再次到达远场（@tex-math{\xi = 1}）。另一族网格线（@tex-math{\xi} = const.）从物体和尾流沿法向发出。网格线@tex-math{\eta = 0}上的@tex-math{a}–@tex-math{b}段代表一条坐标割缝（coordinate cut）。这意味着物理空间中的@tex-math{a}–@tex-math{b}段被映射到计算空间中的两段，即@tex-math{a \le \xi \le b}和@tex-math{b' \le \xi \le a'}。因此，割缝上段（@tex-math{b'}–@tex-math{a'}）与下段（@tex-math{a}–@tex-math{b}）的节点在计算机内存中是分开存储的。相应的边界条件已在8.7节中给出。}
   }
 
-  @image["blazek2005/fig-11-5.png"]{图11.5:二维C网格拓扑}
-
+  @figure["blazek2005/fig-11-5.png" "图11.5:二维C网格拓扑"]{
   @emph{图11.5:二维C网格拓扑。}(a)物理空间(physical space);(b)计算空间(computational space)。
-
-  @image["blazek2005/fig-11-6.png"]{图11.6:NACA 0012翼型周围C网格的局部视图}
-
+}
+  @figure["blazek2005/fig-11-6.png" "图11.6:NACA 0012翼型周围C网格的局部视图"]{
   @emph{图11.6:NACA 0012翼型周围C网格的局部视图。}
-
+}
   @emph{H-Grid Topology H网格拓扑}
 
   @bi{
@@ -145,14 +139,12 @@
     @lang["zh-CN"]{乍看之下，H网格没有明显的坐标割缝。然而在叶轮机械中，@tex-math{a}–@tex-math{b}段与@tex-math{e}–@tex-math{f}段互为周期边界（三维时为旋转周期），@tex-math{c}–@tex-math{d}段与@tex-math{g}–@tex-math{h}段也是如此。这类边界条件在8.8节中处理。图11.8给出了涡轮叶片间一个非正交H网格的例子。}
   }
 
-  @image["blazek2005/fig-11-7.png"]{图11.7:二维H网格拓扑}
-
+  @figure["blazek2005/fig-11-7.png" "图11.7:二维H网格拓扑"]{
   @emph{图11.7:二维H网格拓扑。}(a)物理空间(physical space);(b)计算空间(computational space)。
-
-  @image["blazek2005/fig-11-8.png"]{图11.8:涡轮叶片间H网格的局部视图(虚线所示)}
-
+}
+  @figure["blazek2005/fig-11-8.png" "图11.8:涡轮叶片间H网格的局部视图(虚线所示)"]{
   @emph{图11.8:涡轮叶片间H网格的局部视图(虚线所示)。}
-
+}
   @emph{O-Grid Topology O网格拓扑}
 
   @bi{
@@ -160,14 +152,12 @@
     @lang["zh-CN"]{从图11.9所示O拓扑的绘制结果可以看到，一族网格线（@tex-math{\eta} = const.）在气动体周围形成闭合曲线。第二族网格线（@tex-math{\xi} = const.）沿径向张于物体与外边界（此处为远场）之间。完整的边界线@tex-math{\eta = 0}表示物体的轮廓（从@tex-math{a}到@tex-math{a'}）。坐标割缝由计算空间中的边界@tex-math{\xi = 0}（节点@tex-math{a}–@tex-math{c}）与@tex-math{\xi = 1}（节点@tex-math{a'}–@tex-math{c'}）定义。图11.10的例子给出了用于模拟翼型无黏绕流的标准O网格。O拓扑的一个缺点是在尖锐尾缘处网格质量较差。}
   }
 
-  @image["blazek2005/fig-11-9.png"]{图11.9:二维O网格拓扑}
-
+  @figure["blazek2005/fig-11-9.png" "图11.9:二维O网格拓扑"]{
   @emph{图11.9:二维O网格拓扑。}(a)物理空间(physical space);(b)计算空间(computational space)。
-
-  @image["blazek2005/fig-11-10.png"]{图11.10:NACA 0012翼型周围O网格的局部视图}
-
-  @emph{图11.10:NACA 0012翼型周围O网格的局部视图。}@sidenote{译注：原书图题印作“Partial view an O-grid around NACA 0012 airfoil.”，其中“view”之后脱漏“of”。}
 }
+  @figure["blazek2005/fig-11-10.png" "图11.10:NACA 0012翼型周围O网格的局部视图"]{
+  @emph{图11.10:NACA 0012翼型周围O网格的局部视图。}@sidenote{译注：原书图题印作“Partial view an O-grid around NACA 0012 airfoil.”，其中“view”之后脱漏“of”。}
+}}
 
 @subtree[#:id "blazek2005-11-1-2"]{
   @title{11.1.2 Algebraic Grid Generation 代数网格生成}
@@ -303,10 +293,9 @@
     @lang["zh-CN"]{Dirichlet边界条件用于边界点位置必须保持固定的情形。此时利用控制函数来实现所期望的交角和间距。图11.11以二维情形展示了控制函数对网格的作用。可以看到：由于边界节点保持不动，式@link["blazek2005-ch11#eq-11-8"]{(11.8)}中@tex-math{P}取负值会使@tex-math{\xi} = const.的网格线向左旋转；另一方面，@tex-math{Q < 0}会使@tex-math{\eta} = const.的网格线更靠近边界。控制函数的值先在相应边界上由规定的偏斜度、网格间距与实际值之差算出；然后，把@tex-math{P}、@tex-math{Q}、@tex-math{R}的边界值内插到域的内部，并求解方程组——式@link["blazek2005-ch11#eq-11-6"]{(11.6)}或式@link["blazek2005-ch11#eq-11-8"]{(11.8)}。该过程反复进行，直至达到所要求的网格特性。这一基于Dirichlet条件的方法由Sorenson@link["blazek2005-r11-19"]{[19]}以及Thomas和Middlecoff@link["blazek2005-r11-21"]{[21]}在二维发展，后来由Sorenson@link["blazek2005-r11-22"]{[22]}和Thompson@link["blazek2005-r11-23"]{[23]}推广到三维。}
   }
 
-  @image["blazek2005/fig-11-11.png"]{图11.11:二维椭圆网格生成中控制函数在η = const.边界处的作用}
-
+  @figure["blazek2005/fig-11-11.png" "图11.11:二维椭圆网格生成中控制函数在η = const.边界处的作用"]{
   @emph{图11.11:二维椭圆网格生成中控制函数在@tex-math{\eta} = const.边界处的作用。}@tex-math{P}控制网格的偏斜度，@tex-math{Q}控制网格间距。
-
+}
   @bi{
     @lang["en"]{The elliptic equations @link["blazek2005-ch11#eq-11-6"]{(11.6)} or @link["blazek2005-ch11#eq-11-8"]{(11.8)} are usually discretised using second-order central finite differences. The resulting set of linear algebraic equations can be solved by any standard technique, e.g., by the Gauss-Seidel relaxation scheme accelerated by multigrid. The values of the control functions are updated in an outer iteration. In order to increase the robustness of the procedure, it is advisable to carry out several iterations with the Laplace equations (@tex-math{P = Q = R = 0}), in order to smooth the initial (usually algebraic) grid @link["blazek2005-r11-24"]{[24]}.}
     @lang["zh-CN"]{椭圆方程@link["blazek2005-ch11#eq-11-6"]{(11.6)}或@link["blazek2005-ch11#eq-11-8"]{(11.8)}通常用二阶中心有限差分离散。所得的线性代数方程组可用任何标准方法求解，例如用多重网格加速的Gauss-Seidel松弛格式。控制函数的值在外迭代中更新。为了提高该过程的鲁棒性，建议先用Laplace方程（@tex-math{P = Q = R = 0}）迭代若干次，以光顺初始（通常为代数的）网格@link["blazek2005-r11-24"]{[24]}。}
@@ -317,10 +306,9 @@
     @lang["zh-CN"]{图11.12演示了椭圆方程的作用。翼型周围的网格先用上一小节的TFI方法生成，结果示于图11.12顶部。随后用Laplace方程——即取@tex-math{P = Q = 0}的式@link["blazek2005-ch11#eq-11-8"]{(11.8)}——光顺该代数网格。可以看到，Laplace光顺改善了翼型前缘附近的网格，但表面法向的网格间距仍无法控制；只有借助控制函数@tex-math{P(\xi, \eta)}和@tex-math{Q(\xi, \eta)}才能做到这一点，如图11.12底部所示。控制函数还保证网格线与翼型表面正交。用椭圆方法生成的网格的其他例子分别见图11.1、图11.2和图11.6。}
   }
 
-  @image["blazek2005/fig-11-12.png"]{图11.12:为同一翼型生成的网格序列(自上而下)：TFI代数生成、Laplace方程(P = Q = 0)以及椭圆方程(11.8)}
-
+  @figure["blazek2005/fig-11-12.png" "图11.12:为同一翼型生成的网格序列(自上而下)：TFI代数生成、Laplace方程(P = Q = 0)以及椭圆方程(11.8)"]{
   @emph{图11.12:为同一翼型生成的网格序列(自上而下)：TFI代数生成、Laplace方程(@tex-math{P = Q = 0})以及椭圆方程(11.8)。}
-}
+}}
 
 @subtree[#:id "blazek2005-11-1-4"]{
   @title{11.1.4 Hyperbolic Grid Generation 双曲网格生成}
@@ -412,10 +400,9 @@
       @lang["zh-CN"]{Delaunay三角剖分基于Dirichlet在1850年提出的一种方法，该方法把空间唯一地细分为一组相互填实的凸区域@link["blazek2005-r11-42"]{[42]}。给定一个点集，每个区域表示特定点周围的空间，区域内各处到该点的距离都比到其他任何点近。这些区域构成多边形（3D中为多面体），称为@emph{Dirichlet镶嵌}（Dirichlet tessellation）或@emph{Voronoj图}@link["blazek2005-r11-43"]{[43]}。如果用直线把共享Voronoj图某条边（面）的点对连接起来，就得到Delaunay三角剖分@link["blazek2005-r11-44"]{[44]}。该三角剖分定义了一组覆盖点集凸包的三角形（3D中为四面体）。图11.13展示了这一点。Delaunay三角剖分是Voronoj图的对偶。在2D中，Voronoj多边形的节点是各三角形外接圆的圆心；在3D中，这些节点是各四面体外接球的球心。这意味着每个三角形的外接圆（每个四面体的外接球）内部都不含点集中的任何点。}
     }
 
-    @image["blazek2005/fig-11-13.png"]{图11.13:Delaunay三角剖分(左)与Voronoj图(左图中为虚线，右图中为实线)}
-
+    @figure["blazek2005/fig-11-13.png" "图11.13:Delaunay三角剖分(左)与Voronoj图(左图中为虚线，右图中为实线)"]{
     @emph{图11.13:Delaunay三角剖分(左)与Voronoj图(左图中为虚线，右图中为实线)。}
-
+}
     @bi{
       @lang["en"]{As we already stated, the Delaunay method constitutes a particular way of connecting grid points. The positions of the points must be determined by some other technique. Therefore, one popular approach for the construction of a Delaunay grid is to insert sequentially nodes into an initial triangulation. The grid is then locally retriangulated in order to fulfil the empty circumcircle (circumsphere) criterion. The incremental point-insertion strategy can be described by the following steps:}
       @lang["zh-CN"]{如前所述，Delaunay方法只规定了一种连接网格点的特定方式，网格点的位置必须由其他技术确定。因此，构建Delaunay网格的一种流行做法，是把节点依次插入一个初始三角剖分中，然后对网格作局部重新三角剖分，以满足空外接圆（外接球）准则。这种增量式布点策略可描述为以下步骤：}
@@ -448,10 +435,9 @@
       }
     }
 
-    @image["blazek2005/fig-11-14.png"]{图11.14:2D初始Delaunay网格的可能取法：边界节点的三角剖分(a)；分解为两个三角形的四边形(b)}
-
+    @figure["blazek2005/fig-11-14.png" "图11.14:2D初始Delaunay网格的可能取法：边界节点的三角剖分(a)；分解为两个三角形的四边形(b)"]{
     @emph{图11.14:2D初始Delaunay网格的可能取法：边界节点的三角剖分(a)；分解为两个三角形的四边形(b)。}
-
+}
     @bi{
       @lang["en"]{Alternatively, boundary recovery (step 7) can be carried out after the step 3.}
       @lang["zh-CN"]{另一种做法是在完成第3步之后再进行边界恢复（第7步）。}
@@ -534,14 +520,12 @@
       }
     }
 
-    @image["blazek2005/fig-11-15.png"]{图11.15:把新节点P插入有效的Delaunay三角剖分，该节点位于外接圆圆心处}
-
+    @figure["blazek2005/fig-11-15.png" "图11.15:把新节点P插入有效的Delaunay三角剖分，该节点位于外接圆圆心处"]{
     @emph{图11.15:把新节点P插入有效的Delaunay三角剖分，该节点位于外接圆圆心处。}
-
-    @image["blazek2005/fig-11-16.png"]{图11.16:Watson算法：删除无效三角形(左)，对凸空腔重新三角剖分(右)}
-
+}
+    @figure["blazek2005/fig-11-16.png" "图11.16:Watson算法：删除无效三角形(左)，对凸空腔重新三角剖分(右)"]{
     @emph{图11.16:Watson算法：删除无效三角形(左)，对凸空腔重新三角剖分(右)。}
-
+}
     @bi{
       @lang["en"]{This data structure allows for an efficient search of intersected elements in the step 2. We start the search with the neighbours of the element which contains the inserted point. Then, we proceed to the neighbours of these neighbours and so on. We stop the search in a particular direction, if the circumcircle (circumsphere) of the element is not intersected. The geometrical properties of the Delaunay triangulation make sure that the neighbours of this element are not intersected. It is also guaranteed that all elements being involved are localised by this simple strategy @link["blazek2005-r11-52"]{[52]}, @link["blazek2005-r11-60"]{[60]}. The numerical effort of Watson's algorithm is of the order of @tex-math{N\log(N)}, where @tex-math{N} is the number of grid points. This results in a very fast grid generation methodology.}
       @lang["zh-CN"]{这种数据结构使第2步中对被穿过单元的搜索十分高效。搜索从包含被插入点的单元的邻居开始，继而扩展到这些邻居的邻居，依此类推。若某个单元的外接圆（外接球）未被穿过，则沿该方向的搜索即告停止。Delaunay三角剖分的几何性质保证该单元的邻居也不会被穿过。这一简单策略还能保证找出所有涉及的单元@link["blazek2005-r11-52"]{[52]}、@link["blazek2005-r11-60"]{[60]}。Watson算法的计算量为@tex-math{N\log(N)}量级，其中@tex-math{N}为网格点数，因此这是一种非常快的网格生成方法。}
@@ -554,10 +538,9 @@
       @lang["zh-CN"]{Delaunay三角剖分并不会自动处理预先指定的棱边和面，例如物理域边界上的那些棱边和面。这正是所谓的约束Delaunay三角剖分（constrained Delaunay triangulation）@link["blazek2005-r11-61"]{[61]}所要解决的问题。图11.17示意了2D中边界棱边的恢复。视具体情况，需要进行边交换或重新三角剖分。约束Delaunay三角剖分在2D中总能得到有效网格，但在3D中无法保证这一点。3D中边界离散的恢复必须分两步进行——先恢复边界棱边，再恢复边界面@link["blazek2005-r11-41"]{[41]}。在某些情况下，必须在边界上插入附加点（所谓的Steiner点）@link["blazek2005-r11-62"]{[62]}–@link["blazek2005-r11-63"]{[63]}–@link["blazek2005-r11-64"]{[64]}，否则空腔无法重新四面体化。边界棱边（和面）恢复之后，即可删除流动域之外的单元。}
     }
 
-    @image["blazek2005/fig-11-17.png"]{图11.17:插入缺失的边界边：通过边交换(a)；通过删除相交三角形并对空腔重新三角剖分(b)}
-
+    @figure["blazek2005/fig-11-17.png" "图11.17:插入缺失的边界边：通过边交换(a)；通过删除相交三角形并对空腔重新三角剖分(b)"]{
     @emph{图11.17:插入缺失的边界边：通过边交换(a)；通过删除相交三角形并对空腔重新三角剖分(b)。}被交换或删除的边用虚线表示，新边用粗实线表示；域外的三角形(点划线)被移除。
-  }
+}  }
 
   @subtree[#:id "blazek2005-11-2-2"]{
     @title{11.2.2 Advancing-Front Method 推进波前法}
@@ -601,10 +584,9 @@
       @lang["zh-CN"]{图11.19a-d以一个示例性的2D外形展示了推进波前过程的不同阶段。}
     }
 
-    @image["blazek2005/fig-11-18.png"]{图11.18:2D推进波前法中新节点P₀的插入，活动边用粗线表示}
-
+    @figure["blazek2005/fig-11-18.png" "图11.18:2D推进波前法中新节点P₀的插入，活动边用粗线表示"]{
     @emph{图11.18:2D推进波前法中新节点@tex-math{P_0}的插入，活动边用粗线表示。}
-
+}
     @bi{
       @lang["en"]{The distribution of the element size in the domain is mostly governed by the point density on the boundaries. Additionally, the distance @tex-math{d} in step 3 can be controlled by placing sources of various type - point, line, cylinder, etc. - inside the domain (see, e.g., @link["blazek2005-r11-12"]{[12]}, Chapter 1, pp. 20-22). The local element size can be obtained from a background grid based on the quadtree (octree in 3D) data structure @link["blazek2005-r11-55"]{[55]}–@link["blazek2005-r11-56"]{[56]}–@link["blazek2005-r11-57"]{[57]}–@link["blazek2005-r11-58"]{[58]}–@link["blazek2005-r11-59"]{[59]}. Another possibility is to interpolate the sizes by employing the Delaunay triangulation of the boundary nodes @link["blazek2005-r11-34"]{[34]}–@link["blazek2005-r11-35"]{[35]}–@link["blazek2005-r11-36"]{[36]}, @link["blazek2005-r11-68"]{[68]}, or to use a Cartesian background grid @link["blazek2005-r11-69"]{[69]}. The quadtree (octree) data structure can also be used to search efficiently for nearby points (step 5) as well as to check for possible intersections between the elements. A simple test for the intersection between fronts based on spring analogy was devised in @link["blazek2005-r11-70"]{[70]} and @link["blazek2005-r11-3"]{[3]}. A detailed comparison of different search algorithms can be found, e.g., in @link["blazek2005-r11-71"]{[71]}.}
       @lang["zh-CN"]{域内单元尺寸的分布主要由边界上的点密度决定。此外，第3步中的距离@tex-math{d}还可以通过在域内放置各种类型的源——点源、线源、柱源等——来控制（例如参见文献@link["blazek2005-r11-12"]{[12]}第1章第20-22页）。局部单元尺寸可由基于四叉树（3D中为八叉树）数据结构的背景网格得到@link["blazek2005-r11-55"]{[55]}–@link["blazek2005-r11-56"]{[56]}–@link["blazek2005-r11-57"]{[57]}–@link["blazek2005-r11-58"]{[58]}–@link["blazek2005-r11-59"]{[59]}；另一种做法是利用边界节点的Delaunay三角剖分来插值尺寸@link["blazek2005-r11-34"]{[34]}–@link["blazek2005-r11-35"]{[35]}–@link["blazek2005-r11-36"]{[36]}、@link["blazek2005-r11-68"]{[68]}，或采用Cartesian背景网格@link["blazek2005-r11-69"]{[69]}。四叉树（八叉树）数据结构还可用于高效搜索邻近点（第5步），以及检查单元之间可能出现的相交。文献@link["blazek2005-r11-70"]{[70]}和@link["blazek2005-r11-3"]{[3]}设计了一种基于弹簧类比（spring analogy）的波前间相交简单检验。不同搜索算法的详细比较可参见例如文献@link["blazek2005-r11-71"]{[71]}。}
@@ -624,14 +606,12 @@
       @lang["zh-CN"]{在前面的11.2.1和11.2.2小节中，我们介绍了两种生成各向同性三角形或四面体单元的方法，这适用于无黏流动的模拟。然而，要准确求解雷诺平均Navier-Stokes方程，就需要在跨越边界层和尾迹的方向上具有很高的空间分辨率。因此，对于高雷诺数流动，各向同性网格会导致单元数过多。显然，在黏性流动区域必须采用各向异性、大纵横比的单元。原则上，我们可以采用四边形（3D中为六面体或棱柱），它们天然允许拉伸，由此得到当今非常流行的混合单元网格（见下一小节）。当然，也可以把六面体或棱柱分解，得到纯四面体网格；另一方面，我们也可以直接生成拉伸的三角形（四面体）网格。无论哪种做法，网格生成方法都应避免产生图11.20a所示形式的钝角三角形（四面体）。文献@link["blazek2005-r11-73"]{[73]}证明，这类单元会导致空间离散的截断误差极高。因此，建议生成如图11.20b和图11.20c所示的那种直角单元。不过，视控制体类型的不同，直角单元也可能引起离散误差@link["blazek2005-r11-74"]{[74]}、@link["blazek2005-r11-75"]{[75]}（参见5.2.3小节）。}
     }
 
-    @image["blazek2005/fig-11-19.png"]{图11.19:用推进波前技术生成网格的不同阶段((a)–(d))，当前波前用粗实线表示}
-
+    @figure["blazek2005/fig-11-19.png" "图11.19:用推进波前技术生成网格的不同阶段((a)–(d))，当前波前用粗实线表示"]{
     @emph{图11.19:用推进波前技术生成网格的不同阶段((a)–(d))，当前波前用粗实线表示。}
-
-    @image["blazek2005/fig-11-20.png"]{图11.20:大纵横比单元：钝角三角形(a)、直角三角形(b)和直角四面体(c)}
-
+}
+    @figure["blazek2005/fig-11-20.png" "图11.20:大纵横比单元：钝角三角形(a)、直角三角形(b)和直角四面体(c)"]{
     @emph{图11.20:大纵横比单元：钝角三角形(a)、直角三角形(b)和直角四面体(c)。}
-
+}
     @emph{Stretched Delaunay triangulation 拉伸Delaunay三角剖分}
 
     @bi{
@@ -677,10 +657,9 @@
       @lang["zh-CN"]{然后，流动域的其余部分用各向同性四面体填充。通常采用推进波前方法，从边界单元最后一层所构成的表面出发。图11.4给出了用上述流程生成的网格的一个例子。}
     }
 
-    @image["blazek2005/fig-11-21.png"]{图11.21:推进层法的步骤：边界法向的计算(a)、新层的生成与单元细分(b)、已完成的拉伸网格(c)、在域的其余部分生成各向同性单元(d)}
-
+    @figure["blazek2005/fig-11-21.png" "图11.21:推进层法的步骤：边界法向的计算(a)、新层的生成与单元细分(b)、已完成的拉伸网格(c)、在域的其余部分生成各向同性单元(d)"]{
     @emph{图11.21:推进层法的步骤：边界法向的计算(a)、新层的生成与单元细分(b)、已完成的拉伸网格(c)、在域的其余部分生成各向同性单元(d)。}
-
+}
     @bi{
       @lang["en"]{In principle, two options exist for the evaluation of the normal vectors at the boundary nodes (step 2). First, if the bounding surfaces are described by analytical functions like NURBS (Non-Uniform Rational B-Splines) @link["blazek2005-r11-83"]{[83]}, the normal derivatives are easily calculated. A grid generation method of this type was described in Ref. @link["blazek2005-r11-84"]{[84]}. However, care has to be taken at patch interfaces (e.g., like at trailing edges).}
       @lang["zh-CN"]{在边界节点处计算法向量（第2步）原则上存在两种途径。第一，若边界面由NURBS（非均匀有理B样条，Non-Uniform Rational B-Splines）@link["blazek2005-r11-83"]{[83]}之类的解析函数描述，法向导数很容易计算。文献@link["blazek2005-r11-84"]{[84]}描述了这类网格生成方法。但在面片交界处（例如机翼后缘处）必须小心处理。}
@@ -729,10 +708,9 @@
       @lang["zh-CN"]{在流动表现出强方向性的区域，各向异性网格可以在不损害解精度的前提下显著减少三角面数，从而减少体单元数（见图11.22）。例如，RANS模拟并不要求在机翼或叶片的展向、机身（fuselage）的轴向具有很高的网格分辨率。文献@link["blazek2005-r11-94"]{[94]}、@link["blazek2005-r11-95"]{[95]}报道表面三角形的数量可节省2至6倍。然而，如图11.22所示，必须恰当地取向表面单元，尤其在高曲率区域，否则真实表面轮廓得不到良好表示，流动解将被歪曲。拉伸表面网格可以用上述任何一种各向异性网格方法来生成（关于表面网格生成的一般性讨论可参见例如文献@link["blazek2005-r11-8"]{[8]}、@link["blazek2005-r11-96"]{[96]}）。拉伸比与取向通常通过线源指定；另一种做法是先在参数坐标中生成各向同性网格，再用拉伸函数把网格变换到物理空间。}
     }
 
-    @image["blazek2005/fig-11-22.png"]{图11.22:前缘处的非结构表面网格：各向同性、无特定取向(上)；沿展向拉伸并取向(下)}
-
+    @figure["blazek2005/fig-11-22.png" "图11.22:前缘处的非结构表面网格：各向同性、无特定取向(上)；沿展向拉伸并取向(下)"]{
     @emph{图11.22:前缘处的非结构表面网格：各向同性、无特定取向(上)；沿展向拉伸并取向(下)。}
-  }
+}  }
 
   @subtree[#:id "blazek2005-11-2-4"]{
     @title{11.2.4 Mixed-Element/Hybrid Grids 混合单元/杂交网格}
@@ -766,10 +744,9 @@
       @lang["zh-CN"]{Cartesian网格由与Cartesian坐标轴对齐的正方形（3D中为立方体）组成，即使对几何复杂的域，也能以较低的计算代价方便地生成。然而，Cartesian方法的弱点在于流动解在固体边界处的精度——固体边界或是弯曲的，或是与Cartesian坐标方向不一致。这一问题在RANS模拟中尤为严重，因为此时需要高度拉伸且边界正交的单元。因此，多位作者——如Melton等@link["blazek2005-r11-114"]{[114]}、Karman@link["blazek2005-r11-115"]{[115]}、Smith与Leschziner@link["blazek2005-r11-116"]{[116]}、Wang等@link["blazek2005-r11-117"]{[117]}、Delanaye等@link["blazek2005-r11-118"]{[118]}以及Hitzel等@link["blazek2005-r11-119"]{[119]}——提出在壁面附近插入贴体的四边形（棱柱）。可以用金字塔和四面体作为过渡单元，在内层与外层Cartesian网格之间建立连续的交界面；另一方面，也可以允许悬挂节点和悬挂线，以简化网格生成流程。图11.23展示了这种情况。只要处理得当，交界面上通量的交换可以保持守恒@link["blazek2005-r11-118"]{[118]}、@link["blazek2005-r11-120"]{[120]}。}
     }
 
-    @image["blazek2005/fig-11-23.png"]{图11.23:边界面附近的Cartesian/四边形混合网格}
-
+    @figure["blazek2005/fig-11-23.png" "图11.23:边界面附近的Cartesian/四边形混合网格"]{
     @emph{图11.23:边界面附近的Cartesian/四边形混合网格。}
-  }
+}  }
 
   @subtree[#:id "blazek2005-11-2-5"]{
     @title{11.2.5 Assessment and Improvement of Grid Quality 网格质量的评估与改进}
@@ -817,10 +794,9 @@
       @lang["zh-CN"]{为了改进网格质量，可以使用Lawson提出的边交换算法@link["blazek2005-r11-122"]{[122]}、@link["blazek2005-r11-123"]{[123]}。边交换特别适合于从网格中去除薄片单元@link["blazek2005-r11-36"]{[36]}。}
     }
 
-    @image["blazek2005/fig-11-24.png"]{图11.24:不希望出现的四面体单元形状：(a)钝角(obtuse)、(b)薄片(sliver)、(c)针状(needle)、(d)楔状(wedge)}
-
+    @figure["blazek2005/fig-11-24.png" "图11.24:不希望出现的四面体单元形状：(a)钝角(obtuse)、(b)薄片(sliver)、(c)针状(needle)、(d)楔状(wedge)"]{
     @emph{图11.24:不希望出现的四面体单元形状：(a)钝角(obtuse)、(b)薄片(sliver)、(c)针状(needle)、(d)楔状(wedge)。}
-
+}
     @emph{Grid Smoothing 网格光顺}
 
     @bi{

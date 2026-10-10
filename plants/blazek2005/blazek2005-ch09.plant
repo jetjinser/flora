@@ -38,10 +38,9 @@
     @lang["zh-CN"]{在这种情形下，离散化的控制方程(6.1)对每个控制体都用尽可能大的时间步长进行积分。局部时间步长@tex-math{\Delta t_I}按式(6.14)、(6.18)、(6.20)或(6.22)之一计算。这样一来，向定常态的收敛会显著加速，但瞬态解不再具有时间上的精度。图9.1以绕机翼的无黏亚声速流动为例，展示了局部时间步长的效率。流动由显式多级格式（6.1.1小节）推进到定常态。显然，采用全局时间步长（即对所有控制体都相同的时间步长）会导致向定常态不必要地缓慢收敛。对于定常黏性流动，通常还能获得更大的CPU时间节省。}
   }
 
-  @image["blazek2005/fig-9-1.png"]{图9.1:非结构网格上无黏亚声速流动有/无局部时间步长时升力系数收敛历史的比较}
-
+  @figure["blazek2005/fig-9-1.png" "图9.1:非结构网格上无黏亚声速流动有/无局部时间步长时升力系数收敛历史的比较"]{
   @emph{图9.1:非结构网格上无黏亚声速流动有/无局部时间步长时升力系数收敛历史的比较。}纵轴:升力系数(lift coefficient);横轴:CPU时间(CPU-time [s]);图例:local time-stepping——局部时间步长;global time-stepping——全局时间步长。
-}
+}}
 
 @subtree[#:id "blazek2005-9-2"]{
   @title{9.2 Enthalpy Damping 焓阻尼}
@@ -184,14 +183,12 @@
       @lang["zh-CN"]{实际中，可以达到@tex-math{\sigma^{*}/\sigma \approx 2}（@tex-math{\epsilon = 0.8}）。更高的比值会削弱时间推进格式的阻尼能力。对于上风空间离散，不存在像式@link["blazek2005-ch09#eq-9-8"]{(9.8)}这样简单的条件，因为@tex-math{\sigma^{*}/\sigma}的最大值还与各级系数有关。但通常，无黏流动的CFL数（见表6.1和表6.2）可以提高约两倍，黏性流动（采用表6.2中的混合格式）最多可提高约五倍。图9.2和图9.3展示了中心IRS对结构网格上无黏流动与黏性流动收敛的影响。比较按CPU时间进行，以计入IRS带来的额外计算量。可以看到，求解时间可以显著缩短，对黏性流动尤其明显。不过，当IRS与多重网格（9.4节）联合使用时，还能获得更大的节省。}
     }
 
-    @image["blazek2005/fig-9-2.png"]{图9.2:结构网格上无黏跨声速流动有/无IRS时收敛历史的比较}
-
+    @figure["blazek2005/fig-9-2.png" "图9.2:结构网格上无黏跨声速流动有/无IRS时收敛历史的比较"]{
     @emph{图9.2:结构网格上无黏跨声速流动有/无IRS时收敛历史的比较。}纵轴:log(res)(残差的对数);横轴:CPU时间(CPU time [s]);图例:without IRS——无IRS;with central IRS——有中心IRS。
-
-    @image["blazek2005/fig-9-3.png"]{图9.3:结构网格上黏性亚声速流动有/无IRS时收敛历史的比较}
-
+}
+    @figure["blazek2005/fig-9-3.png" "图9.3:结构网格上黏性亚声速流动有/无IRS时收敛历史的比较"]{
     @emph{图9.3:结构网格上黏性亚声速流动有/无IRS时收敛历史的比较。}纵轴:log(res)(残差的对数);横轴:CPU时间(CPU time [s]);图例:without IRS——无IRS;with central IRS——有中心IRS。
-
+}
     @bi{
       @lang["en"]{The limitation of the time step due to the viscous spectral radius @tex-math{\hat{\Lambda}_v} in Eq. (6.18) can be offset with the aid of the implicit residual smoothing. The maximum time step is calculated according to the formula (6.14) without @tex-math{\hat{\Lambda}_v}. In flow regions where the viscous spectral radius dominates, smoothing is carried out using higher coefficients @tex-math{\epsilon^I}, @tex-math{\epsilon^J}, @tex-math{\epsilon^K}. Smoothing coefficients based on the viscous spectral radii can be computed from @link["blazek2005-r9-12"]{[12]}, @link["blazek2005-r9-13"]{[13]}}
       @lang["zh-CN"]{式(6.18)中由黏性谱半径@tex-math{\hat{\Lambda}_v}造成的时间步长限制，可以借助隐式残差光顺来补偿。最大时间步长按式(6.14)计算，但不包含@tex-math{\hat{\Lambda}_v}。在黏性谱半径占主导的流动区域，用较大的系数@tex-math{\epsilon^I}、@tex-math{\epsilon^J}、@tex-math{\epsilon^K}进行光顺。基于黏性谱半径的光顺系数可由文献@link["blazek2005-r9-12"]{[12]}、@link["blazek2005-r9-13"]{[13]}中的公式计算}
@@ -467,10 +464,9 @@
       @lang["zh-CN"]{需要指出的是，实际中多重网格格式并不是直接从最细网格开始的。相反，先从某个粗网格开始执行若干个多重网格循环，把近似解插值到下一层较细的网格（采用与延拓相同的算子），再执行几个循环，然后把解再次插值到下一层更细的网格，如此继续，直到最细网格。这样，只需适度的数值工作量，就能在最细网格上获得一个良好的起始解。这一非常高效的过程称为完全多重网格（@emph{Full Multigrid}，FMG）方法@link["blazek2005-r9-19"]{[19]}。}
     }
 
-    @image["blazek2005/fig-9-4.png"]{图9.4:多重网格循环的类型}
-
+    @figure["blazek2005/fig-9-4.png" "图9.4:多重网格循环的类型"]{
     @emph{图9.4:多重网格循环的类型。}图内标注:(a)V-cycle——V循环;(b)W-cycle——W循环;h、2h、4h、8h——网格层(由细到粗);●——限制前的时间步;∘——延拓后的时间步。
-
+}
     @emph{Accuracy of Transfer Operators 转移算子的精度}
 
     @bi{
@@ -494,10 +490,9 @@
       @lang["zh-CN"]{多重网格在结构网格上的实现很简单，因为粗网格可以很容易地通过在相应坐标方向上每隔一条删除一条网格线来生成，网格线间距因此为@tex-math{2h}、@tex-math{4h}等。这保证了粗网格上的数值工作量相对于最细网格保持在较低水平。若干代表性例子见文献@link["blazek2005-r9-11"]{[11]}-@link["blazek2005-r9-13"]{[13]}、@link["blazek2005-r9-20"]{[20]}-@link["blazek2005-r9-22"]{[22]}、@link["blazek2005-r9-26"]{[26]}、@link["blazek2005-r9-32"]{[32]}-@link["blazek2005-r9-36"]{[36]}。}
     }
 
-    @image["blazek2005/fig-9-5.png"]{图9.5:细网格(h)与两个粗网格(2h、4h)的一维表示}
-
+    @figure["blazek2005/fig-9-5.png" "图9.5:细网格(h)与两个粗网格(2h、4h)的一维表示"]{
     @emph{图9.5:细网格(h)与两个粗网格(2h、4h)的一维表示。}圆圈表示网格点，矩形表示单元中心。
-
+}
     @bi{
       @lang["en"]{As we can conclude from Fig. 9.5, the operators for the solution interpolation, the restriction of residuals and the prolongation of corrections have to be defined differently for cell-centred and node-centred (cell-vertex) schemes. For example, two successive grids have every second grid point in common. On the contrary, the cell centres are always at different locations. Therefore, we shall discuss the standard forms of the transfer operators separately for the cell-centred and node-centred (identical to cell-vertex) finite-volume schemes.}
       @lang["zh-CN"]{从图9.5可以得出，解插值算子、残差限制算子和修正延拓算子在单元中心（cell-centred）格式与节点中心（cell-vertex，顶点）格式下必须有不同的定义。例如，相邻两层网格每隔一个网格点就有一个公共点；相反，单元中心的位置总是彼此错开的。因此，下面将分别针对单元中心和节点中心（与顶点格式相同）两种有限体积格式讨论转移算子的标准形式。}
@@ -534,10 +529,9 @@
       @lang["zh-CN"]{三维同理。式@link["blazek2005-ch09#eq-9-27"]{(9.27)}中位于物理域之外的那些残差@tex-math{\vec{R}^{n+1}_{h}}必须置为零。}
     }
 
-    @image["blazek2005/fig-9-6.png"]{图9.6:二维结构网格单元中心格式的解插值与残差限制(a)及粗网格修正的延拓(b、c)}
-
+    @figure["blazek2005/fig-9-6.png" "图9.6:二维结构网格单元中心格式的解插值与残差限制(a)及粗网格修正的延拓(b、c)"]{
     @emph{图9.6:二维结构网格单元中心格式的解插值与残差限制(a)，粗网格修正的延拓(b、c)。}实心圆=网格点；实心矩形=插值目标单元中心；矩形=插值来源单元中心；粗线=粗网格；细线=细网格。
-
+}
     @bi{
       @lang["en"]{The prolongation of the coarse-grid correction Eq. @link["blazek2005-ch09#eq-9-23"]{(9.23)} can be conducted in two different ways. First, a zeroth-order prolongation operator results, if @tex-math{\delta\vec{W}_{2h}} is equally distributed to all surrounding cell centres as indicated in Fig. 9.6b. Thus, for instance}
       @lang["zh-CN"]{粗网格修正即式@link["blazek2005-ch09#eq-9-23"]{(9.23)}的延拓可以用两种不同的方式进行。第一种方式：如果把@tex-math{\delta\vec{W}_{2h}}平均分配给周围所有单元中心（如图9.6b所示），就得到零阶延拓算子。例如}
@@ -583,10 +577,9 @@
     &+ \frac{1}{4}\left[(\vec{R}^{n+1}_{h})_{i-1,j-1} + (\vec{R}^{n+1}_{h})_{i+1,j-1} + (\vec{R}^{n+1}_{h})_{i-1,j+1} + (\vec{R}^{n+1}_{h})_{i+1,j+1}\right]\,.
     \end{aligned} \tag{9.32}}
 
-    @image["blazek2005/fig-9-7.png"]{图9.7:二维结构网格顶点格式的限制(a)与延拓(b)的插值系数}
-
+    @figure["blazek2005/fig-9-7.png" "图9.7:二维结构网格顶点格式的限制(a)与延拓(b)的插值系数"]{
     @emph{图9.7:二维结构网格顶点格式的限制(a)与延拓(b)的插值系数。}实心圆=插值目标点；圆圈=插值来源点；粗线=粗网格；细线=细网格。点(i, j)为两网格共有。
-
+}
     @bi{
       @lang["en"]{In 3D, the fine-grid residuals are collected as follows}
       @lang["zh-CN"]{三维情形，细网格残差按下式收集}
@@ -611,10 +604,9 @@
     &\quad + (\vec{R}^{n+1}_{h})_{i-1,j-1,k-1} + (\vec{R}^{n+1}_{h})_{i+1,j-1,k-1}\,.
     \end{aligned} \tag{9.34}}
 
-    @image["blazek2005/fig-9-8.png"]{图9.8:二维上风延拓}
-
+    @figure["blazek2005/fig-9-8.png" "图9.8:二维上风延拓"]{
     @emph{图9.8:二维上风延拓。}点A、B、C、D为粗网格(粗线)与细网格共有；点e、f、e′、f′、g仅属于细网格(细线)。
-
+}
     @bi{
       @lang["en"]{In the above Eq. @link["blazek2005-ch09#eq-9-34"]{(9.34)}, only those indices are shown which are different from @tex-math{i, j, k}. It should be noted that the residuals @tex-math{\vec{R}^{n+1}_{h}} must be set to zero at all physical boundary and dummy points @emph{before} the restriction.}
       @lang["zh-CN"]{式@link["blazek2005-ch09#eq-9-34"]{(9.34)}中只标出了与@tex-math{i, j, k}不同的那些下标。需要注意的是，在限制@emph{之前}必须先把所有物理边界点和虚单元点上的残差@tex-math{\vec{R}^{n+1}_{h}}置为零。}
@@ -759,10 +751,9 @@
       @lang["zh-CN"]{为了保持网格的各向同性，体积聚合必须从边界开始。在三维情形，可能需要用户根据边界的形状指定聚合方向。为克服这一困难，Okamoto等@link["blazek2005-r9-77"]{[77]}提出了另一种称为全局粗化（@emph{global coarsening}）的算法。该方法采用基于边着色（edge colouring）的全局剖分方案；剖分方案用来生成一个独立的边集。第二步，把共享独立边集中一条边的所有控制体聚合起来。重复这一过程，直到达到预定的粗化比。该方法不需要指定初始种子点或聚合方向，还可以处理任何类型的网格单元。}
     }
 
-    @image["blazek2005/fig-9-9.png"]{图9.9:二维聚合多重网格(中位对偶格式)生成粗网格}
-
+    @figure["blazek2005/fig-9-9.png" "图9.9:二维聚合多重网格(中位对偶格式)生成粗网格"]{
     @emph{图9.9:二维聚合多重网格(中位对偶格式)生成粗网格。}图序自上而下依次为最细网格与三个粗网格。
-
+}
     @emph{Problems of Agglomeration Multigrid 聚合多重网格的问题}
 
     @bi{
@@ -1401,16 +1392,13 @@
       @lang["zh-CN"]{将式@link["blazek2005-ch09#eq-9-51"]{(9.51)}的预条件有限体积格式（其中@tex-math{\bar{\Gamma}}按式@link["blazek2005-ch09#eq-9-65"]{(9.65)}取）应用于翼型流动的例子见图9.10-9.12。可以观察到，对于来流马赫数0.01，中心格式和Roe上风格式都无法给出正确的解。无预条件的格式不能预测压力分布，因而也不能正确预测升力系数（@tex-math{C_L = 0.323}和@tex-math{0.324}，而正确值为@tex-math{0.352}）。如图9.12所示，预条件有助于获得正确的解（@tex-math{C_L = 0.353}），并且还显著加速了收敛。}
     }
 
-    @image["blazek2005/fig-9-10.png"]{图9.10:绕对称Joukowsky翼型(厚度10%)的二维无黏流动}
-
+    @figure["blazek2005/fig-9-10.png" "图9.10:绕对称Joukowsky翼型(厚度10%)的二维无黏流动"]{
     @emph{图9.10:绕对称Joukowsky翼型(厚度10%)的二维无黏流动。结构网格，@tex-math{M_\infty = 10^{-2}}，@tex-math{\alpha = 3^{\circ}}，中心空间离散，显式多级时间推进格式，无预条件。上图为收敛历史，下图为压力系数与精确势流解的比较。}图例:上图——convergence(收敛残差，左纵轴为@tex-math{\log(\text{res})})与lift(升力系数，右纵轴)，横轴为迭代次数(iteration);下图——Euler solver(欧拉解算器，曲线)与exact solution(精确解，圆点)，纵轴为@tex-math{-C_p}，横轴为@tex-math{x/L}。
-
-    @image["blazek2005/fig-9-11.png"]{图9.11:绕对称Joukowsky翼型(厚度10%)的二维无黏流动}
-
+}
+    @figure["blazek2005/fig-9-11.png" "图9.11:绕对称Joukowsky翼型(厚度10%)的二维无黏流动"]{
     @emph{图9.11:绕对称Joukowsky翼型(厚度10%)的二维无黏流动。结构网格，@tex-math{M_\infty = 10^{-2}}，@tex-math{\alpha = 3^{\circ}}，二阶Roe上风离散，显式多级时间推进格式，无预条件。上图为收敛历史，下图为压力系数与精确势流解的比较。}图例:同图9.10。
-
-    @image["blazek2005/fig-9-12.png"]{图9.12:绕对称Joukowsky翼型(厚度10%)的二维无黏流动}
-
+}
+    @figure["blazek2005/fig-9-12.png" "图9.12:绕对称Joukowsky翼型(厚度10%)的二维无黏流动"]{
     @emph{图9.12:绕对称Joukowsky翼型(厚度10%)的二维无黏流动。结构网格，@tex-math{M_\infty = 10^{-2}}，@tex-math{\alpha = 3^{\circ}}，中心空间离散，显式多级时间推进格式，Weiss-Smith预条件。上图为收敛历史，下图为压力系数与精确势流解的比较。}图例:同图9.10。
-  }
+}  }
 }

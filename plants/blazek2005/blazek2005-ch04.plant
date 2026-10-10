@@ -76,10 +76,9 @@
   }
 }
 
-@image["blazek2005/fig-4-1.png"]{图4.1:结构网格中控制体(Ω)及各面单位法向量(n⃗_m):(a)二维;(b)三维}
-
+@figure["blazek2005/fig-4-1.png" "图4.1:结构网格中控制体(Ω)及各面单位法向量(n⃗_m):(a)二维;(b)三维"]{
 @emph{图4.1:结构网格中控制体(@tex-math{\Omega})及各面单位法向量(@tex-math{\vec{n}_m}):(a)二维;(b)三维。}图例:情形(a)中ï¼单位法向量@tex-math{\vec{n}_2}与@tex-math{\vec{n}_4}对应计算空间中的@tex-math{i}坐标(方向),@tex-math{\vec{n}_1}与@tex-math{\vec{n}_3}对应@tex-math{j}坐标;四边形控制体@tex-math{\Omega_{I,J}}的顶点标记为1—4ï¼左下角为物理坐标轴@tex-math{x}、@tex-math{y}ï¼右上角为计算坐标@tex-math{i}、@tex-math{j}。情形(b)中ï¼单位法向量@tex-math{\vec{n}_1}与@tex-math{\vec{n}_2}对应@tex-math{i}坐标,@tex-math{\vec{n}_5}与@tex-math{\vec{n}_6}对应@tex-math{j}坐标,@tex-math{\vec{n}_3}与@tex-math{\vec{n}_4}对应@tex-math{k}坐标;六面体控制体@tex-math{\Omega_{I,J,K}}的顶点标记为1—8ï¼左下角为物理坐标轴@tex-math{x}、@tex-math{y}、@tex-math{z}ï¼右下角为计算坐标@tex-math{i}、@tex-math{j}、@tex-math{k}。
-
+}
 @bi{
   @lang["en"]{All three methodologies will be outlined in Section 4.2, which is devoted to general concepts of discretisation schemes. It should be mentioned at this point that the cell-vertex scheme with overlapping control volumes is only seldom used today. Nevertheless, it is included here for completeness.}
   @lang["zh-CN"]{这三种方法学都将在4.2节中概述ï¼该节专门讨论离散格式的一般概念。这里应当指出ï¼采用重叠控制体的单元顶点格式如今已很少使用;不过ï¼为完整起见仍在此予以介绍。}
@@ -180,10 +179,9 @@
       @lang["zh-CN"]{与前述二维情形不同ï¼在三维中ï¼面向量与体积的计算存在一些困难。主要原因在于:一般情形下ï¼控制体一个面的四个顶点可能不共面。此时ï¼法向量在面上不再为常数(图4.2)。}
     }
 
-    @image["blazek2005/fig-4-2.png"]{图4.2:三维中控制体一个面上法向量变化的情形}
-
+    @figure["blazek2005/fig-4-2.png" "图4.2:三维中控制体一个面上法向量变化的情形"]{
     @emph{图4.2:三维中控制体一个面上法向量变化的情形。}图例:阴影四边形为控制体的一个面;由于其四个顶点不共面ï¼面上的法向量(图中@tex-math{\vec{n}_1}、@tex-math{\vec{n}_2})随位置变化ï¼不再是常向量。
-
+}
     @bi{
       @lang["en"]{order to overcome this difficulty, we could decompose all six faces of the control volume into two or more triangles each. The volume itself could then be built of tetrahedra. Performing this subdivision in an appropriate manner would lead to a discretisation scheme which is at least first-order accurate on arbitrary grids @link["blazek2005-r4-3"]{[3]}. Of course, the numerical effort would be increased substantially, because the fluxes would have to be integrated over each partial triangle separately. Hence, the number of point operations would be at least doubled. However, in @link["blazek2005-r4-3"]{[3]}, @link["blazek2005-r4-4"]{[4]} it is shown that for reasonably smooth grids, where the control volume faces approach parallelograms, the decomposition into triangles does not noticeably improve the solution accuracy. Therefore, we shall employ a simplified treatment of the quadrilateral faces in the following considerations, which is based on an @emph{averaged normal vector}.}
       @lang["zh-CN"]{为了克服这一困难ï¼我们可以把控制体的全部六个面各自分解成两个或多个三角形ï¼而体积本身则由四面体拼成。以适当方式进行这种细分ï¼将得到一个在任意网格上至少一阶精度的离散格式@link["blazek2005-r4-3"]{[3]}。当然ï¼数值代价会显著增加ï¼因为通量必须对每个部分三角形分别积分ï¼点操作次数至少加倍。然而ï¼文献@link["blazek2005-r4-3"]{[3]}、@link["blazek2005-r4-4"]{[4]}表明ï¼对于相当光滑、控制体面接近平行四边形的网格ï¼分解成三角形并不能明显提高解的精度。因此ï¼在下面的讨论中ï¼我们将对四边形面采用一种简化的处理方式ï¼它基于@emph{平均法向量}(averaged normal vector)。}
@@ -296,10 +294,9 @@
       }
     }
 
-    @image["blazek2005/fig-4-3.png"]{图4.3:单元中心格式的控制体(二维)}
-
+    @figure["blazek2005/fig-4-3.png" "图4.3:单元中心格式的控制体(二维)"]{
     @emph{图4.3:单元中心格式的控制体(二维)。}图例:阴影四边形@tex-math{\Omega_{I,J}}为控制体(即网格单元)ï¼其四个角点(实心圆点)为网格点@tex-math{i,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i+1,j+1};实心方块@tex-math{I-1,J}、@tex-math{I,J}、@tex-math{I+1,J}、@tex-math{I,J+1}、@tex-math{I,J-1}表示各单元形心处流动变量的存储位置;@tex-math{\vec{n}_{I+1/2,J}}、@tex-math{\vec{n}_{I-1/2,J}}、@tex-math{\vec{n}_{I,J+1/2}}、@tex-math{\vec{n}_{I,J-1/2}}为控制体各面的单位法向量。
-
+}
     @bi{
       @lang["en"]{Thus, taking the cell face @tex-math{\vec{n}_{I+1/2,J}} in Fig. 4.3 as an example, the first approach - average of fluxes - reads in two dimensions}
       @lang["zh-CN"]{以图4.3中的单元面@tex-math{\vec{n}_{I+1/2,J}}为例ï¼第一种做法——通量平均——在二维中写作}
@@ -440,10 +437,9 @@
 
     @tex-display-math[#:id "eq-4-27"]{\vec{W}_{I,J,K-1/2} = \frac{1}{4}\left[\vec{W}_1 + \vec{W}_2 + \vec{W}_5 + \vec{W}_6\right]. \tag{4.27}}
 
-    @image["blazek2005/fig-4-4.png"]{图4.4:单元顶点格式的重叠控制体(二维);箭头表示残差从单元形心向公共节点i,j的分配}
-
+    @figure["blazek2005/fig-4-4.png" "图4.4:单元顶点格式的重叠控制体(二维);箭头表示残差从单元形心向公共节点i,j的分配"]{
     @emph{图4.4:单元顶点格式的重叠控制体(二维);箭头表示残差从单元形心向公共节点@tex-math{i,j}的分配。}图例:四个单元@tex-math{\Omega_{I-1,J-1}}、@tex-math{\Omega_{I,J-1}}、@tex-math{\Omega_{I-1,J}}、@tex-math{\Omega_{I,J}}(阴影四边形)共享公共节点@tex-math{i,j}(实心圆点);各单元形心以实心方块标记@tex-math{I-1,J-1}、@tex-math{I,J-1}、@tex-math{I-1,J}、@tex-math{I,J};箭头表示把各单元(形心)的残差分配到公共节点;外圈网格点标记为@tex-math{i-1,j-1}、@tex-math{i,j-1}、@tex-math{i+1,j-1}、@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i-1,j+1}、@tex-math{i,j+1}、@tex-math{i+1,j+1}。
-
+}
     @bi{
       @lang["en"]{If we assume the edge 1-2 being oriented in the @tex-math{i}-direction, edge 1-5 in the @tex-math{j}-direction, edge 1-4 in the @tex-math{k}-direction, and if we finally associate the point @tex-math{(i,j,k)} with the corner 1 in Fig. 4.1b, the average in Eq. @link["blazek2005-ch04#eq-4-27"]{(4.27)} can also be written as}
       @lang["zh-CN"]{如果假定边1-2沿@tex-math{i}方向、边1-5沿@tex-math{j}方向、边1-4沿@tex-math{k}方向ï¼并把点@tex-math{(i,j,k)}与图4.1b中的角点1相关联ï¼则方程@link["blazek2005-ch04#eq-4-27"]{(4.27)}中的平均也可以写成}
@@ -585,14 +581,12 @@
 
   @tex-display-math[#:id "eq-4-37"]{\vec{W}_{i+1/2,j} = \frac{1}{2}\left(\vec{W}_{i,j} + \vec{W}_{i+1,j}\right)\,. \tag{4.37}}
 
-  @image["blazek2005/fig-4-5.png"]{图4.5:二维中单元顶点格式的对偶控制体}
-
+  @figure["blazek2005/fig-4-5.png" "图4.5:二维中单元顶点格式的对偶控制体"]{
   @emph{图4.5:二维中单元顶点格式的对偶控制体。}图例:阴影四边形@tex-math{\Omega_{I,J}}为围绕网格节点@tex-math{i,j}的对偶控制体ï¼由共享该节点的四个单元的中点连接而成;节点@tex-math{i,j}以及相邻节点@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i,j-1}均以实心圆点标记;@tex-math{\vec{n}_{i+1/2,j}}、@tex-math{\vec{n}_{i-1/2,j}}、@tex-math{\vec{n}_{i,j+1/2}}、@tex-math{\vec{n}_{i,j-1/2}}为对偶控制体各面的单位法向量(箭头所示)。
-
-  @image["blazek2005/fig-4-6.png"]{图4.6:边界处对偶控制体的定义(二维);上排:连接边中点构成;下排:连接边中点及边界上的中心节点构成}
-
+}
+  @figure["blazek2005/fig-4-6.png" "图4.6:边界处对偶控制体的定义(二维);上排:连接边中点构成;下排:连接边中点及边界上的中心节点构成"]{
   @emph{图4.6:边界处对偶控制体的定义(二维)。}上排:通过连接边中点构成;下排:通过连接边中点以及边界上的中心节点构成。图例:阴影四边形为边界网格点(实心圆点)处的对偶控制体;阴影斜线区域为物面(壁面);左列为平直边界上的情形ï¼右列为折角(斜坡)边界上的情形。
-
+}
   @bi{
     @lang["en"]{The flux vector @tex-math{\vec{F}} in Eq. @link["blazek2005-ch04#eq-4-36"]{(4.36)} represents either the convective or the viscous fluxes.}
     @lang["zh-CN"]{方程@link["blazek2005-ch04#eq-4-36"]{(4.36)}中的通量向量@tex-math{\vec{F}}既可以指对流通量ï¼也可以指黏性通量。}
@@ -691,10 +685,9 @@
     @lang["zh-CN"]{其次ï¼比较三种方法及其在边界处的特性。采用对偶控制体的单元顶点格式主要在固壁边界处遇到困难。再次回顾图4.6即可明显看出ï¼在边界处控制体只剩大约一半。沿各面对通量积分得到的残差位于控制体@emph{内部}——理想情况下位于其@emph{形心};但残差却被关联到直接位于壁面上的@emph{节点}。与单元中心格式相比ï¼这种错位导致离散误差增大。对偶控制体的定义在尖角(如尾缘)处也会引起问题ï¼表现为压力或密度上的非物理峰值。此外ï¼在坐标切割或周期边界(见第8章)等处还会出现更多复杂情况ï¼在那里必须把来自控制体两部分的通量正确地相加}
   }
 
-  @image["blazek2005/fig-4-7.png"]{图4.7:斜扭曲网格上的单元中心通量平衡;叉号表示单元面的中点}
-
+  @figure["blazek2005/fig-4-7.png" "图4.7:斜扭曲网格上的单元中心通量平衡;叉号表示单元面的中点"]{
   @emph{图4.7:斜扭曲网格上的单元中心通量平衡;叉号表示单元面的中点。}图例:阴影四边形@tex-math{\Omega_{I,J}}为控制体ï¼其右侧相邻单元@tex-math{I+1,J}发生扭斜;两个单元形心以实心方块标记ï¼虚线连接两形心;叉号@tex-math{\times}表示两单元公共面的中点——即使是线性变化的函数ï¼由形心处数值取平均也得不到该点的正确值。
-
+}
   @bi{
     @lang["en"]{up correctly. All cell-vertex schemes also require additional logic, in order to assure a consistent solution at boundary points shared by multiple grid blocks. No such problems appear for cell-centred schemes.}
     @lang["zh-CN"]{才行。所有单元顶点格式还需要额外的逻辑ï¼以保证在由多个网格块共享的边界点上解的一致性。单元中心格式则不存在这些问题。}
@@ -754,10 +747,9 @@
     @lang["zh-CN"]{某些单元中心格式与对偶控制体格式需要把流动变量插值到控制体的面上。图4.8以@emph{i}方向网格为例示意了这一情形。}
   }
 
-  @image["blazek2005/fig-4-8.png"]{图4.8:单元面I+1/2(或i+1/2)处的左状态与右状态;上半部分:单元中心格式;下半部分:采用对偶控制体的单元顶点格式}
-
+  @figure["blazek2005/fig-4-8.png" "图4.8:单元面I+1/2(或i+1/2)处的左状态与右状态;上半部分:单元中心格式;下半部分:采用对偶控制体的单元顶点格式"]{
   @emph{图4.8:单元面@tex-math{I+1/2}(或@tex-math{i+1/2})处的左状态与右状态。上半部分:单元中心格式;下半部分:采用对偶控制体的单元顶点格式。}图例:圆点表示节点ï¼矩形表示单元形心;L与R分别表示面左侧与右侧的状态ï¼箭头所指为控制体的面(face of control volume)。
-
+}
   @bi{
     @lang["en"]{One possibility, which is employed by the central scheme (see next subsection), consists of linear interpolation using the same number of values to the left and to the right of the face. In other words, the interpolation is centred at the face. Discretisations based on the characteristics of the Euler equations - upwind schemes - separately interpolate flow variables from the left and the right side of the face using non-symmetric formulae. The two values, named the left and the right state, are then utilised to compute the convective flux through the face (see Eqs. @link["blazek2005-ch04#eq-4-18"]{(4.18)}, @link["blazek2005-ch04#eq-4-23"]{(4.23)}, (4.38), or (4.43)). The interpolation formulae are almost exclusively (with the exception of TVD schemes) based on Van Leer's MUSCL (Monotone Upstream-Centred Schemes for Conservation Laws) approach @link["blazek2005-r4-29"]{[29]}. They read for a general flow variable @tex-math{U}}
     @lang["zh-CN"]{中心格式(见下一小节)采用的一种做法ï¼是利用面两侧相同数目的值做线性插值;换句话说ï¼插值相对于面居中。基于欧拉方程特征的离散——上风格式——则用非对称公式分别从面的左侧和右侧插值流动变量。这两个值分别称为左状态(left state)和右状态(right state)ï¼随后被用来计算通过该面的对流通量(见方程@link["blazek2005-ch04#eq-4-18"]{(4.18)}、@link["blazek2005-ch04#eq-4-23"]{(4.23)}、(4.38)或(4.43))。这些插值公式几乎全部(TVD格式除外)基于Van Leer的MUSCL(守恒律的单调上游中心型格式,Monotone Upstream-Centred Schemes for Conservation Laws)方法@link["blazek2005-r4-29"]{[29]}。对于一般流动变量@tex-math{U}ï¼它们为}
@@ -795,10 +787,9 @@
 
   @tex-display-math{(I,J)\quad (I+1,J)\quad (I,J+1)\quad (I-1,J)\quad (I,J-1)\,.}
 
-  @image["blazek2005/fig-4-9.png"]{图4.9:中心离散格式的模板(计算分子):(a)二维;(b)三维空间}
-
+  @figure["blazek2005/fig-4-9.png" "图4.9:中心离散格式的模板(计算分子):(a)二维;(b)三维空间"]{
   @emph{图4.9:中心离散格式的模板(计算分子):(a)二维;(b)三维空间。}图例:情形(a)中模板点为@tex-math{I,J}、@tex-math{I+1,J}、@tex-math{I-1,J}、@tex-math{I,J+1}、@tex-math{I,J-1};情形(b)中模板点为@tex-math{I,J,K}、@tex-math{I+1,J,K}、@tex-math{I-1,J,K}、@tex-math{I,J+1,K}、@tex-math{I,J-1,K}、@tex-math{I,J,K+1}、@tex-math{I,J,K-1};中心点为@tex-math{I,J}或@tex-math{I,J,K}。
-
+}
   @bi{
     @lang["en"]{In three dimensions, a 7-point stencil results, which involves the cells/points}
     @lang["zh-CN"]{在三维中ï¼得到7点模板ï¼涉及的单元/点为}
@@ -1500,10 +1491,9 @@
       @lang["zh-CN"]{二阶及更高阶的上风空间离散需要使用所谓的限制器(limiter)或限制器函数(limiter function)ï¼以防止在大梯度区域(如激波处)产生振荡和虚假解。因此ï¼我们至少要寻找保持单调性(monotonicity preserving)的格式。这意味着流场中的极大值必须不增ï¼极小值必须不减ï¼且时间演化过程中不得产生新的局部极值;换言之ï¼若初始数据单调ï¼则解必须保持单调。保持单调性格式的相当苛刻的条件(或TVD格式更严格的条件)常常被放弃ï¼转而采用局部极值减小(Local Extremum Diminishing,LED)条件@link["blazek2005-r4-60"]{[60]}。此时ï¼只要求包含@emph{在模板之内}的局部极值减小。}
     }
 
-    @image["blazek2005/fig-4-10.png"]{图4.10:有与无限制器的无黏跨声速流动计算比较:NACA 0012翼型,M∞=0.85,α=1°}
-
+    @figure["blazek2005/fig-4-10.png" "图4.10:有与无限制器的无黏跨声速流动计算比较:NACA 0012翼型,M∞=0.85,α=1°"]{
     @emph{图4.10:有与无限制器的无黏跨声速流动计算比较。NACA 0012翼型,@tex-math{M_\infty} = 0.85,@tex-math{\alpha} = 1°。}图例:纵轴为马赫数(Mach number)ï¼横轴为弦向位置(chord);带空心方块的折线为无限制器(without limiter)的结果ï¼实线为采用Van Albada限制器(with Van Albada limiter)的结果。
-
+}
     @bi{
       @lang["en"]{However, due to Godunov's theorem there is no possibility for a higher-order linear scheme (such as the MUSCL approach) to be monotonicity preserving @link["blazek2005-r4-90"]{[90]}. It is therefore necessary to employ non-linear limiter functions in order to construct a monotonicity preserving or a TVD discretisation. This is demonstrated in Fig. 4.10, where the upwind TVD scheme of Eq. @link["blazek2005-ch04#eq-4-98"]{(4.98)} was used with and without a limiter to compute 2-D transonic flow past the NACA 0012 airfoil. It can be clearly seen that without limiter, the solution exhibits large oscillations in the neighbourhood of the shocks on the upper and the lower side of the airfoil. On the other hand, the limited and the unlimited solutions become nearly identical away from the shocks.}
       @lang["zh-CN"]{然而ï¼根据Godunov定理ï¼高阶线性格式(如MUSCL方法)不可能保持单调性@link["blazek2005-r4-90"]{[90]}。因此ï¼必须采用非线性限制器函数来构造保持单调性或TVD的离散。图4.10演示了这一点:用方程@link["blazek2005-ch04#eq-4-98"]{(4.98)}的上风TVD格式ï¼分别在有与无限制器的条件下计算NACA 0012翼型的二维跨声速流动。可以清楚看到ï¼无限制器时ï¼解在翼型上、下表面激波附近出现大幅振荡;而在远离激波处ï¼带限制器与不带限制器的解几乎相同。}
@@ -1514,10 +1504,9 @@
       @lang["zh-CN"]{限制器的目的是减小用于把流动变量插值到控制体面的斜率(即@tex-math{(U_{I+1} - U_I)/\Delta x})ï¼以约束解的变化。在强间断处ï¼限制器必须把斜率减为零ï¼以防产生新极值。这意味着无论对MUSCL方法还是对TVD格式ï¼在大梯度的紧邻区域都退回到(单调的)一阶上风格式(方程@link["blazek2005-ch04#eq-4-46"]{(4.46)}中@tex-math{\epsilon = 0})。对限制器的最后一项要求显而易见——在流动光滑区域必须还原为原始的无限制离散ï¼以使数值耗散量尽可能低。限制器对左、右状态插值的影响示于图4.11。例子显示了在局部极小值@tex-math{I}处斜率的减小ï¼以及在单元@tex-math{(I+1)}、@tex-math{(I+2)}处为获得单调解而对斜率的改变。重要的是要认识到ï¼面上左、右状态之间的差仍可能(而且一般将会)存在。}
     }
 
-    @image["blazek2005/fig-4-11.png"]{图4.11:向单元面直接插值(左)与限制插值(右)的比较}
-
+    @figure["blazek2005/fig-4-11.png" "图4.11:向单元面直接插值(左)与限制插值(右)的比较"]{
     @emph{图4.11:向单元面直接插值(左)与限制插值(右)的比较。}图例:粗线表示斜率@tex-math{\Delta U/\Delta x}ï¼竖条表示单元中心处的值;横轴为@tex-math{I-1}、@tex-math{I}、@tex-math{I+1}、@tex-math{I+2}与@tex-math{x},L、R标记面上的左、右状态。
-
+}
     @bi{
       @lang["en"]{In the following, we shall describe four different limiter functions, which are well-established and proven in practice. We shall consider limiters for the second-order MUSCL, for the CUSP and for the upwind TVD scheme.}
       @lang["zh-CN"]{下面我们描述四种业已确立并经实践检验的限制器函数:分别针对二阶MUSCL、CUSP以及上风TVD格式。}
@@ -1767,10 +1756,9 @@
     @lang["zh-CN"]{导数@tex-math{U_\xi}、@tex-math{U_\eta}与@tex-math{U_\zeta}由有限差分近似得到ï¼更多细节见文献@link["blazek2005-r4-96"]{[96]}-@link["blazek2005-r4-98"]{[98]};坐标的导数与变换的Jacobian见附录A.1。本书更倾向于第二种方法ï¼它与本书讨论的有限体积方法学更为一致;不过ï¼它需要为导数的计算构造一个附加控制体。下面将针对单元中心格式与单元顶点格式分别讨论。一旦得到了控制体面上流动变量与一阶导数的值ï¼就可以按方程@link["blazek2005-ch04#eq-4-2"]{(4.2)}把黏性通量的贡献累加起来;把这部分贡献加到无黏通量上ï¼空间离散即告完成ï¼随后便可对近似的控制方程进行时间积分。}
   }
 
-  @image["blazek2005/fig-4-12.png"]{图4.12:用于计算一阶导数的辅助控制体Ω'(填充部分ï¼二维):(a)单元中心格式;(b)单元顶点格式}
-
+  @figure["blazek2005/fig-4-12.png" "图4.12:用于计算一阶导数的辅助控制体Ω'(填充部分ï¼二维):(a)单元中心格式;(b)单元顶点格式"]{
   @emph{图4.12:用于计算一阶导数的辅助控制体@tex-math{\Omega'}(填充部分ï¼二维):(a)单元中心格式;(b)单元顶点格式。}图例:菱形符号标记一阶导数的计算位置;(a)中@tex-math{\Omega_{I,J}}为单元控制体ï¼单元中心以方块标记(@tex-math{I,J}、@tex-math{I+1,J}、@tex-math{I,J+1}、@tex-math{I+1,J+1}等)ï¼网格点以圆点标记(@tex-math{i,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i+1,j+1})ï¼面中点标记为@tex-math{1/2};(b)中网格点为@tex-math{i,j}、@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i,j+1}、@tex-math{i+1,j+1}、@tex-math{i,j-1}ï¼边中点以@tex-math{1/2}标记。
-
+}
   @subtree[#:id "blazek2005-4-4-1"]{
     @title{4.4.1 Cell-Centred Scheme 单元中心格式}
 

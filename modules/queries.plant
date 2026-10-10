@@ -3,7 +3,6 @@
   #:use-module (forester relations)
   #:use-module (forester site)
   #:use-module (grove relation dsl)
-  #:use-module (grove element)
   #:use-module (grove ir)
   #:use-module (grove site)
   #:use-module (srfi srfi-1))
@@ -200,88 +199,5 @@
               . ,(math-query-results site forest))
              (flora-orphan-page-results
               . ,(orphan-page-results site forest)))))
-    (make-forest
-      (figure-site
-        (expand-site-query-markers site replacements forest)))))
-
-;; 图题配对：紧随单个图片段落之后的图题段落(以 emph 开头)在分析期合并为
-;; <figure><img/><figcaption>…</figcaption></figure>。内容侧保持
-;; @image + 图题段落的原始形态,全书 127 处插图由此规则覆盖。
-;; 读取器会把源文件里的空行/换行变成空白文本节点夹在块级元素之间,
-;; 配对与段落判定一律先剔除空白节点。
-(define (blank-text? node)
-  (and (content-text? node)
-       (string-null? (string-trim-both (content-text-value node)))))
-
-(define (significant-children element)
-  (filter (lambda (child) (not (blank-text? child)))
-          (content-element-children element)))
-
-(define (single-image-paragraph? element)
-  (and (content-element? element)
-       (eq? (content-element-kind element) 'paragraph)
-       (let ((children (significant-children element)))
-         (and (= (length children) 1)
-              (let ((only (car children)))
-                (and (content-element? only)
-                     (eq? (content-element-kind only) 'image)))))))
-
-(define (caption-paragraph? element)
-  (and (content-element? element)
-       (eq? (content-element-kind element) 'paragraph)
-       (let ((children (significant-children element)))
-         (and (pair? children)
-              (let ((first (car children)))
-                (and (content-element? first)
-                     (eq? (content-element-kind first) 'emph)))))))
-
-(define (make-figure image-paragraph caption-paragraph)
-  ((make-element #:tag "figure" #:flow-kind 'block)
-   (car (significant-children image-paragraph))
-   (apply (make-element #:tag "figcaption" #:flow-kind 'block)
-          (significant-children caption-paragraph))))
-
-(define (pair-figures children)
-  (let loop ((rest children) (acc '()))
-    (if (or (null? rest) (null? (cdr rest)))
-        (append (reverse acc) rest)
-        (let ((this (car rest)) (next (cadr rest)))
-          (if (and (single-image-paragraph? this)
-                   (caption-paragraph? next))
-              (loop (cddr rest) (cons (make-figure this next) acc))
-              (loop (cdr rest) (cons this acc)))))))
-
-(define (figure-ize content)
-  (cond
-    ((content-document? content)
-     (make-content-document
-       (pair-figures (filter (lambda (child) (not (blank-text? child)))
-                             (map figure-ize (content-document-children content))))
-       (content-document-source content)))
-    ((content-element? content)
-     (make-content-element
-       (content-element-kind content)
-       ;; 配对同样发生在子树 section 等元素的子节点列表里——全书插图
-       ;; 大多位于小节内部而非页面顶层。
-       (pair-figures (filter (lambda (child) (not (blank-text? child)))
-                             (map figure-ize (content-element-children content))))
-       (content-element-source content)
-       #:properties (content-element-properties content)
-       #:style (content-element-style content)
-       #:flow-kind (content-element-flow-kind content)))
-    (else content)))
-
-(define (figure-site site)
-  (make-site
-    (map (lambda (page)
-           (make-site-page
-             (site-page-id page)
-             (site-page-title page)
-             (figure-ize (site-page-document page))
-             (site-page-source page)
-             #:metadata (site-page-metadata page)))
-         (site-pages site))
-    #:title (site-title site)
-    #:description (site-description site)
-    #:sources (site-sources site)))
+    (make-forest (expand-site-query-markers site replacements forest))))
 )

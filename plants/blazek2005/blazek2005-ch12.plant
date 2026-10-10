@@ -102,10 +102,9 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
     @lang["zh-CN"]{其中@tex-math{x_{thr}}表示喉道的位置。喷管长度取为1。此外，式@link["blazek2005-ch12#eq-12-2"]{(12.2)}中的@tex-math{A_1}为入口面积，@tex-math{A_2}为出口面积（见图12.1中的示意图）。由式@link["blazek2005-ch12#eq-12-2"]{(12.2)}可得喉道面积为@tex-math{A^{*}(x=x_{thr})=1}。该程序生成的网格作为12.5节准一维Euler求解器的输入。}
   }
 
-  @image["blazek2005/fig-12-1.png"]{图12.1:1-D Euler求解器的网格与控制体}
-
+  @figure["blazek2005/fig-12-1.png" "图12.1:1-D Euler求解器的网格与控制体"]{
   @emph{图12.1:1-D Euler求解器的网格与控制体；点@tex-math{i=1}与@tex-math{i=imax}为虚点（dummy points）。}图例：flow——流动方向；@tex-math{A_1}——入口面积；@tex-math{A_2}——出口面积；@tex-math{A_{i+1/2}}——控制体面上的横截面积；control volume——控制体；实心圆点——内部网格点（编号2至ib2）；空心圆点（点1与imax）——虚点。
-}
+}}
 
 @subtree[#:id "blazek2005-12-3"]{
   @title{12.3 Structured 2-D Grid Generators 结构2-D网格生成器}
@@ -247,14 +246,12 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
     @lang["zh-CN"]{求解器中所用面向量@code{SI}与@code{SJ}（即@tex-math{\vec{n}\cdot\Delta S}）的定义见图12.3。面向量与控制体@code{VOL(I,J)}（对应@tex-math{\Omega_{I,J}}）的左面和底面相关联，指向控制体外侧。控制体其余两条边的面向量由@code{-SI(I+1,J)}与@code{-SJ(I,J+1)}得到。这样，每个控制体只需存储两个面向量。}
   }
 
-  @image["blazek2005/fig-12-2.png"]{图12.2:结构2-D Euler/Navier-Stokes求解器在计算空间中的网格}
-
+  @figure["blazek2005/fig-12-2.png" "图12.2:结构2-D Euler/Navier-Stokes求解器在计算空间中的网格"]{
   @emph{图12.2:结构2-D Euler/Navier-Stokes求解器在计算空间中的网格。每条边界处均有两层虚单元（虚线所示）。带圈数字表示计算域的各边。}图例：横轴@tex-math{I}、纵轴@tex-math{J}——计算空间的索引方向；0、1、2——网格线/点编号；@tex-math{J_2}、@tex-math{J_L}、@tex-math{J_M}与@tex-math{I_2}、@tex-math{I_L}、@tex-math{I_M}——物理网格在各方向的界限；①②③④——计算域的下、右、上、左四条边；虚线——虚单元（两层）。
-
-  @image["blazek2005/fig-12-3.png"]{图12.3:结构2-D Euler/Navier-Stokes求解器的控制体与面向量}
-
-  @emph{图12.3:结构2-D Euler/Navier-Stokes求解器的控制体与面向量。索引@tex-math{(I,J)}表示单元，索引@tex-math{(i,j)}表示网格节点。}图例：@code{VOL(I,J)}——单元@tex-math{(I,J)}的控制体（阴影）；@tex-math{I,J}——该单元的中心；@tex-math{I{+}1,J}——相邻单元的中心；@tex-math{i,j}、@tex-math{i{+}1,j}、@tex-math{i,j{+}1}、@tex-math{i{+}1,j{+}1}——网格节点；@code{SI(I,J)}——左面上指向控制体外侧的面向量；@code{SJ(I,J)}——底面上指向控制体外侧的面向量。
 }
+  @figure["blazek2005/fig-12-3.png" "图12.3:结构2-D Euler/Navier-Stokes求解器的控制体与面向量"]{
+  @emph{图12.3:结构2-D Euler/Navier-Stokes求解器的控制体与面向量。索引@tex-math{(I,J)}表示单元，索引@tex-math{(i,j)}表示网格节点。}图例：@code{VOL(I,J)}——单元@tex-math{(I,J)}的控制体（阴影）；@tex-math{I,J}——该单元的中心；@tex-math{I{+}1,J}——相邻单元的中心；@tex-math{i,j}、@tex-math{i{+}1,j}、@tex-math{i,j{+}1}、@tex-math{i{+}1,j{+}1}——网格节点；@code{SI(I,J)}——左面上指向控制体外侧的面向量；@code{SJ(I,J)}——底面上指向控制体外侧的面向量。
+}}
 
 @subtree[#:id "blazek2005-12-7"]{
   @title{12.7 Unstructured 2-D Euler/Navier-Stokes Solver 非结构2-D Euler/Navier-Stokes求解器}
@@ -292,26 +289,21 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
 
   @emph{³原书脚注:see, e.g., http://cygwin.com(例如可参见 http://cygwin.com。)}
 
-  @image["blazek2005/fig-12-4.png"]{图12.4:Vis2D中绘制翼型(沿x方向放置)上的马赫数分布}
-
+  @figure["blazek2005/fig-12-4.png" "图12.4:Vis2D中绘制翼型(沿x方向放置)上的马赫数分布"]{
   @emph{图12.4:Vis2D中绘制翼型（沿@tex-math{x}方向放置）上的马赫数分布。}图例：纵轴——Mach number（马赫数）；横轴——@tex-math{x} [m]；带标记的两条曲线为沿翼型的马赫数分布。
-
-  @image["blazek2005/fig-12-5.png"]{图12.5:Vis2D中用第二y轴显示收敛数据的示例}
-
-  @emph{图12.5:Vis2D中用第二@tex-math{y}轴显示收敛数据的示例。}图例：左纵轴——log(res)（残差对数）；右纵轴——mass ratio（流量比）；横轴——iteration（迭代步数）；曲线图例：convergence history——收敛历史；mass flow ratio——质量流量比。
-
-  @image["blazek2005/fig-12-6.png"]{图12.6:Vis2D绘制的非结构三角网格示例}
-
-  @emph{图12.6:Vis2D绘制的非结构三角网格示例。}图例：窗口标题为“Channel with 10% circular bump”（含10%圆形鼓包的通道）。
-
-  @image["blazek2005/fig-12-7.png"]{图12.7:Vis2D以等值线形式绘制的翼型周围马赫数分布}
-
-  @emph{图12.7:Vis2D以等值线（iso-contours）形式绘制的翼型周围马赫数分布。}图例：右侧色标——Mach number（马赫数），色标范围9.818e-02至1.352e+00。
-
-  @image["blazek2005/fig-12-8.png"]{图12.8:Vis2D窗口:马赫数等值线叠加速度向量}
-
-  @emph{图12.8:Vis2D窗口，显示马赫数等值线并叠加速度向量。}图例：底部色标——Mach number（马赫数），色标值9.818e-02至1.352e+00。
 }
+  @figure["blazek2005/fig-12-5.png" "图12.5:Vis2D中用第二y轴显示收敛数据的示例"]{
+  @emph{图12.5:Vis2D中用第二@tex-math{y}轴显示收敛数据的示例。}图例：左纵轴——log(res)（残差对数）；右纵轴——mass ratio（流量比）；横轴——iteration（迭代步数）；曲线图例：convergence history——收敛历史；mass flow ratio——质量流量比。
+}
+  @figure["blazek2005/fig-12-6.png" "图12.6:Vis2D绘制的非结构三角网格示例"]{
+  @emph{图12.6:Vis2D绘制的非结构三角网格示例。}图例：窗口标题为“Channel with 10% circular bump”（含10%圆形鼓包的通道）。
+}
+  @figure["blazek2005/fig-12-7.png" "图12.7:Vis2D以等值线形式绘制的翼型周围马赫数分布"]{
+  @emph{图12.7:Vis2D以等值线（iso-contours）形式绘制的翼型周围马赫数分布。}图例：右侧色标——Mach number（马赫数），色标范围9.818e-02至1.352e+00。
+}
+  @figure["blazek2005/fig-12-8.png" "图12.8:Vis2D窗口:马赫数等值线叠加速度向量"]{
+  @emph{图12.8:Vis2D窗口，显示马赫数等值线并叠加速度向量。}图例：底部色标——Mach number（马赫数），色标值9.818e-02至1.352e+00。
+}}
   @emph{Appendix A 附录A}
 
   本附录汇集正文多处引用的推导:度量项、旋转坐标系、TSL/PNS 近似、通量雅可比、变量变换、GMRES 算法与张量记号。公式编号 (A.N) 与原书一致,正文的 (A.N) 引用可直接点击跳转。
@@ -429,10 +421,9 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
 
   @tex-display-math[#:id "eq-a-15"]{\begin{aligned} \left(\frac{\partial x}{\partial\xi}\right)_{i,j} &\approx \frac{\frac{1}{2}\left[(x_{i,j} + x_{i+1,j}) - (x_{i,j} + x_{i-1,j})\right]}{(i + 1/2) - (i - 1/2)} = \frac{1}{2}\left(x_{i+1,j} - x_{i-1,j}\right)\\ \left(\frac{\partial y}{\partial\xi}\right)_{i,j} &\approx \frac{\frac{1}{2}\left[(y_{i,j} + y_{i+1,j}) - (y_{i,j} + y_{i-1,j})\right]}{(i + 1/2) - (i - 1/2)} = \frac{1}{2}\left(y_{i+1,j} - y_{i-1,j}\right) \end{aligned} \tag{A.15}}
 
-  @image["blazek2005/fig-a-1.png"]{图A.1:二维度量项的几何表示}
-
+  @figure["blazek2005/fig-a-1.png" "图A.1:二维度量项的几何表示"]{
   @emph{图A.1:二维度量项的几何表示。}图例:网格节点@tex-math{(i-1,j)}、@tex-math{(i,j-1)}、@tex-math{(i,j)}、@tex-math{(i+1,j)}、@tex-math{(i,j+1)};@tex-math{|\vec{S}^I|}——@tex-math{i}方向平均面向量(图中两处箭头);@tex-math{\Omega}——控制体(中心阴影菱形);@tex-math{\Omega^{*}}——对偶控制体(外围虚线菱形)。
-
+}
   @bi{
     @lang["en"]{and}
     @lang["zh-CN"]{以及}
@@ -483,10 +474,9 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
     @lang["zh-CN"]{上述度量项的推导同样可以在三维情形进行，结果示于图A.2。变换Jacobian行列式的逆（@tex-math{J^{-1}}）等于由网格节点@tex-math{(i, j, k-1/2)}、@tex-math{(i+1/2, j, k)}、@tex-math{(i, j, k+1/2)}、@tex-math{(i-1/2, j, k)}、@tex-math{(i, j-1/2, k)}与@tex-math{(i, j+1/2, k)}所确定的体积的两倍。在矩形网格上，这同样恰好对应4.2.3小节的对偶控制体。}
   }
 
-  @image["blazek2005/fig-a-2.png"]{图A.2:三维度量项的几何表示}
-
+  @figure["blazek2005/fig-a-2.png" "图A.2:三维度量项的几何表示"]{
   @emph{图A.2:三维度量项的几何表示。}图例:中心网格节点@tex-math{(i,j,k)};面中点节点@tex-math{(i,j,k+1/2)}、@tex-math{(i,j,k-1/2)}、@tex-math{(i+1/2,j,k)}、@tex-math{(i-1/2,j,k)}、@tex-math{(i,j+1/2,k)}、@tex-math{(i,j-1/2,k)};@tex-math{\frac{1}{2}|\vec{S}^I|}、@tex-math{\frac{1}{2}|\vec{S}^J|}、@tex-math{\frac{1}{2}|\vec{S}^K|}——相应坐标方向上面向量之半(图中阴影三角形)。
-}
+}}
 @subtree[#:id "blazek2005-a-2"]{
   @title{A.2 Quasilinear Form of the Euler Equations A.2 欧拉方程的拟线性形式}
 
@@ -562,14 +552,12 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
       }
     }
 
-    @image["blazek2005/fig-a-3.png"]{图A.3:每点具有两条特征线的双曲型PDE的依赖域与影响域}
-
+    @figure["blazek2005/fig-a-3.png" "图A.3:每点具有两条特征线的双曲型PDE的依赖域与影响域"]{
     @emph{图A.3:每点具有两条特征线的双曲型偏微分方程的依赖域与影响域 @link["blazek2005-ra-3"]{[3]}。}图例:zone of influence of point P——点P的影响区;left-running characteristic——左行特征线;right-running characteristic——右行特征线;region of dependence of point P——点P的依赖区;boundary——边界;P、A、B、C——考察点与边界上的点。
-
-    @image["blazek2005/fig-a-4.png"]{图A.4:抛物型PDE的影响域}
-
+}
+    @figure["blazek2005/fig-a-4.png" "图A.4:抛物型PDE的影响域"]{
     @emph{图A.4:抛物型偏微分方程的影响域 @link["blazek2005-ra-3"]{[3]}。}图例:characteristic——特征线;zone of influence of point P——点P的影响区;boundary——边界;P、A、B、C、D——考察点与边界上的点。
-
+}
     @bi{
       @lang["en"]{
         @itemize{
@@ -611,10 +599,9 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
       @lang["zh-CN"]{最后，若@link["blazek2005-ch12#eq-a-24"]{(A.24)}是椭圆型的，它有两条复特征线。由理论可知，某点@tex-math{P}处的信息影响域内所有其他区域；另一方面，点@tex-math{P}处的解依赖于整个周围区域。情形如图A.5所示。这意味着点@tex-math{P}处的解受到整个封闭边界（@tex-math{A}、@tex-math{B}、@tex-math{C}）的影响。因此，椭圆型PDE代表一个@emph{边值}（boundary-value）问题：点@tex-math{P}处的解必须与域内所有其他点处的解同时求出。这与应用于抛物型和双曲型方程的空间或时间推进方法形成鲜明对照。按照图A.5，必须在}
     }
 
-    @image["blazek2005/fig-a-5.png"]{图A.5:椭圆型PDE的影响域与依赖域}
-
+    @figure["blazek2005/fig-a-5.png" "图A.5:椭圆型PDE的影响域与依赖域"]{
     @emph{图A.5:椭圆型偏微分方程的影响域与依赖域 @link["blazek2005-ra-3"]{[3]}。}图例:boundary——边界;C、B、A——边界上的点;P——域内考察点;图下文字“P depending on and influencing the whole region”意为“点P依赖于整个区域并影响整个区域”。
-
+}
     @bi{
       @lang["en"]{the entire boundary (@tex-math{A}, @tex-math{B}, @tex-math{C}). The boundary conditions can assume one of the two following forms:
         @itemize{
@@ -681,10 +668,9 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
 
   @tex-display-math[#:id "eq-a-30"]{E = e + \frac{|\vec{v}_r|^2}{2} - \frac{|\vec{v}_e|^2}{2} = e + \frac{u^2 + v^2 + w^2}{2} - \frac{\omega_1^2|\vec{r}_n|^2}{2} \tag{A.30}}
 
-  @image["blazek2005/fig-a-6.png"]{图A.6:绝对参考系与旋转参考系(旋转轴与x轴重合)}
-
+  @figure["blazek2005/fig-a-6.png" "图A.6:绝对参考系与旋转参考系(旋转轴与x轴重合)"]{
   @emph{图A.6:绝对参考系与旋转参考系。旋转轴与@tex-math{x}轴重合。}图例:O——坐标原点;@tex-math{x}、@tex-math{y}、@tex-math{z}——绝对参考系的坐标轴;absolute frame of reference——绝对参考系;relative (rotating) frame of reference——相对(旋转)参考系;rotational axis——旋转轴;@tex-math{P}——考察点;@tex-math{\vec{r}}——位置向量;@tex-math{\vec{r}_n}——垂直于旋转轴的位置向量;@tex-math{\vec{\omega}}——角速度;@tex-math{\vec{v}_r}——相对速度;@tex-math{\vec{v}_e}——牵连速度。
-
+}
   @bi{
     @lang["en"]{with @tex-math{|\vec{r}_n|^2 = y^2 + z^2}. The vector of the convective fluxes @tex-math{\vec{F}_c} is defined as}
     @lang["zh-CN"]{其中@tex-math{|\vec{r}_n|^2 = y^2 + z^2}。对流通量向量@tex-math{\vec{F}_c}定义为}
@@ -816,10 +802,9 @@ A(x) &= 1+\frac{1}{2}\left(A_2-1\right)\left\{1-\cos\left[\frac{\pi\left(x-x_{th
     @lang["zh-CN"]{由于控制体@tex-math{\Omega}的表面由凸面片组成，@link["blazek2005-ch12#eq-a-43"]{(A.43)}中体积的总变化等于各面片局部变化之和。现在考察控制体的某个面片@tex-math{m}（如图A.7所示），可以把局部GCL写为}
   }
 
-  @image["blazek2005/fig-a-7.png"]{图A.7:控制体的三角形面片m在时间层n与n+1之间的运动}
-
+  @figure["blazek2005/fig-a-7.png" "图A.7:控制体的三角形面片m在时间层n与n+1之间的运动"]{
   @emph{图A.7:控制体的三角形面片@tex-math{m}在时间层@tex-math{n}与@tex-math{n+1}之间的运动。}图例:@tex-math{A}、@tex-math{B}、@tex-math{C}——面片在时间层@tex-math{n}的顶点;@tex-math{A'}、@tex-math{B'}、@tex-math{C'}——面片在时间层@tex-math{n+1}的顶点;@tex-math{\vec{n}_m^n}、@tex-math{\vec{n}_m^{n+1}}——两个时间层的面片法向量;@tex-math{dS_m^n}、@tex-math{dS_m^{n+1}}——两个时间层的面片面积。
-
+}
   @tex-display-math[#:id "eq-a-44"]{\Delta\Omega_m = \Omega_m^{n+1} - \Omega_m^n = \Delta t\left[\left(\vec{g}\cdot\vec{n}\right)\Delta S\right]_m^{n+1/2}. \tag{A.44}}
 
   @bi{

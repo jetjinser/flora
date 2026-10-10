@@ -46,10 +46,9 @@
     @lang["zh-CN"]{考察图2.1中以流线表示的一个一般流场。流场中由封闭曲面@tex-math{\partial\Omega}所包围、固定在空间中的一个任意有限区域，定义了控制体@tex-math{\Omega}。我们还引入面元@tex-math{dS}及其相应的、指向外侧的单位法向量@tex-math{\vec{n}}。}
   }
 
-  @image["blazek2005/fig-2-1.png"]{图2.1:有限控制体的定义(固定于空间中)}
-
+  @figure["blazek2005/fig-2-1.png" "图2.1:有限控制体的定义(固定于空间中)"]{
   @emph{图2.1:有限控制体的定义(固定于空间中)。}图例:流线;@tex-math{\Omega}——控制体;@tex-math{\partial\Omega}——控制体边界(封闭曲面);@tex-math{dS}——面元;@tex-math{\vec{n}}——外指单位法向量;@tex-math{\vec{v}}——流动速度。
-
+}
   @bi{
     @lang["en"]{The conservation law applied to an exemplary scalar quantity per unit volume @tex-math{U} says that its variation in time within @tex-math{\Omega}, i.e.,}
     @lang["zh-CN"]{将守恒定律应用于单位体积上某个示例标量@tex-math{U}，则它在@tex-math{\Omega}内随时间的变化，即}
@@ -248,10 +247,9 @@
       @lang["zh-CN"]{其中@tex-math{\overline{\overline{I}}}为单位张量（关于张量可参见例如@link["blazek2005-r2-2"]{[2]}）。面源对控制体的作用示于图2.2。在2.3节中，我们将更详细地阐述应力张量的形式，特别是说明法向应力和切向应力与流动速度之间的联系。}
     }
 
-    @image["blazek2005/fig-2-2.png"]{图2.2:作用在控制体表面元上的表面力}
-
+    @figure["blazek2005/fig-2-2.png" "图2.2:作用在控制体表面元上的表面力"]{
     @emph{图2.2:作用在控制体表面元上的表面力。}图例：@tex-math{\overline{\overline{\tau}}\cdot\vec{n}\,dS}——黏性应力；@tex-math{p\vec{n}\,dS}——压力；@tex-math{dS}——面元；@tex-math{\Omega}——控制体。
-
+}
     @bi{
       @lang["en"]{Hence, if we now sum up all the above contributions according to the general conservation law (Eq. @link["blazek2005-ch02#eq-2-2"]{(2.2)}), we finally obtain the expression}
       @lang["zh-CN"]{于是，如果按照一般守恒定律（方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}）把上述所有贡献求和，我们最终得到表达式}
@@ -379,10 +377,9 @@
 
   @tex-display-math[#:id "eq-2-16"]{\nu = \mu/\rho. \tag{2.16}}
 
-  @image["blazek2005/fig-2-3.png"]{图2.3:作用在有限流体微元上的法向应力(a)与切向应力(b)}
-
+  @figure["blazek2005/fig-2-3.png" "图2.3:作用在有限流体微元上的法向应力(a)与切向应力(b)"]{
   @emph{图2.3:作用在有限流体微元上的法向应力(a)与切向应力(b)。}图例：(a)法向应力@tex-math{\tau_{xx}}、@tex-math{\tau_{yy}}、@tex-math{\tau_{zz}}；(b)切向应力@tex-math{\tau_{xy}}、@tex-math{\tau_{xz}}、@tex-math{\tau_{yx}}、@tex-math{\tau_{yz}}、@tex-math{\tau_{zx}}、@tex-math{\tau_{zy}}。
-
+}
   @bi{
     @lang["en"]{The expressions in Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} were derived by the Englishman George Stokes in the middle of the 19th century. The terms @tex-math{\mu(\partial u/\partial x)}, etc. in the normal stresses represent the rate of @emph{linear} dilatation - a change in shape. On the other hand, the term @tex-math{(\lambda\,\mathrm{div}\,\vec{v})} in Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} represents @emph{volumetric} dilatation - the rate of change in volume, which is in essence a change of the density.}
     @lang["zh-CN"]{方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中的表达式由英国人George Stokes在19世纪中叶导出。法向应力中的@tex-math{\mu(\partial u/\partial x)}等项代表线膨胀率（linear dilatation）——形状的变化。另一方面，方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中的项@tex-math{(\lambda\,\mathrm{div}\,\vec{v})}代表体积膨胀（volumetric dilatation）——体积的变化率，其本质是密度的变化。}
@@ -666,10 +663,9 @@
       @lang["zh-CN"]{在模拟高雷诺数绕物体的流动时（即边界层相对于特征尺寸很薄时），可以对Navier-Stokes方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}进行简化。一个必要条件是不存在大面积的分离边界层。于是可以预期}
     }
 
-    @image["blazek2005/fig-2-4.png"]{图2.4:薄边界层的表示}
-
+    @figure["blazek2005/fig-2-4.png" "图2.4:薄边界层的表示"]{
     @emph{图2.4:薄边界层的表示。}图例：Flow——流动；Boundary layer——边界层；Body contour——物面轮廓；@tex-math{\eta}、@tex-math{\xi}——贴体曲线坐标。
-
+}
     @bi{
       @lang["en"]{only the gradients of the flow quantities in the normal direction to the surface of the body (@tex-math{\eta}-direction in Fig. 2.4) contribute to the viscous stresses @link["blazek2005-r2-33"]{[33]}, @link["blazek2005-r2-34"]{[34]}. On the other hand, the gradients in the other coordinate directions (@tex-math{\xi} in Fig. 2.4) are neglected in the evaluation of the shear stress tensor (Eqs. (@link["blazek2005-ch02#eq-2-14"]{2.14}, @link["blazek2005-ch02#eq-2-15"]{2.15})). We speak here of the so-called @emph{Thin Shear Layer} (TSL) approximation of the Navier-Stokes equations. The motivation for the TSL modification is that the numerical evaluation of the viscous terms becomes computationally less expensive, but, within the assumptions, the solution remains sufficiently accurate. The TSL approximation can also be justified from a practical point of view. In the case of high Reynolds number flows, the grid has to be very fine in the wall normal direction in order to resolve the boundary layer properly. Because of the limited computer memory and speed, much coarser grid has to be generated in the other directions. This in turn results in significantly lower numerical accuracy of the gradient evaluation compared to the normal direction. The TSL equations are for completeness presented in the Appendix (A.6). Due to the fact that secondary flow (e.g., like in a blade row) cannot be resolved appropriately, the TSL simplification is usually applied only in external aerodynamics.}
       @lang["zh-CN"]{只有垂直于物体表面方向（图2.4中的@tex-math{\eta}方向）的流动参量梯度才对黏性应力有贡献@link["blazek2005-r2-33"]{[33]}, @link["blazek2005-r2-34"]{[34]}。另一方面，在其他坐标方向（图2.4中的@tex-math{\xi}方向）上的梯度，在计算切向应力张量（方程(@link["blazek2005-ch02#eq-2-14"]{2.14}, @link["blazek2005-ch02#eq-2-15"]{2.15})）时被忽略。这就是所谓的Navier-Stokes方程薄剪切层（Thin Shear Layer，TSL）近似。采用TSL修正的动机在于：黏性项的数值计算代价更低，同时在假设范围内解仍保持足够的精度。从实用的角度看，TSL近似也是合理的。在高雷诺数流动中，为了恰当地分辨边界层，网格在壁面法向必须非常细；而受计算机内存和速度的限制，其他方向的网格只能粗得多。这又使得梯度计算在这些方向上的数值精度明显低于法向。为完整起见，TSL方程在附录(A.6)中给出。由于二次流（例如叶排中的二次流）无法被恰当分辨，TSL简化通常只用于外流空气动力学。}
@@ -694,10 +690,9 @@
       }
     }
 
-    @image["blazek2005/fig-2-5.png"]{图2.5:管道内流——抛物化Navier-Stokes方程}
-
+    @figure["blazek2005/fig-2-5.png" "图2.5:管道内流——抛物化Navier-Stokes方程"]{
     @emph{图2.5:管道内流——抛物化Navier-Stokes方程。}
-
+}
     @bi{
       @lang["en"]{the governing equations @link["blazek2005-ch02#eq-2-19"]{(2.19)}) can be simplified to a form called the @emph{Parabolised Navier-Stokes} (PNS) equations @link["blazek2005-r2-8"]{[8]}, @link["blazek2005-r2-35"]{[35]}-@link["blazek2005-r2-37"]{[37]}. The above conditions allow us to set the derivatives of @tex-math{u}, @tex-math{v}, and @tex-math{w} with respect to the streamwise direction to zero in the viscous stress terms (Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)}). Furthermore, the components of the viscous stress tensor @tex-math{\overline{\overline{\tau}}}, of the work performed by it (@tex-math{\overline{\overline{\tau}}\cdot\vec{v}}), and of the heat conduction @tex-math{k\nabla T} in the streamwise direction are dropped from the viscous flux vector in Eq. @link["blazek2005-ch02#eq-2-23"]{(2.23)}. The continuity equation, as well as the convective fluxes (Eq. @link["blazek2005-ch02#eq-2-21"]{(2.21)}) remain unchanged. For details, the reader is referred to the Appendix (A.7). Considering the situation sketched in Fig. 2.5, where the main flow direction coincides with the @tex-math{x} coordinate, it can be shown that the PNS approximation leads to a mixed set of parabolic / elliptic equations. Namely, the momentum equation in the flow direction becomes parabolic together with the energy equation, and hence they can be solved by marching in the @tex-math{x}-direction. The momentum equations in the @tex-math{y}- and in the @tex-math{z}-direction are elliptic and they have to be solved iteratively in each @tex-math{x}-plane. Thus, the main benefit of the PNS approach is in the largely reduced complexity of the flow solution - from a complete 3-D field to a sequence of 2-D problems. A typical application of the parabolised Navier-Stokes equations is the calculation of internal flows in ducts and in pipes, and also the simulation of steady supersonic flows using the space-marching method @link["blazek2005-r2-38"]{[38]}-@link["blazek2005-r2-41"]{[41]}.}
       @lang["zh-CN"]{控制方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}可以简化为所谓的抛物化Navier-Stokes（Parabolised Navier-Stokes，PNS）方程@link["blazek2005-r2-8"]{[8]}, @link["blazek2005-r2-35"]{[35]}-@link["blazek2005-r2-37"]{[37]}。上述条件允许我们在黏性应力项（方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}）中把@tex-math{u}、@tex-math{v}和@tex-math{w}沿流向的导数取为零。此外，黏性应力张量@tex-math{\overline{\overline{\tau}}}的分量、其做功项（@tex-math{\overline{\overline{\tau}}\cdot\vec{v}}）以及热传导@tex-math{k\nabla T}在流向的分量，都从方程@link["blazek2005-ch02#eq-2-23"]{(2.23)}的黏性通量向量中略去。连续方程以及对流通量（方程@link["blazek2005-ch02#eq-2-21"]{(2.21)}）保持不变。细节请参见附录(A.7)。考虑图2.5所示的情景，其中主流方向与@tex-math{x}坐标一致，可以证明PNS近似导出一组抛物型/椭圆型混合的方程。具体而言，流向动量方程与能量方程一起成为抛物型方程，因此可以沿@tex-math{x}方向推进求解；而@tex-math{y}方向和@tex-math{z}方向的动量方程是椭圆型的，必须在每个@tex-math{x}平面内迭代求解。于是，PNS方法的主要好处在于流动求解复杂度的大幅降低——从完整的三维场变成一系列二维问题。抛物化Navier-Stokes方程的典型应用包括管道内的内流计算，以及利用空间推进方法模拟定常超声速流动@link["blazek2005-r2-38"]{[38]}-@link["blazek2005-r2-41"]{[41]}。}

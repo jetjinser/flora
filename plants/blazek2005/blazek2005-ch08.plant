@@ -52,10 +52,9 @@
     @lang["zh-CN"]{虚单元的目的是简化边界上通量、梯度、耗散等的计算。其实现方式是把空间离散格式的模板（stencil）延伸到物理边界之外。如图8.1所示，在边界处可以采用与物理域内部相同的离散格式。这样，对所有“物理”网格点都能以同样的方式求解控制方程。这使离散格式易于实现。此外，结构网格的所有网格点可以在单个循环中遍历，这在向量计算机上具有显著优势。当然，前提是虚单元（点）中要存有守恒变量以及几何量的适当取值。显然，虚单元层的数目必须使模板位于物理域之外的部分被完全覆盖。虚单元（点）中的守恒变量由边界条件确定，几何量通常取自边界处相应的控制体。在多个网格块之间的边界情形（如图3.4），所有流动变量和几何量都从相邻块传递过来。}
   }
 
-  @image["blazek2005/fig-8-1.png"]{图8.1:二维计算域周围的两层虚单元}
-
+  @figure["blazek2005/fig-8-1.png" "图8.1:二维计算域周围的两层虚单元"]{
   @emph{图8.1:二维计算域（粗线）周围的两层虚单元（虚线）。}实心圆点表示二阶单元顶点（对偶）格式的标准模板，实心矩形勾画出二阶单元中心格式的模板（见4.3节）。
-
+}
   @bi{
     @lang["en"]{The grey-shaded dummy cells (and the associated points) in Fig. 8.1 represent a certain problem, since it is not quite clear how to set their values if there is no adjacent grid block. Their values are not required by the standard cross-type discretisation stencil. However, the cells (points) are important for the computation of gradients (viscous fluxes - see Section 4.4), or for the transfer operators within multigrid (Section 9.4). The simplest way to solve the problem is to average the values from the adjacent "regular" dummy cells, as indicated in Fig. 8.1 by arrows. However, this does not work satisfactorily for wall or symmetry boundaries. In these cases, it is better to extend the physical boundary into the dummy cell layers (see the structured 2-D code on the CD-ROM).}
     @lang["zh-CN"]{图8.1中灰色阴影的虚单元（及其相应点）带来一个难题：如果没有相邻的网格块，如何设置它们的取值并不十分明确。标准十字型离散模板并不需要它们的值。然而，这些单元（点）对梯度的计算（黏性通量——见4.4节）或多重网格中的转移算子（9.4节）十分重要。最简单的解决办法是由相邻的“规则”虚单元取平均，如图8.1中箭头所示。但这对于壁面或对称边界并不奏效。在这些情形下，更好的做法是把物理边界延伸到虚单元层中（参见CD-ROM上的结构化二维代码）。}
@@ -115,14 +114,12 @@
 
     @tex-display-math[#:id "eq-8-5"]{\rho\vec{v}\cdot\left(\vec{v}\cdot\vec{\nabla}\right)\vec{n}=\vec{n}\cdot\vec{\nabla}p\,. \tag{8.5}}
 
-    @image["blazek2005/fig-8-2.png"]{图8.2:单元中心格式的固壁边界条件}
-
+    @figure["blazek2005/fig-8-2.png" "图8.2:单元中心格式的固壁边界条件"]{
     @emph{图8.2:单元中心格式的固壁边界条件。}虚单元记为0和1。计算对流通量式(8.2)的位置用菱形标记。
-
-    @image["blazek2005/fig-8-3.png"]{图8.3:结构化单元顶点对偶控制体格式的固壁边界条件}
-
+}
+    @figure["blazek2005/fig-8-3.png" "图8.3:结构化单元顶点对偶控制体格式的固壁边界条件"]{
     @emph{图8.3:结构化单元顶点对偶控制体格式的固壁边界条件。}虚点记为(i,0)和(i,1)。计算对流通量式(8.2)的位置用菱形标出。另请对照图4.6中的示意。
-
+}
     @bi{
       @lang["en"]{Equation @link["blazek2005-ch08#eq-8-5"]{(8.5)} relates the density, the velocity and the wall geometry to the normal derivative of the pressure. It was demonstrated that the normal-momentum relation gives very accurate results @link["blazek2005-r8-1"]{[1]}. However, problems can arise with the numerical solution of the normal-momentum relation in the case of complex geometries. Detailed description of the implementation and accuracy comparisons can be found in Ref. @link["blazek2005-r8-1"]{[1]}.}
       @lang["zh-CN"]{式@link["blazek2005-ch08#eq-8-5"]{(8.5)}把密度、速度和壁面几何与压力的法向导数联系起来。已经证明，法向动量关系能给出非常精确的结果@link["blazek2005-r8-1"]{[1]}。然而，在复杂几何情形下，法向动量关系的数值求解可能出现问题。实现的详细描述与精度比较见文献@link["blazek2005-r8-1"]{[1]}。}
@@ -211,14 +208,12 @@
       @lang["zh-CN"]{如果边界元素是四面体或棱柱（二维情形为三角形），壁面上的压力应当按有限元方法计算}
     }
 
-    @image["blazek2005/fig-8-4.png"]{图8.4:二维非结构对偶控制体混合网格格式的固壁边界条件}
-
+    @figure["blazek2005/fig-8-4.png" "图8.4:二维非结构对偶控制体混合网格格式的固壁边界条件"]{
     @emph{图8.4:二维非结构对偶控制体混合网格格式的固壁边界条件。}计算对流通量式(8.2)的位置用菱形标出。
-
-    @image["blazek2005/fig-8-5.png"]{图8.5:三维非结构混合网格格式的固壁边界条件}
-
+}
+    @figure["blazek2005/fig-8-5.png" "图8.5:三维非结构混合网格格式的固壁边界条件"]{
     @emph{图8.5:三维非结构混合网格格式的固壁边界条件。}计算对流通量式(8.2)的位置用菱形标出。
-
+}
     @bi{
       @lang["en"]{@link["blazek2005-r8-7"]{[7]}. At the wall segment 1-2 in Fig. 8.4 for example, the pressure at the face 1-2* would be computed as}
       @lang["zh-CN"]{@link["blazek2005-r8-7"]{[7]}。例如，对于图8.4中的壁面段1-2，面1-2*上的压力应按下式计算}
@@ -370,10 +365,9 @@
       }
     }
 
-    @image["blazek2005/fig-8-6.png"]{图8.6:远场边界:入流(a)与出流(b)情形}
-
+    @figure["blazek2005/fig-8-6.png" "图8.6:远场边界:入流(a)与出流(b)情形"]{
     @emph{图8.6:远场边界:入流(a)与出流(b)情形。}位置@tex-math{a}在域外，@tex-math{b}在边界上，位置@tex-math{d}在物理域内。单位法向量@tex-math{\vec{n}=[n_x,n_y,n_z]^T}指向域外。图例:Flow——流动;Boundary surface——边界面。
-
+}
     @emph{Supersonic Inflow 超声速入流}
 
     @bi{
@@ -491,10 +485,9 @@
       @lang["zh-CN"]{上述涡修正式@link["blazek2005-ch08#eq-8-24"]{(8.24)}-@link["blazek2005-ch08#eq-8-28"]{(8.28)}严格来说只对亚声速流动成立。不过，实践证明对自由来流条件的这一修正在跨声速流动中同样有帮助。图8.7展示了这方面的结果，其中研究了升力系数对远场边界距离的依赖关系。远场半径取为5、20、50和99倍弦长。可以看到，不加涡修正的模拟对远场距离有强烈的依赖性；相反，带涡的模拟在约20倍弦长的距离内仍保持足够精度。这使网格单元/点数显著减少。文献@link["blazek2005-r8-19"]{[19]}证明，若在涡修正中使用更高阶的项，远场边界可以只放在约5倍弦长处而不损失精度。}
     }
 
-    @image["blazek2005/fig-8-7.png"]{图8.7:到远场边界的距离和单个涡对升力系数的影响}
-
+    @figure["blazek2005/fig-8-7.png" "图8.7:到远场边界的距离和单个涡对升力系数的影响"]{
     @emph{图8.7:到远场边界的距离和单个涡对升力系数的影响。}NACA 0012翼型，@tex-math{M_\infty=0.8}，@tex-math{\alpha=1.25^{\circ}}。图例:横轴distance to farfield——到远场的距离;纵轴@tex-math{C_L}——升力系数;with vortex correction——带涡修正;without vortex correction——不带涡修正。
-
+}
     @emph{Vortex Correction in 3D 三维涡修正}
 
     @bi{
@@ -650,10 +643,9 @@
     @lang["zh-CN"]{对于图8.8a中所描绘的单元中心格式，@tex-math{p_b}可以直接取为边界单元内的压力，即@tex-math{p_b=p_2}。中位对偶单元顶点格式则需要由定义相应面面积的各点插值@tex-math{p_b}（即由图8.8b中的@tex-math{(i,2)}和@tex-math{(i+1,2)}插值）。为此可以利用式@link["blazek2005-ch08#eq-8-8"]{(8.8)}、@link["blazek2005-ch08#eq-8-11"]{(8.11)}-@link["blazek2005-ch08#eq-8-13"]{(8.13)}之类的公式。虚单元（点）中的值由域内作零阶外推或线性外推得到。}
   }
 
-  @image["blazek2005/fig-8-8.png"]{图8.8:结构化单元中心格式(a)与单元顶点对偶控制体格式(b)的注入边界条件}
-
+  @figure["blazek2005/fig-8-8.png" "图8.8:结构化单元中心格式(a)与单元顶点对偶控制体格式(b)的注入边界条件"]{
   @emph{图8.8:结构化单元中心格式(a)与单元顶点对偶控制体格式(b)的注入边界条件。}虚单元(点)记为1和0。计算对流通量的位置用菱形标出。
-}
+}}
 
 @subtree[#:id "blazek2005-8-6"]{
   @title{8.6 Symmetry Plane 对称面}
@@ -727,10 +719,9 @@
     @lang["zh-CN"]{对于单元顶点格式，切割边界可以用两种不同的方式处理。一种可能是在切割处生成完整的控制体（第二部分在图8.9b中用虚线表示），利用虚点，通量可以像域内一样计算。如果实现正确，点2（上网格部分）与点5（下部分）处的流动量将相等。第二种方法是对控制体的每一半分别积分通量，然后把图8.9b中点2和点5处的残差相加。重要的是，点2和点5处的部分控制体也必须求和。}
   }
 
-  @image["blazek2005/fig-8-9.png"]{图8.9:坐标切割(粗线):单元中心格式(a),对偶控制体格式(b)}
-
+  @figure["blazek2005/fig-8-9.png" "图8.9:坐标切割(粗线):单元中心格式(a),对偶控制体格式(b)"]{
   @emph{图8.9:坐标切割(粗线):单元中心格式(a),对偶控制体格式(b)。}虚单元(点)编号为0和1。
-}
+}}
 
 @subtree[#:id "blazek2005-8-8"]{
   @title{8.8 Periodic Boundaries 周期边界}
@@ -778,18 +769,15 @@
     @lang["zh-CN"]{点1和点2处的部分控制体（图8.11中的阴影部分）也必须相加。在平移周期性的情形下，来自对面边界的残差保持不变，即@tex-math{\vec{R}_{1'}=\vec{R}_1}和@tex-math{\vec{R}_{2'}=\vec{R}_2}，由此得到@tex-math{\vec{R}_{1,sum}=\vec{R}_{2,sum}}。旋转周期边界则要求先对动量方程作变换，然后才能应用式@link["blazek2005-ch08#eq-8-43"]{(8.43)}。}
   }
 
-  @image["blazek2005/fig-8-10.png"]{图8.10:二维非结构/结构网格单元中心格式的周期边界(粗线)}
-
+  @figure["blazek2005/fig-8-10.png" "图8.10:二维非结构/结构网格单元中心格式的周期边界(粗线)"]{
   @emph{图8.10:二维非结构/结构网格、单元中心格式情形下的周期边界(粗线)。}虚单元(虚线)用相应物理单元的(带撇)编号标记。
-
-  @image["blazek2005/fig-8-11.png"]{图8.11:二维非结构/结构网格带对偶控制体的单元顶点格式的周期边界(粗线)}
-
+}
+  @figure["blazek2005/fig-8-11.png" "图8.11:二维非结构/结构网格带对偶控制体的单元顶点格式的周期边界(粗线)"]{
   @emph{图8.11:二维非结构/结构网格、带对偶控制体的单元顶点格式情形下的周期边界(粗线)。}控制体的“虚”部分(虚线)用对面边界上相应控制体的(带撇)编号标记，虚点3'和4'亦同。
-
-  @image["blazek2005/fig-8-12.png"]{图8.12:旋转周期边界(A与B)}
-
+}
+  @figure["blazek2005/fig-8-12.png" "图8.12:旋转周期边界(A与B)"]{
   @emph{图8.12:旋转周期边界(A与B)。}假设旋转轴与@tex-math{x}轴重合。
-
+}
   @emph{Rotational Periodicity 旋转周期性}
 
   @bi{
@@ -856,18 +844,15 @@
     @lang["zh-CN"]{单元中心格式所需要的单元指标@tex-math{I}、@tex-math{J}、@tex-math{K}以类似的方式定义。由于多块方法通常利用虚单元/点来实现，物理单元/点相对每个范围的起点或终点会有一定的偏移（见图8.1）。}
   }
 
-  @image["blazek2005/fig-8-13.png"]{图8.13:计算空间各边及块边界的编号}
-
+  @figure["blazek2005/fig-8-13.png" "图8.13:计算空间各边及块边界的编号"]{
   @emph{图8.13:计算空间各边及块边界的编号。}
-
-  @image["blazek2005/fig-8-14.png"]{图8.14:计算空间中边界区块的坐标}
-
+}
+  @figure["blazek2005/fig-8-14.png" "图8.14:计算空间中边界区块的坐标"]{
   @emph{图8.14:计算空间中边界区块(patch)的坐标。}区块拥有自己的局部坐标系@tex-math{l_1}、@tex-math{l_2}。
-
-  @image["blazek2005/fig-8-15.png"]{图8.15:两个块A与B之间流动变量的交换}
-
+}
+  @figure["blazek2005/fig-8-15.png" "图8.15:两个块A与B之间流动变量的交换"]{
   @emph{图8.15:两个块A与B之间流动变量的交换。}阴影区@tex-math{A'}、@tex-math{B'}为被交换的流动变量;虚层用虚线表示。
-
+}
   @bi{
     @lang["en"]{The boundary of each block is divided into a number of non-overlapping patches. This allows the specification of different boundary conditions on the same block boundary. The situation is depicted in Fig. 8.14. For a unique identification of each patch it is necessary to store the number of the corresponding block and the number of the block boundary. Furthermore, the origin, the height and the width of the patch must be stored. For this purpose, the coordinates @tex-math{L1BEG}, @tex-math{L1END}, @tex-math{L2BEG} and @tex-math{L2END} are used in Fig. 8.14. It is suggested to orient the coordinate system of the patch according to the @emph{cyclic directions}. This means, that if we consider the @tex-math{i}-coordinate, @tex-math{j} and @tex-math{k} will be the first and the second cyclic direction. In the case of the @tex-math{j}-coordinate, the cyclic directions will become @tex-math{k} and @tex-math{i}, respectively. Therefore, since the patch in Fig. 8.14 is on the @tex-math{j=JBEG} boundary, the @tex-math{l_1}-coordinate is oriented in the @tex-math{k}-direction and @tex-math{l_2} in the @tex-math{i}-direction. The application of the cyclic directions allows for a unique definition of the orientation of each patch.}
     @lang["zh-CN"]{每个块的边界被划分为若干互不重叠的区块（patch）。这样就可以在同一块边界上规定不同的边界条件，情形描绘于图8.14。为了唯一地标识每个区块，必须存储相应块的编号和块边界的编号；此外，还必须存储区块的原点、高度和宽度。为此，图8.14中使用了坐标@tex-math{L1BEG}、@tex-math{L1END}、@tex-math{L2BEG}和@tex-math{L2END}。建议按照@emph{循环方向}（cyclic directions）来定向区块的坐标系：这就是说，如果考虑@tex-math{i}坐标，则@tex-math{j}和@tex-math{k}分别是第一和第二循环方向；对于@tex-math{j}坐标，循环方向则相应变为@tex-math{k}和@tex-math{i}。因此，由于图8.14中的区块位于@tex-math{j=JBEG}边界上，@tex-math{l_1}坐标沿@tex-math{k}方向，@tex-math{l_2}沿@tex-math{i}方向。利用循环方向可以唯一地定义每个区块的取向。}
