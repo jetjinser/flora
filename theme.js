@@ -129,8 +129,147 @@
     measure();
   }
 
+  // Link previews, Gwern-style: hovering an internal link floats a card with
+  // the target page's title and lead content. Fetch-on-demand with a short
+  // intent delay and a per-session cache; click still navigates, touch
+  // devices never see it, and math in the card is typeset after injection.
+  function watchLinkPreviews() {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    const INTENT = 180;      // ms of steady hover before a preview appears
+    const MAX_CHARS = 1600;  // cap on extracted lead text
+    const MAX_NODES = 6;     // cap on extracted block elements
+    const SKIP = 'nav, .table-of-contents, .backmatter, .theme-controls, style, script, link, template, h1';
+    const cache = new Map(); // href -> {title, html}
+    let card = null;
+    let currentHref = null;
+    let hoverTimer = 0;
+    let hideTimer = 0;
+
+    function ensureCard() {
+      if (!card) {
+        card = document.createElement('div');
+        card.className = 'link-preview';
+        card.setAttribute('role', 'tooltip');
+        document.body.appendChild(card);
+        card.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+        card.addEventListener('mouseleave', hideSoon);
+      }
+      return card;
+    }
+
+    function hideSoon() {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(hide, 120);
+    }
+
+    function hide() {
+      clearTimeout(hoverTimer);
+      if (card) {
+        card.classList.remove('open');
+        card.classList.remove('loading');
+      }
+      currentHref = null;
+    }
+
+    function extract(doc) {
+      const article = doc.querySelector('article') || doc.body;
+      let title = (doc.querySelector('h1') || {}).textContent || '';
+      // 预览卡片里,taxon 前缀与地址 chip 都是噪音。
+      title = title.replace(/^(reference|chapter|index|tutorial|journal|code|person)\.\s+/i, "")
+                   .replace(/\s*\[[^\]]*\]\s*$/, "")
+                   .trim();
+      const body = document.createElement('div');
+      let chars = 0;
+      for (const node of article.children) {
+        if (node.matches(SKIP)) continue;
+        const text = node.textContent;
+        if (!text.trim()) continue;
+        const clone = node.cloneNode(true);
+        for (const gone of clone.querySelectorAll(SKIP)) gone.remove();
+        body.appendChild(clone);
+        chars += text.length;
+        if (body.children.length >= MAX_NODES || chars >= MAX_CHARS) break;
+      }
+      return { title, html: body.innerHTML };
+    }
+
+    function place(link) {
+      const rect = link.getBoundingClientRect();
+      const width = card.offsetWidth;
+      const height = card.offsetHeight;
+      let left = rect.left + window.scrollX;
+      left = Math.max(8, Math.min(left, window.scrollX + document.documentElement.clientWidth - width - 8));
+      let top = rect.bottom + window.scrollY + 8;
+      if (rect.bottom + height + 8 > window.scrollY + document.documentElement.clientHeight
+          && rect.top - height - 8 > window.scrollY) {
+        top = rect.top + window.scrollY - height - 8;
+      }
+      card.style.left = `${left}px`;
+      card.style.top = `${top}px`;
+    }
+
+    async function showFor(link) {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      currentHref = href;
+      const pending = ensureCard();
+      pending.classList.add('loading');
+      try {
+        let entry = cache.get(href);
+        if (!entry) {
+          const response = await fetch(href);
+          if (!response.ok) throw new Error(response.status);
+          entry = extract(new DOMParser().parseFromString(await response.text(), 'text/html'));
+          cache.set(href, entry);
+        }
+        if (currentHref !== href) return; // the pointer moved on mid-fetch
+        pending.innerHTML = '';
+        const heading = document.createElement('div');
+        heading.className = 'link-preview-title';
+        heading.textContent = entry.title;
+        pending.appendChild(heading);
+        const body = document.createElement('div');
+        body.className = 'link-preview-body';
+        body.innerHTML = entry.html;
+        pending.appendChild(body);
+        place(link);
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise([pending]).catch(() => {});
+        }
+        pending.classList.remove('loading');
+        pending.classList.add('open');
+      } catch (_) {
+        pending.classList.remove('loading'); // previews are optional; stay silent
+      }
+    }
+
+    function enter(link) {
+      if (link.closest('.link-preview')) return;
+      const href = link.getAttribute('href');
+      if (currentHref === href) return; // already showing this target
+      hide();                    // 收起上一张;不得经 hideSoon 延时——它会反杀意图计时器
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(() => showFor(link), INTENT);
+    }
+
+    document.addEventListener('mouseover', (event) => {
+      const link = event.target.closest('a[href$=".html"]');
+      if (link && link.getAttribute('href').startsWith('/')) enter(link);
+      else if (!event.target.closest('.link-preview')) hideSoon();
+    });
+    document.addEventListener('focusin', (event) => {
+      const link = event.target.closest('a[href$=".html"]');
+      if (link && link.getAttribute('href').startsWith('/')) enter(link);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') hide();
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     watchContentsDodge();
+    watchLinkPreviews();
     controls = document.querySelector('.theme-controls');
     if (!controls) return;
     controls.hidden = false;
