@@ -25,6 +25,16 @@ for the contract and `tests/unit/forester/render.scm` for coverage.
 
 ## Open
 
+### make-element ignores its #:flow-kind argument
+
+`(grove element)`'s `make-element` destructures `#:flow-kind` but never uses
+it — `element-command` hardcodes `#:flow-kind 'inline`. Block-flavoured
+custom tags (Flora's `figure`/`figcaption`) therefore render as inline
+elements and get wrapped into a `<p>` by the composition, producing
+`<p><figure>…</figure></p>`. Flora works around it by building the content
+style itself; `make-element` passing `flow-kind` through would remove the
+need.
+
 ### Page and tree metadata at render time
 
 Flora recomputes each page's own taxon in the render phase by scanning
