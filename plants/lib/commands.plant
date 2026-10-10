@@ -4,10 +4,21 @@
   #:use-module (language scribble command)
   #:use-module (grove element)
   #:use-module (grove ir)
+  #:use-module (grove style)
+  #:use-module (grove style html)
   #:use-module (srfi srfi-1)
   #:re-export (image tag taxon title subtree transclude summary published updated lipsum
                bilingual lang term)
   #:re-export-and-replace (link))
+
+@(begin
+   ;; make-element 目前忽略 #:flow-kind 并硬编码 inline,内联的 figure 会被
+   ;; composition 包进 <p>;此处直接以 block 流构建,绕开该限制。
+   ;; (define-public:session 只把公开绑定写入模块,非公开 define 跨页不可见。)
+   (define-public (block-element tag)
+     (let ((style (make-content-style #f (list (make-html-tag tag)))))
+       (lambda body
+         (make-content-element 'span body #:style style #:flow-kind 'block)))))
 
 @(define-public (bi . body)
    "Folded bilingual block: show the Chinese lane, fold the sources.
@@ -36,9 +47,9 @@ the caption (typically an @emph figure title followed by the legend)."
           (caption (append-map (lambda (item)
                                  (if (list? item) item (list item)))
                                caption)))
-     ((make-element #:tag "figure" #:flow-kind 'block)
+     ((block-element "figure")
       (image source alt)
-      (apply (make-element #:tag "figcaption" #:flow-kind 'block)
+      (apply (block-element "figcaption")
              caption))))
 
 @(define-public (sidenote . body)
