@@ -52,6 +52,12 @@ missing-file `stat`; vanished paths are pruned silently now. The text
 renderer also resolves backlink sources through the page index instead of a
 linear scan (`98e1252`).
 
+Serve now names the changed paths that triggered a rebuild (grove commit
+`38cf57e`, 2026-10-11): chained rebuilds — a build's own writes re-triggering
+the watcher — print their feedstock on stderr instead of appearing as
+unexplained full rebuilds. Grew directly out of the controlled reproduction
+below.
+
 Flora composes these options in `project.scm`; see Grove's `docs/project.md`
 for the contract and `tests/unit/forester/render.scm` for coverage.
 
@@ -106,6 +112,32 @@ downcased and hyphenated, with an explicit id overriding). The
 `term-definition` relation schema waits for real term queries to say what it
 must hold — synonyms, multilingual variants, and per-term multiple
 definitions are content-modeling questions that one pilot cannot answer.
+
+### A `.plant` document has no definition context for `@(...)`
+
+A plain `@(define …)` in a page dies with Guile's "definition in expression
+context"; the working idiom is a `@(begin (define …) …)` splice, which
+nothing hints at. Flora hit this while writing its first page-local helpers
+(`fragment-text`/`term-id` for `defn`) and only stopped needing it by moving
+the helpers into library modules. Module files opened with
+`@(define-module …)` are unaffected — plain `@(define-public …)` works
+there — so the contract differs by file kind with no visible signal. At
+minimum the plant-language docs should show the begin-splice idiom; nicer,
+Grove could splice bare top-level definitions in a document into the
+evaluation environment, so a page-local helper reads like Scheme rather
+than like a workaround.
+
+### Command bodies need a public plain-text projection
+
+Deriving an anchor id from a command body (Flora's `defn` → `term-id`)
+needs flattening content fragments to text: strings pass through,
+`content-text` unwraps, elements recurse into children. Grove already has
+exactly this as `content->plain-text`, but only in
+`(forester private content-index)` — Flora's modules do import
+`(forester …)` modules, but a `private` module is not a stable API to build
+on, so Flora duplicates the helper as `fragment-text` in
+`lib/commands.plant`. Promoting it to `(grove ir)` or `(grove element)`
+would let custom commands do this without reaching into internals.
 
 ### Serve shows a stale artifact snapshot
 
@@ -169,3 +201,19 @@ previous generation in `start-build!` (or cap the generation count), and
 optionally sweep orphaned `.grove-preview-*` workspaces older than a threshold
 on serve startup. A stable cache would also make the serve/build locking
 sketched above easier to reason about.
+
+### No project discovery: running from a subdirectory fails with a bare stat error
+
+Commands resolve their project file as `./project.scm` relative to the
+invocation directory, with no upward search, so any command run inside the
+project tree fails at load. Reproduced on `38cf57e`, running `grove check`
+from `flora/plants/lib`:
+
+    Checking project.scm
+    grove: load failed (project.scm)
+    In procedure canonicalize-path: No such file or directory
+
+The output never names the directory that was searched or the `--project`
+escape hatch. Either discover the project file by walking upward
+(git-style), or fail with something like "no project.scm in <dir>; pass
+--project or run from the project root".
