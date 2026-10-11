@@ -5,9 +5,38 @@
   #:use-module (grove element)
   #:use-module (grove ir)
   #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-13)
+  #:use-module (srfi srfi-14)
   #:re-export (image tag taxon title subtree transclude summary published updated lipsum
                bilingual lang term)
   #:re-export-and-replace (link))
+
+@(begin
+   (define (fragment-text value)
+     ;; 递归取纯文本,供锚点派生;非文本片段(如图)贡献空串。
+     (cond
+       ((string? value) value)
+       ((content-text? value) (content-text-value value))
+       ((content-element? value)
+        (string-concatenate (map fragment-text (content-element-children value))))
+       (else "")))
+
+   (define (term-id text)
+     ;; 规范化即锚点 key:转小写、空白折叠为连字符(与 taxon/tag 约定一致)。
+     (string-join
+       (map string-downcase
+           (string-split (string-trim-both text) char-set:whitespace))
+       "-"))
+
+   (define-public (defn . rest)
+     "Marks the defining occurrence of a term: renders as <dfn> with an
+anchor derived from the term text (lowercased, whitespace runs collapsed
+to hyphens) and registered in the anchor registry, so fragment links and
+term queries can see it. Make-element validates the anchor per call, so
+defn constructs per call instead of a top-level define-once."
+     (let* ((body (command-body rest))
+            (text (string-trim-both (apply string-append (map fragment-text body)))))
+       ((make-element #:tag "dfn" #:anchor (term-id text)) text))))
 
 @(define-public (bi . body)
    "Folded bilingual block: show the Chinese lane, fold the sources.
@@ -49,11 +78,6 @@ margin text pairs with its anchor the way Tufte's sidenotes do."
          (apply (make-element #:tag "span" #:class "flora-sidenote"
                               #:attributes '((role . "note")))
                 body)))
-
-@(define-public defn
-   ;; Marks the defining occurrence of a term: rendered as <dfn>, so glossary
-   ;; semantics stay in the content tree without borrowing math's @term.
-   (make-element #:tag "dfn"))
 
 @(define-public (content-query-results)
    (make-content-element 'flora-content-query-results '() #:flow-kind 'block))
@@ -100,7 +124,7 @@ margin text pairs with its anchor the way Tufte's sidenotes do."
 @subtree[#:id "lib-defn"]{
   @title{defn：术语定义}
 
-  用法：@code{@"@"defn{术语}}。渲染为 @code{dfn}，标记术语的定义位置——语义留在内容树里，供将来的术语查询使用，不占用数学的 @code{term}。
+  用法：@code{@"@"defn{术语}}。渲染为 @code{dfn} 并派生锚点——锚点 id 由术语文本规范化而来（转小写、空白折叠为连字符，@code{term-id}），注册进锚点注册表：fragment 链接校验与「术语在哪定义」类查询从此可见。锚点逐次派生（@code{make-element} 在调用时校验），同一术语多处定义会共享同一锚点。scheme 侧的 term-definition 关系暂缓，先积累真实查询用例。
 }
 
 @subtree[#:id "lib-query-markers"]{
