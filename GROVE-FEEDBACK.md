@@ -57,28 +57,36 @@ for the contract and `tests/unit/forester/render.scm` for coverage.
 
 ## Open
 
-### Margin-note lane placement
+### Margin-note lane: resolved in Flora with lane-items layout (2026-10-11)
 
-The `sidenote` pilot (defined through `(grove element)`, styled in Flora)
-floats each note into the contents lane from inside its anchor paragraph.
-Pure CSS handles placement and cascade, but two limits showed up:
+The `sidenote` pilot used to float each note into the contents lane at its
+anchor's line (float + negative offset), colliding with the sticky table of
+contents; Flora layered a paper veil over the overlap and shipped a
+scroll-tracking dodge in theme.js.
 
-- A note anchored near the page top crosses the sticky table of contents.
-  Flora layers notes above it as translucent backdrop-blur cards, so both
-  stay faintly legible; a renderer-owned margin lane would still place notes
-  collision-free instead of layering.
-- The lane offset mirrors the grid's first column and gap in `rem`, because
-  `ic`-based lengths would rescale at the note's smaller font size. A named,
-  renderer-owned margin lane would remove this duplication.
+The experiment settled on lane-items layout. Each note is moved OUT of its
+anchor paragraph into the `[notes]` grid lane as a real lane item — theme.js
+relocates them once on wide viewports (and back below 60rem, memoizing
+anchor spots):
 
-Agreed direction (2026-10-11): Flora leads with the CSS experiment — the
-structural prerequisite already exists in Grove (block-flavoured custom
-elements can stand as paragraph siblings via `#:flow-kind 'block`). The
-promising move is putting the sticky TOC and the notes into the same grid
-container so the browser owns collisions instead of z-order layering. Once
-that CSS shape is proven, Grove can absorb it (an article-level lane
-container or hook); designing the Grove API before the CSS settles would
-freeze an unvalidated layout.
+- `.notes-lane` is a body-grid child: `grid-column: notes; grid-row: 2;
+  position: sticky; inset-block-start: 1.25rem; max-block-size:
+  calc(100svb - 2.5rem); overflow-y: auto; display: flex; flex-direction:
+  column; gap: .8lh;`
+- `.flora-sidenote` inside the lane is a plain block — no float, no
+  negative offsets, no veil. The column keeps notes clear of the contents
+  lane by construction; the scroll-tracking dodge, its transition classes,
+  the `::after` veil, and the `--notes-w/--notes-gap` rem mirror are all
+  deleted.
+
+Verified on `blazek2005-ch11.html` (5 notes): zero note/TOC box
+intersections, TOC and lane on opposite sides of the grid. Trade-off
+recorded: lane items stack in document order, not at each anchor's line;
+the inline counters keep the association with the article text. A sticky
+TOC plus anchor-positioned notes cannot be made collision-free in pure CSS
+(a stuck element overlaps following siblings by design) — that pair needs
+either the JS dodge or this lane-items layout. When Grove absorbs a lane
+container/hook, only the relocation JS would go.
 
 ### Term definitions as anchors
 
@@ -115,6 +123,24 @@ for two hours, and the manual build appeared to hang in the analysis phase for
 watcher should debounce, ignore writes caused by its own rebuilds, and
 ideally take a lock so a serve watch and a manual build cannot build
 concurrently.
+
+Controlled reproduction on bb720b4 (2026-10-11, port 8125, initial full
+build ~170 s):
+
+- style.css only: the update ARRIVES, but through three chained full
+  rebuilds (~5–7 min total). Each cycle's writes re-trigger the watcher
+  (the output directory is watched), then the chain settles once a cycle's
+  writes stop changing anything. ch02's HTML stayed byte-identical
+  throughout — generation isolation holds.
+- one `.plant` only: single cycle, 182 s to the served update, no chain.
+- style.css + `.plant` together: both arrive in the same generation at
+  179 s — the mismatch ("CSS old, HTML new") did not reproduce without
+  interference; it matches the churn window of the chained cycles.
+- manual `grove build` while serve watch runs (bounded at 150 s): completed
+  in place; serve burned ~202 s CPU over the 150 s window digesting the
+  manual build's writes; no 35-minute hang at this scale — but the churn
+  mechanism (own-writes re-triggering) is exactly what fed the 10-09
+  incident.
 
 ### Serve workspace cache: per-rebuild generations accumulate and are never reused
 
