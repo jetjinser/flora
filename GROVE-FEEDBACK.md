@@ -20,25 +20,16 @@ Standalone subtree pages now list their owning tree in the backmatter Context
 section, not only explicit transcluders — verified on
 `blazek2005-front-ack.html` (2026-10-10).
 
+Script elements now serialize their children as raw text (grove commit
+`f60c61a`, 2026-10-11): previously every emitted script had `&&`, `<`, `>`
+HTML-escaped, which threw `SyntaxError` in the browser and killed Grove's own
+backmatter runtime on all pages with collapsible backmatter. Flora's MathJax
+head configuration no longer needs to avoid those characters.
+
 Flora composes these options in `project.scm`; see Grove's `docs/project.md`
 for the contract and `tests/unit/forester/render.scm` for coverage.
 
 ## Open
-
-### Inline script contents are HTML-escaped — Grove's own backmatter runtime is self-broken
-
-Every `<script>` element Grove emits has its text escaped by the serializer:
-`&&` becomes `&amp;&amp;`, so any script containing `&`, `<`, or `>` throws
-`SyntaxError` in the browser. This is not hypothetical — it breaks Grove's
-own backmatter runtime on every page with collapsible backmatter
-(`root &amp;&amp; root.querySelector('.forest-tree-content')` in
-`grove.html:18`), killing the fetch-full-content feature. Flora dodged the
-same bullet in its MathJax head configuration by avoiding those characters.
-
-Script elements should serialize their children as raw text (the standard
-HTML rule), or authors need an explicit raw-text script command. Everything
-else — the backmatter runtime, and any user script with real logic — starts
-working the day this lands.
 
 ### make-element ignores its #:flow-kind argument
 
