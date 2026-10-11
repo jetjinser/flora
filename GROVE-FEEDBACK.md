@@ -63,36 +63,33 @@ for the contract and `tests/unit/forester/render.scm` for coverage.
 
 ## Open
 
-### Margin-note lane: resolved in Flora with lane-items layout (2026-10-11)
+### Margin-note lane: absorbed upstream as `#:side-lane`, adopted (2026-10-12)
 
 The `sidenote` pilot used to float each note into the contents lane at its
 anchor's line (float + negative offset), colliding with the sticky table of
 contents; Flora layered a paper veil over the overlap and shipped a
 scroll-tracking dodge in theme.js.
 
-The experiment settled on lane-items layout. Each note is moved OUT of its
-anchor paragraph into the `[notes]` grid lane as a real lane item — theme.js
-relocates them once on wide viewports (and back below 60rem, memoizing
-anchor spots):
+The experiment settled on lane-items layout, and Grove absorbed it
+(grove commit `4a60360`, 2026-10-12): `#:side-lane` names the content element
+kinds the renderer lifts at render time — the anchor paragraph keeps a
+numbered `sup.margin-ref` marker, and a page-level `div.margin-lane`
+collects the notes in document order, each with a `margin-backref` link.
+Flora adopted it and theme.js's relocation JS is gone; CSS places the lane
+(the article is a subgrid across the reading and notes lanes, the lane
+shares the page-tree's row so sticky travel works), CSS counters renumber
+`.margin-item`s to match the renderer's markers, and below 60rem the lane
+becomes a bordered endnote group after the tree. Verified on
+`blazek2005-ch11.html` (5 notes): zero note/TOC intersections, sticky
+confirmed at scroll position 4749, marker/counter sequences agree.
 
-- `.notes-lane` is a body-grid child: `grid-column: notes; grid-row: 2;
-  position: sticky; inset-block-start: 1.25rem; max-block-size:
-  calc(100svb - 2.5rem); overflow-y: auto; display: flex; flex-direction:
-  column; gap: .8lh;`
-- `.flora-sidenote` inside the lane is a plain block — no float, no
-  negative offsets, no veil. The column keeps notes clear of the contents
-  lane by construction; the scroll-tracking dodge, its transition classes,
-  the `::after` veil, and the `--notes-w/--notes-gap` rem mirror are all
-  deleted.
-
-Verified on `blazek2005-ch11.html` (5 notes): zero note/TOC box
-intersections, TOC and lane on opposite sides of the grid. Trade-off
-recorded: lane items stack in document order, not at each anchor's line;
-the inline counters keep the association with the article text. A sticky
-TOC plus anchor-positioned notes cannot be made collision-free in pure CSS
-(a stuck element overlaps following siblings by design) — that pair needs
-either the JS dodge or this lane-items layout. When Grove absorbs a lane
-container/hook, only the relocation JS would go.
+One composition trap worth recording: `#:side-lane` matches
+`content-element-kind`, but `make-element` — the public vocabulary API —
+always produces `'span`-kinded elements (the tag lives in the style). A
+sidenote built with `make-element #:tag "flora-sidenote"` renders as a raw
+unknown tag, never lifted. Flora's `sidenote` now calls `make-content-element
+'flora-sidenote` directly; either the docs or the API should say that
+side-lane kinds must be IR-level kinds, not make-element tags.
 
 ### Term definitions as anchors
 
@@ -108,7 +105,8 @@ renders as the tag's `id` and lands in `page-anchor-facts` — so Flora's defn
 becomes `(make-element #:tag "dfn" #:anchor "term-loom")` and fragment
 validation covers term anchors. Normalization follows the topic convention:
 the anchor id is the canonical key (Flora derives it from the term text,
-downcased and hyphenated, with an explicit id overriding). The
+downcased and hyphenated, with an explicit id overriding — flora-side this
+is `@defn[#:id "…"]`, exercised on `/commands.html`). The
 `term-definition` relation schema waits for real term queries to say what it
 must hold — synonyms, multilingual variants, and per-term multiple
 definitions are content-modeling questions that one pilot cannot answer.
@@ -174,7 +172,68 @@ build ~170 s):
   mechanism (own-writes re-triggering) is exactly what fed the 10-09
   incident.
 
-### Serve workspace cache: per-rebuild generations accumulate and are never reused
+Grove side, since the reproduction: builds over one project now serialize
+on a build lock (grove commit `5a023cb`, 2026-10-12) — a serve watch and a
+manual build wait for each other instead of racing, and the wait announces
+itself on stderr. Serve also names the changed paths that trigger each
+rebuild (`38cf57e`); on a fresh serve the first watch cycle reported 176
+"changed" store/module paths — the watch set's own first expansion counted
+as edits — which explains one wasted full rebuild per serve start and
+should narrow the chain's trigger list on the next reproduction run. That
+first-expansion miscount and the per-rebuild generations are both fixed
+now (grove commit `69b015b`, 2026-10-12): one stable `workspace/cache`
+(grove's double-run experiment rendered 0 affected artifacts on the second
+pass), orphaned workspaces swept at startup via a `.live` flock, and the
+post-build watch comparison ignores first-sighting additions.
+
+Two more landed alongside: `#:side-lane` lifts margin-note kinds into a
+page-level lane container at render time (grove commit `4a60360`) — once
+Flora adopts it, theme.js's note relocation can retire; and margin-note
+styling has a small default (`.margin-ref`, `.margin-lane`, `.margin-item`).
+One caveat filed for the serve tests themselves: under the blue test driver
+the spawned serve is a grandchild process where libgcrypt's hash call dies
+with ENOSYS, so the serve lifecycle suite cannot run inside `blue check` on
+this machine (direct serve runs are unaffected).
+
+Controlled reproduction on d2c5a65 (2026-10-12, port 8125, workspace
+`.grove-preview-BQUZmO`, initial full build 85 s from the empty workspace
+cache; full log at `/tmp/serve-d2c5a65.log`):
+
+- No phantom rebuild: 75 s of quiet after "Watching for changes" produced
+  zero rebuild cycles — the first-sighting miscount is gone.
+- style.css only: `Rebuilding (1 changed path):` names exactly
+  `/home/jinser/vie/writing/flora/style.css`; ONE cycle (the three-cycle
+  chain is gone), 1 affected artifact (flora.css), 144 s to arrival.
+- one `.plant` (`blazek2005-r11-5.plant`): `Rebuilding (1 changed path):`
+  names the plant; single cycle, 8 affected (the page plus feed/sitemap and
+  backlink-bearing pages), 138 s, update visible on the served page.
+- manual `grove build` while serve watches: the manual build took the lock
+  first and finished in place (141 s, 1952 affected — its own cache was
+  cold for d2c5a65), and the serve rebuild queued behind it, printing
+  "Waiting for the project build lock; another Grove build is running..."
+  on stderr. No hang, no churn.
+- workspace: exactly one `cache/` directory beside `.live`,
+  `request.scm`, `result.scm`; no `cache-N` generations; SIGTERM removed
+  the workspace.
+
+Two residuals observed on the same run:
+
+1. Reverting an input to a previous content left the output stale. After
+   the probes were removed (style.css back to its committed content, the
+   `.plant` back via git checkout), serve rebuilt with
+   `Rebuilding (2 changed paths):` naming both files, reported
+   `0 affected` in 100 s ("Reused 1113/1122 document results"), and wrote
+   nothing — the served flora.css still contained the probe lines and the
+   entry page still carried the probe summary. A manual `grove build`
+   healed both from cache. The reuse/write path treats a reverted input as
+   cached content but never compares the artifact against the files
+   actually on disk.
+2. A manual build over a `build/` directory last written by serve comes
+   out `1952 affected` (full invalidation) even with a warm input cache —
+   presumably the shared output manifest changing hands. Correctness is
+   fine now that the lock serializes them; it is purely wasted work.
+
+### Serve workspace cache: resolved upstream (grove commit `69b015b`, 2026-10-12)
 
 `serve.scm` gives every rebuild a fresh generation directory
 (`XDG_CACHE_HOME=<workspace>/cache-N`, generation incremented in
@@ -201,6 +260,12 @@ previous generation in `start-build!` (or cap the generation count), and
 optionally sweep orphaned `.grove-preview-*` workspaces older than a threshold
 on serve startup. A stable cache would also make the serve/build locking
 sketched above easier to reason about.
+
+All three landed in grove commit `69b015b` (2026-10-12) and verified on
+d2c5a65 (see the d2c5a65 reproduction above): one stable `workspace/cache`
+across rebuilds, orphan sweep at startup behind a `.live` flock, graceful
+exit removes the workspace. Nothing further open here beyond the two
+residuals recorded above.
 
 ### No project discovery: running from a subdirectory fails with a bare stat error
 
