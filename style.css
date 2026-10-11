@@ -52,11 +52,8 @@
   a {
     transition: color 120ms ease-out, text-decoration-color 120ms ease-out;
   }
-  .flora-sidenote-number::after {
+  .margin-ref a {
     transition: color 120ms ease-out;
-  }
-  .flora-sidenote::after {
-    transition: box-shadow 120ms ease-out;
   }
   .forest-tree-block {
     transition: background-color 120ms ease-out;
@@ -90,16 +87,26 @@ body {
   text-spacing-trim: trim-start;
   display: grid;
   /* Named lanes: contents | article | notes. The contents lane holds the
-     sticky TOC; the notes lane holds the margin notes as real lane items
-     (relocated by theme.js on wide screens), so the two never share a lane
-     and cannot collide — no dodge, no veil. */
+     sticky TOC; the notes lane holds the renderer-lifted margin notes, so
+     the two never share a lane and cannot collide — no dodge, no veil. */
   grid-template-columns:
     [contents] minmax(0, 12ic) [article] minmax(0, 38ic) [notes] minmax(0, 1fr);
   column-gap: clamp(1ic, 3vi, 2.5ic);
   align-items: start;
 }
 body > header { grid-column: 2; margin-block-end: .8lh; }
-body > article { grid-column: 2; min-inline-size: 0; }
+/* The article spans the reading and notes lanes as a subgrid: its tree and
+   backmatter sit in the reading lane, the margin lane rides the notes lane
+   on the same row — sticky travel without leaving the article element. */
+body > article {
+  grid-column: 2 / 4;
+  display: grid;
+  grid-template-columns: subgrid;
+  min-inline-size: 0;
+}
+body > article > .page-tree { grid-column: 1; grid-row: 1; }
+body > article > .margin-lane { grid-column: 2; grid-row: 1; }
+body > article > .backmatter { grid-column: 1; }
 body > header nav {
   position: absolute;
   inset-block-start: .5rem;
@@ -159,77 +166,49 @@ a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px soli
 .table-of-contents a:hover { text-decoration: underline; }
 
 /* The notes lane: sticky like the contents lane, its own column, entries
-   stacked in document order — the inline counters keep the association
+   stacked in document order — the numbered markers keep the association
    with their anchors in the article. */
-.notes-lane {
-  grid-column: notes;
-  grid-row: 2;
+.margin-lane {
   position: sticky;
   inset-block-start: 1.25rem;
   align-self: start;
   max-block-size: calc(100svb - 2.5rem);
   overflow-y: auto;
   scrollbar-width: thin;
-  display: flex;
-  flex-direction: column;
-  gap: .8lh;
 }
 
 /* ---- Margin notes ----
-   A sidenote is authored inside its anchor paragraph. On wide viewports
-   theme.js relocates it into the [notes] lane as a real lane item: the
-   browser stacks the notes in their own column, so a note can never slide
-   beneath the sticky contents list — no dodge, no veil. The lane stacks in
-   document order rather than at each anchor's line; the inline counters
-   keep the association with the article text. */
-body { counter-reset: sidenote-counter; }
-.flora-sidenote-number { counter-increment: sidenote-counter; }
-/* The anchor label follows Tufte's scale: a full-size numeral raised out of
-   the line, ink-colored, not a shrunken superscript. */
-.flora-sidenote-number::after {
-  content: counter(sidenote-counter);
-  position: relative;
-  top: -0.4em;
-  line-height: 0;
-  margin-inline-start: .1em;
-  padding-inline: .18em;
-  border-radius: 2px;
-  color: inherit;
-  font-variant-numeric: oldstyle-nums;
-  cursor: default;
-}
-.flora-sidenote::before {
-  content: counter(sidenote-counter) " ";
-  font-size: 1.2em;
-  line-height: 0;
-  color: var(--ink);
-  font-variant-numeric: oldstyle-nums;
-}
-.flora-sidenote-number:hover::after {
-  color: var(--hover-color);
-}
-.flora-sidenote:hover {
-  background-color: var(--hover);
-}
-/* Sidenotes are lane items on wide viewports (relocated by theme.js): no
-   float, no negative offset, no veil — the [notes] column keeps them clear
-   of the sticky contents lane by construction. */
-.flora-sidenote {
-  display: block;
+   A sidenote is authored inside its anchor paragraph; the renderer lifts
+   it out at render time: the anchor keeps a numbered superscript marker,
+   and the note becomes a lane item in document order with a back-reference.
+   Item numbers are a CSS counter walking the same document order as the
+   renderer's markers, so the two sequences agree without coordination. */
+body { counter-reset: margin-note; }
+.margin-ref { font-variant-numeric: oldstyle-nums; }
+.margin-ref a { color: inherit; text-decoration: none; }
+.margin-ref a:hover { color: var(--hover-color); }
+.margin-item {
+  counter-increment: margin-note;
   box-sizing: border-box;
   margin-block: 0;
   padding: .1em .35em .2em;
-  font-size: .8rem;
   line-height: 1.6;
   color: var(--muted);
 }
-.flora-sidenote::before {
-  content: counter(sidenote-counter) " ";
+.margin-item:hover { background-color: var(--hover); }
+.margin-item::before {
+  content: counter(margin-note) " ";
   font-size: 1.2em;
   line-height: 0;
   color: var(--ink);
   font-variant-numeric: oldstyle-nums;
 }
+.margin-backref {
+  margin-inline-start: .1em;
+  color: var(--quiet);
+  text-decoration: none;
+}
+.margin-backref:hover { color: var(--ink); }
 
 /* <dfn> marks the defining occurrence of a term; its face comes from the
    wrapped content, so only the default slant is suppressed (CJK italics
@@ -339,25 +318,25 @@ img { height: auto; }
 
 @media (width <= 60rem) {
   body { display: block; max-inline-size: calc(38ic + 2 * var(--page-gutter)); margin-block-start: 2.5lh; }
-  .notes-lane { display: none; }
+  body > article { display: block; }
   .table-of-contents { position: static; max-block-size: none; padding-block: .75lh; padding-inline: 0; margin-block-end: 1lh; border-block: 1px solid var(--rule); }
   .table-of-contents > ol { columns: 2; column-gap: 1.5ic; }
   .table-of-contents li { break-inside: avoid; }
-  /* No lane to float into: the note folds into the reading flow as a quiet
-     surface block. */
-  .flora-sidenote {
-    position: static;
-    float: none;
-    inline-size: auto;
-    margin-inline: 0;
-    margin-block: .35lh .55lh;
-    padding-block: .3lh .35lh;
+  /* No notes lane on narrow viewports: the lifted notes group at the end of
+     the article as a quiet endnote surface, reached through the markers. */
+  .margin-lane {
+    margin-block: .85lh;
+    padding-block: .5lh;
+    border-block: 1px solid var(--rule);
+  }
+  .margin-item {
+    margin-block: 0 .55lh;
+    padding-block: .2lh .25lh;
     padding-inline: 1ic;
     background: var(--wash);
     color: var(--ink);
     font-size: .85rem;
   }
-  .flora-sidenote::after { content: none; }
 }
 @media (width <= 30rem) {
   body { font-size: 1.0625rem; }
@@ -377,19 +356,16 @@ img { height: auto; }
     font-size: 11pt;
   }
   body > header, .table-of-contents, .theme-controls { display: none !important; }
-  body > article { inline-size: auto; }
-  /* Notes run inline in the text flow, set off by a rule. */
-  .flora-sidenote {
-    float: none;
-    inline-size: auto;
-    margin-inline: 0;
+  body > article { inline-size: auto; display: block; }
+  /* Notes run as a grouped endnote list after the tree, set off by a rule. */
+  .margin-lane { margin-block: .7em; }
+  .margin-item {
     margin-block: .4em;
     padding-inline-start: .8em;
     border-inline-start: 1px solid #bbb;
     color: black;
     font-size: .85em;
   }
-  .flora-sidenote::after { content: none; }
   /* Print every tree, including those that are collapsed in the browser. */
   details > :not(summary) { display: block !important; }
   .forest-tree-block { margin-block: .7em; border: 0; }
@@ -538,3 +514,4 @@ figcaption {
 .link-preview-title { font-weight: 600; margin-block-end: 0.4em; }
 .link-preview-body > :first-child { margin-block-start: 0; }
 .link-preview-body > :last-child { margin-block-end: 0; }
+

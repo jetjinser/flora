@@ -46,39 +46,9 @@
     }
   });
 
-  // Sidenotes live as real items of the [notes] grid lane on wide screens:
-  // the browser stacks them in their own column, so a note can never slide
-  // beneath the sticky contents lane — no scroll-time dodge, no veil. Below
-  // the wide breakpoint the CSS folds notes into the reading flow, so the
-  // relocation is undone across that breakpoint (memoized anchor spots).
-  function watchNotesLane() {
-    const notes = [...document.querySelectorAll('.flora-sidenote')];
-    if (!notes.length) return;
-    const anchors = notes.map((note) => ({
-      note,
-      parent: note.parentElement,
-      next: note.nextSibling,
-    }));
-    const lane = document.createElement('aside');
-    lane.className = 'notes-lane';
-    lane.setAttribute('aria-label', '边注');
-    for (const { note } of anchors) lane.appendChild(note);
-    document.body.appendChild(lane);
-
-    const wide = matchMedia('(min-width: 60rem)');
-    function place() {
-      if (wide.matches) {
-        for (const { note } of anchors) lane.appendChild(note);
-      } else {
-        for (const { note, parent, next } of anchors) {
-          if (next && next.parentElement === parent) parent.insertBefore(note, next);
-          else if (parent) parent.appendChild(note);
-        }
-      }
-    }
-    wide.addEventListener('change', place);
-    place();
-  }
+  // Sidenotes are lifted into the page-level margin lane at render time
+  // (project #:side-lane); the [notes] grid column places the lane beside
+  // the reading column in CSS, so there is nothing to relocate here.
 
   // Link previews, Gwern-style: hovering an internal link floats a card with
   // the target page's title and lead content. Fetch-on-demand with a short
@@ -219,7 +189,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    watchNotesLane();
     watchLinkPreviews();
     controls = document.querySelector('.theme-controls');
     if (!controls) return;

@@ -170,6 +170,9 @@
         (if taxon (taxon-entry-sxml taxon) '())))
       #:article? #t
       #:backmatter-details? #t
+      ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
+      ;; 收进 .margin-lane,各带回链——不再依赖 theme.js 搬运 DOM。
+      #:side-lane '(flora-sidenote)
       #:backmatter-labels '((context . "语境")
                             (references . "参考文献")
                             (backlinks . "反向链接")
