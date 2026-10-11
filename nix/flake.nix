@@ -30,13 +30,20 @@
 
       perSystem = { system, pkgs, ... }: {
         devshells.default = {
-          packages = [
-            inputs.grove.packages.${system}.grove
-          ]
-          ++ (with pkgs.python3Packages; [
-            fonttools
-            brotli
-          ]);
+          packages =
+            let
+              pyEnv = pkgs.python3.withPackages (
+                ps: with ps; [
+                  brotli
+                  fonttools
+                ]
+              );
+            in
+            [
+              inputs.grove.packages.${system}.grove
+              pyEnv
+            ]
+            ++ (with pkgs; [ ]);
         };
       };
 
