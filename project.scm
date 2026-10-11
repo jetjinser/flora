@@ -137,7 +137,6 @@
         ;; MathJax 配置必须先于 tex-chtml.js 加载。displayOverflow=scale:超宽展示公式
         ;; 按比例缩放而非横向滚动;pageReady 钩子在排版完成后补一次锚点滚动——
         ;; 否则浏览器先按未排版的短文本定位,MathJax 渲染后锚点会漂移出视口。
-        ;; 注意:script 内容会被 HTML 转义且浏览器不解码,须避开 => & < 等字符。
         '(script (@ (type "text/javascript"))
           "window.MathJax = { output: { displayOverflow: 'scale' }, startup: { pageReady: function () { return MathJax.startup.defaultPageReady().then(function () { var h = decodeURIComponent(location.hash.slice(1)); if (h) { var el = document.getElementById(h); if (el) el.scrollIntoView(); } }); } } };")
         '(script (@ (src "/theme.js")) "")))
