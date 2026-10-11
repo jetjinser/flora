@@ -89,15 +89,12 @@ body {
   /* Progressive enhancement: trim punctuation where the browser supports it. */
   text-spacing-trim: trim-start;
   display: grid;
-  /* Named lanes: contents | article | notes. The notes lane is empty on
-     pages without margin notes; the theme controls stay viewport-fixed in
-     the nav above. */
+  /* Named lanes: contents | article | notes. The contents lane holds the
+     sticky TOC; the notes lane holds the margin notes as real lane items
+     (relocated by theme.js on wide screens), so the two never share a lane
+     and cannot collide — no dodge, no veil. */
   grid-template-columns:
     [contents] minmax(0, 12ic) [article] minmax(0, 38ic) [notes] minmax(0, 1fr);
-  /* Mirror of the contents lane and column gap for margin notes, in rem:
-     the note's own smaller face would rescale ic-based lengths. */
-  --notes-w: 13.5rem;
-  --notes-gap: clamp(1.125rem, 3vi, 2.8125rem);
   column-gap: clamp(1ic, 3vi, 2.5ic);
   align-items: start;
 }
@@ -160,25 +157,31 @@ a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px soli
 .table-of-contents li { margin-block: .3lh; }
 .table-of-contents a { text-decoration: none; }
 .table-of-contents a:hover { text-decoration: underline; }
-/* While a margin note crosses the lane, the JS dodge tracks the scroll 1:1
-   with no transition; only the settle-back after the note leaves is eased.
-   dodge-engage softens the single jump when a note enters from the top edge
-   on upward scrolls and demands the full push at once. Both classes are
-   applied by the script, which refuses reduced motion. */
-.table-of-contents.dodge-return {
-  transition: transform 320ms ease-out;
-}
-.table-of-contents.dodge-engage {
-  transition: transform 160ms ease-out;
+
+/* The notes lane: sticky like the contents lane, its own column, entries
+   stacked in document order — the inline counters keep the association
+   with their anchors in the article. */
+.notes-lane {
+  grid-column: notes;
+  grid-row: 2;
+  position: sticky;
+  inset-block-start: 1.25rem;
+  align-self: start;
+  max-block-size: calc(100svb - 2.5rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  display: flex;
+  flex-direction: column;
+  gap: .8lh;
 }
 
 /* ---- Margin notes ----
-   A sidenote is authored inside its anchor paragraph. On wide viewports it
-   floats into the contents lane at its anchor's line: the article measure
-   keeps its full width because the floated box sits entirely outside it.
-   Consecutive notes cascade downward through clear. Near the page top a
-   note may slide beneath the sticky contents list; authored sparingly, this
-   reads as intentional layering rather than a collision. */
+   A sidenote is authored inside its anchor paragraph. On wide viewports
+   theme.js relocates it into the [notes] lane as a real lane item: the
+   browser stacks the notes in their own column, so a note can never slide
+   beneath the sticky contents list — no dodge, no veil. The lane stacks in
+   document order rather than at each anchor's line; the inline counters
+   keep the association with the article text. */
 body { counter-reset: sidenote-counter; }
 .flora-sidenote-number { counter-increment: sidenote-counter; }
 /* The anchor label follows Tufte's scale: a full-size numeral raised out of
@@ -202,48 +205,23 @@ body { counter-reset: sidenote-counter; }
   color: var(--ink);
   font-variant-numeric: oldstyle-nums;
 }
-.flora-sidenote-number:hover::after,
-p:has(> .flora-sidenote:hover) > .flora-sidenote-number::after {
+.flora-sidenote-number:hover::after {
   color: var(--hover-color);
 }
-.flora-sidenote:hover::after,
-.flora-sidenote-number:hover + .flora-sidenote::after {
-  box-shadow: inset 0 0 0 999px var(--hover);
+.flora-sidenote:hover {
+  background-color: var(--hover);
 }
-/* A note rides ABOVE the sticky contents, and where the two overlap the
-   entries are ERASED — not covered by a card. The eraser is a paper-tinted
-   veil on ::after: no border, no radius, no blur; its mask feathers the
-   veil in over ~14px so there is no contour to see, only entries fading
-   out. backdrop-filter is deliberately not used: an element's own mask
-   turns it into a backdrop root, which silently disables its own backdrop
-   blur — the frost looked like raw doubled text. The veil must stay opaque
-   enough that the covered text cannot be read through it. */
+/* Sidenotes are lane items on wide viewports (relocated by theme.js): no
+   float, no negative offset, no veil — the [notes] column keeps them clear
+   of the sticky contents lane by construction. */
 .flora-sidenote {
   display: block;
-  position: relative;
-  z-index: 2;
   box-sizing: border-box;
-  float: left;
-  clear: left;
-  inline-size: var(--notes-w);
-  margin-inline-start: calc(-1 * (var(--notes-w) + var(--notes-gap)));
-  margin-block: .2lh 0;
+  margin-block: 0;
   padding: .1em .35em .2em;
   font-size: .8rem;
   line-height: 1.6;
   color: var(--muted);
-}
-.flora-sidenote::after {
-  content: "";
-  position: absolute;
-  inset: -.4em -.6em;
-  z-index: -1;
-  background-color: color-mix(in oklab, var(--paper) 88%, transparent);
-  mask-image:
-    linear-gradient(to right, transparent 0, black 14px, black calc(100% - 14px), transparent 100%),
-    linear-gradient(to bottom, transparent 0, black 14px, black calc(100% - 14px), transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
 }
 .flora-sidenote::before {
   content: counter(sidenote-counter) " ";
@@ -361,6 +339,7 @@ img { height: auto; }
 
 @media (width <= 60rem) {
   body { display: block; max-inline-size: calc(38ic + 2 * var(--page-gutter)); margin-block-start: 2.5lh; }
+  .notes-lane { display: none; }
   .table-of-contents { position: static; max-block-size: none; padding-block: .75lh; padding-inline: 0; margin-block-end: 1lh; border-block: 1px solid var(--rule); }
   .table-of-contents > ol { columns: 2; column-gap: 1.5ic; }
   .table-of-contents li { break-inside: avoid; }
@@ -381,7 +360,7 @@ img { height: auto; }
   .flora-sidenote::after { content: none; }
 }
 @media (width <= 30rem) {
-  body { font-size: 1.0625rem; --notes-w: 12.75rem; }
+  body { font-size: 1.0625rem; }
   h1 { font-size: 1.5rem; }
   .table-of-contents > ol { columns: 1; }
   .forest-tree-content { padding-inline: .5ic; }

@@ -46,87 +46,38 @@
     }
   });
 
-  // The contents lane and the margin notes share one column. When a note
-  // crosses the contents, slide the contents aside on whichever side the
-  // crossing demands less movement — lifted for notes arriving from below,
-  // sunk beneath notes arriving from above — and let it settle back once the
-  // note has passed. Without JS (or with reduced motion) the CSS veil erases
-  // the overlap instead, so this is an enhancement, not a dependency.
-  function watchContentsDodge() {
-    const toc = document.querySelector('.table-of-contents');
-    if (!toc) return;
+  // Sidenotes live as real items of the [notes] grid lane on wide screens:
+  // the browser stacks them in their own column, so a note can never slide
+  // beneath the sticky contents lane — no scroll-time dodge, no veil. Below
+  // the wide breakpoint the CSS folds notes into the reading flow, so the
+  // relocation is undone across that breakpoint (memoized anchor spots).
+  function watchNotesLane() {
     const notes = [...document.querySelectorAll('.flora-sidenote')];
     if (!notes.length) return;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const anchors = notes.map((note) => ({
+      note,
+      parent: note.parentElement,
+      next: note.nextSibling,
+    }));
+    const lane = document.createElement('aside');
+    lane.className = 'notes-lane';
+    lane.setAttribute('aria-label', '边注');
+    for (const { note } of anchors) lane.appendChild(note);
+    document.body.appendChild(lane);
 
-    const gap = 16;
-    let applied = 0;   // signed: positive = slid up, negative = slid down
-    let direction = 0; // chosen side for the current crossing: 1 up, -1 down
-    let settleTimer = 0;
-    let engageTimer = 0;
-    let frame = 0;
-
-    function measure() {
-      frame = 0;
-      // Read the live transform instead of compensating with `applied`:
-      // during the eased settle-back the painted offset lags behind the
-      // stored target, and using the stored value made the resting box look
-      // higher than it is, re-engaging the dodge mid-return (the bouncing).
-      const rect = toc.getBoundingClientRect();
-      const style = getComputedStyle(toc).transform;
-      const ty = style && style !== 'none' ? new DOMMatrixReadOnly(style).m42 : 0;
-      const top = rect.top - ty;
-      const bottom = top + rect.height;
-      let up = 0;
-      let down = 0;
-      for (const note of notes) {
-        const r = note.getBoundingClientRect();
-        if (r.top >= bottom || r.bottom <= top) continue;
-        up = Math.max(up, bottom - r.top + gap);
-        down = Math.max(down, r.bottom + gap - top);
-      }
-      if (up === 0 && down === 0) {
-        if (applied !== 0) {
-          applied = 0;
-          direction = 0;
-          toc.style.transform = '';
-          toc.classList.add('dodge-return');
-          clearTimeout(settleTimer);
-          settleTimer = setTimeout(() => toc.classList.remove('dodge-return'), 400);
-        }
-        return;
-      }
-      // Dodge to whichever side the crossing demands less movement, then
-      // hold that side until the note has passed: a note entering from the
-      // top edge (upward scrolls) sinks the contents beneath itself, one
-      // entering from the bottom lifts it, and both grow 1:1 with the scroll.
-      if (direction === 0) direction = up <= down ? 1 : -1;
-      const shift = direction === 1
-        ? Math.min(up, bottom + gap)
-        : -Math.min(down, bottom + gap);
-      if (shift === applied) return;
-      clearTimeout(settleTimer);
-      toc.classList.remove('dodge-return');
-      // Ease a jump into the dodged state (e.g. a scroll teleport); the
-      // tracking afterwards is exact.
-      if (applied === 0) {
-        toc.classList.add('dodge-engage');
-        clearTimeout(engageTimer);
-        engageTimer = setTimeout(() => toc.classList.remove('dodge-engage'), 180);
+    const wide = matchMedia('(min-width: 60rem)');
+    function place() {
+      if (wide.matches) {
+        for (const { note } of anchors) lane.appendChild(note);
       } else {
-        toc.classList.remove('dodge-engage');
+        for (const { note, parent, next } of anchors) {
+          if (next && next.parentElement === parent) parent.insertBefore(note, next);
+          else if (parent) parent.appendChild(note);
+        }
       }
-      applied = shift;
-      toc.style.transform = `translate3d(0, ${-shift}px, 0)`;
     }
-
-    function requestMeasure() {
-      if (!frame) frame = requestAnimationFrame(measure);
-    }
-
-    addEventListener('scroll', requestMeasure, { passive: true });
-    addEventListener('resize', requestMeasure);
-    measure();
+    wide.addEventListener('change', place);
+    place();
   }
 
   // Link previews, Gwern-style: hovering an internal link floats a card with
@@ -268,7 +219,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    watchContentsDodge();
+    watchNotesLane();
     watchLinkPreviews();
     controls = document.querySelector('.theme-controls');
     if (!controls) return;
