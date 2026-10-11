@@ -26,27 +26,36 @@ HTML-escaped, which threw `SyntaxError` in the browser and killed Grove's own
 backmatter runtime on all pages with collapsible backmatter. Flora's MathJax
 head configuration no longer needs to avoid those characters.
 
+`make-element` passes its declared `#:flow-kind` through to the content
+element (grove commit `384234e`, 2026-10-11): block-flavoured custom tags
+(Flora's `figure`/`figcaption`) are no longer wrapped into a `<p>` by the
+composition, so Flora can drop the build-the-content-style-itself
+workaround.
+
+Childless non-void elements serialize with explicit end tags instead of
+`<span …/>` (same commit): the HTML parser no longer keeps an empty custom
+element open swallowing the markup that follows, so the empty-string-child
+workaround can go. The serializer rewrite also fixed script/style contents
+being emitted twice — once raw and once escaped — which made every inline
+script run twice.
+
+Page frontmatter topics now have direct accessors (grove commit `e34cd60`,
+2026-10-11): `page-taxon`/`page-tags` return a tree's own topic elements, and
+`#:title-decoration` receives `(forest page)` instead of `(forest id)` —
+Flora's precomputed taxa table and its document scan are gone; the hook body
+is now `(lambda (_ page) ...)` over `(page-taxon page)`.
+
+Renamed assets no longer break the next build (grove commit `998f3d6`,
+2026-10-11): a stale build-state path (flora.js after the theme.js rename)
+used to crash both input-cache pruning and stale-output cleanup with a
+missing-file `stat`; vanished paths are pruned silently now. The text
+renderer also resolves backlink sources through the page index instead of a
+linear scan (`98e1252`).
+
 Flora composes these options in `project.scm`; see Grove's `docs/project.md`
 for the contract and `tests/unit/forester/render.scm` for coverage.
 
 ## Open
-
-### make-element ignores its #:flow-kind argument
-
-`(grove element)`'s `make-element` destructures `#:flow-kind` but never uses
-it — `element-command` hardcodes `#:flow-kind 'inline`. Block-flavoured
-custom tags (Flora's `figure`/`figcaption`) therefore render as inline
-elements and get wrapped into a `<p>` by the composition, producing
-`<p><figure>…</figure></p>`. Flora works around it by building the content
-style itself; `make-element` passing `flow-kind` through would remove the
-need.
-
-### Page and tree metadata at render time
-
-Flora recomputes each page's own taxon in the render phase by scanning
-`content-document-children` for a top-level `taxon` element. A direct accessor
-for the current page/tree frontmatter (taxon, tag, summary, published) would
-remove that scan.
 
 ### Margin-note lane placement
 
@@ -62,6 +71,15 @@ Pure CSS handles placement and cascade, but two limits showed up:
   `ic`-based lengths would rescale at the note's smaller font size. A named,
   renderer-owned margin lane would remove this duplication.
 
+Agreed direction (2026-10-11): Flora leads with the CSS experiment — the
+structural prerequisite already exists in Grove (block-flavoured custom
+elements can stand as paragraph siblings via `#:flow-kind 'block`). The
+promising move is putting the sticky TOC and the notes into the same grid
+container so the browser owns collisions instead of z-order layering. Once
+that CSS shape is proven, Grove can absorb it (an article-level lane
+container or hook); designing the Grove API before the CSS settles would
+freeze an unvalidated layout.
+
 ### Term definitions as anchors
 
 The `defn` pilot outputs `<dfn>` for glossary defining occurrences. Grove's
@@ -70,13 +88,16 @@ definition elements would let link fragment validation and term queries
 ("where is this term defined?") see them. The relations DSL could then host a
 `term-definition` schema alongside reference facts.
 
-### Empty elements serialize as self-closing
-
-A custom element with no children renders as `<span …/>`. The HTML parser
-ignores the slash on non-void start tags, so the element stays open and
-swallows the markup that follows it. Flora works around this by giving the
-marker span an empty-string child; the serializer could emit `<! …>`-style
-explicit close tags (or void only whitelisted names) instead.
+First half done (grove commit `675192b`, 2026-10-11): anchored ordinary
+elements are now registry entries. `make-element` grew `#:anchor` — it
+renders as the tag's `id` and lands in `page-anchor-facts` — so Flora's defn
+becomes `(make-element #:tag "dfn" #:anchor "term-loom")` and fragment
+validation covers term anchors. Normalization follows the topic convention:
+the anchor id is the canonical key (Flora derives it from the term text,
+downcased and hyphenated, with an explicit id overriding). The
+`term-definition` relation schema waits for real term queries to say what it
+must hold — synonyms, multilingual variants, and per-term multiple
+definitions are content-modeling questions that one pilot cannot answer.
 
 ### Serve shows a stale artifact snapshot
 

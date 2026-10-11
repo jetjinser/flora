@@ -120,18 +120,14 @@
 ;; rewriting rendered markup: document attributes and head nodes, the site
 ;; navigation, per-tree title decoration, the reading-column article wrapper,
 ;; and collapsible backmatter.
-(define (page-taxon-sxml page)
-  ;; Read only this tree's own frontmatter, never a nested tree's taxon.
-  (append-map
-    (lambda (node)
-      (if (and (content-element? node)
-               (eq? (content-element-kind node) 'taxon))
-          (list `(span (@ (class "taxon")
-                          (data-taxon ,(content-element-property node 'id)))
-                       ,@(map content->sxml (content-element-children node))
-                       ". "))
-          '()))
-    (content-document-children (site-page-document page))))
+(define (taxon-entry-sxml taxon)
+  ;; Render the tree's own taxon element with Flora's markup; the
+  ;; element comes straight from Grove's page-taxon accessor, so only
+  ;; this tree's frontmatter can appear - never a nested tree's.
+  (list `(span (@ (class "taxon")
+                   (data-taxon ,(content-element-property taxon 'id)))
+                ,@(map content->sxml (content-element-children taxon))
+                ". ")))
 
 (define flora-head
   (list '(meta (@ (name "viewport")
@@ -166,13 +162,13 @@
       "Flora"))
 
 (define (render-flora forest)
-  (let ((taxa (map (lambda (page)
-                     (cons (site-page-id page) (page-taxon-sxml page)))
-                   (pages forest))))
-    (render-html forest
-      #:routes html-routes
-      #:style flora-style
-      #:title-decoration (lambda (_ id) (or (assq-ref taxa id) '()))
+  (render-html forest
+    #:routes html-routes
+    #:style flora-style
+    #:title-decoration
+    (lambda (_ page)
+      (let ((taxon (page-taxon page)))
+        (if taxon (taxon-entry-sxml taxon) '())))
       #:article? #t
       #:backmatter-details? #t
       #:backmatter-labels '((context . "语境")
@@ -182,7 +178,7 @@
       #:html-attributes '((lang . "zh-CN"))
       #:head flora-head
       #:home-link flora-home-link
-      #:site-nav (list theme-controls-sxml))))
+      #:site-nav (list theme-controls-sxml)))
 
 (define (analyze-flora site)
   ((module-ref (resolve-interface '(flora queries)) 'analyze-flora) (lp-enrich-site site)))
