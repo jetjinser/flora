@@ -12,15 +12,6 @@
   #:re-export-and-replace (link))
 
 @(begin
-   (define (fragment-text value)
-     ;; 递归取纯文本,供锚点派生;非文本片段(如图)贡献空串。
-     (cond
-       ((string? value) value)
-       ((content-text? value) (content-text-value value))
-       ((content-element? value)
-        (string-concatenate (map fragment-text (content-element-children value))))
-       (else "")))
-
    (define (term-id text)
      ;; 规范化即锚点 key:转小写、空白折叠为连字符(与 taxon/tag 约定一致)。
      (string-join
@@ -40,7 +31,8 @@ constructs per call instead of a top-level define-once."
            (extract (cddr args)
                     (if (equal? (car args) #:id) (cadr args) explicit))
            (let* ((body (command-body args))
-                  (text (string-trim-both (apply string-append (map fragment-text body)))))
+                  (text (string-trim-both
+                          (string-concatenate (map content->plain-text body)))))
              ((make-element #:tag "dfn" #:anchor (or explicit (term-id text))) text)))))
 
    (define-public (sidenote . body)
@@ -48,10 +40,11 @@ constructs per call instead of a top-level define-once."
 flora-sidenote elements into the page's margin lane (project #:side-lane),
 keeps a numbered superscript marker at the anchor, and gives the lane item
 a back-reference; numbering is renderer-assigned, so the command emits no
-counter of its own. The kind must be the element's own - make-element
-always produces span-kinded elements - so this builds the IR directly;
-the unlifted fallback renders as span.flora-sidenote."
-     (make-content-element 'flora-sidenote body))))
+counter of its own. #:kind is what the lane matches - make-element
+defaults the kind to span, which the lift would never see."
+     (apply (make-element #:tag "span" #:class "flora-sidenote"
+                          #:kind 'flora-sidenote)
+            body))))
 
 @(define-public (bi . body)
    "Folded bilingual block: show the Chinese lane, fold the sources.
