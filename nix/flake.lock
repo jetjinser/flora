@@ -53,11 +53,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791791280,
-        "narHash": "sha256-f7Bb3sdUBH887JWqlRHqdHLNCKBPdiLAK5YjaPnW+9w=",
+        "lastModified": 1791817461,
+        "narHash": "sha256-uj598OVUlyCAEis0PpuRWYnzsJYFOGNqKz608wspY+4=",
         "ref": "refs/heads/master",
-        "rev": "63532f6b3dff69cde8f2c8cfc0c7adfdbba30d60",
-        "revCount": 433,
+        "rev": "5f5606deb1a11c1a34f4e5c5a2407196d4bb72ea",
+        "revCount": 437,
         "type": "git",
         "url": "file:///home/jinser/vie/projet/prototype/grove"
       },
