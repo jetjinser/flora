@@ -26,10 +26,28 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
   关系 DSL 以逻辑变量描述「什么算一条关系」：@code{incoming-pageo} 把 link 与 transclude 两种节点都计为指向目标页的入链。孤儿检测是集合差——作者页减去有入链的页；成员判断全部走原生哈希表，逻辑查询只负责收集入链 id，避免页数 × 入链数的二次复杂度。@code{math-query-results} 收集「短于 120 字且含公式」的段落作为改写候选，每次展示前 6 条。
 }
 
+@subtree[#:id "lib-queries-terms"]{
+  @title{术语索引与漂移}
+
+  定义关系收录 @code{defn} 注册的术语（锚点即规范 term-id，display 为术语加释名）；提及关系收录指向无处解析锚点的 fragment 链接。下面的索引与漂移报告是两个占位命令的回填结果，随语料自动更新——术语表页（@link["glossary"]{glossary}）的第一组条目即按此约定注册。
+
+  @subtree[#:id "lib-queries-term-index"]{
+    @title{已定义术语索引}
+
+    @term-index{}
+  }
+
+  @subtree[#:id "lib-queries-term-conflicts"]{
+    @title{定义漂移与定义待办}
+
+    @term-conflicts{}
+  }
+}
+
 @subtree[#:id "lib-queries-expand"]{
   @title{占位展开与站点重组}
 
-  @code{expand-query-markers} 递归遍历内容树：@code{flora-author} 标记就地解析为作者链接，@code{flora-content-query-results}/@code{flora-orphan-page-results} 两种标记由 @code{replacements} 表整块替换，其余节点原样重建。@code{analyze-flora} 是 Grove 调用的入口。
+  @code{expand-query-markers} 递归遍历内容树：@code{flora-author} 标记就地解析为作者链接，@code{flora-content-query-results}/@code{flora-orphan-page-results}/@code{flora-term-index}/@code{flora-term-conflicts} 四种标记由 @code{replacements} 表整块替换，其余节点原样重建。@code{analyze-flora} 是 Grove 调用的入口。
 }
 
 @(begin
@@ -44,6 +62,78 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
     (map (lambda (page)
            (make-content-text "" (site-page-source page)))
          (site-pages site)))
+
+  ;; 定义索引:relation 事实即收集序(文档序),词汇表保持 authored 顺序。
+  ;; 定义发生在别的页面时补一个指向定义页的链接;本页定义只给 display。
+  (define (term-index-results site forest)
+    (let* ((rows (relation-facts (term-definition-relation forest)))
+           (dependencies (source-dependencies site)))
+      (list
+        (make-content-element
+          'paragraph
+          (append
+            (list (format #f
+                    "以下 ~a 条由语料中的 defn 注册，自动生成、保持语料出现顺序："
+                    (length rows)))
+            dependencies))
+        (make-content-element
+          'itemize
+          (map
+            (lambda (row)
+              (let ((page-id (cadr row))
+                    (display-text (cadddr row)))
+                (make-content-element
+                  'item
+                  (if (string=? page-id "glossary")
+                      (list (make-content-text display-text))
+                      (list (make-content-element
+                              'query-link (list display-text)
+                              (site-page-source (find-page forest page-id))
+                              #:properties `((target . ,page-id))))))))
+            rows)
+          #:flow-kind 'block))))
+
+  ;; 冲突:同一 term-id 的多个定义页或不同 display——「漂移」的可查询形式。
+  ;; backlog:语料用 fragment 链接指向、但无处解析的 term-id,附提及页。
+  (define (term-conflict-results site forest)
+    (let* ((conflicts (term-definition-conflicts forest))
+           (backlog (undefined-term-mentions forest))
+           (dependencies (source-dependencies site)))
+      (append
+        (list
+          (make-content-element
+            'paragraph
+            (append
+              (list (format #f
+                      "当前 ~a 个术语存在定义漂移，~a 个术语被提及但无处定义："
+                      (length conflicts) (length backlog)))
+              dependencies)))
+        (map
+          (lambda (entry)
+            (make-content-element
+              'item
+              (cons (make-content-text
+                      (format #f "~a：" (car entry)))
+                    (append-map
+                      (lambda (occurrence)
+                        (list (make-content-element
+                                'query-link
+                                (list (format #f "~a（~a）"
+                                        (cadr occurrence) (car occurrence)))
+                                (site-page-source
+                                  (find-page forest (car occurrence)))
+                                #:properties `((target . ,(car occurrence))))))
+                      (cdr entry)))))
+          conflicts)
+        (map
+          (lambda (entry)
+            (make-content-element
+              'item
+              (list (make-content-text
+                      (format #f "~a（尚未定义；提及于 ~a）"
+                        (car entry)
+                        (string-join (cadr entry) "、"))))))
+          backlog))))
 
   (define (query-math-paragraphs forest)
     (let ((nodes (content-node-relation forest)))
@@ -169,7 +259,8 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
     (define (marker-kind child)
       (and (content-element? child)
            (memq (content-element-kind child)
-                 '(flora-content-query-results flora-orphan-page-results))
+                 '(flora-content-query-results flora-orphan-page-results
+                   flora-term-index flora-term-conflicts))
            (content-element-kind child)))
     (cond
       ((marker-kind content) (marker-kind content))
@@ -225,6 +316,10 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
              `((flora-content-query-results
                 . ,(math-query-results site forest))
                (flora-orphan-page-results
-                . ,(orphan-page-results site forest)))))
+                . ,(orphan-page-results site forest))
+               (flora-term-index
+                . ,(term-index-results site forest))
+               (flora-term-conflicts
+                . ,(term-conflict-results site forest)))))
       (make-forest (expand-site-query-markers site replacements forest))))
 )

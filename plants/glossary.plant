@@ -9,23 +9,28 @@
 @subtree[#:id "glossary-grove"]{
   @title{Grove与文档模型}
 
+  本组条目已注册为术语定义：术语与释名写在 @code{defn} 内（显式
+  @code{#:id}），描述跟在其后——定义关系收录术语与释名作为 display，
+  全站索引与漂移检测由此驱动（见 @link["queries"]{flora queries} 的
+  自动索引）。其余各组仍为手写条目，尚未注册。
+
   @itemize{
-    @item{@defn{@code{tree}}（树）：可独立寻址的一段内容，有地址、标题和可选元数据。}
-    @item{@code{root page}（页面）：一个@code{.plant}文件对应的顶层tree；文件名就是页面地址。}
-    @item{@code{subtree}：在文档中声明一棵嵌套tree的命令；需要长期引用时用@code{#:id}给稳定地址。}
-    @item{@code{address}（地址）：具名tree的@code{#:id}或页面的文件名；未命名tree获得@code{unstable-NNNN}形式的临时地址。}
-    @item{@code{transclude}（嵌入）：按ID查询森林，把目标tree的正文放在当前位置，并保留来源；不导入程序binding。}
-    @item{@code{link}（链接）：指向tree ID的阅读引用，不建立Scheme依赖。}
-    @item{@code{taxon}：tree的种类；写小写英文名，大小写不敏感，显示时首字母大写并加句点。}
-    @item{@code{tag}：主题标签，和taxon一样是可查询的内容节点。}
-    @item{@code{frontmatter}（元数据）：title、summary、published、updated等，属于各自的tree。}
-    @item{@code{content tree}（内容树）：命令与文本解析后的结构化结果，是分析和渲染的输入。}
-    @item{@code{forest}（森林）：全站页面与tree组成的内容集合；跨文章查询在分析阶段基于它。}
-    @item{读取（reading）：解析@code{.plant}并对其中Scheme求值；示例核验也在此进行。}
-    @item{分析（analyzing）：建立forest与关系，例如@code{content-node relation}。}
-    @item{渲染（rendering）：把内容树生成HTML或其他artifact。}
-    @item{@code{checked}：读取时通过核验；不表示浏览器实时运行，也不等于形式化证明。}
-    @item{@code{backlinks}／@code{related}／@code{context}：森林中的阅读关系，可折叠查看；不等于程序@code{requires}。}
+    @item{@defn[#:id "tree"]{@code{tree}（树）}：可独立寻址的一段内容，有地址、标题和可选元数据。}
+    @item{@defn[#:id "root-page"]{@code{root page}（页面）}：一个@code{.plant}文件对应的顶层tree；文件名就是页面地址。}
+    @item{@defn[#:id "subtree"]{@code{subtree}}：在文档中声明一棵嵌套tree的命令；需要长期引用时用@code{#:id}给稳定地址。}
+    @item{@defn[#:id "address"]{@code{address}（地址）}：具名tree的@code{#:id}或页面的文件名；未命名tree获得@code{unstable-NNNN}形式的临时地址。}
+    @item{@defn[#:id "transclude"]{@code{transclude}（嵌入）}：按ID查询森林，把目标tree的正文放在当前位置，并保留来源；不导入程序binding。}
+    @item{@defn[#:id "link"]{@code{link}（链接）}：指向tree ID的阅读引用，不建立Scheme依赖。}
+    @item{@defn[#:id "taxon"]{@code{taxon}}：tree的种类；写小写英文名，大小写不敏感，显示时首字母大写并加句点。}
+    @item{@defn[#:id "tag"]{@code{tag}}：主题标签，和taxon一样是可查询的内容节点。}
+    @item{@defn[#:id "frontmatter"]{@code{frontmatter}（元数据）}：title、summary、published、updated等，属于各自的tree。}
+    @item{@defn[#:id "content-tree"]{@code{content tree}（内容树）}：命令与文本解析后的结构化结果，是分析和渲染的输入。}
+    @item{@defn[#:id "forest"]{@code{forest}（森林）}：全站页面与tree组成的内容集合；跨文章查询在分析阶段基于它。}
+    @item{@defn[#:id "reading"]{读取（reading）}：解析@code{.plant}并对其中Scheme求值；示例核验也在此进行。}
+    @item{@defn[#:id "analyzing"]{分析（analyzing）}：建立forest与关系，例如@code{content-node relation}。}
+    @item{@defn[#:id "rendering"]{渲染（rendering）}：把内容树生成HTML或其他artifact。}
+    @item{@defn[#:id "checked"]{@code{checked}}：读取时通过核验；不表示浏览器实时运行，也不等于形式化证明。}
+    @item{@defn[#:id "backlinks"]{@code{backlinks}／@code{related}／@code{context}}：森林中的阅读关系，可折叠查看；不等于程序@code{requires}。}
   }
 }
 

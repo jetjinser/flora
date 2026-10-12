@@ -84,6 +84,12 @@ the caption (typically an @emph figure title followed by the legend)."
 @(define-public (orphan-page-results)
    (make-content-element 'flora-orphan-page-results '() #:flow-kind 'block))
 
+@(define-public (term-index)
+   (make-content-element 'flora-term-index '() #:flow-kind 'block))
+
+@(define-public (term-conflicts)
+   (make-content-element 'flora-term-conflicts '() #:flow-kind 'block))
+
 @title{flora commands：站点命令库}
 @summary{全站共用内容命令的定义与用法：双语块、作者标注、语义插图、边注与术语定义。}
 @taxon["reference"]
