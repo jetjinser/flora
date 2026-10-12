@@ -140,6 +140,68 @@ display text) at minimum; query 3 additionally wants a mentions relation.
 Everything keys on the normalized term-id; nothing above needs synonyms as
 first-class data yet.
 
+Implemented in grove commit `dd0a5dd` (2026-10-13), following this schema.
+Facts come from anchored elements tagged `dfn` — the HTML defining-instance
+semantic, so Flora's existing `(make-element #:tag "dfn" #:anchor …)` needs
+no change — with the display text taken from the element's plain-text body
+(an original term and a translation ride in one element, per query 2).
+Mentions are fragment links (`link`/`query-link`) whose fragment does not
+resolve in the target page's anchor index — the same condition the fragment
+warning reports, collected as data; an explicit `@term` marking convention
+can replace that source later if Flora wants mentions of defined terms
+too.  Forest-level queries, all exported from `(forester site)`:
+
+- `(term-definitions forest "term-loom")` → `(page-id anchor display-text)`
+  rows for query 1 (glossary listing, hover previews).
+- `(term-definition-conflicts forest)` → `(term-id (page-id display-text)
+  …)` for every term defined on more than one page or with differing
+  display texts — query 2.
+- `(undefined-term-mentions forest)` → `(term-id (page-id …))` grouped and
+  sorted — query 3, the definition backlog.
+
+The relation constructors and `term-definitiono`/`term-mentiono` goals are
+exported from `(forester relations)` for queries beyond these three.
+Documented in docs/forester-composition.md ("Term definitions").
+
+Adopted in Flora same-day (2026-10-13), with the trial this schema was
+sized for:
+
+- `/glossary`'s first group is defn-backed — each entry wraps its term and
+  gloss in `@defn[#:id "…"]`, so the relation's display text is the
+  compact label ("tree（树）") while the description stays item prose.
+  Sixteen terms registered; the other five groups are still hand-written
+  and invisible to the relation — exactly the hand-maintenance drift the
+  schema exists to catch, now visible as absence.
+- `/queries` gained two marker commands filled at analyze time:
+  `@term-index` (the generated defined-term list, collection order, with
+  a link when the definition lives on another page) and `@term-conflicts`
+  (drift report plus backlog). The literal "replace the hand-maintained
+  list" step waits on the corpus: with only one group registered, a
+  generated glossary would be near-empty — groups convert as their
+  entries become defn-backed.
+- Conflicts output verified against the drift intuition with a planted
+  in-passing definition (`@defn[#:id "tree"]` with a different gloss on a
+  tutorial page, reverted after): the report read
+  `tree：tree（树）（glossary-grove）  tree（树），本页口径（unstable-8）`
+  — canonical entry first (collection order), drifted occurrence with its
+  page after. One reading note: the defining page for an in-paragraph
+  defn is the owning subtree's own page id (`unstable-8`), not the
+  article's — correct, but surprising at first glance.
+- Backlog was empty on the real corpus: Flora has no fragment links aimed
+  at missing anchors yet.
+
+For the `@term` convention (mentions of defined terms): emit a link
+element with properties `((target . <defining page>) (fragment . <anchor>)
+(term . "term-id"))`, resolved at analyze time against the definition
+relation — display text from the canonical entry, undefined targets
+surfacing in the backlog report instead of rendering as dead links. Two
+design points from the trial: the marker should key on the RAW anchor
+registry, not rendered DOM ids (rendered anchors carry subtree prefixes —
+`glossary-grove--tree` — so a raw `#tree` fragment counts as unresolved
+even when the term exists); and explicit marking keeps term mentions
+distinguishable from ordinary links, so the mention relation can count
+resolved and unresolved mentions without guessing.
+
 ### A `.plant` document has no definition context for `@(...)`: resolved upstream (grove commit `79b9688`, 2026-10-12)
 
 A plain `@(define …)` in a page dies with Guile's "definition in expression
