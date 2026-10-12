@@ -85,11 +85,11 @@ confirmed at scroll position 4749, marker/counter sequences agree.
 
 One composition trap worth recording: `#:side-lane` matches
 `content-element-kind`, but `make-element` — the public vocabulary API —
-always produces `'span`-kinded elements (the tag lives in the style). A
-sidenote built with `make-element #:tag "flora-sidenote"` renders as a raw
-unknown tag, never lifted. Flora's `sidenote` now calls `make-content-element
-'flora-sidenote` directly; either the docs or the API should say that
-side-lane kinds must be IR-level kinds, not make-element tags.
+always produced `'span`-kinded elements (the tag lives in the style), so a
+sidenote built with it rendered as a raw unknown tag, never lifted. Resolved
+in grove commit `4597d67` (2026-10-12): `make-element` grew `#:kind` and the
+docs point side-lane users at it; Flora's sidenote is back on the public API
+(`#:tag "span" #:class "flora-sidenote" #:kind 'flora-sidenote`).
 
 ### Term definitions as anchors
 
@@ -125,17 +125,16 @@ Grove could splice bare top-level definitions in a document into the
 evaluation environment, so a page-local helper reads like Scheme rather
 than like a workaround.
 
-### Command bodies need a public plain-text projection
+### Command bodies need a public plain-text projection: resolved upstream
 
 Deriving an anchor id from a command body (Flora's `defn` → `term-id`)
-needs flattening content fragments to text: strings pass through,
-`content-text` unwraps, elements recurse into children. Grove already has
-exactly this as `content->plain-text`, but only in
-`(forester private content-index)` — Flora's modules do import
-`(forester …)` modules, but a `private` module is not a stable API to build
-on, so Flora duplicates the helper as `fragment-text` in
-`lib/commands.plant`. Promoting it to `(grove ir)` or `(grove element)`
-would let custom commands do this without reaching into internals.
+needs flattening content fragments to text. Grove had exactly this only in
+`(forester private content-index)`, so Flora duplicated it as
+`fragment-text` in `lib/commands.plant`. Resolved in grove commit
+`d13f423` (2026-10-12): `(grove ir)` exports `content->plain-text` —
+strings pass through, text and layout unwrap, elements recurse with
+kind-specific joiners, documents concatenate. Flora deleted
+`fragment-text` and calls it directly.
 
 ### Serve shows a stale artifact snapshot
 
@@ -216,22 +215,45 @@ cache; full log at `/tmp/serve-d2c5a65.log`):
   `request.scm`, `result.scm`; no `cache-N` generations; SIGTERM removed
   the workspace.
 
-Two residuals observed on the same run:
+Two residuals observed on the d2c5a65 run, and their status after
+`63532f6` (reproduction repeated 2026-10-12, port 8125, initial full build
+89 s, no phantom rebuilds; trigger lists — style.css only: 1 path, 1
+affected artifact, single cycle; one `.plant`: 1 path, 1 affected; full
+log at `/tmp/serve-63532f6.log`):
 
-1. Reverting an input to a previous content left the output stale. After
-   the probes were removed (style.css back to its committed content, the
-   `.plant` back via git checkout), serve rebuilt with
-   `Rebuilding (2 changed paths):` naming both files, reported
-   `0 affected` in 100 s ("Reused 1113/1122 document results"), and wrote
-   nothing — the served flora.css still contained the probe lines and the
-   entry page still carried the probe summary. A manual `grove build`
-   healed both from cache. The reuse/write path treats a reverted input as
-   cached content but never compares the artifact against the files
-   actually on disk.
+1. Reverting an input to a previous content left the output stale. FIXED
+   for the quiet case: with both probes removed while no build was
+   running, serve reported `Rebuilding (2 changed paths):` naming both
+   files, re-rendered (9 affected, 106 s), and the served output healed
+   immediately — no manual build needed.
 2. A manual build over a `build/` directory last written by serve comes
    out `1952 affected` (full invalidation) even with a warm input cache —
    presumably the shared output manifest changing hands. Correctness is
    fine now that the lock serializes them; it is purely wasted work.
+   Re-observed on 63532f6 (healing build: 1952 affected, 117 s).
+
+### Mid-build source drift still escapes the drift check
+
+The quiet-revert fix (`63532f6`) re-fingerprints sources after writing the
+build state and deletes the state on drift. Reverting a source DURING the
+build still poisons the output, deterministically, on 63532f6: append a
+line to style.css, let the rebuild start, and revert the file ~25 s in —
+after the worker loaded the project but before it finished analyzing. The
+cycle reported `1 affected` (writing the probe content), the next cycle —
+triggered by the revert — reported `0 affected` and rewrote the stale
+artifact. The state file (workspace `cache/grove/<hash>/.grove-build-state`)
+held the contradiction in one record: source digest `bff11291` (the clean
+post-revert file) beside artifact content `80cc8f1c` (the probe text).
+
+The gap: the drift check compares two fingerprint observations that both
+postdate the revert, but the render's content predates them — the worker
+reads style.css when it evaluates project.scm (`flora-style` inlines
+`call-with-input-file` at load), then fingerprints the same file much
+later in execute-project. A change landing between load and fingerprint
+poisons the artifacts while every recorded fingerprint stays consistent.
+The drift check would need the load-time reads fingerprinted (or the
+state to carry the content digests the render actually consumed) to close
+this window.
 
 ### Serve workspace cache: resolved upstream (grove commit `69b015b`, 2026-10-12)
 
@@ -278,7 +300,7 @@ from `flora/plants/lib`:
     grove: load failed (project.scm)
     In procedure canonicalize-path: No such file or directory
 
-The output never names the directory that was searched or the `--project`
-escape hatch. Either discover the project file by walking upward
-(git-style), or fail with something like "no project.scm in <dir>; pass
---project or run from the project root".
+Half-resolved in grove commit `465fa08` (2026-10-12): the load now checks
+existence first and reports "no project file at <path>; pass --project or
+run from the project root" instead of the bare stat error. Upward
+discovery (git-style) remains open as a separate question.
