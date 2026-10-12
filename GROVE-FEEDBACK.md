@@ -111,7 +111,36 @@ is `@defn[#:id "…"]`, exercised on `/commands.html`). The
 must hold — synonyms, multilingual variants, and per-term multiple
 definitions are content-modeling questions that one pilot cannot answer.
 
-### A `.plant` document has no definition context for `@(...)`
+Three concrete queries from Flora's translation corpus to size that schema
+(2026-10-13):
+
+1. Defined-term index. `/glossary` is hand-maintained `@item{@defn{tree}
+   （树）：…}` entries that duplicate what `defn` occurrences already know
+   and drift from them. A `term-definitions` query — term-id → list of
+   (page, anchor, display text) — would generate the glossary listing (and
+   the hover-preview text for term markers) from the corpus instead.
+
+2. Conflicting definitions. A chapter's in-passing `@defn` can diverge
+   from the glossary's canonical entry over edits; nothing notices.
+   Counting defining pages per term-id (and comparing display texts when
+   the count is > 1) is a consistency query over the same relation — the
+   multilingual angle rides along: the same term-id often has an English
+   original and a Chinese defining text on the same page, so display text
+   belongs in the relation, not just the id.
+
+3. Undefined mentions. Chapters use terms that no page defines; today
+   that is discoverable only by reading. A mentions-side fact (term-id →
+   pages that use it, from unresolved fragment links to term anchors, or
+   from `@term` occurrences if mentions get marked) turns "which terms
+   still need a definition" into a query — actionable backlog for the
+   translation.
+
+Schema implication: the definition relation needs (term-id, page, anchor,
+display text) at minimum; query 3 additionally wants a mentions relation.
+Everything keys on the normalized term-id; nothing above needs synonyms as
+first-class data yet.
+
+### A `.plant` document has no definition context for `@(...)`: resolved upstream (grove commit `79b9688`, 2026-10-12)
 
 A plain `@(define …)` in a page dies with Guile's "definition in expression
 context"; the working idiom is a `@(begin (define …) …)` splice, which
@@ -119,11 +148,17 @@ nothing hints at. Flora hit this while writing its first page-local helpers
 (`fragment-text`/`term-id` for `defn`) and only stopped needing it by moving
 the helpers into library modules. Module files opened with
 `@(define-module …)` are unaffected — plain `@(define-public …)` works
-there — so the contract differs by file kind with no visible signal. At
-minimum the plant-language docs should show the begin-splice idiom; nicer,
-Grove could splice bare top-level definitions in a document into the
-evaluation environment, so a page-local helper reads like Scheme rather
-than like a workaround.
+there — so the contract differs by file kind with no visible signal.
+
+Re-checked against the current reader (2026-10-12): the reported failure no
+longer reproduces. Each top-level `@(...)` form evaluates in the page
+environment, so a bare `@(define (helper) …)` anywhere at the top level of a
+`.plant` page — including between paragraphs — binds `helper` for every later
+form; the begin-splice workaround is obsolete. A definition inside a command
+argument is still rejected with "definition in expression context", which is
+Scheme's own rule. Grove pinned both sides with scribble read tests and
+stated the contract in docs/project.md ("Executable source and module
+articles"). The `term-definition` note below stands as the only follow-up.
 
 ### Command bodies need a public plain-text projection: resolved upstream
 
@@ -231,12 +266,36 @@ log at `/tmp/serve-63532f6.log`):
    presumably the shared output manifest changing hands. Correctness is
    fine now that the lock serializes them; it is purely wasted work.
    Re-observed on 63532f6 (healing build: 1952 affected, 117 s).
+   RESOLVED upstream (grove commit `02f0362`, 2026-10-12): the serve
+   worker stopped keeping a private cache under the preview workspace and
+   now inherits the serve process's environment, so serve and manual
+   builds share the per-project cache directory — build state, artifact
+   manifest, and input cache — with the build lock serializing writers.
+   Sharing surfaced a second gap: project loads record load-path
+   candidates (module sources and compiled-object paths, often for files
+   that do not exist) into extra-sources, and those candidate sets shift
+   between build processes. The build state now tags source entries as
+   declared or runtime; absent entries are ignored on both sides of the
+   comparison and a removed-and-re-added runtime pair with equal content
+   cancels, since neither can change what a build produces. Grove's serve
+   lifecycle suite pins the contract — a manual build after a serve
+   session reports 0 affected — and also covers editing while serve
+   watches. Flora-side verification welcome on a real tree: manual build
+   over a serve-written `build/` should now stay incremental.
+   VERIFIED on the flora tree (2026-10-13, grove `5f5606d`): the serve
+   workspace now holds only `.live`/`request.scm`/`result.scm` — no
+   `cache/`; build state and input cache live at
+   `~/.cache/grove/d111fa1384d6b861/` for both processes. Serve's initial
+   build over a manual build's output reported `0 affected` (94 s, pure
+   analysis), and a manual `grove build` after a serve session — the
+   direction that used to full-invalidate — reported `0 affected` in
+   114 s ("Cached Renderer cache hit").
 
-### Mid-build source drift still escapes the drift check
+### Mid-build source drift: resolved upstream (grove commit `fda4c0a`, 2026-10-12)
 
 The quiet-revert fix (`63532f6`) re-fingerprints sources after writing the
 build state and deletes the state on drift. Reverting a source DURING the
-build still poisons the output, deterministically, on 63532f6: append a
+build still poisoned the output, deterministically, on 63532f6: append a
 line to style.css, let the rebuild start, and revert the file ~25 s in —
 after the worker loaded the project but before it finished analyzing. The
 cycle reported `1 affected` (writing the probe content), the next cycle —
@@ -245,15 +304,20 @@ artifact. The state file (workspace `cache/grove/<hash>/.grove-build-state`)
 held the contradiction in one record: source digest `bff11291` (the clean
 post-revert file) beside artifact content `80cc8f1c` (the probe text).
 
-The gap: the drift check compares two fingerprint observations that both
+The gap: the drift check compared two fingerprint observations that both
 postdate the revert, but the render's content predates them — the worker
 reads style.css when it evaluates project.scm (`flora-style` inlines
 `call-with-input-file` at load), then fingerprints the same file much
-later in execute-project. A change landing between load and fingerprint
-poisons the artifacts while every recorded fingerprint stays consistent.
-The drift check would need the load-time reads fingerprinted (or the
-state to carry the content digests the render actually consumed) to close
-this window.
+later in execute-project.
+
+Fixed in grove commit `fda4c0a`: extra-sources fingerprints are captured
+as a pre-build snapshot before the analysis runs — the load-time baseline
+the render actually consumed — and the end-of-build check compares against
+both snapshots. Verified on the same steps (2026-10-13, grove `5f5606d`,
+port 8125): the probe cycle reported `1 affected`, and the revert cycle
+came back `1952 affected` in 85 s — the state had been deleted, forcing
+the full re-render — leaving the output clean with no manual build. The
+one full re-render is the correct price for an ambiguous build.
 
 ### Serve workspace cache: resolved upstream (grove commit `69b015b`, 2026-10-12)
 
@@ -289,7 +353,7 @@ across rebuilds, orphan sweep at startup behind a `.live` flock, graceful
 exit removes the workspace. Nothing further open here beyond the two
 residuals recorded above.
 
-### No project discovery: running from a subdirectory fails with a bare stat error
+### No project discovery: running from a subdirectory fails with a bare stat error: resolved upstream (grove commit `5f5606d`, 2026-10-12)
 
 Commands resolve their project file as `./project.scm` relative to the
 invocation directory, with no upward search, so any command run inside the
@@ -302,5 +366,11 @@ from `flora/plants/lib`:
 
 Half-resolved in grove commit `465fa08` (2026-10-12): the load now checks
 existence first and reports "no project file at <path>; pass --project or
-run from the project root" instead of the bare stat error. Upward
-discovery (git-style) remains open as a separate question.
+run from the project root" instead of the bare stat error.
+
+Resolved in grove commit `5f5606d` (2026-10-12): without `--project`,
+commands search the invocation directory and its ancestors git-style and
+stop at a `.git` boundary or the filesystem root; an explicit `--project`
+always wins. The CLI suite pins discovery from a subdirectory, the boundary
+stop, and the escape hatch. For Flora this means `grove check` from
+`flora/plants/lib` now finds `flora/project.scm` and runs.
