@@ -202,6 +202,43 @@ even when the term exists); and explicit marking keeps term mentions
 distinguishable from ordinary links, so the mention relation can count
 resolved and unresolved mentions without guessing.
 
+Implemented in grove commit `08df222` (2026-10-13), following both design
+points. The mention relation gained a resolution column: unresolved
+fragment links record `#f`; an element carrying a `term` property records
+whether the definition relation resolves its term-id — resolution keys on
+the raw registry, never rendered DOM ids. At render time a resolved
+marked mention renders as an anchor to the defining page's own route
+(its standalone rendering keeps unprefixed anchor ids, so
+`<defining-page>.html#<raw-anchor>` scrolls correctly even when the
+definition renders inside a host subtree) with the definition's display
+text when the element has no body of its own — an authored body still
+overrides, for inflected forms. A term nothing defines renders inline
+under `class="missing-term"` instead of a dead href and stays in the
+backlog report; `(undefined-term-mentions forest)` collects both
+unresolved kinds. The render suite pins the resolved href + canonical
+label, the undefined inline fallback, and the backlog merge.
+
+Adopted in Flora same-day — the last open item; with this the file is
+fully resolved. `@term["id"]` (optionally with a body) emits a
+`query-link` element carrying only the `term` property; `/queries`
+exercises all three render modes live — canonical display, body
+override, and a deliberately undefined `route` that shows as
+missing-term and appears in the backlog below. One deviation from the
+sketched shape, and one discovery:
+
+- The element kind is `query-link`, not `link`: the reference pass
+  requires every plain `link` to carry a resolvable page target and
+  errors otherwise ("unresolved Forester link … #f"), and a mention
+  does not know its defining page at authoring time — resolution is the
+  renderer's job. `query-link` is exempt from reference collection, and
+  08df222 handles marked mentions in both render paths. An authoring
+  site that does know the page can still use `link` per the original
+  sketch.
+- Definitions live in named subtrees, so the relation's defining page is
+  the subtree's own id (`glossary-grove`, `unstable-8`) and every index
+  entry deep-links to the subtree's standalone route — uniform, and the
+  raw-anchor hrefs land correctly.
+
 ### A `.plant` document has no definition context for `@(...)`: resolved upstream (grove commit `79b9688`, 2026-10-12)
 
 A plain `@(define …)` in a page dies with Guile's "definition in expression
