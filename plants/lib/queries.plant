@@ -29,7 +29,9 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
 @subtree[#:id "lib-queries-terms"]{
   @title{术语索引与漂移}
 
-  定义关系收录 @code{defn} 注册的术语（锚点即规范 term-id，display 为术语加释名）；提及关系收录指向无处解析锚点的 fragment 链接。下面的索引与漂移报告是两个占位命令的回填结果，随语料自动更新——术语表页（@link["glossary"]{glossary}）的第一组条目即按此约定注册。
+  定义关系收录 @code{defn} 注册的术语（锚点即规范 term-id，display 为术语加释名）；提及关系收录指向无处解析锚点的 fragment 链接与 @code{term} 标记的提及。下面的索引与漂移报告是两个占位命令的回填结果，随语料自动更新——术语表页（@link["glossary"]{glossary}）的第一组条目即按此约定注册。
+
+  标记提及的用法：@term["tree"] 这样裸用，标签取定义的 canonical display；也可以 @term["tree"]{这样覆盖标签}。指向未定义术语时——比如 @term["route"]——行内标为 missing-term 而非死链，并计入下面的 backlog。
 
   @subtree[#:id "lib-queries-term-index"]{
     @title{已定义术语索引}
@@ -64,7 +66,8 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
          (site-pages site)))
 
   ;; 定义索引:relation 事实即收集序(文档序),词汇表保持 authored 顺序。
-  ;; 定义发生在别的页面时补一个指向定义页的链接;本页定义只给 display。
+  ;; 定义藏在命名 subtree 里,定义页是 subtree 自己的 id(如 glossary-grove),
+  ;; 所以每条都链到定义锚点所在的独立路由——统一行为,不做本页特判。
   (define (term-index-results site forest)
     (let* ((rows (relation-facts (term-definition-relation forest)))
            (dependencies (source-dependencies site)))
@@ -81,15 +84,15 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
           (map
             (lambda (row)
               (let ((page-id (cadr row))
+                    (anchor (caddr row))
                     (display-text (cadddr row)))
                 (make-content-element
                   'item
-                  (if (string=? page-id "glossary")
-                      (list (make-content-text display-text))
-                      (list (make-content-element
-                              'query-link (list display-text)
-                              (site-page-source (find-page forest page-id))
-                              #:properties `((target . ,page-id))))))))
+                  (list (make-content-element
+                          'query-link (list display-text)
+                          (site-page-source (find-page forest page-id))
+                          #:properties `((target . ,page-id)
+                                         (fragment . ,anchor)))))))
             rows)
           #:flow-kind 'block))))
 

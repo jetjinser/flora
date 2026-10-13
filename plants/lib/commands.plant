@@ -84,6 +84,18 @@ the caption (typically an @emph figure title followed by the legend)."
 @(define-public (orphan-page-results)
    (make-content-element 'flora-orphan-page-results '() #:flow-kind 'block))
 
+@(define-public (term id . rest)
+   "Mark a mention of term ID (a defn-registered anchor): resolved at
+analyze against the definition relation — rendered as an anchor to the
+canonical definition, labelled with the definition's display text unless
+the body overrides it. A term nothing defines stays inline as
+missing-term and lands in the backlog report, never a dead link.
+@term[\"tree\"] or @term[\"tree\"]{树}. Emits a query-link: plain
+links must carry a resolvable page target, which a mention does not
+know at authoring time."
+   (make-content-element 'query-link (command-body rest)
+     #:properties `((term . ,id))))
+
 @(define-public (term-index)
    (make-content-element 'flora-term-index '() #:flow-kind 'block))
 

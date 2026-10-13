@@ -214,6 +214,11 @@ body { counter-reset: margin-note; }
    wrapped content, so only the default slant is suppressed (CJK italics
    are synthesized, not designed). */
 dfn { font-style: normal; }
+/* A mention of a term nothing defines: kept visible, never a dead link. */
+.missing-term {
+  color: var(--muted);
+  border-block-end: 1px dotted var(--rule);
+}
 
 .forest-tree-block { margin-block: .85lh; border-radius: 0; }
 .forest-tree-block:hover { background-color: var(--hover); }
