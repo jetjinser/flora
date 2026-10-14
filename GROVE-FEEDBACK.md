@@ -28,7 +28,42 @@ per-document analysis keys that make a `.plant` edit re-analyze only
 that document and its dependents. Edit-to-preview at ~140 s for a CSS
 tweak is the one number that still hurts the writing loop.
 
-### Relation rows should name the host article, not just the owning subtree
+First step landed in grove commit `d4980fc` (2026-10-14): `--profile`
+(build, check, serve). It reports the input-cache cost split — every
+document read booked to the reuse side (entry read, identity check,
+dependency verification, unpack) or the fresh side, with counts and
+seconds — the project file's own evaluation time as its own phase, and
+the process's peak RSS (VmHWM). Serve passes the flag to its workers,
+so the lines land on the serve terminal. A warm run on the flora tree
+with this flag is the measurement the design decision needs: if the
+reuse side dominates the floor, the cheap-hits path (mtime/size
+pre-filter before content hashing) comes first; if unpacking
+materialization dominates, forest-level reuse is the answer. Please run
+and share: `grove build --profile` on a warm tree, twice.
+
+Run and shared (2026-10-14, grove `d4980fc`, shared stable cache):
+
+- fully warm, 0 affected: total 121.6 s — analyze 93.3 s, of which the
+  input-cache reuse side is 25.1 s (1122 documents, ≈22 ms each: entry
+  read, identity check, dependency verification, unpack) and the
+  remaining ≈68 s is re-derivation — forest assembly, the reference,
+  page, content-node, and term relations, the anchor index, query
+  resolution — plus module evaluation. Peak RSS 509 MiB.
+- module edit (`queries.plant` touched): 0 reused / 1122 fresh in
+  48.8 s (≈43 ms per document of true re-analysis), analyze 57.3 s,
+  18 affected artifacts, total 135.6 s.
+
+The answer to the design question: the reuse side does not dominate the
+floor — 25 s of reads against ≈68 s of re-derivation. Unpacking is not
+where the time goes; materialization is. Forest-level reuse is the
+first move: when the changed set contains no analysis-visible input
+(every CSS/JS/font edit), reuse the previous forest wholesale and go
+straight to render — that alone turns a CSS cycle into seconds. Cheap
+hits are worth ≈20 of the 25 s of reads at best, second. A module edit
+legitimately re-analyzing everything is correct semantics, and its
+48.8 s is honest work.
+
+### Relation rows should name the host article, not just the owning subtree: resolved upstream (grove commit `612de0d`, 2026-10-14)
 
 An in-paragraph `defn` belongs to its subtree's own page id — an
 anonymous `unstable-8` for unnamed subtrees. The term relation and its
@@ -40,7 +75,37 @@ ideally its title — alongside the owning subtree. (Named subtrees are
 the other half of the answer; grove cannot supply the discipline, but
 the report can stop punishing its absence.)
 
-### `term-definition-conflicts` drops the anchor
+Resolved in grove commit `612de0d` (2026-10-14): the report projections
+resolve each occurrence up the composition graph — subtree definitions,
+then transclusion inclusions — to its host article, and carry the
+host's id and title beside the owning page. Shapes now:
+
+- `(term-definition-conflicts forest)` → `(term-id (host-id host-title
+  page-id anchor display-text) …)` — deep-link to
+  `host.html#anchor` while naming the article; collection order keeps
+  the canonical entry first.
+- `(undefined-term-mentions forest)` → `(term-id (host-id host-title
+  page-id) …)`.
+
+The host table memoizes per forest; the relation-level conflicts
+projection (outside a forest context) keeps `(page-id anchor
+display-text)`.
+
+Adopted in Flora same-day: `@term-conflicts` renders each occurrence as
+a deep link into the owning page's own route (where the raw anchor
+resolves — the host article's rendering prefixes anchors, so
+`host.html#anchor` would not scroll) labelled with the host article's
+title. The verified drift report now reads:
+
+    tree：
+      tree（树）（术语表：文档、文学编程与数学）→ /glossary-grove.html#tree
+      tree（树），本页口径（用.plant写作：元数据、命令与Scheme）→ /unstable-8.html#tree
+
+`unstable-8` still appears, but the report names the article beside it —
+the lookup-table problem is gone. Backlog mentions link to the host
+article too.
+
+### `term-definition-conflicts` drops the anchor: resolved upstream (grove commit `612de0d`, 2026-10-14)
 
 The facts hold `(term-id page-id anchor display-text)`, but the
 conflicts projection yields `(term-id (page-id display-text) …)` — so a
@@ -48,6 +113,17 @@ drift report cannot deep-link to the definitions it is reporting. Keep
 the anchor in the projection; the report (and anything built on it,
 like Flora's `@term-conflicts`) can then link each occurrence to
 `page#anchor` the way `@term-index` already does.
+
+Resolved in grove commit `612de0d` alongside the host-article work: the
+projection is `(page-id anchor display-text)` at the relation level and
+`(host-id host-title page-id anchor display-text)` in the forest-level
+report. `@term-conflicts` can link each occurrence the way
+`@term-index` does.
+
+Adopted same-day: `@term-conflicts` now deep-links every occurrence —
+verified against the planted drift (see above); the report links
+`/glossary-grove.html#tree` and `/unstable-8.html#tree` where it
+previously could only name pages.
 
 ### Serve lifecycle suite under the blue test driver
 

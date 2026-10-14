@@ -1,6 +1,11 @@
 @(define-module (flora queries)
   #:use-module (ice-9 format)
-  #:use-module (forester relations)
+  ;; 只取本模块用到的关系目标:关系级 term-definition-conflicts/
+  ;; undefined-term-mentions 与 (forester site) 的森林级版本重名,
+  ;; select 过滤后警告消失、森林级版本生效。
+  #:use-module ((forester relations)
+                #:select (nodeo node-propertyo source-locationo
+                          math-containing-paragrapho shorter-than-o))
   #:use-module (forester site)
   #:use-module (grove relation dsl)
   #:use-module (grove ir)
@@ -119,23 +124,39 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                       (format #f "~a：" (car entry)))
                     (append-map
                       (lambda (occurrence)
-                        (list (make-content-element
-                                'query-link
-                                (list (format #f "~a（~a）"
-                                        (cadr occurrence) (car occurrence)))
-                                (site-page-source
-                                  (find-page forest (car occurrence)))
-                                #:properties `((target . ,(car occurrence))))))
+                        ;; 投影带上宿主文章(612de0d):occurrence =
+                        ;; (host-id host-title page-id anchor display-text)。
+                        ;; 深链仍指向定义页自身路由——裸锚点只在那里成立。
+                        (let ((host-title (cadr occurrence))
+                              (page-id (caddr occurrence))
+                              (anchor (cadddr occurrence))
+                              (display-text (list-ref occurrence 4)))
+                          (list (make-content-element
+                                  'query-link
+                                  (list (format #f "~a（~a）" display-text host-title))
+                                  (site-page-source
+                                    (find-page forest page-id))
+                                  #:properties `((target . ,page-id)
+                                                 (fragment . ,anchor))))))
                       (cdr entry)))))
           conflicts)
         (map
           (lambda (entry)
             (make-content-element
               'item
-              (list (make-content-text
-                      (format #f "~a（尚未定义；提及于 ~a）"
-                        (car entry)
-                        (string-join (cadr entry) "、"))))))
+              (append
+                (list (make-content-text
+                        (format #f "~a（尚未定义；提及于 " (car entry))))
+                ;; backlog occurrence = (host-id host-title page-id)。
+                (append-map
+                  (lambda (occurrence)
+                    (list (make-content-element
+                            'query-link (list (cadr occurrence))
+                            (site-page-source
+                              (find-page forest (caddr occurrence)))
+                            #:properties `((target . ,(caddr occurrence))))))
+                  (cadr entry))
+                (list (make-content-text "）")))))
           backlog))))
 
   (define (query-math-paragraphs forest)
