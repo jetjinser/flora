@@ -117,6 +117,16 @@ only on the second in-process project load ("re-exporting local
 variable: term") — the first load masks it, so builds pass until the
 worker reloads. `term` joined `link` in `#:re-export-and-replace`.
 
+Priority, as requested: the churn fix first — it is the one defect that
+makes serve unusable rather than merely slow, and the evidence above
+(watch-set stamps for immutable store paths changing every load) should
+make it a short diagnosis; per-artifact reuse in the forest render path
+second, which is what promotes the cycle to seconds; per-document
+invalidation stays third and can wait until real writing trips over it.
+Flora is pinned at `8d4a5a9` in the meantime — the churn affects only
+`grove serve` (manual builds are unaffected), and a pin bump after the
+fix gets a fresh verification pass of all three for the closing data.
+
 Landed in between, from the N-agents/worktrees discussion (grove commit
 `926826b`, 2026-10-14): the document cache moved from a per-output
 directory to a machine-global content store (`GROVE_STORE_DIR`, default
