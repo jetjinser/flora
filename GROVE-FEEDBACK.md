@@ -63,6 +63,75 @@ hits are worth ≈20 of the 25 s of reads at best, second. A module edit
 legitimately re-analyzing everything is correct semantics, and its
 48.8 s is honest work.
 
+Grove side, infrastructure for forest-level reuse landed in grove
+commit `6423869` (2026-10-14): `last-build-model` exposes the analysis
+model after each build, and `rebuild-from-forest` renders and writes
+from a retained forest with a freshly loaded project (so load-time
+assets re-read).  Now wired through (grove commit `8d4a5a9`,
+2026-10-15): the serve worker stays resident across rebuilds —
+requests and results travel through numbered workspace files (serve
+polls the result instead of waitpid), and each request classifies the
+worker's own stamp diff.  When only declared extra sources changed and
+the freshly loaded project's renderer identity matches the retained
+build state, the build renders from the retained forest and skips
+analysis wholesale; document edits and removals take the full path
+(the shared document cache still makes unchanged documents cheap);
+module and project-file edits restart the worker, which also exits on
+its own when the workspace's .live lock disappears.  Verified on a
+scratch project with an analysis counter: an asset edit re-renders
+with zero documents read, a document edit re-analyzes, and the whole
+30-test serve lifecycle suite behaves as before.  What this buys the
+writing loop: CSS/JS/font cycles in `grove serve` should drop from
+~140 s to seconds.  A `.plant` edit still pays the analysis floor —
+per-document invalidation (re-analyze one document and its dependents
+inside the retained forest) is the remaining piece of this item.
+
+Flora measured all of this on the real tree (2026-10-15, grove
+`8d4a5a9`, serve on port 8125, log at `/tmp/serve-8d4a5a9.log`), and the
+headline splits in two:
+
+- The analysis skip works. A style.css edit produces a cycle with no
+  analyze phase at all — fresh project load, render from the retained
+  forest, write. Arrival dropped from ~140 s to 32–48 s.
+- It is not seconds yet, and it is not stable. Two findings:
+
+1. The fast path's new floor is inside `rebuild-from-forest` itself:
+   the fresh project load costs ~10 s and the render stage re-renders
+   all 1943 artifacts (21.8 s) even when 1 artifact is affected — so a
+   one-line CSS edit buys a 30–50 s cycle, not a second-scale one.
+   Rendering from the retained forest with per-artifact reuse (the
+   render side already knows how) is what would make it seconds.
+2. REGRESSION — the resident worker churns. Every cycle's trigger list
+   names ~416 changed paths: style.css plus 415 nix-store `.go` files
+   from the worker's load paths, whose stamps differ on every load.
+   Idle serve with zero edits went 17 → 20 rebuilds in 100 s — each
+   ~35 s cycle re-queues the next, burning CPU indefinitely. This is
+   the old own-writes churn (69b015b's fix covers additions, not
+   stamps that change per load) back in a new costume: stamps for
+   immutable store paths and worker-produced files need to be excluded
+   or frozen after the first build.
+
+One Flora-side casualty of the resident worker, fixed here: a module
+that defines a local binding shadowing its own `#:re-export` errors
+only on the second in-process project load ("re-exporting local
+variable: term") — the first load masks it, so builds pass until the
+worker reloads. `term` joined `link` in `#:re-export-and-replace`.
+
+Landed in between, from the N-agents/worktrees discussion (grove commit
+`926826b`, 2026-10-14): the document cache moved from a per-output
+directory to a machine-global content store (`GROVE_STORE_DIR`, default
+under the cache root), with content-derived keys — the project file's
+digest plus the project-relative document path — and project-relative
+normalization of every tracked path. Two checkouts of one project now
+share document analyses: the first checkout populates the store, the
+second reuses it (30-document two-worktree experiment: second checkout
+0 fresh, byte-identical artifacts). This is the multi-agent half of the
+incrementality story — a fresh worktree now starts warm. It does not
+move the forest-assembly floor for a single checkout; that is the
+forest-level reuse item above, unblocked by the 509 MiB peak RSS
+measurement (well under the residency threshold we were worried
+about).
+
 ### Relation rows should name the host article, not just the owning subtree: resolved upstream (grove commit `612de0d`, 2026-10-14)
 
 An in-paragraph `defn` belongs to its subtree's own page id — an
