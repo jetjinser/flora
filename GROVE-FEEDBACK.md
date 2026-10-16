@@ -6,28 +6,34 @@ narrative detail lives in git history and the grove commit messages.
 
 ## Open
 
-### Serve fast path: forest render reuse and per-document invalidation remain
+### Serve fast path: the reuse decision still churns on resolution candidates
 
-1. ~~REGRESSION — the resident worker churns~~ **Resolved on grove
-   master**: the watch path now filters store prefixes, `.go` files,
-   and grove's own compiled tree out of the watch set and stamps
-   (`unwatched-path?` in preview/watch.scm). Verified 2026-10-16 on
-   the flora tree at grove `f42a507`: serve idle for ~4 min with one
-   real style.css edit — exactly 1 rebuild for the edit, 0 spurious
-   rebuilds across the idle windows (at `8d4a5a9` the same tree did
-   3+ spurious rebuilds per 100 s idle).
-2. The fast path's floor moved into `rebuild-from-forest`: the fresh
-   project load costs ~10 s and the render stage re-renders all 1943
-   artifacts (21.8 s) even when 1 artifact is affected — the verified
-   style.css cycle took 22.9 s. Per-artifact reuse inside the forest
-   render path (the render side already knows how) is what makes it
-   seconds.
+The render side is fixed (grove `2b43dab`): `render-html-changed`
+skips the per-page walk when only load-time style artifacts are dirty,
+so the render half of an asset-only cycle is cheap. What still blocks
+the seconds-scale cycle is `forest-reusable?` (preview/worker.scm):
+it demands `changed` ⊆ declared extra sources, and the worker's
+changed set still carries **module-resolution candidates** - paths
+`compiled-inputs` records on purpose ("observe absent higher-priority
+candidates") plus runtime module sources outside the project. Measured
+2026-10-16 on the flora tree: a style.css edit reports changed =
+(style.css + flora/modules/**/*.scm candidates + the worker's module
+sources), so `reuse?` is #f and the cycle re-renders all 1816 pages
+(~19 s render, ~40 s wall). With reuse forced (#t) the cycle renders in
+~15 s and the fast path is not yet reached; with reuse and the fast
+path together the render should collapse to the style artifacts alone.
 
-Priority: forest render reuse next (promotes the cycle to seconds);
-per-document invalidation for `.plant` edits stays third — the ~68 s
-re-derivation floor is measured (below) and can wait until real writing
-trips over it. A pin bump gets a fresh verification pass for the
-closing data.
+Attempts to filter nonexistent first sightings in `diff-known-stamps`
+regressed the serve lifecycle suite (the "new nested sources through a
+source-directory symlink" and its delete cycle), so that path needs a
+focused pass: a changed-set notion that distinguishes project-visible
+edits from watch-set growth without losing new-source discovery. Until
+then the fast path is dormant for flora's serve.
+
+### Serve fast path: per-document invalidation stays third
+
+The fresh project load floor (~10 s) and the ~68 s re-derivation floor
+are unchanged; see the ledger below for the measurements.
 
 For reference, the `--profile` numbers that chose forest-level reuse
 over cache-read tuning (grove `d4980fc`, warm tree, 0 affected): total
