@@ -1,13 +1,13 @@
 ;;; CJK webfont subsetting for Flora.
 
 (define-module (cjk-fonts)
-  #:use-module (gcrypt hash)
   #:use-module (ice-9 binary-ports)
   #:use-module (ice-9 match)
-  #:use-module (rnrs bytevectors)
   #:use-module (forester site)
   #:use-module (grove output)
   #:use-module (grove private cache-dir)
+  #:use-module (grove private fingerprint)
+  #:use-module (grove private pipeline)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-13)
   #:export (make-cjk-font-renderer))
@@ -44,54 +44,59 @@
     ("Noto Serif CJK SC" 700 "NotoSerifCJKsc-Bold.otf"    "noto-serif-sc-700.woff2")
     ("Noto Sans CJK SC"  400 "NotoSansCJKsc-Regular.otf"  "noto-sans-sc-400.woff2")))
 
-(define (hex-digest digest)
-  (let ((digits "0123456789abcdef"))
-    (list->string
-     (append-map
-      (lambda (byte)
-        (list (string-ref digits (quotient byte 16))
-              (string-ref digits (modulo byte 16))))
-      (bytevector->u8-list digest)))))
-
 (define (pyftsubset-available?)
   (let ((path (getenv "PATH")))
     (and path (search-path (parse-path path) "pyftsubset") #t)))
 
-(define (subset-fingerprint source-path text)
-  ;; Source identity plus codepoint-set identity: a rebuilt font or a
-  ;; growing site changes one of them and the cache misses once.
-  (let ((attributes (stat source-path)))
-    (hex-digest
-     (sha256
-      (string->utf8
-       (string-append (basename source-path)
-                      ":" (number->string (stat:size attributes))
-                      ":" (number->string (stat:mtime attributes))
-                      ":" (hex-digest (sha256 (string->utf8 text)))))))))
+(define (subset-identity source-path text)
+  ;; Content identity: source font bytes plus the codepoint set. No
+  ;; stat, no mtime - the same inputs hit the same store blobs from
+  ;; any checkout.
+  (content-fingerprint
+   (string-append "flora-cjk-subset:" (basename source-path)
+                  ":" (file-fingerprint source-path)
+                  ":" (content-fingerprint text))))
 
-(define (subset-font cache-root text-path text source-path)
-  ;; Path to a cached woff2 for SOURCE-PATH covering TEXT, subsetting on
-  ;; a cache miss. The .partial output keeps a failed run from leaving a
-  ;; broken font where the next build would pick it up.
-  (let* ((cached (string-append cache-root "/"
+(define (subset-font cache-root text-path text source-path output)
+  ;; A woff2 for SOURCE-PATH covering TEXT, staged through the shared
+  ;; store: a hit restores without running pyftsubset at all, a miss
+  ;; runs it and publishes the blob for every other checkout. The
+  ;; .partial output keeps a failed run from leaving a broken font
+  ;; where the next build would pick it up.
+  (let* ((identity (subset-identity source-path text))
+         (cached (string-append cache-root "/"
                                 (basename source-path ".otf") "-"
-                                (subset-fingerprint source-path text)
+                                identity
                                 ".woff2"))
          (partial (string-append cached ".partial")))
-    (unless (file-exists? cached)
-      (let ((status (system* "pyftsubset" source-path
-                             (string-append "--text-file=" text-path)
-                             (string-append "--output-file=" partial)
-                             "--flavor=woff2"
-                             "--layout-features=*"
-                             "--no-hinting"
-                             "--desubroutinize")))
-        (if (and (number? status) (zero? status))
-            (rename-file partial cached)
-            (begin
+    (or (let ((bytes (restore-boundary-bytes identity)))
+          (and bytes
+               (ensure-directory cache-root)
+               (call-with-output-file cached
+                 (lambda (port) (put-bytevector port bytes))
+                 #:binary #t)
+               cached)))
+        (begin
+          (ensure-directory cache-root)
+          (let ((status (system* "pyftsubset" source-path
+                                 (string-append "--text-file=" text-path)
+                                 (string-append "--output-file=" partial)
+                                 "--flavor=woff2"
+                                 "--layout-features=*"
+                                 "--no-hinting"
+                                 "--desubroutinize")))
+            (unless (and (number? status) (zero? status))
               (when (file-exists? partial) (delete-file partial))
-              (error "pyftsubset failed" source-path status)))))
-    cached))
+              (error "pyftsubset failed" source-path status)))
+          (let ((bytes (call-with-input-file partial get-bytevector-all
+                         #:binary #t)))
+            (when (file-exists? partial) (delete-file partial))
+            (write-boundary-index identity
+                                  (list (cons output (publish-boundary-bytes bytes))))
+            (call-with-output-file cached
+              (lambda (port) (put-bytevector port bytes))
+              #:binary #t)
+            cached))))
 
 (define (font-face-sxml family weight output)
   (format #f "@font-face {
@@ -139,7 +144,7 @@
                                (string-append "fonts/" output)
                                (call-with-input-file
                                    (subset-font cache-root text-path text
-                                                source-path)
+                                                source-path output)
                                  get-bytevector-all
                                  #:binary #t)
                                (list source-path text-path))))))))))
@@ -154,4 +159,4 @@
                           (map car faces))
                      ""))
                 (list (current-filename)))
-              (map cdr faces))))))
+              (map cdr faces)))))) 
