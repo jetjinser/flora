@@ -16,6 +16,7 @@
              (forester render sitemap)
              (forester style i18n)
              (grove input scribble)
+             (grove pipeline)
              (grove project)
              (grove project site)
              (grove render html routes)
@@ -58,28 +59,73 @@
            (list path)))
        font-sources))
 
-;; 图片资产:assets/ 下按目录结构注册(如 assets/blazek2005/fig-2-1.png → URL /blazek2005/fig-2-1.png),
-;; 供 @image 引用。子目录递归,隐藏文件跳过。
-(define asset-directory (project-directory% "/assets"))
-(define (asset-files dir)
-  (append-map
-    (lambda (name)
-      (let ((path (string-append dir "/" name)))
-        (if (eq? (stat:type (stat path)) 'directory)
-            (map (lambda (n) (string-append name "/" n))
-                 (asset-files path))
-            (list name))))
-    (scandir dir (lambda (name) (not (string-prefix? "." name))))))
-(define image-assets
-  (map (lambda (rel)
-          (make-byte-artifact rel
-            (call-with-input-file (string-append asset-directory "/" rel)
-              get-bytevector-all #:binary #t)
-            (list (string-append asset-directory "/" rel))))
-       ;; 图片不入库;全新检出需先运行 ./regenerate-figures.sh 生成 assets/。
-       (if (file-exists? asset-directory)
-           (asset-files asset-directory)
-           '())))
+;; 图片资产:blazek2005 的插图由管线从扫描版 PDF 按裁剪清单再生,
+;; 不入库;@image 引用的 URL 与旧的目录布局一致(/blazek2005/fig-*.png)。
+;; 身份覆盖 project.scm 与两份输入——改裁剪框或换 PDF 版本即失效再生。
+(define blazek2005-pdf
+  (project-directory%
+   "/materials/books/Computational Fluid Dynamics Principles and Appl.pdf"))
+(define blazek2005-manifest
+  (project-directory% "/docs/blazek2005-figures.tsv"))
+(define figure-page-cache
+  (string-append (or (getenv "TMPDIR") "/tmp") "/flora-figure-pages"))
+
+(define image-tool
+  ;;     ImageMagick 7 命令名为 magick,Guix 仍是 IM6 的 convert。
+  (if (zero? (system "magick -version >/dev/null 2>&1")) "magick" "convert"))
+
+(define (figure-manifest path)
+  ;; name page x y w h(200 dpi 渲染;PDF 页 = 印刷页 + 21)
+  (filter-map
+   (lambda (line)
+     (and (not (string-null? line))
+          (not (string-prefix? "#" line))
+          (let ((fields (string-split line #\tab)))
+            (cons (car fields)
+                  (map string->number (cdr fields))))))
+   (string-split (call-with-input-file path get-string-all) #\newline)))
+
+(define (render-page pdf page)
+  ;; pdftoppm 的输出名带零填充页号;每页只光栅化一次。
+  (let* ((padded (format #f "~3,'0d" page))
+         (cached (string-append figure-page-cache "/p" padded ".png"))
+         (prefix (string-append figure-page-cache "/tmp" padded)))
+    (unless (file-exists? cached)
+      (unless (file-exists? figure-page-cache)
+        (mkdir figure-page-cache))
+      (unless (zero? (system* "pdftoppm" "-png" "-r" "200"
+                              "-f" (number->string page)
+                              "-l" (number->string page)
+                              pdf prefix))
+        (error "pdftoppm failed" page))
+      (rename-file (string-append prefix "-" padded ".png") cached))
+    cached))
+
+(define blazek2005-figures
+  (make-asset-pipeline
+   #:name "blazek2005-figures"
+   #:inputs (list blazek2005-pdf blazek2005-manifest)
+   #:procedure
+   (lambda (in emit)
+     (let ((pdf (in blazek2005-pdf)))
+       (for-each
+        (lambda (figure)
+          (let* ((name (car figure))
+                 (box (cdr figure))
+                 (page (list-ref box 0))
+                 (x (list-ref box 1))
+                 (y (list-ref box 2))
+                 (w (list-ref box 3))
+                 (h (list-ref box 4))
+                 (page-png (render-page pdf page))
+                 (cropped (string-append figure-page-cache "/crop-" name)))
+            (unless (zero? (system* image-tool page-png "-crop"
+                                    (format #f "~ax~a+~a+~a" w h x y)
+                                    "+repage" cropped))
+              (error "figure crop failed" name))
+            (emit (string-append "blazek2005/" name)
+                  (call-with-input-file cropped get-bytevector-all))))
+        (figure-manifest (in blazek2005-manifest)))))))
 (define flora-style
   (compose-html-styles
     default-html-style
@@ -97,8 +143,7 @@
               (make-artifact "feed.css"
                 (call-with-input-file feed-stylesheet-path get-string-all)
                 (list feed-stylesheet-path)))
-        font-assets
-        image-assets))))
+        font-assets))))
 
 (define html-routes (make-html-routes #:home-page "flora"))
 ;; Interface strings rendered outside the trees: backmatter labels and the
@@ -201,10 +246,7 @@
     #:source-directory plant-directory
     #:extra-sources (append (list stylesheet-path feed-stylesheet-path
                                   theme-script-path)
-                            font-sources
-                            (map (lambda (rel)
-                                   (string-append asset-directory "/" rel))
-                                 (asset-files asset-directory)))
+                            font-sources)
     #:prepare prepare-flora
     #:read-page
     (make-page-reader read-flora-page-document)
@@ -213,6 +255,7 @@
                       (make-cjk-font-renderer
                         (project-directory% "/fonts-src") output-directory
                         #:extra-text interface-text))
+    #:pipelines (list blazek2005-figures)
     #:output-directory output-directory))
 
 flora-project

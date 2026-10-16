@@ -4,16 +4,22 @@ Flora is an executable tutorial site built with Grove. Its `.plant` files combin
 
 ## Build and preview
 
-From the Flora directory, enter the Grove development environment:
+From the Flora directory, enter the development environment. The Grove toolchain comes from the sibling Grove checkout; with Guix:
 
 ```sh
-nix develop ../../projet/prototype/grove/nix
+guix shell -m ../grove/manifest.scm -m manifest.scm
+```
+
+or with nix (the flake pins the same checkout):
+
+```sh
+nix develop ../grove/nix
 ```
 
 If you need to install the CLI, change to the Grove checkout and install it to a temporary prefix:
 
 ```sh
-cd ../../projet/prototype/grove
+cd ../grove
 blue prefix=/tmp/grove-install exec-prefix=/tmp/grove-install \
   bindir=/tmp/grove-install/bin \
   guile-module-dir=/tmp/grove-install/share/guile/site/3.0 \
@@ -40,9 +46,9 @@ Two book-length translations live in `plants/`, both as paragraph-level bilingua
 - **The Elements of Style** (Strunk & White, 4th ed.) — book home `strunk1999` plus nine pages; completed 2026-10-08.
 - **Computational Fluid Dynamics** (Blazek, 2nd ed., 2005) — book home `blazek2005` plus fourteen content pages (front matter, chapters 1–12 with appendix A, index) and 1067 reference entries; completed 2026-10-10.
 
-The conventions these follow (bilingual markup, math anchors, citations, figures, subagent workflow) are documented in `docs/translation-guide.md`; per-book records live in `docs/blazek2005-notes.md` and `docs/blazek2005-figures.md`. Source text extractions and the scanned book files are kept under `materials/` (book PDFs in `materials/books/`). A third book (Kazmer, *Injection Mold Design Engineering*) is prepared but not started — see `docs/kazmer2016.md`.
+The conventions these follow (bilingual markup, math anchors, citations, figures, subagent workflow) are documented in `docs/translation-guide.md`; per-book records live in `docs/blazek2005-notes.md` and `docs/blazek2005-figures.md`. Source text extractions and the scanned book files are kept under `materials/` (book PDFs in `materials/books/`). The scanned books are copyrighted and too large for git, so `materials/` is not tracked: provision it out-of-band (copy the private archive into the checkout) before regenerating figures. A third book (Kazmer, *Injection Mold Design Engineering*) is prepared but not started — see `docs/kazmer2016.md`.
 
-The 127 blazek2005 figures are not checked in either: `docs/blazek2005-figures.tsv` records each figure's PDF page and crop box, and `./regenerate-figures.sh` crops them out of the scanned PDF (pixel-identical; needs `pdftoppm` and `magick` on `PATH`) into `assets/blazek2005/` before building.
+The 127 blazek2005 figures are not checked in either: `docs/blazek2005-figures.tsv` records each figure's PDF page and crop box, and the `blazek2005-figures` asset pipeline declared in `project.scm` crops them out of the scanned PDF during `grove build` (needs `pdftoppm` and ImageMagick on `PATH`; the Guix manifest provides both). Pipeline outputs are content-addressed: a build re-crops only when the PDF, the manifest, or the pipeline itself changes, and two checkouts share the rendered figures through the store.
 
 ## Fonts
 

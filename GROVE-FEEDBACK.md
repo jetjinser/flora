@@ -60,6 +60,12 @@ limitation is not forgotten once the environment changes.
 
 ## Resolved ledger
 
+- Asset pipelines — grove `7f8beaa`: the `blazek2005-figures` pipeline
+  replaced `regenerate-figures.sh`; figures re-crop only when the PDF,
+  the manifest, or the pipeline changes, survive store sharing across
+  checkouts, and retire cleanly from the build when the manifest drops
+  them (verified 2026-10-16: add/remove cycle on `fig-x-test`, cold
+  store 79.5 s for 1938 artifacts, warm rebuilds hit the index).
 - Presentation hooks (`#:html-attributes`, `#:head`, `#:site-nav`,
   `#:home-link`, `#:title-decoration`, `#:article?`,
   `#:backmatter-details?`) — Flora no longer rewrites rendered markup.

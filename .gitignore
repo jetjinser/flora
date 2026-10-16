@@ -2,7 +2,6 @@
 fonts-src/
 /fonts/*.woff2
 /fonts/*.css
-/assets/blazek2005/*.png
 /materials/
 /.blue-store/
 /.direnv/
