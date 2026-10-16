@@ -72,11 +72,14 @@
     (scandir dir (lambda (name) (not (string-prefix? "." name))))))
 (define image-assets
   (map (lambda (rel)
-         (make-byte-artifact rel
-           (call-with-input-file (string-append asset-directory "/" rel)
-             get-bytevector-all #:binary #t)
-           (list (string-append asset-directory "/" rel))))
-       (asset-files asset-directory)))
+          (make-byte-artifact rel
+            (call-with-input-file (string-append asset-directory "/" rel)
+              get-bytevector-all #:binary #t)
+            (list (string-append asset-directory "/" rel))))
+       ;; 图片不入库;全新检出需先运行 ./regenerate-figures.sh 生成 assets/。
+       (if (file-exists? asset-directory)
+           (asset-files asset-directory)
+           '())))
 (define flora-style
   (compose-html-styles
     default-html-style

@@ -42,11 +42,13 @@ Two book-length translations live in `plants/`, both as paragraph-level bilingua
 
 The conventions these follow (bilingual markup, math anchors, citations, figures, subagent workflow) are documented in `docs/translation-guide.md`; per-book records live in `docs/blazek2005-notes.md` and `docs/blazek2005-figures.md`. Source text extractions and the scanned book files are kept under `materials/` (book PDFs in `materials/books/`). A third book (Kazmer, *Injection Mold Design Engineering*) is prepared but not started — see `docs/kazmer2016.md`.
 
+The 127 blazek2005 figures are not checked in either: `docs/blazek2005-figures.tsv` records each figure's PDF page and crop box, and `./regenerate-figures.sh` crops them out of the scanned PDF (pixel-identical; needs `pdftoppm` and `magick` on `PATH`) into `assets/blazek2005/` before building.
+
 ## Fonts
 
 The site pairs Inria (Latin, digits, symbols) with Noto CJK SC (Chinese): serif for prose, sans for navigation, matching the families `style.css` already lists. `cjk-fonts.scm` is a build renderer that collects the site's text universe with `(forester site) used-codepoints`, adds an ASCII and punctuation safety margin, and cuts the source fonts in `fonts-src/` down to woff2 files that cover exactly that universe, so the ~90 MB CJK sources ship as a few hundred kilobytes per weight. Results are cached across builds in the Grove cache directory.
 
-`fonts-src/` is not checked in. Fetch the sources with `./fetch-fonts.sh`, and have `pyftsubset` on `PATH` when building (Guix: `guix shell python-fonttools python-brotli`). Without them the build still succeeds — `fonts/cjk.css` is emitted empty and the system-font stacks in `style.css` take over. Noto CJK is licensed under the SIL Open Font License 1.1; the license files ship in `fonts/`.
+Neither the CJK sources in `fonts-src/` nor the webfonts under `fonts/` are checked in. `./fetch-fonts.sh` fetches both: the Noto CJK sources from the noto-cjk repository, and the Inria webfonts plus `fonts/inria.css` from the Google Fonts css2 API. For CJK subsetting, have `pyftsubset` on `PATH` when building (Guix: `guix shell python-fonttools python-brotli`). Without the CJK sources the build still succeeds — `fonts/cjk.css` is emitted empty and the system-font stacks in `style.css` take over. Noto CJK, Inria Sans, and Inria Serif are all licensed under the SIL Open Font License 1.1; the license files are checked in under `fonts/`.
 
 ## Reading and source layout
 
