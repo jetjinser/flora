@@ -6,39 +6,28 @@ narrative detail lives in git history and the grove commit messages.
 
 ## Open
 
-### Serve fast path: analysis skip verified, two defects remain
+### Serve fast path: forest render reuse and per-document invalidation remain
 
-The resident worker (grove `8d4a5a9`) skips analysis for asset-only
-edits — a style.css cycle has no analyze phase at all: fresh project
-load, render from the retained forest, write. Arrival dropped from
-~140 s to 32–48 s on the flora tree (measured 2026-10-15, log at
-`/tmp/serve-8d4a5a9.log`). Two defects keep it from being done:
-
-1. REGRESSION — the resident worker churns. Every cycle's trigger list
-   names ~416 changed paths: the edited asset plus 415 nix-store `.go`
-   files from the worker's load paths, whose stamps differ on every
-   load. Idle serve with zero edits went 17 → 20 rebuilds in 100 s —
-   each ~35 s cycle re-queues the next, burning CPU indefinitely.
-   69b015b's fix covers watch-set additions, not stamps that change per
-   load; stamps for immutable store paths and worker-produced files
-   (compiled cache, numbered workspace files) need to be excluded or
-   frozen after the first build. This is the blocker: serve is not
-   usable as the writing-loop tool while it churns.
-
+1. ~~REGRESSION — the resident worker churns~~ **Resolved on grove
+   master**: the watch path now filters store prefixes, `.go` files,
+   and grove's own compiled tree out of the watch set and stamps
+   (`unwatched-path?` in preview/watch.scm). Verified 2026-10-16 on
+   the flora tree at grove `f42a507`: serve idle for ~4 min with one
+   real style.css edit — exactly 1 rebuild for the edit, 0 spurious
+   rebuilds across the idle windows (at `8d4a5a9` the same tree did
+   3+ spurious rebuilds per 100 s idle).
 2. The fast path's floor moved into `rebuild-from-forest`: the fresh
    project load costs ~10 s and the render stage re-renders all 1943
-   artifacts (21.8 s) even when 1 artifact is affected — so a one-line
-   CSS edit buys a 30–50 s cycle, not a second-scale one. Per-artifact
-   reuse inside the forest render path (the render side already knows
-   how) is what makes it seconds.
+   artifacts (21.8 s) even when 1 artifact is affected — the verified
+   style.css cycle took 22.9 s. Per-artifact reuse inside the forest
+   render path (the render side already knows how) is what makes it
+   seconds.
 
-Priority: churn fix first (it makes serve unusable rather than merely
-slow), forest render reuse second (promotes the cycle to seconds);
+Priority: forest render reuse next (promotes the cycle to seconds);
 per-document invalidation for `.plant` edits stays third — the ~68 s
 re-derivation floor is measured (below) and can wait until real writing
-trips over it. Flora is pinned at `8d4a5a9`; the churn affects only
-`grove serve`, manual builds are unaffected. A pin bump after the fixes
-gets a fresh verification pass for the closing data.
+trips over it. A pin bump gets a fresh verification pass for the
+closing data.
 
 For reference, the `--profile` numbers that chose forest-level reuse
 over cache-read tuning (grove `d4980fc`, warm tree, 0 affected): total
