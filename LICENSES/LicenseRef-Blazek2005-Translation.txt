@@ -1,0 +1,9 @@
+Original work:
+Jiri Blazek, Computational Fluid Dynamics: Principles and Applications,
+2nd edition (Elsevier, 2005). Copyright 2005 Jiri Blazek.
+
+The Chinese translation, bilingual arrangement, markup, and editorial notes
+in this directory are Copyright 2026 Jinser Kafka and are provided for this
+site only. Redistribution of the translation requires permission from the
+copyright holders. The original English text remains under its original
+copyright and is not licensed under GPL or CC0.

@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: 2026 Jinser Kafka <aimer@purejs.icu>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+version = 1
+
+[[annotations]]
+path = ["plants/blazek2005/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2005 Jiri Blazek; 2026 Jinser Kafka <aimer@purejs.icu>"
+SPDX-License-Identifier = "LicenseRef-Blazek2005-Translation"
+
+[[annotations]]
+path = [
+    "plants/*.plant",
+    "plants/person/**",
+    "plants/strunk1999/**",
+    "docs/**",
+    "README.md",
+    "GROVE-FEEDBACK.md",
+    "idea.txt",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Jinser Kafka <aimer@purejs.icu>"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [
+    "**/*.scm",
+    "**/*.sh",
+    "**/*.nix",
+    "**/*.lock",
+    "**/*.js",
+    "**/*.css",
+    ".envrc",
+    ".gitignore",
+    ".zcodeignore",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Jinser Kafka <aimer@purejs.icu>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = ["lp/**", "tests/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Jinser Kafka <aimer@purejs.icu>"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["plants/lib/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Jinser Kafka <aimer@purejs.icu>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = ["fonts/*-OFL.txt"]
+precedence = "override"
+SPDX-FileCopyrightText = "The Inria and Noto project authors"
+SPDX-License-Identifier = "OFL-1.1"
