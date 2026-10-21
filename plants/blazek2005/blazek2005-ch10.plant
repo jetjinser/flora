@@ -6,12 +6,12 @@
 
 @bi{
   @lang["en"]{Within the finite-volume methodology, the surface integral in the Navier-Stokes equations (2.19) is approximated for each control volume by some appropriate method. We considered various possible spatial discretisations in Chapters 4 and 5. The approximation of the convective and viscous fluxes across the boundaries of the control volume means that the discretised equations differ from the governing equations, which we seek to solve. This difference causes a certain spatial @emph{discretisation error}. The error is influenced by the numerical scheme applied for the evaluation of the integrals and by the resolution of the discretisation. Therefore, the important question is whether and how fast the solution of the discretised equations converges to the exact solution of the governing equations with increasingly finer grid. We shall discuss this question in the next two sections on the consistency and accuracy.}
-  @lang["zh-CN"]{在有限体积方法框架内，Navier-Stokes方程(2.19)中的面积分要对每个控制体用某种适当的方法来近似。我们在第4章和第5章中考察了各种可能的空间离散方法。对跨越控制体边界的对流通量与黏性通量作近似，意味着离散方程与我们要想求解的控制方程有所不同。这一差异造成了一定的空间离散误差（discretisation error）。该误差受积分求值所用的数值格式以及离散化分辨率的影响。因此，重要的问题在于：随着网格不断加密，离散方程的解是否收敛到控制方程的精确解、以及收敛有多快。我们将在接下来的两节中围绕一致性与精度讨论这一问题。}
+  @lang["zh-Hans"]{在有限体积方法框架内，Navier-Stokes方程(2.19)中的面积分要对每个控制体用某种适当的方法来近似。我们在第4章和第5章中考察了各种可能的空间离散方法。对跨越控制体边界的对流通量与黏性通量作近似，意味着离散方程与我们要想求解的控制方程有所不同。这一差异造成了一定的空间离散误差（discretisation error）。该误差受积分求值所用的数值格式以及离散化分辨率的影响。因此，重要的问题在于：随着网格不断加密，离散方程的解是否收敛到控制方程的精确解、以及收敛有多快。我们将在接下来的两节中围绕一致性与精度讨论这一问题。}
 }
 
 @bi{
   @lang["en"]{The solution of the time-dependent governing equations (2.19) requires also the discretisation of the time derivative of the conservative variables. We described several temporal discretisation methods in Chapter 6. We mentioned that each of the schemes has a specific order of accuracy and that there are certain limitations on the maximum size of the time step. These limitations can be assessed by means of the von Neumann stability analysis, which will be presented in Section 10.3. In this section, we shall also investigate the ability of the explicit multistage time-stepping scheme and of a generic implicit scheme to damp errors of the discrete solution in time. The damping properties decide about the convergence speed and the robustness of a particular scheme. They are also very important for the success or failure of the multigrid acceleration (presented in Section 9.4).}
-  @lang["zh-CN"]{求解时间相关的控制方程(2.19)，还需要对守恒变量的时间导数进行离散。我们在第6章介绍过几种时间离散方法，并提到：每种格式都有特定的精度阶，且时间步长的最大取值存在一定限制。这些限制可以借助Von Neumann稳定性分析来评估，该分析将在10.3节给出。在这一节中，我们还将考察显式多步时间推进格式以及一种通用隐式格式在时间上阻尼离散解误差的能力。阻尼特性决定了一种格式的收敛速度与鲁棒性，对多重网格加速（见9.4节）的成败也十分关键。}
+  @lang["zh-Hans"]{求解时间相关的控制方程(2.19)，还需要对守恒变量的时间导数进行离散。我们在第6章介绍过几种时间离散方法，并提到：每种格式都有特定的精度阶，且时间步长的最大取值存在一定限制。这些限制可以借助Von Neumann稳定性分析来评估，该分析将在10.3节给出。在这一节中，我们还将考察显式多步时间推进格式以及一种通用隐式格式在时间上阻尼离散解误差的能力。阻尼特性决定了一种格式的收敛速度与鲁棒性，对多重网格加速（见9.4节）的成败也十分关键。}
 }
 
 @subtree[#:id "blazek2005-10-1"]{
@@ -19,52 +19,52 @@
 
   @bi{
     @lang["en"]{A discretisation scheme is called @emph{consistent}, if the discretised equations converge to the given differential equations for both the time step and grid size tending to zero. A consistent scheme gives us the security that we really solve the governing equations and nothing else. This is quoted in Ref. @link["blazek2005-r10-1"]{[1]} as “solving the equations right” and it is called @emph{verification}. Verification should not be confused with the term @emph{validation}. Validation means: do we solve “the right equations”? Thus verification tries to quantify the numerical errors and uncover programming bugs, whereas validation deals with the modelling errors. For an exhaustive discussion and recommendations see the guidelines presented in Ref. @link["blazek2005-r10-2"]{[2]}.}
-    @lang["zh-CN"]{若离散方程在时间步长与网格尺寸都趋于零时收敛到给定的微分方程，则称该离散格式是@emph{一致的}（consistent）。一致的格式向我们保证：我们求解的确实是控制方程本身，而不是别的东西。文献@link["blazek2005-r10-1"]{[1]}将此称作“把方程解对”（solving the equations right），并称之为验证（verification）。验证不应与确认（validation）一词混淆。确认问的是：我们求解的是否是“对的方程”？因此，验证力图量化数值误差并揭露程序缺陷，而确认处理的则是建模误差。详尽的讨论与建议见文献@link["blazek2005-r10-2"]{[2]}中给出的指南。}
+    @lang["zh-Hans"]{若离散方程在时间步长与网格尺寸都趋于零时收敛到给定的微分方程，则称该离散格式是@emph{一致的}（consistent）。一致的格式向我们保证：我们求解的确实是控制方程本身，而不是别的东西。文献@link["blazek2005-r10-1"]{[1]}将此称作“把方程解对”（solving the equations right），并称之为验证（verification）。验证不应与确认（validation）一词混淆。确认问的是：我们求解的是否是“对的方程”？因此，验证力图量化数值误差并揭露程序缺陷，而确认处理的则是建模误差。详尽的讨论与建议见文献@link["blazek2005-r10-2"]{[2]}中给出的指南。}
   }
 
   @bi{
     @lang["en"]{The consistency of a numerical scheme can be checked by expanding the function values into Taylor series. The developments are then inserted back into the discretised equations. If we subtract the differential equations, we obtain terms which represent the numerical error -- the so-called @emph{truncation error}. For a consistent scheme, the truncation error should go to zero with decreasing time step and grid size.}
-    @lang["zh-CN"]{数值格式的一致性可以这样检验：把函数值展开成Taylor级数，再将展开式代回离散方程；减去微分方程后，得到的各项即代表数值误差——也就是所谓的截断误差（truncation error）。对于一致的格式，截断误差应随时间步长与网格尺寸的减小而趋于零。}
+    @lang["zh-Hans"]{数值格式的一致性可以这样检验：把函数值展开成Taylor级数，再将展开式代回离散方程；减去微分方程后，得到的各项即代表数值误差——也就是所谓的截断误差（truncation error）。对于一致的格式，截断误差应随时间步长与网格尺寸的减小而趋于零。}
   }
 
   @bi{
     @lang["en"]{We will now illustrate this concept on a simple example. Let us consider the following 1-D scalar equation}
-    @lang["zh-CN"]{下面通过一个简单的例子来说明这一概念。考察如下一维标量方程}
+    @lang["zh-Hans"]{下面通过一个简单的例子来说明这一概念。考察如下一维标量方程}
   }
 
   @tex-display-math[#:id "eq-10-1"]{\frac{\partial U}{\partial t} + \frac{\partial U}{\partial x} = 0. \tag{10.1}}
 
   @bi{
     @lang["en"]{A very simple but valid discretisation scheme would be}
-    @lang["zh-CN"]{一个非常简单但有效的离散格式是}
+    @lang["zh-Hans"]{一个非常简单但有效的离散格式是}
   }
 
   @tex-display-math[#:id "eq-10-2"]{\frac{U_i^{n+1} - U_i^n}{\Delta t} + \frac{U_i^n - U_{i-1}^n}{\Delta x} = 0, \tag{10.2}}
 
   @bi{
     @lang["en"]{where @tex-math{n} denotes the time level and @tex-math{i} the node index, respectively. Expanding the solution @tex-math{U_i^{n+1}} around the time level @tex-math{n} gives}
-    @lang["zh-CN"]{其中@tex-math{n}表示时间层，@tex-math{i}表示节点编号。把解@tex-math{U_i^{n+1}}在时间层@tex-math{n}附近展开，得}
+    @lang["zh-Hans"]{其中@tex-math{n}表示时间层，@tex-math{i}表示节点编号。把解@tex-math{U_i^{n+1}}在时间层@tex-math{n}附近展开，得}
   }
 
   @tex-display-math[#:id "eq-10-3"]{U_i^{n+1} = U_i^n + \Delta t \left(\frac{\partial U}{\partial t}\right)_i^n + \frac{(\Delta t)^2}{2} \left(\frac{\partial^2 U}{\partial t^2}\right)_i^n + \cdots \tag{10.3}}
 
   @bi{
     @lang["en"]{where (@tex-math{\cdots}) represents the higher-order terms. The Taylor series for the solution @tex-math{U_{i-1}^n} reads (cf. Eq. (3.1))}
-    @lang["zh-CN"]{其中(@tex-math{\cdots})表示高阶项。解@tex-math{U_{i-1}^n}的Taylor级数为（对照式(3.1)）}
+    @lang["zh-Hans"]{其中(@tex-math{\cdots})表示高阶项。解@tex-math{U_{i-1}^n}的Taylor级数为（对照式(3.1)）}
   }
 
   @tex-display-math[#:id "eq-10-4"]{U_{i-1}^n = U_i^n - \Delta x \left(\frac{\partial U}{\partial x}\right)_i^n + \frac{(\Delta x)^2}{2} \left(\frac{\partial^2 U}{\partial x^2}\right)_i^n + \cdots \tag{10.4}}
 
   @bi{
     @lang["en"]{If we substitute Eq. @link["blazek2005-ch10#eq-10-3"]{(10.3)} and @link["blazek2005-ch10#eq-10-4"]{(10.4)} into the discretised equation @link["blazek2005-ch10#eq-10-2"]{(10.2)}, we obtain}
-    @lang["zh-CN"]{把式@link["blazek2005-ch10#eq-10-3"]{(10.3)}与@link["blazek2005-ch10#eq-10-4"]{(10.4)}代入离散方程@link["blazek2005-ch10#eq-10-2"]{(10.2)}，得}
+    @lang["zh-Hans"]{把式@link["blazek2005-ch10#eq-10-3"]{(10.3)}与@link["blazek2005-ch10#eq-10-4"]{(10.4)}代入离散方程@link["blazek2005-ch10#eq-10-2"]{(10.2)}，得}
   }
 
   @tex-display-math[#:id "eq-10-5"]{\left(\frac{\partial U}{\partial t} + \frac{\partial U}{\partial x}\right)_i^n = -\frac{\Delta t}{2} \left(\frac{\partial^2 U}{\partial t^2}\right)_i^n + \frac{\Delta x}{2} \left(\frac{\partial^2 U}{\partial x^2}\right)_i^n + \cdots \tag{10.5}}
 
   @bi{
     @lang["en"]{A comparison with the differential equation @link["blazek2005-ch10#eq-10-1"]{(10.1)} shows that the terms on the right-hand side of Eq. @link["blazek2005-ch10#eq-10-5"]{(10.5)} represent the truncation error, which is of the order @tex-math{\mathcal{O}(\Delta t, \Delta x)}. The numerical scheme @link["blazek2005-ch10#eq-10-2"]{(10.2)} is consistent, since the truncation error vanishes for @tex-math{\Delta t \to 0}, @tex-math{\Delta x \to 0}.}
-    @lang["zh-CN"]{与微分方程@link["blazek2005-ch10#eq-10-1"]{(10.1)}比较可知，式@link["blazek2005-ch10#eq-10-5"]{(10.5)}右端的各项代表截断误差，其阶为@tex-math{\mathcal{O}(\Delta t, \Delta x)}。数值格式@link["blazek2005-ch10#eq-10-2"]{(10.2)}是一致的，因为当@tex-math{\Delta t \to 0}、@tex-math{\Delta x \to 0}时截断误差消失。}
+    @lang["zh-Hans"]{与微分方程@link["blazek2005-ch10#eq-10-1"]{(10.1)}比较可知，式@link["blazek2005-ch10#eq-10-5"]{(10.5)}右端的各项代表截断误差，其阶为@tex-math{\mathcal{O}(\Delta t, \Delta x)}。数值格式@link["blazek2005-ch10#eq-10-2"]{(10.2)}是一致的，因为当@tex-math{\Delta t \to 0}、@tex-math{\Delta x \to 0}时截断误差消失。}
   }
 }
 
@@ -73,7 +73,7 @@
 
   @bi{
     @lang["en"]{The accuracy of a discretisation scheme is connected to its truncation error. If, for instance, the leading term of the truncation error is proportional to @tex-math{\Delta x}, we speak of @emph{first-order} accurate spatial scheme. If the leading term behaves like @tex-math{(\Delta x)^2}, the scheme is second-order accurate, and so on. Thus the example scheme Eq. @link["blazek2005-ch10#eq-10-2"]{(10.2)} is 1st-order accurate in space and in time (Eq. @link["blazek2005-ch10#eq-10-5"]{(10.5)}). This leads us to the condition that the numerical scheme must be at least 1st-order accurate in order to be consistent. Otherwise, the truncation error cannot be reduced by decreasing the values of @tex-math{\Delta t} and @tex-math{\Delta x}.}
-    @lang["zh-CN"]{离散格式的精度与其截断误差相关联。例如，若截断误差的首项正比于@tex-math{\Delta x}，我们称空间格式具有@emph{一阶}精度；若首项表现为@tex-math{(\Delta x)^2}，则格式具有二阶精度，依此类推。因此，示例格式式@link["blazek2005-ch10#eq-10-2"]{(10.2)}在空间和时间上都是一阶精度的（式@link["blazek2005-ch10#eq-10-5"]{(10.5)}）。由此得出一个条件：数值格式至少要达到一阶精度才可能是一致的；否则，截断误差无法通过减小@tex-math{\Delta t}和@tex-math{\Delta x}的取值来降低。}
+    @lang["zh-Hans"]{离散格式的精度与其截断误差相关联。例如，若截断误差的首项正比于@tex-math{\Delta x}，我们称空间格式具有@emph{一阶}精度；若首项表现为@tex-math{(\Delta x)^2}，则格式具有二阶精度，依此类推。因此，示例格式式@link["blazek2005-ch10#eq-10-2"]{(10.2)}在空间和时间上都是一阶精度的（式@link["blazek2005-ch10#eq-10-5"]{(10.5)}）。由此得出一个条件：数值格式至少要达到一阶精度才可能是一致的；否则，截断误差无法通过减小@tex-math{\Delta t}和@tex-math{\Delta x}的取值来降低。}
   }
 
   @bi{
@@ -85,7 +85,7 @@
         @item{algebraic evaluations on the same grid.}
       }
     }
-    @lang["zh-CN"]{现在的问题是：实践中如何评估截断误差？诚然，对于含非线性开关、限制器等的复杂数值格式，Taylor级数展开并不适用。以下是几种可行的误差估计途径@link["blazek2005-r10-1"]{[1]}：
+    @lang["zh-Hans"]{现在的问题是：实践中如何评估截断误差？诚然，对于含非线性开关、限制器等的复杂数值格式，Taylor级数展开并不适用。以下是几种可行的误差估计途径@link["blazek2005-r10-1"]{[1]}：
       @itemize{
         @item{在不同网格上附加求解——网格加密或粗化、无关网格；}
         @item{在同一网格上附加求解——更高阶或更低阶精度的离散化；}
@@ -97,19 +97,19 @@
 
   @bi{
     @lang["en"]{The most common approach is to solve the governing equations on a series of grids with different cell sizes. If we happen to know the exact solution, we can easily quantify the error for each grid. The rate by which the truncation error decreases determines the accuracy of the discretisation. For example, if we halve the grid size in all coordinate directions and the error drops by a factor of four, the scheme is 2nd-order accurate. However, the exact physical solution is quite often not known. In such a case, the order of accuracy can be estimated using the formula @link["blazek2005-r10-3"]{[3]}}
-    @lang["zh-CN"]{最常见的做法，是在一系列单元尺寸不同的网格上求解控制方程。如果恰好已知精确解，就容易量化每个网格上的误差；截断误差下降的速率决定了离散化的精度。例如，若把所有坐标方向的网格尺寸减半后误差降至原来的四分之一，则格式为二阶精度。然而，精确的物理解往往是未知的。这时，精度阶可用如下公式估计@link["blazek2005-r10-3"]{[3]}}
+    @lang["zh-Hans"]{最常见的做法，是在一系列单元尺寸不同的网格上求解控制方程。如果恰好已知精确解，就容易量化每个网格上的误差；截断误差下降的速率决定了离散化的精度。例如，若把所有坐标方向的网格尺寸减半后误差降至原来的四分之一，则格式为二阶精度。然而，精确的物理解往往是未知的。这时，精度阶可用如下公式估计@link["blazek2005-r10-3"]{[3]}}
   }
 
   @tex-display-math[#:id "eq-10-6"]{p = \frac{\ln\left(\dfrac{f_3 - f_2}{f_2 - f_1}\right)}{\ln(r)}, \tag{10.6}}
 
   @bi{
     @lang["en"]{where @tex-math{p} denotes the accuracy, @tex-math{r} the refinement (coarsening) ratio and @tex-math{f} the numerical solution, respectively. Index 1 denotes the finest grid and index 3 the coarsest grid. If the coarsening ratio is not constant between the grids, a more general relation can be found in Ref. @link["blazek2005-r10-1"]{[1]}.}
-    @lang["zh-CN"]{其中@tex-math{p}表示精度，@tex-math{r}为加密（粗化）比，@tex-math{f}为数值解。下标1代表最细网格，下标3代表最粗网格。若各网格间的粗化比不是常数，可在文献@link["blazek2005-r10-1"]{[1]}中找到更一般的关系式。}
+    @lang["zh-Hans"]{其中@tex-math{p}表示精度，@tex-math{r}为加密（粗化）比，@tex-math{f}为数值解。下标1代表最细网格，下标3代表最粗网格。若各网格间的粗化比不是常数，可在文献@link["blazek2005-r10-1"]{[1]}中找到更一般的关系式。}
   }
 
   @bi{
     @lang["en"]{Besides the estimation of the truncation error, varying the grid resolution is also used to obtain what is called @emph{grid converged solution}. This is achieved if the solution does not change (within a certain tolerance) with further grid refinement. In this connection, we speak of @emph{grid convergence studies}. Although grid convergence studies can be very time consuming, it is recommended always to check if the solution is grid converged.}
-    @lang["zh-CN"]{除估计截断误差之外，改变网格分辨率还用于获得所谓的@emph{网格收敛解}（grid converged solution）：若进一步加密网格而解不再变化（在一定容差内），便达到了这一状态。与此相关，我们称之为@emph{网格收敛研究}（grid convergence studies）。尽管网格收敛研究可能非常耗时，仍建议始终检查解是否达到网格收敛。}
+    @lang["zh-Hans"]{除估计截断误差之外，改变网格分辨率还用于获得所谓的@emph{网格收敛解}（grid converged solution）：若进一步加密网格而解不再变化（在一定容差内），便达到了这一状态。与此相关，我们称之为@emph{网格收敛研究}（grid convergence studies）。尽管网格收敛研究可能非常耗时，仍建议始终检查解是否达到网格收敛。}
   }
 }
 
@@ -118,17 +118,17 @@
 
   @bi{
     @lang["en"]{Before a new discretisation method is implemented, it is important to know, at least approximately, how the method will influence the stability and the convergence behaviour of the numerical scheme. It was already frequently confirmed that the von Neumann method of stability analysis can deliver reliable assessment of the properties of a solution scheme. The methodology was developed at Los Alamos during the Second World War. However, it was briefly described first in 1947 by Cranck and Nicholson @link["blazek2005-r10-4"]{[4]}. Later, it was also published in Ref. @link["blazek2005-r10-5"]{[5]}. A very helpful introduction to the von Neumann stability analysis can be found in @link["blazek2005-r10-6"]{[6]}.}
-    @lang["zh-CN"]{在实现一种新的离散化方法之前，至少要大致了解该方法将如何影响数值格式的稳定性与收敛行为。Von Neumann稳定性分析方法能够对求解格式的性质给出可靠评估，这一点已得到反复证实。该方法学是第二次世界大战期间在Los Alamos发展起来的；它最早于1947年由Cranck和Nicholson作了简要描述@link["blazek2005-r10-4"]{[4]}，后来又发表于文献@link["blazek2005-r10-5"]{[5]}。文献@link["blazek2005-r10-6"]{[6]}中有一篇对Von Neumann稳定性分析非常有帮助的入门介绍。@sidenote{译注：原书印作“Cranck”，通行形式应为“Crank”，即Crank–Nicolson方法的提出者John Crank与Phyllis Nicolson。}}
+    @lang["zh-Hans"]{在实现一种新的离散化方法之前，至少要大致了解该方法将如何影响数值格式的稳定性与收敛行为。Von Neumann稳定性分析方法能够对求解格式的性质给出可靠评估，这一点已得到反复证实。该方法学是第二次世界大战期间在Los Alamos发展起来的；它最早于1947年由Cranck和Nicholson作了简要描述@link["blazek2005-r10-4"]{[4]}，后来又发表于文献@link["blazek2005-r10-5"]{[5]}。文献@link["blazek2005-r10-6"]{[6]}中有一篇对Von Neumann稳定性分析非常有帮助的入门介绍。@sidenote{译注：原书印作“Cranck”，通行形式应为“Crank”，即Crank–Nicolson方法的提出者John Crank与Phyllis Nicolson。}}
   }
 
   @bi{
     @lang["en"]{Von Neumann stability analysis is applicable to discretised linear partial differential equations under the assumption of periodic boundary conditions. It is based on the decomposition of the solution into a Fourier series. On the one hand, this allows the investigation of the stability of a solution scheme. On the other hand, the behaviour of the solution across the frequency spectrum can be examined in detail. Precisely this is of fundamental importance for the estimation of the convergence properties and robustness of a scheme, since the individual components (Fourier modes) of the solution error have to be reduced (damped) as quickly as possible. Therefore, we speak of the @emph{damping properties} of a solution scheme.}
-    @lang["zh-CN"]{Von Neumann稳定性分析适用于离散化的线性偏微分方程，并假设边界条件为周期边界条件。它基于把解分解成Fourier级数：一方面，借此可以考察求解格式的稳定性；另一方面，可以细致地检查解在整个频谱上的行为。这恰恰对估计格式的收敛特性与鲁棒性具有根本性的意义，因为解误差的各个分量（Fourier模态）必须尽快被衰减（阻尼）。因此，我们谈到求解格式的@emph{阻尼特性}（damping properties）。}
+    @lang["zh-Hans"]{Von Neumann稳定性分析适用于离散化的线性偏微分方程，并假设边界条件为周期边界条件。它基于把解分解成Fourier级数：一方面，借此可以考察求解格式的稳定性；另一方面，可以细致地检查解在整个频谱上的行为。这恰恰对估计格式的收敛特性与鲁棒性具有根本性的意义，因为解误差的各个分量（Fourier模态）必须尽快被衰减（阻尼）。因此，我们谈到求解格式的@emph{阻尼特性}（damping properties）。}
   }
 
   @bi{
     @lang["en"]{Because the von Neumann analysis is limited to linear problems, the Euler or the Navier-Stokes equations have to be substituted with a suitable model equation. Two often employed 1-D model problems will be presented further below. The first one describes pure convection of a disturbance, which models the behaviour of the Euler equations. The second model equation contains additionally a diffusion term in order to simulate the behaviour of the Navier-Stokes equations.}
-    @lang["zh-CN"]{由于Von Neumann分析只限于线性问题，必须用合适的模型方程来代替Euler方程或Navier-Stokes方程。下文将给出两个常用的一维模型问题：第一个描述扰动的纯对流，用来模拟Euler方程的行为；第二个模型方程额外含有一个扩散项，用以模拟Navier-Stokes方程的行为。}
+    @lang["zh-Hans"]{由于Von Neumann分析只限于线性问题，必须用合适的模型方程来代替Euler方程或Navier-Stokes方程。下文将给出两个常用的一维模型问题：第一个描述扰动的纯对流，用来模拟Euler方程的行为；第二个模型方程额外含有一个扩散项，用以模拟Navier-Stokes方程的行为。}
   }
 
   @subtree[#:id "blazek2005-10-3-1"]{
@@ -136,54 +136,54 @@
 
     @bi{
       @lang["en"]{Before we proceed with the model problems, let us examine the von Neumann analysis for a general 1-D scalar linear equation. After the spatial discretisation of the fluxes, we obtain a system of ordinary differential equations in time (cf. Eq. (4.3))}
-      @lang["zh-CN"]{在讨论模型问题之前，先考察一般一维标量线性方程的Von Neumann分析。对通量作空间离散后，得到一个关于时间的常微分方程组（对照式(4.3)）}
+      @lang["zh-Hans"]{在讨论模型问题之前，先考察一般一维标量线性方程的Von Neumann分析。对通量作空间离散后，得到一个关于时间的常微分方程组（对照式(4.3)）}
     }
 
     @tex-display-math[#:id "eq-10-7"]{\Delta t \left(\frac{d}{dt} U_i\right) = -\frac{\Delta t}{\Delta x} R_i, \tag{10.7}}
 
     @bi{
       @lang["en"]{where @tex-math{U_i} denotes a scalar variable at point @tex-math{i}, @tex-math{R_i} stands for the residual, and @tex-math{\Delta x} represents the grid size. Assuming periodic boundary conditions, we can expand the solution @tex-math{U} in Eq. @link["blazek2005-ch10#eq-10-7"]{(10.7)} into a finite Fourier series @link["blazek2005-r10-6"]{[6]}–@link["blazek2005-r10-7"]{[7]}–@link["blazek2005-r10-8"]{[8]}}
-      @lang["zh-CN"]{其中@tex-math{U_i}表示点@tex-math{i}处的标量变量，@tex-math{R_i}代表残差，@tex-math{\Delta x}为网格尺寸。在周期边界条件的假设下，可以把式@link["blazek2005-ch10#eq-10-7"]{(10.7)}中的解@tex-math{U}展开成有限Fourier级数@link["blazek2005-r10-6"]{[6]}–@link["blazek2005-r10-7"]{[7]}–@link["blazek2005-r10-8"]{[8]}}
+      @lang["zh-Hans"]{其中@tex-math{U_i}表示点@tex-math{i}处的标量变量，@tex-math{R_i}代表残差，@tex-math{\Delta x}为网格尺寸。在周期边界条件的假设下，可以把式@link["blazek2005-ch10#eq-10-7"]{(10.7)}中的解@tex-math{U}展开成有限Fourier级数@link["blazek2005-r10-6"]{[6]}–@link["blazek2005-r10-7"]{[7]}–@link["blazek2005-r10-8"]{[8]}}
     }
 
     @tex-display-math[#:id "eq-10-8"]{U_i = \sum_{k=-N}^{N} \hat{U}_k\, e^{I p_k (i \Delta x)} \tag{10.8}}
 
     @bi{
       @lang["en"]{with the point index @tex-math{i} running from 0 to @tex-math{N} (@tex-math{x_i = i \Delta x}), @tex-math{p_k} being the wave number and @tex-math{I} the imaginary unit. Due to the linearity of the model equation, it is sufficient to consider only an individual (@tex-math{l}-th) Fourier mode, i.e.,}
-      @lang["zh-CN"]{其中点编号@tex-math{i}从0取到@tex-math{N}（@tex-math{x_i = i \Delta x}），@tex-math{p_k}为波数，@tex-math{I}为虚数单位。由于模型方程是线性的，只需考察单个（第@tex-math{l}个）Fourier模态，即}
+      @lang["zh-Hans"]{其中点编号@tex-math{i}从0取到@tex-math{N}（@tex-math{x_i = i \Delta x}），@tex-math{p_k}为波数，@tex-math{I}为虚数单位。由于模型方程是线性的，只需考察单个（第@tex-math{l}个）Fourier模态，即}
     }
 
     @tex-display-math[#:id "eq-10-9"]{\hat{U}\, e^{I p_l (i \Delta x)} \tag{10.9}}
 
     @bi{
       @lang["en"]{since the entire influence can be obtained by superposition. If we now insert the Fourier mode Eq. @link["blazek2005-ch10#eq-10-9"]{(10.9)} into the discretised model equation @link["blazek2005-ch10#eq-10-7"]{(10.7)}, we get}
-      @lang["zh-CN"]{因为整体的影响可以由叠加得到。若把Fourier模态式@link["blazek2005-ch10#eq-10-9"]{(10.9)}插入离散模型方程@link["blazek2005-ch10#eq-10-7"]{(10.7)}，便得到}
+      @lang["zh-Hans"]{因为整体的影响可以由叠加得到。若把Fourier模态式@link["blazek2005-ch10#eq-10-9"]{(10.9)}插入离散模型方程@link["blazek2005-ch10#eq-10-7"]{(10.7)}，便得到}
     }
 
     @tex-display-math[#:id "eq-10-10"]{\Delta t \frac{d}{dt} \left(\hat{U}\, e^{I p_l (i \Delta x)}\right) = -\frac{\Delta t}{\Delta x} R_i = -\frac{\Delta t}{\Delta x} z\, \hat{U} e^{I i \Phi} \tag{10.10}}
 
     @bi{
       @lang["en"]{with the definition of the @emph{phase angle}: @tex-math{\Phi = p_l \Delta x}. The complex function @tex-math{z} in Eq. @link["blazek2005-ch10#eq-10-10"]{(10.10)} represents the so-called @emph{Fourier symbol} of the spatial operator. Its form depends on the discretisation type (central, upwind) and on the order of accuracy.}
-      @lang["zh-CN"]{其中定义了@emph{相位角}（phase angle）：@tex-math{\Phi = p_l \Delta x}。式@link["blazek2005-ch10#eq-10-10"]{(10.10)}中的复函数@tex-math{z}就是所谓的空间算子@emph{Fourier符号}（Fourier symbol），其形式取决于离散化类型（中心、上风）与精度阶。}
+      @lang["zh-Hans"]{其中定义了@emph{相位角}（phase angle）：@tex-math{\Phi = p_l \Delta x}。式@link["blazek2005-ch10#eq-10-10"]{(10.10)}中的复函数@tex-math{z}就是所谓的空间算子@emph{Fourier符号}（Fourier symbol），其形式取决于离散化类型（中心、上风）与精度阶。}
     }
 
     @bi{
       @lang["en"]{An explicit or implicit time-stepping scheme used to solve Eq. @link["blazek2005-ch10#eq-10-7"]{(10.7)} will be linearly stable, if the amplitude of any harmonic (@tex-math{\hat{U}}) does not grow in time. This means that the amplitude of the new solution must be equal or smaller than the amplitude of the previous solution. Hence, the @emph{amplification factor} is defined as}
-      @lang["zh-CN"]{用于求解式@link["blazek2005-ch10#eq-10-7"]{(10.7)}的显式或隐式时间推进格式，若任一谐波（@tex-math{\hat{U}}）的幅值不随时间增长，就是线性稳定的。这意味着新解的幅值必须等于或小于前一时间层解的幅值。据此定义@emph{放大因子}（amplification factor）}
+      @lang["zh-Hans"]{用于求解式@link["blazek2005-ch10#eq-10-7"]{(10.7)}的显式或隐式时间推进格式，若任一谐波（@tex-math{\hat{U}}）的幅值不随时间增长，就是线性稳定的。这意味着新解的幅值必须等于或小于前一时间层解的幅值。据此定义@emph{放大因子}（amplification factor）}
     }
 
     @tex-display-math[#:id "eq-10-11"]{g = \frac{\hat{U}^{n+1}}{\hat{U}^n}. \tag{10.11}}
 
     @bi{
       @lang["en"]{If we introduce the @emph{time-stepping operator} @tex-math{f}, we can write the amplification factor in the general form as}
-      @lang["zh-CN"]{若引入@emph{时间推进算子}（time-stepping operator）@tex-math{f}，则放大因子可以写成如下一般形式}
+      @lang["zh-Hans"]{若引入@emph{时间推进算子}（time-stepping operator）@tex-math{f}，则放大因子可以写成如下一般形式}
     }
 
     @tex-display-math[#:id "eq-10-12"]{g = 1 - f z. \tag{10.12}}
 
     @bi{
       @lang["en"]{The time-stepping scheme will be linearly stable if @tex-math{|g| \le 1}. In cases, where the spatial and temporal discretisations are separated (method of lines), the domain of stability depends on the time-stepping scheme (@tex-math{f}), but not on the spatial discretisation (@tex-math{z}). The Fourier symbol of the spatial operator @tex-math{z} must lie within the domain of stability for all phase angles @tex-math{\Phi}. We speak of good damping properties if @tex-math{|g|} is well below unity. This means that the perturbations of the numerical solution are rapidly damped in time. Consequently, the time-stepping scheme converges faster to the steady-state solution than for @tex-math{|g| \to 1}.}
-      @lang["zh-CN"]{若@tex-math{|g| \le 1}，则时间推进格式线性稳定。在空间离散与时间离散相互分离（线方法，method of lines）的情形下，稳定域只取决于时间推进格式（@tex-math{f}），而与空间离散（@tex-math{z}）无关。空间算子的Fourier符号@tex-math{z}必须在所有相位角@tex-math{\Phi}下都位于稳定域之内。若@tex-math{|g|}远小于1，我们称阻尼特性良好；这意味着数值解的扰动随时间被迅速阻尼，因而时间推进格式收敛到定常解的速度要比@tex-math{|g| \to 1}的情形更快。}
+      @lang["zh-Hans"]{若@tex-math{|g| \le 1}，则时间推进格式线性稳定。在空间离散与时间离散相互分离（线方法，method of lines）的情形下，稳定域只取决于时间推进格式（@tex-math{f}），而与空间离散（@tex-math{z}）无关。空间算子的Fourier符号@tex-math{z}必须在所有相位角@tex-math{\Phi}下都位于稳定域之内。若@tex-math{|g|}远小于1，我们称阻尼特性良好；这意味着数值解的扰动随时间被迅速阻尼，因而时间推进格式收敛到定常解的速度要比@tex-math{|g| \to 1}的情形更快。}
     }
   }
 
@@ -192,28 +192,28 @@
 
     @bi{
       @lang["en"]{In this case, the scalar linear model equation reads}
-      @lang["zh-CN"]{此时，标量线性模型方程为}
+      @lang["zh-Hans"]{此时，标量线性模型方程为}
     }
 
     @tex-display-math[#:id "eq-10-13"]{\frac{\partial U}{\partial t} + \Lambda \frac{\partial U}{\partial x} = 0. \tag{10.13}}
 
     @bi{
       @lang["en"]{The convection velocity @tex-math{\Lambda} (also the eigenvalue) is assumed to be constant and positive. In the following, we shall consider different spatial discretisation schemes applied to Eq. @link["blazek2005-ch10#eq-10-7"]{(10.7)} and their corresponding Fourier symbols.}
-      @lang["zh-CN"]{对流速度@tex-math{\Lambda}（亦即特征值）假定为正常数。下面我们将考察施加于式@link["blazek2005-ch10#eq-10-7"]{(10.7)}的各种空间离散格式及其相应的Fourier符号。}
+      @lang["zh-Hans"]{对流速度@tex-math{\Lambda}（亦即特征值）假定为正常数。下面我们将考察施加于式@link["blazek2005-ch10#eq-10-7"]{(10.7)}的各种空间离散格式及其相应的Fourier符号。}
     }
 
     @emph{Central Scheme with Artificial Dissipation 带人工耗散的中心格式}
 
     @bi{
       @lang["en"]{According to Eqs. (4.48)-(4.50), the residual @tex-math{R_i} in Eq. @link["blazek2005-ch10#eq-10-7"]{(10.7)} takes the form}
-      @lang["zh-CN"]{根据式(4.48)-(4.50)，式@link["blazek2005-ch10#eq-10-7"]{(10.7)}中的残差@tex-math{R_i}取如下形式}
+      @lang["zh-Hans"]{根据式(4.48)-(4.50)，式@link["blazek2005-ch10#eq-10-7"]{(10.7)}中的残差@tex-math{R_i}取如下形式}
     }
 
     @tex-display-math[#:id "eq-10-14"]{R_i = \frac{\Lambda}{2}\left(U_{i+1} - U_{i-1}\right) + \Lambda \epsilon^{(4)}\left(U_{i+2} - 4U_{i+1} + 6U_i - 4U_{i-1} + U_{i-2}\right) \tag{10.14}}
 
     @bi{
       @lang["en"]{with @tex-math{\epsilon^{(4)}} denoting the dissipation coefficient. In order to simplify the analysis, only the 4th-order differences were retained in Eq. @link["blazek2005-ch10#eq-10-14"]{(10.14)}. The Fourier symbol of the spatial operator is obtained according to Eq. @link["blazek2005-ch10#eq-10-10"]{(10.10)} by inserting the harmonic Eq. @link["blazek2005-ch10#eq-10-9"]{(10.9)} into Eq. @link["blazek2005-ch10#eq-10-14"]{(10.14)}}
-      @lang["zh-CN"]{其中@tex-math{\epsilon^{(4)}}表示耗散系数。为简化分析，式@link["blazek2005-ch10#eq-10-14"]{(10.14)}中只保留了四阶差分项。按照式@link["blazek2005-ch10#eq-10-10"]{(10.10)}，把谐波式@link["blazek2005-ch10#eq-10-9"]{(10.9)}代入式@link["blazek2005-ch10#eq-10-14"]{(10.14)}，即得空间算子的Fourier符号}
+      @lang["zh-Hans"]{其中@tex-math{\epsilon^{(4)}}表示耗散系数。为简化分析，式@link["blazek2005-ch10#eq-10-14"]{(10.14)}中只保留了四阶差分项。按照式@link["blazek2005-ch10#eq-10-10"]{(10.10)}，把谐波式@link["blazek2005-ch10#eq-10-9"]{(10.9)}代入式@link["blazek2005-ch10#eq-10-14"]{(10.14)}，即得空间算子的Fourier符号}
     }
 
     @tex-display-math[#:id "eq-10-15"]{z = \Lambda\left[I \sin\Phi + 4\epsilon^{(4)}\left(1 - \cos\Phi\right)^2\right]. \tag{10.15}}
@@ -222,28 +222,28 @@
 
     @bi{
       @lang["en"]{Using the 1st-order upwind scheme (see Eq. (4.46)), the residual @tex-math{R_i} becomes}
-      @lang["zh-CN"]{采用一阶上风格式（见式(4.46)）时，残差@tex-math{R_i}变为}
+      @lang["zh-Hans"]{采用一阶上风格式（见式(4.46)）时，残差@tex-math{R_i}变为}
     }
 
     @tex-display-math[#:id "eq-10-16"]{R_i = \Lambda\left(U_i - U_{i-1}\right) \tag{10.16}}
 
     @bi{
       @lang["en"]{and the associated Fourier symbol reads}
-      @lang["zh-CN"]{相应的Fourier符号为}
+      @lang["zh-Hans"]{相应的Fourier符号为}
     }
 
     @tex-display-math[#:id "eq-10-17"]{z = \Lambda\left[I \sin\Phi + \left(1 - \cos\Phi\right)\right]. \tag{10.17}}
 
     @bi{
       @lang["en"]{In the case of the 2nd-order upwind spatial discretisation, the residual in Eq. @link["blazek2005-ch10#eq-10-7"]{(10.7)} is given by}
-      @lang["zh-CN"]{对于二阶上风空间离散，式@link["blazek2005-ch10#eq-10-7"]{(10.7)}中的残差为}
+      @lang["zh-Hans"]{对于二阶上风空间离散，式@link["blazek2005-ch10#eq-10-7"]{(10.7)}中的残差为}
     }
 
     @tex-display-math[#:id "eq-10-18"]{R_i = \frac{\Lambda}{2}\left(3U_i - 4U_{i-1} + U_{i-2}\right). \tag{10.18}}
 
     @bi{
       @lang["en"]{The corresponding Fourier symbols @tex-math{z} of the spatial operator appears as}
-      @lang["zh-CN"]{空间算子相应的Fourier符号@tex-math{z}表现为}
+      @lang["zh-Hans"]{空间算子相应的Fourier符号@tex-math{z}表现为}
     }
 
     @tex-display-math[#:id "eq-10-19"]{z = \Lambda\left[I \sin\Phi\left(2 - \cos\Phi\right) + \left(1 - \cos\Phi\right)^2\right]. \tag{10.19}}
@@ -254,52 +254,52 @@
 
     @bi{
       @lang["en"]{The combined convection-diffusion model equation can be written in the form}
-      @lang["zh-CN"]{对流-扩散组合模型方程可以写成}
+      @lang["zh-Hans"]{对流-扩散组合模型方程可以写成}
     }
 
     @tex-display-math[#:id "eq-10-20"]{\frac{\partial U}{\partial t} + \Lambda \frac{\partial U}{\partial x} = \nu \frac{\partial^2 U}{\partial x^2}, \tag{10.20}}
 
     @bi{
       @lang["en"]{where @tex-math{\nu} represent the viscosity coefficient. The diffusion term @tex-math{\partial^2 U / \partial x^2} is normally approximated by 2nd-order central differences. Thus,}
-      @lang["zh-CN"]{其中@tex-math{\nu}表示黏性系数。扩散项@tex-math{\partial^2 U / \partial x^2}通常用二阶中心差分近似，即}
+      @lang["zh-Hans"]{其中@tex-math{\nu}表示黏性系数。扩散项@tex-math{\partial^2 U / \partial x^2}通常用二阶中心差分近似，即}
     }
 
     @tex-display-math[#:id "eq-10-21"]{\nu \frac{\partial^2 U}{\partial x^2} \approx \frac{\Lambda_v}{\Delta x}\left(U_{i+1} - 2U_i + U_{i-1}\right) \tag{10.21}}
 
     @bi{
       @lang["en"]{with}
-      @lang["zh-CN"]{其中}
+      @lang["zh-Hans"]{其中}
     }
 
     @tex-display-math[#:id "eq-10-22"]{\Lambda_v = \frac{\nu}{\Delta x} \tag{10.22}}
 
     @bi{
       @lang["en"]{being the viscous eigenvalue.}
-      @lang["zh-CN"]{为黏性特征值。}
+      @lang["zh-Hans"]{为黏性特征值。}
     }
 
     @bi{
       @lang["en"]{The Fourier symbol of the spatial operator is now composed of the convective and the diffusive part, i.e.,}
-      @lang["zh-CN"]{此时，空间算子的Fourier符号由对流部分与扩散部分组成，即}
+      @lang["zh-Hans"]{此时，空间算子的Fourier符号由对流部分与扩散部分组成，即}
     }
 
     @tex-display-math[#:id "eq-10-23"]{z = z_c - z_v, \tag{10.23}}
 
     @bi{
       @lang["en"]{where}
-      @lang["zh-CN"]{其中}
+      @lang["zh-Hans"]{其中}
     }
 
     @tex-display-math[#:id "eq-10-24"]{z_v = 2\Lambda_v\left(\cos\Phi - 1\right) \tag{10.24}}
 
     @bi{
       @lang["en"]{and @tex-math{z_c} corresponds to one of the forms presented in Eq. @link["blazek2005-ch10#eq-10-15"]{(10.15)}, @link["blazek2005-ch10#eq-10-17"]{(10.17)}, or @link["blazek2005-ch10#eq-10-19"]{(10.19)}, respectively.}
-      @lang["zh-CN"]{而@tex-math{z_c}对应式@link["blazek2005-ch10#eq-10-15"]{(10.15)}、@link["blazek2005-ch10#eq-10-17"]{(10.17)}或@link["blazek2005-ch10#eq-10-19"]{(10.19)}中给出的形式之一。}
+      @lang["zh-Hans"]{而@tex-math{z_c}对应式@link["blazek2005-ch10#eq-10-15"]{(10.15)}、@link["blazek2005-ch10#eq-10-17"]{(10.17)}或@link["blazek2005-ch10#eq-10-19"]{(10.19)}中给出的形式之一。}
     }
 
     @bi{
       @lang["en"]{As we can conclude from Eq. @link["blazek2005-ch10#eq-10-24"]{(10.24)}, the diffusion term changes only the real part of the Fourier symbol. This is typical for any kind of diffusion or artificial dissipation (cf. Eq. @link["blazek2005-ch10#eq-10-15"]{(10.15)}). Furthermore, we can see from Eq. @link["blazek2005-ch10#eq-10-17"]{(10.17)} or @link["blazek2005-ch10#eq-10-19"]{(10.19)} that the upwind discretisation of the convective term also causes the Fourier symbol to have a real part (@tex-math{1 - \cos\Phi}). Therefore, we speak of upwind dissipation. Only the central discretisation of the convective term adds no numerical dissipation, since the Fourier symbol is given by (@tex-math{I \sin\Phi}). However, the central scheme allows for the unwanted odd-even decoupling of the solution.}
-      @lang["zh-CN"]{由式@link["blazek2005-ch10#eq-10-24"]{(10.24)}可以得出：扩散项只改变Fourier符号的实部。这对任何类型的扩散或人工耗散都是如此（对照式@link["blazek2005-ch10#eq-10-15"]{(10.15)}）。此外，从式@link["blazek2005-ch10#eq-10-17"]{(10.17)}或@link["blazek2005-ch10#eq-10-19"]{(10.19)}还可以看到，对流项的上风离散也使Fourier符号带有实部（@tex-math{1 - \cos\Phi}），因此我们称之为上风耗散（upwind dissipation）。只有对流项的中心离散不引入任何数值耗散，因为其Fourier符号为（@tex-math{I \sin\Phi}）；然而，中心格式会出现不希望看到的解的奇偶失联（odd-even decoupling）。}
+      @lang["zh-Hans"]{由式@link["blazek2005-ch10#eq-10-24"]{(10.24)}可以得出：扩散项只改变Fourier符号的实部。这对任何类型的扩散或人工耗散都是如此（对照式@link["blazek2005-ch10#eq-10-15"]{(10.15)}）。此外，从式@link["blazek2005-ch10#eq-10-17"]{(10.17)}或@link["blazek2005-ch10#eq-10-19"]{(10.19)}还可以看到，对流项的上风离散也使Fourier符号带有实部（@tex-math{1 - \cos\Phi}），因此我们称之为上风耗散（upwind dissipation）。只有对流项的中心离散不引入任何数值耗散，因为其Fourier符号为（@tex-math{I \sin\Phi}）；然而，中心格式会出现不希望看到的解的奇偶失联（odd-even decoupling）。}
     }
   }
 
@@ -308,73 +308,73 @@
 
     @bi{
       @lang["en"]{The application of an @tex-math{m}-stage explicit time-stepping scheme to the discretised model problem Eq. @link["blazek2005-ch10#eq-10-7"]{(10.7)} can be described in the following way (see Subsection 6.1.1)}
-      @lang["zh-CN"]{把@tex-math{m}步显式时间推进格式施加于离散化的模型问题式@link["blazek2005-ch10#eq-10-7"]{(10.7)}，可以描述为（见小节6.1.1）}
+      @lang["zh-Hans"]{把@tex-math{m}步显式时间推进格式施加于离散化的模型问题式@link["blazek2005-ch10#eq-10-7"]{(10.7)}，可以描述为（见小节6.1.1）}
     }
 
     @tex-display-math[#:id "eq-10-25"]{\begin{aligned} U_i^{(0)} &= U_i^n\\ U_i^{(k)} &= U_i^{(0)} - \alpha_k \frac{\Delta t}{\Delta x} R_i^{(k-1)}, \quad k = 1, \cdots, m\\ U_i^{n+1} &= U_i^{(m)}, \end{aligned} \tag{10.25}}
 
     @bi{
       @lang["en"]{where @tex-math{\alpha_k} denote the stage coefficients. If we substitute the variable @tex-math{U} by its Fourier representation Eq. @link["blazek2005-ch10#eq-10-8"]{(10.8)} and the residual by the Fourier symbol @tex-math{z}, Equation @link["blazek2005-ch10#eq-10-25"]{(10.25)} transforms to}
-      @lang["zh-CN"]{其中@tex-math{\alpha_k}表示阶段系数。若把变量@tex-math{U}用其Fourier表示式@link["blazek2005-ch10#eq-10-8"]{(10.8)}代替、把残差用Fourier符号@tex-math{z}代替，则方程@link["blazek2005-ch10#eq-10-25"]{(10.25)}化为}
+      @lang["zh-Hans"]{其中@tex-math{\alpha_k}表示阶段系数。若把变量@tex-math{U}用其Fourier表示式@link["blazek2005-ch10#eq-10-8"]{(10.8)}代替、把残差用Fourier符号@tex-math{z}代替，则方程@link["blazek2005-ch10#eq-10-25"]{(10.25)}化为}
     }
 
     @tex-display-math[#:id "eq-10-26"]{\begin{aligned} \hat{U}^{(0)} &= \hat{U}^n\\ \hat{U}^{(k)} &= \hat{U}^{(0)} - \alpha_k \frac{\Delta t}{\Delta x} z\, \hat{U}^{(k-1)}, \quad k = 1, \cdots, m\\ \hat{U}^{n+1} &= \hat{U}^{(m)}. \end{aligned} \tag{10.26}}
 
     @bi{
       @lang["en"]{The amplification factor of the above @tex-math{m}-stage explicit scheme is given by Eq. @link["blazek2005-ch10#eq-10-12"]{(10.12)}. Based on Eq. @link["blazek2005-ch10#eq-10-26"]{(10.26)} it can be shown that the Fourier symbol of the time-stepping operator @tex-math{f} resumes the form @link["blazek2005-r10-9"]{[9]}}
-      @lang["zh-CN"]{上述@tex-math{m}步显式格式的放大因子由式@link["blazek2005-ch10#eq-10-12"]{(10.12)}给出。基于式@link["blazek2005-ch10#eq-10-26"]{(10.26)}可以证明，时间推进算子@tex-math{f}的Fourier符号取如下形式@link["blazek2005-r10-9"]{[9]}}
+      @lang["zh-Hans"]{上述@tex-math{m}步显式格式的放大因子由式@link["blazek2005-ch10#eq-10-12"]{(10.12)}给出。基于式@link["blazek2005-ch10#eq-10-26"]{(10.26)}可以证明，时间推进算子@tex-math{f}的Fourier符号取如下形式@link["blazek2005-r10-9"]{[9]}}
     }
 
     @tex-display-math[#:id "eq-10-27"]{\begin{aligned} f = \frac{\Delta t}{\Delta x} \Big[ &\alpha_m - \alpha_{m-1} \alpha_m \left(\frac{\Delta t}{\Delta x} z\right)\\ &+ \cdots - (-1)^m \alpha_1 \alpha_2 \cdots \alpha_m \left(\frac{\Delta t}{\Delta x} z\right)^{m-1} \Big], \end{aligned} \tag{10.27}}
 
     @bi{
       @lang["en"]{provided the convective and the dissipative part of @tex-math{z} are evaluated at each stage (so-called (@tex-math{m}, @tex-math{m})-scheme). The derivation of @tex-math{f} becomes more involved for the hybrid multistage schemes (Subsection 6.1.2). In the case of the (5,3)-scheme (Eq. (6.7)), the Fourier symbol of the time-stepping operator reads @link["blazek2005-r10-10"]{[10]}}
-      @lang["zh-CN"]{前提是@tex-math{z}的对流部分与耗散部分在每一阶段都重新求值（即所谓的(@tex-math{m}, @tex-math{m})-格式）。对于混合多步格式（小节6.1.2），@tex-math{f}的推导要更复杂。在(5,3)-格式（式(6.7)）的情形下，时间推进算子的Fourier符号为@link["blazek2005-r10-10"]{[10]}}
+      @lang["zh-Hans"]{前提是@tex-math{z}的对流部分与耗散部分在每一阶段都重新求值（即所谓的(@tex-math{m}, @tex-math{m})-格式）。对于混合多步格式（小节6.1.2），@tex-math{f}的推导要更复杂。在(5,3)-格式（式(6.7)）的情形下，时间推进算子的Fourier符号为@link["blazek2005-r10-10"]{[10]}}
     }
 
     @tex-display-math[#:id "eq-10-28"]{\begin{aligned} f = \frac{\Delta t}{\Delta x} \big\{ &\alpha_5 - \alpha_5 \alpha_4 \left(z_I + \beta_5 z_R\right)\left(1 - \alpha_3 z_I\right)\\ &- \alpha_5 \alpha_4 \alpha_2 \left(1 - \alpha_1 z_I\right)\left(z_I + \beta_5 z_R\right)\left[\alpha_3\left(z_I + \beta_3 z_R\right) z_I - \beta_3 z_R\right]\\ &- \alpha_5 \alpha_2 \left(1 - \beta_5\right) \beta_3 \left(1 - \alpha_1 z_I\right) z_R \big\} \end{aligned} \tag{10.28}}
 
     @bi{
       @lang["en"]{with}
-      @lang["zh-CN"]{其中}
+      @lang["zh-Hans"]{其中}
     }
 
     @tex-display-math[#:id "eq-10-29"]{z_R = \frac{\Delta t}{\Delta x}\, \mathrm{Real}(z) \quad \mathrm{and} \quad z_I = \frac{\Delta t}{\Delta x}\, \mathrm{Imag}(z) \tag{10.29}}
 
     @bi{
       @lang["en"]{representing the real and the imaginary part of @tex-math{z}. The stage coefficients @tex-math{\alpha_k} and the blending coefficients @tex-math{\beta_k} are shown in Table 6.2.}
-      @lang["zh-CN"]{分别表示@tex-math{z}的实部与虚部。阶段系数@tex-math{\alpha_k}与混合系数@tex-math{\beta_k}见表6.2。}
+      @lang["zh-Hans"]{分别表示@tex-math{z}的实部与虚部。阶段系数@tex-math{\alpha_k}与混合系数@tex-math{\beta_k}见表6.2。}
     }
 
     @bi{
       @lang["en"]{The time step @tex-math{\Delta t} can be determined with the aid of the Courant-Friedrichs-Lewy (CFL) condition @link["blazek2005-r10-11"]{[11]}. The following formula can be found for the convection model equation @link["blazek2005-ch10#eq-10-13"]{(10.13)}}
-      @lang["zh-CN"]{时间步长@tex-math{\Delta t}可以借助Courant-Friedrichs-Lewy（CFL）条件来确定@link["blazek2005-r10-11"]{[11]}。对于对流模型方程@link["blazek2005-ch10#eq-10-13"]{(10.13)}，可得如下公式}
+      @lang["zh-Hans"]{时间步长@tex-math{\Delta t}可以借助Courant-Friedrichs-Lewy（CFL）条件来确定@link["blazek2005-r10-11"]{[11]}。对于对流模型方程@link["blazek2005-ch10#eq-10-13"]{(10.13)}，可得如下公式}
     }
 
     @tex-display-math[#:id "eq-10-30"]{\Delta t = \sigma \frac{\Delta x}{|\Lambda|}. \tag{10.30}}
 
     @bi{
       @lang["en"]{The parameter @tex-math{\sigma} in Eq. @link["blazek2005-ch10#eq-10-30"]{(10.30)} denotes the CFL number. Its magnitude depends on the type and on the stage coefficients of the time-stepping scheme. The derivation of Eq. @link["blazek2005-ch10#eq-10-30"]{(10.30)} is presented in Subsection 10.3.6. In the case of the convection-diffusion model equation @link["blazek2005-ch10#eq-10-20"]{(10.20)}, the relation}
-      @lang["zh-CN"]{式@link["blazek2005-ch10#eq-10-30"]{(10.30)}中的参数@tex-math{\sigma}表示CFL数，其大小取决于时间推进格式的类型与阶段系数。式@link["blazek2005-ch10#eq-10-30"]{(10.30)}的推导见小节10.3.6。对于对流-扩散模型方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}，时间步长满足如下关系}
+      @lang["zh-Hans"]{式@link["blazek2005-ch10#eq-10-30"]{(10.30)}中的参数@tex-math{\sigma}表示CFL数，其大小取决于时间推进格式的类型与阶段系数。式@link["blazek2005-ch10#eq-10-30"]{(10.30)}的推导见小节10.3.6。对于对流-扩散模型方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}，时间步长满足如下关系}
     }
 
     @tex-display-math[#:id "eq-10-31"]{\Delta t = \sigma \frac{\Delta x}{|\Lambda| + C \Lambda_v} \tag{10.31}}
 
     @bi{
       @lang["en"]{holds for the time step. The factor @tex-math{C} in Eq. @link["blazek2005-ch10#eq-10-31"]{(10.31)} varies with the spatial discretisation. For the central scheme Eq. @link["blazek2005-ch10#eq-10-15"]{(10.15)}, @tex-math{C = 4} results in good damping. In the case of the 1st-order upwind scheme Eq. @link["blazek2005-ch10#eq-10-17"]{(10.17)}, @tex-math{C = 2} guarantees that the Fourier symbol of @tex-math{z = z_c - z_v} (Eq. @link["blazek2005-ch10#eq-10-23"]{(10.23)}) remains bounded by @tex-math{z_c}. In fact, the Fourier symbol with the diffusion term is identical to the Fourier symbol of @tex-math{z_c} for @tex-math{\Phi = \pi}, regardless of the ratio @tex-math{\Lambda_v / |\Lambda|}. The same situation is encountered for the 2nd-order upwind scheme Eq. @link["blazek2005-ch10#eq-10-19"]{(10.19)} if one sets @tex-math{C = 1}.}
-      @lang["zh-CN"]{式@link["blazek2005-ch10#eq-10-31"]{(10.31)}中的因子@tex-math{C}随空间离散化而变。对于中心格式（式@link["blazek2005-ch10#eq-10-15"]{(10.15)}），取@tex-math{C = 4}可获得良好阻尼。对于一阶上风格式（式@link["blazek2005-ch10#eq-10-17"]{(10.17)}），取@tex-math{C = 2}可保证@tex-math{z = z_c - z_v}（式@link["blazek2005-ch10#eq-10-23"]{(10.23)}）的Fourier符号始终以@tex-math{z_c}为界。事实上，当@tex-math{\Phi = \pi}时，含扩散项的Fourier符号与@tex-math{z_c}的Fourier符号完全相同，而与比值@tex-math{\Lambda_v / |\Lambda|}无关。对于二阶上风格式（式@link["blazek2005-ch10#eq-10-19"]{(10.19)}），取@tex-math{C = 1}时也会遇到同样的情形。}
+      @lang["zh-Hans"]{式@link["blazek2005-ch10#eq-10-31"]{(10.31)}中的因子@tex-math{C}随空间离散化而变。对于中心格式（式@link["blazek2005-ch10#eq-10-15"]{(10.15)}），取@tex-math{C = 4}可获得良好阻尼。对于一阶上风格式（式@link["blazek2005-ch10#eq-10-17"]{(10.17)}），取@tex-math{C = 2}可保证@tex-math{z = z_c - z_v}（式@link["blazek2005-ch10#eq-10-23"]{(10.23)}）的Fourier符号始终以@tex-math{z_c}为界。事实上，当@tex-math{\Phi = \pi}时，含扩散项的Fourier符号与@tex-math{z_c}的Fourier符号完全相同，而与比值@tex-math{\Lambda_v / |\Lambda|}无关。对于二阶上风格式（式@link["blazek2005-ch10#eq-10-19"]{(10.19)}），取@tex-math{C = 1}时也会遇到同样的情形。}
     }
 
     @emph{Examples of Fourier Symbols and Amplification Factors Fourier符号与放大因子示例}
 
     @bi{
       @lang["en"]{In the following, we shall consider a few applications of the von Neumann stability analysis to the convection and the mixed convection-diffusion model problems. The left-hand side of the figures below shows the locus of the Fourier symbol of the spatial operator @tex-math{z} (thick line) together with the isolines of the magnitude of the amplification factor @tex-math{|g|}. The boundary of the stability region is represented by @tex-math{|g| = 1}. The behaviour of @tex-math{|g|} with respect to the phase angle @tex-math{\Phi} is displayed on the right-hand side. This allows the assessment of the damping properties.}
-      @lang["zh-CN"]{下面考察Von Neumann稳定性分析在对流以及对流-扩散混合模型问题上的几个应用。以下各图的左半部分给出空间算子Fourier符号@tex-math{z}的轨迹（粗线）以及放大因子幅值@tex-math{|g|}的等值线；稳定区域的边界由@tex-math{|g| = 1}表示。右半部分给出@tex-math{|g|}随相位角@tex-math{\Phi}的变化。据此可以评估格式的阻尼特性。}
+      @lang["zh-Hans"]{下面考察Von Neumann稳定性分析在对流以及对流-扩散混合模型问题上的几个应用。以下各图的左半部分给出空间算子Fourier符号@tex-math{z}的轨迹（粗线）以及放大因子幅值@tex-math{|g|}的等值线；稳定区域的边界由@tex-math{|g| = 1}表示。右半部分给出@tex-math{|g|}随相位角@tex-math{\Phi}的变化。据此可以评估格式的阻尼特性。}
     }
 
     @bi{
       @lang["en"]{Fourier symbols and damping of upwind discretisation schemes are displayed in Fig. 10.1 for the convection model equation. In both cases, a 3-stage scheme is employed with optimised coefficients (Table 6.1). The behaviour of the 1st-order}
-      @lang["zh-CN"]{图10.1给出了对流模型方程上风离散格式的Fourier符号与阻尼特性。两种情形都采用带优化系数的3步格式（表6.1）。一阶上风格式（式}
+      @lang["zh-Hans"]{图10.1给出了对流模型方程上风离散格式的Fourier符号与阻尼特性。两种情形都采用带优化系数的3步格式（表6.1）。一阶上风格式（式}
     }
 
     @figure["blazek2005/fig-10-1.png" "图10.1:对流模型方程——显式(3,3)格式下空间算子的Fourier符号(z)与放大因子幅值(|g|)"]{
@@ -382,17 +382,17 @@
 }
     @bi{
       @lang["en"]{upwind scheme Eq. @link["blazek2005-ch10#eq-10-16"]{(10.16)} is shown in Fig. 10.1a and 10.1b. As we can see, the locus of the Fourier symbol passes all three minima of @tex-math{|g|} (small circular areas on the isoplot). This leads to very low magnitude of the amplification factor for a phase angle @tex-math{\Phi > \pi/2}, which is particularly important for an efficient multigrid scheme (@tex-math{\Phi \ge \pi/2} on coarse grid corresponds to @tex-math{\Phi < \pi/2} on fine grid). We can also observe that the damping properties are poor for @tex-math{\Phi < \pi/2}. This behaviour is typical for the multistage schemes. It explains their low asymptotic convergence rate, which can be best improved by multigrid. It should be noted that the range @tex-math{0 \le \Phi \le \pi} represents the first half of the locus on the left-hand side.}
-      @lang["zh-CN"]{@link["blazek2005-ch10#eq-10-16"]{(10.16)}）的行为示于图10.1a与图10.1b。可以看到，Fourier符号的轨迹通过了@tex-math{|g|}的全部三个极小值（等值线图上的小圆形区域）。这使得当相位角@tex-math{\Phi > \pi/2}时放大因子的幅值非常低，这对高效的多重网格尤为重要（粗网格上的@tex-math{\Phi \ge \pi/2}对应细网格上的@tex-math{\Phi < \pi/2}）。我们还可以观察到，@tex-math{\Phi < \pi/2}时阻尼特性较差。这一行为是多步格式的典型特征，也解释了其渐近收敛率偏低的原因——多重网格正是改善这一点的最佳手段。应当注意，@tex-math{0 \le \Phi \le \pi}的范围对应左图中轨迹的前一半。}
+      @lang["zh-Hans"]{@link["blazek2005-ch10#eq-10-16"]{(10.16)}）的行为示于图10.1a与图10.1b。可以看到，Fourier符号的轨迹通过了@tex-math{|g|}的全部三个极小值（等值线图上的小圆形区域）。这使得当相位角@tex-math{\Phi > \pi/2}时放大因子的幅值非常低，这对高效的多重网格尤为重要（粗网格上的@tex-math{\Phi \ge \pi/2}对应细网格上的@tex-math{\Phi < \pi/2}）。我们还可以观察到，@tex-math{\Phi < \pi/2}时阻尼特性较差。这一行为是多步格式的典型特征，也解释了其渐近收敛率偏低的原因——多重网格正是改善这一点的最佳手段。应当注意，@tex-math{0 \le \Phi \le \pi}的范围对应左图中轨迹的前一半。}
     }
 
     @bi{
       @lang["en"]{The next diagram (Fig. 10.1b), demonstrates what happens, if the CFL-number @tex-math{\sigma} is increased too much. As expected, the Fourier symbol extends behind the stability boundary. Consequently, the magnitude of @tex-math{g} becomes larger than unity (dashed line). This means that the solution errors are amplified for the corresponding phase angles (frequencies). Such a time-stepping scheme will clearly diverge. Part (c) of Fig. 10.1 shows the properties of the 2nd-order upwind scheme Eq. @link["blazek2005-ch10#eq-10-18"]{(10.18)}. In principle, the behaviour is similar to that of the 1st-order upwind scheme.}
-      @lang["zh-CN"]{下一幅图（图10.1b）演示了若把CFL数@tex-math{\sigma}增大得过多会发生什么。正如所料，Fourier符号越过稳定边界向外延伸，于是@tex-math{g}的幅值大于1（虚线）。这意味着对相应的相位角（频率），解误差会被放大；这样的时间推进格式显然会发散。图10.1的(c)部分给出了二阶上风格式（式@link["blazek2005-ch10#eq-10-18"]{(10.18)}）的特性，其行为原则上与一阶上风格式类似。}
+      @lang["zh-Hans"]{下一幅图（图10.1b）演示了若把CFL数@tex-math{\sigma}增大得过多会发生什么。正如所料，Fourier符号越过稳定边界向外延伸，于是@tex-math{g}的幅值大于1（虚线）。这意味着对相应的相位角（频率），解误差会被放大；这样的时间推进格式显然会发散。图10.1的(c)部分给出了二阶上风格式（式@link["blazek2005-ch10#eq-10-18"]{(10.18)}）的特性，其行为原则上与一阶上风格式类似。}
     }
 
     @bi{
       @lang["en"]{The following plots in Fig. 10.2 display the loci of the Fourier symbols and the damping properties of the hybrid (5,3)-scheme (Subsection 6.1.2) applied to the convection model equation @link["blazek2005-ch10#eq-10-13"]{(10.13)}. The spatial discretisation utilises the central scheme with artificial dissipation (Eq. @link["blazek2005-ch10#eq-10-14"]{(10.14)}). In order to demonstrate the influence of the dissipation coefficient @tex-math{\epsilon^{(4)}}, its value is varied from 1/16 (Fig. 10.2a) to 1/256 (Fig. 10.2c). We can conclude from the results that the locus is contracted along the real axis with decreasing amount of artificial dissipation. This effect is caused by down-sizing the term @tex-math{(1 - \cos\Phi)^2} in Eq. @link["blazek2005-ch10#eq-10-15"]{(10.15)}. More important is the fact that the damping properties deteriorate with reduced artificial dissipation. This means in practice that the convergence speed and the robustness of the scheme will degrade with lower dissipation level.}
-      @lang["zh-CN"]{图10.2中的各图显示了混合(5,3)-格式（小节6.1.2）施加于对流模型方程@link["blazek2005-ch10#eq-10-13"]{(10.13)}时的Fourier符号轨迹与阻尼特性，空间离散采用带人工耗散的中心格式（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）。为了展示耗散系数@tex-math{\epsilon^{(4)}}的影响，其取值从1/16（图10.2a）变到1/256（图10.2c）。由结果可以得出：随着人工耗散量的减小，轨迹沿实轴收缩——这是式@link["blazek2005-ch10#eq-10-15"]{(10.15)}中@tex-math{(1 - \cos\Phi)^2}项变小所致。更重要的是，人工耗散减小后阻尼特性会恶化；实际上，这意味着耗散水平越低，格式的收敛速度与鲁棒性就越差。}
+      @lang["zh-Hans"]{图10.2中的各图显示了混合(5,3)-格式（小节6.1.2）施加于对流模型方程@link["blazek2005-ch10#eq-10-13"]{(10.13)}时的Fourier符号轨迹与阻尼特性，空间离散采用带人工耗散的中心格式（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）。为了展示耗散系数@tex-math{\epsilon^{(4)}}的影响，其取值从1/16（图10.2a）变到1/256（图10.2c）。由结果可以得出：随着人工耗散量的减小，轨迹沿实轴收缩——这是式@link["blazek2005-ch10#eq-10-15"]{(10.15)}中@tex-math{(1 - \cos\Phi)^2}项变小所致。更重要的是，人工耗散减小后阻尼特性会恶化；实际上，这意味着耗散水平越低，格式的收敛速度与鲁棒性就越差。}
     }
 
     @figure["blazek2005/fig-10-2.png" "图10.2:对流模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)"]{
@@ -400,7 +400,7 @@
 }
     @bi{
       @lang["en"]{The properties of the hybrid (5,3)-scheme employed to solve the convection-diffusion equation @link["blazek2005-ch10#eq-10-20"]{(10.20)} are investigated next. At first, the scheme is coupled to the 1st-order upwind spatial discretisation Eq. @link["blazek2005-ch10#eq-10-16"]{(10.16)}. In Fig. 10.3, comparison is made between the cases @tex-math{\Lambda_v = 0} (pure convection) and @tex-math{\Lambda_v / \Lambda = 2} (denoted by dashed line). As we can see, the locus of the Fourier symbol is contracted along the imaginary axis due to the influence of the diffusion term @tex-math{z_v}, which has only a real component. The extension of the Fourier symbol along the real axis is kept, if the time step is computed according to Eq. @link["blazek2005-ch10#eq-10-31"]{(10.31)} with @tex-math{C = 2}. The damping of the scheme remains on about the same favourable level as for pure convection. This is caused by the optimised, flat minimum of @tex-math{|g|} in the region surrounded by the locus of @tex-math{z_c} (right-hand side of Fig. 10.3).}
-      @lang["zh-CN"]{接下来考察用混合(5,3)-格式求解对流-扩散方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}时的特性。首先把该格式与一阶上风空间离散（式@link["blazek2005-ch10#eq-10-16"]{(10.16)}）相耦合。图10.3比较了@tex-math{\Lambda_v = 0}（纯对流）与@tex-math{\Lambda_v / \Lambda = 2}（虚线所示）两种情形。可以看到，由于扩散项@tex-math{z_v}（只有实部分量）的影响，Fourier符号的轨迹沿虚轴收缩。若时间步长按式@link["blazek2005-ch10#eq-10-31"]{(10.31)}取@tex-math{C = 2}计算，则Fourier符号沿实轴的伸展得以保持，格式的阻尼大致维持在纯对流时同样良好的水平上——其原因在于@tex-math{z_c}轨迹所围区域内@tex-math{|g|}具有优化过的平坦极小值（图10.3右图）。}
+      @lang["zh-Hans"]{接下来考察用混合(5,3)-格式求解对流-扩散方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}时的特性。首先把该格式与一阶上风空间离散（式@link["blazek2005-ch10#eq-10-16"]{(10.16)}）相耦合。图10.3比较了@tex-math{\Lambda_v = 0}（纯对流）与@tex-math{\Lambda_v / \Lambda = 2}（虚线所示）两种情形。可以看到，由于扩散项@tex-math{z_v}（只有实部分量）的影响，Fourier符号的轨迹沿虚轴收缩。若时间步长按式@link["blazek2005-ch10#eq-10-31"]{(10.31)}取@tex-math{C = 2}计算，则Fourier符号沿实轴的伸展得以保持，格式的阻尼大致维持在纯对流时同样良好的水平上——其原因在于@tex-math{z_c}轨迹所围区域内@tex-math{|g|}具有优化过的平坦极小值（图10.3右图）。}
     }
 
     @figure["blazek2005/fig-10-3.png" "图10.3:对流-扩散模型方程——一阶上风空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)"]{
@@ -408,7 +408,7 @@
 }
     @bi{
       @lang["en"]{The behaviour of the hybrid (5,3)-scheme with central discretisation (Eq. @link["blazek2005-ch10#eq-10-14"]{(10.14)}) is displayed in Fig. 10.4. The dissipation coefficient was set to @tex-math{\epsilon^{(4)} = 1/64} and the ratio of the eigenvalues to @tex-math{\Lambda_v / \Lambda = 2}, respectively. We can observe that the locus of the Fourier symbol changes its form completely as compared to the convection equation. In the limit case @tex-math{\Lambda_v \to \infty}, the locus would degrade to a line. Therefore, it is important that the time-stepping is optimised to have}
-      @lang["zh-CN"]{采用中心离散（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）时混合(5,3)-格式的行为示于图10.4，其中耗散系数取@tex-math{\epsilon^{(4)} = 1/64}，特征值之比取@tex-math{\Lambda_v / \Lambda = 2}。可以观察到，与对流方程相比，Fourier符号的轨迹形状完全改变；在@tex-math{\Lambda_v \to \infty}的极限情形下，轨迹会退化成一条线。因此，重要的是把时间推进优化成具有}
+      @lang["zh-Hans"]{采用中心离散（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）时混合(5,3)-格式的行为示于图10.4，其中耗散系数取@tex-math{\epsilon^{(4)} = 1/64}，特征值之比取@tex-math{\Lambda_v / \Lambda = 2}。可以观察到，与对流方程相比，Fourier符号的轨迹形状完全改变；在@tex-math{\Lambda_v \to \infty}的极限情形下，轨迹会退化成一条线。因此，重要的是把时间推进优化成具有}
     }
 
     @figure["blazek2005/fig-10-4.png" "图10.4:对流-扩散模型方程——中心空间离散下显式(5,3)格式的空间算子Fourier符号(z)与放大因子幅值(|g|)"]{
@@ -416,12 +416,12 @@
 }
     @bi{
       @lang["en"]{a shallow minimum of @tex-math{|g|} along the real axis. It should be mentioned that the time step was evaluated with Eq. @link["blazek2005-ch10#eq-10-31"]{(10.31)} and @tex-math{C = 4}.}
-      @lang["zh-CN"]{沿实轴的@tex-math{|g|}浅极小值。需要说明的是，这里的时间步长按式@link["blazek2005-ch10#eq-10-31"]{(10.31)}取@tex-math{C = 4}计算。}
+      @lang["zh-Hans"]{沿实轴的@tex-math{|g|}浅极小值。需要说明的是，这里的时间步长按式@link["blazek2005-ch10#eq-10-31"]{(10.31)}取@tex-math{C = 4}计算。}
     }
 
     @bi{
       @lang["en"]{Further examples related to the von Neumann stability analysis can be found in the Refs. @link["blazek2005-r10-9"]{[9]}, and @link["blazek2005-r10-12"]{[12]}–@link["blazek2005-r10-13"]{[13]}–@link["blazek2005-r10-14"]{[14]}–@link["blazek2005-r10-15"]{[15]}–@link["blazek2005-r10-16"]{[16]}–@link["blazek2005-r10-17"]{[17]}–@link["blazek2005-r10-18"]{[18]}. Program for the linear analysis of explicit multistage schemes (with implicit residual smoothing) is provided on the CD-ROM.}
-      @lang["zh-CN"]{与Von Neumann稳定性分析有关的更多例子可在文献@link["blazek2005-r10-9"]{[9]}以及@link["blazek2005-r10-12"]{[12]}–@link["blazek2005-r10-13"]{[13]}–@link["blazek2005-r10-14"]{[14]}–@link["blazek2005-r10-15"]{[15]}–@link["blazek2005-r10-16"]{[16]}–@link["blazek2005-r10-17"]{[17]}–@link["blazek2005-r10-18"]{[18]}中找到。CD-ROM上提供了对显式多步格式（含隐式残差光顺）作线性分析的程序。}
+      @lang["zh-Hans"]{与Von Neumann稳定性分析有关的更多例子可在文献@link["blazek2005-r10-9"]{[9]}以及@link["blazek2005-r10-12"]{[12]}–@link["blazek2005-r10-13"]{[13]}–@link["blazek2005-r10-14"]{[14]}–@link["blazek2005-r10-15"]{[15]}–@link["blazek2005-r10-16"]{[16]}–@link["blazek2005-r10-17"]{[17]}–@link["blazek2005-r10-18"]{[18]}中找到。CD-ROM上提供了对显式多步格式（含隐式残差光顺）作线性分析的程序。}
     }
   }
 }
@@ -430,35 +430,35 @@
 
   @bi{
     @lang["en"]{According to Eq. (6.28) in Section 6.2, a general implicit scheme for the integration of the model equations can be formulated as}
-    @lang["zh-CN"]{根据6.2节中的式(6.28)，可以写出用于积分模型方程的一般隐式格式}
+    @lang["zh-Hans"]{根据6.2节中的式(6.28)，可以写出用于积分模型方程的一般隐式格式}
   }
 
   @tex-display-math[#:id "eq-10-32"]{\left[\frac{\Delta x}{\Delta t} + \beta\left(\frac{\partial R}{\partial U}\right)_i\right]\Delta U^n = -R_i^n\,. \tag{10.32}}
 
   @bi{
     @lang["en"]{We can rewrite the flux Jacobian @tex-math{\partial R/\partial U} as a sum of two difference operators - one for the convection and one for the diffusion term in Eq. @link["blazek2005-ch10#eq-10-20"]{(10.20)}, i.e.,}
-    @lang["zh-CN"]{我们可以把通量Jacobian@tex-math{\partial R/\partial U}重写为两个差分算子之和——一个对应式@link["blazek2005-ch10#eq-10-20"]{(10.20)}中的对流项，另一个对应其中的扩散项，即}
+    @lang["zh-Hans"]{我们可以把通量Jacobian@tex-math{\partial R/\partial U}重写为两个差分算子之和——一个对应式@link["blazek2005-ch10#eq-10-20"]{(10.20)}中的对流项，另一个对应其中的扩散项，即}
   }
 
   @tex-display-math[#:id "eq-10-33"]{\left\{\frac{\Delta x}{\Delta t} + \beta\left[(D_x^I)_c - (D_x^I)_v\right]_i\right\}\Delta U^n = -R_i^n\,. \tag{10.33}}
 
   @bi{
     @lang["en"]{The convection difference-operator can take various forms. For instance, in the case of the central scheme with artificial dissipation it becomes (cf. Eq. (6.47))}
-    @lang["zh-CN"]{对流差分算子可以取多种不同的形式。例如，在带人工耗散的中心格式的情形下，它成为（对照式(6.47)）}
+    @lang["zh-Hans"]{对流差分算子可以取多种不同的形式。例如，在带人工耗散的中心格式的情形下，它成为（对照式(6.47)）}
   }
 
   @tex-display-math[#:id "eq-10-34"]{(D_x^I)_c\,\Delta U^n = \frac{\Lambda}{2}\left(\Delta U_{i+1}^n - \Delta U_{i-1}^n\right) + \Lambda\epsilon^I\left(\Delta U_{i+1}^n - 2\Delta U_i^n + \Delta U_{i-1}^n\right), \tag{10.34}}
 
   @bi{
     @lang["en"]{where @tex-math{\epsilon^I} denotes the implicit dissipation coefficient. We do not include here the 4th-differences, since those are only seldom used in practice (because of high numerical effort). The 1st- or the 2nd-order upwind scheme in the implicit operator leads to}
-    @lang["zh-CN"]{其中@tex-math{\epsilon^I}表示隐式耗散系数。这里没有包含四阶差分项，因为它的数值代价高，实际中很少使用。隐式算子中采用一阶或二阶上风格式时，分别得到}
+    @lang["zh-Hans"]{其中@tex-math{\epsilon^I}表示隐式耗散系数。这里没有包含四阶差分项，因为它的数值代价高，实际中很少使用。隐式算子中采用一阶或二阶上风格式时，分别得到}
   }
 
   @tex-display-math[#:id "eq-10-35"]{(D_x^I)_c\,\Delta U^n = \Lambda\left(\Delta U_i^n - \Delta U_{i-1}^n\right), \tag{10.35}}
 
   @bi{
     @lang["en"]{or}
-    @lang["zh-CN"]{或}
+    @lang["zh-Hans"]{或}
   }
 
   @tex-display-math[#:id "eq-10-36"]{(D_x^I)_c\,\Delta U^n = \frac{\Lambda}{2}\left(3\Delta U_i^n - 4\Delta U_{i-1}^n\right) + \Delta U_{i-2}^n)\,, \tag{10.36}}
@@ -467,52 +467,52 @@
 
   @bi{
     @lang["en"]{respectively. The diffusion difference-operator is usually of central type}
-    @lang["zh-CN"]{其中前者对应一阶、后者对应二阶上风格式。扩散差分算子通常为中心型}
+    @lang["zh-Hans"]{其中前者对应一阶、后者对应二阶上风格式。扩散差分算子通常为中心型}
   }
 
   @tex-display-math[#:id "eq-10-37"]{(D_x^I)_v\,\Delta U^n = \frac{\Lambda_v}{2}\left(\Delta U_{i+1}^n - 2\Delta U_i^n + \Delta U_{i-1}^n\right). \tag{10.37}}
 
   @bi{
     @lang["en"]{The discretisation of the explicit operator can be conducted accordingly to one of the relations (10.14), (10.16), or (10.18).}
-    @lang["zh-CN"]{显式算子的离散化则可以按照式@link["blazek2005-ch10#eq-10-14"]{(10.14)}、式@link["blazek2005-ch10#eq-10-16"]{(10.16)}或式@link["blazek2005-ch10#eq-10-18"]{(10.18)}中的某一关系来进行。}
+    @lang["zh-Hans"]{显式算子的离散化则可以按照式@link["blazek2005-ch10#eq-10-14"]{(10.14)}、式@link["blazek2005-ch10#eq-10-16"]{(10.16)}或式@link["blazek2005-ch10#eq-10-18"]{(10.18)}中的某一关系来进行。}
   }
 
   @bi{
     @lang["en"]{If we insert the Fourier mode Eq. (10.9) into the implicit scheme Eq. @link["blazek2005-ch10#eq-10-33"]{(10.33)}, we obtain}
-    @lang["zh-CN"]{如果把式@link["blazek2005-ch10#eq-10-9"]{(10.9)}所表示的傅里叶模态代入隐式格式@link["blazek2005-ch10#eq-10-33"]{(10.33)}，就得到}
+    @lang["zh-Hans"]{如果把式@link["blazek2005-ch10#eq-10-9"]{(10.9)}所表示的傅里叶模态代入隐式格式@link["blazek2005-ch10#eq-10-33"]{(10.33)}，就得到}
   }
 
   @tex-display-math[#:id "eq-10-38"]{\left[\frac{\Delta x}{\Delta t} + \beta z^I\right]\Delta\hat{U}^n = -z^E\hat{U}^n\,, \tag{10.38}}
 
   @bi{
     @lang["en"]{where @tex-math{z^I = z_c^I - z_v^I} denotes the Fourier symbol of the flux Jacobian and @tex-math{z^E = z_c^E - z_v^E} represents the Fourier symbol of the explicit operator. The forms of the Fourier symbols correspond to those derived in Sections 10.3.2 and 10.3.3. The amplification factor results with Eq. (10.12) as}
-    @lang["zh-CN"]{其中@tex-math{z^I=z_c^I-z_v^I}表示通量Jacobian的傅里叶符号，@tex-math{z^E=z_c^E-z_v^E}表示显式算子的傅里叶符号。这些傅里叶符号的形式与10.3.2节和10.3.3节中推导的形式相对应。借助式@link["blazek2005-ch10#eq-10-12"]{(10.12)}，放大因子为}
+    @lang["zh-Hans"]{其中@tex-math{z^I=z_c^I-z_v^I}表示通量Jacobian的傅里叶符号，@tex-math{z^E=z_c^E-z_v^E}表示显式算子的傅里叶符号。这些傅里叶符号的形式与10.3.2节和10.3.3节中推导的形式相对应。借助式@link["blazek2005-ch10#eq-10-12"]{(10.12)}，放大因子为}
   }
 
   @tex-display-math[#:id "eq-10-39"]{g = 1 - \frac{z^E}{\left[\frac{\Delta x}{\Delta t} + \beta z^I\right]}\,. \tag{10.39}}
 
   @bi{
     @lang["en"]{Thus, the Fourier symbol of the time-stepping operator is @tex-math{f = 1/[\cdots]}. A quick inspection of Eq. (10.39) reveals that for @tex-math{\Delta t \to \infty}, @tex-math{\beta = 1} and @tex-math{z^I = z^E}, the amplification factor will be zero for phase angles @tex-math{\Phi > 0}. This situation occurs for the Newton scheme (see Subsection 6.2.5), if the flux Jacobian is exact. This explains the very fast convergence of the exact Newton's method.}
-    @lang["zh-CN"]{因此，时间推进算子的傅里叶符号为@tex-math{f=1/[\cdots]}。快速考察式@link["blazek2005-ch10#eq-10-39"]{(10.39)}可以发现：当@tex-math{\Delta t\to\infty}、@tex-math{\beta=1}且@tex-math{z^I=z^E}时，对所有相位角@tex-math{\Phi>0}放大因子都将为零。当通量Jacobian为精确Jacobian时，Newton格式（见6.2.5小节）恰好就处于这种情形。这解释了精确Newton法收敛极快的原因。}
+    @lang["zh-Hans"]{因此，时间推进算子的傅里叶符号为@tex-math{f=1/[\cdots]}。快速考察式@link["blazek2005-ch10#eq-10-39"]{(10.39)}可以发现：当@tex-math{\Delta t\to\infty}、@tex-math{\beta=1}且@tex-math{z^I=z^E}时，对所有相位角@tex-math{\Phi>0}放大因子都将为零。当通量Jacobian为精确Jacobian时，Newton格式（见6.2.5小节）恰好就处于这种情形。这解释了精确Newton法收敛极快的原因。}
   }
 
   @emph{Examples of Amplification Factors 放大因子示例}
 
   @bi{
     @lang["en"]{In the following, we shall investigate the damping properties of a few implicit schemes with varying discretisations of the explicit and the implicit operator. For further discussion, the interested reader is referred to Ref. @link["blazek2005-r10-19"]{[19]}, which contains von Neumann analysis of the popular LU-SGS scheme in 2D (single grid and multigrid). A program for the analysis of implicit schemes is also provided on the accompanying CD-ROM.}
-    @lang["zh-CN"]{下面我们将考察若干隐式格式的阻尼特性，它们对显式算子和隐式算子采用不同的离散方式。想作进一步讨论的读者可参阅文献@link["blazek2005-r10-19"]{[19]}，其中包含对流行的LU-SGS格式在二维情形（单层网格与多重网格）下的von Neumann分析。随书CD-ROM上也提供了用于分析隐式格式的程序。}
+    @lang["zh-Hans"]{下面我们将考察若干隐式格式的阻尼特性，它们对显式算子和隐式算子采用不同的离散方式。想作进一步讨论的读者可参阅文献@link["blazek2005-r10-19"]{[19]}，其中包含对流行的LU-SGS格式在二维情形（单层网格与多重网格）下的von Neumann分析。随书CD-ROM上也提供了用于分析隐式格式的程序。}
   }
 
   @bi{
     @lang["en"]{In the first example, we consider a scheme which applies central spatial discretisation to the explicit (Eq. (10.14)) and the implicit operator (Eq. (10.34)). This is similar to the standard ADI scheme as presented in Subsection 6.2.3. We want to investigate the influence of parameter settings within the implicit operator on the amplification factor. Three exemplary results are compared in Fig. 10.5. The first curve (solid line) was generated with @tex-math{\beta = 1} and @tex-math{\epsilon^I = 1/20}. The value of @tex-math{\epsilon^I} was chosen such that @tex-math{|g| = 0} at @tex-math{\Phi = \pi}. The following formulae can be used to compute @tex-math{\epsilon^I}}
-    @lang["zh-CN"]{第一个例子考察对显式算子（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）和隐式算子（式@link["blazek2005-ch10#eq-10-34"]{(10.34)}）都采用中心空间离散的格式。它与6.2.3小节中介绍的标准ADI格式类似。我们想研究隐式算子内部参数设置对放大因子的影响。图10.5比较了三个示例结果。第一条曲线（实线）取@tex-math{\beta=1}、@tex-math{\epsilon^I=1/20}生成；@tex-math{\epsilon^I}的取值使得@tex-math{|g|}在@tex-math{\Phi=\pi}处为零。下面的公式可用来计算@tex-math{\epsilon^I}}
+    @lang["zh-Hans"]{第一个例子考察对显式算子（式@link["blazek2005-ch10#eq-10-14"]{(10.14)}）和隐式算子（式@link["blazek2005-ch10#eq-10-34"]{(10.34)}）都采用中心空间离散的格式。它与6.2.3小节中介绍的标准ADI格式类似。我们想研究隐式算子内部参数设置对放大因子的影响。图10.5比较了三个示例结果。第一条曲线（实线）取@tex-math{\beta=1}、@tex-math{\epsilon^I=1/20}生成；@tex-math{\epsilon^I}的取值使得@tex-math{|g|}在@tex-math{\Phi=\pi}处为零。下面的公式可用来计算@tex-math{\epsilon^I}}
   }
 
   @tex-display-math[#:id "eq-10-40"]{\epsilon^I = \frac{1}{\beta}\left(4\epsilon^{(4)} - \frac{\Delta x}{4|\Lambda|\Delta t}\right)\,. \tag{10.40}}
 
   @bi{
     @lang["en"]{The second curve (dashed line) demonstrates that the artificial dissipation has to be included in the implicit operator. For @tex-math{\epsilon^I = 0}, the scheme becomes unstable at high frequencies (@tex-math{\Phi \to \pi}). The last curve (dash-dotted) shows the magnitude of @tex-math{g} for @tex-math{\beta = 1/2}, i.e., for second-order accuracy in time. As we can see, the damping properties are much worser than for @tex-math{\beta = 1}. Therefore, this value should be preferred. Unsteady flows are more efficiently solved by the dual-time stepping described in Section 6.3.2.}
-    @lang["zh-CN"]{第二条曲线（虚线）表明人工耗散必须包含在隐式算子之内：当@tex-math{\epsilon^I=0}时，格式在高频段（@tex-math{\Phi\to\pi}）会变得不稳定。最后一条曲线（点划线）给出@tex-math{\beta=1/2}（即时间二阶精度）时@tex-math{g}的幅值。可以看到，其阻尼特性比@tex-math{\beta=1}时差得多，因此应优先选用后者。非定常流动用6.3.2节所述的双重时间推进（dual-time stepping）来求解更为高效。}
+    @lang["zh-Hans"]{第二条曲线（虚线）表明人工耗散必须包含在隐式算子之内：当@tex-math{\epsilon^I=0}时，格式在高频段（@tex-math{\Phi\to\pi}）会变得不稳定。最后一条曲线（点划线）给出@tex-math{\beta=1/2}（即时间二阶精度）时@tex-math{g}的幅值。可以看到，其阻尼特性比@tex-math{\beta=1}时差得多，因此应优先选用后者。非定常流动用6.3.2节所述的双重时间推进（dual-time stepping）来求解更为高效。}
   }
 
   @figure["blazek2005/fig-10-5.png" "图10.5:对流模型方程——隐式格式下放大因子的幅值"]{
@@ -520,7 +520,7 @@
 }
   @bi{
     @lang["en"]{The effect of increasing CFL number is illustrated in Fig. 10.6. First-order upwind scheme (Eqs. (10.16) and (10.35)) is employed on both sides. The damping is very good due to the similarity between the explicit and the implicit operator. This confirms our remark with respect to Newton's scheme.}
-    @lang["zh-CN"]{CFL数增大的影响如图10.6所示。两侧（显式算子与隐式算子）都采用一阶上风格式（式@link["blazek2005-ch10#eq-10-16"]{(10.16)}与式@link["blazek2005-ch10#eq-10-35"]{(10.35)}）。由于显式算子与隐式算子之间的相似性，阻尼非常好。这印证了我们前面关于Newton格式的评述。}
+    @lang["zh-Hans"]{CFL数增大的影响如图10.6所示。两侧（显式算子与隐式算子）都采用一阶上风格式（式@link["blazek2005-ch10#eq-10-16"]{(10.16)}与式@link["blazek2005-ch10#eq-10-35"]{(10.35)}）。由于显式算子与隐式算子之间的相似性，阻尼非常好。这印证了我们前面关于Newton格式的评述。}
   }
 
   @figure["blazek2005/fig-10-6.png" "图10.6:对流模型方程——隐式格式下放大因子的幅值"]{
@@ -528,7 +528,7 @@
 }
   @bi{
     @lang["en"]{In the next diagram (Fig. 10.7), we compare the amplification factors for two different discretisations of the implicit operator (the left-hand side - LHS). The explicit operator is in both cases discretised using 2nd-order upwind scheme Eq. (10.18). It is evident that the exact representation of the explicit operator on the LHS leads to significantly better damping properties and thus to faster convergence. This observation was often confirmed in practice. The damping properties of a mixed 1st-/2nd-order discretisation can be improved by increased overrelaxation as demonstrated for the LU-SGS scheme @link["blazek2005-r10-19"]{[19]}, @link["blazek2005-r10-20"]{[20]}.}
-    @lang["zh-CN"]{在接下来的一幅图（图10.7）中，我们比较隐式算子（即左端项，left-hand side——LHS）两种不同离散化的放大因子。两种情形下，显式算子都采用二阶上风格式(10.18)离散。显式算子在LHS中得到精确表示时，阻尼特性明显更佳、收敛更快，这一点从图中显而易见。这一观察在实践中多次得到证实。对于一阶/二阶混合离散，可以通过加大超松弛来改善阻尼特性，LU-SGS格式@link["blazek2005-r10-19"]{[19]}、@link["blazek2005-r10-20"]{[20]}即为这样的例子。}
+    @lang["zh-Hans"]{在接下来的一幅图（图10.7）中，我们比较隐式算子（即左端项，left-hand side——LHS）两种不同离散化的放大因子。两种情形下，显式算子都采用二阶上风格式(10.18)离散。显式算子在LHS中得到精确表示时，阻尼特性明显更佳、收敛更快，这一点从图中显而易见。这一观察在实践中多次得到证实。对于一阶/二阶混合离散，可以通过加大超松弛来改善阻尼特性，LU-SGS格式@link["blazek2005-r10-19"]{[19]}、@link["blazek2005-r10-20"]{[20]}即为这样的例子。}
   }
 
   @figure["blazek2005/fig-10-7.png" "图10.7:对流模型方程——隐式格式下放大因子的幅值"]{
@@ -536,7 +536,7 @@
 }
   @bi{
     @lang["en"]{The last example in Fig. 10.8 deals with the convection-diffusion model equation (10.20). We want to compare two cases. In the first one, the discretisation of the diffusion term is also contained in the implicit operator (solid line). We can observe that the damping properties are very favourable - similar to those found for the convection model problem. However, if the diffusion term is removed from the implicit operator (dashed line in Fig. 10.8, the scheme becomes unstable, even at this low ratio of viscous to convective eigenvalue (@tex-math{\Lambda_v/\Lambda = 2}). Therefore, the viscous fluxes should be always included in the approximation of the flux Jacobian to obtain a robust scheme.}
-    @lang["zh-CN"]{图10.8中的最后一个例子考察对流-扩散模型方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}。我们比较两种情形。第一种情形把扩散项的离散也包含在隐式算子之内（实线）。可以看到，其阻尼特性非常好——与对流模型问题中的情形相似。然而，如果从隐式算子中去掉扩散项（图10.8中的虚线），格式就会变得不稳定，即使此时黏性特征值与对流特征值之比很低（@tex-math{\Lambda_v/\Lambda=2}）。因此，为了获得稳健的格式，黏性通量始终都应包含在通量Jacobian的近似之中。}
+    @lang["zh-Hans"]{图10.8中的最后一个例子考察对流-扩散模型方程@link["blazek2005-ch10#eq-10-20"]{(10.20)}。我们比较两种情形。第一种情形把扩散项的离散也包含在隐式算子之内（实线）。可以看到，其阻尼特性非常好——与对流模型问题中的情形相似。然而，如果从隐式算子中去掉扩散项（图10.8中的虚线），格式就会变得不稳定，即使此时黏性特征值与对流特征值之比很低（@tex-math{\Lambda_v/\Lambda=2}）。因此，为了获得稳健的格式，黏性通量始终都应包含在通量Jacobian的近似之中。}
   }
 
   @sidenote{译注：原书此处“(dashed line in Fig. 10.8,”之后缺少右括号，译文按文义补全。}
@@ -546,12 +546,12 @@
 }
   @bi{
     @lang["en"]{In summary, we can state that the implicit operator should include at least the most important features of the spatial discretisation and of the physical problem. Rather crude approximations of the flux Jacobian @tex-math{\partial\tilde{R}/\partial\tilde{W}} can easily lead to an unstable scheme. Therefore, it is very important to find a reasonable compromise between the numerical effort and the accuracy of the numerical flux Jacobian.}
-    @lang["zh-CN"]{综上所述：隐式算子至少应当包含空间离散和物理问题中最重要的特征。十分粗糙的通量Jacobian@tex-math{\partial\tilde{R}/\partial\tilde{W}}近似很容易导致格式不稳定。因此，在数值代价与数值通量Jacobian的精度之间找到合理的折中极为重要。}
+    @lang["zh-Hans"]{综上所述：隐式算子至少应当包含空间离散和物理问题中最重要的特征。十分粗糙的通量Jacobian@tex-math{\partial\tilde{R}/\partial\tilde{W}}近似很容易导致格式不稳定。因此，在数值代价与数值通量Jacobian的精度之间找到合理的折中极为重要。}
   }
 
   @bi{
     @lang["en"]{A comparison to the results of the explicit multistage scheme reveals that the damping properties of a properly designed implicit scheme are significantly better. This is especially true for the damping at low phase angles (frequencies). Therefore, we can expect faster asymptotic convergence rates from an implicit scheme as compared to a multistage scheme.}
-    @lang["zh-CN"]{与显式多级格式的结果相比较可以看出：设计得当的隐式格式阻尼特性明显更好，在低相位角（低频）段的阻尼尤其如此。因此，与多级格式相比，可以期望隐式格式具有更快的渐近收敛速率。}
+    @lang["zh-Hans"]{与显式多级格式的结果相比较可以看出：设计得当的隐式格式阻尼特性明显更好，在低相位角（低频）段的阻尼尤其如此。因此，与多级格式相比，可以期望隐式格式具有更快的渐近收敛速率。}
   }
 }
 
@@ -560,7 +560,7 @@
 
   @bi{
     @lang["en"]{Every explicit time-stepping scheme remains stable only up to a certain value of the time step @tex-math{\Delta t}. The necessary, but not sufficient, condition for stability of a time-stepping scheme was formulated by Courant, Friedrichs and Lewy @link["blazek2005-r10-11"]{[11]}. The so-called CFL condition states that the domain of dependence of the numerical scheme has to include the domain of dependence of the partial differential equation. In order to clarify this statement, let us consider the @tex-math{x}-@tex-math{t} diagram in Fig. 10.9. The domain of dependence of the convection model equation (10.13) is given by the characteristic @tex-math{dx/dt = \Lambda}. This means that any information is carried with this speed across the domain. Consequently, the exact solution at the time @tex-math{(t_0 + \Delta t)} is equal to the solution at the time @tex-math{t_0} but at the space coordinate @tex-math{x^{*} = x_i - \Lambda\Delta t}. In order to simulate the behaviour of the exact solution correctly, the stencil of the spatial discretisation must enclose the point @tex-math{x^{*}}. Thus, at least the point @tex-math{x_{i-1}} has to be included (if @tex-math{\Lambda > 0}). The domain of dependence of such a numerical scheme is represented by the shaded area in Fig. 10.9. Hence, we can formulate the condition}
-    @lang["zh-CN"]{任何显式时间推进格式都只有在时间步长@tex-math{\Delta t}不超过某一数值时才能保持稳定。Courant、Friedrichs和Lewy@link["blazek2005-r10-11"]{[11]}给出了时间推进格式稳定性的必要（但不充分）条件。所谓的CFL条件指出：数值格式的依赖域必须把偏微分方程的依赖域包含在内。为了阐明这一表述，我们来考察图10.9中的@tex-math{x}-@tex-math{t}图。对流模型方程(10.13)的依赖域由特征线@tex-math{dx/dt=\Lambda}给出。这意味着任何信息都以这一速度在计算域内传播。因此，时刻@tex-math{(t_0+\Delta t)}的精确解等于时刻@tex-math{t_0}在空间坐标@tex-math{x^{*}=x_i-\Lambda\Delta t}处的解。为了正确模拟精确解的行为，空间离散的模板必须把点@tex-math{x^{*}}包在其中。于是，至少要包含点@tex-math{x_{i-1}}（当@tex-math{\Lambda>0}时）。这类数值格式的依赖域由图10.9中的阴影区表示。由此，我们可以写出条件}
+    @lang["zh-Hans"]{任何显式时间推进格式都只有在时间步长@tex-math{\Delta t}不超过某一数值时才能保持稳定。Courant、Friedrichs和Lewy@link["blazek2005-r10-11"]{[11]}给出了时间推进格式稳定性的必要（但不充分）条件。所谓的CFL条件指出：数值格式的依赖域必须把偏微分方程的依赖域包含在内。为了阐明这一表述，我们来考察图10.9中的@tex-math{x}-@tex-math{t}图。对流模型方程(10.13)的依赖域由特征线@tex-math{dx/dt=\Lambda}给出。这意味着任何信息都以这一速度在计算域内传播。因此，时刻@tex-math{(t_0+\Delta t)}的精确解等于时刻@tex-math{t_0}在空间坐标@tex-math{x^{*}=x_i-\Lambda\Delta t}处的解。为了正确模拟精确解的行为，空间离散的模板必须把点@tex-math{x^{*}}包在其中。于是，至少要包含点@tex-math{x_{i-1}}（当@tex-math{\Lambda>0}时）。这类数值格式的依赖域由图10.9中的阴影区表示。由此，我们可以写出条件}
   }
 
   @tex-display-math[#:id "eq-10-41"]{\Lambda\Delta t \le \Delta x \quad\text{or}\quad \Delta t \le \frac{\Delta x}{\Lambda}\,. \tag{10.41}}
@@ -570,72 +570,72 @@
 }
   @bi{
     @lang["en"]{This leads us to the CFL condition}
-    @lang["zh-CN"]{由此得到CFL条件}
+    @lang["zh-Hans"]{由此得到CFL条件}
   }
 
   @tex-display-math[#:id "eq-10-42"]{\sigma = |\Lambda|\frac{\Delta t}{\Delta x} \le 1\,. \tag{10.42}}
 
   @bi{
     @lang["en"]{Of course, the explicit multistage scheme allows for CFL-numbers @tex-math{\sigma > 1}, since the new solution at the time @tex-math{(t_0 + \Delta t)} is obtained in more than one step.}
-    @lang["zh-CN"]{当然，显式多级格式允许CFL数@tex-math{\sigma>1}，因为时刻@tex-math{(t_0+\Delta t)}的新解是经过多于一步才得到的。}
+    @lang["zh-Hans"]{当然，显式多级格式允许CFL数@tex-math{\sigma>1}，因为时刻@tex-math{(t_0+\Delta t)}的新解是经过多于一步才得到的。}
   }
 
   @bi{
     @lang["en"]{Based on the above arguments, we can easily show that an implicit scheme like in Eq. (10.32) always fulfils the CFL condition, since the numerical domain of dependence extends over all grid points.}
-    @lang["zh-CN"]{基于上述论证，我们容易证明：像式@link["blazek2005-ch10#eq-10-32"]{(10.32)}那样的隐式格式总是满足CFL条件的，因为其数值依赖域覆盖了所有网格点。}
+    @lang["zh-Hans"]{基于上述论证，我们容易证明：像式@link["blazek2005-ch10#eq-10-32"]{(10.32)}那样的隐式格式总是满足CFL条件的，因为其数值依赖域覆盖了所有网格点。}
   }
 
   @emph{CFL Condition by von Neumann Analysis 由von Neumann分析导出CFL条件}
 
   @bi{
     @lang["en"]{The CFL condition in Eq. (10.42) can be also derived by the von Neumann stability analysis. Let us consider for this purpose the convection model equation (10.13) discretised using the 1st-order upwind scheme Eq. (10.16) and a one-stage explicit scheme. The domain of dependence of this numerical scheme corresponds to the shaded region in Fig. 10.9. According to Eq. (10.12), we obtain the amplification factor @tex-math{g} from the relationship}
-    @lang["zh-CN"]{式@link["blazek2005-ch10#eq-10-42"]{(10.42)}中的CFL条件也可以由von Neumann稳定性分析导出。为此，考察采用一阶上风格式(10.16)和单级显式格式离散的对流模型方程(10.13)。该数值格式的依赖域与图10.9中的阴影区相对应。根据式@link["blazek2005-ch10#eq-10-12"]{(10.12)}，我们由如下关系式得到放大因子@tex-math{g}}
+    @lang["zh-Hans"]{式@link["blazek2005-ch10#eq-10-42"]{(10.42)}中的CFL条件也可以由von Neumann稳定性分析导出。为此，考察采用一阶上风格式(10.16)和单级显式格式离散的对流模型方程(10.13)。该数值格式的依赖域与图10.9中的阴影区相对应。根据式@link["blazek2005-ch10#eq-10-12"]{(10.12)}，我们由如下关系式得到放大因子@tex-math{g}}
   }
 
   @tex-display-math[#:id "eq-10-43"]{g = 1 - \frac{\Delta t}{\Delta x}z\,, \tag{10.43}}
 
   @bi{
     @lang["en"]{since the Fourier symbol of the time-stepping operator reduces to @tex-math{f = \Delta t/\Delta x}. If we substitute Eq. (10.17) for @tex-math{z} in Eq. (10.43), the amplification factor will read}
-    @lang["zh-CN"]{这是因为此时时间推进算子的傅里叶符号简化为@tex-math{f=\Delta t/\Delta x}。如果把式@link["blazek2005-ch10#eq-10-17"]{(10.17)}代入式@link["blazek2005-ch10#eq-10-43"]{(10.43)}中的@tex-math{z}，放大因子就成为}
+    @lang["zh-Hans"]{这是因为此时时间推进算子的傅里叶符号简化为@tex-math{f=\Delta t/\Delta x}。如果把式@link["blazek2005-ch10#eq-10-17"]{(10.17)}代入式@link["blazek2005-ch10#eq-10-43"]{(10.43)}中的@tex-math{z}，放大因子就成为}
   }
 
   @tex-display-math[#:id "eq-10-44"]{g = 1 - \frac{\Delta t}{\Delta x}\Lambda\left[I\sin\Phi + \left(1 - \cos\Phi\right)\right]\,. \tag{10.44}}
 
   @bi{
     @lang["en"]{Thus, the amplitude of @tex-math{g} is given by (we assume @tex-math{\Lambda > 0})}
-    @lang["zh-CN"]{于是，@tex-math{g}的幅值为（这里假定@tex-math{\Lambda>0}）}
+    @lang["zh-Hans"]{于是，@tex-math{g}的幅值为（这里假定@tex-math{\Lambda>0}）}
   }
 
   @tex-display-math[#:id "eq-10-45"]{|g|^2 = 2\frac{\Delta t}{\Delta x}\Lambda\left(\frac{\Delta t}{\Delta x}\Lambda - 1\right)\left(1 - \cos\Phi\right) + 1\,. \tag{10.45}}
 
   @bi{
     @lang["en"]{It is easy to show that the maximum of @tex-math{|g|^2} occurs at a phase angle @tex-math{\Phi = \pi}. If we set @tex-math{\Phi = \pi} in Eq. (10.45), we obtain}
-    @lang["zh-CN"]{容易证明，@tex-math{|g|^{2}}的最大值出现在相位角@tex-math{\Phi=\pi}处。在式@link["blazek2005-ch10#eq-10-45"]{(10.45)}中令@tex-math{\Phi=\pi}，得到}
+    @lang["zh-Hans"]{容易证明，@tex-math{|g|^{2}}的最大值出现在相位角@tex-math{\Phi=\pi}处。在式@link["blazek2005-ch10#eq-10-45"]{(10.45)}中令@tex-math{\Phi=\pi}，得到}
   }
 
   @tex-display-math[#:id "eq-10-46"]{|g(\Phi = \pi)|^2 = 4\frac{\Delta t}{\Delta x}\Lambda\left(\frac{\Delta t}{\Delta x}\Lambda - 1\right) + 1\,. \tag{10.46}}
 
   @bi{
     @lang["en"]{In order for the time-stepping scheme to be stable, it must hold that @tex-math{|g|^2 \le 1}. This condition can only be fulfilled if}
-    @lang["zh-CN"]{要使时间推进格式稳定，必须满足@tex-math{|g|^{2}\le 1}。该条件只有在}
+    @lang["zh-Hans"]{要使时间推进格式稳定，必须满足@tex-math{|g|^{2}\le 1}。该条件只有在}
   }
 
   @tex-display-math[#:id "eq-10-47"]{\frac{\Delta t}{\Delta x}\Lambda \le 1 \tag{10.47}}
 
   @bi{
     @lang["en"]{and hence}
-    @lang["zh-CN"]{的情形下才能满足，从而有}
+    @lang["zh-Hans"]{的情形下才能满足，从而有}
   }
 
   @tex-display-math[#:id "eq-10-48"]{\Delta t \le \frac{\Delta x}{\Lambda}\,. \tag{10.48}}
 
   @bi{
     @lang["en"]{This corresponds exactly to Eq. (10.41).}
-    @lang["zh-CN"]{这与式@link["blazek2005-ch10#eq-10-41"]{(10.41)}完全一致。}
+    @lang["zh-Hans"]{这与式@link["blazek2005-ch10#eq-10-41"]{(10.41)}完全一致。}
   }
 
   @bi{
     @lang["en"]{It is important to note that the CFL condition (10.42) is @emph{not} sufficient (however necessary) to guarantee stability of the numerical scheme. Therefore, the von Neumann analysis should be carried out as well.}
-    @lang["zh-CN"]{值得注意的是，CFL条件(10.42)并@emph{不足以}保证数值格式的稳定性（尽管它是必要的）。因此，还应当进行von Neumann分析。}
+    @lang["zh-Hans"]{值得注意的是，CFL条件(10.42)并@emph{不足以}保证数值格式的稳定性（尽管它是必要的）。因此，还应当进行von Neumann分析。}
   }
 }

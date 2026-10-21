@@ -51,7 +51,7 @@ defaults the kind to span, which the lift would never see."
 @(define-public (bi . body)
    "Folded bilingual block: show the Chinese lane, fold the sources.
 The fold hint defaults to the folded lanes' language codes (e.g. en)."
-   (apply bilingual #:reader "zh-CN" body))
+   (apply bilingual #:reader "zh-Hans" body))
 
 @(define-public (emph . body)
    (set! body (command-body body))
@@ -113,7 +113,7 @@ know at authoring time."
 @subtree[#:id "lib-bi"]{
   @title{bi：段落级双语折叠块}
 
-  用法：@code{@"@"bi{ @"@"lang["en"]{…} @"@"lang["zh-CN"]{…} }}。中文 lane 默认显示，英文原文折叠，折叠提示自动取被折叠 lane 的语言码（如 en ▸）。它是 @code{bilingual[#:reader "zh-CN"]} 的别名；除非要改阅读语言，不要传 @code{#:source-label}。规范与示例见 @link["blazek2005-front"]{任一译本}。
+  用法：@code{@"@"bi{ @"@"lang["en"]{…} @"@"lang["zh-Hans"]{…} }}。中文 lane 默认显示，英文原文折叠，折叠提示自动取被折叠 lane 的语言码（如 en ▸）。它是 @code{bilingual[#:reader "zh-Hans"]} 的别名；除非要改阅读语言，不要传 @code{#:source-label}。规范与示例见 @link["blazek2005-front"]{任一译本}。
 }
 
 @subtree[#:id "lib-emph"]{

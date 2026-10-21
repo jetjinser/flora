@@ -11,7 +11,7 @@
 
   @bi{
     @lang["en"]{@emph{Get}. The colloquial @emph{have got} for @emph{have} should not be @bold{used in} writing. The preferable form of the participle is @emph{got}, @bold{not} @emph{gotten}.}
-    @lang["zh-CN"]{@emph{Get}。口语体的@emph{have got}用来代替@emph{have}，不应@bold{用于}写作。分词更可取的形式是@emph{got}，@bold{不是}@emph{gotten}。}
+    @lang["zh-Hans"]{@emph{Get}。口语体的@emph{have got}用来代替@emph{have}，不应@bold{用于}写作。分词更可取的形式是@emph{got}，@bold{不是}@emph{gotten}。}
   }
 
   @itemize{
@@ -30,7 +30,7 @@
 
   @bi{
     @lang["en"]{@emph{Gratuitous}. Means "unearned," or "unwarranted."}
-    @lang["zh-CN"]{@emph{Gratuitous}。意为"unearned"（不应得的）或"unwarranted"（无正当理由的）。}
+    @lang["zh-Hans"]{@emph{Gratuitous}。意为"unearned"（不应得的）或"unwarranted"（无正当理由的）。}
   }
 
   @blockquote{The insult seemed gratuitous. (undeserved)}
@@ -41,7 +41,7 @@
 
   @bi{
     @lang["en"]{@emph{He is a man who}. A common type of redundant expression; see @link["strunk1999-rule-17"]{Rule 17}.}
-    @lang["zh-CN"]{@emph{He is a man who}。一种常见的冗余表达；见@link["strunk1999-rule-17"]{规则17}。}
+    @lang["zh-Hans"]{@emph{He is a man who}。一种常见的冗余表达；见@link["strunk1999-rule-17"]{规则17}。}
   }
 
   @itemize{
@@ -60,7 +60,7 @@
 
   @bi{
     @lang["en"]{@emph{Hopefully}. This once-useful adverb meaning "with hope" has been distorted and is now widely used to mean "I hope" or "it is to be hoped." Such use is not merely wrong, it is silly. To say, "Hopefully I'll leave on the noon plane" is to talk nonsense. Do you mean you'll leave on the noon plane in a hopeful frame of mind? Or do you mean you hope you'll leave on the noon plane? Whichever you mean, you haven't said it clearly. Although the word in its new, free-floating capacity may be pleasurable and even useful to many, it offends the ear of many others, who do not like to see words dulled or eroded, particularly when the erosion leads to ambiguity, softness, or nonsense.}
-    @lang["zh-CN"]{@emph{Hopefully}。这个一度有用的副词，意为"with hope"（怀着希望），如今已被扭曲，广泛用来表示"I hope"（我希望）或"it is to be hoped"（但愿）。这种用法不仅错误，而且愚蠢。说"Hopefully I'll leave on the noon plane"是无意义的。你的意思是你会怀着希望的心情乘中午的飞机离开？还是你希望自己乘中午的飞机离开？无论你指哪一种，你都没有把它说清楚。尽管这个词在它新的、飘忽不定的用法中可能令许多人感到愉快甚至有用，但它却冒犯了另外许多人的耳朵，他们不愿看到词被钝化或侵蚀，尤其当这种侵蚀导致歧义、软弱或荒谬时。}
+    @lang["zh-Hans"]{@emph{Hopefully}。这个一度有用的副词，意为"with hope"（怀着希望），如今已被扭曲，广泛用来表示"I hope"（我希望）或"it is to be hoped"（但愿）。这种用法不仅错误，而且愚蠢。说"Hopefully I'll leave on the noon plane"是无意义的。你的意思是你会怀着希望的心情乘中午的飞机离开？还是你希望自己乘中午的飞机离开？无论你指哪一种，你都没有把它说清楚。尽管这个词在它新的、飘忽不定的用法中可能令许多人感到愉快甚至有用，但它却冒犯了另外许多人的耳朵，他们不愿看到词被钝化或侵蚀，尤其当这种侵蚀导致歧义、软弱或荒谬时。}
   }
 }
 
@@ -69,7 +69,7 @@
 
   @bi{
     @lang["en"]{@emph{However}. Avoid starting a sentence with @emph{however} when the meaning is "nevertheless." The word usually serves better when not in first position.}
-    @lang["zh-CN"]{@emph{However}。当意思是"nevertheless"（然而）时，避免用它来开头一句。这个词在不出现在句首时通常更合适。}
+    @lang["zh-Hans"]{@emph{However}。当意思是"nevertheless"（然而）时，避免用它来开头一句。这个词在不出现在句首时通常更合适。}
   }
 
   @itemize{
@@ -79,7 +79,7 @@
 
   @bi{
     @lang["en"]{When @emph{however} comes first, it means "in whatever way" or "to whatever extent."}
-    @lang["zh-CN"]{当@emph{however}位于句首时，意为"in whatever way"（无论以何种方式）或"to whatever extent"（无论到什么程度）。}
+    @lang["zh-Hans"]{当@emph{however}位于句首时，意为"in whatever way"（无论以何种方式）或"to whatever extent"（无论到什么程度）。}
   }
 
   @blockquote{However you advise him, he will probably do as he thinks best. However discouraging the prospect, they never lost heart.}
@@ -90,7 +90,7 @@
 
   @bi{
     @lang["en"]{@emph{Illusion}. See @emph{allusion}.}
-    @lang["zh-CN"]{@emph{Illusion}。见@emph{allusion}。}
+    @lang["zh-Hans"]{@emph{Illusion}。见@emph{allusion}。}
   }
 }
 
@@ -99,7 +99,7 @@
 
   @bi{
     @lang["en"]{@emph{Imply}. @emph{Infer}. Not interchangeable. Something @emph{implied} is something suggested or indicated, though not expressed. Something @emph{inferred} is something deduced from evidence at hand.}
-    @lang["zh-CN"]{@emph{Imply}、@emph{Infer}。二者不可互换。@emph{implied}（被暗示的）是被提示或指出、但未明说的东西。@emph{inferred}（被推断的）是从手头证据中推导出来的东西。}
+    @lang["zh-Hans"]{@emph{Imply}、@emph{Infer}。二者不可互换。@emph{implied}（被暗示的）是被提示或指出、但未明说的东西。@emph{inferred}（被推断的）是从手头证据中推导出来的东西。}
   }
 
   @blockquote{Farming implies early rising. Since she was a farmer, we inferred that she got up early.}
@@ -110,7 +110,7 @@
 
   @bi{
     @lang["en"]{@emph{Importantly}. Avoid by rephrasing.}
-    @lang["zh-CN"]{@emph{Importantly}。通过改写来避免使用。}
+    @lang["zh-Hans"]{@emph{Importantly}。通过改写来避免使用。}
   }
 
   @itemize{
@@ -129,7 +129,7 @@
 
   @bi{
     @lang["en"]{@emph{In regard to}. Often wrongly written @emph{in regards to}. But @emph{as regards} is correct, and means the same thing.}
-    @lang["zh-CN"]{@emph{In regard to}。常被错误地写成@emph{in regards to}。但@emph{as regards}是正确的，意思相同。}
+    @lang["zh-Hans"]{@emph{In regard to}。常被错误地写成@emph{in regards to}。但@emph{as regards}是正确的，意思相同。}
   }
 }
 
@@ -138,7 +138,7 @@
 
   @bi{
     @lang["en"]{@emph{In the last analysis}. A bankrupt expression.}
-    @lang["zh-CN"]{@emph{In the last analysis}。一个毫无价值的表达。}
+    @lang["zh-Hans"]{@emph{In the last analysis}。一个毫无价值的表达。}
   }
 }
 
@@ -147,7 +147,7 @@
 
   @bi{
     @lang["en"]{@emph{Inside of}. @emph{Inside}. The @emph{of} following @emph{inside} is correct in the adverbial meaning "in less than." In other meanings, @emph{of} is unnecessary.}
-    @lang["zh-CN"]{@emph{Inside of}、@emph{Inside}。@emph{inside}后面的@emph{of}，在副词义"in less than"（不到、少于）中是正确的。在其他含义中，@emph{of}是多余的。}
+    @lang["zh-Hans"]{@emph{Inside of}、@emph{Inside}。@emph{inside}后面的@emph{of}，在副词义"in less than"（不到、少于）中是正确的。在其他含义中，@emph{of}是多余的。}
   }
 
   @blockquote{Inside of five minutes I'll be inside the bank.}
@@ -158,7 +158,7 @@
 
   @bi{
     @lang["en"]{@emph{Insightful}. The word is a suspicious overstatement for "perceptive." If it is to be used at all, it should be used for instances of remarkably penetrating vision. Usually, it crops up merely to inflate the commonplace.}
-    @lang["zh-CN"]{@emph{Insightful}。这个词是对"perceptive"（有洞察力的）的一种可疑的夸大说法。如果要用，也应当用于洞察力非凡的情形。通常，它冒出来只是为了给平庸的话添彩。}
+    @lang["zh-Hans"]{@emph{Insightful}。这个词是对"perceptive"（有洞察力的）的一种可疑的夸大说法。如果要用，也应当用于洞察力非凡的情形。通常，它冒出来只是为了给平庸的话添彩。}
   }
 
   @itemize{
@@ -172,7 +172,7 @@
 
   @bi{
     @lang["en"]{@emph{In terms of}. A piece of padding usually best omitted.}
-    @lang["zh-CN"]{@emph{In terms of}。一种填充语，通常最好删去。}
+    @lang["zh-Hans"]{@emph{In terms of}。一种填充语，通常最好删去。}
   }
 
   @itemize{
@@ -186,7 +186,7 @@
 
   @bi{
     @lang["en"]{@emph{Interesting}. An unconvincing word; avoid it as a means of introduction. Instead of announcing that what you are about to tell is interesting, make it so.}
-    @lang["zh-CN"]{@emph{Interesting}。一个没有说服力的词；避免用它来开头引入。与其宣布你即将讲的东西有趣，不如让它变得有趣。}
+    @lang["zh-Hans"]{@emph{Interesting}。一个没有说服力的词；避免用它来开头引入。与其宣布你即将讲的东西有趣，不如让它变得有趣。}
   }
 
   @itemize{
@@ -201,7 +201,7 @@
 
   @bi{
     @lang["en"]{Also to be avoided in introduction is the word @emph{funny}. Nothing becomes funny by being labeled so.}
-    @lang["zh-CN"]{同样要避免在开头引入时使用@emph{funny}一词。贴上标签并不会让任何东西变得有趣。}
+    @lang["zh-Hans"]{同样要避免在开头引入时使用@emph{funny}一词。贴上标签并不会让任何东西变得有趣。}
   }
 }
 
@@ -210,7 +210,7 @@
 
   @bi{
     @lang["en"]{@emph{Irregardless}. Should be @emph{regardless}. The error results from failure to see the negative in @emph{-less} and from a desire to get it in as a prefix, suggested by such words as @emph{irregular}, @emph{irresponsible}, and, perhaps especially, @emph{irrespective}.}
-    @lang["zh-CN"]{@emph{Irregardless}。应为@emph{regardless}。这个错误源于没有看出@emph{-less}中的否定含义，以及想把否定作为前缀嵌入的愿望——这种愿望由@emph{irregular}、@emph{irresponsible}，也许尤其是@emph{irrespective}这类词所暗示。}
+    @lang["zh-Hans"]{@emph{Irregardless}。应为@emph{regardless}。这个错误源于没有看出@emph{-less}中的否定含义，以及想把否定作为前缀嵌入的愿望——这种愿望由@emph{irregular}、@emph{irresponsible}，也许尤其是@emph{irrespective}这类词所暗示。}
   }
 }
 
@@ -219,7 +219,7 @@
 
   @bi{
     @lang["en"]{@emph{-ize}. Do not coin verbs by adding this tempting suffix. Many good and useful verbs do end in @emph{-ize}: @emph{summarize}, @emph{fraternize}, @emph{harmonize}, @emph{fertilize}. But there is a growing list of abominations: @emph{containerize}, @emph{prioritize}, @emph{finalize}, to name three. Be suspicious of @emph{-ize}; let your ear and your eye guide you. Never tack @emph{-ize} onto a noun to create a verb. Usually you will discover that a useful verb already exists. Why say "utilize" when there is the simple, unpretentious word @emph{use}?}
-    @lang["zh-CN"]{@emph{-ize}。不要通过添加这个诱人的后缀来生造动词。许多好的、有用的动词确实以@emph{-ize}结尾：@emph{summarize}、@emph{fraternize}、@emph{harmonize}、@emph{fertilize}。但可恶的词也越来越多：仅举三例，@emph{containerize}、@emph{prioritize}、@emph{finalize}。对@emph{-ize}要存疑；让你的耳朵和眼睛来引导你。绝不要把@emph{-ize}缀到名词上造动词。通常你会发现一个有用的动词已经存在。既然有简单、朴实的@emph{use}，为什么还要说"utilize"呢？}
+    @lang["zh-Hans"]{@emph{-ize}。不要通过添加这个诱人的后缀来生造动词。许多好的、有用的动词确实以@emph{-ize}结尾：@emph{summarize}、@emph{fraternize}、@emph{harmonize}、@emph{fertilize}。但可恶的词也越来越多：仅举三例，@emph{containerize}、@emph{prioritize}、@emph{finalize}。对@emph{-ize}要存疑；让你的耳朵和眼睛来引导你。绝不要把@emph{-ize}缀到名词上造动词。通常你会发现一个有用的动词已经存在。既然有简单、朴实的@emph{use}，为什么还要说"utilize"呢？}
   }
 }
 
@@ -228,7 +228,7 @@
 
   @bi{
     @lang["en"]{@emph{Kind of}. Except in familiar style, not to be used as a substitute for @emph{rather} or @emph{something like}. Restrict it to its literal sense: "Amber is a kind of fossil resin"; "I dislike that kind of publicity." The same holds true for @emph{sort of}.}
-    @lang["zh-CN"]{@emph{Kind of}。除在随便的文体中外，不用作@emph{rather}或@emph{something like}的替代。把它限制在字面意义上："Amber is a kind of fossil resin"；"I dislike that kind of publicity." @emph{sort of}同样如此。}
+    @lang["zh-Hans"]{@emph{Kind of}。除在随便的文体中外，不用作@emph{rather}或@emph{something like}的替代。把它限制在字面意义上："Amber is a kind of fossil resin"；"I dislike that kind of publicity." @emph{sort of}同样如此。}
   }
 }
 
@@ -237,7 +237,7 @@
 
   @bi{
     @lang["en"]{@emph{Lay}. A transitive verb. Except in slang ("Let it lay"), do not misuse it for the intransitive verb @emph{lie}. The hen, or the play, @emph{lays} an egg; the llama @emph{lies} down. The playwright went home and @emph{lay} down.}
-    @lang["zh-CN"]{@emph{Lay}。一个及物动词。除俚语中（"Let it lay"）外，不要把它误用作不及物动词@emph{lie}。母鸡，或者戏剧，@emph{lays}一个蛋；美洲驼@emph{lies} down（躺下）。剧作家回家后@emph{lay} down（躺下）。}
+    @lang["zh-Hans"]{@emph{Lay}。一个及物动词。除俚语中（"Let it lay"）外，不要把它误用作不及物动词@emph{lie}。母鸡，或者戏剧，@emph{lays}一个蛋；美洲驼@emph{lies} down（躺下）。剧作家回家后@emph{lay} down（躺下）。}
   }
 
   @blockquote{lie, lay, lain, lying        lay, laid, laid, laying}
@@ -248,7 +248,7 @@
 
   @bi{
     @lang["en"]{@emph{Leave}. Not to be misused for @emph{let}.}
-    @lang["zh-CN"]{@emph{Leave}。不要误用作@emph{let}。}
+    @lang["zh-Hans"]{@emph{Leave}。不要误用作@emph{let}。}
   }
 
   @itemize{
@@ -267,7 +267,7 @@
 
   @bi{
     @lang["en"]{@emph{Less}. Should not be misused for @emph{fewer}.}
-    @lang["zh-CN"]{@emph{Less}。不应误用作@emph{fewer}。}
+    @lang["zh-Hans"]{@emph{Less}。不应误用作@emph{fewer}。}
   }
 
   @itemize{
@@ -277,7 +277,7 @@
 
   @bi{
     @lang["en"]{@emph{Less} refers to quantity, @emph{fewer} to number. "His troubles are less than mine" means "His troubles are not so great as mine." "His troubles are fewer than mine" means "His troubles are not so numerous as mine."}
-    @lang["zh-CN"]{@emph{less}指数量（quantity），@emph{fewer}指数目（number）。"His troubles are less than mine"意为"His troubles are not so great as mine"。"His troubles are fewer than mine"意为"His troubles are not so numerous as mine"。}
+    @lang["zh-Hans"]{@emph{less}指数量（quantity），@emph{fewer}指数目（number）。"His troubles are less than mine"意为"His troubles are not so great as mine"。"His troubles are fewer than mine"意为"His troubles are not so numerous as mine"。}
   }
 }
 
@@ -286,7 +286,7 @@
 
   @bi{
     @lang["en"]{@emph{Like}. Not to be used for the conjunction @emph{as}. @emph{Like} governs nouns and pronouns; before phrases and clauses the equivalent word is @emph{as}.}
-    @lang["zh-CN"]{@emph{Like}。不要用来代替连词@emph{as}。@emph{like}后接名词和代词；在短语和子句之前，对应的词是as。}
+    @lang["zh-Hans"]{@emph{Like}。不要用来代替连词@emph{as}。@emph{like}后接名词和代词；在短语和子句之前，对应的词是as。}
   }
 
   @itemize{
@@ -301,7 +301,7 @@
 
   @bi{
     @lang["en"]{The use of @emph{like} for @emph{as} has its defenders; they argue that any usage that achieves currency becomes valid automatically. This, they say, is the way the language is formed. It is and it isn't. An expression sometimes merely enjoys a vogue, much as an article of apparel does. @emph{Like} has long been widely misused by the illiterate; lately it has been taken up by the knowing and the well-informed, who find it catchy, or liberating, and who use it as though they were slumming. If every word or device that achieved currency were immediately authenticated, simply on the ground of popularity, the language would be as chaotic as a ball game with no foul lines. For the student, perhaps the most useful thing to know about @emph{like} is that most carefully edited publications regard its use before phrases and clauses as simple error.}
-    @lang["zh-CN"]{用@emph{like}代替@emph{as}有其捍卫者；他们辩称，任何获得通用的用法都会自动变得有效。他们说，语言就是这样形成的。是，也不是。一个表达有时只是一时风靡，就像一件衣服一样。@emph{like}长期以来被未受教育的人广泛误用；近来它又被内行和见多识广的人捡了起来，他们觉得它时髦，或者说解放，用它时仿佛是在体验底层生活。如果每一个获得通用的词或手法都仅凭流行就立即被认可，语言就会像一个没有边线的球赛一样混乱。对学生来说，关于@emph{like}也许最有用的一点是：大多数经过仔细编辑的出版物都将其用在短语和子句之前视为纯粹的错误。}
+    @lang["zh-Hans"]{用@emph{like}代替@emph{as}有其捍卫者；他们辩称，任何获得通用的用法都会自动变得有效。他们说，语言就是这样形成的。是，也不是。一个表达有时只是一时风靡，就像一件衣服一样。@emph{like}长期以来被未受教育的人广泛误用；近来它又被内行和见多识广的人捡了起来，他们觉得它时髦，或者说解放，用它时仿佛是在体验底层生活。如果每一个获得通用的词或手法都仅凭流行就立即被认可，语言就会像一个没有边线的球赛一样混乱。对学生来说，关于@emph{like}也许最有用的一点是：大多数经过仔细编辑的出版物都将其用在短语和子句之前视为纯粹的错误。}
   }
 }
 
@@ -310,7 +310,7 @@
 
   @bi{
     @lang["en"]{@emph{Line}. @emph{Along these lines}. @emph{Line} in the sense of "course of procedure, conduct, thought" is allowable but has been so overworked, particularly in the phrase @emph{along these lines}, that a writer who aims at freshness or originality had better discard it entirely.}
-    @lang["zh-CN"]{@emph{Line}、@emph{Along these lines}。@emph{line}在"course of procedure, conduct, thought"（行事、行为、思想的路线、方针）这一意义上是可用的，但它被用得太滥，尤其是@emph{along these lines}这一短语，因此追求新鲜或独创的作者最好完全弃用。}
+    @lang["zh-Hans"]{@emph{Line}、@emph{Along these lines}。@emph{line}在"course of procedure, conduct, thought"（行事、行为、思想的路线、方针）这一意义上是可用的，但它被用得太滥，尤其是@emph{along these lines}这一短语，因此追求新鲜或独创的作者最好完全弃用。}
   }
 
   @itemize{
@@ -329,7 +329,7 @@
 
   @bi{
     @lang["en"]{@emph{Literal}. @emph{Literally}. Often incorrectly used in support of exaggeration or violent metaphor.}
-    @lang["zh-CN"]{@emph{Literal}、@emph{Literally}。常被错误地用来支持夸张或激烈的比喻。}
+    @lang["zh-Hans"]{@emph{Literal}、@emph{Literally}。常被错误地用来支持夸张或激烈的比喻。}
   }
 
   @itemize{
@@ -348,7 +348,7 @@
 
   @bi{
     @lang["en"]{@emph{Loan}. A noun. As a verb, prefer @emph{lend}.}
-    @lang["zh-CN"]{@emph{Loan}。一个名词。作为动词，宁用@emph{lend}。}
+    @lang["zh-Hans"]{@emph{Loan}。一个名词。作为动词，宁用@emph{lend}。}
   }
 
   @blockquote{Lend me your ears, the loan of your ears}
@@ -359,7 +359,7 @@
 
   @bi{
     @lang["en"]{@emph{Meaningful}. A bankrupt adjective. Choose another, or rephrase.}
-    @lang["zh-CN"]{@emph{Meaningful}。一个毫无价值的形容词。换一个词，或改写。}
+    @lang["zh-Hans"]{@emph{Meaningful}。一个毫无价值的形容词。换一个词，或改写。}
   }
 
   @itemize{
@@ -378,7 +378,7 @@
 
   @bi{
     @lang["en"]{@emph{Memento}. Often incorrectly written @emph{momento}.}
-    @lang["zh-CN"]{@emph{Memento}。常被错误地写成@emph{momento}。}
+    @lang["zh-Hans"]{@emph{Memento}。常被错误地写成@emph{momento}。}
   }
 }
 
@@ -387,7 +387,7 @@
 
   @bi{
     @lang["en"]{@emph{Most}. Not to be used for @emph{almost} in formal composition.}
-    @lang["zh-CN"]{@emph{Most}。在正式写作中不要用来代替@emph{almost}。}
+    @lang["zh-Hans"]{@emph{Most}。在正式写作中不要用来代替@emph{almost}。}
   }
 
   @itemize{
@@ -403,7 +403,7 @@
 
   @bi{
     @lang["en"]{@emph{Nature}. Often simply redundant, used like @emph{character}.}
-    @lang["zh-CN"]{@emph{Nature}。常纯属多余，用法与@emph{character}类似。}
+    @lang["zh-Hans"]{@emph{Nature}。常纯属多余，用法与@emph{character}类似。}
   }
 
   @itemize{
@@ -413,7 +413,7 @@
 
   @bi{
     @lang["en"]{@emph{Nature} should be avoided in such vague expressions as "a lover of nature," "poems about nature." Unless more specific statements follow, the reader cannot tell whether the poems have to do with natural scenery, rural life, the sunset, the untracked wilderness, or the habits of squirrels.}
-    @lang["zh-CN"]{在"a lover of nature"、"poems about nature"这类含糊表达中应避免@emph{nature}。除非后面有更具体的说明，读者无从判断这些诗是关于自然景色、乡间生活、日落、人迹未至的荒野，还是松鼠的习性。}
+    @lang["zh-Hans"]{在"a lover of nature"、"poems about nature"这类含糊表达中应避免@emph{nature}。除非后面有更具体的说明，读者无从判断这些诗是关于自然景色、乡间生活、日落、人迹未至的荒野，还是松鼠的习性。}
   }
 }
 
@@ -422,7 +422,7 @@
 
   @bi{
     @lang["en"]{@emph{Nauseous}. @emph{Nauseated}. The first means "sickening to contemplate"; the second means "sick at the stomach." Do not, therefore, say, "I feel nauseous," unless you are sure you have that effect on others.}
-    @lang["zh-CN"]{@emph{Nauseous}、@emph{Nauseated}。第一个意为"sickening to contemplate"（令人作呕）；第二个意为"sick at the stomach"（胃里难受）。因此，不要说"I feel nauseous"，除非你确信自己对别人有那种令人作呕的效果。}
+    @lang["zh-Hans"]{@emph{Nauseous}、@emph{Nauseated}。第一个意为"sickening to contemplate"（令人作呕）；第二个意为"sick at the stomach"（胃里难受）。因此，不要说"I feel nauseous"，除非你确信自己对别人有那种令人作呕的效果。}
   }
 }
 
@@ -431,7 +431,7 @@
 
   @bi{
     @lang["en"]{@emph{Nice}. A shaggy, all-purpose word, to be used sparingly in formal composition. "I had a nice time." "It was nice weather." "She was so nice to her mother." The meanings are indistinct. @emph{Nice} is most useful in the sense of "precise" or "delicate": "a nice distinction."}
-    @lang["zh-CN"]{@emph{Nice}。一个毛茸茸的、万能的词，在正式写作中要少用。"I had a nice time." "It was nice weather." "She was so nice to her mother." 这些意思都含糊不清。@emph{nice}在"precise"（精确）或"delicate"（微妙）的意义上最有用："a nice distinction."。}
+    @lang["zh-Hans"]{@emph{Nice}。一个毛茸茸的、万能的词，在正式写作中要少用。"I had a nice time." "It was nice weather." "She was so nice to her mother." 这些意思都含糊不清。@emph{nice}在"precise"（精确）或"delicate"（微妙）的意义上最有用："a nice distinction."。}
   }
 }
 
@@ -440,7 +440,7 @@
 
   @bi{
     @lang["en"]{@emph{Nor}. Often used wrongly for @emph{or} after negative expressions.}
-    @lang["zh-CN"]{@emph{Nor}。在否定表达之后常被误用为@emph{or}。}
+    @lang["zh-Hans"]{@emph{Nor}。在否定表达之后常被误用为@emph{or}。}
   }
 
   @itemize{
@@ -456,7 +456,7 @@
 
   @bi{
     @lang["en"]{@emph{Noun used as verb}. Many nouns have lately been pressed into service as verbs. Not all are bad, but all are suspect.}
-    @lang["zh-CN"]{@emph{Noun used as verb}。许多名词近来被拿来当动词用。并非全都糟糕，但全都可疑。}
+    @lang["zh-Hans"]{@emph{Noun used as verb}。许多名词近来被拿来当动词用。并非全都糟糕，但全都可疑。}
   }
 
   @itemize{
@@ -490,7 +490,7 @@
 
   @bi{
     @lang["en"]{@emph{Offputting}. @emph{Ongoing}. Newfound adjectives, to be avoided because they are inexact and clumsy. @emph{Ongoing} is a @bold{mix} of "continuing" and "active" and is usually superfluous.}
-    @lang["zh-CN"]{@emph{Offputting}、@emph{Ongoing}。新造的形容词，应予避免，因为它们不精确且笨拙。@emph{ongoing}是"continuing"和"active"的@bold{杂糅}，通常是多余的。}
+    @lang["zh-Hans"]{@emph{Offputting}、@emph{Ongoing}。新造的形容词，应予避免，因为它们不精确且笨拙。@emph{ongoing}是"continuing"和"active"的@bold{杂糅}，通常是多余的。}
   }
 
   @itemize{
@@ -500,7 +500,7 @@
 
   @bi{
     @lang["en"]{@emph{Offputting} might mean "objectionable," "disconcerting," "distasteful." Select instead a word whose meaning is clear. As a simple test, transform the participles to verbs. It is possible to @emph{upset} something. But to @emph{offput}? To @emph{ongo}?}
-    @lang["zh-CN"]{@emph{offputting}可能意为"objectionable"（令人反感的）、"disconcerting"（令人不安的）、"distasteful"（令人厌恶的）。改选一个意思明确的词。有个简单的检验方法：把这些分词还原为动词。让某物@emph{upset}是可能的。但to@emph{offput}呢？to@emph{ongo}呢？}
+    @lang["zh-Hans"]{@emph{offputting}可能意为"objectionable"（令人反感的）、"disconcerting"（令人不安的）、"distasteful"（令人厌恶的）。改选一个意思明确的词。有个简单的检验方法：把这些分词还原为动词。让某物@emph{upset}是可能的。但to@emph{offput}呢？to@emph{ongo}呢？}
   }
 }
 
@@ -509,7 +509,7 @@
 
   @bi{
     @lang["en"]{@emph{One}. In the sense of "a person," not to be followed by @emph{his} or @emph{her}.}
-    @lang["zh-CN"]{@emph{One}。在"a person"（一个人）的意义上，后面不能接@emph{his}或@emph{her}。}
+    @lang["zh-Hans"]{@emph{One}。在"a person"（一个人）的意义上，后面不能接@emph{his}或@emph{her}。}
   }
 
   @itemize{
@@ -523,7 +523,7 @@
 
   @bi{
     @lang["en"]{@emph{One of the most}. Avoid this feeble formula. "One of the most exciting developments of modern science is…"; "Switzerland is one of the most beautiful countries of Europe." There is nothing wrong with the grammar; the formula is simply threadbare.}
-    @lang["zh-CN"]{@emph{One of the most}。避免这个软弱的套话。"One of the most exciting developments of modern science is…"；"Switzerland is one of the most beautiful countries of Europe." 语法上并没有错；只是这个套话被用滥了。}
+    @lang["zh-Hans"]{@emph{One of the most}。避免这个软弱的套话。"One of the most exciting developments of modern science is…"；"Switzerland is one of the most beautiful countries of Europe." 语法上并没有错；只是这个套话被用滥了。}
   }
 }
 
@@ -532,7 +532,7 @@
 
   @bi{
     @lang["en"]{@emph{-oriented}. A clumsy, pretentious device, much in vogue. Find a better way of indicating orientation or alignment or direction.}
-    @lang["zh-CN"]{@emph{-oriented}。一个笨拙、装腔作势的手法，非常流行。另找一个更好的方式来表示取向、立场或方向。}
+    @lang["zh-Hans"]{@emph{-oriented}。一个笨拙、装腔作势的手法，非常流行。另找一个更好的方式来表示取向、立场或方向。}
   }
 
   @itemize{

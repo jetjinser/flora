@@ -31,12 +31,12 @@
 
 ## 2. 双语形式
 
-散文按原文自然段逐段做成双语块,`@bi` 是 `@bilingual[#:reader "zh-CN"]` 的别名(定义于 `plants/lib/commands.plant`,文档页 /commands.html):
+散文按原文自然段逐段做成双语块,`@bi` 是 `@bilingual[#:reader "zh-Hans"]` 的别名(定义于 `plants/lib/commands.plant`,文档页 /commands.html):
 
 ```
 @bi{
   @lang["en"]{The discussion of the conservation laws leads us…}
-  @lang["zh-CN"]{对守恒定律的讨论很自然地引导我们……}
+  @lang["zh-Hans"]{对守恒定律的讨论很自然地引导我们……}
 }
 ```
 

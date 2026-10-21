@@ -152,7 +152,8 @@
 (define interface-text
   (string-append "语境参考文献反向链接相关"
                  "回到首页"
-                 "站点配色设置跟随系统配色使用日间配色使用夜间配色"))
+                 "站点配色设置跟随系统配色使用日间配色使用夜间配色"
+                 "跳到正文站点导航目录将树作为页面打开更新于年月日"))
 (define flora-sitemap
   (make-sitemap-renderer
     #:site-url "https://flora.purejs.icu"
@@ -211,6 +212,8 @@
 (define (render-flora forest)
   (render-html forest
     #:routes html-routes
+    #:site-url "https://flora.purejs.icu"
+    #:locale "zh-Hans"
     #:style flora-style
     #:title-decoration
     (lambda (_ page)
@@ -225,7 +228,6 @@
                             (references . "参考文献")
                             (backlinks . "反向链接")
                             (related . "相关"))
-      #:html-attributes '((lang . "zh-CN"))
       #:head flora-head
       #:home-link flora-home-link
       #:site-nav (list theme-controls-sxml)))

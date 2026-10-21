@@ -9,7 +9,7 @@
 
   @bi{
     @lang["en"]{If you use a colloquialism or a slang word or phrase, simply use it; do not draw attention to it by enclosing it in quotation marks. To do so is to put on airs, as though you were inviting the reader to join you in a select society of those who know better.}
-    @lang["zh-CN"]{如果你使用一个口语词，或者一个俚语词或短语，就直接用；不要用引号把它括起来以引人注意。这样做是装腔作势，仿佛你在邀请读者加入一个由更懂行的人组成的精选圈子。}
+    @lang["zh-Hans"]{如果你使用一个口语词，或者一个俚语词或短语，就直接用；不要用引号把它括起来以引人注意。这样做是装腔作势，仿佛你在邀请读者加入一个由更懂行的人组成的精选圈子。}
   }
 }
 
@@ -18,7 +18,7 @@
 
   @bi{
     @lang["en"]{Do not attempt to emphasize simple statements by using a mark of exclamation.}
-    @lang["zh-CN"]{不要试图用感叹号来强调简单的陈述。}
+    @lang["zh-Hans"]{不要试图用感叹号来强调简单的陈述。}
   }
 
   @itemize{
@@ -28,7 +28,7 @@
 
   @bi{
     @lang["en"]{The exclamation mark is to be reserved for use after true exclamations or commands.}
-    @lang["zh-CN"]{感叹号应留到真正的感叹或命令之后使用。}
+    @lang["zh-Hans"]{感叹号应留到真正的感叹或命令之后使用。}
   }
 
   @blockquote{What a wonderful show! Halt!}
@@ -39,7 +39,7 @@
 
   @bi{
     @lang["en"]{If a manuscript is to be submitted for publication, leave plenty of space at the top of page 1. The editor will need this space to write directions to the compositor. Place the heading, or title, at least a fourth of the way down the page. Leave a blank line, or its equivalent in space, after the heading. On succeeding pages, begin near the top, but not so near as to give a crowded appearance. Omit the period after a title or heading. A question mark or an exclamation point may be used if the heading calls for it.}
-    @lang["zh-CN"]{如果一份手稿要提交出版，在第1页顶部留出充足的空白。编辑需要这块空白来给排字工写指示。把标题放在距页面顶端至少四分之一处。在标题之后空一行，或留出与一行相当的空间。在后面各页，从接近顶部处开始，但不要近得显得拥挤。标题或题头后面的句号应省略。如果标题需要，可以用问号或感叹号。}
+    @lang["zh-Hans"]{如果一份手稿要提交出版，在第1页顶部留出充足的空白。编辑需要这块空白来给排字工写指示。把标题放在距页面顶端至少四分之一处。在标题之后空一行，或留出与一行相当的空间。在后面各页，从接近顶部处开始，但不要近得显得拥挤。标题或题头后面的句号应省略。如果标题需要，可以用问号或感叹号。}
   }
 }
 
@@ -48,14 +48,14 @@
 
   @bi{
     @lang["en"]{When two or more words are combined to form a compound adjective, a hyphen is usually required.}
-    @lang["zh-CN"]{当两个或更多词组合成一个复合形容词时，通常需要用连字符。}
+    @lang["zh-Hans"]{当两个或更多词组合成一个复合形容词时，通常需要用连字符。}
   }
 
   @blockquote{"He belonged to the leisure class and enjoyed leisure-class pursuits." "She entered her boat in the round-the-island race."}
 
   @bi{
     @lang["en"]{Do not use a hyphen between words that can better be written as one word: @emph{water-fowl, waterfowl}. Common sense will aid you in the decision, but a dictionary is more reliable. The steady evolution of the language seems to favor union: two words eventually become one, usually after a period of hyphenation.}
-    @lang["zh-CN"]{不要把连字符用在更宜写成一个词的两个词之间：@emph{water-fowl, waterfowl}。常识会帮助你做决定，但词典更可靠。语言的稳定演变似乎倾向于合并：两个词最终变成一个，通常要经过一段使用连字符的时期。}
+    @lang["zh-Hans"]{不要把连字符用在更宜写成一个词的两个词之间：@emph{water-fowl, waterfowl}。常识会帮助你做决定，但词典更可靠。语言的稳定演变似乎倾向于合并：两个词最终变成一个，通常要经过一段使用连字符的时期。}
   }
 
   @itemize{
@@ -66,7 +66,7 @@
 
   @bi{
     @lang["en"]{The hyphen can play tricks on the unwary, as it did in Chattanooga when two newspapers merged—the @emph{News} and the @emph{Free Press}. Someone introduced a hyphen into the merger, and the paper became @emph{The Chattanooga News-Free Press}, which sounds as though the paper were news-free, or devoid of news. Obviously, we ask too much of a hyphen when we ask it to cast its spell over words it does not adjoin.}
-    @lang["zh-CN"]{连字符会捉弄不小心的人，就像在查塔努加两家报纸合并时那样——@emph{News}和@emph{Free Press}。有人在合并名里加进了一个连字符，报纸于是成了@emph{The Chattanooga News-Free Press}，听上去仿佛这份报纸是“无新闻”的，或者说没有新闻。显然，当我们要求一个连字符对它并不相邻的词施展魔力时，我们要求得太多了。}
+    @lang["zh-Hans"]{连字符会捉弄不小心的人，就像在查塔努加两家报纸合并时那样——@emph{News}和@emph{Free Press}。有人在合并名里加进了一个连字符，报纸于是成了@emph{The Chattanooga News-Free Press}，听上去仿佛这份报纸是“无新闻”的，或者说没有新闻。显然，当我们要求一个连字符对它并不相邻的词施展魔力时，我们要求得太多了。}
   }
 }
 
@@ -75,7 +75,7 @@
 
   @bi{
     @lang["en"]{Keep righthand and lefthand margins roughly the same width. Exception: If a great deal of annotating or editing is anticipated, the lefthand margin should be roomy enough to accommodate this work.}
-    @lang["zh-CN"]{让左右页边距的宽度大致相同。例外：如果预计会有大量批注或编辑，左页边距应留得足够宽，以容纳这项工作。}
+    @lang["zh-Hans"]{让左右页边距的宽度大致相同。例外：如果预计会有大量批注或编辑，左页边距应留得足够宽，以容纳这项工作。}
   }
 }
 
@@ -84,14 +84,14 @@
 
   @bi{
     @lang["en"]{Do not spell out dates or other serial numbers. Write them in figures or in Roman notation, as appropriate.}
-    @lang["zh-CN"]{不要把日期或其他序号拼写出来。视情况用阿拉伯数字或罗马数字书写。}
+    @lang["zh-Hans"]{不要把日期或其他序号拼写出来。视情况用阿拉伯数字或罗马数字书写。}
   }
 
   @blockquote{August 9, 1988 Part XII Rule 3 352d Infantry}
 
   @bi{
     @lang["en"]{Exception: When they occur in dialogue, most dates and numbers are best spelled out.}
-    @lang["zh-CN"]{例外：当它们出现在对话中时，大多数日期和数字最好拼写出来。}
+    @lang["zh-Hans"]{例外：当它们出现在对话中时，大多数日期和数字最好拼写出来。}
   }
 
   @blockquote{"I arrived home on August ninth." "In the year 1990, I turned twenty-one." "Read Chapter Twelve."}
@@ -102,7 +102,7 @@
 
   @bi{
     @lang["en"]{A sentence containing an expression in parentheses is punctuated outside the last mark of parenthesis exactly as if the parenthetical expression were absent. The expression within the marks is punctuated as if it stood by itself, except that the final stop is omitted unless it is a question mark or an exclamation point.}
-    @lang["zh-CN"]{一个含有括注表达式的句子，其标点打在最后一个括号标记之外，完全就像该括注表达式不存在一样。括号内的表达式按它自己独立来标点，只是省略句末的句号，除非那是问号或感叹号。}
+    @lang["zh-Hans"]{一个含有括注表达式的句子，其标点打在最后一个括号标记之外，完全就像该括注表达式不存在一样。括号内的表达式按它自己独立来标点，只是省略句末的句号，除非那是问号或感叹号。}
   }
 
   @blockquote{I went to her house yesterday (my third attempt to see her), but she had left town.}
@@ -111,7 +111,7 @@
 
   @bi{
     @lang["en"]{(When a wholly detached expression or sentence is parenthesized, the final stop comes before the last mark of parenthesis.)}
-    @lang["zh-CN"]{（当一个完全独立的表达式或句子被加上括号时，句末的句号位于最后一个括号标记之前。）}
+    @lang["zh-Hans"]{（当一个完全独立的表达式或句子被加上括号时，句末的句号位于最后一个括号标记之前。）}
   }
 }
 
@@ -120,14 +120,14 @@
 
   @bi{
     @lang["en"]{Formal quotations cited as documentary evidence are introduced by a colon and enclosed in quotation marks.}
-    @lang["zh-CN"]{作为文献证据引用的正式引文，用冒号引出，并加上引号。}
+    @lang["zh-Hans"]{作为文献证据引用的正式引文，用冒号引出，并加上引号。}
   }
 
   @blockquote{The United States Coast Pilot has this to say of the place: "Bracy Cove, 0.5 mile eastward of Bear Island, is exposed to southeast winds, has a rocky and uneven bottom, and is unfit for anchorage."}
 
   @bi{
     @lang["en"]{A quotation grammatically in apposition or the direct object of a verb is preceded by a comma and enclosed in quotation marks.}
-    @lang["zh-CN"]{在语法上作同位语或动词直接宾语的引文，前面用逗号，并加上引号。}
+    @lang["zh-Hans"]{在语法上作同位语或动词直接宾语的引文，前面用逗号，并加上引号。}
   }
 
   @blockquote{I am reminded of the advice of my neighbor, "Never worry about your heart till it stops beating."}
@@ -136,40 +136,40 @@
 
   @bi{
     @lang["en"]{When a quotation is followed by an attributive phrase, the comma is enclosed within the quotation marks.}
-    @lang["zh-CN"]{当引文后面跟着一个定语短语时，逗号放在引号之内。}
+    @lang["zh-Hans"]{当引文后面跟着一个定语短语时，逗号放在引号之内。}
   }
 
   @blockquote{"I can't attend," she said.}
 
   @bi{
     @lang["en"]{Typographical usage dictates that the comma be inside the marks, though logically it often seems not to belong there.}
-    @lang["zh-CN"]{印刷惯例要求逗号位于引号之内，尽管从逻辑上说它常常似乎不属于那里。}
+    @lang["zh-Hans"]{印刷惯例要求逗号位于引号之内，尽管从逻辑上说它常常似乎不属于那里。}
   }
 
   @blockquote{"The Fish." "Poetry," and "The Monkeys" are in Marianne Moore's @emph{Selected Poems}.}
 
   @bi{
     @lang["en"]{When quotations of an entire line, or more, of either verse or prose are to be distinguished typographically from text matter, as are the quotations in this book, begin on a fresh line and indent. Quotation marks should not be used unless they appear in the original, as in dialogue.}
-    @lang["zh-CN"]{当整行或多行引文（无论诗体还是散文）要像本书中的引文那样在版式上与正文区分开时，另起一行并缩进。除非引号出现在原文中，否则不应使用引号，例如对话中。}
+    @lang["zh-Hans"]{当整行或多行引文（无论诗体还是散文）要像本书中的引文那样在版式上与正文区分开时，另起一行并缩进。除非引号出现在原文中，否则不应使用引号，例如对话中。}
   }
 
   @bi{
     @lang["en"]{Wordsworth's enthusiasm for the French Revolution was at first unbounded:}
-    @lang["zh-CN"]{华兹华斯对法国大革命的热情起初没有边际：}
+    @lang["zh-Hans"]{华兹华斯对法国大革命的热情起初没有边际：}
   }
 
   @blockquote{Bliss was it in that dawn to be alive, But to be young was very heaven!}
 
   @bi{
     @lang["en"]{Quotations introduced by @emph{that} are indirect discourse and not enclosed in quotation marks.}
-    @lang["zh-CN"]{由@emph{that}引出的引文是间接引语，不加引号。}
+    @lang["zh-Hans"]{由@emph{that}引出的引文是间接引语，不加引号。}
   }
 
   @blockquote{Keats declares that beauty is truth, truth beauty. Dickinson states that a coffin is a small domain.}
 
   @bi{
     @lang["en"]{Proverbial expressions and familiar phrases of literary origin require no quotation marks.}
-    @lang["zh-CN"]{谚语式表达和源自文学的名言熟语不需要引号。}
+    @lang["zh-Hans"]{谚语式表达和源自文学的名言熟语不需要引号。}
   }
 
   @blockquote{These are the times that try men's souls. He lives far from the madding crowd.}
@@ -180,7 +180,7 @@
 
   @bi{
     @lang["en"]{In scholarly work requiring exact references, abbreviate titles that occur frequently, giving the full forms in an alphabetical list at the end. As a general practice, give the references in parentheses or in footnotes, not in the body of the sentence. Omit the words @emph{act, scene, line, book, volume, page}, except when referring to only one of them. Punctuate as indicated below.}
-    @lang["zh-CN"]{在需要精确引用的学术著作中，把频繁出现的书名缩写，并在末尾按字母顺序列出全称。作为一般做法，把引用放在括号或脚注中，不要放进句子主体。省略@emph{act}、@emph{scene}、@emph{line}、@emph{book}、@emph{volume}、@emph{page}这些词，除非只指其中一项。按下面的方式标点。}
+    @lang["zh-Hans"]{在需要精确引用的学术著作中，把频繁出现的书名缩写，并在末尾按字母顺序列出全称。作为一般做法，把引用放在括号或脚注中，不要放进句子主体。省略@emph{act}、@emph{scene}、@emph{line}、@emph{book}、@emph{volume}、@emph{page}这些词，除非只指其中一项。按下面的方式标点。}
   }
 
   @blockquote{in the second scene of the third act  in III.ii (Better still, insert III.ii in parentheses at the proper place in the sentence.)}
@@ -193,7 +193,7 @@
 
   @bi{
     @lang["en"]{When a word must be divided at the end of a line, consult a dictionary to learn the syllables between which division should be made. The student will do well to examine the syllable division in a number of pages of any carefully printed book.}
-    @lang["zh-CN"]{当一个词必须在一行末尾断开时，查词典弄清楚应在哪两个音节之间断开。学生若把任何印刷精良的书翻上若干页，考察其中的音节划分，会很有益处。}
+    @lang["zh-Hans"]{当一个词必须在一行末尾断开时，查词典弄清楚应在哪两个音节之间断开。学生若把任何印刷精良的书翻上若干页，考察其中的音节划分，会很有益处。}
   }
 }
 
@@ -202,7 +202,7 @@
 
   @bi{
     @lang["en"]{For the titles of literary works, scholarly usage prefers italics with capitalized initials. The usage of editors and publishers varies, some using italics with capitalized initials, others using Roman with capitalized initials and with or without quotation marks. Use italics (indicated in manuscript by underscoring) except in writing for a periodical that follows a different practice. Omit initial @emph{A} or @emph{The} from titles when you place the possessive before them.}
-    @lang["zh-CN"]{对于文学作品的标题，学术惯例倾向于用斜体，并把首字母大写。编辑和出版者的惯例各不相同，有的用斜体并大写首字母，有的用正体并大写首字母，使用或不使用引号。除为遵循不同惯例的期刊写作外，都用斜体（在手稿中以加下划线表示）。当你在标题前面放所有格时，省略开头的@emph{A}或@emph{The}。}
+    @lang["zh-Hans"]{对于文学作品的标题，学术惯例倾向于用斜体，并把首字母大写。编辑和出版者的惯例各不相同，有的用斜体并大写首字母，有的用正体并大写首字母，使用或不使用引号。除为遵循不同惯例的期刊写作外，都用斜体（在手稿中以加下划线表示）。当你在标题前面放所有格时，省略开头的@emph{A}或@emph{The}。}
   }
 
   @blockquote{A @emph{Tale of Two Cities}; Dickens's @emph{Tale of Two Cities}. @emph{The Age of Innocence}; Wharton's @emph{Age of Innocence}.}
