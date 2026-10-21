@@ -51,7 +51,7 @@ defaults the kind to span, which the lift would never see."
 @(define-public (bi . body)
    "Folded bilingual block: show the Chinese lane, fold the sources.
 The fold hint defaults to the folded lanes' language codes (e.g. en)."
-   (apply bilingual #:reader "zh-Hans" body))
+   (apply bilingual body))
 
 @(define-public (emph . body)
    (set! body (command-body body))

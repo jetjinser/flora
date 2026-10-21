@@ -148,9 +148,10 @@
 
 (define html-routes (make-html-routes #:home-page "flora"))
 
+(define flora-locale "zh-Hans")
 (define flora-settings
   (make-site-settings #:site-url "https://flora.purejs.icu"
-                      #:default-locale "zh-Hans"))
+                      #:default-locale flora-locale))
 
 ;; Interface strings rendered outside the trees: backmatter labels and the
 ;; theme controls. The font subset must carry their glyphs even though no
@@ -219,7 +220,7 @@
   (render-html forest
     #:routes html-routes
     #:settings flora-settings
-    #:locale "zh-Hans"
+    #:locale flora-locale
     #:style flora-style
     #:title-decoration
     (lambda (_ page)
@@ -250,6 +251,7 @@
         "@title{}\n"
         "@published{" date "}\n"))
     #:title "Flora"
+    #:locale flora-locale
     #:description "A garden of connected notes."
     #:source-directory plant-directory
     #:extra-sources (append (list stylesheet-path feed-stylesheet-path
