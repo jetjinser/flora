@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Principles of Solution of the Governing Equations 第3章 控制方程求解原理}
 @summary{空间与时间离散ï¼显式与隐式格式ï¼湍流建模与边界条件概述。}

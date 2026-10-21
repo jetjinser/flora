@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Rizzi, A.; Eliasson, P.; Lindblad, I.; Hirsch, C.; Lacor, C.; Haeuser, J.: The Engineering of Multiblock/Multigrid Software for Navier-Stokes Flows on Structured Meshes. Computers & Fluids, 22 (1993), pp. 341-367.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jameson, A.; Lax, P.D.: Conditions for the Construction of Multi-Point Total Variation Diminishing Difference Schemes. MAE Report 1650, Dept. of Mechanical and Aerospace Engineering, Princeton University, 1984.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Reynolds, O.: On the Dynamical Theory of Incompressible Viscous Fluids and the Determination of the Criterion. Phil. Trans. Roy. Soc., London, Series A 186 (1895), pp. 123-164.}
 @taxon["reference"]

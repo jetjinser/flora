@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Wang, M.; Moin, P.: Wall Modelling in LES of Trailing-Edge Flow. Proc. 2nd Int. Symposium on Turbulence and Shear Flow Phenomena, Stockholm, Sweden, Vol. 2 (2001), pp. 165-170.}
 @taxon["reference"]

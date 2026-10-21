@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Dompierre, J.; Labbé, P.; Vallet, M.-G.; Camarero, R.: How to Subdivide Pyramids, Prisms and Hexahedra into Tetrahedra. Report CERCA R99-78, 1999; also 8th Int. Meshing Roundtable, Lake Tahoe, CA, 1999.}
 @taxon["reference"]

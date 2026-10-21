@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Baker, T.J.: Triangulations, Mesh Generation and Point Placement Strategies. Proc. Conf. Frontiers of Computational Fluid Dynamics 1994, Ithaca, New York, Nov. 1994.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Paillère, H.; Deconinck, H.; Roe, P.L.: Conservative Upwind Residual-Distribution Schemes Based on the Steady Characteristics of the Euler Equations. AIAA Paper 95-1700, 1995.}
 @taxon["reference"]

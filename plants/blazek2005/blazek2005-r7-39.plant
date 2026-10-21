@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Tucker, P.G.: Differential Equation Based Length Scales to Improve DES and RANS Simulations. AIAA Paper 2003-3968, 2003.}
 @taxon["reference"]

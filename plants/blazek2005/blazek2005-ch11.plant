@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Principles of Grid Generation 网格生成原理}
 @summary{结构网格的 C/H/O 拓扑与代数、椭圆、双曲生成方法。}

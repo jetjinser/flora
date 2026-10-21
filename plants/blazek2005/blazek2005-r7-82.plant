@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Erlebacher, G.; Hussaini, M.Y.; Speziale, C.G.; Zang, T.A.: Toward the Large-Eddy Simulation of Compressible Turbulent Flows. ICASE Report No. 90-76, 1990.}
 @taxon["reference"]

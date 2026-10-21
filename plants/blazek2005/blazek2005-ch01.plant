@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Introduction 第1章 引言}
 @summary{CFD的历史沿革、数值方法与网格技术的发展脉络，以及本书的结构安排。}

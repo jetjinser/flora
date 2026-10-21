@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{George, P.L.; Hecht, F.; Saltel, E.: Automatic Mesh Generator with Specified Boundary. Comp. Meth. Appl. Mech. and Eng., 33 (1991), pp. 975-995.}
 @taxon["reference"]

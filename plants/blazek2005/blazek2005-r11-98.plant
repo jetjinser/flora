@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Nakahashi, K.; Obayashi, S.: FDM-FEM Zonal Approach for Viscous Flow Computations over Multiple Bodies. AIAA Paper 87-0604, 1987.}
 @taxon["reference"]

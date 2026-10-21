@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Van Leer, B.; Thomas, J.L.; Roe, P.L.; Newsome, R.W.: A Comparison of Numerical Flux Formulas for the Euler and Navier-Stokes Equations. AIAA Paper 87-1104, 1987.}
 @taxon["reference"]

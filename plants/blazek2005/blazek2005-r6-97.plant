@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jameson, A.: Time-Dependent Calculations Using Multigrid with Applications to Unsteady Flows Past Airfoils and Wings. AIAA Paper 91-1596, 1991.}
 @taxon["reference"]

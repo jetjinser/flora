@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jansen, K.: Large-Eddy Simulation of Flow Around a NACA 0012 Airfoil Using Unstructured Grids. Center for Turbulence Research, NASA Ames/Stanford University, Annual Research Briefs, 1996, pp. 225-232.}
 @taxon["reference"]

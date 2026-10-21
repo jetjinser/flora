@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Vinokur, M.; Liu, Y.: Equilibrium Gas Flow Computations: II. An Analysis of Numerical Formulations of Conservation Laws. AIAA Paper 88-0127, 1988.}
 @taxon["reference"]

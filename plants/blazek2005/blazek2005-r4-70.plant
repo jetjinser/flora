@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Harten, A.; Lax, P.D.; Van Leer, B.: On Upstream Differencing and Godunov-Type Schemes for Hyperbolic Conservation Laws. Soc. Industrial and Applied Mathematics Rev., 25 (1983), No. 1.}
 @taxon["reference"]

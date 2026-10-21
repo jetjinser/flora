@@ -1,4 +1,4 @@
-@use-modules[(flora commands)]
+@use-commands{flora}
 
 @title{尝试使用Grove}
 @summary{从计算、排版与计划三个平台设想Grove，以及同像性带来的能力。}

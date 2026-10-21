@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Martinelli, L.; Jameson, A.: Validation of a Multigrid Method for Reynolds Averaged Equations. AIAA Paper 88-0414, 1988.}
 @taxon["reference"]

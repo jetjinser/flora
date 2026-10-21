@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Mavriplis, D.J.: On Convergence Acceleration Techniques for Unstructured Meshes. AIAA Paper 98-2966, 1998.}
 @taxon["reference"]

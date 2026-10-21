@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Weiss, J.; Smith, W.A.: Preconditioning Applied to Variable and Constant Density Flows. AIAA Journal, 33 (1995), pp. 2050-2057.}
 @taxon["reference"]

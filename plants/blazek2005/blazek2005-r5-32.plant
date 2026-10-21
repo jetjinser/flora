@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hwang, C.J.; Wu, S.J.: Adaptive Finite Volume Upwind Approach on Mixed Quadrilateral-Triangular Meshes. AIAA Journal, 31 (1993), pp. 61-67.}
 @taxon["reference"]

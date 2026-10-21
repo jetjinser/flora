@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Issman, E.; Degrez, G.; Deconinck, H.: Implicit Upwind Residual-Distribution Euler and Navier-Stokes Solver on Unstructured Meshes. AIAA Journal, 34 (1996), pp. 2021-2028.}
 @taxon["reference"]

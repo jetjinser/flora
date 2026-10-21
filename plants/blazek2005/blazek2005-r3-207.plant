@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Blazek, J.: A Multigrid LU-SSOR Scheme for the Solution of Hypersonic Flow Problems. AIAA Paper 94-0062, 1994.}
 @taxon["reference"]

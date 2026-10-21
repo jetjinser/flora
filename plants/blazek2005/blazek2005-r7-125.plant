@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Grinstein, F.F.; Fureby, C.: Recent progress on MILES for High Reynolds Number Flows. J. Fluids Eng., 124 (2002), pp. 848-861.}
 @taxon["reference"]

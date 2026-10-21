@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Schröder, W.; Hänel, D.: An Unfactored Implicit Scheme with Multigrid Acceleration for the Solution of the Navier-Stokes Equations. Computers & Fluids, 15 (1987), pp. 313-320.}
 @taxon["reference"]

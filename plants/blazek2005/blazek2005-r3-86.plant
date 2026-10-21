@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Godfrey, A.G.; Mitchell, C.R.; Walters, R.W.: Practical Aspects of Spatially High-Order Accurate Methods. AIAA Journal, 31 (1993), pp. 1634-1642.}
 @taxon["reference"]

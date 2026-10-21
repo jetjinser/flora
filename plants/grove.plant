@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Grove文档：写作模型与tree组合}
 @summary{认识.plant页面、结构化内容、稳定地址与嵌入。}

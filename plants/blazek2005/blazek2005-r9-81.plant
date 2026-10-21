@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Guillard, H.; Viozat, C.: On the Behavior of Upwind Schemes in the Low Mach Number Limit. INRIA Report No. 3160, 1997.}
 @taxon["reference"]

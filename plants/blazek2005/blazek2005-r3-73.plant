@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Tatsumi, S.; Martinelli, L.; Jameson, A.: A New High Resolution Scheme for Compressible Viscous Flow with Shocks. AIAA Paper 95-0466, 1995.}
 @taxon["reference"]

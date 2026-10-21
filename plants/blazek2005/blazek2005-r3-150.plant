@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Alonso, J.; Martinelli, L.; Jameson, A.: Multigrid Unsteady Navier-Stokes Calculations with Aeroelastic Applications. AIAA Paper 95-0048, 1995.}
 @taxon["reference"]

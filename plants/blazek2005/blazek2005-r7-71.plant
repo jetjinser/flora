@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Menter, F.R.: Influence of Freestream Values on k-ω Turbulence Model Predictions. AIAA Journal, 30 (1992), pp. 1651-1659.}
 @taxon["reference"]

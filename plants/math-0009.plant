@@ -1,4 +1,5 @@
-@use-modules[(flora commands) (language scribble commands) (grove math catalog) (grove relation dsl)]
+@use-commands{flora}
+@use-modules[(grove math catalog) (grove relation dsl)]
 
 @title{用miniKanren查询数学规则}
 @summary{把规则目录当作关系查询，输出真正参与计算的规则说明。}

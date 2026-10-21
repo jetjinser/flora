@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Boussinesq, J.: Essai sur la théorie des eaux courantes. Mem. Pres. Acad. Sci., XXIII, 46, Paris, 1877.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Acceleration Techniques 第9章 加速技术}
 @summary{局部时间步长、焓阻尼、残差光顺等定常解加速方法。}

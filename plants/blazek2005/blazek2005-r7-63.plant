@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Viegas, J.R.; Rubesin, M.W.: Wall-Function Boundary Conditions in the Solution of the Navier-Stokes Equations for Complex Compressible Flows. AIAA Paper 83-1694, 1983.}
 @taxon["reference"]

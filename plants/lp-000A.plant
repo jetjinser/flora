@@ -1,4 +1,5 @@
-@use-modules[(flora commands) (lp core) (lp project) (lp scribble) (lp forester) (lp checked) (flora metacircular) (flora metacircular-runtime) (flora metacircular-self) (language scribble commands)]
+@use-commands{flora}
+@use-modules[(lp core) (lp project) (lp scribble) (lp forester) (lp checked) (flora metacircular) (flora metacircular-runtime) (flora metacircular-self)]
 
 @title{Scheme解释器的多文件工程}
 @summary{用同一份片段组装独立Guile模块，明确导入、初始化顺序与核验入口。}

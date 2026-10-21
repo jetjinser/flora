@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Wada, Y.; Liou, M.-S.: A Flux Splitting Scheme with High-Resolution and Robustness for Discontinuities. AIAA Paper 94-0083, 1994.}
 @taxon["reference"]

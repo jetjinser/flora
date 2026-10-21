@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Yoh, J.J.-I.; Zhong, X.: Low-Storage Semi-Implicit Runge-Kutta Methods for Reactive Flow Computations. AIAA Paper 98-0130, 1998.}
 @taxon["reference"]

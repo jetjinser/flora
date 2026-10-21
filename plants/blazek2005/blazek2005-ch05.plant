@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Unstructured Finite Volume Schemes 第5章 非结构网格有限体积格式}
 @summary{非结构控制体的几何量ï¼单元中心与中位对偶单元顶点格式。}

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{A Few Matters of Form 第三章 格式的若干问题}
 @summary{口语、感叹号、标题、连字符、数字、括号、引文等格式细节。}

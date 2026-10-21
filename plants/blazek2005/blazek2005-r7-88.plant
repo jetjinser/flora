@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Cook, A.W.; Riley, J.J.; Kosaly, G.: A Laminar Flamelet Approach to Subgrid-Scale Chemistry in Turbulent Flows. Combustion and Flame, 109 (1997), pp. 332-341.}
 @taxon["reference"]

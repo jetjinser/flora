@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Bischof, C.; Khademi, P.; Mauer, A.; Carle, A.: Adifor 2.0: Automatic Differentiation of Fortran 77 Programs. IEEE Computational Science & Engineering, Fall 1996, pp. 18-32.}
 @taxon["reference"]

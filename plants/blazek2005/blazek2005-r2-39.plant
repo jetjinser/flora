@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Krishnan, R.R.; Eidson, T.M.: An Efficient, Parallel Space-Marching Euler Solver for HSCT Research. AIAA Paper 95-1749, 1995.}
 @taxon["reference"]

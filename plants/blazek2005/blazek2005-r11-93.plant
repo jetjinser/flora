@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Marcum, D.L.; Gaither, J.A.: Mixed Element Type Unstructured Grid Generation for Viscous Flow Applications. AIAA Paper 99-3252, 1999.}
 @taxon["reference"]

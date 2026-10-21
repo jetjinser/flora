@@ -1,4 +1,5 @@
-@use-modules[(flora commands) (lp checked) (flora expression-language) (language scribble commands)]
+@use-commands{flora}
+@use-modules[(lp checked) (flora expression-language)]
 
 @title{从文章模块导入程序定义}
 @summary{从文学化文章导入真实binding，让文档与可复用程序保持同源。}
@@ -8,7 +9,8 @@
 
 模块文章用define-module声明模块与公共接口。消费者的导入写法是：
 
-@verbatim["@use-modules[(flora expression-language) (flora commands) (lp checked) (language scribble commands)]"]
+@verbatim["@use-commands{flora}
+@use-modules[(flora expression-language) (lp checked)]"]
 
 @checked-example["lp-import-eval" "导入的算术 interpret 结果为 21"
   (interpret '(* (+ x 2) y) '((x 5) (y 3))) 21]

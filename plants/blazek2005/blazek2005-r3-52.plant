@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Henderson, R.D.; Karniadakis, G.: Unstructured Spectral Element Methods for Simulation of Turbulent Flows. J. Computational Physics, 122 (1995), pp. 191-217.}
 @taxon["reference"]

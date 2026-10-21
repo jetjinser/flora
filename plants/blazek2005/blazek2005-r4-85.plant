@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Yee, H.C.: A Class of High-Resolution Explicit and Implicit Shock-Capturing Methods. VKI Lecture Series 1989-04, 1989; also NASA TM-101088, 1989.}
 @taxon["reference"]

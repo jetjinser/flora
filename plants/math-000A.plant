@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{查询没有入向引用的tree}
 @summary{在Flora项目中定义关系谓词，并查询没有被链接或transclude的文章。}

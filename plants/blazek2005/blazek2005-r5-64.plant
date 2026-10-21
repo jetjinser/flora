@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Barth, T.J.: A 3-D Upwind Euler Solver for Unstructured Meshes. AIAA Paper 91-1548, 1991.}
 @taxon["reference"]

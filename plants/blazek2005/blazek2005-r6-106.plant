@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Dubuc, L.; Cantariti, F.; Woodgate, M.; Gribben, B.; Badcock, K.J.; Richards, B.E.: Solution of the Unsteady Euler Equations Using an Implicit Dual-Time Method. AIAA Journal, 36 (1998), pp. 1417-1424.}
 @taxon["reference"]

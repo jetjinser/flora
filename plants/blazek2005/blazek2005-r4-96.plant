@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Radespiel, R.; Swanson, R.C.: An Investigation of Cell Centred and Cell Vertex Multigrid Schemes for the Navier-Stokes Equations. AIAA Paper 89-0548, 1989.}
 @taxon["reference"]

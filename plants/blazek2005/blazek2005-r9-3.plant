@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jameson, A.: Iterative Solution of Transonic Flow over Airfoil and Wings Including at Mach 1. Comm. Pure Appl. Math., 27 (1974), pp. 283-309.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Soni, B.K.: Two- and Three-Dimensional Grid Generation for Internal Flow Applications of Computational Fluid Dynamics. AIAA Paper 85-1526, 1985.}
 @taxon["reference"]

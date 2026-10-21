@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hänel, D.; Schwane, R.; Seider, G.: On the Accuracy of Upwind Schemes for the Solution of the Navier-Stokes Equations. AIAA Paper 87-1105, 1987.}
 @taxon["reference"]

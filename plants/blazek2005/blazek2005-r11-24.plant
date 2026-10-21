@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Sonar, T.: Grid Generation Using Elliptic Partial Differential Equations. DFVLR-FB 89-15, 1989.}
 @taxon["reference"]

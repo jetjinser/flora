@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Tidriri, M.D.: Schwarz-Based Algorithms for Compressible Flows. ICASE Report 96-4, 1996.}
 @taxon["reference"]

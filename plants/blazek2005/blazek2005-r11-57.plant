@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Samet, H.: The Design and Analysis of Spatial Data Structures. Addison-Wesley, 1990.}
 @taxon["reference"]

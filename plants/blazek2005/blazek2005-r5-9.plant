@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Khawaja A., Kallinderis Y. and Parthasarathy V., Implementation of Adaptive Hybrid Grids for 3-D Turbulent Flows, AIAA Paper 96-0026, 1996.}
 @taxon["reference"]

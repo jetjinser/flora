@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Turkel, E.; Yaniv, S.; Landau, U.: Accuracy of Schemes for the Euler Equations with Non-Uniform Meshes. ICASE Report No. 85-59, 1985.}
 @taxon["reference"]

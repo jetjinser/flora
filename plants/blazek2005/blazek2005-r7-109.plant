@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Urbin, G.; Knight, D.; Zheltovodov, A.A.: Compressible Large Eddy Simulation Using Unstructured Grid: Supersonic Turbulent Boundary Layer and Compression Corner. AIAA Paper 99-0427, 1999.}
 @taxon["reference"]

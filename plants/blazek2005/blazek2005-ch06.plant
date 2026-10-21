@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Temporal Discretisation 第6章 时间离散}
 @summary{显式多步格式、隐式算子的矩阵形式与通量雅可比的求值。}

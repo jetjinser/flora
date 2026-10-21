@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Barth, T.J.: Recent Developments in High Order k-Exact Reconstruction on Unstructured Meshes. AIAA Paper 93-0668, 1993.}
 @taxon["reference"]

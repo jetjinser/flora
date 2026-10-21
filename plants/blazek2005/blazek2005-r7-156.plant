@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Strelets, M.: Detached Eddy Simulation of Massively Separated Flows. AIAA Paper 2001-0879, 2001.}
 @taxon["reference"]

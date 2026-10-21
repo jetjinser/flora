@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{McMorris, H.; Kallinderis, Y.: Octree-Advancing Front Method for Generation of Unstructured Surface and Volume Meshes. AIAA Journal, 35 (1997), pp. 976-984.}
 @taxon["reference"]

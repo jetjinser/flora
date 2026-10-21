@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Giles, M.B.: Non-reflecting Boundary Conditions for Euler Equation Calculations. AIAA Paper 89-1942, 1989.}
 @taxon["reference"]

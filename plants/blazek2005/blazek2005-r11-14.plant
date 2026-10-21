@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Gordon, W.N.; Hall, C.A.: Construction of Curvilinear Coordinate Systems and Application to Mesh Generation. Int. J. Num. Methods in Engineering, 7 (1973), pp. 461-477.}
 @taxon["reference"]

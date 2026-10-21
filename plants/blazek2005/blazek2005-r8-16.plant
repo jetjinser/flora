@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Givoli, D.: Non-Reflecting Boundary Conditions. J. Computational Physics, 94 (1991), pp. 1-29.}
 @taxon["reference"]

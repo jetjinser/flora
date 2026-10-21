@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Kallinderis, Y.; Khawaja, A.; McMorris, H.; Irmisch, S.; Walker, D.: Hybrid Prismatic/Tetrahedral Grids for Turbomachinery Applications. Proc. 6th Int. Meshing Roundtable, Park City, Utah, USA, 1997, pp. 21-31.}
 @taxon["reference"]

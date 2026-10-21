@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Boundary Conditions 第8章 边界条件}
 @summary{虚单元概念,固壁、远场、入流/出流边界的数值处理。}

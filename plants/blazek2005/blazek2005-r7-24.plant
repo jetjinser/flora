@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Craft, T.J.; Launder, B.E.; Suga, K.: A Non-Linear Eddy-Viscosity Model Including Sensitivity to Stress Anisotropy. Proc. 10th Symp. Turbulent Shear Flows, Pennsylvania State University, Paper 23:19, 1995.}
 @taxon["reference"]

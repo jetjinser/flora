@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Griffiths, D.F.: The 'No Boundary Condition' Outflow Boundary Condition. Int. J. Numerical Methods in Fluids, 24 (1997), pp. 393-411.}
 @taxon["reference"]

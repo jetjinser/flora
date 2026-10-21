@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Delaunay, B.: Sur la sphère vide. Bull. Acad. Science USSR, Class. Science Mat. Nat., 7 (1934), pp. 793-800.}
 @taxon["reference"]

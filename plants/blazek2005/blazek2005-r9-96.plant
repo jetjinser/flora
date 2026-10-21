@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Turkel, E.; Vatsa, V.N.; Radespiel, R.: Preconditioning Methods for Low-Speed Flows. AIAA Paper 96-2460, 1996.}
 @taxon["reference"]

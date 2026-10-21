@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Words and Expressions Commonly Misused 常被误用的词与短语（A–F）}
 @summary{从Aggravate到Fortuitous的常见误用词条。}

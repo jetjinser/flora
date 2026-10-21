@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Slater, J.W.; Freund, D.; Sajben, M.: Study of CFD Methods Applied to Rapidly Deforming Boundaries. AIAA Paper 97-2041, 1997.}
 @taxon["reference"]

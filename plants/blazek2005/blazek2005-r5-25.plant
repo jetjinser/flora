@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jameson, A.; Mavriplis, D.: Finite Volume Solution of the Two-Dimensional Euler Equations on a Regular Triangular Mesh. AIAA Journal, 24 (1986), pp. 611-618.}
 @taxon["reference"]

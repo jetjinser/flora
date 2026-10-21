@@ -1,6 +1,5 @@
-@use-modules[(flora commands)
-             (language scribble commands)
-             (grove math pipeline)
+@use-commands{flora}
+@use-modules[(grove math pipeline)
              (grove math proof)
              (grove math layout)
              ((grove math semantic) #:prefix ◆:)

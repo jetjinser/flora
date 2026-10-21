@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Stüben, K.: A Review of Algebraic Multigrid. J. Comput. Applied Math., 128 (2001), pp. 281-309.}
 @taxon["reference"]

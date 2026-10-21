@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Favre, A.: Equations des gaz turbulents compressibles, part 1: formes générales. Journal de Mécanique 4 (1965), pp. 361-390.}
 @taxon["reference"]

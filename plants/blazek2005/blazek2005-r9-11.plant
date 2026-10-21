@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Martinelli, L.: Calculation of Viscous Flows with a Multigrid Method. Ph.D. Thesis, Dept. of Mechanical and Aerospace Eng., Princeton University, 1987.}
 @taxon["reference"]

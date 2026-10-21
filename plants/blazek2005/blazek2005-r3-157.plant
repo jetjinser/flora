@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Venkatakrishnan, V.; Barth, T.J.: Application of Direct Solvers to Unstructured Meshes for the Euler and Navier-Stokes Equations Using Upwind Schemes. AIAA Paper 89-0364, 1989.}
 @taxon["reference"]

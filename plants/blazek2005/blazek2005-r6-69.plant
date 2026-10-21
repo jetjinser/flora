@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Shuen, J.S.; Chen, K.H.; Choi, Y.: A Coupled Implicit Method for Chemical Non-Equilibrium Flows at All Speeds. J. Computational Physics, 106 (1993), pp. 306-318.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Cabot, W.; Moin, P.: Approximate Wall Boundary Conditions in the Large-Eddy Simulation of High Reynolds Number Flow. Flow Turbulence Combust., 63 (1999), pp. 269-291.}
 @taxon["reference"]

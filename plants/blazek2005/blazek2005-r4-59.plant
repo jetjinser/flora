@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jameson, A.: Positive Schemes and Shock Modelling for Compressible Flow. Int. J. Numerical Methods in Fluids, 20 (1995), pp. 743-776.}
 @taxon["reference"]

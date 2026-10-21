@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Launder, B.E.; Spalding, B.: The Numerical Computation of Turbulent Flows. Comput. Methods Appl. Mech. Eng. 3 (1974), pp. 269-289.}
 @taxon["reference"]

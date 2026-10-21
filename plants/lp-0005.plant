@@ -1,4 +1,5 @@
-@use-modules[(flora commands) (flora literate) (language scribble commands)]
+@use-commands{flora}
+@use-modules[(flora literate)]
 
 @title{文本片段与源码生成}
 @summary{用命名代码片段组织解释，组合为Scheme源码，再独立执行导出的程序。}

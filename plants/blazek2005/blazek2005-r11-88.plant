@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Sharov, D.; Nakahashi, K.: Hybrid Prismatic/Tetrahedral Grid Generation for Viscous Flow Applications. AIAA Paper 96-2000, 1996; also AIAA Journal, 36 (1998), pp. 157-162.}
 @taxon["reference"]

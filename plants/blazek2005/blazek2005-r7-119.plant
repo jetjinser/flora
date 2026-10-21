@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Moin, P.; Squires, K.D.; Cabot, W.H.; Lee, S.: A Dynamic Subgrid-Scale Model for Compressible Turbulence and Scalar Transport. Physics of Fluids, 3 (1991), pp. 2746-2757.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Pierce, N.A.; Alonso, J.J.: A Preconditioned Implicit Multigrid Algorithm for Parallel Computation of Unsteady Aeroelastic Compressible Flows. AIAA Paper 97-0444, 1997.}
 @taxon["reference"]

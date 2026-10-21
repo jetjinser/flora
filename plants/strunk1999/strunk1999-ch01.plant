@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Elementary Rules of Usage 第一章 英语用法的基本规则}
 @summary{十一条基本用法规则：所有格、逗号、插入语、从句、代词格与主谓一致等。}

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{组合tree：subtree与transclude}
 @summary{把一段内容保留在原处、单独寻址，并在其他位置重复使用。}

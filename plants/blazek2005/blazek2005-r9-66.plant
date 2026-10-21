@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Lawson, C.L.: Software for C^1 Surface Interpolation. Mathematical Software III, Rice, J.R. (ed.), Academic Press, 1977.}
 @taxon["reference"]

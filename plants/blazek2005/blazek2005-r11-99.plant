@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Nakahashi, K.; Obayashi, S.: Viscous Flow Computations Using a Composite Grid. AIAA Paper 87-1128, 1987.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Nakahashi, K.; Togashi, F.; Sharov, D.: Intergrid-Boundary Definition Method for Overset Unstructured Grid Approach. AIAA Journal, 38 (2000), pp. 2077-2084.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Oosterlee, C.W.: A GMRES-Based Plane Smoother in Multigrid to Solve 3D Anisotropic Fluid Flow Problems. J. Computational Physics, 130 (1997), pp. 41-53.}
 @taxon["reference"]

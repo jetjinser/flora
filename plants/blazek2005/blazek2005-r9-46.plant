@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Cleary, A.J.; Falgout, R.D.; Van Henson, E.; Jones, J.E.; Manteuffel, T.A.; McCormick, S.F.; Miranda, G.N.; Ruge, J.W.: Robustness and Scalability of Algebraic Multigrid. SIAM J. Sci. Comput., 21 (2000), pp. 1886-1908.}
 @taxon["reference"]

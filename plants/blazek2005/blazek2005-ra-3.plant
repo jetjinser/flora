@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hirsch, C.: Numerical Computation of Internal and External Flows. Vol. 1, John Wiley and Sons, 1988.}
 @taxon["reference"]

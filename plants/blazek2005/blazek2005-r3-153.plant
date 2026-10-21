@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Bender, E.E.; Khosla, P.K.: Solution of the Two-Dimensional Navier-Stokes Equations Using Sparse Matrix Solvers. AIAA Paper 87-0603, 1987.}
 @taxon["reference"]

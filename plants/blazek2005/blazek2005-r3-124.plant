@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Enander, E.: Improved Implicit Residual Smoothing for Steady State Computations of First-Order Hyperbolic Systems. J. Computational Physics, 107 (1993), pp. 291-296.}
 @taxon["reference"]

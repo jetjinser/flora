@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Palmer, G.; Venkatapathy, E.: Comparison of Nonequilibrium Solution Algorithms Applied to Chemically Stiff Hypersonic Flows. AIAA Journal, 33 (1995), pp. 1211-1219.}
 @taxon["reference"]

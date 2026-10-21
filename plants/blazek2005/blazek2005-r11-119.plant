@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hitzel, S.M.; Tremel, U.; Deister, F.; Rieger, H.: Complex Configuration Meshing - An Industrial View and Approach. AIAA Paper 2003-4130, 2003.}
 @taxon["reference"]

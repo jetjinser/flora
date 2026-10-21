@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Thomas, P.D.; Lombard, C.K.: Geometric Conservation Law and Its Application to Flow Computations on Moving Grids. AIAA Journal, 17 (1979), pp. 1030-1037.}
 @taxon["reference"]

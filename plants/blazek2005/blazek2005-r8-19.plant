@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Giles, M.B.; Drela, M.; Thompkins, W.T.: Newton Solution of Direct and Inverse Transonic Euler Equations. AIAA Paper 85-1530, 1985.}
 @taxon["reference"]

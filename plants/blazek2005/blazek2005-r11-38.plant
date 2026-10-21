@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Liu, J.; Tang, R.: Ball-Packing Method: A New Approach for Quality Automatic Triangulation of Arbitrary Domains. Proc. 16th Int. Meshing Roundtable, Park City, Utah, Oct. 13-15, 1997, pp. 85-96.}
 @taxon["reference"]

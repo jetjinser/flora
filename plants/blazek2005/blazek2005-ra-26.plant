@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Whitham, G.B.: Linear and Nonlinear Waves. Wiley, New York, 1974.}
 @taxon["reference"]

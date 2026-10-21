@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Yerry, M.A.; Shephard, M.S.: Automatic Three-Dimensional Mesh Generation by the Modified-Octree Technique. Int. J. Numer. Meth. Eng., 20 (1984), pp. 1965-1990.}
 @taxon["reference"]

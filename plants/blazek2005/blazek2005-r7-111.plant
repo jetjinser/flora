@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Piomelli, U.: Large-Eddy Simulation of Turbulent Flows. VKI Lecture Series 1998-05, 1998.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Powell, K.G.; van Leer, B.; Roe, P.L.: Towards a Genuinely Multi-Dimensional Upwind Scheme. VKI Lecture Series 1990-03, 1990.}
 @taxon["reference"]

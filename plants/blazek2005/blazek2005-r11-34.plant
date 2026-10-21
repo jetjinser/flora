@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Müller, J.D.; Roe, P.L.; Deconinck, H.: A Frontal Approach for Internal Node Generation in Delaunay Triangulations. Int. J. Numerical Methods in Fluids, 17 (1993), pp. 241-256.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Sockol, P.M.: Multigrid Solution of the Navier-Stokes Equations at Low Speeds with Large Temperature Variations. J. Computational Physics, 192 (2003), pp. 570-592.}
 @taxon["reference"]

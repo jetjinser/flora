@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Foreword and Introduction 前言与导言}
 @summary{Roger Angell的前言与E. B. White为1979年版所写的导言。}

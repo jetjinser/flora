@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Merkle, C.L.; Sullivan, J.Y.; Buelow, P.E.O.; Venkateswaran, S.: Computation of Flows with Arbitrary Equations of State. AIAA Journal, 36 (1998), pp. 515-521.}
 @taxon["reference"]

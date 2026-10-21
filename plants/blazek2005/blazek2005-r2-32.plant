@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{White, A.J.; Young, J.B.; Walters, P.T.: Experimental Validation of Condensing Flow Theory for a Stationary Cascade of Steam Turbine Blades. Phil. Trans. R. Soc., London, A 354 (1996), pp. 59-88.}
 @taxon["reference"]

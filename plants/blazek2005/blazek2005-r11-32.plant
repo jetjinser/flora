@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jeng, Y.N.; Liou, Y.-C.: Hyperbolic Equation Method of Grid Generation for Enclosed Regions. AIAA Journal, 34 (1996), pp. 1293-1295.}
 @taxon["reference"]

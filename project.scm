@@ -40,6 +40,7 @@
          "lp-0009.plant")))
 (define read-flora-document
   (make-scribble-document-reader))
+(define language-manifest (project-directory% "/flora.scm"))
 (define-values (prepare-literate read-flora-page-document)
   (make-scribble-module-session literate-module-sources
     #:read-document read-flora-document))
@@ -247,14 +248,14 @@
     #:tree-template
     (lambda (id date)
       (string-append
-        "@use-modules[(flora commands) (language scribble commands)]\n\n"
+        "@use-commands{flora}\n\n"
         "@title{}\n"
         "@published{" date "}\n"))
     #:title "Flora"
     #:locale flora-locale
     #:description "A garden of connected notes."
     #:source-directory plant-directory
-    #:extra-sources (append (list stylesheet-path feed-stylesheet-path
+    #:extra-sources (append (list language-manifest stylesheet-path feed-stylesheet-path
                                   theme-script-path)
                             font-sources)
     #:prepare prepare-flora

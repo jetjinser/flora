@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Bartels, R.E.: An Elasticity-Based Mesh Scheme Applied to the Computation of Unsteady Three-Dimensional Spoiler and Aeroelastic Problems. AIAA Paper 99-3301, 1999.}
 @taxon["reference"]

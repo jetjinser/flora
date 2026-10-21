@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Venkatakrishnan, V.: Preconditioned Conjugate Gradient Methods for the Compressible Navier-Stokes Equations. AIAA Paper 90-0586, 1990; also AIAA Journal, 29 (1991), pp. 1092-1100.}
 @taxon["reference"]

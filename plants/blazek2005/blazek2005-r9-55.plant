@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Leclerq, M.P.; Stoufflet, B.: Characteristic Multigrid Method Application to Solve the Euler Equations with Unstructured and Unnested Grids. J. Computational Physics, 104 (1993), pp. 329-346.}
 @taxon["reference"]

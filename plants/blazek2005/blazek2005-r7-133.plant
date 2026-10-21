@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Raverdy, B.; Mary, I.; Sagaut, P.: High-Resolution Large-Eddy Simulation of Flow Around Low-Pressure Turbine Blade. AIAA Journal, 41 (2003), pp. 390-397.}
 @taxon["reference"]

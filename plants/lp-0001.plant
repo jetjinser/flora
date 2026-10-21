@@ -1,4 +1,5 @@
-@use-modules[(flora commands) (lp core) (lp scribble) (lp forester) (lp checked) (language scribble commands)]
+@use-commands{flora}
+@use-modules[(lp core) (lp scribble) (lp forester) (lp checked)]
 
 @title{文学编程：片段、计划与实例}
 @summary{用累计器学习完整定义的保存、程序装配、状态隔离和同源输出。}
@@ -9,9 +10,9 @@
 @subtree{
   @title{累计器教程的模块导入}
 
-  .plant文档使用以下导入；Flora的project.scm已将LP库所在目录加入Guile的模块搜索路径：
+  .plant文档用 @code{@"@"use-commands{flora}} 引入Flora命令，再显式导入LP模块；Flora的project.scm已将LP库所在目录加入Guile的模块搜索路径：
 
-  @verbatim["@use-modules[(flora commands) (lp core) (lp scribble) (lp forester) (lp checked) (language scribble commands)]"]
+  @verbatim["@use-modules[(lp core) (lp scribble) (lp forester) (lp checked)]"]
 
   (lp core)管理片段、计划和实例，(lp scribble)提供code-fragment宏，(lp forester)提供阅读tree与输出，(lp checked)提供核验展示。这里只将(flora commands)用于文章命令，程序核心不依赖Flora。
 }

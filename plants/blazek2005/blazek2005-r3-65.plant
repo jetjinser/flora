@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jameson, A.; Baker, T.J.; Weatherill, N.P.: Calculation of Inviscid Transonic Flow over a Complete Aircraft. AIAA Paper 86-0103, 1986.}
 @taxon["reference"]

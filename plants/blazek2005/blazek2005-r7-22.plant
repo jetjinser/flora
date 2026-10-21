@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Lumley, J.L.: Toward a Turbulent Constitutive Equation. J. Fluid Mechanics, 41 (1970), pp. 413-434.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Liu, Y.; Vinokur, M.: Upwind Algorithms for General Thermo-Chemical Nonequilibrium Flows. AIAA Paper 89-0201, 1989.}
 @taxon["reference"]

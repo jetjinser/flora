@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hestenes, M.R.; Stiefel, E.L.: Methods of Conjugate Gradients for Solving Linear Systems. J. Res. Nat. Bur. Stand., 49 (1952), p. 409.}
 @taxon["reference"]

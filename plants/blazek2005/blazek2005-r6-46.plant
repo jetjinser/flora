@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Lomax, H.: Some Notes on Finite Difference Methods. Lecture Notes, Stanford University, 1986.}
 @taxon["reference"]

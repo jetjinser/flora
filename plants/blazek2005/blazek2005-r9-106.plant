@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Nemec, M.; Zingg, D.W.: Aerodynamic Computations Using the Convective Upstream Split Pressure Scheme with Local Preconditioning. AIAA Paper 98-2444, 1998.}
 @taxon["reference"]

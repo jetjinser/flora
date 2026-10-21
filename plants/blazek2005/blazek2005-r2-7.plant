@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Vinokur, M.: Conservation Equations of Gas Dynamics in Curvilinear Coordinate Systems. J. Computational Physics, 14 (1974), pp. 105-125.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Governing Equations 第2章 控制方程}
 @summary{流体流动的数学描述与守恒定律，Navier-Stokes方程的完整形式及其简化。}

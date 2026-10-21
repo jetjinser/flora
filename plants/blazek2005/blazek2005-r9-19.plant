@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Brandt, A.: Guide to Multigrid Development. Multigrid Methods/Lecture Notes in Mathematics, No. 960, Springer Verlag, New York, 1981.}
 @taxon["reference"]

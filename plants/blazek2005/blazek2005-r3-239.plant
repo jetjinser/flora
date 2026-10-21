@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Verhoff, A.: Modeling of Computational and Solid Surface Boundary Conditions for Fluid Dynamics Calculations. AIAA Paper 85-1496, 1985.}
 @taxon["reference"]

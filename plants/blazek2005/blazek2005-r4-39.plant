@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Van Leer, B.: Flux-Vector Splitting for the Euler Equations. Proc. 8th Int. Conf. on Numerical Methods in Fluid Dynamics, Springer Verlag, 1982, pp. 507-512; also ICASE Report 82-30, 1982.}
 @taxon["reference"]

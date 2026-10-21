@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{LeVeque, R.J.: Numerical Methods for Conservation Laws. Birkhäuser Verlag, Basel, Switzerland, 1992.}
 @taxon["reference"]

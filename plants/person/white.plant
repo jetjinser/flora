@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{E. B. White}
 @summary{美国散文家，修订《The Elements of Style》使其通行于世。}

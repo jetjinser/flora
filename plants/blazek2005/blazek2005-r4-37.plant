@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Swanson, R.C.; Radespiel, R.; Turkel, E.: Comparison of Several Dissipation Algorithms for Central Difference Schemes. ICASE Report No. 97-40, 1997; also AIAA Paper 97-1945, 1997.}
 @taxon["reference"]

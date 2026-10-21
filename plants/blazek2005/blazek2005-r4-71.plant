@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Harten, A.; Hyman, J.M.: Self Adjusting Grid Methods for One-Dimensional Hyperbolic Conservation Laws. J. Computational Physics, 50 (1983), pp. 235-269.}
 @taxon["reference"]

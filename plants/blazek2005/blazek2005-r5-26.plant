@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Frink, N.T.; Parikh, P.; Pirzadeh, S.: A Fast Upwind Solver for the Euler Equations on Three-Dimensional Unstructured Meshes. AIAA Paper 91-0102, 1991.}
 @taxon["reference"]

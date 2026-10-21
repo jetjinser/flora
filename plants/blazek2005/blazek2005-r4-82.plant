@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Yee, H.C.: Upwind and Symmetric Shock-Capturing Schemes. NASA TM-89464, 1987.}
 @taxon["reference"]

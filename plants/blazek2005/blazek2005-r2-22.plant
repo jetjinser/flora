@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Li, C.P.: Computational Aspects of Chemically Reacting Flows. AIAA Paper 91-1574, 1991.}
 @taxon["reference"]

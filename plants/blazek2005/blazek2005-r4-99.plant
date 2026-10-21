@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Morton, K.W.; Paisley, M.F.: On the Cell-Centre and Cell-Vertex Approaches to the Steady Euler Equations and the Use of Shock Fitting. Proc. Int. Conf. Num. Meth. Fluid Dynamics 10, Beijing, China, 1986.}
 @taxon["reference"]

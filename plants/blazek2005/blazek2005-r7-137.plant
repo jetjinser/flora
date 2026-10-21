@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Lilly, D.K.: The Representation of Small-Scale Turbulence in Numerical Simulation Experiments. Proc. IBM Sci. Comp. Symp. on Environmental Sciences, New York, November 14-16, 1967.}
 @taxon["reference"]

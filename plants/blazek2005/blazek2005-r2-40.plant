@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Nakahashi, K.; Saitoh, E.: Space-Marching Method on Unstructured grid for Supersonic Flows with Embedded Subsonic Regions. AIAA Paper 96-0418, 1996.}
 @taxon["reference"]

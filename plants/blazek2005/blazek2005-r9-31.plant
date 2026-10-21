@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Haselbacher, A.C.: A Grid-Transparent Numerical Method for Compressible Viscous Flows on Mixed Unstructured Grids. PhD Thesis, Loughborough University, England, 1999.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jiri Blazek}
 @summary{计算流体力学研究者，《Computational Fluid Dynamics: Principles and Applications》作者。}

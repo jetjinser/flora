@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Mavriplis, D.J.: Adaptive Meshing Technique for Viscous Flow Calculations on Mixed-Element Unstructured Meshes. AIAA Paper 97-0857, 1997.}
 @taxon["reference"]

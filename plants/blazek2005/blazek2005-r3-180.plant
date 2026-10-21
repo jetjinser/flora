@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Kano, S.; Nakahashi, K.: Navier-Stokes Computations of HSCT Off-Design Aerodynamics Using Unstructured Hybrid Grids. AIAA Paper 98-0232, 1998.}
 @taxon["reference"]

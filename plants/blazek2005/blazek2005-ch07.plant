@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Turbulence Modelling 第7章 湍流建模}
 @summary{湍流的基本方程：平均方法、涡黏性假设与雷诺应力输运。}

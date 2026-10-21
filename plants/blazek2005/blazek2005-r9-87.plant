@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Shi, J.; Toro, E.F.: A Riemann-Problem-Based Approach for Steady Incompressible Flows. Int. J. Num. Meth. Heat Fluid Flow, 6 (1996), pp. 81-93.}
 @taxon["reference"]

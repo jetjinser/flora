@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Bussing, T.R.A.: A Finite Volume Method for the Navier-Stokes Equations with Finite Rate Chemistry. PhD Thesis, Dept. of Aeronautics and Astronautics, Massachusetts Inst. of Technology, 1985.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Vasilyev, O.V.; Lund, T.S.; Moin, P.: A General Class of Commutative Filters for LES in Complex Geometries. J. Computational Physics, 146 (1998), pp. 82-104.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Michal, T.; Johnson, J.: A Hybrid Structured/Unstructured Grid Multi-Block Flow Solver for Distributed Parallel Processing. AIAA Paper 97-1895, 1997.}
 @taxon["reference"]

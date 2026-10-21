@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Thomas, J.L.; Salas, M.D.: Far Field Boundary Conditions for Transonic Lifting Solutions to the Euler Equations. AIAA Journal, 24 (1986), pp. 1074-1080.}
 @taxon["reference"]

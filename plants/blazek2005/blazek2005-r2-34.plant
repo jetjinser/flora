@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Pulliam, T.H.; Steger, J.L.: Implicit Finite Difference Simulations of Three-Dimensional Compressible Flows. AIAA Journal, 18 (1980), pp. 159-167.}
 @taxon["reference"]

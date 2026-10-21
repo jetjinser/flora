@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hall, M.G.: Cell Vertex Multigrid Scheme for Solution of the Euler Equations. Proc. Conf. on Numerical Methods for Fluid Dynamics, Reading, UK, 1985.}
 @taxon["reference"]

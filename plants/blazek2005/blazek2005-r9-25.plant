@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Thomas, J.L.: An Implicit Multigrid Scheme for Hypersonic Strong-Interaction Flowfields. 5th Copper Mountain Conf. on Multigrid Methods, Denver, USA, 1991.}
 @taxon["reference"]

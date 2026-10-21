@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Anderson, W.K.; Thomas, J.L.; van Leer, B.: A Comparison of Finite Volume Flux Vector Splittings for the Euler Equations. AIAA Journal, 24 (1986), pp. 1453-1460.}
 @taxon["reference"]

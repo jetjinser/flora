@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Menter, F.R.: Two-Equation Eddy-Viscosity Turbulence Models for Engineering Applications. AIAA Paper 93-2906, 1993; also AIAA Journal, 32 (1994), pp. 1598-1605.}
 @taxon["reference"]

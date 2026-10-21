@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Germano, M.; Piomelli, U.; Moin, P.; Cabot, W.H.: A Dynamic Subgrid-Scale Eddy Viscosity Model. Physics of Fluids, 3 (1991), pp. 1760-1765.}
 @taxon["reference"]

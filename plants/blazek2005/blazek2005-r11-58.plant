@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Yerry, M.A.; Shephard, M.S.: A Modified Quadtree Approach to Finite Element Mesh Generation. IEEE Comput. Graph. and Appl., 3 (1983), pp. 39-46.}
 @taxon["reference"]

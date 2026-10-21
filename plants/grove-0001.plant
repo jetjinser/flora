@@ -1,4 +1,5 @@
-@use-modules[(flora commands) (language scribble commands) (grove style) (grove style html)]
+@use-commands{flora}
+@use-modules[(grove style) (grove style html)]
 
 @title{用.plant写作：元数据、命令与Scheme}
 @summary{认识页面元数据、自动段落、at-exp命令和源码展示。}
@@ -24,7 +25,7 @@
 
   下面是一个可以独立保存为@code{plants/hello.plant}的最小示例：
 
-  @verbatim["@use-modules[(flora commands) (language scribble commands)]
+  @verbatim["@use-commands{flora}
 
   @title{Hello}
   @summary{My first Grove page.}
@@ -65,7 +66,7 @@
     @title{一份页面源码的形状}
   @taxon["definition"]
     @paragraph{页面源码由元数据、内容命令、普通文本和可选的Scheme计算组成。它保留为内容树，之后才交给分析和渲染阶段。}
-    @verbatim["@use-modules[(flora commands) (language scribble commands)]
+    @verbatim["@use-commands{flora}
 
   @title{Page title}
   @summary{One-sentence description.}

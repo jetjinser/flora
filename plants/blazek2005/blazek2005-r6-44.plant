@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Pulliam, T.H.: Artificial Dissipation Models for the Euler Equations. AIAA Journal, 24 (1986), pp. 1931-1940.}
 @taxon["reference"]

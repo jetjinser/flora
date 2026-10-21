@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Words and Expressions Commonly Misused 常被误用的词与短语(G–O)}
 @summary{从Get到-oriented的常见误用词条。}

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Sethian, J.A.: Curvature Flow and Entropy Conditions Applied to Grid Generation. J. Computational Physics, 115 (1994), pp. 440-454.}
 @taxon["reference"]

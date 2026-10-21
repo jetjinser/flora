@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Wang, Z.J.; Hufford, G.S.; Przekwas, A.J.: Adaptive Cartesian/Adaptive Prism (ACAP) Grid Generation for Complex Geometries. AIAA Paper 97-0860, 1997.}
 @taxon["reference"]

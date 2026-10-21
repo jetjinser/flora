@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Words and Expressions Commonly Misused 常被误用的词与短语（P–Z）}
 @summary{从Partially到Would的常见误用词条。}

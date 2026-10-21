@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Held, J.: Large Eddy Simulations of Separated Compressible Flows Around 3-D Configurations. PhD Thesis, Department of Heat and Power Engineering/Fluid Mechanics, Lund Institute of Technology, Lund, Sweden, 1998.}
 @taxon["reference"]

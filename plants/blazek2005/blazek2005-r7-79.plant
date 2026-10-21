@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Moin, P.; Kim, J.: Numerical Investigation of Turbulent Channel Flow. J. Fluid Mechanics, 118 (1982), pp. 341-377.}
 @taxon["reference"]

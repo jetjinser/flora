@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Briley, W.R.; Taylor, L.K.; Whitfield, D.L.: High-resolution viscous flow simulations at arbitrary Mach number. J. Computational Physics, 184 (2003), pp. 79-105.}
 @taxon["reference"]

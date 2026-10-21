@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Young, J.B.: Two-Dimensional Non-Equilibrium Wet-Steam Calculations for Nozzles and Turbine Cascades. Trans. ASME, J. Turbomachinery, 114 (1992), pp. 569-579.}
 @taxon["reference"]

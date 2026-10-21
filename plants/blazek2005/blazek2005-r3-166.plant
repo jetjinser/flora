@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jenssen, C.B.: Implicit Multiblock Euler and Navier-Stokes Calculations. AIAA Journal, 32 (1994), pp. 1808-1814.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Roe, P.L.: Approximate Riemann Solvers, Parameter Vectors, and Difference Schemes. J. Computational Physics, 43 (1981), pp. 357-372.}
 @taxon["reference"]

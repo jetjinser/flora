@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Voronoj, G.: Nouvelles applications de paramètres continus à la théorie des formes quadratiques. Z. Reine Angew. Math., 134 (1908).}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Nielsen, E.J.; Anderson, W.K.; Walters, R.W.; Keyes, D.E.: Application of Newton-Krylov Methodology to a Three-Dimensional Unstructured Euler Code. AIAA Paper 95-1733, 1995.}
 @taxon["reference"]

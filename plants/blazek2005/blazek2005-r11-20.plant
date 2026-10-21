@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hsu, K.; Lee, S.L.: A Numerical Technique for Two-Dimensional Grid Generation with Grid Control at All of the Boundaries. J. Computational Physics, 96 (1991), pp. 451-469.}
 @taxon["reference"]

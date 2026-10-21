@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Liu, C.; Liu, Z.: Multigrid Methods and High Order Finite Difference for Flow in Transition. AIAA Paper 93-3354, 1993.}
 @taxon["reference"]

@@ -1,4 +1,5 @@
-@use-modules[(flora commands) (lp checked) (language scribble commands)]
+@use-commands{flora}
+@use-modules[(lp checked)]
 
 @title{文章中的可执行Scheme定义}
 @summary{使用program展示真实Scheme定义，使用核验表达式说明结果与复用行为。}
@@ -11,7 +12,8 @@ program适合需要直接执行的函数说明：同一份Scheme定义进入文�
 
   (lp checked)提供文章内的执行与核验。定义型program放在文章顶层，不能借助subtree参数自动成为顶层定义：
 
-  @verbatim["@use-modules[(flora commands) (lp checked) (language scribble commands)]
+  @verbatim["@use-commands{flora}
+@use-modules[(lp checked)]
 
 @program[\"short-square\" \"平方函数 square 的定义\"]{
 @(define (square x)

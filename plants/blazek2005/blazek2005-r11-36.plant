@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Marcum, D.L.; Weatherill, N.P.: Unstructured Grid Generation Using Iterative Point Insertion and Local Reconnection. AIAA Journal, 33 (1995), pp. 1619-1625.}
 @taxon["reference"]

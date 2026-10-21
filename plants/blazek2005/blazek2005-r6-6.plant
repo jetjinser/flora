@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Mavriplis, D.J.; Jameson, A.: Multigrid Solution of the Navier-Stokes Equations on Triangular Meshes. AIAA Journal, 28 (1990), pp. 1415-1425.}
 @taxon["reference"]

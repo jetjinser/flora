@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Leonard, B.P.: Comparison of Truncation Error of Finite-Difference and Finite-Volume Formulations of Convection Terms. NASA TM-105861, 1992.}
 @taxon["reference"]

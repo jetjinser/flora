@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Hassan, O.; Morgan, K.; Peraire, J.: An Implicit Finite Element Method for High Speed Flows. AIAA Paper 90-0402, 1990.}
 @taxon["reference"]

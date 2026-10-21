@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Mavriplis, D.J.; Pirzadeh, S.: Large-Scale Parallel Unstructured Mesh Computations for 3D High-Lift Analysis. AIAA Paper 99-0537, 1999.}
 @taxon["reference"]

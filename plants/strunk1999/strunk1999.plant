@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{英语写作：The Elements of Style}
 @summary{Strunk与White的英语写作指南第四版段落级双语翻译。}

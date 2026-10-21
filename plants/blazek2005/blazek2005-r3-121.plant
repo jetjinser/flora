@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Jameson, A.: Computational Transonics. Comm. on Pure and Appl. Math., Vol. XLI (1988), pp. 507-549.}
 @taxon["reference"]

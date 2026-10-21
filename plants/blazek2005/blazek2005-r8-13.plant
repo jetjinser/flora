@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Gustafsson, B.: Far Field Boundary Conditions for Time-Dependent Hyperbolic Systems. Center for Large Scale Sci. Comput., CLaSSiC-87-16, Stanford University, 1987.}
 @taxon["reference"]

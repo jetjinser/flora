@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Thompson, J.F.: A General Three-Dimensional Elliptic Grid Generation System Based on a Composite Block Structure. Comp. Meth. Appl. Mech. and Eng., 64 (1987), pp. 377-411.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Consistency, Accuracy and Stability 一致性、精度与稳定性}
 @summary{离散化的一致性与精度要求，Von Neumann稳定性分析。}

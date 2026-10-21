@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Steger, J.L.; Chaussee, D.S.: Generation of Body-Fitted Coordinates Using Hyperbolic Partial Differential Equations. SIAM J. Sci. Stat. Comp., 1 (1980), pp. 431-437.}
 @taxon["reference"]

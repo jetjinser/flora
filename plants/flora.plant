@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Flora：用Grove构建可执行文档}
 @summary{从内容树、数学计算与文学编程三个方向认识Grove。}

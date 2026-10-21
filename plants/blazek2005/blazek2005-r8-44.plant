@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{De-Nicola, C.; Pinto, G.; Tognaccini, R.: On the Numerical Stability of Block Structured Algorithms with Applications to 1-D Advection-Diffusion Problems. Computers & Fluids, 24 (1995), pp. 41-54.}
 @taxon["reference"]

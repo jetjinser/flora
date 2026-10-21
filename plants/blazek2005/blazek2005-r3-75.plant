@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Rossow, C.-C.: A Simple Flux Splitting Scheme for Compressible Flows. Proc. 11th DGLR-Fach-Symposium, Berlin, Germany, November 10-12, 1998.}
 @taxon["reference"]

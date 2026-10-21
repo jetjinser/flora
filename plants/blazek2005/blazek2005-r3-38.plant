@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Kallinderis, Y.; Khawaja, A.; McMorris, H.: Hybrid Prismatic/Tetrahedral Grid Generation for Viscous Flows Around Complex Geometries. AIAA Journal, 34 (1996), pp. 291-298.}
 @taxon["reference"]

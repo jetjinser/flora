@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Orkwis, P.D.; Vanden, K.J.: On the Accuracy of Numerical versus Analytical Jacobians. AIAA Paper 94-0176, 1994; also AIAA Journal, 34 (1996), pp. 1125-1129.}
 @taxon["reference"]

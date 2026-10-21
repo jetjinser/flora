@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Dick, E.: A Flux-Difference Splitting Method for Steady Euler Equations. J. Computational Physics, 76 (1988), pp. 19-32.}
 @taxon["reference"]

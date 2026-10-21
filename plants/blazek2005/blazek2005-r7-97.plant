@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Cook, A.W.: A Consistent Approach to Large Eddy Simulation Using Adaptive Mesh Refinement. J. Computational Physics, 154 (1999), pp. 117-133.}
 @taxon["reference"]

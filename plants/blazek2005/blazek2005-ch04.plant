@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Structured Finite Volume Schemes 第4章 结构网格有限体积格式}
 @summary{控制体几何量、单元中心与单元顶点格式ï¼以及通用离散方法学。}

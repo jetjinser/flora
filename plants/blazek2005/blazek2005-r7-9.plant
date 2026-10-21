@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Freund, J.B.: Acoustic Sources in a Turbulent Jet - A Direct Numerical Simulation Study. AIAA Paper 99-1858, 1999.}
 @taxon["reference"]

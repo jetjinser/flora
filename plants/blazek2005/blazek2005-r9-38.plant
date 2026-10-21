@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Thomas, J.L.; Bonhaus, D.L.; Anderson, W.K.; Rumsey, C.L.; Biedron, R.T.: An O(Nm^2) Plane Solver for the Compressible Navier-Stokes Equations. AIAA Paper 99-0785, 1999.}
 @taxon["reference"]

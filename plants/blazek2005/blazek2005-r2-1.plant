@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Lax, P.D.: Weak Solutions of Nonlinear Hyperbolic Equations and their Numerical Computation. Comm. Pure and Applied Mathematics, 7 (1954), pp. 159-193.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{关系查询参考：DSL与项目谓词}
 @summary{汇总miniKanren查询语法、规则目录与项目自定义谓词。}

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Arts, T.: On the Consistency of four Different Control Surfaces Used for Finite Area Blade-to-Blade Calculations. Int. J. Numerical Methods in Fluids, 4 (1984), pp. 1083-1096.}
 @taxon["reference"]

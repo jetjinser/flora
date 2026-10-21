@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Fureby, C.; Grinstein, F.F.: Large Eddy Simulation of High-Reynolds-Number Free and Wall-Bounded Flows. J. Computational Physics, 181 (2002), pp. 68-97.}
 @taxon["reference"]

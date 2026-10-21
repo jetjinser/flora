@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Ruppert, J.: A Delaunay Refinement Algorithm for Quality 2-Dimensional Mesh Generation. J. Algorithms, 18 (1995), pp. 548-585.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Barth, T.J.: Numerical Aspects of Computing High-Reynolds Number Flows on Unstructured Meshes. AIAA Paper 91-0721, 1991.}
 @taxon["reference"]

@@ -1,4 +1,4 @@
-@use-modules[(flora commands) (language scribble commands)]
+@use-commands{flora}
 
 @title{Thompson, J.F.; Warsi, Z.U.A.; Mastin, C.W.: Numerical Grid Generation: Foundations and Applications. Elsevier Science, 1985; see also at: http://www.erc.msstate.edu/education/gridbook.}
 @taxon["reference"]
