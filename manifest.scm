@@ -8,8 +8,8 @@
 ;;;
 ;;;   guix shell -m ../grove/manifest.scm -m manifest.scm
 ;;;   ./regenerate-figures.sh
-;;;   grove check
-;;;   grove build
+;;;   make check
+;;;   make build
 ;;;
 ;;; Point GROVE_CHECKOUT elsewhere if Grove does not live at ../grove.
 
@@ -21,4 +21,5 @@
             "imagemagick"       ; magick: crop figures from the pages
             "python-fonttools"  ; pyftsubset: cut the CJK woff2 subset
             "python-brotli"     ; woff2 compression for the subset
+            "make"              ; Makefile entry points
             "curl")))           ; fetch-fonts.sh

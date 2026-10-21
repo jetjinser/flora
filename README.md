@@ -29,23 +29,21 @@ export PATH=/tmp/grove-install/bin:$PATH
 cd -
 ```
 
-Return to the Flora directory and run:
+Return to the Flora directory and use the Makefile:
 
 ```sh
-grove check
-grove build
-grove serve
+make check
+make build
+make serve
 ```
 
-The browser accessibility audit runs through Grove's Blue interface. After
-`grove build`, from the Grove checkout:
-
-```sh
-blue a11y ../flora/build/index.html ../flora/build/blazek2005-ch02.html
-```
-
-`blue` uses the checkout that provides `@use-commands`; set `CHROMIUM` if the
-browser is not on `PATH`.
+`make check-all` runs `check`, `lint`, and `a11y`; `make a11y` builds and runs
+the browser audit on the home page and `blazek2005-ch02.html`; `make lint`
+checks REUSE compliance. The Makefile uses `grove` from `PATH`; override
+`GROVE` to point at another checkout. The audit uses
+`$(GROVE_ROOT)/scripts/a11y-audit.sh` (default `../grove`), so set `GROVE_ROOT`
+when the Grove source is elsewhere. Set `CHROMIUM` if the browser is not on
+`PATH`.
 
 The preview is available at `http://127.0.0.1:8080/`. Use `--port` or `--output` to select another port or output directory. Stop the server with Ctrl-C.
 
@@ -96,8 +94,8 @@ Run the LP library checks and validate the whole site after changing program exa
 ```sh
 guile --no-auto-compile -L . tests/lp-core.scm
 guile --no-auto-compile -L . tests/lp-project.scm
-grove check
-grove build
+make check
+make build
 ```
 
 The metacircular interpreter also emits standalone Guile programs under `build/programs/`. Its finite examples exercise the advertised subset; they are not a proof of equivalence with full Scheme.

@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2026 Jinser Kafka <aimer@purejs.icu>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+GROVE ?= grove
+GROVE_ROOT ?= ../grove
+REUSE ?= reuse
+
+.PHONY: help check build serve lint a11y check-all clean
+
+help:
+	@printf '%s\n' \
+	  'make check       Validate the project' \
+	  'make build       Build the site' \
+	  'make serve       Preview the site' \
+	  'make lint        Check REUSE license compliance' \
+	  'make a11y        Build and run the browser accessibility audit' \
+	  'make check-all   check + lint + a11y' \
+	  'make clean       Remove build output'
+
+check:
+	$(GROVE) check
+
+build:
+	$(GROVE) build
+
+serve:
+	$(GROVE) serve
+
+lint:
+	$(REUSE) --no-multiprocessing lint
+
+a11y: build
+	@test -x "$(GROVE_ROOT)/scripts/a11y-audit.sh" || { \
+	  echo "a11y: set GROVE_ROOT to a Grove checkout with scripts/a11y-audit.sh" >&2; \
+	  exit 1; \
+	}
+	"$(GROVE_ROOT)/scripts/a11y-audit.sh" \
+	  build/index.html build/blazek2005-ch02.html
+
+check-all: check lint a11y
+
+clean:
+	rm -rf build
