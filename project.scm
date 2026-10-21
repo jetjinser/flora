@@ -13,6 +13,7 @@
              (forester input scribble)
              (forester render html)
              (forester render rss)
+             (forester render site)
              (forester render sitemap)
              (forester style i18n)
              (grove input scribble)
@@ -146,6 +147,11 @@
         font-assets))))
 
 (define html-routes (make-html-routes #:home-page "flora"))
+
+(define flora-settings
+  (make-site-settings #:site-url "https://flora.purejs.icu"
+                      #:default-locale "zh-Hans"))
+
 ;; Interface strings rendered outside the trees: backmatter labels and the
 ;; theme controls. The font subset must carry their glyphs even though no
 ;; tree happens to contain them.
@@ -156,11 +162,11 @@
                  "跳到正文站点导航目录将树作为页面打开更新于年月日"))
 (define flora-sitemap
   (make-sitemap-renderer
-    #:site-url "https://flora.purejs.icu"
+    #:settings flora-settings
     #:routes html-routes))
 (define flora-rss
   (make-rss-renderer
-    #:site-url "https://flora.purejs.icu"
+    #:settings flora-settings
     #:routes html-routes
     #:stylesheet-url "feed.css"
     #:stylesheet-type "text/css"))
@@ -212,7 +218,7 @@
 (define (render-flora forest)
   (render-html forest
     #:routes html-routes
-    #:site-url "https://flora.purejs.icu"
+    #:settings flora-settings
     #:locale "zh-Hans"
     #:style flora-style
     #:title-decoration
