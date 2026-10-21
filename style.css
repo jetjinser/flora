@@ -44,6 +44,43 @@
     oklch(from var(--hover-color) l c h / .08));
 }
 
+/* User preference: raise the reading hierarchy without changing the palette. */
+@media (prefers-contrast: more) {
+  :root {
+    --muted: light-dark(
+      color-mix(in oklab, var(--ink) 88%, var(--paper)),
+      color-mix(in oklab, var(--ink) 92%, var(--paper)));
+    --taxon: light-dark(
+      color-mix(in oklab, var(--ink) 92%, var(--paper)),
+      color-mix(in oklab, var(--ink) 95%, var(--paper)));
+    --quiet: light-dark(
+      color-mix(in oklab, var(--ink) 75%, var(--paper)),
+      color-mix(in oklab, var(--ink) 80%, var(--paper)));
+    --link: var(--ink);
+    --rule: light-dark(
+      color-mix(in oklab, var(--ink) 35%, var(--paper)),
+      color-mix(in oklab, var(--ink) 45%, var(--paper)));
+    --code-rule: light-dark(
+      color-mix(in oklab, var(--ink) 25%, var(--paper)),
+      color-mix(in oklab, var(--ink) 30%, var(--paper)));
+    --focus: var(--ink);
+    --hover: light-dark(
+      color-mix(in oklab, var(--hover-color) 15%, var(--paper)),
+      color-mix(in oklab, var(--hover-color) 22%, var(--paper)));
+  }
+  :focus-visible { outline-width: 3px; }
+}
+
+/* Progressive: Chrome-only, so it only removes translucency, never relies on it. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --hover: light-dark(
+      color-mix(in oklab, var(--hover-color) 20%, var(--paper)),
+      color-mix(in oklab, var(--hover-color) 28%, var(--paper)));
+  }
+  .link-preview { box-shadow: none; }
+}
+
 /* The theme control only chooses a scheme; the palette is defined once. */
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
@@ -63,6 +100,9 @@
     transition-property: color, background-color, border-color, text-decoration-color;
     transition-duration: 180ms;
     transition-timing-function: ease-out;
+  }
+  .link-preview {
+    transition: opacity 120ms ease-out;
   }
 }
 
@@ -437,7 +477,7 @@ mjx-container > mjx-speech {
    Grove 的 i18n.css 只提供 reset 基线;视觉设计归项目。 */
 
 /* 展开后的原文 lane:静音文字式——无装饰,靠色调与字号区分 */
-.bilingual-pair > summary ~ .bilingual-lane {
+.bilingual-source > summary ~ .bilingual-lane {
   margin-block-start: 0.25rem;
   padding-inline-start: 0.5rem;
   color: var(--muted);
@@ -447,17 +487,17 @@ mjx-container > mjx-speech {
 /* 悬停反馈接 flora 主题变量,昼夜一致。
    焦点态不用背景:部分浏览器鼠标点击 <summary> 也匹配 :focus-visible,
    背景会一直挂到焦点离开;键盘焦点改用轮廓线。 */
-.bilingual-pair > summary:hover {
+.bilingual-source > summary:hover {
   background: var(--hover);
 }
-.bilingual-pair > summary:focus-visible {
+.bilingual-source > summary:focus-visible {
   background: transparent;
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
 /* 段落以列表等块结尾时,hint 独占一行,收紧其间距 */
-.bilingual-pair > summary > .bilingual-more {
+.bilingual-source > summary > .bilingual-more {
   display: block;
   margin-block-start: 0.15rem;
 }
@@ -512,7 +552,6 @@ figcaption {
   font-size: 0.95em;
   line-height: 1.7;
   opacity: 0;
-  transition: opacity 120ms ease-out;
 }
 .link-preview.open { opacity: 1; }
 .link-preview.loading { color: var(--muted); font-style: italic; }
