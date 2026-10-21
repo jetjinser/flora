@@ -62,7 +62,14 @@
     const MAX_NODES = 6;     // cap on extracted block elements
     const SKIP = 'nav, .table-of-contents, .backmatter, .theme-controls, style, script, link, template, h1';
     const cache = new Map(); // href -> {title, html}
+    // CSS anchor positioning handles placement and flipping; place() remains
+    // the fallback for browsers without position-area/position-anchor.
+    const anchorPositioning =
+      typeof CSS !== 'undefined' && CSS.supports &&
+      CSS.supports('position-area: block-end span-inline-end') &&
+      CSS.supports('position-anchor: --flora-link-preview');
     let card = null;
+    let currentLink = null;
     let currentHref = null;
     let hoverTimer = 0;
     let hideTimer = 0;
@@ -77,6 +84,13 @@
         card.addEventListener('mouseleave', hideSoon);
       }
       return card;
+    }
+
+    function setAnchor(link) {
+      if (currentLink === link) return;
+      if (currentLink) currentLink.style.removeProperty('anchor-name');
+      currentLink = link;
+      link.style.setProperty('anchor-name', '--flora-link-preview');
     }
 
     function hideSoon() {
@@ -154,7 +168,8 @@
         body.className = 'link-preview-body';
         body.innerHTML = entry.html;
         pending.appendChild(body);
-        place(link);
+        if (anchorPositioning) setAnchor(link);
+        else place(link);
         if (window.MathJax && MathJax.typesetPromise) {
           MathJax.typesetPromise([pending]).catch(() => {});
         }

@@ -536,7 +536,8 @@ figcaption {
 }
 
 /* Gwern 式链接预览:hover 内链时浮现目标页的标题与首段。
-   位置与开合由 theme.js 管理;深浅两色全部走现有变量。 */
+   位置优先由 CSS anchor positioning 管理,旧浏览器回退到 theme.js;
+   开合由 theme.js 管理;深浅两色全部走现有变量。 */
 .link-preview {
   position: absolute;
   z-index: 60;
@@ -552,6 +553,16 @@ figcaption {
   font-size: 0.95em;
   line-height: 1.7;
   opacity: 0;
+}
+@supports (position-area: block-end) and (position-anchor: --flora-link-preview) {
+  .link-preview {
+    position: fixed;
+    inset: auto;
+    position-anchor: --flora-link-preview;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks: flip-block;
+    margin-block: 8px;
+  }
 }
 .link-preview.open { opacity: 1; }
 .link-preview.loading { color: var(--muted); font-style: italic; }
