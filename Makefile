@@ -6,7 +6,7 @@ GROVE ?= grove
 GROVE_ROOT ?= ../grove
 REUSE ?= reuse
 
-.PHONY: help check build serve lint a11y check-all clean
+.PHONY: help check build serve lint a11y preview-check check-all clean
 
 help:
 	@printf '%s\n' \
@@ -15,7 +15,8 @@ help:
 	  'make serve       Preview the site' \
 	  'make lint        Check REUSE license compliance' \
 	  'make a11y        Build and run the browser accessibility audit' \
-	  'make check-all   check + lint + a11y' \
+	  'make preview-check  Check link-preview keyboard behavior' \
+	  'make check-all   check + lint + a11y + preview-check' \
 	  'make clean       Remove build output'
 
 check:
@@ -38,7 +39,10 @@ a11y: build
 	"$(GROVE_ROOT)/scripts/a11y-audit.sh" \
 	  build/index.html build/blazek2005-ch02.html
 
-check-all: check lint a11y
+check-all: check lint a11y preview-check
 
 clean:
 	rm -rf build
+
+preview-check: build
+	scripts/preview-check.sh

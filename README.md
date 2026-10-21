@@ -37,8 +37,9 @@ make build
 make serve
 ```
 
-`make check-all` runs `check`, `lint`, and `a11y`; `make a11y` builds and runs
-the browser audit on the home page and `blazek2005-ch02.html`; `make lint`
+`make check-all` runs `check`, `lint`, `a11y`, and `preview-check`; `make a11y` builds and runs
+the browser audit on the home page and `blazek2005-ch02.html`; `make preview-check`
+checks the link preview’s focus, Escape, and focusout behavior; `make lint`
 checks REUSE compliance. The Makefile uses `grove` from `PATH`; override
 `GROVE` to point at another checkout. The audit uses
 `$(GROVE_ROOT)/scripts/a11y-audit.sh` (default `../grove`), so set `GROVE_ROOT`

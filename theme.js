@@ -78,7 +78,7 @@
       if (!card) {
         card = document.createElement('div');
         card.className = 'link-preview';
-        card.setAttribute('role', 'tooltip');
+        card.setAttribute('aria-hidden', 'true');
         document.body.appendChild(card);
         card.addEventListener('mouseenter', () => clearTimeout(hideTimer));
         card.addEventListener('mouseleave', hideSoon);
@@ -122,6 +122,22 @@
         if (!text.trim()) continue;
         const clone = node.cloneNode(true);
         for (const gone of clone.querySelectorAll(SKIP)) gone.remove();
+        // The preview is visual-only: keep text and figures, drop every
+        // focusable or interactive descendant and duplicate ids.
+        for (const gone of clone.querySelectorAll(
+          'a, button, input, select, textarea, summary, [tabindex], ' +
+          'audio[controls], video[controls], iframe, object, embed, form')) {
+          gone.remove();
+        }
+        for (const details of clone.querySelectorAll('details')) {
+          details.replaceWith(...details.childNodes);
+        }
+        for (const label of clone.querySelectorAll('label[for]')) {
+          label.removeAttribute('for');
+        }
+        for (const node of clone.querySelectorAll('[id]')) {
+          node.removeAttribute('id');
+        }
         body.appendChild(clone);
         chars += text.length;
         if (body.children.length >= MAX_NODES || chars >= MAX_CHARS) break;
@@ -197,6 +213,13 @@
     document.addEventListener('focusin', (event) => {
       const link = event.target.closest('a[href$=".html"]');
       if (link && link.getAttribute('href').startsWith('/')) enter(link);
+    });
+    document.addEventListener('focusout', (event) => {
+      const link = event.target.closest('a[href$=".html"]');
+      if (!link) return;
+      const next = event.relatedTarget;
+      if (next && next.closest && next.closest('a[href$=".html"]')) return;
+      hideSoon();
     });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') hide();
