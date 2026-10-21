@@ -37,11 +37,15 @@ grove build
 grove serve
 ```
 
-For the full local gate, run `scripts/check-all.sh` inside Grove's development
-shell. It runs `grove check`, `reuse --no-multiprocessing lint`, `grove build`,
-and the axe audit on the home page and `blazek2005-ch02.html`. Set `GROVE_ROOT`
-when the Grove checkout is not `../grove`; the script uses that checkout so the
-build sees `@use-commands`.
+The browser accessibility audit runs through Grove's Blue interface. After
+`grove build`, from the Grove checkout:
+
+```sh
+blue a11y ../flora/build/index.html ../flora/build/blazek2005-ch02.html
+```
+
+`blue` uses the checkout that provides `@use-commands`; set `CHROMIUM` if the
+browser is not on `PATH`.
 
 The preview is available at `http://127.0.0.1:8080/`. Use `--port` or `--output` to select another port or output directory. Stop the server with Ctrl-C.
 
