@@ -32,12 +32,12 @@ cd -
 Return to the Flora directory and use the Makefile:
 
 ```sh
-make check
+make validate
 make build
 make serve
 ```
 
-`make check-all` runs `check`, `lint`, `a11y`, and `preview-check`; `make a11y` builds and runs
+`make check` is the full gate: `validate`, `lint`, `a11y`, and `preview-check`; `make a11y` builds and runs
 the browser audit on the home page and `blazek2005-ch02.html`; `make preview-check`
 checks the link preview’s focus, Escape, and focusout behavior; `make lint`
 checks REUSE compliance. The Makefile uses `grove` from `PATH`; override
@@ -95,7 +95,7 @@ Run the LP library checks and validate the whole site after changing program exa
 ```sh
 guile --no-auto-compile -L . tests/lp-core.scm
 guile --no-auto-compile -L . tests/lp-project.scm
-make check
+make validate
 make build
 ```
 
