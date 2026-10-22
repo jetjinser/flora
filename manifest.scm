@@ -16,10 +16,13 @@
 (use-modules (gnu packages))
 
 (packages->manifest
- (map specification->package
-      (list "poppler"           ; pdftoppm: rasterize the scanned PDF
-            "imagemagick"       ; magick: crop figures from the pages
-            "python-fonttools"  ; pyftsubset: cut the CJK woff2 subset
-            "python-brotli"     ; woff2 compression for the subset
-            "make"              ; Makefile entry points
-            "curl")))           ; fetch-fonts.sh
+ (cons (list (specification->package "libavif") "tools")
+       (map specification->package
+            (list "poppler"           ; pdftoppm: rasterize the scanned PDF
+                  "imagemagick"       ; magick: crop figures from the pages
+                  "libjxl"            ; cjxl: JPEG XL encoding
+                  "libwebp"           ; cwebp: WebP encoding
+                  "python-fonttools"  ; pyftsubset: cut the CJK woff2 subset
+                  "python-brotli"     ; woff2 compression for the subset
+                  "make"              ; Makefile entry points
+                  "curl"))))          ; fetch-fonts.sh
