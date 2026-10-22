@@ -26,6 +26,8 @@
              (grove ir)
              (lp forester)
              (grove render html)
+             (grove render html image)
+             (grove render html rules)
              (srfi srfi-1)
              (srfi srfi-13))
 
@@ -102,6 +104,14 @@
       (rename-file (string-append prefix "-" padded ".png") cached))
     cached))
 
+
+(define (encode-variant command args output)
+  (let ((temporary (string-append figure-page-cache "/" (basename output))))
+    (unless (zero? (apply system* command (append args (list temporary))))
+      (error "image encode failed" command output))
+    (let ((bytes (call-with-input-file temporary get-bytevector-all #:binary #t)))
+      (delete-file temporary)
+      bytes)))
 (define blazek2005-figures
   (make-asset-pipeline
    #:name "blazek2005-figures"
@@ -124,9 +134,34 @@
                                     (format #f "~ax~a+~a+~a" w h x y)
                                     "+repage" cropped))
               (error "figure crop failed" name))
-            (emit (string-append "blazek2005/" name)
-                  (call-with-input-file cropped get-bytevector-all))))
+            (let* ((base (string-drop-right name 4))
+                   (png (string-append "blazek2005/" name))
+                   (avif (string-append "blazek2005/" base ".avif")))
+              (emit png
+                    (call-with-input-file cropped get-bytevector-all))
+              (emit avif
+                    (encode-variant
+                      "avifenc" (list "-q" "60" "-s" "8" cropped)
+                      avif)))))
         (figure-manifest (in blazek2005-manifest)))))))
+(define figure-image-sets
+  (map (lambda (name)
+         (let ((base (string-drop-right name 4)))
+           (cons (string-append "blazek2005/" name)
+                 (make-image-set
+                   (string-append "blazek2005/" name)
+                   #:variants
+                   (list
+                     (make-image-variant
+                       "image/avif"
+                       (string-append "/blazek2005/" base ".avif")))
+                   #:fallback
+                   (string-append "/blazek2005/" name)))))
+       (map car (figure-manifest blazek2005-manifest))))
+
+(define flora-rules
+  (make-html-rules
+    (list (cons 'image (image-set-rule figure-image-sets)))))
 (define flora-style
   (compose-html-styles
     default-html-style
@@ -222,6 +257,7 @@
     #:settings flora-settings
     #:locale flora-locale
     #:style flora-style
+    #:rules flora-rules
     #:title-decoration
     (lambda (_ page)
       (let ((taxon (page-taxon page)))
