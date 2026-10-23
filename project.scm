@@ -11,10 +11,9 @@
              (grove style html)
              (grove output)
              (forester input scribble)
+             (forester render derived)
              (forester render html)
-             (forester render rss)
              (forester render site)
-             (forester render sitemap)
              (forester style i18n)
              (grove input scribble)
              (grove pipeline)
@@ -27,7 +26,7 @@
              (lp forester)
              (grove render html)
              (grove render html image)
-             (grove render html rules)
+             (grove render rules)
              (srfi srfi-1)
              (srfi srfi-13))
 
@@ -160,7 +159,7 @@
        (map car (figure-manifest blazek2005-manifest))))
 
 (define flora-rules
-  (make-html-rules
+  (make-render-rules
     (list (cons 'image (image-set-rule figure-image-sets)))))
 (define flora-style
   (compose-html-styles
@@ -196,16 +195,6 @@
                  "回到首页"
                  "站点配色设置跟随系统配色使用日间配色使用夜间配色"
                  "跳到正文站点导航目录将树作为页面打开更新于年月日"))
-(define flora-sitemap
-  (make-sitemap-renderer
-    #:settings flora-settings
-    #:routes html-routes))
-(define flora-rss
-  (make-rss-renderer
-    #:settings flora-settings
-    #:routes html-routes
-    #:stylesheet-url "feed.css"
-    #:stylesheet-type "text/css"))
 
 ;; Flora's presentation is composed from Grove's HTML hooks instead of
 ;; rewriting rendered markup: document attributes and head nodes, the site
@@ -252,16 +241,23 @@
       "Flora"))
 
 (define (render-flora forest)
-  (render-html forest
-    #:routes html-routes
-    #:settings flora-settings
-    #:locale flora-locale
-    #:style flora-style
-    #:rules flora-rules
-    #:title-decoration
-    (lambda (_ page)
-      (let ((taxon (page-taxon page)))
-        (if taxon (taxon-entry-sxml taxon) '())))
+  (render-html
+    forest
+    #:options
+    (make-html-options
+      #:routes html-routes
+      #:settings flora-settings
+      #:locale flora-locale
+      #:style flora-style
+      #:rules flora-rules
+      #:hooks
+      (make-html-hooks
+        #:title-decoration
+        (lambda (_ page)
+          (let ((taxon (page-taxon page)))
+            (if taxon (taxon-entry-sxml taxon) '())))
+        #:home-link flora-home-link
+        #:site-nav (list theme-controls-sxml))
       #:article? #t
       #:backmatter-details? #t
       ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
@@ -271,37 +267,42 @@
                             (references . "参考文献")
                             (backlinks . "反向链接")
                             (related . "相关"))
-      #:head flora-head
-      #:home-link flora-home-link
-      #:site-nav (list theme-controls-sxml)))
+      #:head flora-head)))
 
 (define (analyze-flora site)
   ((module-ref (resolve-interface '(flora queries)) 'analyze-flora) (lp-enrich-site site)))
 
 (define flora-project
   (make-site-project
-    #:tree-template
-    (lambda (id date)
-      (string-append
-        "@use-commands{flora}\n\n"
-        "@title{}\n"
-        "@published{" date "}\n"))
-    #:title "Flora"
-    #:locale flora-locale
-    #:description "A garden of connected notes."
-    #:source-directory plant-directory
-    #:extra-sources (append (list stylesheet-path feed-stylesheet-path
-                                  theme-script-path)
-                            font-sources)
-    #:prepare prepare-flora
-    #:read-page
-    (make-page-reader read-flora-page-document)
-    #:analyze analyze-flora
-    #:renderers (list render-flora lp-artifacts flora-sitemap flora-rss
-                      (make-cjk-font-renderer
-                        (project-directory% "/fonts-src") output-directory
-                        #:extra-text interface-text))
-    #:pipelines (list blazek2005-figures)
-    #:output-directory output-directory))
+    #:options
+    (make-site-options
+      #:tree-template
+      (lambda (id date)
+        (string-append
+          "@use-commands{flora}\n\n"
+          "@title{}\n"
+          "@published{" date "}\n"))
+      #:title "Flora"
+      #:locale flora-locale
+      #:description "A garden of connected notes."
+      #:source-directory plant-directory
+      #:extra-sources (append (list stylesheet-path feed-stylesheet-path
+                                    theme-script-path)
+                              font-sources)
+      #:prepare prepare-flora
+      #:read-page
+      (make-page-reader read-flora-page-document)
+      #:analyze analyze-flora
+      #:renderers (list render-flora lp-artifacts
+                        (make-cjk-font-renderer
+                          (project-directory% "/fonts-src") output-directory
+                          #:extra-text interface-text))
+      #:derived
+      (list (sitemap-derived #:settings flora-settings #:routes html-routes)
+            (rss-derived #:settings flora-settings #:routes html-routes
+                         #:stylesheet-url "feed.css"
+                         #:stylesheet-type "text/css"))
+      #:pipelines (list blazek2005-figures)
+      #:output-directory output-directory)))
 
 flora-project
