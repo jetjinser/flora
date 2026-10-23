@@ -19,6 +19,7 @@
              (grove pipeline)
              (grove project)
              (grove project site)
+             (grove render html presentation)
              (grove render html routes)
              (forester site)
              (grove site)
@@ -248,8 +249,9 @@
       #:routes html-routes
       #:settings flora-settings
       #:locale flora-locale
-      #:style flora-style
-      #:rules flora-rules
+      #:presentation (make-html-presentation
+                       #:style flora-style
+                       #:rules flora-rules)
       #:hooks
       (make-html-hooks
         #:title-decoration
