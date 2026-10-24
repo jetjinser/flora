@@ -21,6 +21,7 @@
              (grove project site)
              (grove render html presentation)
              (grove render html routes)
+             (grove i18n)
              (forester site)
              (grove site)
              (grove ir)
@@ -184,6 +185,13 @@
 (define html-routes (make-html-routes #:home-page "flora"))
 
 (define flora-locale "zh-Hans")
+(define flora-messages
+  (make-message-catalog
+    '(("zh-Hans" . ((backmatter-context . "语境")
+                    (backmatter-references . "参考文献")
+                    (backmatter-backlinks . "反向链接")
+                    (backmatter-related . "相关"))))
+    #:default flora-locale))
 (define flora-settings
   (make-site-settings #:site-url "https://flora.purejs.icu"
                       #:default-locale flora-locale))
@@ -250,6 +258,7 @@
       #:routes html-routes
       #:settings flora-settings
       #:locale flora-locale
+      #:messages flora-messages
       #:presentation
       (compose-html-presentations
         (make-html-presentation #:style flora-style #:rules flora-rules)
@@ -266,11 +275,7 @@
       #:backmatter-details? #t
       ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
       ;; 收进 .margin-lane,各带回链——不再依赖 theme.js 搬运 DOM。
-      #:side-lane '(flora-sidenote)
-      #:backmatter-labels '((context . "语境")
-                            (references . "参考文献")
-                            (backlinks . "反向链接")
-                            (related . "相关")))))
+      #:side-lane '(flora-sidenote))))
 
 (define (analyze-flora site)
   ((module-ref (resolve-interface '(flora queries)) 'analyze-flora) (lp-enrich-site site)))
