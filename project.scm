@@ -257,7 +257,6 @@
     (make-html-options
       #:routes html-routes
       #:settings flora-settings
-      #:locale flora-locale
       #:messages flora-messages
       #:presentation
       (compose-html-presentations
@@ -303,7 +302,7 @@
       #:analyze analyze-flora
       #:renderers (list render-flora lp-artifacts
                         (make-cjk-font-renderer
-                          (project-directory% "/fonts-src") output-directory
+                          (project-directory% "/fonts-src")
                           #:extra-text interface-text))
       #:derived
       (list (sitemap-derived #:settings flora-settings #:routes html-routes)
