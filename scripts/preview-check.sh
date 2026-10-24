@@ -78,6 +78,22 @@ cat > "$temporary/probe.html" <<HTML
     var link = document.getElementById("probe");
     var card;
     var state = { opened: false, hidden: false, focusable: -1, closed: false, blurClosed: false };
+    var target = '<!doctype html><html><body><article>' +
+      '<h1>Target page</h1><p>Preview body with <a href="#">a link</a> ' +
+      'and <button>a button</button>.</p></article></body></html>';
+    var nativeFetch = window.fetch.bind(window);
+
+    // file:// pages cannot fetch sibling files in Chromium. Keep the real
+    // preview code under test and provide the target document as a response.
+    window.fetch = function (url, options) {
+      if (url === link.getAttribute("href")) {
+        return Promise.resolve({
+          ok: true,
+          text: function () { return Promise.resolve(target); }
+        });
+      }
+      return nativeFetch(url, options);
+    };
 
     function snapshot() {
       card = document.querySelector(".link-preview");
