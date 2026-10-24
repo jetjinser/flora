@@ -254,8 +254,6 @@
       (compose-html-presentations
         (make-html-presentation #:style flora-style #:rules flora-rules)
         (make-html-presentation
-          #:chrome
-          (make-html-chrome
             #:head flora-head
             #:title-decorations (flora-title-decorations forest)
             #:home-link
@@ -263,7 +261,7 @@
               '((span (@ (class "home-icon") (aria-hidden "true")) "«")
                 "Flora")
               #:attributes '((title . "回到首页")))
-            #:site-nav (list theme-controls-sxml))))
+            #:site-nav (list theme-controls-sxml)))
       #:article? #t
       #:backmatter-details? #t
       ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
