@@ -197,10 +197,9 @@
                  "站点配色设置跟随系统配色使用日间配色使用夜间配色"
                  "跳到正文站点导航目录将树作为页面打开更新于年月日"))
 
-;; Flora's presentation is composed from Grove's HTML hooks instead of
-;; rewriting rendered markup: document attributes and head nodes, the site
-;; navigation, per-tree title decoration, the reading-column article wrapper,
-;; and collapsible backmatter.
+;; Flora composes Grove's HTML presentation values: document head,
+;; route-aware site navigation, per-page title decoration, the reading-column
+;; article wrapper, and collapsible backmatter.
 (define (taxon-entry-sxml taxon)
   ;; Render the tree's own taxon element with Flora's markup; the
   ;; element comes straight from Grove's page-taxon accessor, so only
@@ -236,10 +235,12 @@
                         (aria-label "使用夜间配色")))
               (span "Night")))))
 
-(define (flora-home-link href)
-  `(a (@ (title "回到首页") (href ,href))
-      (span (@ (class "home-icon") (aria-hidden "true")) "«")
-      "Flora"))
+(define (flora-title-decorations forest)
+  (map (lambda (page)
+         (let ((taxon (page-taxon page)))
+           (cons (site-page-id page)
+                 (if taxon (taxon-entry-sxml taxon) '()))))
+       (pages forest)))
 
 (define (render-flora forest)
   (render-html
@@ -249,17 +250,20 @@
       #:routes html-routes
       #:settings flora-settings
       #:locale flora-locale
-      #:presentation (make-html-presentation
-                       #:style flora-style
-                       #:rules flora-rules)
-      #:hooks
-      (make-html-hooks
-        #:title-decoration
-        (lambda (_ page)
-          (let ((taxon (page-taxon page)))
-            (if taxon (taxon-entry-sxml taxon) '())))
-        #:home-link flora-home-link
-        #:site-nav (list theme-controls-sxml))
+      #:presentation
+      (compose-html-presentations
+        (make-html-presentation #:style flora-style #:rules flora-rules)
+        (make-html-presentation
+          #:chrome
+          (make-html-chrome
+            #:head flora-head
+            #:title-decorations (flora-title-decorations forest)
+            #:home-link
+            (make-html-home-link
+              '((span (@ (class "home-icon") (aria-hidden "true")) "«")
+                "Flora")
+              #:attributes '((title . "回到首页")))
+            #:site-nav (list theme-controls-sxml))))
       #:article? #t
       #:backmatter-details? #t
       ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
@@ -268,8 +272,7 @@
       #:backmatter-labels '((context . "语境")
                             (references . "参考文献")
                             (backlinks . "反向链接")
-                            (related . "相关"))
-      #:head flora-head)))
+                            (related . "相关")))))
 
 (define (analyze-flora site)
   ((module-ref (resolve-interface '(flora queries)) 'analyze-flora) (lp-enrich-site site)))
