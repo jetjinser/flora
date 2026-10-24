@@ -15,6 +15,7 @@
              (forester render html)
              (forester render site)
              (forester style i18n)
+             (grove cache)
              (grove input scribble)
              (grove pipeline)
              (grove project)
@@ -74,6 +75,10 @@
 (define figure-page-cache
   (string-append (or (getenv "TMPDIR") "/tmp") "/flora-figure-pages"))
 
+;; Bump this when the page rasterizer or its options change. The Guix
+;; channels pin the toolchain; this identifier separates its local page cache.
+(define figure-page-rasterizer-version "pdftoppm-png-200dpi-v1")
+
 (define image-tool
   ;;     ImageMagick 7 命令名为 magick,Guix 仍是 IM6 的 convert。
   (if (zero? (system "magick -version >/dev/null 2>&1")) "magick" "convert"))
@@ -89,14 +94,14 @@
                   (map string->number (cdr fields))))))
    (string-split (call-with-input-file path get-string-all) #\newline)))
 
-(define (render-page pdf page)
+(define (render-page pdf page cache-directory)
   ;; pdftoppm 的输出名带零填充页号;每页只光栅化一次。
   (let* ((padded (format #f "~3,'0d" page))
-         (cached (string-append figure-page-cache "/p" padded ".png"))
-         (prefix (string-append figure-page-cache "/tmp" padded)))
+         (cached (string-append cache-directory "/p" padded ".png"))
+         (prefix (string-append cache-directory "/tmp" padded)))
     (unless (file-exists? cached)
-      (unless (file-exists? figure-page-cache)
-        (mkdir figure-page-cache))
+      (unless (file-exists? cache-directory)
+        (mkdir cache-directory))
       (unless (zero? (system* "pdftoppm" "-png" "-r" "200"
                               "-f" (number->string page)
                               "-l" (number->string page)
@@ -116,10 +121,19 @@
 (define blazek2005-figures
   (make-asset-pipeline
    #:name "blazek2005-figures"
+   #:version "pdftoppm-png-200dpi-imagemagick-avifenc-v1"
    #:inputs (list blazek2005-pdf blazek2005-manifest)
    #:procedure
    (lambda (in emit)
-     (let ((pdf (in blazek2005-pdf)))
+     (let* ((pdf (in blazek2005-pdf))
+            (page-cache
+             (string-append
+              figure-page-cache "/"
+              (content-fingerprint
+               (string-append figure-page-rasterizer-version "\n"
+                              (file-fingerprint pdf))))))
+       (unless (file-exists? figure-page-cache)
+         (mkdir figure-page-cache))
        (for-each
         (lambda (figure)
           (let* ((name (car figure))
@@ -129,7 +143,7 @@
                  (y (list-ref box 2))
                  (w (list-ref box 3))
                  (h (list-ref box 4))
-                 (page-png (render-page pdf page))
+                 (page-png (render-page pdf page page-cache))
                  (cropped (string-append figure-page-cache "/crop-" name)))
             (unless (zero? (system* image-tool page-png "-crop"
                                     (format #f "~ax~a+~a+~a" w h x y)
