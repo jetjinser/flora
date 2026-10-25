@@ -45,6 +45,11 @@
 
 (define %font-cache (make-content-cache "flora-cjk-fonts"))
 
+;; `current-filename` is dynamically scoped and is #f when a renderer runs
+;; during the build. Capture the module source while it is being loaded so
+;; generated font artifacts retain their implementation dependency.
+(define %source-file (current-filename))
+
 (define (pyftsubset-available?)
   (let ((path (getenv "PATH")))
     (and path (search-path (parse-path path) "pyftsubset") #t)))
@@ -154,6 +159,7 @@
                     (map car faces))
                ""))
           (delete-duplicates
-           (append source-sources font-sources (list (current-filename)))
+           (append source-sources font-sources
+                   (if %source-file (list %source-file) '()))
            string=?))
          (map cdr faces))))))

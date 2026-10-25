@@ -204,7 +204,8 @@
     '(("zh-Hans" . ((backmatter-context . "语境")
                     (backmatter-references . "参考文献")
                     (backmatter-backlinks . "反向链接")
-                    (backmatter-related . "相关"))))
+                    (backmatter-related . "相关")
+                    (describes . "描述的实体"))))
     #:default flora-locale))
 (define flora-settings
   (make-site-settings #:site-url "https://flora.purejs.icu"
@@ -214,7 +215,7 @@
 ;; theme controls. The font subset must carry their glyphs even though no
 ;; tree happens to contain them.
 (define interface-text
-  (string-append "语境参考文献反向链接相关"
+  (string-append "语境参考文献反向链接相关描述的实体"
                  "回到首页"
                  "站点配色设置跟随系统配色使用日间配色使用夜间配色"
                  "跳到正文站点导航目录将树作为页面打开更新于年月日"))
