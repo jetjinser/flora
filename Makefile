@@ -6,12 +6,13 @@ GROVE ?= grove
 GROVE_ROOT ?= ../grove
 REUSE ?= reuse
 
-.PHONY: help validate check build serve lint a11y preview-check clean
+.PHONY: help validate check build serve lint a11y preview-check update-doi-metadata clean
 
 help:
 	@printf '%s\n' \
 	  'make validate    Validate the project' \
 	  'make build       Build the site' \
+	  'make update-doi-metadata DOI=doi:10.../...  Refresh one local metadata snapshot' \
 	  'make serve       Preview the site' \
 	  'make lint        Check REUSE license compliance' \
 	  'make a11y        Build and run the browser accessibility audit' \
@@ -27,6 +28,11 @@ build:
 
 serve:
 	$(GROVE) serve
+
+update-doi-metadata:
+	@test -n "$(DOI)" || { echo 'usage: make update-doi-metadata DOI=doi:10.../...' >&2; exit 2; }
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . \
+	  scripts/update-doi-metadata.scm "$(DOI)"
 
 lint:
 	$(REUSE) --no-multiprocessing lint

@@ -48,6 +48,22 @@ when the Grove source is elsewhere. Set `CHROMIUM` if the browser is not on
 
 The preview is available at `http://127.0.0.1:8080/`. Use `--port` or `--output` to select another port or output directory. Stop the server with Ctrl-C.
 
+## External entity metadata
+
+Reference pages declare identifiers with `@describes`. To experiment with
+supplemental DOI metadata, explicitly refresh a local snapshot from DOI content
+negotiation:
+
+```sh
+make update-doi-metadata DOI=doi:10.1146/annurev.fluid.29.1.123
+```
+
+The command stores normalized fields and fetch provenance under
+`metadata/dois/`. Ordinary `grove build` reads only these local snapshots and
+does not access the network. The reference page's own title and text remain
+author-controlled; available DOI title, authors, and year appear as separate
+supplemental metadata. This is an experiment in Flora, not a Grove fetching API.
+
 ## Book translations
 
 Two book-length translations live in `plants/`, both as paragraph-level bilingual pages: the English source is folded under each Chinese paragraph, formulas are re-typeset as LaTeX with per-equation anchors, citations link to per-entry reference trees, and figures are cropped from the scanned source pages.
