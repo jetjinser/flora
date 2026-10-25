@@ -11,7 +11,8 @@
                bilingual lang)
   ;; term 与 link 同理:本地定义覆盖 forester 原语。term 是术语提及
   ;; 命令(解析进定义关系),原语的 term 是数学记号构造器,站内未用。
-  #:re-export-and-replace (link term))
+  #:re-export-and-replace (link)
+  #:replace (term))
 
 @(begin
    (define (term-id text)
