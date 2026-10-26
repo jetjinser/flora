@@ -23,6 +23,7 @@
 (define (dataset-item metadata)
   (let ((name (assq-ref metadata 'name))
         (landing-page (assq-ref metadata 'landing-page))
+        (creators (assq-ref metadata 'creators))
         (description (assq-ref metadata 'description))
         (license (assq-ref metadata 'license)))
     `(li (@ (class "meta-item external-metadata dataset"))
@@ -30,6 +31,9 @@
          ,(if (and (string? landing-page) (string? name))
               `(a (@ (href ,landing-page)) ,name)
               (or name landing-page "（未命名）"))
+         ,@(if (and (list? creators) (pair? creators))
+               (list " — " (string-join creators ", "))
+               '())
          ,@(if (string? description) (list " — " description) '())
          ,@(if (string? license) (list " · 许可：" license) '()))))
 

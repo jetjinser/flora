@@ -51,24 +51,26 @@ The preview is available at `http://127.0.0.1:8080/`. Use `--port` or `--output`
 ## External entity metadata
 
 Reference pages declare identifiers with `@describes`. To experiment with
-supplemental DOI metadata, explicitly refresh a local snapshot from DOI content
-negotiation:
+supplemental metadata, explicitly refresh a local snapshot from a source that
+provides a machine-readable record:
 
 ```sh
 make update-doi-metadata DOI=doi:10.1146/annurev.fluid.29.1.123
+make update-zenodo-metadata URI=https://zenodo.org/records/11198731
 ```
 
 The command stores normalized fields and fetch provenance under
-`metadata/entities/`. Snapshots are indexed by their declared URI, regardless
-of scheme. Ordinary `grove build` reads only these local snapshots and
-does not access the network. An unchanged metadata response leaves its
+`metadata/entities/`. DOI content negotiation is one source adapter; the
+Zenodo command is another, accepting a Zenodo HTTPS landing-page URI and
+reading its public record API. Snapshots are indexed by their declared URI,
+regardless of scheme. Ordinary `grove build` reads only these local snapshots
+and does not access the network. An unchanged metadata response leaves its
 snapshot untouched, so it does not trigger an unnecessary Grove rebuild.
 `captured-at` marks when the stored metadata was captured or last changed.
-Failed requests and invalid CSL records produce a concise error and leave the
-previous snapshot intact.
-The reference page title and text remain author-controlled; available DOI
-title, authors, and year appear as separate supplemental metadata. This is an
-experiment in Flora, not a Grove fetching API.
+Failed requests and invalid or mismatched records produce a concise error and
+leave the previous snapshot intact. The reference page title and text remain
+author-controlled; fetched metadata appears as a separate supplement. These
+source adapters are an experiment in Flora, not a Grove fetching API.
 
 ## Book translations
 
@@ -118,6 +120,7 @@ program examples:
 ```sh
 guile --no-auto-compile -L . tests/lp-core.scm
 guile --no-auto-compile -L ../grove/modules tests/doi-metadata.scm
+guile --no-auto-compile -L ../grove/modules tests/zenodo-metadata.scm
 guile --no-auto-compile -L . tests/entity-metadata.scm
 guile --no-auto-compile -L . tests/lp-project.scm
 make validate

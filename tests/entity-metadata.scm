@@ -71,6 +71,21 @@
              " — " "Velocity-field measurements for particle image velocimetry."
              " · 许可：" "CC BY 4.0")
         (entity-metadata-item (entity-metadata-ref snapshots https-uri)))
+      (test-equal "dataset presentation includes source-provided creators"
+        '(li (@ (class "meta-item external-metadata dataset"))
+             "外部数据集："
+             (a (@ (href "https://example.org/datasets/piv"))
+                "Open PIV Benchmark")
+             " — " "Ada Lovelace, Research Group"
+             " — " "Velocity-field measurements for particle image velocimetry."
+             " · 许可：" "CC BY 4.0")
+        (entity-metadata-item
+          `((type . dataset)
+            (name . "Open PIV Benchmark")
+            (landing-page . "https://example.org/datasets/piv")
+            (creators . ("Ada Lovelace" "Research Group"))
+            (description . "Velocity-field measurements for particle image velocimetry.")
+            (license . "CC BY 4.0"))))
       (test-assert "unknown entity types have no implicit presentation"
         (not (entity-metadata-item '((type . software)))))
       (test-equal "the index and both snapshots are declared build inputs"
