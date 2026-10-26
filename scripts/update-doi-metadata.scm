@@ -35,7 +35,7 @@
                doi))
   (command-error (format #f "DOI contains unsupported URI path characters: ~s" doi)))
 
-(define directory "metadata/dois")
+(define directory "metadata/entities")
 (define index-path (string-append directory "/index.scm"))
 (define snapshot-path
   (string-append directory "/" (content-fingerprint uri) ".scm"))
@@ -126,6 +126,7 @@
         (format #f "response DOI ~s did not match ~a or had no title"
                 record-doi uri)))
     `((uri . ,uri)
+      (type . citation)
       (source . "https://doi.org/ (CSL-JSON content negotiation)")
       (captured-at . ,(date->string (current-date 0) "~Y-~m-~dT~H:~M:~SZ"))
       (title . ,title)

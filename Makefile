@@ -6,22 +6,27 @@ GROVE ?= grove
 GROVE_ROOT ?= ../grove
 REUSE ?= reuse
 
-.PHONY: help validate check build serve lint a11y preview-check update-doi-metadata clean
+.PHONY: help validate test check build serve lint a11y preview-check update-doi-metadata clean
 
 help:
 	@printf '%s\n' \
 	  'make validate    Validate the project' \
+	  'make test        Run offline project tests' \
 	  'make build       Build the site' \
 	  'make update-doi-metadata DOI=doi:10.../...  Refresh one local metadata snapshot' \
 	  'make serve       Preview the site' \
 	  'make lint        Check REUSE license compliance' \
 	  'make a11y        Build and run the browser accessibility audit' \
 	  'make preview-check  Check link-preview keyboard behavior' \
-	  'make check       Full gate: validate + lint + a11y + preview-check' \
+	  'make check       Full gate: validate + test + lint + a11y + preview-check' \
 	  'make clean       Remove build output'
 
 validate:
 	$(GROVE) check
+
+test:
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/doi-metadata.scm
+	guile --no-auto-compile -L . tests/entity-metadata.scm
 
 build:
 	$(GROVE) build
@@ -45,7 +50,7 @@ a11y: build
 	"$(GROVE_ROOT)/scripts/a11y-audit.sh" \
 	  build/index.html build/blazek2005-ch02.html
 
-check: validate lint a11y preview-check
+check: validate test lint a11y preview-check
 
 clean:
 	rm -rf build

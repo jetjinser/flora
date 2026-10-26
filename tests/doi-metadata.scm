@@ -12,7 +12,7 @@
 (define original-directory (getcwd))
 (define test-root (mkdtemp "/tmp/flora-doi-test-XXXXXX"))
 (define test-bin (string-append test-root "/bin"))
-(define test-metadata (string-append test-root "/metadata/dois"))
+(define test-metadata (string-append test-root "/metadata/entities"))
 (define fixture-path (string-append test-root "/response.json"))
 (define temporary-path-log (string-append test-root "/temporary-path"))
 (define fake-curl (string-append test-bin "/curl"))
@@ -20,6 +20,8 @@
 (define grove-modules (canonicalize-path "../grove/modules"))
 (define original-path (getenv "PATH"))
 (define uri "doi:10.1234/grove-test")
+(define https-uri "https://example.org/publication/42")
+(define https-snapshot-path "metadata/entities/https-fixture.scm")
 
 (define vector-record
   "{\"DOI\":\"10.1234/grove-test\",\"title\":[\"A test record\"],\"author\":[{\"given\":\"Ada\",\"family\":\"Lovelace\"},{\"name\":\"Research Group\"}],\"issued\":{\"date-parts\":[[2020,2,3]]},\"container-title\":[\"Test Journal\"],\"publisher\":\"Test Press\"}")
@@ -79,6 +81,11 @@
     (mkdir test-bin)
     (mkdir (string-append test-root "/metadata"))
     (mkdir test-metadata)
+    (write-text (string-append test-metadata "/index.scm")
+      (format #f "((~s . ~s))~%" https-uri https-snapshot-path))
+    (write-text (string-append test-root "/" https-snapshot-path)
+      (format #f "((uri . ~s) (source . \"fixture\") (title . \"HTTPS record\"))~%"
+              https-uri))
     (setenv "PATH" (string-append test-bin ":" original-path))
     (setenv "FLORA_DOI_FIXTURE" fixture-path)
     (setenv "FLORA_DOI_TEMP_PATH_LOG" temporary-path-log)
@@ -92,10 +99,16 @@
            (index-path (string-append test-metadata "/index.scm"))
            (index-bytes (read-text index-path)))
       (test-equal "snapshot retains the requested URI" uri (assoc-ref snapshot 'uri))
+      (test-equal "DOI snapshots declare their presentation kind" 'citation
+        (assoc-ref snapshot 'type))
       (test-equal "snapshot captures the CSL title" "A test record"
         (assoc-ref snapshot 'title))
       (test-equal "personal and organizational authors are retained"
         '("Ada Lovelace" "Research Group") (assoc-ref snapshot 'authors))
+      (test-assert "DOI refresh preserves other-scheme snapshot entries"
+        (assoc https-uri
+          (call-with-input-file index-path read)
+          string=?))
       (test-assert "snapshot records when its content was captured"
         (assoc-ref snapshot 'captured-at))
       (test-assert "successful update removes its temporary response"

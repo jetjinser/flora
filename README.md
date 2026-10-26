@@ -59,7 +59,8 @@ make update-doi-metadata DOI=doi:10.1146/annurev.fluid.29.1.123
 ```
 
 The command stores normalized fields and fetch provenance under
-`metadata/dois/`. Ordinary `grove build` reads only these local snapshots and
+`metadata/entities/`. Snapshots are indexed by their declared URI, regardless
+of scheme. Ordinary `grove build` reads only these local snapshots and
 does not access the network. An unchanged metadata response leaves its
 snapshot untouched, so it does not trigger an unnecessary Grove rebuild.
 `captured-at` marks when the stored metadata was captured or last changed.
@@ -111,11 +112,13 @@ Each page should make sense when opened or linked on its own. Describe topic rel
 
 ## Checks
 
-Run the LP library checks and validate the whole site after changing program examples:
+Run the offline project tests and validate the whole site after changing
+program examples:
 
 ```sh
 guile --no-auto-compile -L . tests/lp-core.scm
 guile --no-auto-compile -L ../grove/modules tests/doi-metadata.scm
+guile --no-auto-compile -L . tests/entity-metadata.scm
 guile --no-auto-compile -L . tests/lp-project.scm
 make validate
 make build

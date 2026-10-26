@@ -4,6 +4,8 @@
 (set! %load-path (cons (dirname (current-filename)) %load-path))
 
 (use-modules (cjk-fonts)
+             (flora entity-metadata)
+             (flora entity-presentation)
              (ice-9 ftw)
              (ice-9 binary-ports)
              (ice-9 textual-ports)
@@ -57,24 +59,13 @@
 (define font-sources
   (map (lambda (name) (string-append font-directory "/" name))
        (scandir font-directory (lambda (name) (not (string-prefix? "." name))))))
-(define doi-metadata-index-path
-  (project-directory% "/metadata/dois/index.scm"))
-(define doi-metadata-index
-  (if (file-exists? doi-metadata-index-path)
-      (call-with-input-file doi-metadata-index-path read)
-      '()))
-(define doi-metadata-sources
-  (cons doi-metadata-index-path
-        (map (lambda (entry)
-               (project-directory% (string-append "/" (cdr entry))))
-             doi-metadata-index)))
-(define doi-metadata
-  (map (lambda (entry)
-         (cons (car entry)
-               (call-with-input-file
-                   (project-directory% (string-append "/" (cdr entry)))
-                 read)))
-       doi-metadata-index))
+(define entity-metadata-sources
+  (append (map project-directory%
+                '("/flora/entity-metadata.scm"
+                  "/flora/entity-presentation.scm"))
+          (entity-metadata-source-paths (dirname (current-filename)))))
+(define entity-metadata
+  (load-entity-metadata (dirname (current-filename))))
 (define font-assets
   (map (lambda (path)
          (make-byte-artifact (string-append "fonts/" (basename path))
@@ -236,18 +227,24 @@
   (string-append "语境参考文献反向链接相关描述的实体"
                  "回到首页"
                  "站点配色设置跟随系统配色使用日间配色使用夜间配色"
-                 "跳到正文站点导航目录将树作为页面打开更新于年月日外部DOI元数据"
+                 "跳到正文站点导航目录将树作为页面打开更新于年月日外部元数据"
+                 "外部文献：外部数据集：许可："
                  (string-concatenate
                    (append-map
                      (lambda (entry)
                        (let ((metadata (cdr entry)))
-                         (append (list (or (assq-ref metadata 'title) ""))
+                         (append (filter string?
+                                 (list (assq-ref metadata 'title)
+                                       (assq-ref metadata 'name)
+                                       (assq-ref metadata 'description)
+                                       (assq-ref metadata 'license)
+                                       (assq-ref metadata 'landing-page)))
                                  (or (assq-ref metadata 'authors) '())
                                  (filter string?
                                          (list (assq-ref metadata 'year)
                                                (assq-ref metadata
                                                          'container-title))))))
-                     doi-metadata))))
+                     entity-metadata))))
 
 ;; Flora composes Grove's HTML presentation values: document head,
 ;; route-aware site navigation, per-page title decoration, the reading-column
@@ -299,23 +296,12 @@
     (lambda (page)
       (let find ((uris (or (assq-ref (site-page-metadata page) 'describes) '())))
         (and (pair? uris)
-             (let ((entry (assoc (car uris) doi-metadata string=?)))
-               (if entry
-                   (let* ((metadata (cdr entry))
-                          (authors (assq-ref metadata 'authors))
-                          (details
-                           (filter string?
-                                   (list (and (pair? authors)
-                                              (string-join authors ", "))
-                                         (assq-ref metadata 'year)
-                                         (assq-ref metadata 'container-title)))))
-                     (cons (site-page-id page)
-                       (list `(li (@ (class "meta-item external-metadata"))
-                                  "外部 DOI 元数据："
-                                  (cite ,(assq-ref metadata 'title))
-                                  ,@(if (pair? details)
-                                        (list " — " (string-join details " · "))
-                                        '())))))
+             (let ((metadata (entity-metadata-ref entity-metadata (car uris))))
+               (if metadata
+                   (let ((item (entity-metadata-item metadata)))
+                     (if item
+                         (cons (site-page-id page) (list item))
+                         (find (cdr uris))))
                    (find (cdr uris)))))))
     (pages forest)))
 
@@ -365,7 +351,7 @@
       #:source-directory plant-directory
       #:extra-sources (append (list stylesheet-path feed-stylesheet-path
                                     theme-script-path)
-                              font-sources doi-metadata-sources)
+                              font-sources entity-metadata-sources)
       #:prepare prepare-flora
       #:read-page
       (make-page-reader read-flora-page-document)

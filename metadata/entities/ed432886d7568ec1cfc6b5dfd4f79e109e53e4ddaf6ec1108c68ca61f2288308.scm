@@ -1,0 +1,1 @@
+((uri . "doi:10.1146/annurev.fluid.29.1.123") (type . citation) (source . "https://doi.org/ (CSL-JSON content negotiation)") (captured-at . "2026-10-26T00:30:35Z") (title . "QUANTIFICATION OF UNCERTAINTY IN COMPUTATIONAL FLUID DYNAMICS") (authors "P. J. Roache") (year . "1997") (container-title . "Annual Review of Fluid Mechanics") (publisher . "Annual Reviews"))
