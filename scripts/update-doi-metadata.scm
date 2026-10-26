@@ -12,13 +12,17 @@
              (srfi srfi-13)
              (srfi srfi-19))
 
+(define (command-error message)
+  (format (current-error-port) "update-doi-metadata: ~a~%" message)
+  (exit 2))
+
 (define arguments (cdr (command-line)))
 (unless (= (length arguments) 1)
-  (error "usage: update-doi-metadata.scm doi:10.../..."))
+  (command-error "usage: update-doi-metadata.scm doi:10.../..."))
 
 (define uri (car arguments))
 (unless (string-prefix? "doi:" uri)
-  (error "expected a DOI URI beginning with doi:" uri))
+  (command-error (format #f "expected a DOI URI beginning with doi: ~s" uri)))
 (define doi (substring uri 4))
 (unless (and (string-prefix? "10." doi)
              (string-index doi #\/)
@@ -29,7 +33,7 @@
                      (memv character '(#\. #\/ #\- #\_ #\~ #\! #\$ #\&
                                        #\' #\( #\) #\* #\+ #\, #\; #\= #\@))))
                doi))
-  (error "DOI contains unsupported URI path characters" doi))
+  (command-error (format #f "DOI contains unsupported URI path characters: ~s" doi)))
 
 (define directory "metadata/dois")
 (define index-path (string-append directory "/index.scm"))
@@ -38,6 +42,9 @@
 (define temporary-path
   (format #f "/tmp/flora-doi-~a.json" (getpid)))
 (define request-url (string-append "https://doi.org/" doi))
+
+(define (update-error message)
+  (throw 'update-error message))
 
 (define (json-field record key)
   (and (list? record) (assoc-ref record key)))
@@ -80,7 +87,11 @@
       '()))
 
 (define (read-response)
-  (call-with-input-file temporary-path json->scm))
+  (catch #t
+    (lambda ()
+      (call-with-input-file temporary-path json->scm))
+    (lambda _
+      (update-error (format #f "response for ~a was not valid JSON" uri)))))
 
 (define (write-datum-atomically path datum)
   (let ((temporary (string-append path ".tmp")))
@@ -102,7 +113,8 @@
                   "--header" "Accept: application/vnd.citationstyles.csl+json"
                   "--output" temporary-path request-url)))
     (unless (and (number? status) (zero? status))
-      (error "DOI metadata request failed" uri status)))
+      (update-error
+        (format #f "request for ~a failed; check connectivity and DOI availability" uri))))
   (let* ((record (read-response))
          (record-doi (json-field record "DOI"))
          (title (first-string (json-field record "title")))
@@ -110,8 +122,9 @@
          (year (issued-year record)))
     (unless (and (string? record-doi) (string-ci=? doi record-doi)
                  title)
-      (error "DOI response did not contain the requested CSL record"
-             uri record-doi title))
+      (update-error
+        (format #f "response DOI ~s did not match ~a or had no title"
+                record-doi uri)))
     `((uri . ,uri)
       (source . "https://doi.org/ (CSL-JSON content negotiation)")
       (captured-at . ,(date->string (current-date 0) "~Y-~m-~dT~H:~M:~SZ"))
@@ -121,34 +134,39 @@
       (container-title . ,(first-string (json-field record "container-title")))
       (publisher . ,(json-field record "publisher")))))
 
-(unless (file-exists? directory)
-  (mkdir directory))
-(dynamic-wind
-  (lambda () #t)
+(catch 'update-error
   (lambda ()
-    (let* ((snapshot (fetch))
-           (old-snapshot
-            (and (file-exists? snapshot-path)
-                 (call-with-input-file snapshot-path read)))
-           (snapshot-changed?
-            (or (not old-snapshot)
-                (assq 'fetched-at old-snapshot)
-                (not (equal? (without-capture-time old-snapshot)
-                             (without-capture-time snapshot)))))
-           (index (filter (lambda (entry)
-                            (not (string=? (car entry) uri)))
-                          (existing-index)))
-           (updated (sort (cons (cons uri snapshot-path) index)
-                          (lambda (left right)
-                            (string<? (car left) (car right)))))
-           (index-changed? (not (equal? updated (existing-index)))))
-      (when snapshot-changed?
-        (write-datum-atomically snapshot-path snapshot))
-      (when index-changed?
-        (write-datum-atomically index-path updated))
-      (format #t "~a ~a from DOI content negotiation: ~a~%"
-              (if snapshot-changed? "Updated" "Unchanged")
-              uri snapshot-path)))
-  (lambda ()
-    (when (file-exists? temporary-path)
-      (delete-file temporary-path))))
+    (unless (file-exists? directory)
+      (mkdir directory))
+    (dynamic-wind
+      (lambda () #t)
+      (lambda ()
+        (let* ((snapshot (fetch))
+               (old-snapshot
+                (and (file-exists? snapshot-path)
+                     (call-with-input-file snapshot-path read)))
+               (snapshot-changed?
+                (or (not old-snapshot)
+                    (assq 'fetched-at old-snapshot)
+                    (not (equal? (without-capture-time old-snapshot)
+                                 (without-capture-time snapshot)))))
+               (index (filter (lambda (entry)
+                                (not (string=? (car entry) uri)))
+                              (existing-index)))
+               (updated (sort (cons (cons uri snapshot-path) index)
+                              (lambda (left right)
+                                (string<? (car left) (car right)))))
+               (index-changed? (not (equal? updated (existing-index)))))
+          (when snapshot-changed?
+            (write-datum-atomically snapshot-path snapshot))
+          (when index-changed?
+            (write-datum-atomically index-path updated))
+          (format #t "~a ~a from DOI content negotiation: ~a~%"
+                  (if snapshot-changed? "Updated" "Unchanged")
+                  uri snapshot-path)))
+      (lambda ()
+        (when (file-exists? temporary-path)
+          (delete-file temporary-path)))))
+  (lambda (_ message)
+    (format (current-error-port) "update-doi-metadata: ~a~%" message)
+    (exit 1)))

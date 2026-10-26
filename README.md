@@ -63,6 +63,8 @@ The command stores normalized fields and fetch provenance under
 does not access the network. An unchanged metadata response leaves its
 snapshot untouched, so it does not trigger an unnecessary Grove rebuild.
 `captured-at` marks when the stored metadata was captured or last changed.
+Failed requests and invalid CSL records produce a concise error and leave the
+previous snapshot intact.
 The reference page title and text remain author-controlled; available DOI
 title, authors, and year appear as separate supplemental metadata. This is an
 experiment in Flora, not a Grove fetching API.
