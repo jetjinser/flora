@@ -4,14 +4,14 @@
 ;;; Refresh a local snapshot for a public Zenodo record. Site builds only read
 ;;; the resulting Scheme data; they never contact Zenodo.
 
-(use-modules (grove cache)
+(use-modules (flora entity-snapshot)
              (htmlprag)
              (ice-9 format)
              (ice-9 textual-ports)
              (json)
              (srfi srfi-1)
-             (srfi srfi-13)
-             (srfi srfi-19))
+             (srfi srfi-11)
+             (srfi srfi-13))
 
 (define (command-error message)
   (format (current-error-port) "update-zenodo-metadata: ~a~%" message)
@@ -30,10 +30,6 @@
              (string-every char-numeric? record-id))
   (command-error (format #f "expected a numeric record ID in ~s" uri)))
 
-(define directory "metadata/entities")
-(define index-path (string-append directory "/index.scm"))
-(define snapshot-path
-  (string-append directory "/" (content-fingerprint uri) ".scm"))
 (define temporary-path
   (format #f "/tmp/flora-zenodo-~a.json" (getpid)))
 (define api-url (string-append "https://zenodo.org/api/records/" record-id))
@@ -55,24 +51,6 @@
                  (string-append text " ")
                  text)))
           (else ""))))
-
-(define (write-datum-atomically path datum)
-  (let ((temporary (string-append path ".tmp")))
-    (call-with-output-file temporary
-      (lambda (port)
-        (write datum port)
-        (newline port)))
-    (rename-file temporary path)))
-
-(define (without-capture-time datum)
-  (filter (lambda (field)
-            (not (memq (car field) '(captured-at fetched-at))))
-          datum))
-
-(define (existing-index)
-  (if (file-exists? index-path)
-      (call-with-input-file index-path read)
-      '()))
 
 (define (read-response)
   (catch #t
@@ -114,7 +92,6 @@
     `((uri . ,uri)
       (type . ,(if (string=? resource-type "dataset") 'dataset 'resource))
       (source . ,api-url)
-      (captured-at . ,(date->string (current-date 0) "~Y-~m-~dT~H:~M:~SZ"))
       (doi . ,doi)
       (name . ,title)
       (creators . ,creator-names)
@@ -124,29 +101,13 @@
 
 (catch 'update-error
   (lambda ()
-    (unless (file-exists? directory) (mkdir directory))
     (dynamic-wind
       (lambda () #t)
       (lambda ()
-        (let* ((snapshot (fetch))
-               (old-snapshot
-                (and (file-exists? snapshot-path)
-                     (call-with-input-file snapshot-path read)))
-               (snapshot-changed?
-                (or (not old-snapshot)
-                    (assq 'fetched-at old-snapshot)
-                    (not (equal? (without-capture-time old-snapshot)
-                                 (without-capture-time snapshot)))))
-               (index (filter (lambda (entry) (not (string=? (car entry) uri)))
-                              (existing-index)))
-               (updated (sort (cons (cons uri snapshot-path) index)
-                              (lambda (left right)
-                                (string<? (car left) (car right)))))
-               (index-changed? (not (equal? updated (existing-index)))))
-          (when snapshot-changed? (write-datum-atomically snapshot-path snapshot))
-          (when index-changed? (write-datum-atomically index-path updated))
+        (let-values (((status path)
+                      (store-entity-snapshot! (getcwd) uri (fetch))))
           (format #t "~a ~a from Zenodo record API: ~a~%"
-                  (if snapshot-changed? "Updated" "Unchanged") uri snapshot-path)))
+                  (if (eq? status 'updated) "Updated" "Unchanged") uri path)))
       (lambda ()
         (when (file-exists? temporary-path) (delete-file temporary-path)))))
   (lambda (_ message)

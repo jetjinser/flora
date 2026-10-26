@@ -6,7 +6,8 @@ GROVE ?= grove
 GROVE_ROOT ?= ../grove
 REUSE ?= reuse
 
-.PHONY: help validate test check build serve lint a11y preview-check update-doi-metadata update-zenodo-metadata clean
+.PHONY: help validate test check build serve lint a11y preview-check \
+	update-doi-metadata update-zenodo-metadata update-crossref-metadata clean
 
 help:
 	@printf '%s\n' \
@@ -14,6 +15,7 @@ help:
 	  'make test        Run offline project tests' \
 	  'make build       Build the site' \
 	  'make update-doi-metadata DOI=doi:10.../...  Refresh one local metadata snapshot' \
+	  'make update-crossref-metadata DOI=doi:10.../...  Refresh via Crossref REST API' \
 	  'make update-zenodo-metadata URI=https://zenodo.org/records/ID  Refresh a Zenodo dataset snapshot' \
 	  'make serve       Preview the site' \
 	  'make lint        Check REUSE license compliance' \
@@ -26,8 +28,10 @@ validate:
 	$(GROVE) check
 
 test:
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/entity-snapshot.scm
 	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/doi-metadata.scm
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" tests/zenodo-metadata.scm
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/zenodo-metadata.scm
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/crossref-metadata.scm
 	guile --no-auto-compile -L . tests/entity-metadata.scm
 
 build:
@@ -43,8 +47,13 @@ update-doi-metadata:
 
 update-zenodo-metadata:
 	@test -n "$(URI)" || { echo 'usage: make update-zenodo-metadata URI=https://zenodo.org/records/ID' >&2; exit 2; }
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" \
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . \
 	  scripts/update-zenodo-metadata.scm "$(URI)"
+
+update-crossref-metadata:
+	@test -n "$(DOI)" || { echo 'usage: make update-crossref-metadata DOI=doi:10.../...' >&2; exit 2; }
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . \
+	  scripts/update-crossref-metadata.scm "$(DOI)"
 
 lint:
 	$(REUSE) --no-multiprocessing lint

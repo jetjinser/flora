@@ -56,16 +56,19 @@ provides a machine-readable record:
 
 ```sh
 make update-doi-metadata DOI=doi:10.1146/annurev.fluid.29.1.123
+make update-crossref-metadata DOI=doi:10.1146/annurev.fluid.29.1.123
 make update-zenodo-metadata URI=https://zenodo.org/records/11198731
 ```
 
-The command stores normalized fields and fetch provenance under
-`metadata/entities/`. DOI content negotiation is one source adapter; the
-Zenodo command is another, accepting a Zenodo HTTPS landing-page URI and
-reading its public record API. Snapshots are indexed by their declared URI,
-regardless of scheme. Ordinary `grove build` reads only these local snapshots
-and does not access the network. An unchanged metadata response leaves its
-snapshot untouched, so it does not trigger an unnecessary Grove rebuild.
+Each command stores normalized fields and fetch provenance under
+`metadata/entities/`. DOI content negotiation and Crossref's REST API are two
+adapters for citations; the Zenodo command accepts a Zenodo HTTPS landing-page
+URI and reads its public record API for dataset metadata. Snapshots are
+indexed by their declared URI, regardless of scheme. Ordinary `grove build`
+reads only these local snapshots and does not access the network. An unchanged
+metadata response leaves its snapshot untouched, so it does not trigger an
+unnecessary Grove rebuild. All three adapters share the same snapshot writer;
+source-specific response validation and field mapping stay in each adapter.
 `captured-at` marks when the stored metadata was captured or last changed.
 Failed requests and invalid or mismatched records produce a concise error and
 leave the previous snapshot intact. The reference page title and text remain
@@ -119,8 +122,10 @@ program examples:
 
 ```sh
 guile --no-auto-compile -L . tests/lp-core.scm
-guile --no-auto-compile -L ../grove/modules tests/doi-metadata.scm
-guile --no-auto-compile -L ../grove/modules tests/zenodo-metadata.scm
+guile --no-auto-compile -L ../grove/modules -L . tests/doi-metadata.scm
+guile --no-auto-compile -L ../grove/modules -L . tests/zenodo-metadata.scm
+guile --no-auto-compile -L ../grove/modules -L . tests/crossref-metadata.scm
+guile --no-auto-compile -L ../grove/modules -L . tests/entity-snapshot.scm
 guile --no-auto-compile -L . tests/entity-metadata.scm
 guile --no-auto-compile -L . tests/lp-project.scm
 make validate

@@ -17,6 +17,7 @@
 (define temporary-path-log (string-append test-root "/temporary-path"))
 (define fake-curl (string-append test-bin "/curl"))
 (define updater-path (canonicalize-path "scripts/update-zenodo-metadata.scm"))
+(define flora-modules (canonicalize-path "."))
 (define grove-modules (canonicalize-path "../grove/modules"))
 (define original-path (getenv "PATH"))
 (define uri "https://zenodo.org/records/12345")
@@ -55,7 +56,7 @@
   (chdir test-root)
   (let ((status
          (system* "guile" "--no-auto-compile"
-                  "-L" grove-modules updater-path uri)))
+                  "-L" grove-modules "-L" flora-modules updater-path uri)))
     (chdir original-directory)
     status))
 
