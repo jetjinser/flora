@@ -60,9 +60,12 @@ make update-doi-metadata DOI=doi:10.1146/annurev.fluid.29.1.123
 
 The command stores normalized fields and fetch provenance under
 `metadata/dois/`. Ordinary `grove build` reads only these local snapshots and
-does not access the network. The reference page's own title and text remain
-author-controlled; available DOI title, authors, and year appear as separate
-supplemental metadata. This is an experiment in Flora, not a Grove fetching API.
+does not access the network. An unchanged metadata response leaves its
+snapshot untouched, so it does not trigger an unnecessary Grove rebuild.
+`captured-at` marks when the stored metadata was captured or last changed.
+The reference page title and text remain author-controlled; available DOI
+title, authors, and year appear as separate supplemental metadata. This is an
+experiment in Flora, not a Grove fetching API.
 
 ## Book translations
 
@@ -110,6 +113,7 @@ Run the LP library checks and validate the whole site after changing program exa
 
 ```sh
 guile --no-auto-compile -L . tests/lp-core.scm
+guile --no-auto-compile -L ../grove/modules tests/doi-metadata.scm
 guile --no-auto-compile -L . tests/lp-project.scm
 make validate
 make build

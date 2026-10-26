@@ -50,9 +50,12 @@
         (else #f)))
 
 (define (author-name author)
-  (let ((given (json-field author "given"))
+  (let ((name (json-field author "name"))
+        (given (json-field author "given"))
         (family (json-field author "family")))
-    (string-join (filter string? (list given family)) " ")))
+    (if (and (string? name) (not (string-null? name)))
+        name
+        (string-join (filter string? (list given family)) " "))))
 
 (define (authors record)
   (let ((values (json-field record "author")))
@@ -87,6 +90,11 @@
         (newline port)))
     (rename-file temporary path)))
 
+(define (without-capture-time datum)
+  (filter (lambda (field)
+            (not (memq (car field) '(captured-at fetched-at))))
+          datum))
+
 (define (fetch)
   (let ((status
          (system* "curl" "--fail" "--silent" "--show-error" "--location"
@@ -106,7 +114,7 @@
              uri record-doi title))
     `((uri . ,uri)
       (source . "https://doi.org/ (CSL-JSON content negotiation)")
-      (fetched-at . ,(date->string (current-date 0) "~Y-~m-~dT~H:~M:~SZ"))
+      (captured-at . ,(date->string (current-date 0) "~Y-~m-~dT~H:~M:~SZ"))
       (title . ,title)
       (authors . ,record-authors)
       (year . ,year)
@@ -119,15 +127,27 @@
   (lambda () #t)
   (lambda ()
     (let* ((snapshot (fetch))
+           (old-snapshot
+            (and (file-exists? snapshot-path)
+                 (call-with-input-file snapshot-path read)))
+           (snapshot-changed?
+            (or (not old-snapshot)
+                (assq 'fetched-at old-snapshot)
+                (not (equal? (without-capture-time old-snapshot)
+                             (without-capture-time snapshot)))))
            (index (filter (lambda (entry)
                             (not (string=? (car entry) uri)))
                           (existing-index)))
            (updated (sort (cons (cons uri snapshot-path) index)
                           (lambda (left right)
-                            (string<? (car left) (car right))))))
-      (write-datum-atomically snapshot-path snapshot)
-      (write-datum-atomically index-path updated)
-      (format #t "Updated ~a from DOI content negotiation: ~a~%"
+                            (string<? (car left) (car right)))))
+           (index-changed? (not (equal? updated (existing-index)))))
+      (when snapshot-changed?
+        (write-datum-atomically snapshot-path snapshot))
+      (when index-changed?
+        (write-datum-atomically index-path updated))
+      (format #t "~a ~a from DOI content negotiation: ~a~%"
+              (if snapshot-changed? "Updated" "Unchanged")
               uri snapshot-path)))
   (lambda ()
     (when (file-exists? temporary-path)
