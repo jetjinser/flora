@@ -95,7 +95,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                   'item
                   (list (make-content-element
                           'query-link (list display-text)
-                          (site-page-source (find-page forest page-id))
+                          (site-page-source (require-page forest page-id))
                           #:properties `((target . ,page-id)
                                          (fragment . ,anchor)))))))
             rows)
@@ -135,7 +135,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                                   'query-link
                                   (list (format #f "~a（~a）" display-text host-title))
                                   (site-page-source
-                                    (find-page forest page-id))
+                                    (require-page forest page-id))
                                   #:properties `((target . ,page-id)
                                                  (fragment . ,anchor))))))
                       (cdr entry)))))
@@ -153,7 +153,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                     (list (make-content-element
                             'query-link (list (cadr occurrence))
                             (site-page-source
-                              (find-page forest (caddr occurrence)))
+                              (require-page forest (caddr occurrence)))
                             #:properties `((target . ,(caddr occurrence))))))
                   (cadr entry))
                 (list (make-content-text "）")))))
@@ -196,7 +196,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                             (line (list-ref row 4))
                             (column (list-ref row 5))
                             (source (site-page-source
-                                      (find-page forest page-id))))
+                                      (require-page forest page-id))))
                        (make-content-element
                          'item
                          (list
@@ -256,7 +256,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                          (list
                            (make-content-element
                              'query-link (list title)
-                             (site-page-source (find-page forest page-id))
+                             (site-page-source (require-page forest page-id))
                              #:properties `((target . ,page-id)))
                            (make-content-text (format #f " (~a)" page-id))))))
                    orphans)
@@ -268,7 +268,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
     ;; Resolve an @author marker to a link whose text is the person tree's
     ;; title; unknown targets fall back to the bare id with a warning.
     (let* ((target (content-element-property marker 'target))
-           (person (false-if-exception (find-page forest target))))
+           (person (find-page forest target)))
       (unless person
         (format (current-error-port)
                 "WARNING: @author target is not a known tree: ~a~%" target))
