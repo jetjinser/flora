@@ -122,7 +122,7 @@
 
   如果计算读取额外的数据文件，要在读取前登记它：
 
-  @verbatim["@use-modules[(grove input scribble) (ice-9 textual-ports)]
+  @verbatim["@use-modules[(grove input) (ice-9 textual-ports)]
 @(define data
    (call-with-input-file (depend-on! \"data.txt\") get-string-all))"]
 
