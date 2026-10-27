@@ -4,10 +4,11 @@
   #:use-module (language scribble command)
   #:use-module (grove element)
   #:use-module (grove ir)
+  #:use-module (grove render plain-text)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-13)
   #:use-module (srfi srfi-14)
-  #:re-export (image tag taxon title subtree transclude summary published updated lipsum
+  #:re-export (image tag taxon title subtree transclude summary published updated
                bilingual lang)
   ;; term 与 link 同理:本地定义覆盖 forester 原语。term 是术语提及
   ;; 命令(解析进定义关系),原语的 term 是数学记号构造器,站内未用。
@@ -109,7 +110,7 @@ know at authoring time."
 @summary{全站共用内容命令的定义与用法：双语块、作者标注、语义插图、边注与术语定义。}
 @taxon["reference"]
 
-本模块是 Flora 的命令词汇表，各页面在 @code{use-modules} 中引入 @code{(flora commands)}。本页逐个说明命令的来源与用法；定义在各节的说明之后，构建时求值。转发自 Grove/Forester 原语的命令（@code{image}、@code{tag}、@code{taxon}、@code{title}、@code{subtree}、@code{transclude}、@code{summary}、@code{published}、@code{updated}、@code{lipsum}、@code{bilingual}、@code{lang}、@code{term}）本页不再重复，另见 @link["grove"]{Grove 文档}。
+本模块是 Flora 的命令词汇表，各页面在 @code{use-modules} 中引入 @code{(flora commands)}。本页逐个说明命令的来源与用法；定义在各节的说明之后，构建时求值。转发自 Grove/Forester 原语的命令（@code{image}、@code{tag}、@code{taxon}、@code{title}、@code{subtree}、@code{transclude}、@code{summary}、@code{published}、@code{updated}、@code{bilingual}、@code{lang}、@code{term}）本页不再重复，另见 @link["grove"]{Grove 文档}。
 
 @subtree[#:id "lib-bi"]{
   @title{bi：段落级双语折叠块}

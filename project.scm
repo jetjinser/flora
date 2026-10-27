@@ -13,9 +13,11 @@
              (grove style html)
              (grove output)
              (forester input scribble)
-             (forester render derived)
              (forester render html)
+             (forester render rss)
+             (forester render sitemap)
              (forester render site)
+             (forester project new)
              (forester style i18n)
              (grove cache)
              (grove input scribble)
@@ -337,35 +339,37 @@
 
 (define flora-project
   (make-site-project
-    #:options
-    (make-site-options
-      #:tree-template
+    #:title "Flora"
+    #:description "A garden of connected notes."
+    #:source-directory plant-directory
+    #:extra-sources (append (list stylesheet-path feed-stylesheet-path
+                                  theme-script-path)
+                            font-sources entity-metadata-sources)
+    #:prepare prepare-flora
+    #:read-page (make-page-reader read-flora-page-document)
+    #:analyze analyze-flora
+    #:reader-locale flora-locale
+    #:renderers
+    (list render-flora lp-artifacts
+          (make-cjk-font-renderer
+            (project-directory% "/fonts-src")
+            #:extra-text interface-text)
+          (make-sitemap-renderer
+            #:settings flora-settings #:routes html-routes)
+          (make-rss-renderer
+            #:settings flora-settings #:routes html-routes
+            #:stylesheet-url "feed.css"
+            #:stylesheet-type "text/css"))
+    #:pipelines (list blazek2005-figures)
+    #:create-source
+    (make-forester-source-creator
+      #:source-directory plant-directory
+      #:template
       (lambda (id date)
         (string-append
           "@use-commands{flora}\n\n"
           "@title{}\n"
-          "@published{" date "}\n"))
-      #:title "Flora"
-      #:locale flora-locale
-      #:description "A garden of connected notes."
-      #:source-directory plant-directory
-      #:extra-sources (append (list stylesheet-path feed-stylesheet-path
-                                    theme-script-path)
-                              font-sources entity-metadata-sources)
-      #:prepare prepare-flora
-      #:read-page
-      (make-page-reader read-flora-page-document)
-      #:analyze analyze-flora
-      #:renderers (list render-flora lp-artifacts
-                        (make-cjk-font-renderer
-                          (project-directory% "/fonts-src")
-                          #:extra-text interface-text))
-      #:derived
-      (list (sitemap-derived #:settings flora-settings #:routes html-routes)
-            (rss-derived #:settings flora-settings #:routes html-routes
-                         #:stylesheet-url "feed.css"
-                         #:stylesheet-type "text/css"))
-      #:pipelines (list blazek2005-figures)
-      #:output-directory output-directory)))
+          "@published{" date "}\n")))
+    #:output-directory output-directory))
 
 flora-project
