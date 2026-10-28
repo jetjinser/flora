@@ -10,7 +10,7 @@
   @title{查询DSL}
 
   @itemize{
-    @item{@code{query}／@code{run*}：声明要返回的逻辑变量并收集全部解。}
+    @item{@code{run*}：声明要返回的逻辑变量并收集全部解。}
     @item{@code{fresh}：引入只在当前目标内可见的存在量词变量。}
     @item{@code{conde}：析取，列出多个可接受的目标分支。}
     @item{@code{==}：统一两个项；@code{=/=}约束两项不相等。}
@@ -25,7 +25,7 @@
 
   @code{ruleo}把数学规则目录公开为关系，参数依次是名称、类别、适用模式与docstring：
 
-  @code-block[#:language 'scheme "(query (name modes documentation)
+  @code-block[#:language 'scheme "(run* (name modes documentation)
   (ruleo name 'differentiate modes documentation))"]
 
   @code{math-rule->content}把规则名转成文章内容（结构化模式与说明），因此文档与运行时目录来自同一份定义。详见@link["math-0009"]{规则查询}。

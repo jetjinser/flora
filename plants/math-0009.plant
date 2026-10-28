@@ -8,7 +8,7 @@
 数学规则不是散落在文章里的字符串清单。Grove把规则以关系形式公开，因此文章可以查询名字、类别、适用模式和docstring。此处的输出由构建时查询生成。
 
 @(define rules
-  (query (name group modes documentation)
+  (run* (name group modes documentation)
     (ruleo name group modes documentation)))
 
 @subtree{
@@ -23,7 +23,7 @@
 }
 
 @(define differential-rules
-  (query (name modes documentation)
+  (run* (name modes documentation)
     (ruleo name 'differentiate modes documentation)))
 
 @subtree{
@@ -33,7 +33,7 @@
 
   @verbatim[(format #f "~s" differential-rules)]
 
-  @code{ruleo}描述规则目录中的事实；@code{query}声明要返回哪些逻辑变量；把类别固定为@code{differentiate}会只返回匹配的规则。关系可以进一步组合，而不需要手写列表过滤代码。
+  @code{ruleo}描述规则目录中的事实；@code{run*}声明要返回哪些逻辑变量；把类别固定为@code{differentiate}会只返回匹配的规则。关系可以进一步组合，而不需要手写列表过滤代码。
 
   查询空间和分量规则：
 
@@ -48,7 +48,7 @@
 }
 
 @(define rule-names
-  (query (name)
+  (run* (name)
     (fresh (group modes documentation)
       (ruleo name group modes documentation))))
 
@@ -62,7 +62,7 @@
   若想只看写过说明的规则，可以约束documentation不等于@code{#f}：
 
   @verbatim[(format #f "~s"
-    (query (name documentation)
+    (run* (name documentation)
       (fresh (group modes)
         (ruleo name group modes documentation)
         (=/= documentation #f))))]
@@ -79,7 +79,7 @@
   因为@code{.plant}在整个站点分析之前就已读取，跨文章查询应放在项目的@code{#:analyze}阶段。下面是Flora @code{project.scm}实际运行的查询：
 
   @code-block[#:language 'scheme "(let ((nodes (content-node-relation forest)))
-    (query (node-id page-id position text line column)
+    (run* (node-id page-id position text line column)
       (fresh (file)
         (math-containing-paragrapho nodes node-id)
         (shorter-than-o nodes node-id 120)

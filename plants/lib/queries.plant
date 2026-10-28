@@ -59,9 +59,11 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
 
 @(begin
   ;; Project predicates over the content and page relation snapshots.
-  (define-relation (incoming-pageo nodes page-id)
-    (exists (node-id kind)
-      (either ((== kind 'link)) ((== kind 'transclude)))
+  (defrel (incoming-pageo nodes page-id)
+    (fresh (node-id kind)
+      (conde
+        ((== kind 'link))
+        ((== kind 'transclude)))
       (nodeo nodes (node-id node-id) (kind kind))
       (node-propertyo nodes node-id 'target page-id)))
 
@@ -162,7 +164,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
   (define (query-math-paragraphs forest)
     (let ((nodes (content-node-relation forest)))
       (delete-duplicates
-        (query (node-id page-id position text line column)
+        (run* (node-id page-id position text line column)
           (fresh (file)
             (math-containing-paragrapho nodes node-id)
             (shorter-than-o nodes node-id 120)
@@ -214,7 +216,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
     (let* ((nodes (content-node-relation forest))
            (incoming-page-ids
              (delete-duplicates
-               (query (page-id)
+               (run* (page-id)
                  (incoming-pageo nodes page-id))
                string=?))
            (incoming-set

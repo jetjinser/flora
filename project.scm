@@ -135,7 +135,7 @@
    #:version "pdftoppm-png-200dpi-imagemagick-avifenc-v1"
    #:inputs (list blazek2005-pdf blazek2005-manifest)
    #:procedure
-   (lambda (in emit)
+   (lambda (in)
      (let* ((pdf (in blazek2005-pdf))
             (page-cache
              (string-append
@@ -145,7 +145,7 @@
                               (file-fingerprint pdf))))))
        (unless (file-exists? figure-page-cache)
          (mkdir figure-page-cache))
-       (for-each
+       (append-map
         (lambda (figure)
           (let* ((name (car figure))
                  (box (cdr figure))
@@ -163,26 +163,26 @@
             (let* ((base (string-drop-right name 4))
                    (png (string-append "blazek2005/" name))
                    (avif (string-append "blazek2005/" base ".avif")))
-              (emit png
-                    (call-with-input-file cropped get-bytevector-all))
-              (emit avif
-                    (encode-variant
-                      "avifenc" (list "-q" "60" "-s" "8" cropped)
-                      avif)))))
+              (list
+                (make-byte-artifact png
+                  (call-with-input-file cropped get-bytevector-all))
+                (make-byte-artifact avif
+                  (encode-variant
+                    "avifenc" (list "-q" "60" "-s" "8" cropped)
+                    avif))))))
         (figure-manifest (in blazek2005-manifest)))))))
 (define figure-image-sets
   (map (lambda (name)
          (let ((base (string-drop-right name 4)))
-           (cons (string-append "blazek2005/" name)
-                 (make-image-set
-                   (string-append "blazek2005/" name)
-                   #:variants
-                   (list
-                     (make-image-variant
-                       "image/avif"
-                       (string-append "/blazek2005/" base ".avif")))
-                   #:fallback
-                   (string-append "/blazek2005/" name)))))
+           (make-image-set
+             (string-append "blazek2005/" name)
+             #:variants
+             (list
+               (make-image-variant
+                 "image/avif"
+                 (string-append "/blazek2005/" base ".avif")))
+             #:fallback
+             (string-append "/blazek2005/" name))))
        (map car (figure-manifest blazek2005-manifest))))
 
 (define flora-rules

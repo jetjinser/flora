@@ -13,9 +13,9 @@
 
   link和transclude都直接指向tree ID；不再有heading fragment。@code{incoming-pageo}将两种入向引用合并：
 
-  @code-block[#:language 'scheme "(define-relation (incoming-pageo nodes page-id)
-    (exists (node-id kind)
-      (either ((== kind 'link)) ((== kind 'transclude)))
+  @code-block[#:language 'scheme "(defrel (incoming-pageo nodes page-id)
+    (fresh (node-id kind)
+      (conde ((== kind 'link)) ((== kind 'transclude)))
       (nodeo nodes (node-id node-id) (kind kind))
       (node-propertyo nodes node-id 'target page-id)))"]
 
@@ -30,16 +30,16 @@
 
   miniKanren的@code{=/=}表示两个项不相等，并不表示“某个关系中不存在匹配行”。这里先查询所有被link或transclude的页面ID，再用递归的@code{not-membero}检查一个页面ID不在该有限列表中：
 
-  @code-block[#:language 'scheme "(define-relation (not-membero value values)
-    (either
+  @code-block[#:language 'scheme "(defrel (not-membero value values)
+    (conde
       ((== '() values))
-      ((exists (head tail)
+      ((fresh (head tail)
          (== `(,head . ,tail) values)
          (=/= value head)
          (not-membero value tail)))))
 
-  (define-relation (authored-pageo page-data page-id title)
-    (exists (metadata)
+  (defrel (authored-pageo page-data page-id title)
+    (fresh (metadata)
       (pageo page-data
              (page-id page-id)
              (title title)
@@ -47,7 +47,7 @@
       (project (metadata)
         (if (assq-ref metadata 'inline-subtree) fail succeed))))
 
-  (define-relation (orphan-pageo page-data incoming-page-ids page-id title)
+  (defrel (orphan-pageo page-data incoming-page-ids page-id title)
     (authored-pageo page-data page-id title)
     (not-membero page-id incoming-page-ids))"]
 
