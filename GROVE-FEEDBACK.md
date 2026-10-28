@@ -44,16 +44,15 @@ index, query resolution. Unpacking is not where the time goes;
 materialization is. A module edit re-analyzing all 1122 documents takes
 48.8 s (≈43 ms each) — correct semantics, honest work.
 
-### Serve lifecycle suite under the blue test driver
-
-Carry-over caveat from the build-lock work: under `blue check` the
-spawned serve is a grandchild process where libgcrypt's hash call dies
-with ENOSYS, so the serve lifecycle suite only runs as a direct serve
-process on this machine. Everything it pins is nonetheless verified
-against the real flora tree (see the ledger). Filed so the driver
-limitation is not forgotten once the environment changes.
-
 ## Resolved ledger
+
+- Serve lifecycle suite runs under Blue again (2026-10-29): `blue verify`
+  completed tests, lint, and examples; targeted `blue check
+  tests/unit/grove/serve.scm` passed locally. The prior grandchild-process
+  ENOSYS limitation no longer applies. A parallel run exposed a test race:
+  the neighboring-file assertion could run before the runtime-input rebuild
+  settled. The test now waits for the watcher idle signal before editing the
+  neighbor.
 
 - Asset pipelines — grove `7f8beaa`: the `blazek2005-figures` pipeline
   replaced `regenerate-figures.sh`; figures re-crop only when the PDF,
