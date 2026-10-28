@@ -72,7 +72,7 @@
   (map (lambda (path)
          (make-byte-artifact (string-append "fonts/" (basename path))
            (call-with-input-file path get-bytevector-all #:binary #t)
-           (list path)))
+           #:sources (list path)))
        font-sources))
 
 ;; 图片资产:blazek2005 的插图由管线从扫描版 PDF 按裁剪清单再生,
@@ -196,15 +196,15 @@
       #:stylesheets
       (list (make-artifact "flora.css"
               (call-with-input-file stylesheet-path get-string-all)
-              (list stylesheet-path)))
+              #:sources (list stylesheet-path)))
       #:assets
       (append
         (list (make-artifact "theme.js"
                 (call-with-input-file theme-script-path get-string-all)
-                (list theme-script-path))
+                #:sources (list theme-script-path))
               (make-artifact "feed.css"
                 (call-with-input-file feed-stylesheet-path get-string-all)
-                (list feed-stylesheet-path)))
+                #:sources (list feed-stylesheet-path)))
         font-assets))))
 
 (define html-routes (make-html-routes #:home-page "flora"))

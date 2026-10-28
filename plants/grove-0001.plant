@@ -1,5 +1,5 @@
 @use-commands{flora}
-@use-modules[(grove style) (grove style html)]
+@use-modules[(grove style) (grove style html element)]
 
 @title{用.plant写作：元数据、命令与Scheme}
 @summary{认识页面元数据、自动段落、at-exp命令和源码展示。}

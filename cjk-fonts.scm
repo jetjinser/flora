@@ -123,7 +123,7 @@
                (make-byte-artifact
                 (string-append "fonts/" output)
                 (subset-font text source-path)
-                (append source-sources (list source-path))))))))))
+                #:sources (append source-sources (list source-path))))))))))
 
 (define* (make-cjk-font-renderer source-directory
                                  #:key (extra-text ""))
@@ -158,7 +158,7 @@
                        (font-face-sxml family weight output)))
                     (map car faces))
                ""))
-          (delete-duplicates
+          #:sources (delete-duplicates
            (append source-sources font-sources
                    (if %source-file (list %source-file) '()))
            string=?))

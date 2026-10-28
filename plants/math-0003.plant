@@ -1,5 +1,6 @@
 @use-commands{flora}
 @use-modules[(grove math pipeline)
+             (grove math semantic-check)
              (grove math proof)
              (grove math layout)
              ((grove math semantic) #:prefix ◆:)

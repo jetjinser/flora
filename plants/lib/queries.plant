@@ -69,7 +69,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
 
   (define (source-dependencies site)
     (map (lambda (page)
-           (make-content-text "" (site-page-source page)))
+           (make-content-text "" #:source (site-page-source page)))
          (site-pages site)))
 
   ;; 定义索引:relation 事实即收集序(文档序),词汇表保持 authored 顺序。
@@ -203,12 +203,12 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                          'item
                          (list
                            (make-content-element
-                             'query-link (list page-id) source
+                             'query-link (list page-id) #:source source
                              #:properties `((target . ,page-id)))
                            (make-content-text
                              (format #f " (line ~a, column ~a; IR position ~a): ~a"
                                      line column position text)
-                             source)))))
+                             #:source source)))))
                    shown)
               #:flow-kind 'block))))
 
@@ -277,8 +277,8 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
       (make-content-element
         'link
         (list (if person (site-page-title person)
-                  (make-content-text target #f)))
-        (content-element-source marker)
+                  (make-content-text target)))
+        #:source (content-element-source marker)
         #:properties `((target . ,target)))))
 
   (define (placeholder-kind content)
@@ -302,7 +302,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
          (append-map (lambda (child)
                        (expand-query-markers child replacements forest))
                      (content-document-children content))
-         (content-document-source content)))
+         #:source (content-document-source content)))
       ((content-element? content)
        (if (eq? (content-element-kind content) 'flora-author)
            (list (author-link forest content))
@@ -316,7 +316,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                      (append-map (lambda (child)
                                    (expand-query-markers child replacements forest))
                                  (content-element-children content))
-                     (content-element-source content)
+                     #:source (content-element-source content)
                      #:properties (content-element-properties content)
                      #:style (content-element-style content)
                      #:flow-kind (content-element-flow-kind content)))))))
@@ -329,7 +329,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                (site-page-id page)
                (site-page-title page)
                (expand-query-markers (site-page-document page) replacements forest)
-               (site-page-source page)
+               #:source (site-page-source page)
                #:metadata (site-page-metadata page)))
            (site-pages site))
       #:title (site-title site)

@@ -5,6 +5,7 @@
   #:use-module (grove ir)
   #:use-module (grove style)
   #:use-module (grove style html)
+  #:use-module (grove style html element)
   #:use-module (grove output)
   #:use-module (grove site)
   #:use-module ((forester site) #:select (pages))
@@ -16,7 +17,7 @@
 
 (define (annotate element properties)
   (make-content-element (content-element-kind element) (content-element-children element)
-    (content-element-source element)
+    #:source (content-element-source element)
     #:properties (append properties (content-element-properties element))
     #:style (content-element-style element) #:flow-kind (content-element-flow-kind element)))
 
@@ -217,7 +218,8 @@
   (define (walk node)
     (cond
       ((content-document? node)
-       (make-content-document (map walk (content-document-children node)) (content-document-source node)))
+       (make-content-document (map walk (content-document-children node))
+         #:source (content-document-source node)))
       ((content-element? node)
        (let* ((fragment (content-element-property node 'lp-fragment))
               (program (content-element-property node 'lp-program))
@@ -229,14 +231,15 @@
                                    (and (content-element? child)
                                         (memq (content-element-kind child) '(title taxon)))) children)))
          (make-content-element (content-element-kind node)
-           (append front nav (drop children (length front))) (content-element-source node)
+           (append front nav (drop children (length front)))
+           #:source (content-element-source node)
            #:properties (content-element-properties node) #:style (content-element-style node)
            #:flow-kind (content-element-flow-kind node))))
       (else node)))
   (make-site
     (map (lambda (page)
            (make-site-page (site-page-id page) (site-page-title page)
-             (walk (site-page-document page)) (site-page-source page)
+             (walk (site-page-document page)) #:source (site-page-source page)
              #:metadata (site-page-metadata page))) (site-pages original))
     #:title (site-title original) #:description (site-description original) #:sources (site-sources original)))
 
@@ -252,7 +255,7 @@
              (list (make-artifact (string-append "programs/" filename)
                      (or (content-element-property content 'literate-source)
                          (content-verbatim-string (content-element-children content)))
-                     (delete-duplicates (cons source
+                     #:sources (delete-duplicates (cons source
                        (or (content-element-property content 'literate-sources) '())))))
              (append-map (lambda (child) (outputs child source))
                          (content-element-children content)))))
