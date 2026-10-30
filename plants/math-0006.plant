@@ -1,5 +1,5 @@
 @use-commands{flora}
-@use-modules[(grove math pipeline)
+@use-modules[(grove math calculation)
              ((grove math semantic) #:prefix ◆:)
              ((grove math formula) #:prefix φ:)]
 
