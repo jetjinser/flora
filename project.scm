@@ -6,6 +6,7 @@
 (use-modules (cjk-fonts)
              (flora entity-metadata)
              (flora entity-presentation)
+             (flora figure-assets)
              (ice-9 ftw)
              (ice-9 binary-ports)
              (ice-9 textual-ports)
@@ -19,9 +20,7 @@
              (forester render site)
              (forester project new)
              (forester style i18n)
-             (grove cache)
              (grove input scribble)
-             (grove pipeline)
              (grove project)
              (grove project site)
              (grove render html presentation)
@@ -43,7 +42,7 @@
 (define plant-directory (project-directory% "/plants"))
 (define literate-module-sources
   (map (lambda (name) (string-append plant-directory "/" name))
-       '("lib/commands.plant" "lib/queries.plant" "lib/literate.plant"
+       '("lib/commands.plant" "lib/queries.plant"
          "lp-0003.plant" "lp-0008.plant" "lp-0007.plant"
          "lp-0009.plant")))
 (define read-flora-document
@@ -61,11 +60,13 @@
 (define font-sources
   (map (lambda (name) (string-append font-directory "/" name))
        (scandir font-directory (lambda (name) (not (string-prefix? "." name))))))
+(define flora-module-sources
+  (map project-directory%
+       (list "/flora/entity-metadata.scm"
+             "/flora/entity-presentation.scm"
+             "/flora/figure-assets.scm")))
 (define entity-metadata-sources
-  (append (map project-directory%
-                '("/flora/entity-metadata.scm"
-                  "/flora/entity-presentation.scm"))
-          (entity-metadata-source-paths (dirname (current-filename)))))
+  (entity-metadata-source-paths (dirname (current-filename))))
 (define entity-metadata
   (load-entity-metadata (dirname (current-filename))))
 (define font-assets
@@ -75,116 +76,8 @@
            #:sources (list path)))
        font-sources))
 
-;; 图片资产:blazek2005 的插图由管线从扫描版 PDF 按裁剪清单再生,
-;; 不入库;@image 引用的 URL 与旧的目录布局一致(/blazek2005/fig-*.png)。
-;; 身份覆盖 project.scm 与两份输入——改裁剪框或换 PDF 版本即失效再生。
-(define blazek2005-pdf
-  (project-directory%
-   "/materials/books/Computational Fluid Dynamics Principles and Appl.pdf"))
-(define blazek2005-manifest
-  (project-directory% "/docs/blazek2005-figures.tsv"))
-(define figure-page-cache
-  (string-append (or (getenv "TMPDIR") "/tmp") "/flora-figure-pages"))
-
-;; Bump this when the page rasterizer or its options change. The Guix
-;; channels pin the toolchain; this identifier separates its local page cache.
-(define figure-page-rasterizer-version "pdftoppm-png-200dpi-v1")
-
-(define image-tool
-  ;;     ImageMagick 7 命令名为 magick,Guix 仍是 IM6 的 convert。
-  (if (zero? (system "magick -version >/dev/null 2>&1")) "magick" "convert"))
-
-(define (figure-manifest path)
-  ;; name page x y w h(200 dpi 渲染;PDF 页 = 印刷页 + 21)
-  (filter-map
-   (lambda (line)
-     (and (not (string-null? line))
-          (not (string-prefix? "#" line))
-          (let ((fields (string-split line #\tab)))
-            (cons (car fields)
-                  (map string->number (cdr fields))))))
-   (string-split (call-with-input-file path get-string-all) #\newline)))
-
-(define (render-page pdf page cache-directory)
-  ;; pdftoppm 的输出名带零填充页号;每页只光栅化一次。
-  (let* ((padded (format #f "~3,'0d" page))
-         (cached (string-append cache-directory "/p" padded ".png"))
-         (prefix (string-append cache-directory "/tmp" padded)))
-    (unless (file-exists? cached)
-      (unless (file-exists? cache-directory)
-        (mkdir cache-directory))
-      (unless (zero? (system* "pdftoppm" "-png" "-r" "200"
-                              "-f" (number->string page)
-                              "-l" (number->string page)
-                              pdf prefix))
-        (error "pdftoppm failed" page))
-      (rename-file (string-append prefix "-" padded ".png") cached))
-    cached))
-
-
-(define (encode-variant command args output)
-  (let ((temporary (string-append figure-page-cache "/" (basename output))))
-    (unless (zero? (apply system* command (append args (list temporary))))
-      (error "image encode failed" command output))
-    (let ((bytes (call-with-input-file temporary get-bytevector-all #:binary #t)))
-      (delete-file temporary)
-      bytes)))
-(define blazek2005-figures
-  (make-asset-pipeline
-   #:name "blazek2005-figures"
-   #:version "pdftoppm-png-200dpi-imagemagick-avifenc-v1"
-   #:inputs (list blazek2005-pdf blazek2005-manifest)
-   #:procedure
-   (lambda (in)
-     (let* ((pdf (in blazek2005-pdf))
-            (page-cache
-             (string-append
-              figure-page-cache "/"
-              (content-fingerprint
-               (string-append figure-page-rasterizer-version "\n"
-                              (file-fingerprint pdf))))))
-       (unless (file-exists? figure-page-cache)
-         (mkdir figure-page-cache))
-       (append-map
-        (lambda (figure)
-          (let* ((name (car figure))
-                 (box (cdr figure))
-                 (page (list-ref box 0))
-                 (x (list-ref box 1))
-                 (y (list-ref box 2))
-                 (w (list-ref box 3))
-                 (h (list-ref box 4))
-                 (page-png (render-page pdf page page-cache))
-                 (cropped (string-append figure-page-cache "/crop-" name)))
-            (unless (zero? (system* image-tool page-png "-crop"
-                                    (format #f "~ax~a+~a+~a" w h x y)
-                                    "+repage" cropped))
-              (error "figure crop failed" name))
-            (let* ((base (string-drop-right name 4))
-                   (png (string-append "blazek2005/" name))
-                   (avif (string-append "blazek2005/" base ".avif")))
-              (list
-                (make-byte-artifact png
-                  (call-with-input-file cropped get-bytevector-all))
-                (make-byte-artifact avif
-                  (encode-variant
-                    "avifenc" (list "-q" "60" "-s" "8" cropped)
-                    avif))))))
-        (figure-manifest (in blazek2005-manifest)))))))
-(define figure-image-sets
-  (map (lambda (name)
-         (let ((base (string-drop-right name 4)))
-           (make-image-set
-             (string-append "blazek2005/" name)
-             #:variants
-             (list
-               (make-image-variant
-                 "image/avif"
-                 (string-append "/blazek2005/" base ".avif")))
-             #:fallback
-             (string-append "/blazek2005/" name))))
-       (map car (figure-manifest blazek2005-manifest))))
-
+(define-values (blazek2005-figures figure-image-sets)
+  (make-blazek2005-figure-assets (dirname (current-filename))))
 (define flora-rules
   (make-render-rules
     (list (cons 'image (image-set-rule figure-image-sets)))))
@@ -344,7 +237,7 @@
     #:source-directory plant-directory
     #:extra-sources (append (list stylesheet-path feed-stylesheet-path
                                   theme-script-path)
-                            font-sources entity-metadata-sources)
+                            font-sources flora-module-sources entity-metadata-sources)
     #:prepare prepare-flora
     #:read-page (make-page-reader read-flora-page-document)
     #:analyze analyze-flora

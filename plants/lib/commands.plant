@@ -145,7 +145,7 @@ know at authoring time."
 @subtree[#:id "lib-defn"]{
   @title{defn：术语定义}
 
-  用法：@code{@"@"defn{术语}}。渲染为 @code{dfn} 并派生锚点——锚点 id 由术语文本规范化而来（转小写、空白折叠为连字符，@code{term-id}），注册进锚点注册表：fragment 链接校验与「术语在哪定义」类查询从此可见。需要显式指定锚点时用 @code{@"@"defn[#:id "…"]{术语}} 覆盖派生值——比如 @defn[#:id "term-anchor-demo"]{显式锚点} 的锚点就是 @code{term-anchor-demo}，而非派生值。锚点逐次派生（@code{make-element} 在调用时校验），同一术语多处定义会共享同一锚点。scheme 侧的 term-definition 关系暂缓，先积累真实查询用例。
+  用法：@code{@"@"defn{术语}}。渲染为 @code{dfn} 并派生锚点——锚点 id 由术语文本规范化而来（转小写、空白折叠为连字符，@code{term-id}），注册进锚点注册表：fragment 链接校验与「术语在哪定义」类查询从此可见。需要显式指定锚点时用 @code{@"@"defn[#:id "…"]{术语}} 覆盖派生值——比如 @defn[#:id "term-anchor-demo"]{显式锚点} 的锚点就是 @code{term-anchor-demo}，而非派生值。锚点逐次派生（@code{make-element} 在调用时校验），同一术语多处定义会共享同一锚点。Forester 从这些定义建立 term-definition 关系；Flora 的术语索引与漂移报告直接查询该关系。
 }
 
 @subtree[#:id "lib-query-markers"]{

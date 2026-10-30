@@ -1,90 +1,70 @@
 @use-commands{flora}
-@use-modules[(flora literate)]
+@use-modules[(lp core) (lp scribble) (lp project) (lp forester) (lp checked)]
 
-@title{文本片段与源码生成}
-@summary{用命名代码片段组织解释，组合为Scheme源码，再独立执行导出的程序。}
+@title{从片段到可运行的 Scheme 模块}
+@summary{使用 LP 片段、显式依赖和模块导出，生成可执行、可核验的程序。}
 @taxon["tutorial"]
 
-文本片段把命名源码字符串组合成外部文件，与@link["lp-0001"]{完整Scheme定义的装配}形成对照。code-chunk不提供程序作用域，程序是否有效由外部运行时判断；站点只展示并输出文本。
+LP 片段保存真实的 Scheme 定义，而不是待拼接的源码字符串。组装程序时，构造器检查片段身份、定义冲突、依赖和导出；模块输出再把程序放进普通 Guile 模块。本文用平方函数展示从定义、装配、核验到导出的完整路径。
 
-这个案例生成squares.scm，独立运行后输出(1 4 9 16)。它说明阅读引用、文本组合和执行是不同的动作；页面标记见@link["lp-results"]{LP结果与依赖说明}。
+@(define square-fragment
+   (code-fragment "square" "平方函数 square"
+     (define (square x)
+       (* x x))))
 
-@(define square
-   (code-chunk "lp-square" "源码文本：平方函数 square"
-     "; 单个数的平方
-(define (square x)
-  (* x x))
-"))
-@(define squares
-   (code-chunk "lp-squares" "源码文本：包含 square 的 squares 定义"
-     square "
-(define (squares xs)
-  (map square xs))
-"))
-@(define program
-   (code-chunk "lp-program" "源码文本：平方列表的独立入口"
-     squares "
-(write (squares '(1 2 3 4)))
-(newline)
-"))
+@(define squares-fragment
+   (code-fragment "squares-definition" "平方列表 squares"
+     #:requires (square)
+     (define (squares xs)
+       (map square xs))))
+
+@(define squares-program
+   (make-program "squares-program" "平方列表"
+     (list square-fragment squares-fragment)
+     '(squares)))
+
+@(define squares-output
+   (make-module-output '(flora examples squares) squares-program))
+
+@(define squares-project
+   (make-project "square-list-project" "平方列表示例"
+     (list squares-output)))
+
+@(define squares-instance
+   (instantiate-project squares-project))
 
 @subtree{
-  @title{平方函数的源码文本片段}
+  @title{片段保留定义和依赖}
 
-  square片段保存平方函数的源码字符串。Code tree的地址可以独立打开、链接或嵌入；声明code-chunk和展示chunk-tree都不执行字符串中的Scheme。
+  @fragment-tree[square-fragment]
 
-  @chunk-tree[square]
+  @fragment-tree[squares-fragment]
+
+  第二个片段声明它需要 @code{square}。构造器会确认这个 binding 确实由程序提供；若缺少定义或定义重复，构造阶段就会失败。
 }
 
 @subtree{
-  @title{平方列表的文本组合与Uses链接}
+  @title{程序与模块边界}
 
-  squares片段的组成值包含square，因此展开文本同时包含两个函数。square的源码变化会影响squares和程序入口的输出；Uses链接来自文本组合中的片段关系，而不是对Scheme调用的分析。
 
-  @chunk-tree[squares]
-
-  平方列表Code tree展示展开后的源码；Uses链接可以回到片段的解释位置。它们也是普通Forester入链，因此会参与backlinks查询。
+  @project-tree[squares-project]
+  程序只导出 @code{squares}。模块以独立的 Guile namespace 实例化，导入和导出边界由模块声明决定；私有定义不会成为公共接口。
 }
+
+@(program-check squares-program
+  (checked-example "lp-squares-check" "squares 对四个整数逐项求平方"
+    ((project-binding squares-instance '(flora examples squares) 'squares)
+     '(1 2 3 4))
+    '(1 4 9 16)))
 
 @subtree{
-  @title{squares.scm的文本输出与独立结果}
+  @title{生成源码文件}
 
-  程序入口加入输入与输出。组合采用精确的文本拼接，片段自己的换行和缩进不会被重新格式化。
+  @project-output[squares-project]
 
-  @chunk-tree[program]
+  输出是普通 Scheme 模块，不依赖 Grove 或 LP 运行库。构建后可从产物目录加载并执行：
 
-  program-code在内容IR中声明squares.scm输出，lp-artifacts renderer从该结构生成文件；@link["lp-program"]{平方列表入口}和代码框显示同一文本：
+  @verbatim{guile --no-auto-compile -L build/programs -c '(use-modules (flora examples squares)) (write (squares (quote (1 2 3 4)))) (newline)'}
 
-  @program-code["squares.scm" program]
-
-  构建产物是@code{build/programs/squares.scm}，可以独立运行：
-
-  @verbatim{guile --no-auto-compile build/programs/squares.scm}
-
-  输出应为@code{(1 4 9 16)}。导出不等于执行：站点构建只生成文件，执行检查在构建之外完成。
-}
-
-@subtree{
-  @title{文本片段的接口与输出约定}
-
-  @code{modules/literate.plant}提供code-chunk、chunk-tree和program-code。片段是不可变的Scheme值，子片段通过值引用组合；所有HTML内容都使用既有subtree、paragraph、link和code-block节点，不需要修改Grove renderer。
-
-  code-chunk接受字符串和已有片段值，文本按参数顺序拼接。这个写法在声明时需要片段值已经可用：
-
-  @code-block[#:language 'scheme]{
-(define helper
-  (code-chunk "lp-helper" "辅助函数"
-    "(define (identity x) x)
-"))
-(define main
-  (code-chunk "lp-main" "入口" helper
-    "(write (identity 42))
-"))
-}
-
-  在文章中调用@code{chunk-tree}展示片段，调用@code{program-code}指定输出文件。展示用的代码框不会执行内容；真正调用code-chunk会创建片段值，字符串内的Scheme定义仍不执行。
-
-  @code{program-code}在code-block上附加项目属性literate-output；(lp forester)的lp-artifacts renderer遍历内容IR生成源码artifact，Flora在project.scm登记它。片段样式通过具名style literate-code与literate-uses接入，继续使用当前日夜配色。
-
-  文本片段的范围是值组合与源码输出，不建立LP实例或检查Scheme binding。引用必须指向已定义的片段值，因此不会出现依赖环；缺失变量会在读取文章时失败。跨文章展示可以使用Forester link或transclude，跨文章的代码值复用则应抽到项目模块中。
+  结果应为 @code{(1 4 9 16)}。站点构建负责生成模块，模块的求值核验则在本文读取时完成。
 }

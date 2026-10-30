@@ -78,7 +78,7 @@
     @item{@code{Program.}／@code{Module.}／@code{Project.}／@code{Example.}／@code{Code.}：LP案例中的taxon标签，表示内容种类而非运行按钮。}
     @item{@code{define-module}（模块文章）：在@code{.plant}中声明真实Scheme模块与公共接口。详见@link["lp-0004"]{模块导入}。}
     @item{@code{project}（工程）：多个计划组成的模块工程；@code{make-project}与@code{instantiate-project}组织并实例化。详见@link["lp-000A"]{多文件工程}。}
-    @item{@code{code-chunk}（文本片段）：命名源码字符串，只做文本组合与输出，不提供作用域。详见@link["lp-0005"]{文本片段组合}。}
+    @item{@code{LP fragment}（LP片段）：包含真实Scheme定义及其依赖声明的不可变值，由program装配并检查。详见@link["lp-0005"]{片段到可运行模块}。}
     @item{@code{program-output}：声明@code{.scm}构建产物并生成Download链接；下载或展示不触发实例化。}
     @item{@code{checked-example}／@code{checked-property}／@code{checked-error}：分别核验值、有限样本性质和异常key。}
   }
