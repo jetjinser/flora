@@ -86,6 +86,16 @@ Grove的数学接口把“作者写下的公式”“公式表达的数学对象
 
   核心@code{math-differentiate}不解析字符串，也不依赖Formula模块；它只消费数学值。这让文本文法可以独立演进，而计算保持稳定的输入契约。
 
+同一篇文章中，若Formula调用和文章命令共享前提，可以用局部作用域声明一次：
+
+@with-assumptions["coordinate(x)"]{
+  @math[(let ((report (φ:differentiate parsed "x")))
+          (math-report-result report))]
+  @differentiate["x" parsed]
+}
+
+两种入口都从当前作用域取得坐标声明；离开这个块后，前提不会继续生效。Formula调用用普通的@code{let}绑定报告，文章命令则直接显示同一公式的推导。
+
 }
 
 @subtree{
