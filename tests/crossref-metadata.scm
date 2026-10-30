@@ -14,12 +14,14 @@
 (define test-bin (string-append test-root "/bin"))
 (define test-metadata (string-append test-root "/metadata/entities"))
 (define fixture-path (string-append test-root "/response.json"))
+(define request-url-log (string-append test-root "/request-url"))
 (define fake-curl (string-append test-bin "/curl"))
 (define updater-path (canonicalize-path "scripts/update-crossref-metadata.scm"))
 (define flora-modules (canonicalize-path "."))
 (define grove-modules (canonicalize-path "../grove/modules"))
 (define original-path (getenv "PATH"))
 (define uri "doi:10.1146/annurev.fluid.29.1.123")
+(define unicode-uri "doi:10.1234/例")
 (define fixture
   "{\"status\":\"ok\",\"message\":{\"DOI\":\"10.1146/annurev.fluid.29.1.123\",\"type\":\"journal-article\",\"title\":[\"QUANTIFICATION OF UNCERTAINTY IN COMPUTATIONAL FLUID DYNAMICS\"],\"author\":[{\"given\":\"P. J.\",\"family\":\"Roache\"}],\"published-print\":{\"date-parts\":[[1997,1]]},\"container-title\":[\"Annual Review of Fluid Mechanics\"],\"publisher\":\"Annual Reviews\"}}")
 (define mismatched-fixture
@@ -37,7 +39,7 @@
 
 (define (install-copying-curl)
   (install-fake-curl
-    "output=\nwhile [ $# -gt 0 ]; do\n  if [ \"$1\" = --output ]; then shift; output=$1; fi\n  shift\ndone\ncp \"$FLORA_CROSSREF_FIXTURE\" \"$output\""))
+    "output=\nwhile [ $# -gt 0 ]; do\n  case \"$1\" in https://*) printf '%s\\n' \"$1\" > \"$FLORA_CROSSREF_REQUEST_URL_LOG\";; esac\n  if [ \"$1\" = --output ]; then shift; output=$1; fi\n  shift\ndone\ncp \"$FLORA_CROSSREF_FIXTURE\" \"$output\""))
 
 (define (run-updater)
   (chdir test-root)
@@ -62,6 +64,7 @@
     (mkdir test-metadata)
     (setenv "PATH" (string-append test-bin ":" original-path))
     (setenv "FLORA_CROSSREF_FIXTURE" fixture-path)
+    (setenv "FLORA_CROSSREF_REQUEST_URL_LOG" request-url-log)
     (install-copying-curl)
     (write-text fixture-path fixture))
   (lambda ()
@@ -97,11 +100,26 @@
         (test-equal "mismatched DOI leaves prior snapshot intact"
           snapshot-bytes (read-text snapshot-path))
         (test-equal "mismatched DOI leaves prior index intact"
-          index-bytes (read-text index-path)))))
+          index-bytes (read-text index-path))))
+    (set! uri unicode-uri)
+    (write-text fixture-path
+      "{\"status\":\"ok\",\"message\":{\"DOI\":\"10.1234/例\",\"title\":[\"Unicode Crossref record\"]}}")
+    (install-copying-curl)
+    (test-assert "Unicode DOI refresh succeeds through Crossref" (zero? (run-updater)))
+    (let ((snapshot (indexed-snapshot)))
+      (test-equal "Crossref request URL percent-encodes Unicode"
+        "https://api.crossref.org/works/10.1234/%E4%BE%8B"
+        (string-trim-both (call-with-input-file request-url-log get-string-all)))
+      (test-equal "Crossref snapshot retains authored Unicode IRI"
+        unicode-uri (assoc-ref snapshot 'uri))
+      (test-equal "Crossref provenance uses the encoded request URL"
+        "https://api.crossref.org/works/10.1234/%E4%BE%8B"
+        (assoc-ref snapshot 'source))))
   (lambda ()
     (chdir original-directory)
     (if original-path (setenv "PATH" original-path) (unsetenv "PATH"))
     (unsetenv "FLORA_CROSSREF_FIXTURE")
+    (unsetenv "FLORA_CROSSREF_REQUEST_URL_LOG")
     (system* "rm" "-rf" test-root)))
 
 (define failures (test-runner-fail-count (test-runner-current)))

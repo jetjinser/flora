@@ -6,7 +6,9 @@
 
 (use-modules (ice-9 ftw)
              (ice-9 textual-ports)
+             (flora private doi)
              (srfi srfi-1)
+             (srfi srfi-13)
              (srfi srfi-64))
 
 (define original-directory (getcwd))
@@ -15,12 +17,14 @@
 (define test-metadata (string-append test-root "/metadata/entities"))
 (define fixture-path (string-append test-root "/response.json"))
 (define temporary-path-log (string-append test-root "/temporary-path"))
+(define request-url-log (string-append test-root "/request-url"))
 (define fake-curl (string-append test-bin "/curl"))
 (define updater-path (canonicalize-path "scripts/update-doi-metadata.scm"))
 (define flora-modules (canonicalize-path "."))
 (define grove-modules (canonicalize-path "../grove/modules"))
 (define original-path (getenv "PATH"))
 (define uri "doi:10.1234/grove-test")
+(define unicode-uri "doi:10.1234/例")
 (define https-uri "https://example.org/publication/42")
 (define https-snapshot-path "metadata/entities/https-fixture.scm")
 
@@ -44,7 +48,7 @@
   (chmod fake-curl #o755))
 
 (define curl-arguments
-  "output=\nwhile [ $# -gt 0 ]; do\n  if [ \"$1\" = --output ]; then shift; output=$1; fi\n  shift\ndone\nprintf '%s\\n' \"$output\" > \"$FLORA_DOI_TEMP_PATH_LOG\"\n")
+  "output=\nwhile [ $# -gt 0 ]; do\n  case \"$1\" in https://*) printf '%s\\n' \"$1\" > \"$FLORA_DOI_REQUEST_URL_LOG\";; esac\n  if [ \"$1\" = --output ]; then shift; output=$1; fi\n  shift\ndone\nprintf '%s\\n' \"$output\" > \"$FLORA_DOI_TEMP_PATH_LOG\"\n")
 
 (define (install-copying-curl)
   (install-fake-curl
@@ -90,9 +94,33 @@
     (setenv "PATH" (string-append test-bin ":" original-path))
     (setenv "FLORA_DOI_FIXTURE" fixture-path)
     (setenv "FLORA_DOI_TEMP_PATH_LOG" temporary-path-log)
+    (setenv "FLORA_DOI_REQUEST_URL_LOG" request-url-log)
     (install-copying-curl)
-    (write-text fixture-path vector-record))
+    (write-text fixture-path vector-record)
+    (test-equal "Unicode DOI IRI yields its authored DOI name"
+      "10.1234/例" (doi-iri-name unicode-uri))
+    (test-equal "escaped reserved path characters remain escaped"
+      "https://doi.org/10.1234/a%3Fb"
+      (doi-request-url "https://doi.org/"
+        (doi-iri-name "doi:10.1234/a%3Fb")))
+    (test-equal "raw query syntax is not accepted as part of a DOI name"
+      #f (doi-iri-name "doi:10.1234/a?b"))
+    (test-assert "DOI comparison folds ASCII only"
+      (doi-name=? "10.1234/ABC例" "10.1234/abc例"))
+    (test-assert "DOI comparison does not fold Unicode letters"
+      (not (doi-name=? "10.1234/Ä" "10.1234/ä")))
+    (write-text fixture-path
+      "{\"DOI\":\"10.1234/例\",\"title\":[\"Unicode DOI record\"]}")
+    (set! uri unicode-uri))
   (lambda ()
+    (test-assert "Unicode DOI refresh succeeds offline" (zero? (run-updater)))
+    (test-equal "Unicode DOI is UTF-8 percent-encoded for HTTP"
+      "https://doi.org/10.1234/%E4%BE%8B"
+      (string-trim-both (read-text request-url-log)))
+    (test-equal "Unicode request preserves authored IRI in snapshot"
+      unicode-uri (assoc-ref (indexed-snapshot) 'uri))
+    (set! uri "doi:10.1234/grove-test")
+    (write-text fixture-path vector-record)
     (test-assert "vector CSL fixture produces a snapshot" (zero? (run-updater)))
     (let* ((snapshot (indexed-snapshot))
            (path (snapshot-path))
@@ -174,6 +202,7 @@
     (if original-path (setenv "PATH" original-path) (unsetenv "PATH"))
     (unsetenv "FLORA_DOI_FIXTURE")
     (unsetenv "FLORA_DOI_TEMP_PATH_LOG")
+    (unsetenv "FLORA_DOI_REQUEST_URL_LOG")
     (system* "rm" "-rf" test-root)))
 
 (define failures (+ (test-runner-fail-count (test-runner-current))

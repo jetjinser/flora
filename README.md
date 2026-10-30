@@ -69,6 +69,10 @@ reads only these local snapshots and does not access the network. An unchanged
 metadata response leaves its snapshot untouched, so it does not trigger an
 unnecessary Grove rebuild. All three adapters share the same snapshot writer;
 source-specific response validation and field mapping stay in each adapter.
+DOI names may contain Unicode in these `doi:` IRIs; the refresh commands
+percent-encode them as UTF-8 only for the HTTP request and keep the authored
+IRI as the snapshot key. Encode literal `?` or `#` in a DOI name as `%3F` or
+`%23`, since unescaped forms delimit the IRI query or fragment.
 `captured-at` marks when the stored metadata was captured or last changed.
 Failed requests and invalid or mismatched records produce a concise error and
 leave the previous snapshot intact. The reference page title and text remain

@@ -4,7 +4,8 @@
 ;;; Refresh a citation snapshot from Crossref's public REST API. Site builds
 ;;; only read the resulting Scheme data; they never contact Crossref.
 
-(use-modules (flora entity-snapshot)
+(use-modules (flora private doi)
+             (flora entity-snapshot)
              (ice-9 format)
              (ice-9 textual-ports)
              (json)
@@ -21,23 +22,15 @@
   (command-error "usage: update-crossref-metadata.scm doi:10.../..."))
 
 (define uri (car arguments))
-(unless (string-prefix? "doi:" uri)
-  (command-error (format #f "expected a DOI URI beginning with doi: ~s" uri)))
-(define doi (substring uri 4))
-(unless (and (string-prefix? "10." doi)
-             (string-index doi #\/)
-             (string-every
-               (lambda (character)
-                 (or (char-alphabetic? character)
-                     (char-numeric? character)
-                     (memv character '(#\. #\/ #\- #\_ #\~ #\! #\$ #\&
-                                       #\' #\( #\) #\* #\+ #\, #\; #\= #\@))))
-               doi))
-  (command-error (format #f "DOI contains unsupported URI path characters: ~s" doi)))
+(define doi (doi-iri-name uri))
+(unless doi
+  (command-error
+    (format #f "expected a valid doi: IRI with a 10.xxxx/... name: ~s" uri)))
 
 (define temporary-path
   (format #f "/tmp/flora-crossref-~a.json" (getpid)))
-(define api-url (string-append "https://api.crossref.org/works/" doi))
+(define api-url
+  (doi-request-url "https://api.crossref.org/works/" doi))
 
 (define (update-error message)
   (throw 'update-error message))
@@ -100,7 +93,7 @@
          (record-doi (field record "DOI"))
          (title (first-string (field record "title")))
          (record-authors (authors record)))
-    (unless (and (string? record-doi) (string-ci=? doi record-doi)
+    (unless (and (string? record-doi) (doi-name=? doi record-doi)
                  title (not (string-null? title)))
       (update-error
         (format #f "Crossref response DOI ~s did not match ~a or had no title"
