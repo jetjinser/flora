@@ -194,13 +194,14 @@
 
 }
 
+@with-assumptions["coordinate(x)"]{
 @subtree{
   @title{手写一条链}
   @taxon["example"]
 
   对于教学或解释，也可以亲自列出每一步。下面刻意拆开幂法则、常数倍和常数导数：
 
-  @check-derive[#:assumptions "coordinate(x)" #:view 'full]{
+  @check-derive[#:view 'full]{
     differentiate(x^3,x)
     3*x^2*differentiate(x,x)
     3*x^2*1
@@ -217,10 +218,11 @@
 
   有时作者知道想要的结论，却不想手工写所有步骤：
 
-  @search-derive["1" #:assumptions "coordinate(x)" #:max-depth 4]{differentiate(x,x)}
+  @search-derive["1" #:max-depth 4]{differentiate(x,x)}
 
-  命令从左侧源项搜索到目标项，并展示找到的证书。这个最小例子找到从形式导数到1的规则路径；上面的多项式则使用确定性的求导pass。通用搜索面对分支较多的项可能触及状态上限，搜索停止不等同于数学上的不可达证明。
+  这两个命令共享外层声明的坐标前提；搜索从左侧源项到目标项，并展示找到的证书。这个最小例子找到从形式导数到1的规则路径；上面的多项式则使用确定性的求导pass。通用搜索面对分支较多的项可能触及状态上限，搜索停止不等同于数学上的不可达证明。
 
+}
 }
 
 @subtree{
