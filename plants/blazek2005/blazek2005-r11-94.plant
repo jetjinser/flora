@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{McMorris, H.; Kallinderis, Y.: A Combined Octree-Advancing Front Method for Tetrahedra and Anisotropic Surface Meshes. AIAA Paper 96-2442, 1996.}
 @taxon["reference"]

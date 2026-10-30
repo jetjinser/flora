@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Hoffman, J.D.: Relationship between the Truncation Errors of Centered Finite-Difference Approximations on Uniform and Nonuniform Meshes. J. Computational Physics, 46 (1982), pp. 464-474.}
 @taxon["reference"]

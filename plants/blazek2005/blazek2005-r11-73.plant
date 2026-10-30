@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Babuška, I.; Aziz, A.K.: On the Angle Condition in the Finite-Element Method. SIAM J. Numerical Analysis, 13 (1976), pp. 214-226.}
 @taxon["reference"]

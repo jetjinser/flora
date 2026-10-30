@@ -7,6 +7,7 @@
 [ ] JMS Forester's Canonical URI? Canonical URIs could give pages in independent forests a shared identity. This would make cross-forest links unambiguous; exchanging backlinks would additionally require a way to publish or query relations, while transclusion would require a content-fetching and format convention.
 [ ] Optional Scheme CSS DSL for user-defined components: compose and compute styles as ordinary values, emit CSS through the existing style API, and keep plain CSS available.
 [ ] Interactive knowledge graph as a view of Grove relations: explore the context of an article or a query-defined topic, distinguish links, transclusion and tree containment, and make each connection explainable. Authors could embed these views in plants alongside ordinary query results. Keep content and relations as the source of truth; RDF may be useful for interchange later, but is not required for this view.
+[ ] Assess Scribble-compatible deindentation for textual blocks in Grove; keep it in the parser rather than special-casing `@bi`.
 [x] strip fonts automaticaly
 [x] Gemini Protocol
 [x] SSH access?

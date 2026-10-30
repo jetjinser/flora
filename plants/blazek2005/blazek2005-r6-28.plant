@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Gibbs, N.E.; Poole, W.G.; Stockmeyer, P.K.: An Algorithm for Reducing the Bandwidth and Profile of a Sparse Matrix. SIAM J. Numer. Anal., 13 (1976), pp. 236-250.}
 @taxon["reference"]

@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Mavriplis, D.J.: Revisiting the Least-Squares Procedure for Gradient Reconstruction on Unstructured Meshes. AIAA Paper 2003-3986, 2003.}
 @taxon["reference"]

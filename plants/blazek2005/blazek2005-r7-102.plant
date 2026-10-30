@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Mittal, R.; Moin, P.: Suitability of Upwind-Biased Finite Difference Schemes for Large-Eddy Simulation of Turbulent Flows. AIAA Journal, 35 (1997), pp. 1415-1417.}
 @taxon["reference"]

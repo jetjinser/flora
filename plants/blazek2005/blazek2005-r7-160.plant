@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Hamba, F.: A Hybrid RANS/LES Simulation of Turbulent Channel Flow. Theoret. Comput. Fluid Dynamics, 16 (2003), pp. 387-403.}
 @taxon["reference"]

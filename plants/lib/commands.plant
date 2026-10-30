@@ -1,6 +1,6 @@
 @(define-module (flora commands)
   #:use-module (forester commands)
-  #:use-module (forester i18n)
+  #:use-module ((forester i18n) #:select (bilingual lang))
   #:use-module (language scribble command)
   #:use-module (grove render html element)
   #:use-module (grove ir)
@@ -53,19 +53,14 @@ defaults the kind to span, which the lift would never see."
 @(define-public (bi . body)
    "Fold a Flora English–Chinese pair, showing the Chinese translation.
 Write @bi{source}{translation}; each body is ordinary Scribble content.
-Explicit @lang lanes remain accepted for richly structured or other-language
-pairs, and @bilingual is available for the full Forester interface."
-   (let* ((content (command-body body))
-          (pair (filter (lambda (item)
-                          (not (and (string? item)
-                                    (string-every char-whitespace? item))))
-                        content)))
-     (if (and (not (any keyword? body))
-              (= (length pair) 2)
-              (not (and (bilingual-lane? (car pair))
-                        (bilingual-lane? (cadr pair)))))
-         (bilingual (lang "en" (car pair)) (lang "zh-Hans" (cadr pair)))
-         (apply bilingual body))))
+Use @bilingual and @lang for other language pairs or explicit lane structure."
+   (let ((pair (filter (lambda (item)
+                         (not (and (string? item)
+                                   (string-every char-whitespace? item))))
+                       (command-body body))))
+     (unless (= (length pair) 2)
+       (error "@bi requires an English source and a Chinese translation"))
+     (bilingual (lang "en" (car pair)) (lang "zh-Hans" (cadr pair)))))
 
 @(define-public (emph . body)
    (set! body (command-body body))
@@ -122,7 +117,7 @@ know at authoring time."
 @summary{全站共用内容命令的定义与用法：双语块、作者标注、语义插图、边注与术语定义。}
 @taxon["reference"]
 
-本模块是 Flora 的命令词汇表，各页面在 @code{use-modules} 中引入 @code{(flora commands)}。本页逐个说明命令的来源与用法；定义在各节的说明之后，构建时求值。转发自 Grove/Forester 原语的命令（@code{image}、@code{tag}、@code{taxon}、@code{title}、@code{subtree}、@code{transclude}、@code{summary}、@code{published}、@code{updated}、@code{bilingual}、@code{lang}、@code{term}）本页不再重复，另见 @link["grove"]{Grove 文档}。
+本模块是 Flora 的命令词汇表，各页面在 @code{use-modules} 中引入 @code{(flora commands)}。本页逐个说明命令的来源与用法；定义在各节的说明之后，构建时求值。直接转出自 Grove/Forester 的命令（@code{image}、@code{tag}、@code{taxon}、@code{title}、@code{subtree}、@code{transclude}、@code{summary}、@code{published}、@code{updated}、@code{bilingual}、@code{lang}）本页不再重复，另见 @link["grove"]{Grove 文档}。@code{term} 则由 Flora 基于 Forester 的关系实现，见下文。
 
 @subtree[#:id "lib-bi"]{
   @title{bi：段落级双语折叠块}

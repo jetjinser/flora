@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Favre, A.: Equations des gaz turbulents compressibles, part 2: méthode des vitesses moyennes; méthode des vitesses moyennes pondérées par la masse volumique. Journal de Mécanique 4 (1965), pp. 391-421.}
 @taxon["reference"]

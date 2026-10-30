@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Elementary Rules of Usage 第一章 英语用法的基本规则}
 @summary{十一条基本用法规则：所有格、逗号、插入语、从句、代词格与主谓一致等。}
@@ -8,8 +7,9 @@
   @title{规则1 名词所有格单数加's}
 
   @bi{
-    @lang["en"]{Form the possessive singular of nouns by adding 's. Follow this rule whatever the final consonant. Thus write,}
-    @lang["zh-Hans"]{单数名词构成所有格时加@code{'s}。无论词尾是什么辅音字母，都遵循这一规则。因此写：}
+    Form the possessive singular of nouns by adding 's. Follow this rule whatever the final consonant. Thus write,
+  }{
+    单数名词构成所有格时加@code{'s}。无论词尾是什么辅音字母，都遵循这一规则。因此写：
   }
 
   @itemize{
@@ -19,15 +19,17 @@
   }
 
   @bi{
-    @lang["en"]{Exceptions are the possessives of ancient proper names ending in @emph{-es} and @emph{-is}, the possessive @emph{Jesus'}, and such forms as @emph{for conscience' sake, for righteousness' sake}. But such forms as @emph{Moses' Laws, Isis' temple} are commonly replaced by
-the laws of Moses
-the temple of Isis}
-    @lang["zh-Hans"]{例外情况是以@emph{-es}和@emph{-is}结尾的古代专有名词的所有格、所有格@code{Jesus'}，以及@emph{for conscience' sake}、@emph{for righteousness' sake}这类形式。但@emph{Moses' Laws}、@emph{Isis' temple}这类形式通常被替换为the laws of Moses和the temple of Isis。}
+    Exceptions are the possessives of ancient proper names ending in @emph{-es} and @emph{-is}, the possessive @emph{Jesus'}, and such forms as @emph{for conscience' sake, for righteousness' sake}. But such forms as @emph{Moses' Laws, Isis' temple} are commonly replaced by
+    the laws of Moses
+    the temple of Isis
+  }{
+    例外情况是以@emph{-es}和@emph{-is}结尾的古代专有名词的所有格、所有格@code{Jesus'}，以及@emph{for conscience' sake}、@emph{for righteousness' sake}这类形式。但@emph{Moses' Laws}、@emph{Isis' temple}这类形式通常被替换为the laws of Moses和the temple of Isis。
   }
 
   @bi{
-    @lang["en"]{The pronominal possessives @emph{hers}, @emph{its}, @emph{theirs}, @emph{yours}, and @emph{ours} have no apostrophe. Indefinite pronouns, however, use the apostrophe to show possession.}
-    @lang["zh-Hans"]{代词性所有格@emph{hers}、@emph{its}、@emph{theirs}、@emph{yours}和@emph{ours}不带撇号。不过，不定代词用撇号表示所有格。}
+    The pronominal possessives @emph{hers}, @emph{its}, @emph{theirs}, @emph{yours}, and @emph{ours} have no apostrophe. Indefinite pronouns, however, use the apostrophe to show possession.
+  }{
+    代词性所有格@emph{hers}、@emph{its}、@emph{theirs}、@emph{yours}和@emph{ours}不带撇号。不过，不定代词用撇号表示所有格。
   }
 
   @itemize{
@@ -36,8 +38,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{A common error is to write @emph{it's} for @emph{its}, or vice versa. The first is a contraction, meaning "it is." The second is a possessive.}
-    @lang["zh-Hans"]{一个常见的错误是把@code{its}写成@code{it's}，或者反过来。前者是缩略形式，意思是it is。后者是名词所有格。}
+    A common error is to write @emph{it's} for @emph{its}, or vice versa. The first is a contraction, meaning "it is." The second is a possessive.
+  }{
+    一个常见的错误是把@code{its}写成@code{it's}，或者反过来。前者是缩略形式，意思是it is。后者是名词所有格。
   }
 
   @blockquote{It's a wise dog that scratches its own fleas.}
@@ -47,8 +50,9 @@ the temple of Isis}
   @title{规则2 三项或以上并列时，除最后一项外每项后加逗号}
 
   @bi{
-    @lang["en"]{In a series of three or more terms with a single conjunction, use a comma after each term except the last. Thus write,}
-    @lang["zh-Hans"]{在由单个连词连接的三个或更多项组成的系列中，除最后一项外，每一项后都用逗号。因此写：}
+    In a series of three or more terms with a single conjunction, use a comma after each term except the last. Thus write,
+  }{
+    在由单个连词连接的三个或更多项组成的系列中，除最后一项外，每一项后都用逗号。因此写：
   }
 
   @itemize{
@@ -59,13 +63,15 @@ the temple of Isis}
   @blockquote{He opened the letter, read it, and made a note of its contents.}
 
   @bi{
-    @lang["en"]{This comma is often referred to as the "serial" comma.}
-    @lang["zh-Hans"]{这个逗号常被称为“serial”逗号。}
+    This comma is often referred to as the "serial" comma.
+  }{
+    这个逗号常被称为“serial”逗号。
   }
 
   @bi{
-    @lang["en"]{In the names of business firms the last comma is usually omitted. Follow the usage of the individual firm.}
-    @lang["zh-Hans"]{在商号名称中，最后一个逗号通常省略。按各个商号自身的用法来写。}
+    In the names of business firms the last comma is usually omitted. Follow the usage of the individual firm.
+  }{
+    在商号名称中，最后一个逗号通常省略。按各个商号自身的用法来写。
   }
 
   @itemize{
@@ -80,8 +86,9 @@ the temple of Isis}
   @blockquote{The best way to see a country, unless you are pressed for time, is to travel on foot.}
 
   @bi{
-    @lang["en"]{This rule is difficult to apply; it is frequently hard to decide whether a single word, such as @emph{however}, or a brief phrase is or is not parenthetic. If the interruption to the flow of the sentence is but slight, the commas may be safely omitted. But whether the interruption is slight or considerable, never omit one comma and leave the other. There is no defense for such punctuation as}
-    @lang["zh-Hans"]{这条规则难以运用；常常很难判断某个单词（例如@emph{however}）或某个简短短语究竟是不是插入语。如果对句子连贯性的打断很轻微，逗号可以稳妥地省略。但无论打断是轻微还是显著，都绝不能只省略一个逗号而留下另一个。下面这类标点是站不住脚的：}
+    This rule is difficult to apply; it is frequently hard to decide whether a single word, such as @emph{however}, or a brief phrase is or is not parenthetic. If the interruption to the flow of the sentence is but slight, the commas may be safely omitted. But whether the interruption is slight or considerable, never omit one comma and leave the other. There is no defense for such punctuation as
+  }{
+    这条规则难以运用；常常很难判断某个单词（例如@emph{however}）或某个简短短语究竟是不是插入语。如果对句子连贯性的打断很轻微，逗号可以稳妥地省略。但无论打断是轻微还是显著，都绝不能只省略一个逗号而留下另一个。下面这类标点是站不住脚的：
   }
 
   @itemize{
@@ -90,8 +97,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Dates usually contain parenthetic words or figures. Punctuate as follows:}
-    @lang["zh-Hans"]{日期通常含有插入性的词语或数字。标点如下：}
+    Dates usually contain parenthetic words or figures. Punctuate as follows:
+  }{
+    日期通常含有插入性的词语或数字。标点如下：
   }
 
   @itemize{
@@ -101,20 +109,23 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Note that it is customary to omit the comma in}
-    @lang["zh-Hans"]{注意，在以下写法中通常省略逗号：}
+    Note that it is customary to omit the comma in
+  }{
+    注意，在以下写法中通常省略逗号：
   }
 
   @blockquote{6 April 1988}
 
   @bi{
-    @lang["en"]{The last form is an excellent way to write a date; the figures are separated by a word and are, for that reason, quickly grasped.}
-    @lang["zh-Hans"]{最后这种写法是书写日期的绝佳方式；数字之间被一个单词隔开，因此能迅速看懂。}
+    The last form is an excellent way to write a date; the figures are separated by a word and are, for that reason, quickly grasped.
+  }{
+    最后这种写法是书写日期的绝佳方式；数字之间被一个单词隔开，因此能迅速看懂。
   }
 
   @bi{
-    @lang["en"]{A name or a title in direct address is parenthetic.}
-    @lang["zh-Hans"]{直接称呼中的名字或头衔是插入语。}
+    A name or a title in direct address is parenthetic.
+  }{
+    直接称呼中的名字或头衔是插入语。
   }
 
   @itemize{
@@ -123,8 +134,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{The abbreviations @emph{etc.}, @emph{i.e.}, and @emph{e.g.}, the abbreviations for academic degrees, and titles that follow a name are parenthetic and should be punctuated accordingly.}
-    @lang["zh-Hans"]{缩写@emph{etc.}、@emph{i.e.}和@emph{e.g.}、学位的缩写，以及跟在名字后面的头衔，都是插入语，应当相应地加标点。}
+    The abbreviations @emph{etc.}, @emph{i.e.}, and @emph{e.g.}, the abbreviations for academic degrees, and titles that follow a name are parenthetic and should be punctuated accordingly.
+  }{
+    缩写@emph{etc.}、@emph{i.e.}和@emph{e.g.}、学位的缩写，以及跟在名字后面的头衔，都是插入语，应当相应地加标点。
   }
 
   @itemize{
@@ -135,8 +147,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{No comma, however, should separate a noun from a restrictive term of identification.}
-    @lang["zh-Hans"]{然而，逗号不应把名词与限制性的身份说明分开。}
+    No comma, however, should separate a noun from a restrictive term of identification.
+  }{
+    然而，逗号不应把名词与限制性的身份说明分开。
   }
 
   @itemize{
@@ -147,15 +160,17 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Although @emph{Junior}, with its abbreviation @emph{Jr.}, has commonly been regarded as parenthetic, logic suggests that it is, in fact, restrictive and therefore not in need of a comma.}
-    @lang["zh-Hans"]{尽管@emph{Junior}及其缩写@emph{Jr.}通常被视为插入语，但逻辑表明它实际上是限制性的，因此不需要逗号。}
+    Although @emph{Junior}, with its abbreviation @emph{Jr.}, has commonly been regarded as parenthetic, logic suggests that it is, in fact, restrictive and therefore not in need of a comma.
+  }{
+    尽管@emph{Junior}及其缩写@emph{Jr.}通常被视为插入语，但逻辑表明它实际上是限制性的，因此不需要逗号。
   }
 
   @blockquote{James Wright Jr.}
 
   @bi{
-    @lang["en"]{Nonrestrictive relative clauses are parenthetic, as @emph{are} similar clauses introduced by conjunctions indicating @emph{time} or place. Commas are therefore needed. A nonrestrictive clause is one that does not serve to identify or define the @emph{antecedent} noun.}
-    @lang["zh-Hans"]{非限制性关系从句是插入语，由表示时间或地点的连词引导的类似从句也是如此。因此需要用逗号。非限制性从句是指不用于识别或限定先行词名词的从句。}
+    Nonrestrictive relative clauses are parenthetic, as @emph{are} similar clauses introduced by conjunctions indicating @emph{time} or place. Commas are therefore needed. A nonrestrictive clause is one that does not serve to identify or define the @emph{antecedent} noun.
+  }{
+    非限制性关系从句是插入语，由表示时间或地点的连词引导的类似从句也是如此。因此需要用逗号。非限制性从句是指不用于识别或限定先行词名词的从句。
   }
 
   @itemize{
@@ -165,8 +180,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{In these sentences, the clauses introduced by @emph{which}, @emph{when}, and @emph{where} are nonrestrictive; they do not limit or define, they merely add something. In the first example, the clause introduced by @emph{which} does not serve to tell which of several possible audiences is meant; the reader presumably knows that already. The clause adds, parenthetically, a statement supplementing that in the main clause. Each of the three sentences is a combination of two statements that might have been made independently.}
-    @lang["zh-Hans"]{在这些句子中，由@emph{which}、@emph{when}和@emph{where}引导的从句是非限制性的；它们不限定也不定义，只是增添一些内容。在第一个例子中，由@emph{which}引导的从句并不用于说明几个可能的听众中指的是哪一个；读者想必已经知道。这个从句以插入的方式，补充了主句所陈述的内容。这三个句子中的每一个，都是两个本可以独立陈述的句子的组合。}
+    In these sentences, the clauses introduced by @emph{which}, @emph{when}, and @emph{where} are nonrestrictive; they do not limit or define, they merely add something. In the first example, the clause introduced by @emph{which} does not serve to tell which of several possible audiences is meant; the reader presumably knows that already. The clause adds, parenthetically, a statement supplementing that in the main clause. Each of the three sentences is a combination of two statements that might have been made independently.
+  }{
+    在这些句子中，由@emph{which}、@emph{when}和@emph{where}引导的从句是非限制性的；它们不限定也不定义，只是增添一些内容。在第一个例子中，由@emph{which}引导的从句并不用于说明几个可能的听众中指的是哪一个；读者想必已经知道。这个从句以插入的方式，补充了主句所陈述的内容。这三个句子中的每一个，都是两个本可以独立陈述的句子的组合。
   }
 
   @itemize{
@@ -176,15 +192,17 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Restrictive clauses, by contrast, are not parenthetic and are not set off by commas. Thus,}
-    @lang["zh-Hans"]{相反，限制性从句不是插入语，不用逗号隔开。因此：}
+    Restrictive clauses, by contrast, are not parenthetic and are not set off by commas. Thus,
+  }{
+    相反，限制性从句不是插入语，不用逗号隔开。因此：
   }
 
   @blockquote{People who live in glass houses shouldn't throw stones.}
 
   @bi{
-    @lang["en"]{Here the clause introduced by @emph{who} does serve to tell which people are meant; the sentence, unlike the sentences above, cannot be split into two independent statements. The same principle of comma use applies to participial phrases and to appositives.}
-    @lang["zh-Hans"]{这里由@emph{who}引导的从句确实用于说明指的是哪些人；这个句子与上面的句子不同，无法拆成两个独立陈述。同一条逗号使用原则也适用于分词短语和同位语。}
+    Here the clause introduced by @emph{who} does serve to tell which people are meant; the sentence, unlike the sentences above, cannot be split into two independent statements. The same principle of comma use applies to participial phrases and to appositives.
+  }{
+    这里由@emph{who}引导的从句确实用于说明指的是哪些人；这个句子与上面的句子不同，无法拆成两个独立陈述。同一条逗号使用原则也适用于分词短语和同位语。
   }
 
   @itemize{
@@ -195,8 +213,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{When the main clause of a sentence is preceded by a phrase or a subordinate clause, use a comma to set off these elements.}
-    @lang["zh-Hans"]{当句子的主句前面有短语或从属子句时，用逗号把这些成分隔开。}
+    When the main clause of a sentence is preceded by a phrase or a subordinate clause, use a comma to set off these elements.
+  }{
+    当句子的主句前面有短语或从属子句时，用逗号把这些成分隔开。
   }
 
   @blockquote{Partly by hard fighting, partly by diplomatic skill, they enlarged their dominions to the east and rose to royal rank with the possession of Sicily.}
@@ -211,20 +230,23 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Two-part sentences of which the second member is introduced by @emph{as} (in the sense of "because"), @emph{for}, @emph{or}, @emph{nor}, or @emph{while} (in the sense of "and at the same time") likewise require a comma before the conjunction.}
-    @lang["zh-Hans"]{由@emph{as}（意为because）、@emph{for}、@emph{or}、@emph{nor}或@emph{while}（意为and at the same time）引导第二部分的两部分句子，同样需要在连词前加逗号。}
+    Two-part sentences of which the second member is introduced by @emph{as} (in the sense of "because"), @emph{for}, @emph{or}, @emph{nor}, or @emph{while} (in the sense of "and at the same time") likewise require a comma before the conjunction.
+  }{
+    由@emph{as}（意为because）、@emph{for}、@emph{or}、@emph{nor}或@emph{while}（意为and at the same time）引导第二部分的两部分句子，同样需要在连词前加逗号。
   }
 
   @bi{
-    @lang["en"]{If a dependent clause, or an introductory phrase requiring to be set off by a comma, precedes the second independent clause, no comma is needed after the conjunction.}
-    @lang["zh-Hans"]{如果一个从属子句，或一个需要用逗号隔开的引导性短语，位于第二个独立子句之前，那么连词后就不需要逗号。}
+    If a dependent clause, or an introductory phrase requiring to be set off by a comma, precedes the second independent clause, no comma is needed after the conjunction.
+  }{
+    如果一个从属子句，或一个需要用逗号隔开的引导性短语，位于第二个独立子句之前，那么连词后就不需要逗号。
   }
 
   @blockquote{The situation is perilous, but if we are prepared to act promptly, there is still one chance of escape.}
 
   @bi{
-    @lang["en"]{When the subject is the same for both clauses and is expressed only once, a comma is useful if the connective is @emph{but}. When the connective is @emph{and}, the comma should be omitted if the relation between the two statements is close or immediate.}
-    @lang["zh-Hans"]{当两个子句的主语相同且只出现一次时，如果连接词是@emph{but}，逗号有用。当连接词是@emph{and}时，如果两个陈述之间的关系紧密或直接，就应省略逗号。}
+    When the subject is the same for both clauses and is expressed only once, a comma is useful if the connective is @emph{but}. When the connective is @emph{and}, the comma should be omitted if the relation between the two statements is close or immediate.
+  }{
+    当两个子句的主语相同且只出现一次时，如果连接词是@emph{but}，逗号有用。当连接词是@emph{and}时，如果两个陈述之间的关系紧密或直接，就应省略逗号。
   }
 
   @itemize{
@@ -237,8 +259,9 @@ the temple of Isis}
   @title{规则5 不要用逗号连接独立子句}
 
   @bi{
-    @lang["en"]{If two or more clauses grammatically complete and not joined by a conjunction are to form a single compound sentence, the proper mark of punctuation is a semicolon.}
-    @lang["zh-Hans"]{如果两个或更多语法上完整、且未由连词连接的子句要构成一个复合句，恰当的标点符号是分号。}
+    If two or more clauses grammatically complete and not joined by a conjunction are to form a single compound sentence, the proper mark of punctuation is a semicolon.
+  }{
+    如果两个或更多语法上完整、且未由连词连接的子句要构成一个复合句，恰当的标点符号是分号。
   }
 
   @itemize{
@@ -247,15 +270,17 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{It is, of course, equally correct to write each of these as two sentences, replacing the semicolons with periods.}
-    @lang["zh-Hans"]{当然，把这两句各写成两个句子、用句号代替分号，也同样正确。}
+    It is, of course, equally correct to write each of these as two sentences, replacing the semicolons with periods.
+  }{
+    当然，把这两句各写成两个句子、用句号代替分号，也同样正确。
   }
 
   @blockquote{Mary Shelley's works are entertaining. They are full of engaging ideas. It is nearly half past five. We cannot reach town before dark.}
 
   @bi{
-    @lang["en"]{If a conjunction is inserted, the proper mark is a comma. (Rule 4.)}
-    @lang["zh-Hans"]{如果插入一个连词，恰当的标点就是逗号。（见@link["strunk1999-rule-4"]{规则4}。）}
+    If a conjunction is inserted, the proper mark is a comma. (Rule 4.)
+  }{
+    如果插入一个连词，恰当的标点就是逗号。（见@link["strunk1999-rule-4"]{规则4}。）
   }
 
   @itemize{
@@ -264,20 +289,23 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{A comparison of the three forms given above will show clearly the advantage of the first. It is, at least in the examples given, better than the second form because it suggests the close relationship between the two statements in a way that the second does not attempt, and better than the third because it is briefer and therefore more forcible. Indeed, this simple method of indicating relationship between statements is one of the most useful devices of composition. The relationship, as above, is commonly one of cause and consequence.}
-    @lang["zh-Hans"]{把上面给出的三种形式比较一下，就能清楚看出第一种的优点。至少在上面这些例子里，它比第二种好，因为它以第二种形式根本不去尝试的方式，暗示了两个陈述之间的紧密关系；它也比第三种好，因为它更简短，因而更有力。的确，这种标明陈述之间关系的简单方法，是组篇中最有用的手段之一。如上所示，这种关系通常是因果关系。}
+    A comparison of the three forms given above will show clearly the advantage of the first. It is, at least in the examples given, better than the second form because it suggests the close relationship between the two statements in a way that the second does not attempt, and better than the third because it is briefer and therefore more forcible. Indeed, this simple method of indicating relationship between statements is one of the most useful devices of composition. The relationship, as above, is commonly one of cause and consequence.
+  }{
+    把上面给出的三种形式比较一下，就能清楚看出第一种的优点。至少在上面这些例子里，它比第二种好，因为它以第二种形式根本不去尝试的方式，暗示了两个陈述之间的紧密关系；它也比第三种好，因为它更简短，因而更有力。的确，这种标明陈述之间关系的简单方法，是组篇中最有用的手段之一。如上所示，这种关系通常是因果关系。
   }
 
   @bi{
-    @lang["en"]{Note that if the second clause is preceded by an adverb, such as @emph{accordingly}, @emph{besides}, @emph{then}, @emph{therefore}, or @emph{thus}, and not by a conjunction, the semicolon is still required.}
-    @lang["zh-Hans"]{注意，如果第二个子句前面是一个副词，例如@emph{accordingly}、@emph{besides}、@emph{then}、@emph{therefore}或@emph{thus}，而不是一个连词，那么仍然需要使用分号。}
+    Note that if the second clause is preceded by an adverb, such as @emph{accordingly}, @emph{besides}, @emph{then}, @emph{therefore}, or @emph{thus}, and not by a conjunction, the semicolon is still required.
+  }{
+    注意，如果第二个子句前面是一个副词，例如@emph{accordingly}、@emph{besides}、@emph{then}、@emph{therefore}或@emph{thus}，而不是一个连词，那么仍然需要使用分号。
   }
 
   @blockquote{I had never been in the place before; besides, it was dark as a tomb.}
 
   @bi{
-    @lang["en"]{An exception to the semicolon rule is worth noting here. A comma is preferable when the clauses are very short and alike in form, or when the tone of the sentence is easy and conversational.}
-    @lang["zh-Hans"]{分号规则有一个例外值得在此一提。当子句很短且形式相似，或者句子的语气轻松随意、像在交谈时，逗号更可取。}
+    An exception to the semicolon rule is worth noting here. A comma is preferable when the clauses are very short and alike in form, or when the tone of the sentence is easy and conversational.
+  }{
+    分号规则有一个例外值得在此一提。当子句很短且形式相似，或者句子的语气轻松随意、像在交谈时，逗号更可取。
   }
 
   @itemize{
@@ -292,32 +320,37 @@ the temple of Isis}
   @title{规则6 不要把句子断成两半}
 
   @bi{
-    @lang["en"]{In other words, do not use periods for commas.}
-    @lang["zh-Hans"]{换句话说，不要用句号代替逗号。}
+    In other words, do not use periods for commas.
+  }{
+    换句话说，不要用句号代替逗号。
   }
 
   @blockquote{I met them on a Cunard liner many years ago. Coming home from Liverpool to New York. She was an interesting talker. A woman who had traveled all over the world and lived in half a dozen countries.}
 
   @bi{
-    @lang["en"]{In both these examples, the first period should be replaced by a comma and the following word begun with a small letter.}
-    @lang["zh-Hans"]{在这两个例子中，第一个句号都应换成逗号，后面的词则用小写字母开头。}
+    In both these examples, the first period should be replaced by a comma and the following word begun with a small letter.
+  }{
+    在这两个例子中，第一个句号都应换成逗号，后面的词则用小写字母开头。
   }
 
   @bi{
-    @lang["en"]{It is permissible to make an emphatic word or expression serve the purpose of a sentence and to punctuate it accordingly:}
-    @lang["zh-Hans"]{允许让一个强调性的词或表达充当一个句子，并相应地加标点：}
+    It is permissible to make an emphatic word or expression serve the purpose of a sentence and to punctuate it accordingly:
+  }{
+    允许让一个强调性的词或表达充当一个句子，并相应地加标点：
   }
 
   @blockquote{Again and again he called out. No reply.}
 
   @bi{
-    @lang["en"]{The writer must, however, be certain that the emphasis is warranted, lest a clipped sentence seem merely a blunder in syntax or in punctuation. Generally speaking, the place for broken sentences is in dialogue, when a character happens to speak in a clipped or fragmentary way.}
-    @lang["zh-Hans"]{不过，作者必须确信这种强调是站得住的，以免一个截断的句子显得只是句法或标点上的失误。一般来说，断句的用武之地是在对话中，即人物碰巧以截断或片段的方式说话时。}
+    The writer must, however, be certain that the emphasis is warranted, lest a clipped sentence seem merely a blunder in syntax or in punctuation. Generally speaking, the place for broken sentences is in dialogue, when a character happens to speak in a clipped or fragmentary way.
+  }{
+    不过，作者必须确信这种强调是站得住的，以免一个截断的句子显得只是句法或标点上的失误。一般来说，断句的用武之地是在对话中，即人物碰巧以截断或片段的方式说话时。
   }
 
   @bi{
-    @lang["en"]{Rules 3, 4, 5, and 6 cover the most important principles that govern punctuation. They should be so thoroughly mastered that their application becomes second nature.}
-    @lang["zh-Hans"]{@link["strunk1999-rule-3"]{规则3}、@link["strunk1999-rule-4"]{规则4}、@link["strunk1999-rule-5"]{规则5}和@link["strunk1999-rule-6"]{规则6}涵盖了支配标点的最重要原则。它们应当被彻底掌握，以至于运用起来成为第二天性。}
+    Rules 3, 4, 5, and 6 cover the most important principles that govern punctuation. They should be so thoroughly mastered that their application becomes second nature.
+  }{
+    @link["strunk1999-rule-3"]{规则3}、@link["strunk1999-rule-4"]{规则4}、@link["strunk1999-rule-5"]{规则5}和@link["strunk1999-rule-6"]{规则6}涵盖了支配标点的最重要原则。它们应当被彻底掌握，以至于运用起来成为第二天性。
   }
 }
 
@@ -325,8 +358,9 @@ the temple of Isis}
   @title{规则7 在独立子句后用冒号引出并列项、同位语、补充说明或举例引文}
 
   @bi{
-    @lang["en"]{A colon tells the reader that what follows is closely related to the preceding clause. The colon has more effect than the comma, less power to separate than the semicolon, and more formality than the dash. It usually follows an independent clause and should not separate a verb from its complement or a preposition from its object. The examples in the lefthand column, below, are wrong; they should be rewritten as in the righthand column.}
-    @lang["zh-Hans"]{冒号告诉读者，后面的内容与前面的子句密切相关。冒号的作用比逗号强，分隔的力量比分号弱，比破折号更为正式。它通常跟在独立子句之后，不应把动词与其补语分开，也不应把介词与其宾语分开。下面左栏的例子是错误的；它们应当像右栏那样改写。}
+    A colon tells the reader that what follows is closely related to the preceding clause. The colon has more effect than the comma, less power to separate than the semicolon, and more formality than the dash. It usually follows an independent clause and should not separate a verb from its complement or a preposition from its object. The examples in the lefthand column, below, are wrong; they should be rewritten as in the righthand column.
+  }{
+    冒号告诉读者，后面的内容与前面的子句密切相关。冒号的作用比逗号强，分隔的力量比分号弱，比破折号更为正式。它通常跟在独立子句之后，不应把动词与其补语分开，也不应把介词与其宾语分开。下面左栏的例子是错误的；它们应当像右栏那样改写。
   }
 
   @itemize{
@@ -340,22 +374,25 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Join two independent clauses with a colon if the second interprets or amplifies the first.}
-    @lang["zh-Hans"]{如果第二个独立子句解释或补充第一个，就用冒号把它们连接起来。}
+    Join two independent clauses with a colon if the second interprets or amplifies the first.
+  }{
+    如果第二个独立子句解释或补充第一个，就用冒号把它们连接起来。
   }
 
   @blockquote{But even so, there was a directness and dispatch about animal burial: there was no stopover in the undertaker's foul parlor, no wreath or spray.}
 
   @bi{
-    @lang["en"]{A colon may introduce a quotation that supports or contributes to the preceding clause.}
-    @lang["zh-Hans"]{冒号可以引出一段支持或补足前面子句的引文。}
+    A colon may introduce a quotation that supports or contributes to the preceding clause.
+  }{
+    冒号可以引出一段支持或补足前面子句的引文。
   }
 
   @blockquote{The squalor of the streets reminded her of a line from Oscar Wilde: "We are all in the gutter, but some of us are looking at the stars."}
 
   @bi{
-    @lang["en"]{The colon also has certain functions of form: to follow the salutation of a formal letter, to separate hour from minute in a notation of time, and to separate the title of a work from its subtitle or a Bible chapter from a verse.}
-    @lang["zh-Hans"]{冒号还具有某些形式上的功能：跟在正式信函的称呼之后，把时间记法中的小时与分钟分开，以及把作品的标题与其副标题分开，或把《圣经》的章与节分开。}
+    The colon also has certain functions of form: to follow the salutation of a formal letter, to separate hour from minute in a notation of time, and to separate the title of a work from its subtitle or a Bible chapter from a verse.
+  }{
+    冒号还具有某些形式上的功能：跟在正式信函的称呼之后，把时间记法中的小时与分钟分开，以及把作品的标题与其副标题分开，或把《圣经》的章与节分开。
   }
 
   @itemize{
@@ -370,8 +407,9 @@ the temple of Isis}
   @title{规则8 用破折号引出突然的停顿或中断，并引出较长的同位语或总结}
 
   @bi{
-    @lang["en"]{A dash is a mark of separation stronger than a comma, less formal than a colon, and more relaxed than parentheses.}
-    @lang["zh-Hans"]{破折号是一种比逗号更强的分隔标记，不如冒号正式，比圆括号更放松。}
+    A dash is a mark of separation stronger than a comma, less formal than a colon, and more relaxed than parentheses.
+  }{
+    破折号是一种比逗号更强的分隔标记，不如冒号正式，比圆括号更放松。
   }
 
   @itemize{
@@ -381,8 +419,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Use a dash only when a more common mark of punctuation seems inadequate.}
-    @lang["zh-Hans"]{只有当更常见的标点符号显得不够用时，才使用破折号。}
+    Use a dash only when a more common mark of punctuation seems inadequate.
+  }{
+    只有当更常见的标点符号显得不够用时，才使用破折号。
   }
 
   @itemize{
@@ -400,8 +439,9 @@ the temple of Isis}
   @title{规则9 主语的数决定动词的数}
 
   @bi{
-    @lang["en"]{Words that intervene between subject and verb do not affect the number of the verb.}
-    @lang["zh-Hans"]{介于主语与动词之间的词不影响动词的数。}
+    Words that intervene between subject and verb do not affect the number of the verb.
+  }{
+    介于主语与动词之间的词不影响动词的数。
   }
 
   @itemize{
@@ -410,8 +450,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{A common blunder is the use of a singular verb form in a relative clause following "one of…" or a similar expression when the relative is the subject.}
-    @lang["zh-Hans"]{一个常见的失误是：当关系词作主语时，在“one of…”或类似表达后面的关系从句中使用单数动词形式。}
+    A common blunder is the use of a singular verb form in a relative clause following "one of…" or a similar expression when the relative is the subject.
+  }{
+    一个常见的失误是：当关系词作主语时，在“one of…”或类似表达后面的关系从句中使用单数动词形式。
   }
 
   @itemize{
@@ -425,8 +466,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Use a singular verb form after @emph{each}, @emph{either}, @emph{everyone}, @emph{everybody}, @emph{neither}, @emph{nobody}, @emph{someone}.}
-    @lang["zh-Hans"]{在@emph{each}、@emph{either}、@emph{everyone}、@emph{everybody}、@emph{neither}、@emph{nobody}、@emph{someone}之后用单数动词形式。}
+    Use a singular verb form after @emph{each}, @emph{either}, @emph{everyone}, @emph{everybody}, @emph{neither}, @emph{nobody}, @emph{someone}.
+  }{
+    在@emph{each}、@emph{either}、@emph{everyone}、@emph{everybody}、@emph{neither}、@emph{nobody}、@emph{someone}之后用单数动词形式。
   }
 
   @itemize{
@@ -435,8 +477,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{With @emph{none}, use the singular verb when the word means "no one" or "not one."}
-    @lang["zh-Hans"]{对于@emph{none}，当该词意为“no one”或“not one”时，用单数动词。}
+    With @emph{none}, use the singular verb when the word means "no one" or "not one."
+  }{
+    对于@emph{none}，当该词意为“no one”或“not one”时，用单数动词。
   }
 
   @itemize{
@@ -445,22 +488,25 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{A plural verb is commonly used when @emph{none} suggests more than one thing or person.}
-    @lang["zh-Hans"]{当@emph{none}暗示不止一个事物或人时，通常用复数动词。}
+    A plural verb is commonly used when @emph{none} suggests more than one thing or person.
+  }{
+    当@emph{none}暗示不止一个事物或人时，通常用复数动词。
   }
 
   @blockquote{None are so fallible as those who are sure they're right.}
 
   @bi{
-    @lang["en"]{A compound subject formed of two or more nouns joined by @emph{and} almost always requires a plural verb.}
-    @lang["zh-Hans"]{由@emph{and}连接两个或更多名词构成的复合主语，几乎总是需要复数动词。}
+    A compound subject formed of two or more nouns joined by @emph{and} almost always requires a plural verb.
+  }{
+    由@emph{and}连接两个或更多名词构成的复合主语，几乎总是需要复数动词。
   }
 
   @blockquote{The walrus and the carpenter were walking close at hand.}
 
   @bi{
-    @lang["en"]{But certain compounds, often clichés, are so inseparable they are considered a unit and so take a singular verb, as do compound subjects qualified by @emph{each} or @emph{every}.}
-    @lang["zh-Hans"]{但某些复合词——常常是陈词滥调——如此不可分割，以至于被视为一个整体，因而用单数动词；由@emph{each}或@emph{every}限定的复合主语也是如此。}
+    But certain compounds, often clichés, are so inseparable they are considered a unit and so take a singular verb, as do compound subjects qualified by @emph{each} or @emph{every}.
+  }{
+    但某些复合词——常常是陈词滥调——如此不可分割，以至于被视为一个整体，因而用单数动词；由@emph{each}或@emph{every}限定的复合主语也是如此。
   }
 
   @itemize{
@@ -471,15 +517,17 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{A singular subject remains singular even if other nouns are connected to it by @emph{with}, @emph{as well as}, @emph{in addition to}, @emph{except}, @emph{together with}, and @emph{no less than}.}
-    @lang["zh-Hans"]{即使有其他名词通过@emph{with}、@emph{as well as}、@emph{in addition to}、@emph{except}、@emph{together with}和@emph{no less than}与单数主语相连，该单数主语仍保持单数。}
+    A singular subject remains singular even if other nouns are connected to it by @emph{with}, @emph{as well as}, @emph{in addition to}, @emph{except}, @emph{together with}, and @emph{no less than}.
+  }{
+    即使有其他名词通过@emph{with}、@emph{as well as}、@emph{in addition to}、@emph{except}、@emph{together with}和@emph{no less than}与单数主语相连，该单数主语仍保持单数。
   }
 
   @blockquote{His speech as well as his manner is objectionable.}
 
   @bi{
-    @lang["en"]{A linking verb agrees with the number of its subject.}
-    @lang["zh-Hans"]{系动词与其主语的数一致。}
+    A linking verb agrees with the number of its subject.
+  }{
+    系动词与其主语的数一致。
   }
 
   @itemize{
@@ -488,8 +536,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Some nouns that appear to be plural are usually construed as singular and given a singular verb.}
-    @lang["zh-Hans"]{有些看起来是复数的名词通常被理解为单数，并配单数动词。}
+    Some nouns that appear to be plural are usually construed as singular and given a singular verb.
+  }{
+    有些看起来是复数的名词通常被理解为单数，并配单数动词。
   }
 
   @itemize{
@@ -498,15 +547,17 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{But}
-    @lang["zh-Hans"]{但：}
+    But
+  }{
+    但：
   }
 
   @blockquote{The general's quarters are across the river.}
 
   @bi{
-    @lang["en"]{In these cases the writer must simply learn the idioms. @emph{The contents of a book} is singular. @emph{The contents of a jar} may be either singular or plural, depending on what's in the jar—jam or marbles.}
-    @lang["zh-Hans"]{在这些情况下，作者只能去学会这些习语。@emph{The contents of a book}是单数。@emph{The contents of a jar}既可以是单数也可以是复数，取决于罐子里装的是什么——果酱还是弹珠。}
+    In these cases the writer must simply learn the idioms. @emph{The contents of a book} is singular. @emph{The contents of a jar} may be either singular or plural, depending on what's in the jar—jam or marbles.
+  }{
+    在这些情况下，作者只能去学会这些习语。@emph{The contents of a book}是单数。@emph{The contents of a jar}既可以是单数也可以是复数，取决于罐子里装的是什么——果酱还是弹珠。
   }
 }
 
@@ -514,8 +565,9 @@ the temple of Isis}
   @title{规则10 使用正确的代词格}
 
   @bi{
-    @lang["en"]{The personal pronouns, as well as the pronoun @emph{who}, change form as they function as subject or object.}
-    @lang["zh-Hans"]{人称代词以及代词@emph{who}，在充当主语或宾语时会改变形式。}
+    The personal pronouns, as well as the pronoun @emph{who}, change form as they function as subject or object.
+  }{
+    人称代词以及代词@emph{who}，在充当主语或宾语时会改变形式。
   }
 
   @itemize{
@@ -527,8 +579,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{In the last example, @emph{whoever} is the subject of @emph{looks idle}; the object of the preposition @emph{to} is the entire clause @emph{whoever looks idle}. When @emph{who} introduces a subordinate clause, its case depends on its function in that clause.}
-    @lang["zh-Hans"]{在最后一个例子中，@emph{whoever}是@emph{looks idle}的主语；介词@emph{to}的宾语是整个子句@emph{whoever looks idle}。当@emph{who}引导一个从属子句时，它的格取决于它在那个子句中的功能。}
+    In the last example, @emph{whoever} is the subject of @emph{looks idle}; the object of the preposition @emph{to} is the entire clause @emph{whoever looks idle}. When @emph{who} introduces a subordinate clause, its case depends on its function in that clause.
+  }{
+    在最后一个例子中，@emph{whoever}是@emph{looks idle}的主语；介词@emph{to}的宾语是整个子句@emph{whoever looks idle}。当@emph{who}引导一个从属子句时，它的格取决于它在那个子句中的功能。
   }
 
   @itemize{
@@ -537,8 +590,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{[We think @emph{he} will win.]}
-    @lang["zh-Hans"]{（我们认为@emph{he}会赢。）}
+    [We think @emph{he} will win.]
+  }{
+    （我们认为@emph{he}会赢。）
   }
 
   @itemize{
@@ -547,20 +601,23 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{[We hope to elect @emph{him}.]}
-    @lang["zh-Hans"]{（我们希望选出@emph{him}。）}
+    [We hope to elect @emph{him}.]
+  }{
+    （我们希望选出@emph{him}。）
   }
 
   @bi{
-    @lang["en"]{A pronoun in a comparison is nominative if it is the subject of a stated or understood verb.}
-    @lang["zh-Hans"]{比较中的代词，如果是一个明确出现或隐含的动词的主语，就取主格。}
+    A pronoun in a comparison is nominative if it is the subject of a stated or understood verb.
+  }{
+    比较中的代词，如果是一个明确出现或隐含的动词的主语，就取主格。
   }
 
   @blockquote{Sandy writes better than I. (Than I write.)}
 
   @bi{
-    @lang["en"]{In general, avoid "understood" verbs by supplying them.}
-    @lang["zh-Hans"]{一般来说，要避免“隐含”的动词，把它们补出来。}
+    In general, avoid "understood" verbs by supplying them.
+  }{
+    一般来说，要避免“隐含”的动词，把它们补出来。
   }
 
   @itemize{
@@ -574,8 +631,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{The objective case is correct in the following examples.}
-    @lang["zh-Hans"]{以下例子中用宾格是正确的。}
+    The objective case is correct in the following examples.
+  }{
+    以下例子中用宾格是正确的。
   }
 
   @itemize{
@@ -587,13 +645,15 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{@emph{Us} in the last example is in apposition to taxpayers, the object of the preposition @emph{of}. The wording, although grammatically defensible, is rarely apt. "A group of us protested as taxpayers" is better, if not exactly equivalent.}
-    @lang["zh-Hans"]{最后一个例子里的@emph{Us}与taxpayers同位，而taxpayers是介词@emph{of}的宾语。这种措辞虽然从语法上说得通，却很少贴切。“A group of us protested as taxpayers”更好，尽管并非完全等义。}
+    @emph{Us} in the last example is in apposition to taxpayers, the object of the preposition @emph{of}. The wording, although grammatically defensible, is rarely apt. "A group of us protested as taxpayers" is better, if not exactly equivalent.
+  }{
+    最后一个例子里的@emph{Us}与taxpayers同位，而taxpayers是介词@emph{of}的宾语。这种措辞虽然从语法上说得通，却很少贴切。“A group of us protested as taxpayers”更好，尽管并非完全等义。
   }
 
   @bi{
-    @lang["en"]{Use the simple personal pronoun as a subject.}
-    @lang["zh-Hans"]{以简单的人称代词作主语。}
+    Use the simple personal pronoun as a subject.
+  }{
+    以简单的人称代词作主语。
   }
 
   @itemize{
@@ -607,29 +667,33 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{The possessive case of pronouns is used to show ownership. It has two forms: the adjectival modifier, @emph{your} hat, and the noun form, a hat of @emph{yours}.}
-    @lang["zh-Hans"]{代词的所有格用于表示所属关系。它有两种形式：形容词性修饰语，如@emph{your} hat；以及名词形式，如a hat of @emph{yours}。}
+    The possessive case of pronouns is used to show ownership. It has two forms: the adjectival modifier, @emph{your} hat, and the noun form, a hat of @emph{yours}.
+  }{
+    代词的所有格用于表示所属关系。它有两种形式：形容词性修饰语，如@emph{your} hat；以及名词形式，如a hat of @emph{yours}。
   }
 
   @blockquote{The dog has buried one of your gloves and one of mine in the flower bed.}
 
   @bi{
-    @lang["en"]{@bold{Gerunds usually require the possessive case.}}
-    @lang["zh-Hans"]{@bold{动名词通常要求用所有格。}}
+    @bold{Gerunds usually require the possessive case.}
+  }{
+    @bold{动名词通常要求用所有格。}
   }
 
   @blockquote{Mother objected to our driving on the icy roads.}
 
   @bi{
-    @lang["en"]{A present participle as a verbal, on the other hand, takes the objective case.}
-    @lang["zh-Hans"]{另一方面，作为动词性词语的现在分词用宾格。}
+    A present participle as a verbal, on the other hand, takes the objective case.
+  }{
+    另一方面，作为动词性词语的现在分词用宾格。
   }
 
   @blockquote{They heard him singing in the shower.}
 
   @bi{
-    @lang["en"]{The difference between a verbal participle and a gerund is not always obvious, but note what is really said in each of the following.}
-    @lang["zh-Hans"]{动词性分词与动名词之间的区别并不总是显而易见，但请注意以下每句真正说的是什么。}
+    The difference between a verbal participle and a gerund is not always obvious, but note what is really said in each of the following.
+  }{
+    动词性分词与动名词之间的区别并不总是显而易见，但请注意以下每句真正说的是什么。
   }
 
   @itemize{
@@ -638,8 +702,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{In the first sentence, the queried objection is to @emph{me}, as opposed to other members of the group, asking a question. In the second example, the issue is whether a question may be asked at all.}
-    @lang["zh-Hans"]{在第一个句子中，被质疑的反对对象是@emph{me}去问一个问题，而不是群体中其他成员去问。在第二个例子中，问题在于究竟可不可以问一个问题。}
+    In the first sentence, the queried objection is to @emph{me}, as opposed to other members of the group, asking a question. In the second example, the issue is whether a question may be asked at all.
+  }{
+    在第一个句子中，被质疑的反对对象是@emph{me}去问一个问题，而不是群体中其他成员去问。在第二个例子中，问题在于究竟可不可以问一个问题。
   }
 }
 
@@ -649,15 +714,17 @@ the temple of Isis}
   @blockquote{Walking slowly down the road, he saw a woman accompanied by two children.}
 
   @bi{
-    @lang["en"]{The word @emph{walking} refers to the subject of the sentence, not to the woman. To make it refer to the woman, the writer must recast the sentence.}
-    @lang["zh-Hans"]{@emph{walking}一词指的是句子的主语，而不是那个女人。要使它指那个女人，作者必须改写句子。}
+    The word @emph{walking} refers to the subject of the sentence, not to the woman. To make it refer to the woman, the writer must recast the sentence.
+  }{
+    @emph{walking}一词指的是句子的主语，而不是那个女人。要使它指那个女人，作者必须改写句子。
   }
 
   @blockquote{He saw a woman, accompanied by two children, walking slowly down the road.}
 
   @bi{
-    @lang["en"]{Participial phrases preceded by a conjunction or by a preposition, nouns in apposition, adjectives, and adjective phrases come under the same rule if they begin the sentence.}
-    @lang["zh-Hans"]{由连词或介词引导的分词短语、同位语名词、形容词以及形容词短语，如果出现在句首，也受同一条规则约束。}
+    Participial phrases preceded by a conjunction or by a preposition, nouns in apposition, adjectives, and adjective phrases come under the same rule if they begin the sentence.
+  }{
+    由连词或介词引导的分词短语、同位语名词、形容词以及形容词短语，如果出现在句首，也受同一条规则约束。
   }
 
   @itemize{
@@ -681,8 +748,9 @@ the temple of Isis}
   }
 
   @bi{
-    @lang["en"]{Sentences violating Rule 11 are often ludicrous:}
-    @lang["zh-Hans"]{违反@link["strunk1999-rule-11"]{规则11}的句子常常很可笑：}
+    Sentences violating Rule 11 are often ludicrous:
+  }{
+    违反@link["strunk1999-rule-11"]{规则11}的句子常常很可笑：
   }
 
   @itemize{

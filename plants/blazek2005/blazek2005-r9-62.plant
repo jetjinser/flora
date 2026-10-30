@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Guillard, H.: Node-Nested Multigrid with Delaunay Coarsening. INRIA Report No. 1898, 1993.}
 @taxon["reference"]

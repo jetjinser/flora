@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Governing Equations 第2章 控制方程}
 @summary{流体流动的数学描述与守恒定律，Navier-Stokes方程的完整形式及其简化。}
@@ -8,117 +7,132 @@
   @title{2.1 The Flow and its Mathematical Description 流动及其数学描述}
 
   @bi{
-    @lang["en"]{Before we begin with the derivation of the basic equations describing the behaviour of the fluid, it may be convenient to clarify what the term '@emph{fluid dynamics}' stands for. It is, in fact, the investigation of the interactive motion of a large number of individual particles. These are in our case molecules or atoms. That means, we assume the density of the fluid is high enough, so that it can be approximated as a @emph{continuum}. It implies that even an infinitesimally small (in the sense of differential calculus) element of the fluid still contains a sufficient number of particles, for which we can specify mean velocity and mean kinetic energy. In this way, we are able to define velocity, pressure, temperature, density and other important quantities at each point of the fluid.}
-    @lang["zh-Hans"]{在开始推导描述流体行为的基本方程之前，先澄清“流体动力学（fluid dynamics）”这一术语的含义可能会更方便。实际上，它研究的是大量单个粒子之间的相互作用运动，在这里这些粒子就是分子或原子。这意味着，我们假定流体的密度足够高，以致可以把它近似为连续介质（continuum）。也就是说，即使是微分意义下无限小的流体微元，也仍然包含足够多的粒子，从而可以为其指定平均速度和平均动能。这样，我们就能够在流体的每一点上定义速度、压力、温度、密度以及其他重要物理量。}
+    Before we begin with the derivation of the basic equations describing the behaviour of the fluid, it may be convenient to clarify what the term '@emph{fluid dynamics}' stands for. It is, in fact, the investigation of the interactive motion of a large number of individual particles. These are in our case molecules or atoms. That means, we assume the density of the fluid is high enough, so that it can be approximated as a @emph{continuum}. It implies that even an infinitesimally small (in the sense of differential calculus) element of the fluid still contains a sufficient number of particles, for which we can specify mean velocity and mean kinetic energy. In this way, we are able to define velocity, pressure, temperature, density and other important quantities at each point of the fluid.
+  }{
+    在开始推导描述流体行为的基本方程之前，先澄清“流体动力学（fluid dynamics）”这一术语的含义可能会更方便。实际上，它研究的是大量单个粒子之间的相互作用运动，在这里这些粒子就是分子或原子。这意味着，我们假定流体的密度足够高，以致可以把它近似为连续介质（continuum）。也就是说，即使是微分意义下无限小的流体微元，也仍然包含足够多的粒子，从而可以为其指定平均速度和平均动能。这样，我们就能够在流体的每一点上定义速度、压力、温度、密度以及其他重要物理量。
   }
 
   @bi{
-    @lang["en"]{The derivation of the principal equations of fluid dynamics is based on the fact that the dynamical behaviour of a fluid is determined by the following @emph{conservation laws}, namely:
-      @itemize{
-        @item{the conservation of mass,}
-        @item{the conservation of momentum, and}
-        @item{the conservation of energy.}
-      }
-    }
-    @lang["zh-Hans"]{流体动力学基本方程的推导基于这样一个事实：流体的动力学行为由以下守恒定律（conservation laws）决定，即：
-      @itemize{
-        @item{质量守恒；}
-        @item{动量守恒；}
-        @item{能量守恒。}
-      }
-    }
+    The derivation of the principal equations of fluid dynamics is based on the fact that the dynamical behaviour of a fluid is determined by the following @emph{conservation laws}, namely:
+          @itemize{
+            @item{the conservation of mass,}
+            @item{the conservation of momentum, and}
+            @item{the conservation of energy.}
+          }
+
+  }{
+    流体动力学基本方程的推导基于这样一个事实：流体的动力学行为由以下守恒定律（conservation laws）决定，即：
+          @itemize{
+            @item{质量守恒；}
+            @item{动量守恒；}
+            @item{能量守恒。}
+          }
+
   }
 
   @bi{
-    @lang["en"]{The conservation of a certain flow quantity means that its total variation inside an arbitrary volume can be expressed as the net effect of the amount of the quantity being transported across the boundary, of any internal forces and sources, and of external forces acting on the volume. The amount of the quantity crossing the boundary is called @emph{flux}. The flux can be in general decomposed into two different parts: one due to the convective transport and the other one due to the molecular motion present in the fluid at rest. This second contribution is of a diffusive nature - it is proportional to the gradient of the quantity considered, and hence it will vanish for a homogeneous distribution.}
-    @lang["zh-Hans"]{某一流动量的守恒，意味着它在任意体积内部的总变化，可以表示为以下几方面的净效应：越过边界被输运的该量、体积内部可能存在的内力和源，以及作用在该体积上的外力。越过边界的该量之数量称为通量（flux）。通量一般可以分解为两个不同的部分：一个源于对流输运，另一个源于静止流体中存在的分子运动。后一部分具有扩散性质——它与所考虑物理量的梯度成正比，因此在均匀分布时为零。}
+    The conservation of a certain flow quantity means that its total variation inside an arbitrary volume can be expressed as the net effect of the amount of the quantity being transported across the boundary, of any internal forces and sources, and of external forces acting on the volume. The amount of the quantity crossing the boundary is called @emph{flux}. The flux can be in general decomposed into two different parts: one due to the convective transport and the other one due to the molecular motion present in the fluid at rest. This second contribution is of a diffusive nature - it is proportional to the gradient of the quantity considered, and hence it will vanish for a homogeneous distribution.
+  }{
+    某一流动量的守恒，意味着它在任意体积内部的总变化，可以表示为以下几方面的净效应：越过边界被输运的该量、体积内部可能存在的内力和源，以及作用在该体积上的外力。越过边界的该量之数量称为通量（flux）。通量一般可以分解为两个不同的部分：一个源于对流输运，另一个源于静止流体中存在的分子运动。后一部分具有扩散性质——它与所考虑物理量的梯度成正比，因此在均匀分布时为零。
   }
 
   @bi{
-    @lang["en"]{The discussion of the conservation laws leads us quite naturally to the idea of dividing the flow field into a number of volumes and to concentrate on the modelling of the behaviour of the fluid in one such finite region. For this purpose, we define the so-called @emph{finite control volume} and try to develop a mathematical description of its physical properties.}
-    @lang["zh-Hans"]{对守恒定律的讨论很自然地引导我们产生这样一个想法：把流场划分成许多体积，并集中研究流体在其中某一个有限区域内的行为。为此，我们定义所谓的有限控制体（finite control volume），并试图对其物理性质建立数学描述。}
+    The discussion of the conservation laws leads us quite naturally to the idea of dividing the flow field into a number of volumes and to concentrate on the modelling of the behaviour of the fluid in one such finite region. For this purpose, we define the so-called @emph{finite control volume} and try to develop a mathematical description of its physical properties.
+  }{
+    对守恒定律的讨论很自然地引导我们产生这样一个想法：把流场划分成许多体积，并集中研究流体在其中某一个有限区域内的行为。为此，我们定义所谓的有限控制体（finite control volume），并试图对其物理性质建立数学描述。
   }
 
   @emph{Finite control volume 有限控制体}
 
   @bi{
-    @lang["en"]{Consider a general flow field as represented by streamlines in Fig. 2.1. An arbitrary finite region of the flow, bounded by the closed surface @tex-math{\partial\Omega} and fixed in space, defines the control volume @tex-math{\Omega}. We also introduce a surface element @tex-math{dS} and its associated, outward pointing unit normal vector @tex-math{\vec{n}}.}
-    @lang["zh-Hans"]{考察图2.1中以流线表示的一个一般流场。流场中由封闭曲面@tex-math{\partial\Omega}所包围、固定在空间中的一个任意有限区域，定义了控制体@tex-math{\Omega}。我们还引入面元@tex-math{dS}及其相应的、指向外侧的单位法向量@tex-math{\vec{n}}。}
+    Consider a general flow field as represented by streamlines in Fig. 2.1. An arbitrary finite region of the flow, bounded by the closed surface @tex-math{\partial\Omega} and fixed in space, defines the control volume @tex-math{\Omega}. We also introduce a surface element @tex-math{dS} and its associated, outward pointing unit normal vector @tex-math{\vec{n}}.
+  }{
+    考察图2.1中以流线表示的一个一般流场。流场中由封闭曲面@tex-math{\partial\Omega}所包围、固定在空间中的一个任意有限区域，定义了控制体@tex-math{\Omega}。我们还引入面元@tex-math{dS}及其相应的、指向外侧的单位法向量@tex-math{\vec{n}}。
   }
 
   @figure["blazek2005/fig-2-1.png" "图2.1:有限控制体的定义(固定于空间中)"]{
   @emph{图2.1:有限控制体的定义(固定于空间中)。}图例:流线;@tex-math{\Omega}——控制体;@tex-math{\partial\Omega}——控制体边界(封闭曲面);@tex-math{dS}——面元;@tex-math{\vec{n}}——外指单位法向量;@tex-math{\vec{v}}——流动速度。
 }
   @bi{
-    @lang["en"]{The conservation law applied to an exemplary scalar quantity per unit volume @tex-math{U} says that its variation in time within @tex-math{\Omega}, i.e.,}
-    @lang["zh-Hans"]{将守恒定律应用于单位体积上某个示例标量@tex-math{U}，则它在@tex-math{\Omega}内随时间的变化，即}
+    The conservation law applied to an exemplary scalar quantity per unit volume @tex-math{U} says that its variation in time within @tex-math{\Omega}, i.e.,
+  }{
+    将守恒定律应用于单位体积上某个示例标量@tex-math{U}，则它在@tex-math{\Omega}内随时间的变化，即
   }
 
   @tex-display-math{\frac{\partial}{\partial t}\int_{\Omega} U\,d\Omega}
 
   @bi{
-    @lang["en"]{is equal to the sum of the contributions due to the @emph{convective flux} - amount of the quantity @tex-math{U} entering the control volume through the boundary with the velocity @tex-math{\vec{v}}}
-    @lang["zh-Hans"]{等于下列各项贡献之和：由对流通量（convective flux）引起的贡献——即以速度@tex-math{\vec{v}}通过边界进入控制体的物理量@tex-math{U}的数量}
+    is equal to the sum of the contributions due to the @emph{convective flux} - amount of the quantity @tex-math{U} entering the control volume through the boundary with the velocity @tex-math{\vec{v}}
+  }{
+    等于下列各项贡献之和：由对流通量（convective flux）引起的贡献——即以速度@tex-math{\vec{v}}通过边界进入控制体的物理量@tex-math{U}的数量
   }
 
   @tex-display-math{-\oint_{\partial\Omega} U\left(\vec{v}\cdot\vec{n}\right)dS,}
 
   @bi{
-    @lang["en"]{further due to the @emph{diffusive flux} - expressed by the generalised Fick's gradient law}
-    @lang["zh-Hans"]{再加上由扩散通量（diffusive flux）引起的贡献——它由广义的Fick梯度定律表示}
+    further due to the @emph{diffusive flux} - expressed by the generalised Fick's gradient law
+  }{
+    再加上由扩散通量（diffusive flux）引起的贡献——它由广义的Fick梯度定律表示
   }
 
   @tex-display-math{\oint_{\partial\Omega} \kappa\rho\left[\nabla(U/\rho)\cdot\vec{n}\right]dS,}
 
   @bi{
-    @lang["en"]{where @tex-math{\kappa} is the @emph{thermal diffusivity coefficient}, and finally due to the volume as well as surface sources, @tex-math{Q_V}, @tex-math{\vec{Q}_S}, i.e.,}
-    @lang["zh-Hans"]{其中@tex-math{\kappa}为热扩散率系数（thermal diffusivity coefficient）；最后还有体积源和面源@tex-math{Q_V}、@tex-math{\vec{Q}_S}的贡献，即}
+    where @tex-math{\kappa} is the @emph{thermal diffusivity coefficient}, and finally due to the volume as well as surface sources, @tex-math{Q_V}, @tex-math{\vec{Q}_S}, i.e.,
+  }{
+    其中@tex-math{\kappa}为热扩散率系数（thermal diffusivity coefficient）；最后还有体积源和面源@tex-math{Q_V}、@tex-math{\vec{Q}_S}的贡献，即
   }
 
   @tex-display-math{\int_{\Omega} Q_V\,d\Omega + \oint_{\partial\Omega}\left(\vec{Q}_S\cdot\vec{n}\right)dS.}
 
   @bi{
-    @lang["en"]{After summing up the above contributions, we obtain the following general form of the conservation law for the scalar quantity @tex-math{U}}
-    @lang["zh-Hans"]{把上述各项贡献相加，便得到标量@tex-math{U}的守恒定律的如下一般形式}
+    After summing up the above contributions, we obtain the following general form of the conservation law for the scalar quantity @tex-math{U}
+  }{
+    把上述各项贡献相加，便得到标量@tex-math{U}的守恒定律的如下一般形式
   }
 
   @tex-display-math[#:id "eq-2-1"]{\frac{\partial}{\partial t}\int_{\Omega} U\,d\Omega + \oint_{\partial\Omega}\left[U\left(\vec{v}\cdot\vec{n}\right) - \kappa\rho\left(\nabla U^{*}\cdot\vec{n}\right)\right]dS = \int_{\Omega} Q_V\,d\Omega + \oint_{\partial\Omega}\left(\vec{Q}_S\cdot\vec{n}\right)dS, \tag{2.1}}
 
   @bi{
-    @lang["en"]{where @tex-math{U^{*}} denotes the quantity @tex-math{U} per unit mass, i.e., @tex-math{U/\rho}.}
-    @lang["zh-Hans"]{其中@tex-math{U^{*}}表示单位质量的物理量@tex-math{U}，即@tex-math{U/\rho}。}
+    where @tex-math{U^{*}} denotes the quantity @tex-math{U} per unit mass, i.e., @tex-math{U/\rho}.
+  }{
+    其中@tex-math{U^{*}}表示单位质量的物理量@tex-math{U}，即@tex-math{U/\rho}。
   }
 
   @bi{
-    @lang["en"]{It is important to note that if the conserved quantity would be a vector instead of a scalar, the above Equation @link["blazek2005-ch02#eq-2-1"]{(2.1)} would be formally still valid. But in difference, the convective and the diffusive flux would become tensors instead of vectors - @tex-math{\overline{\overline{F}}_C} the @emph{convective flux tensor} and @tex-math{\overline{\overline{F}}_D} the @emph{diffusive flux tensor}. The volume sources would be a vector @tex-math{\vec{Q}_V}, and the surface sources would change into a tensor @tex-math{\overline{\overline{Q}}_S}. We can therefore write the conservation law for a general vector quantity @tex-math{\vec{U}} as}
-    @lang["zh-Hans"]{值得注意的是，如果守恒量不是标量而是向量，上述方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}在形式上仍然成立。但不同之处在于，对流通量和扩散通量将不再是向量，而是变为张量——@tex-math{\overline{\overline{F}}_C}为对流通量张量（convective flux tensor），@tex-math{\overline{\overline{F}}_D}为扩散通量张量（diffusive flux tensor）。体积源将成为向量@tex-math{\vec{Q}_V}，而面源则变为张量@tex-math{\overline{\overline{Q}}_S}。因此，对于一般向量量@tex-math{\vec{U}}，可以把守恒定律写成}
+    It is important to note that if the conserved quantity would be a vector instead of a scalar, the above Equation @link["blazek2005-ch02#eq-2-1"]{(2.1)} would be formally still valid. But in difference, the convective and the diffusive flux would become tensors instead of vectors - @tex-math{\overline{\overline{F}}_C} the @emph{convective flux tensor} and @tex-math{\overline{\overline{F}}_D} the @emph{diffusive flux tensor}. The volume sources would be a vector @tex-math{\vec{Q}_V}, and the surface sources would change into a tensor @tex-math{\overline{\overline{Q}}_S}. We can therefore write the conservation law for a general vector quantity @tex-math{\vec{U}} as
+  }{
+    值得注意的是，如果守恒量不是标量而是向量，上述方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}在形式上仍然成立。但不同之处在于，对流通量和扩散通量将不再是向量，而是变为张量——@tex-math{\overline{\overline{F}}_C}为对流通量张量（convective flux tensor），@tex-math{\overline{\overline{F}}_D}为扩散通量张量（diffusive flux tensor）。体积源将成为向量@tex-math{\vec{Q}_V}，而面源则变为张量@tex-math{\overline{\overline{Q}}_S}。因此，对于一般向量量@tex-math{\vec{U}}，可以把守恒定律写成
   }
 
   @tex-display-math[#:id "eq-2-2"]{\frac{\partial}{\partial t}\int_{\Omega}\vec{U}\,d\Omega + \oint_{\partial\Omega}\left[\left(\overline{\overline{F}}_C - \overline{\overline{F}}_D\right)\cdot\vec{n}\right]dS = \int_{\Omega}\vec{Q}_V\,d\Omega + \oint_{\partial\Omega}\left(\overline{\overline{Q}}_S\cdot\vec{n}\right)dS. \tag{2.2}}
 
   @bi{
-    @lang["en"]{The @emph{integral formulation} of the conservation law, as given by the Equations @link["blazek2005-ch02#eq-2-1"]{(2.1)} or @link["blazek2005-ch02#eq-2-2"]{(2.2)}, has two very important and desirable properties:
-      @itemize{
-        @item{if there are no volume sources present, the variation of @tex-math{U} depends solely on the flux across the boundary @tex-math{\partial\Omega} and not on any flux inside the control volume @tex-math{\Omega};}
-        @item{this particular form remain valid in the presence of discontinuities in the flow field like shocks or contact discontinuities @link["blazek2005-r2-1"]{[1]}.}
-      }
-    }
-    @lang["zh-Hans"]{由方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}或@link["blazek2005-ch02#eq-2-2"]{(2.2)}给出的守恒定律积分形式（integral formulation）具有两个非常重要且十分理想的性质：
-      @itemize{
-        @item{若不存在体积源，@tex-math{U}的变化仅取决于通过边界@tex-math{\partial\Omega}的通量，而与控制体@tex-math{\Omega}内部的任何通量无关；}
-        @item{当流场中存在激波或接触间断等间断时，这一特定形式仍然有效@link["blazek2005-r2-1"]{[1]}。}
-      }
-    }
+    The @emph{integral formulation} of the conservation law, as given by the Equations @link["blazek2005-ch02#eq-2-1"]{(2.1)} or @link["blazek2005-ch02#eq-2-2"]{(2.2)}, has two very important and desirable properties:
+          @itemize{
+            @item{if there are no volume sources present, the variation of @tex-math{U} depends solely on the flux across the boundary @tex-math{\partial\Omega} and not on any flux inside the control volume @tex-math{\Omega};}
+            @item{this particular form remain valid in the presence of discontinuities in the flow field like shocks or contact discontinuities @link["blazek2005-r2-1"]{[1]}.}
+          }
+
+  }{
+    由方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}或@link["blazek2005-ch02#eq-2-2"]{(2.2)}给出的守恒定律积分形式（integral formulation）具有两个非常重要且十分理想的性质：
+          @itemize{
+            @item{若不存在体积源，@tex-math{U}的变化仅取决于通过边界@tex-math{\partial\Omega}的通量，而与控制体@tex-math{\Omega}内部的任何通量无关；}
+            @item{当流场中存在激波或接触间断等间断时，这一特定形式仍然有效@link["blazek2005-r2-1"]{[1]}。}
+          }
+
   }
 
   @bi{
-    @lang["en"]{Because of its generality and its desirable properties, it is not surprising that the majority of the CFD codes today is based on the integral form of the governing equations.}
-    @lang["zh-Hans"]{由于其一般性和这些理想的性质，如今大多数CFD代码都基于控制方程的积分形式，这并不令人意外。}
+    Because of its generality and its desirable properties, it is not surprising that the majority of the CFD codes today is based on the integral form of the governing equations.
+  }{
+    由于其一般性和这些理想的性质，如今大多数CFD代码都基于控制方程的积分形式，这并不令人意外。
   }
 
   @bi{
-    @lang["en"]{In the following section, we shall utilise the above integral form in order to derive the corresponding expressions for the three conservation laws of the fluid dynamics.}
-    @lang["zh-Hans"]{在下一节中，我们将利用上述积分形式，来导出流体动力学三个守恒定律的相应表达式。}
+    In the following section, we shall utilise the above integral form in order to derive the corresponding expressions for the three conservation laws of the fluid dynamics.
+  }{
+    在下一节中，我们将利用上述积分形式，来导出流体动力学三个守恒定律的相应表达式。
   }
 }
 
@@ -129,39 +143,45 @@
     @title{2.2.1 The Continuity Equation 连续方程}
 
     @bi{
-      @lang["en"]{If we restrict our attention to single-phase fluids, the law of mass conservation expresses the fact that mass cannot be created in such a fluid system, nor it can disappear. There is also no diffusive flux contribution to the continuity equation, since for a fluid at rest, any variation of mass would imply a displacement of the fluid particles.}
-      @lang["zh-Hans"]{如果把注意力限定在单相流体上，质量守恒定律表达的是这样一个事实：在这样的流体系统中，质量既不能被创造，也不能消失。连续方程中也没有扩散通量的贡献，因为对静止流体而言，质量的任何变化都意味着流体粒子的位移。}
+      If we restrict our attention to single-phase fluids, the law of mass conservation expresses the fact that mass cannot be created in such a fluid system, nor it can disappear. There is also no diffusive flux contribution to the continuity equation, since for a fluid at rest, any variation of mass would imply a displacement of the fluid particles.
+    }{
+      如果把注意力限定在单相流体上，质量守恒定律表达的是这样一个事实：在这样的流体系统中，质量既不能被创造，也不能消失。连续方程中也没有扩散通量的贡献，因为对静止流体而言，质量的任何变化都意味着流体粒子的位移。
     }
 
     @bi{
-      @lang["en"]{In order to derive the continuity equation, consider the model of a finite control volume fixed in space, as sketched in Fig. 2.1. At a point on the control surface, the flow velocity is @tex-math{\vec{v}}, the unit normal vector is @tex-math{\vec{n}}, and @tex-math{dS} denotes an elemental surface area. The conserved quantity in this case is the density @tex-math{\rho}. For the time rate of change of the total mass inside the finite volume @tex-math{\Omega} we have}
-      @lang["zh-Hans"]{为了导出连续方程，考虑如图2.1所示的固定在空间中的有限控制体模型。在控制面上的某一点处，流动速度为@tex-math{\vec{v}}，单位法向量为@tex-math{\vec{n}}，@tex-math{dS}表示一个微元面积。此情形下的守恒量是密度@tex-math{\rho}。对有限体积@tex-math{\Omega}内部总质量的时间变化率，我们有}
+      In order to derive the continuity equation, consider the model of a finite control volume fixed in space, as sketched in Fig. 2.1. At a point on the control surface, the flow velocity is @tex-math{\vec{v}}, the unit normal vector is @tex-math{\vec{n}}, and @tex-math{dS} denotes an elemental surface area. The conserved quantity in this case is the density @tex-math{\rho}. For the time rate of change of the total mass inside the finite volume @tex-math{\Omega} we have
+    }{
+      为了导出连续方程，考虑如图2.1所示的固定在空间中的有限控制体模型。在控制面上的某一点处，流动速度为@tex-math{\vec{v}}，单位法向量为@tex-math{\vec{n}}，@tex-math{dS}表示一个微元面积。此情形下的守恒量是密度@tex-math{\rho}。对有限体积@tex-math{\Omega}内部总质量的时间变化率，我们有
     }
 
     @tex-display-math{\frac{\partial}{\partial t}\int_{\Omega}\rho\,d\Omega.}
 
     @bi{
-      @lang["en"]{The mass flow of a fluid through some surface fixed in space equals to the product of (density) × (surface area) × (velocity component perpendicular to the surface). Therefore, the contribution from the convective flux across each surface element @tex-math{dS} becomes}
-      @lang["zh-Hans"]{流体通过某个固定在空间中的表面的质量流量，等于（密度）×（表面面积）×（垂直于表面的速度分量）的乘积。因此，对流通过每个面元@tex-math{dS}的贡献便为}
+      The mass flow of a fluid through some surface fixed in space equals to the product of (density) × (surface area) × (velocity component perpendicular to the surface). Therefore, the contribution from the convective flux across each surface element @tex-math{dS} becomes
+    }{
+      流体通过某个固定在空间中的表面的质量流量，等于（密度）×（表面面积）×（垂直于表面的速度分量）的乘积。因此，对流通过每个面元@tex-math{dS}的贡献便为
     }
 
     @tex-display-math{\rho\left(\vec{v}\cdot\vec{n}\right)dS.}
 
     @bi{
-      @lang["en"]{Since by convection @tex-math{\vec{n}} always points out of the control volume, we speak of @emph{inflow} if the product @tex-math{\left(\vec{v}\cdot\vec{n}\right)} is negative, and of @emph{outflow} if it is positive and hence the mass leaves the control volume.}
-      @lang["zh-Hans"]{由于在对流中@tex-math{\vec{n}}总是指向控制体外，当乘积@tex-math{\left(\vec{v}\cdot\vec{n}\right)}为负时我们称之为流入（inflow），为正时则称为流出（outflow），此时质量离开控制体。}
+      Since by convection @tex-math{\vec{n}} always points out of the control volume, we speak of @emph{inflow} if the product @tex-math{\left(\vec{v}\cdot\vec{n}\right)} is negative, and of @emph{outflow} if it is positive and hence the mass leaves the control volume.
+    }{
+      由于在对流中@tex-math{\vec{n}}总是指向控制体外，当乘积@tex-math{\left(\vec{v}\cdot\vec{n}\right)}为负时我们称之为流入（inflow），为正时则称为流出（outflow），此时质量离开控制体。
     }
 
     @bi{
-      @lang["en"]{As stated above, there are no volume or surface sources present. Thus, by taking into account the general formulation of Eq. @link["blazek2005-ch02#eq-2-1"]{(2.1)}, we can write}
-      @lang["zh-Hans"]{如上所述，此时不存在任何体积源或面源。于是，考虑到方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}的一般形式，我们可以写出}
+      As stated above, there are no volume or surface sources present. Thus, by taking into account the general formulation of Eq. @link["blazek2005-ch02#eq-2-1"]{(2.1)}, we can write
+    }{
+      如上所述，此时不存在任何体积源或面源。于是，考虑到方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}的一般形式，我们可以写出
     }
 
     @tex-display-math[#:id "eq-2-3"]{\frac{\partial}{\partial t}\int_{\Omega}\rho\,d\Omega + \oint_{\partial\Omega}\rho\left(\vec{v}\cdot\vec{n}\right)dS = 0. \tag{2.3}}
 
     @bi{
-      @lang["en"]{This represents the integral form of the continuity equation - the conservation law of mass.}
-      @lang["zh-Hans"]{这就是连续方程的积分形式——质量守恒定律。}
+      This represents the integral form of the continuity equation - the conservation law of mass.
+    }{
+      这就是连续方程的积分形式——质量守恒定律。
     }
   }
 
@@ -169,97 +189,108 @@
     @title{2.2.2 The Momentum Equation 动量方程}
 
     @bi{
-      @lang["en"]{We may start the derivation of the momentum equation by recalling the particular form of Newton's second law which states that the variation of momentum is caused by the net force acting on an mass element. For the momentum of an infinitesimally small portion of the control volume @tex-math{\Omega} (see Fig. 2.1) we have}
-      @lang["zh-Hans"]{动量方程的推导可以从牛顿第二定律的一种特定形式入手，该定律指出，动量的变化是由作用在质量微元上的净力引起的。对控制体@tex-math{\Omega}中无限小部分（见图2.1）的动量，我们有}
+      We may start the derivation of the momentum equation by recalling the particular form of Newton's second law which states that the variation of momentum is caused by the net force acting on an mass element. For the momentum of an infinitesimally small portion of the control volume @tex-math{\Omega} (see Fig. 2.1) we have
+    }{
+      动量方程的推导可以从牛顿第二定律的一种特定形式入手，该定律指出，动量的变化是由作用在质量微元上的净力引起的。对控制体@tex-math{\Omega}中无限小部分（见图2.1）的动量，我们有
     }
 
     @tex-display-math{\rho\vec{v}\,d\Omega.}
 
     @bi{
-      @lang["en"]{The variation in time of momentum within the control volume equals}
-      @lang["zh-Hans"]{控制体内动量随时间的变化等于}
+      The variation in time of momentum within the control volume equals
+    }{
+      控制体内动量随时间的变化等于
     }
 
     @tex-display-math{\frac{\partial}{\partial t}\int_{\Omega}\rho\vec{v}\,d\Omega.}
 
     @bi{
-      @lang["en"]{Hence, the conserved quantity is here the product of the density and the velocity, i.e.,}
-      @lang["zh-Hans"]{因此，这里的守恒量是密度与速度的乘积，即}
+      Hence, the conserved quantity is here the product of the density and the velocity, i.e.,
+    }{
+      因此，这里的守恒量是密度与速度的乘积，即
     }
 
     @tex-display-math{\rho\vec{v} = \left[\,\rho u,\ \rho v,\ \rho w\,\right]^{T}.}
 
     @bi{
-      @lang["en"]{The convective flux tensor, which describes the transfer of momentum across the boundary of the control volume, consists in the Cartesian coordinate system of the following three components}
-      @lang["zh-Hans"]{描述动量越过控制体边界输运的对流通量张量，在笛卡尔坐标系中由以下三个分量组成}
+      The convective flux tensor, which describes the transfer of momentum across the boundary of the control volume, consists in the Cartesian coordinate system of the following three components
+    }{
+      描述动量越过控制体边界输运的对流通量张量，在笛卡尔坐标系中由以下三个分量组成
     }
 
     @tex-display-math{\begin{aligned} x\text{-component}&:\quad \rho u\,\vec{v}\\ y\text{-component}&:\quad \rho v\,\vec{v}\\ z\text{-component}&:\quad \rho w\,\vec{v}. \end{aligned}}
 
     @bi{
-      @lang["en"]{The contribution of the convective flux tensor to the conservation of momentum is then given by}
-      @lang["zh-Hans"]{对流通量张量对动量守恒的贡献则由下式给出}
+      The contribution of the convective flux tensor to the conservation of momentum is then given by
+    }{
+      对流通量张量对动量守恒的贡献则由下式给出
     }
 
     @tex-display-math{-\oint_{\partial\Omega}\rho\vec{v}\left(\vec{v}\cdot\vec{n}\right)dS.}
 
     @bi{
-      @lang["en"]{The diffusive flux is zero since there is no diffusion of momentum possible for a fluid at rest. Thus, the remaining question is now, what are the forces the fluid element is exposed to? We can identify two kinds of forces acting on the control volume:
-        @itemize{
-          @item{@emph{External volume} or @emph{body} forces, which act directly on the mass of the volume. These are for example gravitational, buoyancy, Coriolis or centrifugal forces. In some cases, there can be electromagnetic forces present as well.}
-          @item{@emph{Surface} forces, which act directly on the surface of the control volume. They result from only two sources:
-            @itemize{
-              @item{the pressure distribution, imposed by the outside fluid surrounding the volume,}
-              @item{the shear and normal stresses, resulting from the friction between the fluid and the surface of the volume.}
-            }
-          }
-        }
-      }
-      @lang["zh-Hans"]{扩散通量为零，因为对静止流体而言不可能存在动量的扩散。于是，剩下的问题是：流体微元受到哪些力的作用？我们可以辨识出作用在控制体上的两类力：
-        @itemize{
-          @item{外部体积力或体力（body forces），直接作用在体积的质量上。例如重力、浮力、科里奥利力或离心力。在某些情形下，还可能存在电磁力。}
-          @item{表面力（surface forces），直接作用在控制体的表面上。它们仅来自两个来源：
-            @itemize{
-              @item{由包围该体积的外部流体施加的压力分布；}
-              @item{由流体与体积表面之间的摩擦产生的切向应力和法向应力。}
-            }
-          }
-        }
-      }
+      The diffusive flux is zero since there is no diffusion of momentum possible for a fluid at rest. Thus, the remaining question is now, what are the forces the fluid element is exposed to? We can identify two kinds of forces acting on the control volume:
+              @itemize{
+                @item{@emph{External volume} or @emph{body} forces, which act directly on the mass of the volume. These are for example gravitational, buoyancy, Coriolis or centrifugal forces. In some cases, there can be electromagnetic forces present as well.}
+                @item{@emph{Surface} forces, which act directly on the surface of the control volume. They result from only two sources:
+                  @itemize{
+                    @item{the pressure distribution, imposed by the outside fluid surrounding the volume,}
+                    @item{the shear and normal stresses, resulting from the friction between the fluid and the surface of the volume.}
+                  }
+                }
+              }
+
+    }{
+      扩散通量为零，因为对静止流体而言不可能存在动量的扩散。于是，剩下的问题是：流体微元受到哪些力的作用？我们可以辨识出作用在控制体上的两类力：
+              @itemize{
+                @item{外部体积力或体力（body forces），直接作用在体积的质量上。例如重力、浮力、科里奥利力或离心力。在某些情形下，还可能存在电磁力。}
+                @item{表面力（surface forces），直接作用在控制体的表面上。它们仅来自两个来源：
+                  @itemize{
+                    @item{由包围该体积的外部流体施加的压力分布；}
+                    @item{由流体与体积表面之间的摩擦产生的切向应力和法向应力。}
+                  }
+                }
+              }
+
     }
 
     @bi{
-      @lang["en"]{From the above, we can see that the body force per unit volume, further denoted as @tex-math{\rho\vec{f}_e}, corresponds to the volume sources in Eq. @link["blazek2005-ch02#eq-2-2"]{(2.2)}. Thus, the contribution of the body (external) force to the momentum conservation is}
-      @lang["zh-Hans"]{由此可以看出，单位体积上的体力（下面记作@tex-math{\rho\vec{f}_e}）对应于方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}中的体积源。因此，体力（外力）对动量守恒的贡献为}
+      From the above, we can see that the body force per unit volume, further denoted as @tex-math{\rho\vec{f}_e}, corresponds to the volume sources in Eq. @link["blazek2005-ch02#eq-2-2"]{(2.2)}. Thus, the contribution of the body (external) force to the momentum conservation is
+    }{
+      由此可以看出，单位体积上的体力（下面记作@tex-math{\rho\vec{f}_e}）对应于方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}中的体积源。因此，体力（外力）对动量守恒的贡献为
     }
 
     @tex-display-math{\int_{\Omega}\rho\vec{f}_e\,d\Omega.}
 
     @bi{
-      @lang["en"]{The surface sources consist then of two parts - of an isotropic pressure component and of a @emph{viscous stress} tensor @tex-math{\overline{\overline{\tau}}}, i.e.,}
-      @lang["zh-Hans"]{面源则由两部分组成——各向同性的压力分量和黏性应力（viscous stress）张量@tex-math{\overline{\overline{\tau}}}，即}
+      The surface sources consist then of two parts - of an isotropic pressure component and of a @emph{viscous stress} tensor @tex-math{\overline{\overline{\tau}}}, i.e.,
+    }{
+      面源则由两部分组成——各向同性的压力分量和黏性应力（viscous stress）张量@tex-math{\overline{\overline{\tau}}}，即
     }
 
     @tex-display-math[#:id "eq-2-4"]{\vec{Q}_S = -p\,\overline{\overline{I}} + \overline{\overline{\tau}} \tag{2.4}}
 
     @bi{
-      @lang["en"]{with @tex-math{\overline{\overline{I}}} being the unit tensor (for tensors see, e.g., @link["blazek2005-r2-2"]{[2]}). The effect of the surface sources on the control volume is sketched in Fig. 2.2. In Section 2.3, we shall elaborate the form of the stress tensor in more detail, and in particular show how the normal and the shear stresses are connected to the flow velocity.}
-      @lang["zh-Hans"]{其中@tex-math{\overline{\overline{I}}}为单位张量（关于张量可参见例如@link["blazek2005-r2-2"]{[2]}）。面源对控制体的作用示于图2.2。在2.3节中，我们将更详细地阐述应力张量的形式，特别是说明法向应力和切向应力与流动速度之间的联系。}
+      with @tex-math{\overline{\overline{I}}} being the unit tensor (for tensors see, e.g., @link["blazek2005-r2-2"]{[2]}). The effect of the surface sources on the control volume is sketched in Fig. 2.2. In Section 2.3, we shall elaborate the form of the stress tensor in more detail, and in particular show how the normal and the shear stresses are connected to the flow velocity.
+    }{
+      其中@tex-math{\overline{\overline{I}}}为单位张量（关于张量可参见例如@link["blazek2005-r2-2"]{[2]}）。面源对控制体的作用示于图2.2。在2.3节中，我们将更详细地阐述应力张量的形式，特别是说明法向应力和切向应力与流动速度之间的联系。
     }
 
     @figure["blazek2005/fig-2-2.png" "图2.2:作用在控制体表面元上的表面力"]{
     @emph{图2.2:作用在控制体表面元上的表面力。}图例：@tex-math{\overline{\overline{\tau}}\cdot\vec{n}\,dS}——黏性应力；@tex-math{p\vec{n}\,dS}——压力；@tex-math{dS}——面元；@tex-math{\Omega}——控制体。
 }
     @bi{
-      @lang["en"]{Hence, if we now sum up all the above contributions according to the general conservation law (Eq. @link["blazek2005-ch02#eq-2-2"]{(2.2)}), we finally obtain the expression}
-      @lang["zh-Hans"]{于是，如果按照一般守恒定律（方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}）把上述所有贡献求和，我们最终得到表达式}
+      Hence, if we now sum up all the above contributions according to the general conservation law (Eq. @link["blazek2005-ch02#eq-2-2"]{(2.2)}), we finally obtain the expression
+    }{
+      于是，如果按照一般守恒定律（方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}）把上述所有贡献求和，我们最终得到表达式
     }
 
     @tex-display-math[#:id "eq-2-5"]{\begin{aligned} \frac{\partial}{\partial t}\int_{\Omega}\rho\vec{v}\,d\Omega + \oint_{\partial\Omega}\rho\vec{v}\left(\vec{v}\cdot\vec{n}\right)dS\\ \quad = \int_{\Omega}\rho\vec{f}_e\,d\Omega - \oint_{\partial\Omega}p\,\vec{n}\,dS + \oint_{\partial\Omega}\left(\overline{\overline{\tau}}\cdot\vec{n}\right)dS \end{aligned} \tag{2.5}}
 
     @bi{
-      @lang["en"]{for the momentum conservation inside an arbitrary control volume @tex-math{\Omega} which is fixed in space.}
-      @lang["zh-Hans"]{即固定在空间中的任意控制体@tex-math{\Omega}内的动量守恒。}
+      for the momentum conservation inside an arbitrary control volume @tex-math{\Omega} which is fixed in space.
+    }{
+      即固定在空间中的任意控制体@tex-math{\Omega}内的动量守恒。
     }
   }
 
@@ -267,83 +298,95 @@
     @title{2.2.3 The Energy Equation 能量方程}
 
     @bi{
-      @lang["en"]{The underlying principle that we will apply in the derivation of the energy equation, is the first law of thermodynamics. Applied to the control volume displayed in Fig. 2.1, it states that any changes in time of the total energy inside the volume are caused by the rate of work of forces acting on the volume and by the net heat flux into it. The total energy per unit mass @tex-math{E} of a fluid is obtained by adding its internal energy per unit mass, @tex-math{e}, to its kinetic energy per unit mass @tex-math{|\vec{v}|^{2}/2}. Thus, we can write for the total energy}
-      @lang["zh-Hans"]{我们在推导能量方程时所依据的基本原理是热力学第一定律。把它应用于图2.1所示的控制体，可以表述为：体积内总能量随时间的任何变化，都是由作用在该体积上的力的做功速率以及流入该体积的净热流引起的。流体单位质量的总能量@tex-math{E}，由其单位质量内能@tex-math{e}加上单位质量动能@tex-math{|\vec{v}|^{2}/2}而得到。因此，总能量可以写为}
+      The underlying principle that we will apply in the derivation of the energy equation, is the first law of thermodynamics. Applied to the control volume displayed in Fig. 2.1, it states that any changes in time of the total energy inside the volume are caused by the rate of work of forces acting on the volume and by the net heat flux into it. The total energy per unit mass @tex-math{E} of a fluid is obtained by adding its internal energy per unit mass, @tex-math{e}, to its kinetic energy per unit mass @tex-math{|\vec{v}|^{2}/2}. Thus, we can write for the total energy
+    }{
+      我们在推导能量方程时所依据的基本原理是热力学第一定律。把它应用于图2.1所示的控制体，可以表述为：体积内总能量随时间的任何变化，都是由作用在该体积上的力的做功速率以及流入该体积的净热流引起的。流体单位质量的总能量@tex-math{E}，由其单位质量内能@tex-math{e}加上单位质量动能@tex-math{|\vec{v}|^{2}/2}而得到。因此，总能量可以写为
     }
 
     @tex-display-math[#:id "eq-2-6"]{E = e + \frac{|\vec{v}|^{2}}{2} = e + \frac{u^{2}+v^{2}+w^{2}}{2}. \tag{2.6}}
 
     @bi{
-      @lang["en"]{The conserved quantity is in this case the total energy per unit volume, i.e., @tex-math{\rho E}. Its variation in time within the volume @tex-math{\Omega} can be expressed as}
-      @lang["zh-Hans"]{此情形下的守恒量是单位体积的总能量，即@tex-math{\rho E}。它在体积@tex-math{\Omega}内随时间的变化可表示为}
+      The conserved quantity is in this case the total energy per unit volume, i.e., @tex-math{\rho E}. Its variation in time within the volume @tex-math{\Omega} can be expressed as
+    }{
+      此情形下的守恒量是单位体积的总能量，即@tex-math{\rho E}。它在体积@tex-math{\Omega}内随时间的变化可表示为
     }
 
     @tex-display-math{\frac{\partial}{\partial t}\int_{\Omega}\rho E\,d\Omega.}
 
     @bi{
-      @lang["en"]{Following the discussion in course of the derivation of the general conservation law (Eq. @link["blazek2005-ch02#eq-2-1"]{(2.1)}), we can readily specify the contribution of the convective flux as}
-      @lang["zh-Hans"]{按照推导一般守恒定律（方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}）时的讨论，我们可以直接写出对流通量的贡献为}
+      Following the discussion in course of the derivation of the general conservation law (Eq. @link["blazek2005-ch02#eq-2-1"]{(2.1)}), we can readily specify the contribution of the convective flux as
+    }{
+      按照推导一般守恒定律（方程@link["blazek2005-ch02#eq-2-1"]{(2.1)}）时的讨论，我们可以直接写出对流通量的贡献为
     }
 
     @tex-display-math{-\oint_{\partial\Omega}\rho E\left(\vec{v}\cdot\vec{n}\right)dS.}
 
     @bi{
-      @lang["en"]{In contrast to the continuity and the momentum equation, there is now a diffusive flux. As we already stated, it is proportional to the gradient of the conserved quantity per unit mass (Fick's law). Since the diffusive flux @tex-math{\vec{F}_D} is defined for a fluid at rest, only the internal energy becomes effective and we obtain}
-      @lang["zh-Hans"]{与连续方程和动量方程不同，这里出现了扩散通量。如前所述，它与单位质量守恒量的梯度成正比（Fick定律）。由于扩散通量@tex-math{\vec{F}_D}是针对静止流体定义的，只有内能起作用，于是得到}
+      In contrast to the continuity and the momentum equation, there is now a diffusive flux. As we already stated, it is proportional to the gradient of the conserved quantity per unit mass (Fick's law). Since the diffusive flux @tex-math{\vec{F}_D} is defined for a fluid at rest, only the internal energy becomes effective and we obtain
+    }{
+      与连续方程和动量方程不同，这里出现了扩散通量。如前所述，它与单位质量守恒量的梯度成正比（Fick定律）。由于扩散通量@tex-math{\vec{F}_D}是针对静止流体定义的，只有内能起作用，于是得到
     }
 
     @tex-display-math[#:id "eq-2-7"]{\vec{F}_D = -\gamma\rho\kappa\,\nabla e. \tag{2.7}}
 
     @bi{
-      @lang["en"]{In the above, @tex-math{\gamma = c_p/c_v} is the ratio of specific heat coefficients, and @tex-math{\kappa} denotes the @emph{thermal diffusivity coefficient}. The diffusion flux represents one part of the heat flux into the control volume, namely the diffusion of heat due to molecular thermal conduction - heat transfer due to temperature gradients. Therefore, Equation @link["blazek2005-ch02#eq-2-7"]{(2.7)} is in general written in the form of Fourier's law of heat conduction, i.e.,}
-      @lang["zh-Hans"]{上式中，@tex-math{\gamma = c_p/c_v}为比热系数之比，@tex-math{\kappa}为热扩散率系数（thermal diffusivity coefficient）。扩散通量代表进入控制体热流的一部分，即由分子热传导引起的热扩散——由温度梯度导致的传热。因此，方程@link["blazek2005-ch02#eq-2-7"]{(2.7)}通常写成Fourier热传导定律的形式，即}
+      In the above, @tex-math{\gamma = c_p/c_v} is the ratio of specific heat coefficients, and @tex-math{\kappa} denotes the @emph{thermal diffusivity coefficient}. The diffusion flux represents one part of the heat flux into the control volume, namely the diffusion of heat due to molecular thermal conduction - heat transfer due to temperature gradients. Therefore, Equation @link["blazek2005-ch02#eq-2-7"]{(2.7)} is in general written in the form of Fourier's law of heat conduction, i.e.,
+    }{
+      上式中，@tex-math{\gamma = c_p/c_v}为比热系数之比，@tex-math{\kappa}为热扩散率系数（thermal diffusivity coefficient）。扩散通量代表进入控制体热流的一部分，即由分子热传导引起的热扩散——由温度梯度导致的传热。因此，方程@link["blazek2005-ch02#eq-2-7"]{(2.7)}通常写成Fourier热传导定律的形式，即
     }
 
     @tex-display-math[#:id "eq-2-8"]{\vec{F}_D = -k\,\nabla T \tag{2.8}}
 
     @bi{
-      @lang["en"]{with @tex-math{k} standing for the @emph{thermal conductivity coefficient} and @tex-math{T} for the absolute static temperature.}
-      @lang["zh-Hans"]{其中@tex-math{k}为热导率系数（thermal conductivity coefficient），@tex-math{T}为绝对静温。}
+      with @tex-math{k} standing for the @emph{thermal conductivity coefficient} and @tex-math{T} for the absolute static temperature.
+    }{
+      其中@tex-math{k}为热导率系数（thermal conductivity coefficient），@tex-math{T}为绝对静温。
     }
 
     @bi{
-      @lang["en"]{The other part of the net heat flux into the finite control volume consists of volumetric heating due to the absorption or emission of radiation, or due to chemical reactions. We will denote the heat sources - the time rate of heat transfer per unit mass - as @tex-math{\dot{q}_h}. Together with the rate of work done by the body forces @tex-math{\vec{f}_e}, which we have introduced for the momentum equation, it completes the volume sources}
-      @lang["zh-Hans"]{进入有限控制体的净热流的另一部分，是由辐射的吸收或发射、或化学反应引起的体积加热。我们把热源——单位质量传热的时间变化率——记作@tex-math{\dot{q}_h}。它与为动量方程引入的体力@tex-math{\vec{f}_e}的做功速率一起，构成完整的体积源}
+      The other part of the net heat flux into the finite control volume consists of volumetric heating due to the absorption or emission of radiation, or due to chemical reactions. We will denote the heat sources - the time rate of heat transfer per unit mass - as @tex-math{\dot{q}_h}. Together with the rate of work done by the body forces @tex-math{\vec{f}_e}, which we have introduced for the momentum equation, it completes the volume sources
+    }{
+      进入有限控制体的净热流的另一部分，是由辐射的吸收或发射、或化学反应引起的体积加热。我们把热源——单位质量传热的时间变化率——记作@tex-math{\dot{q}_h}。它与为动量方程引入的体力@tex-math{\vec{f}_e}的做功速率一起，构成完整的体积源
     }
 
     @tex-display-math[#:id "eq-2-9"]{Q_V = \rho\,\vec{f}_e\cdot\vec{v} + \dot{q}_h. \tag{2.9}}
 
     @bi{
-      @lang["en"]{The last contribution to the conservation of energy, which we have yet to determine, are the surface sources @tex-math{Q_S}. They correspond to the time rate of work done by the pressure as well as the shear and normal stresses on the fluid element (see Fig. 2.2), i.e.,}
-      @lang["zh-Hans"]{能量守恒中尚待确定的最后一项贡献是面源@tex-math{Q_S}。它对应于压力以及切向和法向应力对流体微元做功的时间变化率（见图2.2），即}
+      The last contribution to the conservation of energy, which we have yet to determine, are the surface sources @tex-math{Q_S}. They correspond to the time rate of work done by the pressure as well as the shear and normal stresses on the fluid element (see Fig. 2.2), i.e.,
+    }{
+      能量守恒中尚待确定的最后一项贡献是面源@tex-math{Q_S}。它对应于压力以及切向和法向应力对流体微元做功的时间变化率（见图2.2），即
     }
 
     @tex-display-math[#:id "eq-2-10"]{\vec{Q}_S = -p\,\vec{v} + \overline{\overline{\tau}}\cdot\vec{v}. \tag{2.10}}
 
     @bi{
-      @lang["en"]{Sorting now all the above contributions and terms, we obtain for the energy conservation equation the expression}
-      @lang["zh-Hans"]{把上述所有贡献和各项整理起来，便得到能量守恒方程的表达式}
+      Sorting now all the above contributions and terms, we obtain for the energy conservation equation the expression
+    }{
+      把上述所有贡献和各项整理起来，便得到能量守恒方程的表达式
     }
 
     @tex-display-math[#:id "eq-2-11"]{\begin{aligned} \frac{\partial}{\partial t}\int_{\Omega}\rho E\,d\Omega + \oint_{\partial\Omega}\rho E\left(\vec{v}\cdot\vec{n}\right)dS = \oint_{\partial\Omega}k\left(\nabla T\cdot\vec{n}\right)dS\\ + \int_{\Omega}\left(\rho\vec{f}_e\cdot\vec{v} + \dot{q}_h\right)d\Omega - \oint_{\partial\Omega}p\left(\vec{v}\cdot\vec{n}\right)dS + \oint_{\partial\Omega}\left(\overline{\overline{\tau}}\cdot\vec{v}\right)\cdot\vec{n}\,dS. \end{aligned} \tag{2.11}}
 
     @bi{
-      @lang["en"]{The energy equation @link["blazek2005-ch02#eq-2-11"]{(2.11)} is usually written in a slightly different form. For that purpose, we will utilise the following general relation between the total enthalpy, the total energy and the pressure}
-      @lang["zh-Hans"]{能量方程@link["blazek2005-ch02#eq-2-11"]{(2.11)}通常写成略有不同的形式。为此，我们将利用总焓、总能量与压力之间的如下一般关系}
+      The energy equation @link["blazek2005-ch02#eq-2-11"]{(2.11)} is usually written in a slightly different form. For that purpose, we will utilise the following general relation between the total enthalpy, the total energy and the pressure
+    }{
+      能量方程@link["blazek2005-ch02#eq-2-11"]{(2.11)}通常写成略有不同的形式。为此，我们将利用总焓、总能量与压力之间的如下一般关系
     }
 
     @tex-display-math[#:id "eq-2-12"]{H = h + \frac{|\vec{v}|^{2}}{2} = E + \frac{p}{\rho}. \tag{2.12}}
 
     @bi{
-      @lang["en"]{When we now gather the convective (@tex-math{\rho E\vec{v}}) and the pressure term (@tex-math{p\vec{v}}) in the energy conservation law @link["blazek2005-ch02#eq-2-11"]{(2.11)}, and apply the formula @link["blazek2005-ch02#eq-2-12"]{(2.12)}, we can finally write the energy equation in the form}
-      @lang["zh-Hans"]{当我们在能量守恒定律@link["blazek2005-ch02#eq-2-11"]{(2.11)}中把对流项（@tex-math{\rho E\vec{v}}）与压力项（@tex-math{p\vec{v}}）合并，并应用公式@link["blazek2005-ch02#eq-2-12"]{(2.12)}时，最终可把能量方程写成}
+      When we now gather the convective (@tex-math{\rho E\vec{v}}) and the pressure term (@tex-math{p\vec{v}}) in the energy conservation law @link["blazek2005-ch02#eq-2-11"]{(2.11)}, and apply the formula @link["blazek2005-ch02#eq-2-12"]{(2.12)}, we can finally write the energy equation in the form
+    }{
+      当我们在能量守恒定律@link["blazek2005-ch02#eq-2-11"]{(2.11)}中把对流项（@tex-math{\rho E\vec{v}}）与压力项（@tex-math{p\vec{v}}）合并，并应用公式@link["blazek2005-ch02#eq-2-12"]{(2.12)}时，最终可把能量方程写成
     }
 
     @tex-display-math[#:id "eq-2-13"]{\begin{aligned} \frac{\partial}{\partial t}\int_{\Omega}\rho E\,d\Omega + \oint_{\partial\Omega}\rho H\left(\vec{v}\cdot\vec{n}\right)dS = \oint_{\partial\Omega}k\left(\nabla T\cdot\vec{n}\right)dS\\ + \int_{\Omega}\left(\rho\vec{f}_e\cdot\vec{v} + \dot{q}_h\right)d\Omega + \oint_{\partial\Omega}\left(\overline{\overline{\tau}}\cdot\vec{v}\right)\cdot\vec{n}\,dS. \end{aligned} \tag{2.13}}
 
     @bi{
-      @lang["en"]{Herewith, we have derived integral formulations of the three conservation laws: the conservation of mass @link["blazek2005-ch02#eq-2-3"]{(2.3)}, of momentum @link["blazek2005-ch02#eq-2-5"]{(2.5)}, and of energy @link["blazek2005-ch02#eq-2-13"]{(2.13)}. In the next section, we shall work out the formulation of the normal and the shear stresses in more detail.}
-      @lang["zh-Hans"]{至此，我们已经导出了三个守恒定律的积分形式：质量守恒@link["blazek2005-ch02#eq-2-3"]{(2.3)}、动量守恒@link["blazek2005-ch02#eq-2-5"]{(2.5)}和能量守恒@link["blazek2005-ch02#eq-2-13"]{(2.13)}。下一节中，我们将更详细地给出法向应力和切向应力的表述。}
+      Herewith, we have derived integral formulations of the three conservation laws: the conservation of mass @link["blazek2005-ch02#eq-2-3"]{(2.3)}, of momentum @link["blazek2005-ch02#eq-2-5"]{(2.5)}, and of energy @link["blazek2005-ch02#eq-2-13"]{(2.13)}. In the next section, we shall work out the formulation of the normal and the shear stresses in more detail.
+    }{
+      至此，我们已经导出了三个守恒定律的积分形式：质量守恒@link["blazek2005-ch02#eq-2-3"]{(2.3)}、动量守恒@link["blazek2005-ch02#eq-2-5"]{(2.5)}和能量守恒@link["blazek2005-ch02#eq-2-13"]{(2.13)}。下一节中，我们将更详细地给出法向应力和切向应力的表述。
     }
   }
 }
@@ -352,27 +395,31 @@
   @title{2.3 Viscous Stresses 黏性应力}
 
   @bi{
-    @lang["en"]{The viscous stresses, which originate from the friction between the fluid and the surface of an element, are described by the stress tensor @tex-math{\overline{\overline{\tau}}}. In Cartesian coordinates its general form is given by}
-    @lang["zh-Hans"]{黏性应力源于流体与微元表面之间的摩擦，由应力张量@tex-math{\overline{\overline{\tau}}}描述。在笛卡尔坐标系中，其一般形式为}
+    The viscous stresses, which originate from the friction between the fluid and the surface of an element, are described by the stress tensor @tex-math{\overline{\overline{\tau}}}. In Cartesian coordinates its general form is given by
+  }{
+    黏性应力源于流体与微元表面之间的摩擦，由应力张量@tex-math{\overline{\overline{\tau}}}描述。在笛卡尔坐标系中，其一般形式为
   }
 
   @tex-display-math[#:id "eq-2-14"]{\overline{\overline{\tau}} = \begin{bmatrix} \tau_{xx} & \tau_{xy} & \tau_{xz}\\ \tau_{yx} & \tau_{yy} & \tau_{yz}\\ \tau_{zx} & \tau_{zy} & \tau_{zz} \end{bmatrix} \tag{2.14}}
 
   @bi{
-    @lang["en"]{The notation @tex-math{\tau_{ij}} means by convention that the particular stress component affects a plane perpendicular to the @tex-math{i}-axis, in the direction of the @tex-math{j}-axis. The components @tex-math{\tau_{xx}}, @tex-math{\tau_{yy}}, and @tex-math{\tau_{zz}} represent the normal stresses, the other components of @tex-math{\overline{\overline{\tau}}} stand for the shear stresses, respectively. Figure 2.3 shows the stresses for a quadrilateral fluid element. One can notice that the normal stresses (Fig. 2.3a) try to displace the faces of the element in three mutually perpendicular directions, whereas the shear stresses (Fig. 2.3b) try to shear the element.}
-    @lang["zh-Hans"]{按照惯例，记号@tex-math{\tau_{ij}}表示该应力分量作用在垂直于@tex-math{i}轴的平面上、方向沿@tex-math{j}轴。分量@tex-math{\tau_{xx}}、@tex-math{\tau_{yy}}和@tex-math{\tau_{zz}}代表法向应力，@tex-math{\overline{\overline{\tau}}}的其余分量则分别代表切向应力。图2.3给出了四边形流体微元上的应力。可以看到，法向应力（图2.3a）试图使微元的各个面沿三个互相垂直的方向发生位移，而切向应力（图2.3b）则试图使微元发生剪切变形。}
+    The notation @tex-math{\tau_{ij}} means by convention that the particular stress component affects a plane perpendicular to the @tex-math{i}-axis, in the direction of the @tex-math{j}-axis. The components @tex-math{\tau_{xx}}, @tex-math{\tau_{yy}}, and @tex-math{\tau_{zz}} represent the normal stresses, the other components of @tex-math{\overline{\overline{\tau}}} stand for the shear stresses, respectively. Figure 2.3 shows the stresses for a quadrilateral fluid element. One can notice that the normal stresses (Fig. 2.3a) try to displace the faces of the element in three mutually perpendicular directions, whereas the shear stresses (Fig. 2.3b) try to shear the element.
+  }{
+    按照惯例，记号@tex-math{\tau_{ij}}表示该应力分量作用在垂直于@tex-math{i}轴的平面上、方向沿@tex-math{j}轴。分量@tex-math{\tau_{xx}}、@tex-math{\tau_{yy}}和@tex-math{\tau_{zz}}代表法向应力，@tex-math{\overline{\overline{\tau}}}的其余分量则分别代表切向应力。图2.3给出了四边形流体微元上的应力。可以看到，法向应力（图2.3a）试图使微元的各个面沿三个互相垂直的方向发生位移，而切向应力（图2.3b）则试图使微元发生剪切变形。
   }
 
   @bi{
-    @lang["en"]{You may ask now, how the viscous stresses are evaluated. First of all, they depend on the dynamical properties of the medium. For fluids like air or water, Isaac Newton stated that the shear stress is proportional to the velocity gradient. Therefore, medium of such a type is designated as @emph{Newtonian fluid}. On the other hand, fluids like for example melted plastic or blood behave in a different manner - they are non-Newtonian fluids. But, for the vast majority of practical problems, where the fluid can be assumed to be Newtonian, the components of the viscous stress tensor are defined by the relations @link["blazek2005-r2-3"]{[3]}, @link["blazek2005-r2-4"]{[4]}}
-    @lang["zh-Hans"]{现在你可能会问，黏性应力是如何求得的。首先，它们取决于介质的动力学性质。对于空气或水这类流体，Isaac Newton指出切向应力与速度梯度成正比。因此，这类介质被称为牛顿流体（Newtonian fluid）。另一方面，诸如熔融塑料或血液等流体则表现出不同的行为——它们是非牛顿流体。但是，对于流体可以假设为牛顿流体的绝大多数实际问题，黏性应力张量的分量由如下关系定义@link["blazek2005-r2-3"]{[3]}, @link["blazek2005-r2-4"]{[4]}}
+    You may ask now, how the viscous stresses are evaluated. First of all, they depend on the dynamical properties of the medium. For fluids like air or water, Isaac Newton stated that the shear stress is proportional to the velocity gradient. Therefore, medium of such a type is designated as @emph{Newtonian fluid}. On the other hand, fluids like for example melted plastic or blood behave in a different manner - they are non-Newtonian fluids. But, for the vast majority of practical problems, where the fluid can be assumed to be Newtonian, the components of the viscous stress tensor are defined by the relations @link["blazek2005-r2-3"]{[3]}, @link["blazek2005-r2-4"]{[4]}
+  }{
+    现在你可能会问，黏性应力是如何求得的。首先，它们取决于介质的动力学性质。对于空气或水这类流体，Isaac Newton指出切向应力与速度梯度成正比。因此，这类介质被称为牛顿流体（Newtonian fluid）。另一方面，诸如熔融塑料或血液等流体则表现出不同的行为——它们是非牛顿流体。但是，对于流体可以假设为牛顿流体的绝大多数实际问题，黏性应力张量的分量由如下关系定义@link["blazek2005-r2-3"]{[3]}, @link["blazek2005-r2-4"]{[4]}
   }
 
   @tex-display-math[#:id "eq-2-15"]{\begin{aligned} \tau_{xx} &= \lambda\left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} + \frac{\partial w}{\partial z}\right) + 2\mu\frac{\partial u}{\partial x}\\ \tau_{yy} &= \lambda\left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} + \frac{\partial w}{\partial z}\right) + 2\mu\frac{\partial v}{\partial y}\\ \tau_{zz} &= \lambda\left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} + \frac{\partial w}{\partial z}\right) + 2\mu\frac{\partial w}{\partial z}\\ \tau_{xy} &= \tau_{yx} = \mu\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\\ \tau_{xz} &= \tau_{zx} = \mu\left(\frac{\partial u}{\partial z} + \frac{\partial w}{\partial x}\right)\\ \tau_{yz} &= \tau_{zy} = \mu\left(\frac{\partial v}{\partial z} + \frac{\partial w}{\partial y}\right) \end{aligned} \tag{2.15}}
 
   @bi{
-    @lang["en"]{in which @tex-math{\lambda} represents the @emph{second viscosity} coefficient, and @tex-math{\mu} denotes the @emph{dynamic viscosity} coefficient. For convenience, we can also define the so-called @emph{kinematic} viscosity coefficient, which is given by the formula}
-    @lang["zh-Hans"]{其中@tex-math{\lambda}为第二黏性系数（second viscosity），@tex-math{\mu}为动力黏性系数（dynamic viscosity）。为方便起见，还可以定义所谓的运动黏性系数（kinematic viscosity），其公式为}
+    in which @tex-math{\lambda} represents the @emph{second viscosity} coefficient, and @tex-math{\mu} denotes the @emph{dynamic viscosity} coefficient. For convenience, we can also define the so-called @emph{kinematic} viscosity coefficient, which is given by the formula
+  }{
+    其中@tex-math{\lambda}为第二黏性系数（second viscosity），@tex-math{\mu}为动力黏性系数（dynamic viscosity）。为方便起见，还可以定义所谓的运动黏性系数（kinematic viscosity），其公式为
   }
 
   @tex-display-math[#:id "eq-2-16"]{\nu = \mu/\rho. \tag{2.16}}
@@ -381,37 +428,43 @@
   @emph{图2.3:作用在有限流体微元上的法向应力(a)与切向应力(b)。}图例：(a)法向应力@tex-math{\tau_{xx}}、@tex-math{\tau_{yy}}、@tex-math{\tau_{zz}}；(b)切向应力@tex-math{\tau_{xy}}、@tex-math{\tau_{xz}}、@tex-math{\tau_{yx}}、@tex-math{\tau_{yz}}、@tex-math{\tau_{zx}}、@tex-math{\tau_{zy}}。
 }
   @bi{
-    @lang["en"]{The expressions in Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} were derived by the Englishman George Stokes in the middle of the 19th century. The terms @tex-math{\mu(\partial u/\partial x)}, etc. in the normal stresses represent the rate of @emph{linear} dilatation - a change in shape. On the other hand, the term @tex-math{(\lambda\,\mathrm{div}\,\vec{v})} in Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} represents @emph{volumetric} dilatation - the rate of change in volume, which is in essence a change of the density.}
-    @lang["zh-Hans"]{方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中的表达式由英国人George Stokes在19世纪中叶导出。法向应力中的@tex-math{\mu(\partial u/\partial x)}等项代表线膨胀率（linear dilatation）——形状的变化。另一方面，方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中的项@tex-math{(\lambda\,\mathrm{div}\,\vec{v})}代表体积膨胀（volumetric dilatation）——体积的变化率，其本质是密度的变化。}
+    The expressions in Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} were derived by the Englishman George Stokes in the middle of the 19th century. The terms @tex-math{\mu(\partial u/\partial x)}, etc. in the normal stresses represent the rate of @emph{linear} dilatation - a change in shape. On the other hand, the term @tex-math{(\lambda\,\mathrm{div}\,\vec{v})} in Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} represents @emph{volumetric} dilatation - the rate of change in volume, which is in essence a change of the density.
+  }{
+    方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中的表达式由英国人George Stokes在19世纪中叶导出。法向应力中的@tex-math{\mu(\partial u/\partial x)}等项代表线膨胀率（linear dilatation）——形状的变化。另一方面，方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中的项@tex-math{(\lambda\,\mathrm{div}\,\vec{v})}代表体积膨胀（volumetric dilatation）——体积的变化率，其本质是密度的变化。
   }
 
   @bi{
-    @lang["en"]{In order to close the expressions for the normal stresses, Stokes introduced the hypothesis @link["blazek2005-r2-5"]{[5]} that}
-    @lang["zh-Hans"]{为了使法向应力的表达式封闭，Stokes引入了如下假设@link["blazek2005-r2-5"]{[5]}}
+    In order to close the expressions for the normal stresses, Stokes introduced the hypothesis @link["blazek2005-r2-5"]{[5]} that
+  }{
+    为了使法向应力的表达式封闭，Stokes引入了如下假设@link["blazek2005-r2-5"]{[5]}
   }
 
   @tex-display-math[#:id "eq-2-17"]{\lambda + \frac{2}{3}\,\mu = 0. \tag{2.17}}
 
   @bi{
-    @lang["en"]{The above relation @link["blazek2005-ch02#eq-2-17"]{(2.17)} is termed the @emph{bulk viscosity}. Bulk viscosity represents the property, which is responsible for energy dissipation in a fluid of uniform temperature during a change in volume at finite rate.}
-    @lang["zh-Hans"]{上述关系@link["blazek2005-ch02#eq-2-17"]{(2.17)}称为体积黏性（bulk viscosity）。体积黏性所描述的性质，决定了温度均匀的流体在以有限速率改变体积时的能量耗散。}
+    The above relation @link["blazek2005-ch02#eq-2-17"]{(2.17)} is termed the @emph{bulk viscosity}. Bulk viscosity represents the property, which is responsible for energy dissipation in a fluid of uniform temperature during a change in volume at finite rate.
+  }{
+    上述关系@link["blazek2005-ch02#eq-2-17"]{(2.17)}称为体积黏性（bulk viscosity）。体积黏性所描述的性质，决定了温度均匀的流体在以有限速率改变体积时的能量耗散。
   }
 
   @bi{
-    @lang["en"]{With the exception of extremely high temperatures or pressures, there is so far no experimental evidence that Stokes's hypothesis in Eq. @link["blazek2005-ch02#eq-2-17"]{(2.17)} does not hold (see discussion in Ref. @link["blazek2005-r2-6"]{[6]}). It is therefore generally used to eliminate @tex-math{\lambda} from Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)}. Hence, we obtain for the normal viscous stresses}
-    @lang["zh-Hans"]{除极高温度或极高压力的情形外，迄今尚无实验证据表明方程@link["blazek2005-ch02#eq-2-17"]{(2.17)}中的Stokes假设不成立（参见文献@link["blazek2005-r2-6"]{[6]}中的讨论）。因此，通常利用该假设从方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中消去@tex-math{\lambda}。于是，法向黏性应力为}
+    With the exception of extremely high temperatures or pressures, there is so far no experimental evidence that Stokes's hypothesis in Eq. @link["blazek2005-ch02#eq-2-17"]{(2.17)} does not hold (see discussion in Ref. @link["blazek2005-r2-6"]{[6]}). It is therefore generally used to eliminate @tex-math{\lambda} from Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)}. Hence, we obtain for the normal viscous stresses
+  }{
+    除极高温度或极高压力的情形外，迄今尚无实验证据表明方程@link["blazek2005-ch02#eq-2-17"]{(2.17)}中的Stokes假设不成立（参见文献@link["blazek2005-r2-6"]{[6]}中的讨论）。因此，通常利用该假设从方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}中消去@tex-math{\lambda}。于是，法向黏性应力为
   }
 
   @tex-display-math[#:id "eq-2-18"]{\begin{aligned} \tau_{xx} &= 2\mu\left(\frac{\partial u}{\partial x} - \frac{1}{3}\,\mathrm{div}\,\vec{v}\right)\\ \tau_{yy} &= 2\mu\left(\frac{\partial v}{\partial y} - \frac{1}{3}\,\mathrm{div}\,\vec{v}\right)\\ \tau_{zz} &= 2\mu\left(\frac{\partial w}{\partial z} - \frac{1}{3}\,\mathrm{div}\,\vec{v}\right). \end{aligned} \tag{2.18}}
 
   @bi{
-    @lang["en"]{It should be noted that the expressions for the normal stresses in Eq. @link["blazek2005-ch02#eq-2-18"]{(2.18)} simplify for an incompressible fluid (constant density) because of @tex-math{\mathrm{div}\,\vec{v} = 0} (continuity equation).}
-    @lang["zh-Hans"]{应当注意，对于不可压缩流体（密度恒定），由于@tex-math{\mathrm{div}\,\vec{v} = 0}（连续方程），方程@link["blazek2005-ch02#eq-2-18"]{(2.18)}中的法向应力表达式会得到简化。}
+    It should be noted that the expressions for the normal stresses in Eq. @link["blazek2005-ch02#eq-2-18"]{(2.18)} simplify for an incompressible fluid (constant density) because of @tex-math{\mathrm{div}\,\vec{v} = 0} (continuity equation).
+  }{
+    应当注意，对于不可压缩流体（密度恒定），由于@tex-math{\mathrm{div}\,\vec{v} = 0}（连续方程），方程@link["blazek2005-ch02#eq-2-18"]{(2.18)}中的法向应力表达式会得到简化。
   }
 
   @bi{
-    @lang["en"]{What remains to be determined are the viscosity coefficient @tex-math{\mu} and the thermal conductivity coefficient @tex-math{k} as functions of the state of the fluid. This can be done within the framework of continuum mechanics only on the basis of empirical assumptions. We shall return to this problem in the next section.}
-    @lang["zh-Hans"]{尚待确定的是作为流体状态函数的黏性系数@tex-math{\mu}和热导率系数@tex-math{k}。在连续介质力学的框架内，这只能依靠经验假设来完成。我们将在下一节回到这一问题。}
+    What remains to be determined are the viscosity coefficient @tex-math{\mu} and the thermal conductivity coefficient @tex-math{k} as functions of the state of the fluid. This can be done within the framework of continuum mechanics only on the basis of empirical assumptions. We shall return to this problem in the next section.
+  }{
+    尚待确定的是作为流体状态函数的黏性系数@tex-math{\mu}和热导率系数@tex-math{k}。在连续介质力学的框架内，这只能依靠经验假设来完成。我们将在下一节回到这一问题。
   }
 }
 
@@ -419,117 +472,134 @@
   @title{2.4 Complete System of the Navier-Stokes Equations 完整的Navier-Stokes方程组}
 
   @bi{
-    @lang["en"]{In the previous sections, we have separately derived the conservation laws of mass, momentum and energy. Now, we can collect them into one system of equations in order to obtain a better overview of the various terms involved. For this purpose, we go back to the general conservation law for a vector quantity, which is expressed in Equation @link["blazek2005-ch02#eq-2-2"]{(2.2)}. For reasons to be explained later, we will introduce two flux vectors, namely @tex-math{\vec{F}_c} and @tex-math{\vec{F}_v}. The first one, @tex-math{\vec{F}_c}, is related to the convective transport of quantities in the fluid. It is usually termed @emph{vector of convective fluxes}, although for the momentum and the energy equation it also includes the pressure terms @tex-math{p\vec{n}} (Eq. @link["blazek2005-ch02#eq-2-5"]{(2.5)}) and @tex-math{p\left(\vec{v}\cdot\vec{n}\right)} (Eq. @link["blazek2005-ch02#eq-2-11"]{(2.11)}), respectively. The second flux vector - denoted the @emph{vector of viscous fluxes} @tex-math{\vec{F}_v}, contains the viscous stresses as well as the heat diffusion. Additionally, let us define a source term @tex-math{\vec{Q}}, which comprises all volume sources due to body forces and volumetric heating. With all this in mind and conducting the scalar product with the unit normal vector @tex-math{\vec{n}}, we can cast Eq. @link["blazek2005-ch02#eq-2-2"]{(2.2)} together with Equations @link["blazek2005-ch02#eq-2-3"]{(2.3)}, @link["blazek2005-ch02#eq-2-5"]{(2.5)} and @link["blazek2005-ch02#eq-2-13"]{(2.13)} into}
-    @lang["zh-Hans"]{在前面几节中，我们分别导出了质量、动量和能量的守恒定律。现在，可以把它们汇集为一个方程组，以便更清楚地总览其中所含的各项。为此，我们回到向量量的一般守恒定律，即方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}。出于后面将会说明的原因，我们引入两个通量向量，即@tex-math{\vec{F}_c}和@tex-math{\vec{F}_v}。第一个向量@tex-math{\vec{F}_c}与流体中物理量的对流输运有关，通常称为对流通量向量（vector of convective fluxes），尽管对动量方程和能量方程而言，它还分别包含压力项@tex-math{p\vec{n}}（方程@link["blazek2005-ch02#eq-2-5"]{(2.5)}）和@tex-math{p\left(\vec{v}\cdot\vec{n}\right)}（方程@link["blazek2005-ch02#eq-2-11"]{(2.11)}）。第二个通量向量称为黏性通量向量（vector of viscous fluxes）@tex-math{\vec{F}_v}，它包含黏性应力以及热扩散。此外，再定义一个源项@tex-math{\vec{Q}}，它涵盖由体力和体积加热引起的所有体积源。记住这些定义，并与单位法向量@tex-math{\vec{n}}作标量积，我们就可以把方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}与方程@link["blazek2005-ch02#eq-2-3"]{(2.3)}、@link["blazek2005-ch02#eq-2-5"]{(2.5)}和@link["blazek2005-ch02#eq-2-13"]{(2.13)}合并为}
+    In the previous sections, we have separately derived the conservation laws of mass, momentum and energy. Now, we can collect them into one system of equations in order to obtain a better overview of the various terms involved. For this purpose, we go back to the general conservation law for a vector quantity, which is expressed in Equation @link["blazek2005-ch02#eq-2-2"]{(2.2)}. For reasons to be explained later, we will introduce two flux vectors, namely @tex-math{\vec{F}_c} and @tex-math{\vec{F}_v}. The first one, @tex-math{\vec{F}_c}, is related to the convective transport of quantities in the fluid. It is usually termed @emph{vector of convective fluxes}, although for the momentum and the energy equation it also includes the pressure terms @tex-math{p\vec{n}} (Eq. @link["blazek2005-ch02#eq-2-5"]{(2.5)}) and @tex-math{p\left(\vec{v}\cdot\vec{n}\right)} (Eq. @link["blazek2005-ch02#eq-2-11"]{(2.11)}), respectively. The second flux vector - denoted the @emph{vector of viscous fluxes} @tex-math{\vec{F}_v}, contains the viscous stresses as well as the heat diffusion. Additionally, let us define a source term @tex-math{\vec{Q}}, which comprises all volume sources due to body forces and volumetric heating. With all this in mind and conducting the scalar product with the unit normal vector @tex-math{\vec{n}}, we can cast Eq. @link["blazek2005-ch02#eq-2-2"]{(2.2)} together with Equations @link["blazek2005-ch02#eq-2-3"]{(2.3)}, @link["blazek2005-ch02#eq-2-5"]{(2.5)} and @link["blazek2005-ch02#eq-2-13"]{(2.13)} into
+  }{
+    在前面几节中，我们分别导出了质量、动量和能量的守恒定律。现在，可以把它们汇集为一个方程组，以便更清楚地总览其中所含的各项。为此，我们回到向量量的一般守恒定律，即方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}。出于后面将会说明的原因，我们引入两个通量向量，即@tex-math{\vec{F}_c}和@tex-math{\vec{F}_v}。第一个向量@tex-math{\vec{F}_c}与流体中物理量的对流输运有关，通常称为对流通量向量（vector of convective fluxes），尽管对动量方程和能量方程而言，它还分别包含压力项@tex-math{p\vec{n}}（方程@link["blazek2005-ch02#eq-2-5"]{(2.5)}）和@tex-math{p\left(\vec{v}\cdot\vec{n}\right)}（方程@link["blazek2005-ch02#eq-2-11"]{(2.11)}）。第二个通量向量称为黏性通量向量（vector of viscous fluxes）@tex-math{\vec{F}_v}，它包含黏性应力以及热扩散。此外，再定义一个源项@tex-math{\vec{Q}}，它涵盖由体力和体积加热引起的所有体积源。记住这些定义，并与单位法向量@tex-math{\vec{n}}作标量积，我们就可以把方程@link["blazek2005-ch02#eq-2-2"]{(2.2)}与方程@link["blazek2005-ch02#eq-2-3"]{(2.3)}、@link["blazek2005-ch02#eq-2-5"]{(2.5)}和@link["blazek2005-ch02#eq-2-13"]{(2.13)}合并为
   }
 
   @tex-display-math[#:id "eq-2-19"]{\frac{\partial}{\partial t}\int_{\Omega}\vec{W}\,d\Omega + \oint_{\partial\Omega}\left(\vec{F}_c - \vec{F}_v\right)dS = \int_{\Omega}\vec{Q}\,d\Omega. \tag{2.19}}
 
   @bi{
-    @lang["en"]{The vector of the so-called @emph{conservative variables} @tex-math{\vec{W}} consists in three dimensions of the following five components}
-    @lang["zh-Hans"]{所谓守恒变量（conservative variables）的向量@tex-math{\vec{W}}，在三维情形下由以下五个分量组成}
+    The vector of the so-called @emph{conservative variables} @tex-math{\vec{W}} consists in three dimensions of the following five components
+  }{
+    所谓守恒变量（conservative variables）的向量@tex-math{\vec{W}}，在三维情形下由以下五个分量组成
   }
 
   @tex-display-math[#:id "eq-2-20"]{\vec{W} = \begin{bmatrix} \rho\\ \rho u\\ \rho v\\ \rho w\\ \rho E \end{bmatrix}. \tag{2.20}}
 
   @bi{
-    @lang["en"]{For the vector of convective fluxes we obtain}
-    @lang["zh-Hans"]{对流通量向量为}
+    For the vector of convective fluxes we obtain
+  }{
+    对流通量向量为
   }
 
   @tex-display-math[#:id "eq-2-21"]{\vec{F}_c = \begin{bmatrix} \rho V\\ \rho uV + n_x p\\ \rho vV + n_y p\\ \rho wV + n_z p\\ \rho HV \end{bmatrix} \tag{2.21}}
 
   @bi{
-    @lang["en"]{with the @emph{contravariant velocity} @tex-math{V} - the velocity normal to the surface element @tex-math{dS} - being defined as the scalar product of the velocity vector and the unit normal vector, i.e.,}
-    @lang["zh-Hans"]{其中逆变速度（contravariant velocity）@tex-math{V}——垂直于面元@tex-math{dS}的速度——定义为速度向量与单位法向量的标量积，即}
+    with the @emph{contravariant velocity} @tex-math{V} - the velocity normal to the surface element @tex-math{dS} - being defined as the scalar product of the velocity vector and the unit normal vector, i.e.,
+  }{
+    其中逆变速度（contravariant velocity）@tex-math{V}——垂直于面元@tex-math{dS}的速度——定义为速度向量与单位法向量的标量积，即
   }
 
   @tex-display-math[#:id "eq-2-22"]{V \equiv \vec{v}\cdot\vec{n} = n_x u + n_y v + n_z w. \tag{2.22}}
 
   @bi{
-    @lang["en"]{The total enthalpy @tex-math{H} in Eq. @link["blazek2005-ch02#eq-2-21"]{(2.21)} is given by the formula @link["blazek2005-ch02#eq-2-12"]{(2.12)}. For the vector of viscous fluxes we have with Eq. (2.14)}
-    @lang["zh-Hans"]{方程@link["blazek2005-ch02#eq-2-21"]{(2.21)}中的总焓@tex-math{H}由公式@link["blazek2005-ch02#eq-2-12"]{(2.12)}给出。利用方程@link["blazek2005-ch02#eq-2-14"]{(2.14)}，黏性通量向量为}
+    The total enthalpy @tex-math{H} in Eq. @link["blazek2005-ch02#eq-2-21"]{(2.21)} is given by the formula @link["blazek2005-ch02#eq-2-12"]{(2.12)}. For the vector of viscous fluxes we have with Eq. (2.14)
+  }{
+    方程@link["blazek2005-ch02#eq-2-21"]{(2.21)}中的总焓@tex-math{H}由公式@link["blazek2005-ch02#eq-2-12"]{(2.12)}给出。利用方程@link["blazek2005-ch02#eq-2-14"]{(2.14)}，黏性通量向量为
   }
 
   @tex-display-math[#:id "eq-2-23"]{\vec{F}_v = \begin{bmatrix} 0\\ n_x\tau_{xx} + n_y\tau_{xy} + n_z\tau_{xz}\\ n_x\tau_{yx} + n_y\tau_{yy} + n_z\tau_{yz}\\ n_x\tau_{zx} + n_y\tau_{zy} + n_z\tau_{zz}\\ n_x\Theta_x + n_y\Theta_y + n_z\Theta_z \end{bmatrix}, \tag{2.23}}
 
   @bi{
-    @lang["en"]{where}
-    @lang["zh-Hans"]{其中}
+    where
+  }{
+    其中
   }
 
   @tex-display-math[#:id "eq-2-24"]{\begin{aligned} \Theta_x &= u\tau_{xx} + v\tau_{xy} + w\tau_{xz} + k\frac{\partial T}{\partial x}\\ \Theta_y &= u\tau_{yx} + v\tau_{yy} + w\tau_{yz} + k\frac{\partial T}{\partial y}\\ \Theta_z &= u\tau_{zx} + v\tau_{zy} + w\tau_{zz} + k\frac{\partial T}{\partial z} \end{aligned} \tag{2.24}}
 
   @bi{
-    @lang["en"]{are terms describing the work of the viscous stresses and of the heat conduction in the fluid, respectively. Finally, the source term reads}
-    @lang["zh-Hans"]{它们是分别描述黏性应力做功和流体中热传导的各项。最后，源项为}
+    are terms describing the work of the viscous stresses and of the heat conduction in the fluid, respectively. Finally, the source term reads
+  }{
+    它们是分别描述黏性应力做功和流体中热传导的各项。最后，源项为
   }
 
   @tex-display-math[#:id "eq-2-25"]{\vec{Q} = \begin{bmatrix} 0\\ \rho f_{e,x}\\ \rho f_{e,y}\\ \rho f_{e,z}\\ \rho\vec{f}_e\cdot\vec{v} + \dot{q}_h \end{bmatrix}. \tag{2.25}}
 
   @bi{
-    @lang["en"]{In the case of a Newtonian fluid, i.e., if the relations Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} for the viscous stresses are valid, the above system of equations (Eqs. @link["blazek2005-ch02#eq-2-19"]{(2.19)}-@link["blazek2005-ch02#eq-2-25"]{(2.25)}) is called the @emph{Navier-Stokes equations}. They describe the exchange (flux) of mass, momentum and energy through the boundary @tex-math{\partial\Omega} of a control volume @tex-math{\Omega}, which is fixed in space (see Fig. 2.1). We have derived the Navier-Stokes equations in integral formulation, in accordance with the conservation laws. Applying Gauss's theorem, Equation @link["blazek2005-ch02#eq-2-19"]{(2.19)} can be re-written in differential form @link["blazek2005-r2-7"]{[7]}. Since the differential form is often found in literature, it is for completeness included in the Appendix (A.1).}
-    @lang["zh-Hans"]{对于牛顿流体，即当黏性应力满足方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}的关系时，上述方程组（方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}–@link["blazek2005-ch02#eq-2-25"]{(2.25)}）就称为Navier-Stokes方程（Navier-Stokes equations）。它们描述质量、动量和能量穿过固定在空间中的控制体@tex-math{\Omega}之边界@tex-math{\partial\Omega}的交换（通量）（见图2.1）。我们是按照守恒定律、以积分形式导出Navier-Stokes方程的。应用Gauss定理，方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}可以改写为微分形式@link["blazek2005-r2-7"]{[7]}。由于微分形式在文献中经常出现，为完整起见将其收入附录(A.1)中。}
+    In the case of a Newtonian fluid, i.e., if the relations Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)} for the viscous stresses are valid, the above system of equations (Eqs. @link["blazek2005-ch02#eq-2-19"]{(2.19)}-@link["blazek2005-ch02#eq-2-25"]{(2.25)}) is called the @emph{Navier-Stokes equations}. They describe the exchange (flux) of mass, momentum and energy through the boundary @tex-math{\partial\Omega} of a control volume @tex-math{\Omega}, which is fixed in space (see Fig. 2.1). We have derived the Navier-Stokes equations in integral formulation, in accordance with the conservation laws. Applying Gauss's theorem, Equation @link["blazek2005-ch02#eq-2-19"]{(2.19)} can be re-written in differential form @link["blazek2005-r2-7"]{[7]}. Since the differential form is often found in literature, it is for completeness included in the Appendix (A.1).
+  }{
+    对于牛顿流体，即当黏性应力满足方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}的关系时，上述方程组（方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}–@link["blazek2005-ch02#eq-2-25"]{(2.25)}）就称为Navier-Stokes方程（Navier-Stokes equations）。它们描述质量、动量和能量穿过固定在空间中的控制体@tex-math{\Omega}之边界@tex-math{\partial\Omega}的交换（通量）（见图2.1）。我们是按照守恒定律、以积分形式导出Navier-Stokes方程的。应用Gauss定理，方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}可以改写为微分形式@link["blazek2005-r2-7"]{[7]}。由于微分形式在文献中经常出现，为完整起见将其收入附录(A.1)中。
   }
 
   @bi{
-    @lang["en"]{In some instances, for example in turbomachinery applications or geophysics, the control volume is rotating (usually steadily) about some axis. In such a case, the Navier-Stokes equations are transformed into a @emph{rotating frame of reference}. As a consequence, the source term @tex-math{\vec{Q}} has to be extended by the effects due to the Coriolis and the centrifugal force @link["blazek2005-r2-8"]{[8]}. The resulting form of the Navier-Stokes equations may be found in the Appendix (A.4). In other cases, the control volume can be subject to translation or deformation. This happens, for instance, when fluid-structure interaction is investigated. Then, the Navier-Stokes equations @link["blazek2005-ch02#eq-2-19"]{(2.19)} have to be extended by a term, which describes the relative motion of the surface element @tex-math{dS} with respect to the fixed coordinate system @link["blazek2005-r2-9"]{[9]}. Additionally, the so-called @emph{Geometric Conservation Law} (GCL) has to be fulfilled @link["blazek2005-r2-10"]{[10]}-@link["blazek2005-r2-12"]{[12]}. We present the appropriate formulation in Section (A.5) of the Appendix.}
-    @lang["zh-Hans"]{在某些情形下，例如在叶轮机械应用或地球物理中，控制体会绕某一轴（通常是稳定地）旋转。此时，需要把Navier-Stokes方程变换到旋转参考系（rotating frame of reference）中。其结果是，源项@tex-math{\vec{Q}}必须补充由科里奥利力和离心力引起的影响@link["blazek2005-r2-8"]{[8]}。所得形式的Navier-Stokes方程可参见附录(A.4)。另一些情形下，控制体可能发生平移或变形，例如在研究流固耦合（fluid-structure interaction）时就会出现这种情况。此时，Navier-Stokes方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}必须补充一个描述面元@tex-math{dS}相对于固定坐标系之相对运动的项@link["blazek2005-r2-9"]{[9]}。此外，还必须满足所谓的几何守恒定律（Geometric Conservation Law，GCL）@link["blazek2005-r2-10"]{[10]}-@link["blazek2005-r2-12"]{[12]}。相应的表述在附录(A.5)中给出。}
+    In some instances, for example in turbomachinery applications or geophysics, the control volume is rotating (usually steadily) about some axis. In such a case, the Navier-Stokes equations are transformed into a @emph{rotating frame of reference}. As a consequence, the source term @tex-math{\vec{Q}} has to be extended by the effects due to the Coriolis and the centrifugal force @link["blazek2005-r2-8"]{[8]}. The resulting form of the Navier-Stokes equations may be found in the Appendix (A.4). In other cases, the control volume can be subject to translation or deformation. This happens, for instance, when fluid-structure interaction is investigated. Then, the Navier-Stokes equations @link["blazek2005-ch02#eq-2-19"]{(2.19)} have to be extended by a term, which describes the relative motion of the surface element @tex-math{dS} with respect to the fixed coordinate system @link["blazek2005-r2-9"]{[9]}. Additionally, the so-called @emph{Geometric Conservation Law} (GCL) has to be fulfilled @link["blazek2005-r2-10"]{[10]}-@link["blazek2005-r2-12"]{[12]}. We present the appropriate formulation in Section (A.5) of the Appendix.
+  }{
+    在某些情形下，例如在叶轮机械应用或地球物理中，控制体会绕某一轴（通常是稳定地）旋转。此时，需要把Navier-Stokes方程变换到旋转参考系（rotating frame of reference）中。其结果是，源项@tex-math{\vec{Q}}必须补充由科里奥利力和离心力引起的影响@link["blazek2005-r2-8"]{[8]}。所得形式的Navier-Stokes方程可参见附录(A.4)。另一些情形下，控制体可能发生平移或变形，例如在研究流固耦合（fluid-structure interaction）时就会出现这种情况。此时，Navier-Stokes方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}必须补充一个描述面元@tex-math{dS}相对于固定坐标系之相对运动的项@link["blazek2005-r2-9"]{[9]}。此外，还必须满足所谓的几何守恒定律（Geometric Conservation Law，GCL）@link["blazek2005-r2-10"]{[10]}-@link["blazek2005-r2-12"]{[12]}。相应的表述在附录(A.5)中给出。
   }
 
   @bi{
-    @lang["en"]{The Navier-Stokes equations represent in three dimensions a system of five equations for the five conservative variables @tex-math{\rho}, @tex-math{\rho u}, @tex-math{\rho v}, @tex-math{\rho w}, and @tex-math{\rho E}. But they contain seven unknown flow field variables, namely: @tex-math{\rho}, @tex-math{u}, @tex-math{v}, @tex-math{w}, @tex-math{E}, @tex-math{p}, and @tex-math{T}. Therefore, we have to supply two additional equations, which have to be thermodynamic relations between the state variables. For example, the pressure expressed as a function of the density and temperature, and the internal energy or the enthalpy given as a function of the pressure and temperature. Beyond this, we have to provide the viscosity coefficient @tex-math{\mu} and the thermal conductivity coefficient @tex-math{k} as functions of the state of the fluid, in order to close the entire system of equations. Clearly, the relationships depend on the kind of fluid being considered. In the following, we shall therefore show methods of closing the equations for two commonly encountered situations.}
-    @lang["zh-Hans"]{在三维情形下，Navier-Stokes方程是关于五个守恒变量@tex-math{\rho}、@tex-math{\rho u}、@tex-math{\rho v}、@tex-math{\rho w}和@tex-math{\rho E}的五个方程组成的方程组。但它们包含七个未知的流场变量，即：@tex-math{\rho}、@tex-math{u}、@tex-math{v}、@tex-math{w}、@tex-math{E}、@tex-math{p}和@tex-math{T}。因此，我们必须补充两个附加方程，它们应当是状态变量之间的热力学关系。例如，把压力表示为密度和温度的函数，把内能或焓表示为压力和温度的函数。除此之外，还必须给出作为流体状态函数的黏性系数@tex-math{\mu}和热导率系数@tex-math{k}，以使整个方程组封闭。显然，这些关系取决于所考虑的流体种类。下面我们将针对两种常见情形给出使方程封闭的方法。}
+    The Navier-Stokes equations represent in three dimensions a system of five equations for the five conservative variables @tex-math{\rho}, @tex-math{\rho u}, @tex-math{\rho v}, @tex-math{\rho w}, and @tex-math{\rho E}. But they contain seven unknown flow field variables, namely: @tex-math{\rho}, @tex-math{u}, @tex-math{v}, @tex-math{w}, @tex-math{E}, @tex-math{p}, and @tex-math{T}. Therefore, we have to supply two additional equations, which have to be thermodynamic relations between the state variables. For example, the pressure expressed as a function of the density and temperature, and the internal energy or the enthalpy given as a function of the pressure and temperature. Beyond this, we have to provide the viscosity coefficient @tex-math{\mu} and the thermal conductivity coefficient @tex-math{k} as functions of the state of the fluid, in order to close the entire system of equations. Clearly, the relationships depend on the kind of fluid being considered. In the following, we shall therefore show methods of closing the equations for two commonly encountered situations.
+  }{
+    在三维情形下，Navier-Stokes方程是关于五个守恒变量@tex-math{\rho}、@tex-math{\rho u}、@tex-math{\rho v}、@tex-math{\rho w}和@tex-math{\rho E}的五个方程组成的方程组。但它们包含七个未知的流场变量，即：@tex-math{\rho}、@tex-math{u}、@tex-math{v}、@tex-math{w}、@tex-math{E}、@tex-math{p}和@tex-math{T}。因此，我们必须补充两个附加方程，它们应当是状态变量之间的热力学关系。例如，把压力表示为密度和温度的函数，把内能或焓表示为压力和温度的函数。除此之外，还必须给出作为流体状态函数的黏性系数@tex-math{\mu}和热导率系数@tex-math{k}，以使整个方程组封闭。显然，这些关系取决于所考虑的流体种类。下面我们将针对两种常见情形给出使方程封闭的方法。
   }
 
   @subtree[#:id "blazek2005-2-4-1"]{
     @title{2.4.1 Formulation for a Perfect Gas 完全气体的形式}
 
     @bi{
-      @lang["en"]{In pure aerodynamics, it is generally reasonable to assume that the working fluid behaves like a calorically @emph{perfect gas}, for which the equation of state assumes the form @link["blazek2005-r2-13"]{[13]}, @link["blazek2005-r2-14"]{[14]}}
-      @lang["zh-Hans"]{在纯空气动力学中，一般可以合理地假定工作流体表现为量热完全气体（calorically perfect gas），其状态方程的形式为@link["blazek2005-r2-13"]{[13]}, @link["blazek2005-r2-14"]{[14]}}
+      In pure aerodynamics, it is generally reasonable to assume that the working fluid behaves like a calorically @emph{perfect gas}, for which the equation of state assumes the form @link["blazek2005-r2-13"]{[13]}, @link["blazek2005-r2-14"]{[14]}
+    }{
+      在纯空气动力学中，一般可以合理地假定工作流体表现为量热完全气体（calorically perfect gas），其状态方程的形式为@link["blazek2005-r2-13"]{[13]}, @link["blazek2005-r2-14"]{[14]}
     }
 
     @tex-display-math[#:id "eq-2-26"]{p = \rho RT, \tag{2.26}}
 
     @bi{
-      @lang["en"]{where @tex-math{R} denotes the specific gas constant. The enthalpy results from}
-      @lang["zh-Hans"]{其中@tex-math{R}为比气体常数。焓由下式给出}
+      where @tex-math{R} denotes the specific gas constant. The enthalpy results from
+    }{
+      其中@tex-math{R}为比气体常数。焓由下式给出
     }
 
     @tex-display-math[#:id "eq-2-27"]{h = c_p T. \tag{2.27}}
 
     @bi{
-      @lang["en"]{It is convenient to express the pressure in terms of the conservative variables. For that purpose, we have to combine Equation @link["blazek2005-ch02#eq-2-12"]{(2.12)}, relating the total enthalpy to the total energy, together with the equation of state @link["blazek2005-ch02#eq-2-26"]{(2.26)}. Substituting expression @link["blazek2005-ch02#eq-2-27"]{(2.27)} for the enthalpy and using the definitions}
-      @lang["zh-Hans"]{用守恒变量表示压力会带来方便。为此，需要把联系总焓与总能量的方程@link["blazek2005-ch02#eq-2-12"]{(2.12)}与状态方程@link["blazek2005-ch02#eq-2-26"]{(2.26)}结合起来。把表达式@link["blazek2005-ch02#eq-2-27"]{(2.27)}代入焓，并利用定义}
+      It is convenient to express the pressure in terms of the conservative variables. For that purpose, we have to combine Equation @link["blazek2005-ch02#eq-2-12"]{(2.12)}, relating the total enthalpy to the total energy, together with the equation of state @link["blazek2005-ch02#eq-2-26"]{(2.26)}. Substituting expression @link["blazek2005-ch02#eq-2-27"]{(2.27)} for the enthalpy and using the definitions
+    }{
+      用守恒变量表示压力会带来方便。为此，需要把联系总焓与总能量的方程@link["blazek2005-ch02#eq-2-12"]{(2.12)}与状态方程@link["blazek2005-ch02#eq-2-26"]{(2.26)}结合起来。把表达式@link["blazek2005-ch02#eq-2-27"]{(2.27)}代入焓，并利用定义
     }
 
     @tex-display-math[#:id "eq-2-28"]{R = c_p - c_v, \quad \gamma = \frac{c_p}{c_v}, \tag{2.28}}
 
     @bi{
-      @lang["en"]{we finally obtain for the pressure}
-      @lang["zh-Hans"]{最终得到压力}
+      we finally obtain for the pressure
+    }{
+      最终得到压力
     }
 
     @tex-display-math[#:id "eq-2-29"]{p = (\gamma - 1)\,\rho\left[E - \frac{u^{2}+v^{2}+w^{2}}{2}\right]. \tag{2.29}}
 
     @bi{
-      @lang["en"]{The temperature is then calculated with the aid of the relationship Eq. @link["blazek2005-ch02#eq-2-26"]{(2.26)}. The coefficient of the dynamic viscosity @tex-math{\mu} is, for a perfect gas, strongly dependent on temperature but only weakly dependent on pressure. The so-called Sutherland formula is frequently used. The result for air is (in SI units)}
-      @lang["zh-Hans"]{温度随后借助关系式@link["blazek2005-ch02#eq-2-26"]{(2.26)}计算。对完全气体而言，动力黏性系数@tex-math{\mu}强烈依赖于温度，而受压力的影响很弱。常用的公式是所谓的Sutherland公式。对空气的结果为（SI单位）}
+      The temperature is then calculated with the aid of the relationship Eq. @link["blazek2005-ch02#eq-2-26"]{(2.26)}. The coefficient of the dynamic viscosity @tex-math{\mu} is, for a perfect gas, strongly dependent on temperature but only weakly dependent on pressure. The so-called Sutherland formula is frequently used. The result for air is (in SI units)
+    }{
+      温度随后借助关系式@link["blazek2005-ch02#eq-2-26"]{(2.26)}计算。对完全气体而言，动力黏性系数@tex-math{\mu}强烈依赖于温度，而受压力的影响很弱。常用的公式是所谓的Sutherland公式。对空气的结果为（SI单位）
     }
 
     @tex-display-math[#:id "eq-2-30"]{\mu = \frac{1.45\,T^{3/2}}{T+110}\cdot 10^{-6}, \tag{2.30}}
 
     @bi{
-      @lang["en"]{where the temperature @tex-math{T} is in degree Kelvin (K). Thus, at @tex-math{T = 288\,\mathrm{K}} one obtains @tex-math{\mu = 1.78\cdot 10^{-5}\,\mathrm{kg/ms}}. The temperature dependence of the thermal conductivity coefficient @tex-math{k} resembles that of @tex-math{\mu} in the case of gases. By contrast, @tex-math{k} is virtually constant in the case of liquids. For this reason, the relationship}
-      @lang["zh-Hans"]{其中温度@tex-math{T}以开尔文（K）为单位。于是，在@tex-math{T = 288\,\mathrm{K}}时可得@tex-math{\mu = 1.78\cdot 10^{-5}\,\mathrm{kg/ms}}。气体中热导率系数@tex-math{k}对温度的依赖关系与@tex-math{\mu}类似；相反，液体中@tex-math{k}几乎为常数。因此，对空气通常采用关系式}
+      where the temperature @tex-math{T} is in degree Kelvin (K). Thus, at @tex-math{T = 288\,\mathrm{K}} one obtains @tex-math{\mu = 1.78\cdot 10^{-5}\,\mathrm{kg/ms}}. The temperature dependence of the thermal conductivity coefficient @tex-math{k} resembles that of @tex-math{\mu} in the case of gases. By contrast, @tex-math{k} is virtually constant in the case of liquids. For this reason, the relationship
+    }{
+      其中温度@tex-math{T}以开尔文（K）为单位。于是，在@tex-math{T = 288\,\mathrm{K}}时可得@tex-math{\mu = 1.78\cdot 10^{-5}\,\mathrm{kg/ms}}。气体中热导率系数@tex-math{k}对温度的依赖关系与@tex-math{\mu}类似；相反，液体中@tex-math{k}几乎为常数。因此，对空气通常采用关系式
     }
 
     @tex-display-math[#:id "eq-2-31"]{k = c_p\frac{\mu}{Pr} \tag{2.31}}
 
     @bi{
-      @lang["en"]{is generally used for air. In addition, it is commonly assumed that the Prandtl number @tex-math{Pr} is constant in the entire flow field. For air, the Prandtl number takes the value @tex-math{Pr = 0.72}.}
-      @lang["zh-Hans"]{此外，通常还假定Prandtl数@tex-math{Pr}在整个流场中为常数。对空气，Prandtl数取值@tex-math{Pr = 0.72}。}
+      is generally used for air. In addition, it is commonly assumed that the Prandtl number @tex-math{Pr} is constant in the entire flow field. For air, the Prandtl number takes the value @tex-math{Pr = 0.72}.
+    }{
+      此外，通常还假定Prandtl数@tex-math{Pr}在整个流场中为常数。对空气，Prandtl数取值@tex-math{Pr = 0.72}。
     }
   }
 
@@ -537,114 +607,131 @@
     @title{2.4.2 Formulation for a Real Gas 真实气体的形式}
 
     @bi{
-      @lang["en"]{The matter becomes more complicated when one has to deal with a @emph{real gas}. The reason is that now we have to model a thermodynamic process and chemical reactions in addition to the fluid dynamics. Examples for a real gas flow are the simulation of combustion, the hypersonic flow past a re-entry vehicle, or the flow in a steam turbine. In principle, two different methods can be pursued to solve the problem. The first methodology is applicable in cases, where the gas is in chemical and in thermodynamical equilibrium. This implies that there is a unique equation of state. Then, the governing equations @link["blazek2005-ch02#eq-2-19"]{(2.19)} remain unchanged. Only the values of pressure, temperature, viscosity, etc. are interpolated from lookup tables using curve fits @link["blazek2005-r2-15"]{[15]}-@link["blazek2005-r2-17"]{[17]}. But in practice, the gas is more often in chemical and/or thermodynamical non-equilibrium and has to be treated correspondingly.}
-      @lang["zh-Hans"]{当必须处理真实气体（real gas）时，问题变得更加复杂。原因在于，除流体动力学外，现在还必须对热力学过程和化学反应进行建模。真实气体流动的例子有：燃烧的模拟、再入飞行器的高超声速绕流，以及汽轮机内的流动。原则上，可以采取两种不同的方法来求解这一问题。第一种方法适用于气体处于化学平衡和热力学平衡的情形。这意味着存在唯一的状态方程，此时控制方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}保持不变，只是压力、温度、黏度等的数值要通过曲线拟合从查询表中插值得到@link["blazek2005-r2-15"]{[15]}-@link["blazek2005-r2-17"]{[17]}。但在实际中，气体更多是处于化学和/或热力学非平衡状态，必须相应地加以处理。}
+      The matter becomes more complicated when one has to deal with a @emph{real gas}. The reason is that now we have to model a thermodynamic process and chemical reactions in addition to the fluid dynamics. Examples for a real gas flow are the simulation of combustion, the hypersonic flow past a re-entry vehicle, or the flow in a steam turbine. In principle, two different methods can be pursued to solve the problem. The first methodology is applicable in cases, where the gas is in chemical and in thermodynamical equilibrium. This implies that there is a unique equation of state. Then, the governing equations @link["blazek2005-ch02#eq-2-19"]{(2.19)} remain unchanged. Only the values of pressure, temperature, viscosity, etc. are interpolated from lookup tables using curve fits @link["blazek2005-r2-15"]{[15]}-@link["blazek2005-r2-17"]{[17]}. But in practice, the gas is more often in chemical and/or thermodynamical non-equilibrium and has to be treated correspondingly.
+    }{
+      当必须处理真实气体（real gas）时，问题变得更加复杂。原因在于，除流体动力学外，现在还必须对热力学过程和化学反应进行建模。真实气体流动的例子有：燃烧的模拟、再入飞行器的高超声速绕流，以及汽轮机内的流动。原则上，可以采取两种不同的方法来求解这一问题。第一种方法适用于气体处于化学平衡和热力学平衡的情形。这意味着存在唯一的状态方程，此时控制方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}保持不变，只是压力、温度、黏度等的数值要通过曲线拟合从查询表中插值得到@link["blazek2005-r2-15"]{[15]}-@link["blazek2005-r2-17"]{[17]}。但在实际中，气体更多是处于化学和/或热力学非平衡状态，必须相应地加以处理。
     }
 
     @bi{
-      @lang["en"]{Let us for illustration consider a gas mixture consisting of @tex-math{N} different species. For a finite Damköhler number, which is defined as the ratio of flow-residence time to chemical-reaction time, we have to include finite-rate chemistry into our model. It has to describe the generation/destruction of species due to chemical reactions. In what follows, we will furthermore assume that the temporal and the spatial scales of fluid dynamics and of chemical reactions are much larger compared to those of thermodynamics. Thus, we suppose the gas is thermodynamically in equilibrium but chemically in non-equilibrium. In order to simulate the behaviour of such a gas mixture, the Navier-Stokes equations have to be augmented by @tex-math{(N-1)} additional transport equations for the @tex-math{N} species @link["blazek2005-r2-18"]{[18]}-@link["blazek2005-r2-23"]{[23]}. Hence, we obtain formally the same system like Eq. @link["blazek2005-ch02#eq-2-19"]{(2.19)}, but now with the vectors of the conservative variables @tex-math{\vec{W}}, the flux vectors @tex-math{\vec{F}_c} and @tex-math{\vec{F}_v}, as well as with the source term @tex-math{\vec{Q}} extended by @tex-math{(N-1)} species equations. Recalling the expressions @link["blazek2005-ch02#eq-2-20"]{(2.20)} to @link["blazek2005-ch02#eq-2-25"]{(2.25)}, the vector of the conservative variables reads now}
-      @lang["zh-Hans"]{为便于说明，考虑由@tex-math{N}种不同组分组成的气体混合物。对于有限的Damköhler数——其定义为流动滞留时间与化学反应时间之比——必须在模型中纳入有限速率化学。该模型需要描述化学反应引起的组分的生成与消亡。下面我们进一步假定，流体动力学和化学反应的时间尺度与空间尺度都远大于热力学的相应尺度。于是，我们假定气体处于热力学平衡但化学非平衡状态。为了模拟这种气体混合物的行为，必须为@tex-math{N}种组分补充@tex-math{(N-1)}个附加输运方程，从而扩展Navier-Stokes方程@link["blazek2005-r2-18"]{[18]}-@link["blazek2005-r2-23"]{[23]}。这样，我们得到形式上与方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}相同的方程组，但守恒变量向量@tex-math{\vec{W}}、通量向量@tex-math{\vec{F}_c}和@tex-math{\vec{F}_v}以及源项@tex-math{\vec{Q}}都被@tex-math{(N-1)}个组分方程所扩展。回顾表达式@link["blazek2005-ch02#eq-2-20"]{(2.20)}至@link["blazek2005-ch02#eq-2-25"]{(2.25)}，守恒变量向量现在为}
+      Let us for illustration consider a gas mixture consisting of @tex-math{N} different species. For a finite Damköhler number, which is defined as the ratio of flow-residence time to chemical-reaction time, we have to include finite-rate chemistry into our model. It has to describe the generation/destruction of species due to chemical reactions. In what follows, we will furthermore assume that the temporal and the spatial scales of fluid dynamics and of chemical reactions are much larger compared to those of thermodynamics. Thus, we suppose the gas is thermodynamically in equilibrium but chemically in non-equilibrium. In order to simulate the behaviour of such a gas mixture, the Navier-Stokes equations have to be augmented by @tex-math{(N-1)} additional transport equations for the @tex-math{N} species @link["blazek2005-r2-18"]{[18]}-@link["blazek2005-r2-23"]{[23]}. Hence, we obtain formally the same system like Eq. @link["blazek2005-ch02#eq-2-19"]{(2.19)}, but now with the vectors of the conservative variables @tex-math{\vec{W}}, the flux vectors @tex-math{\vec{F}_c} and @tex-math{\vec{F}_v}, as well as with the source term @tex-math{\vec{Q}} extended by @tex-math{(N-1)} species equations. Recalling the expressions @link["blazek2005-ch02#eq-2-20"]{(2.20)} to @link["blazek2005-ch02#eq-2-25"]{(2.25)}, the vector of the conservative variables reads now
+    }{
+      为便于说明，考虑由@tex-math{N}种不同组分组成的气体混合物。对于有限的Damköhler数——其定义为流动滞留时间与化学反应时间之比——必须在模型中纳入有限速率化学。该模型需要描述化学反应引起的组分的生成与消亡。下面我们进一步假定，流体动力学和化学反应的时间尺度与空间尺度都远大于热力学的相应尺度。于是，我们假定气体处于热力学平衡但化学非平衡状态。为了模拟这种气体混合物的行为，必须为@tex-math{N}种组分补充@tex-math{(N-1)}个附加输运方程，从而扩展Navier-Stokes方程@link["blazek2005-r2-18"]{[18]}-@link["blazek2005-r2-23"]{[23]}。这样，我们得到形式上与方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}相同的方程组，但守恒变量向量@tex-math{\vec{W}}、通量向量@tex-math{\vec{F}_c}和@tex-math{\vec{F}_v}以及源项@tex-math{\vec{Q}}都被@tex-math{(N-1)}个组分方程所扩展。回顾表达式@link["blazek2005-ch02#eq-2-20"]{(2.20)}至@link["blazek2005-ch02#eq-2-25"]{(2.25)}，守恒变量向量现在为
     }
 
     @tex-display-math[#:id "eq-2-32"]{\vec{W} = \begin{bmatrix} \rho\\ \rho u\\ \rho v\\ \rho w\\ \rho E\\ \rho Y_1\\ \vdots\\ \rho Y_{N-1} \end{bmatrix}. \tag{2.32}}
 
     @bi{
-      @lang["en"]{The convective and the viscous flux vectors transform into}
-      @lang["zh-Hans"]{对流通量向量和黏性通量向量则变换为}
+      The convective and the viscous flux vectors transform into
+    }{
+      对流通量向量和黏性通量向量则变换为
     }
 
     @tex-display-math[#:id "eq-2-33"]{\vec{F}_c = \begin{bmatrix} \rho V\\ \rho uV + n_x p\\ \rho vV + n_y p\\ \rho wV + n_z p\\ \rho HV\\ \rho Y_1 V\\ \vdots\\ \rho Y_{N-1} V \end{bmatrix}, \quad \vec{F}_v = \begin{bmatrix} 0\\ n_x\tau_{xx} + n_y\tau_{xy} + n_z\tau_{xz}\\ n_x\tau_{yx} + n_y\tau_{yy} + n_z\tau_{yz}\\ n_x\tau_{zx} + n_y\tau_{zy} + n_z\tau_{zz}\\ n_x\Theta_x + n_y\Theta_y + n_z\Theta_z\\ n_x\Phi_{x,1} + n_y\Phi_{y,1} + n_z\Phi_{z,1}\\ \vdots\\ n_x\Phi_{x,N-1} + n_y\Phi_{y,N-1} + n_z\Phi_{z,N-1} \end{bmatrix}, \tag{2.33}}
 
     @bi{
-      @lang["en"]{where}
-      @lang["zh-Hans"]{其中}
+      where
+    }{
+      其中
     }
 
     @tex-display-math[#:id "eq-2-34"]{\begin{aligned} \Theta_x &= u\tau_{xx} + v\tau_{xy} + w\tau_{xz} + k\frac{\partial T}{\partial x} + \rho\sum_{m=1}^{N} h_m D_m\frac{\partial Y_m}{\partial x}\\ \Theta_y &= u\tau_{yx} + v\tau_{yy} + w\tau_{yz} + k\frac{\partial T}{\partial y} + \rho\sum_{m=1}^{N} h_m D_m\frac{\partial Y_m}{\partial y}\\ \Theta_z &= u\tau_{zx} + v\tau_{zy} + w\tau_{zz} + k\frac{\partial T}{\partial z} + \rho\sum_{m=1}^{N} h_m D_m\frac{\partial Y_m}{\partial z}\\ \Phi_{x,m} &= \rho D_m\frac{\partial Y_m}{\partial x}\\ \Phi_{y,m} &= \rho D_m\frac{\partial Y_m}{\partial y}\\ \Phi_{z,m} &= \rho D_m\frac{\partial Y_m}{\partial z}. \end{aligned} \tag{2.34}}
 
     @bi{
-      @lang["en"]{Finally, the source term now becomes}
-      @lang["zh-Hans"]{最后，源项现在变为}
+      Finally, the source term now becomes
+    }{
+      最后，源项现在变为
     }
 
     @tex-display-math[#:id "eq-2-35"]{\vec{Q} = \begin{bmatrix} 0\\ \rho f_{e,x}\\ \rho f_{e,y}\\ \rho f_{e,z}\\ \rho\vec{f}_e\cdot\vec{v} + \dot{q}_h\\ \dot{s}_1\\ \vdots\\ \dot{s}_{N-1} \end{bmatrix}. \tag{2.35}}
 
     @bi{
-      @lang["en"]{In the above expressions Eqs. @link["blazek2005-ch02#eq-2-32"]{(2.32)}-@link["blazek2005-ch02#eq-2-35"]{(2.35)}, @tex-math{Y_m} denotes the mass fraction, @tex-math{h_m} the enthalpy, and @tex-math{D_m} the effective binary diffusivity of species @tex-math{m}, respectively. Furthermore, @tex-math{\dot{s}_m} is the rate of change of species @tex-math{m} due to chemical reactions. Note that the total density @tex-math{\rho} of the mixture is equal to the sum of the densities of the species @tex-math{\rho Y_m}. Therefore, since the total density is regarded as an independent quantity, there are only @tex-math{(N-1)} independent densities @tex-math{\rho Y_m} left. The remaining mass fraction @tex-math{Y_N} is obtained from}
-      @lang["zh-Hans"]{在上述表达式（方程@link["blazek2005-ch02#eq-2-32"]{(2.32)}–@link["blazek2005-ch02#eq-2-35"]{(2.35)}）中，@tex-math{Y_m}表示质量分数，@tex-math{h_m}为焓，@tex-math{D_m}为组分@tex-math{m}的有效二元扩散系数。此外，@tex-math{\dot{s}_m}是化学反应引起的组分@tex-math{m}的变化率。注意，混合物的总密度@tex-math{\rho}等于各组分密度@tex-math{\rho Y_m}之和。因此，由于总密度被视为独立变量，只剩下@tex-math{(N-1)}个独立的密度@tex-math{\rho Y_m}。其余的质量分数@tex-math{Y_N}由下式求得}
+      In the above expressions Eqs. @link["blazek2005-ch02#eq-2-32"]{(2.32)}-@link["blazek2005-ch02#eq-2-35"]{(2.35)}, @tex-math{Y_m} denotes the mass fraction, @tex-math{h_m} the enthalpy, and @tex-math{D_m} the effective binary diffusivity of species @tex-math{m}, respectively. Furthermore, @tex-math{\dot{s}_m} is the rate of change of species @tex-math{m} due to chemical reactions. Note that the total density @tex-math{\rho} of the mixture is equal to the sum of the densities of the species @tex-math{\rho Y_m}. Therefore, since the total density is regarded as an independent quantity, there are only @tex-math{(N-1)} independent densities @tex-math{\rho Y_m} left. The remaining mass fraction @tex-math{Y_N} is obtained from
+    }{
+      在上述表达式（方程@link["blazek2005-ch02#eq-2-32"]{(2.32)}–@link["blazek2005-ch02#eq-2-35"]{(2.35)}）中，@tex-math{Y_m}表示质量分数，@tex-math{h_m}为焓，@tex-math{D_m}为组分@tex-math{m}的有效二元扩散系数。此外，@tex-math{\dot{s}_m}是化学反应引起的组分@tex-math{m}的变化率。注意，混合物的总密度@tex-math{\rho}等于各组分密度@tex-math{\rho Y_m}之和。因此，由于总密度被视为独立变量，只剩下@tex-math{(N-1)}个独立的密度@tex-math{\rho Y_m}。其余的质量分数@tex-math{Y_N}由下式求得
     }
 
     @tex-display-math[#:id "eq-2-36"]{Y_N = 1 - \sum_{m=1}^{N-1} Y_m. \tag{2.36}}
 
     @bi{
-      @lang["en"]{In order to find an expression for the pressure @tex-math{p}, we first assume that the individual species behave like ideal gases, i.e.,}
-      @lang["zh-Hans"]{为了得到压力@tex-math{p}的表达式，首先假定各组分的行为如同理想气体，即}
+      In order to find an expression for the pressure @tex-math{p}, we first assume that the individual species behave like ideal gases, i.e.,
+    }{
+      为了得到压力@tex-math{p}的表达式，首先假定各组分的行为如同理想气体，即
     }
 
     @tex-display-math[#:id "eq-2-37"]{p_m = \rho Y_m\frac{R_u}{W_m}\,T, \tag{2.37}}
 
     @bi{
-      @lang["en"]{with @tex-math{R_u} denoting the universal gas constant and @tex-math{W_m} being the molecular weight, respectively. Together with Dalton's law,}
-      @lang["zh-Hans"]{其中@tex-math{R_u}为普适气体常数，@tex-math{W_m}为分子量。结合Dalton定律}
+      with @tex-math{R_u} denoting the universal gas constant and @tex-math{W_m} being the molecular weight, respectively. Together with Dalton's law,
+    }{
+      其中@tex-math{R_u}为普适气体常数，@tex-math{W_m}为分子量。结合Dalton定律
     }
 
     @tex-display-math[#:id "eq-2-38"]{p = \sum_{m=1}^{N} p_m, \tag{2.38}}
 
     @bi{
-      @lang["en"]{we can write}
-      @lang["zh-Hans"]{可以写出}
+      we can write
+    }{
+      可以写出
     }
 
     @tex-display-math[#:id "eq-2-39"]{p = \rho R_u T\sum_{m=1}^{N}\frac{Y_m}{W_m}. \tag{2.39}}
 
     @bi{
-      @lang["en"]{It is important to notice that because the gas is in thermodynamical equilibrium, all species possess the same temperature @tex-math{T}. The temperature has to be calculated iteratively from the expression @link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-24"]{[24]}}
-      @lang["zh-Hans"]{值得注意的是，由于气体处于热力学平衡，所有组分具有相同的温度@tex-math{T}。温度必须由下式迭代求出@link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-24"]{[24]}}
+      It is important to notice that because the gas is in thermodynamical equilibrium, all species possess the same temperature @tex-math{T}. The temperature has to be calculated iteratively from the expression @link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-24"]{[24]}
+    }{
+      值得注意的是，由于气体处于热力学平衡，所有组分具有相同的温度@tex-math{T}。温度必须由下式迭代求出@link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-24"]{[24]}
     }
 
     @tex-display-math[#:id "eq-2-40"]{e = \sum_{m=1}^{N}\left[Y_m\left(h^{0}_{f,m} + \int_{T_{ref}}^{T} c_{p,m}\,dT\right)\right] - \frac{p}{\rho}. \tag{2.40}}
 
     @bi{
-      @lang["en"]{The internal energy of the gas mixture @tex-math{e} is obtained from Eq. @link["blazek2005-ch02#eq-2-6"]{(2.6)}. The quantities @tex-math{h^{0}_{f,m}}, @tex-math{c_{p,m}}, and @tex-math{T_{ref}} in Eq. @link["blazek2005-ch02#eq-2-40"]{(2.40)} denote the heat of formation, the specific heat at constant pressure, and the reference temperature of the @tex-math{m}-th species, respectively. Values of the above quantities as well as of the thermal conductivity @tex-math{k} and of the dynamic viscosity @tex-math{\mu} of the species are determined from curve fits @link["blazek2005-r2-19"]{[19]}, @link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-23"]{[23]}.}
-      @lang["zh-Hans"]{气体混合物的内能@tex-math{e}由方程@link["blazek2005-ch02#eq-2-6"]{(2.6)}得到。方程@link["blazek2005-ch02#eq-2-40"]{(2.40)}中的@tex-math{h^{0}_{f,m}}、@tex-math{c_{p,m}}和@tex-math{T_{ref}}分别表示第@tex-math{m}种组分的生成热、定压比热和参考温度。上述物理量以及各组分的焓、热导率@tex-math{k}和动力黏性@tex-math{\mu}的数值，都由曲线拟合确定@link["blazek2005-r2-19"]{[19]}, @link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-23"]{[23]}。}
+      The internal energy of the gas mixture @tex-math{e} is obtained from Eq. @link["blazek2005-ch02#eq-2-6"]{(2.6)}. The quantities @tex-math{h^{0}_{f,m}}, @tex-math{c_{p,m}}, and @tex-math{T_{ref}} in Eq. @link["blazek2005-ch02#eq-2-40"]{(2.40)} denote the heat of formation, the specific heat at constant pressure, and the reference temperature of the @tex-math{m}-th species, respectively. Values of the above quantities as well as of the thermal conductivity @tex-math{k} and of the dynamic viscosity @tex-math{\mu} of the species are determined from curve fits @link["blazek2005-r2-19"]{[19]}, @link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-23"]{[23]}.
+    }{
+      气体混合物的内能@tex-math{e}由方程@link["blazek2005-ch02#eq-2-6"]{(2.6)}得到。方程@link["blazek2005-ch02#eq-2-40"]{(2.40)}中的@tex-math{h^{0}_{f,m}}、@tex-math{c_{p,m}}和@tex-math{T_{ref}}分别表示第@tex-math{m}种组分的生成热、定压比热和参考温度。上述物理量以及各组分的焓、热导率@tex-math{k}和动力黏性@tex-math{\mu}的数值，都由曲线拟合确定@link["blazek2005-r2-19"]{[19]}, @link["blazek2005-r2-21"]{[21]}, @link["blazek2005-r2-23"]{[23]}。
     }
 
     @bi{
-      @lang["en"]{The last part, which remains to be modelled, is the chemical source term @tex-math{\dot{s}_m} in Eq. @link["blazek2005-ch02#eq-2-35"]{(2.35)}. The rate equations for a set of @tex-math{N_R} elementary reactions involving @tex-math{N} species can be written in the general form}
-      @lang["zh-Hans"]{最后一个尚待建模的部分是方程@link["blazek2005-ch02#eq-2-35"]{(2.35)}中的化学源项@tex-math{\dot{s}_m}。对于包含@tex-math{N}种组分、由@tex-math{N_R}个基元反应构成的反应集，其速率方程可以写成如下一般形式}
+      The last part, which remains to be modelled, is the chemical source term @tex-math{\dot{s}_m} in Eq. @link["blazek2005-ch02#eq-2-35"]{(2.35)}. The rate equations for a set of @tex-math{N_R} elementary reactions involving @tex-math{N} species can be written in the general form
+    }{
+      最后一个尚待建模的部分是方程@link["blazek2005-ch02#eq-2-35"]{(2.35)}中的化学源项@tex-math{\dot{s}_m}。对于包含@tex-math{N}种组分、由@tex-math{N_R}个基元反应构成的反应集，其速率方程可以写成如下一般形式
     }
 
     @tex-display-math[#:id "eq-2-41"]{\sum_{m=1}^{N}\nu'_{lm}C_m \;\overset{K_{fl}}{\underset{K_{bl}}{\rightleftharpoons}}\; \sum_{m=1}^{N}\nu''_{lm}C_m \quad\text{for}\quad l = 1, 2, \ldots, N_R. \tag{2.41}}
 
     @bi{
-      @lang["en"]{In the above Eq. @link["blazek2005-ch02#eq-2-41"]{(2.41)}, @tex-math{\nu'_{lm}} and @tex-math{\nu''_{lm}} are the stoichiometric coefficients for species @tex-math{m} in the @tex-math{l}-th forward and backward reaction, respectively. Furthermore, @tex-math{C_m} stands for the molar concentration of species @tex-math{m} (@tex-math{C_m = \rho Y_m/W_m}), and finally @tex-math{K_{fl}} and @tex-math{K_{bl}}, respectively, denote the forward and the backward reaction rate constants for the @tex-math{l}-th reaction step. They are given by the empirical Arrhenius formulae}
-      @lang["zh-Hans"]{在方程@link["blazek2005-ch02#eq-2-41"]{(2.41)}中，@tex-math{\nu'_{lm}}和@tex-math{\nu''_{lm}}分别是组分@tex-math{m}在第@tex-math{l}个正反应和逆反应中的化学计量系数。此外，@tex-math{C_m}表示组分@tex-math{m}的摩尔浓度（@tex-math{C_m = \rho Y_m/W_m}），而@tex-math{K_{fl}}和@tex-math{K_{bl}}分别表示第@tex-math{l}个反应步骤的正反应和逆反应速率常数。它们由经验Arrhenius公式给出}
+      In the above Eq. @link["blazek2005-ch02#eq-2-41"]{(2.41)}, @tex-math{\nu'_{lm}} and @tex-math{\nu''_{lm}} are the stoichiometric coefficients for species @tex-math{m} in the @tex-math{l}-th forward and backward reaction, respectively. Furthermore, @tex-math{C_m} stands for the molar concentration of species @tex-math{m} (@tex-math{C_m = \rho Y_m/W_m}), and finally @tex-math{K_{fl}} and @tex-math{K_{bl}}, respectively, denote the forward and the backward reaction rate constants for the @tex-math{l}-th reaction step. They are given by the empirical Arrhenius formulae
+    }{
+      在方程@link["blazek2005-ch02#eq-2-41"]{(2.41)}中，@tex-math{\nu'_{lm}}和@tex-math{\nu''_{lm}}分别是组分@tex-math{m}在第@tex-math{l}个正反应和逆反应中的化学计量系数。此外，@tex-math{C_m}表示组分@tex-math{m}的摩尔浓度（@tex-math{C_m = \rho Y_m/W_m}），而@tex-math{K_{fl}}和@tex-math{K_{bl}}分别表示第@tex-math{l}个反应步骤的正反应和逆反应速率常数。它们由经验Arrhenius公式给出
     }
 
     @tex-display-math[#:id "eq-2-42"]{\begin{aligned} K_f &= A_f\,T^{B_f}\exp(-E_f/R_u T)\\ K_b &= A_b\,T^{B_b}\exp(-E_b/R_u T), \end{aligned} \tag{2.42}}
 
     @bi{
-      @lang["en"]{where @tex-math{A_f} and @tex-math{A_b} are the Arrhenius coefficients, @tex-math{E_f} and @tex-math{E_b} represent the activation energies, and @tex-math{B_f} as well as @tex-math{B_b} are constants, respectively. The rate of change of molar concentration of species @tex-math{m} by the @tex-math{l}-th reaction is given by}
-      @lang["zh-Hans"]{其中@tex-math{A_f}和@tex-math{A_b}为Arrhenius系数，@tex-math{E_f}和@tex-math{E_b}为活化能，@tex-math{B_f}和@tex-math{B_b}为常数。第@tex-math{l}个反应引起的组分@tex-math{m}摩尔浓度的变化率为}
+      where @tex-math{A_f} and @tex-math{A_b} are the Arrhenius coefficients, @tex-math{E_f} and @tex-math{E_b} represent the activation energies, and @tex-math{B_f} as well as @tex-math{B_b} are constants, respectively. The rate of change of molar concentration of species @tex-math{m} by the @tex-math{l}-th reaction is given by
+    }{
+      其中@tex-math{A_f}和@tex-math{A_b}为Arrhenius系数，@tex-math{E_f}和@tex-math{E_b}为活化能，@tex-math{B_f}和@tex-math{B_b}为常数。第@tex-math{l}个反应引起的组分@tex-math{m}摩尔浓度的变化率为
     }
 
     @tex-display-math[#:id "eq-2-43"]{\dot{C}_{lm} = \left(\nu''_{lm} - \nu'_{lm}\right)\left(K_{fl}\prod_{n=1}^{N} C_n^{\nu'_{ln}} - K_{bl}\prod_{n=1}^{N} C_n^{\nu''_{ln}}\right). \tag{2.43}}
 
     @bi{
-      @lang["en"]{Hence, together with Eq. @link["blazek2005-ch02#eq-2-43"]{(2.43)} we can calculate the total rate of change of species @tex-math{m} from}
-      @lang["zh-Hans"]{于是，结合方程@link["blazek2005-ch02#eq-2-43"]{(2.43)}，可以由下式计算组分@tex-math{m}的总变化率}
+      Hence, together with Eq. @link["blazek2005-ch02#eq-2-43"]{(2.43)} we can calculate the total rate of change of species @tex-math{m} from
+    }{
+      于是，结合方程@link["blazek2005-ch02#eq-2-43"]{(2.43)}，可以由下式计算组分@tex-math{m}的总变化率
     }
 
     @tex-display-math[#:id "eq-2-44"]{\dot{s}_m = W_m\sum_{l=1}^{N_R}\dot{C}_{lm}. \tag{2.44}}
 
     @bi{
-      @lang["en"]{More details can be found in the references cited above. A detailed overview of the equations governing a chemically reacting flow, together with the Jacobian matrices of the fluxes and their eigenvalues, can also be found in @link["blazek2005-r2-24"]{[24]}.}
-      @lang["zh-Hans"]{更多细节可参见上文引用的文献。关于化学反应流动控制方程的详细综述，包括通量的Jacobian矩阵及其特征值，也可参见@link["blazek2005-r2-24"]{[24]}。}
+      More details can be found in the references cited above. A detailed overview of the equations governing a chemically reacting flow, together with the Jacobian matrices of the fluxes and their eigenvalues, can also be found in @link["blazek2005-r2-24"]{[24]}.
+    }{
+      更多细节可参见上文引用的文献。关于化学反应流动控制方程的详细综述，包括通量的Jacobian矩阵及其特征值，也可参见@link["blazek2005-r2-24"]{[24]}。
     }
 
     @bi{
-      @lang["en"]{Another practical example of real gas is the simulation of steam or, which is more demanding, of wet steam in turbomachinery applications @link["blazek2005-r2-25"]{[25]}-@link["blazek2005-r2-32"]{[32]}. In the later case, where the steam is mixed with water droplets, so that we speak of @emph{multiphase flow}, it is either possible to solve an additional set of transport equations, or to trace the water droplets along a number of streamlines. These simulations have very important applications in the design of modern steam turbine cascades. The analysis of flow past turbine blades can for instance help to understand the occurrence of supercritical shocks by condensation and of flow instabilities, responsible for an additional dynamic load on the bladings and resulting in a loss of the efficiency.}
-      @lang["zh-Hans"]{真实气体的另一个实用例子是蒸汽的模拟，或者更有挑战性的、叶轮机械应用中湿蒸汽的模拟@link["blazek2005-r2-25"]{[25]}-@link["blazek2005-r2-32"]{[32]}。在后一种情形中，蒸汽与水滴混合，即所谓的多相流（multiphase flow）；此时既可以求解一组附加的输运方程，也可以沿若干条流线追踪水滴。这类模拟在现代汽轮机叶栅设计中有着十分重要的应用。例如，对涡轮叶片绕流的分析有助于理解凝结引起的超临界激波以及流动不稳定性的产生，后者会使叶片装置承受额外的动态载荷并导致效率损失。}
+      Another practical example of real gas is the simulation of steam or, which is more demanding, of wet steam in turbomachinery applications @link["blazek2005-r2-25"]{[25]}-@link["blazek2005-r2-32"]{[32]}. In the later case, where the steam is mixed with water droplets, so that we speak of @emph{multiphase flow}, it is either possible to solve an additional set of transport equations, or to trace the water droplets along a number of streamlines. These simulations have very important applications in the design of modern steam turbine cascades. The analysis of flow past turbine blades can for instance help to understand the occurrence of supercritical shocks by condensation and of flow instabilities, responsible for an additional dynamic load on the bladings and resulting in a loss of the efficiency.
+    }{
+      真实气体的另一个实用例子是蒸汽的模拟，或者更有挑战性的、叶轮机械应用中湿蒸汽的模拟@link["blazek2005-r2-25"]{[25]}-@link["blazek2005-r2-32"]{[32]}。在后一种情形中，蒸汽与水滴混合，即所谓的多相流（multiphase flow）；此时既可以求解一组附加的输运方程，也可以沿若干条流线追踪水滴。这类模拟在现代汽轮机叶栅设计中有着十分重要的应用。例如，对涡轮叶片绕流的分析有助于理解凝结引起的超临界激波以及流动不稳定性的产生，后者会使叶片装置承受额外的动态载荷并导致效率损失。
     }
   }
 
@@ -652,69 +739,77 @@
     @title{2.4.3 Simplifications to the Navier-Stokes Equations Navier-Stokes方程的简化}
 
     @bi{
-      @lang["en"]{In the following, we shall consider three common simplifications to the Navier-Stokes equations @link["blazek2005-ch02#eq-2-19"]{(2.19)}. We shall restrict our attention here to the physical reasoning behind each of the approximations. The equations for the first two simplified forms of the Navier-Stokes equations are provided in the Appendix.}
-      @lang["zh-Hans"]{下面考虑Navier-Stokes方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}的三种常见简化。这里我们把注意力集中在每种近似背后的物理依据上。前两种简化形式的方程在附录中给出。}
+      In the following, we shall consider three common simplifications to the Navier-Stokes equations @link["blazek2005-ch02#eq-2-19"]{(2.19)}. We shall restrict our attention here to the physical reasoning behind each of the approximations. The equations for the first two simplified forms of the Navier-Stokes equations are provided in the Appendix.
+    }{
+      下面考虑Navier-Stokes方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}的三种常见简化。这里我们把注意力集中在每种近似背后的物理依据上。前两种简化形式的方程在附录中给出。
     }
 
     @emph{Thin Shear Layer Approximation 薄剪切层近似}
 
     @bi{
-      @lang["en"]{When simulating flows around bodies for high Reynolds numbers (i.e., when the boundary layer is thin with respect to a characteristic dimension), the Navier-Stokes equations @link["blazek2005-ch02#eq-2-19"]{(2.19)} can be simplified. One necessary condition is that there is no large area of separated boundary layer. It can then be anticipated that}
-      @lang["zh-Hans"]{在模拟高雷诺数绕物体的流动时（即边界层相对于特征尺寸很薄时），可以对Navier-Stokes方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}进行简化。一个必要条件是不存在大面积的分离边界层。于是可以预期}
+      When simulating flows around bodies for high Reynolds numbers (i.e., when the boundary layer is thin with respect to a characteristic dimension), the Navier-Stokes equations @link["blazek2005-ch02#eq-2-19"]{(2.19)} can be simplified. One necessary condition is that there is no large area of separated boundary layer. It can then be anticipated that
+    }{
+      在模拟高雷诺数绕物体的流动时（即边界层相对于特征尺寸很薄时），可以对Navier-Stokes方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}进行简化。一个必要条件是不存在大面积的分离边界层。于是可以预期
     }
 
     @figure["blazek2005/fig-2-4.png" "图2.4:薄边界层的表示"]{
     @emph{图2.4:薄边界层的表示。}图例：Flow——流动；Boundary layer——边界层；Body contour——物面轮廓；@tex-math{\eta}、@tex-math{\xi}——贴体曲线坐标。
 }
     @bi{
-      @lang["en"]{only the gradients of the flow quantities in the normal direction to the surface of the body (@tex-math{\eta}-direction in Fig. 2.4) contribute to the viscous stresses @link["blazek2005-r2-33"]{[33]}, @link["blazek2005-r2-34"]{[34]}. On the other hand, the gradients in the other coordinate directions (@tex-math{\xi} in Fig. 2.4) are neglected in the evaluation of the shear stress tensor (Eqs. (@link["blazek2005-ch02#eq-2-14"]{2.14}, @link["blazek2005-ch02#eq-2-15"]{2.15})). We speak here of the so-called @emph{Thin Shear Layer} (TSL) approximation of the Navier-Stokes equations. The motivation for the TSL modification is that the numerical evaluation of the viscous terms becomes computationally less expensive, but, within the assumptions, the solution remains sufficiently accurate. The TSL approximation can also be justified from a practical point of view. In the case of high Reynolds number flows, the grid has to be very fine in the wall normal direction in order to resolve the boundary layer properly. Because of the limited computer memory and speed, much coarser grid has to be generated in the other directions. This in turn results in significantly lower numerical accuracy of the gradient evaluation compared to the normal direction. The TSL equations are for completeness presented in the Appendix (A.6). Due to the fact that secondary flow (e.g., like in a blade row) cannot be resolved appropriately, the TSL simplification is usually applied only in external aerodynamics.}
-      @lang["zh-Hans"]{只有垂直于物体表面方向（图2.4中的@tex-math{\eta}方向）的流动参量梯度才对黏性应力有贡献@link["blazek2005-r2-33"]{[33]}, @link["blazek2005-r2-34"]{[34]}。另一方面，在其他坐标方向（图2.4中的@tex-math{\xi}方向）上的梯度，在计算切向应力张量（方程(@link["blazek2005-ch02#eq-2-14"]{2.14}, @link["blazek2005-ch02#eq-2-15"]{2.15})）时被忽略。这就是所谓的Navier-Stokes方程薄剪切层（Thin Shear Layer，TSL）近似。采用TSL修正的动机在于：黏性项的数值计算代价更低，同时在假设范围内解仍保持足够的精度。从实用的角度看，TSL近似也是合理的。在高雷诺数流动中，为了恰当地分辨边界层，网格在壁面法向必须非常细；而受计算机内存和速度的限制，其他方向的网格只能粗得多。这又使得梯度计算在这些方向上的数值精度明显低于法向。为完整起见，TSL方程在附录(A.6)中给出。由于二次流（例如叶排中的二次流）无法被恰当分辨，TSL简化通常只用于外流空气动力学。}
+      only the gradients of the flow quantities in the normal direction to the surface of the body (@tex-math{\eta}-direction in Fig. 2.4) contribute to the viscous stresses @link["blazek2005-r2-33"]{[33]}, @link["blazek2005-r2-34"]{[34]}. On the other hand, the gradients in the other coordinate directions (@tex-math{\xi} in Fig. 2.4) are neglected in the evaluation of the shear stress tensor (Eqs. (@link["blazek2005-ch02#eq-2-14"]{2.14}, @link["blazek2005-ch02#eq-2-15"]{2.15})). We speak here of the so-called @emph{Thin Shear Layer} (TSL) approximation of the Navier-Stokes equations. The motivation for the TSL modification is that the numerical evaluation of the viscous terms becomes computationally less expensive, but, within the assumptions, the solution remains sufficiently accurate. The TSL approximation can also be justified from a practical point of view. In the case of high Reynolds number flows, the grid has to be very fine in the wall normal direction in order to resolve the boundary layer properly. Because of the limited computer memory and speed, much coarser grid has to be generated in the other directions. This in turn results in significantly lower numerical accuracy of the gradient evaluation compared to the normal direction. The TSL equations are for completeness presented in the Appendix (A.6). Due to the fact that secondary flow (e.g., like in a blade row) cannot be resolved appropriately, the TSL simplification is usually applied only in external aerodynamics.
+    }{
+      只有垂直于物体表面方向（图2.4中的@tex-math{\eta}方向）的流动参量梯度才对黏性应力有贡献@link["blazek2005-r2-33"]{[33]}, @link["blazek2005-r2-34"]{[34]}。另一方面，在其他坐标方向（图2.4中的@tex-math{\xi}方向）上的梯度，在计算切向应力张量（方程(@link["blazek2005-ch02#eq-2-14"]{2.14}, @link["blazek2005-ch02#eq-2-15"]{2.15})）时被忽略。这就是所谓的Navier-Stokes方程薄剪切层（Thin Shear Layer，TSL）近似。采用TSL修正的动机在于：黏性项的数值计算代价更低，同时在假设范围内解仍保持足够的精度。从实用的角度看，TSL近似也是合理的。在高雷诺数流动中，为了恰当地分辨边界层，网格在壁面法向必须非常细；而受计算机内存和速度的限制，其他方向的网格只能粗得多。这又使得梯度计算在这些方向上的数值精度明显低于法向。为完整起见，TSL方程在附录(A.6)中给出。由于二次流（例如叶排中的二次流）无法被恰当分辨，TSL简化通常只用于外流空气动力学。
     }
 
     @emph{Parabolised Navier-Stokes Equations 抛物化Navier-Stokes方程}
 
     @bi{
-      @lang["en"]{In cases, where the following three conditions are fulfilled:
-        @itemize{
-          @item{the flow is steady (i.e. @tex-math{\partial\vec{W}/\partial t = 0}),}
-          @item{the fluid moves predominantly in one main direction (e.g., there must be no boundary layer separation),}
-          @item{the cross-flow components are negligible,}
-        }
-      }
-      @lang["zh-Hans"]{在满足以下三个条件的情况下：
-        @itemize{
-          @item{流动是定常的（即@tex-math{\partial\vec{W}/\partial t = 0}）；}
-          @item{流体主要沿一个主流方向运动（例如不得出现边界层分离）；}
-          @item{横流分量可以忽略；}
-        }
-      }
+      In cases, where the following three conditions are fulfilled:
+              @itemize{
+                @item{the flow is steady (i.e. @tex-math{\partial\vec{W}/\partial t = 0}),}
+                @item{the fluid moves predominantly in one main direction (e.g., there must be no boundary layer separation),}
+                @item{the cross-flow components are negligible,}
+              }
+
+    }{
+      在满足以下三个条件的情况下：
+              @itemize{
+                @item{流动是定常的（即@tex-math{\partial\vec{W}/\partial t = 0}）；}
+                @item{流体主要沿一个主流方向运动（例如不得出现边界层分离）；}
+                @item{横流分量可以忽略；}
+              }
+
     }
 
     @figure["blazek2005/fig-2-5.png" "图2.5:管道内流——抛物化Navier-Stokes方程"]{
     @emph{图2.5:管道内流——抛物化Navier-Stokes方程。}
 }
     @bi{
-      @lang["en"]{the governing equations @link["blazek2005-ch02#eq-2-19"]{(2.19)}) can be simplified to a form called the @emph{Parabolised Navier-Stokes} (PNS) equations @link["blazek2005-r2-8"]{[8]}, @link["blazek2005-r2-35"]{[35]}-@link["blazek2005-r2-37"]{[37]}. The above conditions allow us to set the derivatives of @tex-math{u}, @tex-math{v}, and @tex-math{w} with respect to the streamwise direction to zero in the viscous stress terms (Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)}). Furthermore, the components of the viscous stress tensor @tex-math{\overline{\overline{\tau}}}, of the work performed by it (@tex-math{\overline{\overline{\tau}}\cdot\vec{v}}), and of the heat conduction @tex-math{k\nabla T} in the streamwise direction are dropped from the viscous flux vector in Eq. @link["blazek2005-ch02#eq-2-23"]{(2.23)}. The continuity equation, as well as the convective fluxes (Eq. @link["blazek2005-ch02#eq-2-21"]{(2.21)}) remain unchanged. For details, the reader is referred to the Appendix (A.7). Considering the situation sketched in Fig. 2.5, where the main flow direction coincides with the @tex-math{x} coordinate, it can be shown that the PNS approximation leads to a mixed set of parabolic / elliptic equations. Namely, the momentum equation in the flow direction becomes parabolic together with the energy equation, and hence they can be solved by marching in the @tex-math{x}-direction. The momentum equations in the @tex-math{y}- and in the @tex-math{z}-direction are elliptic and they have to be solved iteratively in each @tex-math{x}-plane. Thus, the main benefit of the PNS approach is in the largely reduced complexity of the flow solution - from a complete 3-D field to a sequence of 2-D problems. A typical application of the parabolised Navier-Stokes equations is the calculation of internal flows in ducts and in pipes, and also the simulation of steady supersonic flows using the space-marching method @link["blazek2005-r2-38"]{[38]}-@link["blazek2005-r2-41"]{[41]}.}
-      @lang["zh-Hans"]{控制方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}可以简化为所谓的抛物化Navier-Stokes（Parabolised Navier-Stokes，PNS）方程@link["blazek2005-r2-8"]{[8]}, @link["blazek2005-r2-35"]{[35]}-@link["blazek2005-r2-37"]{[37]}。上述条件允许我们在黏性应力项（方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}）中把@tex-math{u}、@tex-math{v}和@tex-math{w}沿流向的导数取为零。此外，黏性应力张量@tex-math{\overline{\overline{\tau}}}的分量、其做功项（@tex-math{\overline{\overline{\tau}}\cdot\vec{v}}）以及热传导@tex-math{k\nabla T}在流向的分量，都从方程@link["blazek2005-ch02#eq-2-23"]{(2.23)}的黏性通量向量中略去。连续方程以及对流通量（方程@link["blazek2005-ch02#eq-2-21"]{(2.21)}）保持不变。细节请参见附录(A.7)。考虑图2.5所示的情景，其中主流方向与@tex-math{x}坐标一致，可以证明PNS近似导出一组抛物型/椭圆型混合的方程。具体而言，流向动量方程与能量方程一起成为抛物型方程，因此可以沿@tex-math{x}方向推进求解；而@tex-math{y}方向和@tex-math{z}方向的动量方程是椭圆型的，必须在每个@tex-math{x}平面内迭代求解。于是，PNS方法的主要好处在于流动求解复杂度的大幅降低——从完整的三维场变成一系列二维问题。抛物化Navier-Stokes方程的典型应用包括管道内的内流计算，以及利用空间推进方法模拟定常超声速流动@link["blazek2005-r2-38"]{[38]}-@link["blazek2005-r2-41"]{[41]}。}
+      the governing equations @link["blazek2005-ch02#eq-2-19"]{(2.19)}) can be simplified to a form called the @emph{Parabolised Navier-Stokes} (PNS) equations @link["blazek2005-r2-8"]{[8]}, @link["blazek2005-r2-35"]{[35]}-@link["blazek2005-r2-37"]{[37]}. The above conditions allow us to set the derivatives of @tex-math{u}, @tex-math{v}, and @tex-math{w} with respect to the streamwise direction to zero in the viscous stress terms (Eq. @link["blazek2005-ch02#eq-2-15"]{(2.15)}). Furthermore, the components of the viscous stress tensor @tex-math{\overline{\overline{\tau}}}, of the work performed by it (@tex-math{\overline{\overline{\tau}}\cdot\vec{v}}), and of the heat conduction @tex-math{k\nabla T} in the streamwise direction are dropped from the viscous flux vector in Eq. @link["blazek2005-ch02#eq-2-23"]{(2.23)}. The continuity equation, as well as the convective fluxes (Eq. @link["blazek2005-ch02#eq-2-21"]{(2.21)}) remain unchanged. For details, the reader is referred to the Appendix (A.7). Considering the situation sketched in Fig. 2.5, where the main flow direction coincides with the @tex-math{x} coordinate, it can be shown that the PNS approximation leads to a mixed set of parabolic / elliptic equations. Namely, the momentum equation in the flow direction becomes parabolic together with the energy equation, and hence they can be solved by marching in the @tex-math{x}-direction. The momentum equations in the @tex-math{y}- and in the @tex-math{z}-direction are elliptic and they have to be solved iteratively in each @tex-math{x}-plane. Thus, the main benefit of the PNS approach is in the largely reduced complexity of the flow solution - from a complete 3-D field to a sequence of 2-D problems. A typical application of the parabolised Navier-Stokes equations is the calculation of internal flows in ducts and in pipes, and also the simulation of steady supersonic flows using the space-marching method @link["blazek2005-r2-38"]{[38]}-@link["blazek2005-r2-41"]{[41]}.
+    }{
+      控制方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}可以简化为所谓的抛物化Navier-Stokes（Parabolised Navier-Stokes，PNS）方程@link["blazek2005-r2-8"]{[8]}, @link["blazek2005-r2-35"]{[35]}-@link["blazek2005-r2-37"]{[37]}。上述条件允许我们在黏性应力项（方程@link["blazek2005-ch02#eq-2-15"]{(2.15)}）中把@tex-math{u}、@tex-math{v}和@tex-math{w}沿流向的导数取为零。此外，黏性应力张量@tex-math{\overline{\overline{\tau}}}的分量、其做功项（@tex-math{\overline{\overline{\tau}}\cdot\vec{v}}）以及热传导@tex-math{k\nabla T}在流向的分量，都从方程@link["blazek2005-ch02#eq-2-23"]{(2.23)}的黏性通量向量中略去。连续方程以及对流通量（方程@link["blazek2005-ch02#eq-2-21"]{(2.21)}）保持不变。细节请参见附录(A.7)。考虑图2.5所示的情景，其中主流方向与@tex-math{x}坐标一致，可以证明PNS近似导出一组抛物型/椭圆型混合的方程。具体而言，流向动量方程与能量方程一起成为抛物型方程，因此可以沿@tex-math{x}方向推进求解；而@tex-math{y}方向和@tex-math{z}方向的动量方程是椭圆型的，必须在每个@tex-math{x}平面内迭代求解。于是，PNS方法的主要好处在于流动求解复杂度的大幅降低——从完整的三维场变成一系列二维问题。抛物化Navier-Stokes方程的典型应用包括管道内的内流计算，以及利用空间推进方法模拟定常超声速流动@link["blazek2005-r2-38"]{[38]}-@link["blazek2005-r2-41"]{[41]}。
     }
 
     @emph{Euler Equations 欧拉方程}
 
     @bi{
-      @lang["en"]{As we have seen, the Navier-Stokes equations describe the behaviour of a viscous fluid. In many instances, it is a valid approximation to neglect the viscous effects completely, like for example for high Reynolds-number flows, where the boundary layer is very thin compared to the dimensions of the body. In such cases, we can simply omit the vector of viscous fluxes, @tex-math{\vec{F}_v}, from the Equations @link["blazek2005-ch02#eq-2-19"]{(2.19)}. Thus, we are left with}
-      @lang["zh-Hans"]{如前所述，Navier-Stokes方程描述黏性流体的行为。在许多情形下，完全忽略黏性效应是一种有效的近似，例如高雷诺数流动，其边界层相对于物体尺寸非常薄。此时，我们可以简单地从方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}中略去黏性通量向量@tex-math{\vec{F}_v}。于是得到}
+      As we have seen, the Navier-Stokes equations describe the behaviour of a viscous fluid. In many instances, it is a valid approximation to neglect the viscous effects completely, like for example for high Reynolds-number flows, where the boundary layer is very thin compared to the dimensions of the body. In such cases, we can simply omit the vector of viscous fluxes, @tex-math{\vec{F}_v}, from the Equations @link["blazek2005-ch02#eq-2-19"]{(2.19)}. Thus, we are left with
+    }{
+      如前所述，Navier-Stokes方程描述黏性流体的行为。在许多情形下，完全忽略黏性效应是一种有效的近似，例如高雷诺数流动，其边界层相对于物体尺寸非常薄。此时，我们可以简单地从方程@link["blazek2005-ch02#eq-2-19"]{(2.19)}中略去黏性通量向量@tex-math{\vec{F}_v}。于是得到
     }
 
     @tex-display-math[#:id "eq-2-45"]{\frac{\partial}{\partial t}\int_{\Omega}\vec{W}\,d\Omega + \oint_{\partial\Omega}\vec{F}_c\,dS = \int_{\Omega}\vec{Q}\,d\Omega. \tag{2.45}}
 
     @bi{
-      @lang["en"]{The remaining terms are given by the same relations @link["blazek2005-ch02#eq-2-20"]{(2.20)}-@link["blazek2005-ch02#eq-2-22"]{(2.22)} and Eq. @link["blazek2005-ch02#eq-2-25"]{(2.25)} as before. This simplified form of the governing equations is called the @emph{Euler equations}. They describe the pure convection of flow quantities in an inviscid fluid. If the Euler equations are formulated in conservative way (like above), they allow for accurate representation of such important phenomena like shocks, expansion waves and vortices over delta wings (with sharp leading edges). Furthermore, the Euler equations served in the past - and still do - as the basis for the development of discretisation methods and boundary conditions.}
-      @lang["zh-Hans"]{其余各项仍由与前面相同的关系式@link["blazek2005-ch02#eq-2-20"]{(2.20)}–@link["blazek2005-ch02#eq-2-22"]{(2.22)}以及方程@link["blazek2005-ch02#eq-2-25"]{(2.25)}给出。这种简化形式的控制方程称为欧拉方程（Euler equations）。它们描述无黏流体中流动物理量的纯对流。如果像上面那样以守恒形式表述欧拉方程，它们便能准确刻画激波、膨胀波以及三角翼（具有尖锐前缘）上的涡等重要现象。此外，欧拉方程在过去——并且至今仍然——是发展离散化方法和边界条件的基础。}
+      The remaining terms are given by the same relations @link["blazek2005-ch02#eq-2-20"]{(2.20)}-@link["blazek2005-ch02#eq-2-22"]{(2.22)} and Eq. @link["blazek2005-ch02#eq-2-25"]{(2.25)} as before. This simplified form of the governing equations is called the @emph{Euler equations}. They describe the pure convection of flow quantities in an inviscid fluid. If the Euler equations are formulated in conservative way (like above), they allow for accurate representation of such important phenomena like shocks, expansion waves and vortices over delta wings (with sharp leading edges). Furthermore, the Euler equations served in the past - and still do - as the basis for the development of discretisation methods and boundary conditions.
+    }{
+      其余各项仍由与前面相同的关系式@link["blazek2005-ch02#eq-2-20"]{(2.20)}–@link["blazek2005-ch02#eq-2-22"]{(2.22)}以及方程@link["blazek2005-ch02#eq-2-25"]{(2.25)}给出。这种简化形式的控制方程称为欧拉方程（Euler equations）。它们描述无黏流体中流动物理量的纯对流。如果像上面那样以守恒形式表述欧拉方程，它们便能准确刻画激波、膨胀波以及三角翼（具有尖锐前缘）上的涡等重要现象。此外，欧拉方程在过去——并且至今仍然——是发展离散化方法和边界条件的基础。
     }
 
     @bi{
-      @lang["en"]{However, it should be noted that today, due to the computational power of even personal computers and due to the increased demands on the quality of the simulations, the Euler equations are only relatively seldom employed for flow computations.}
-      @lang["zh-Hans"]{然而，应当指出，如今由于即使是个人计算机也具备的强大计算能力，以及对模拟质量要求的不断提高，欧拉方程已只是相对偶尔地用于流动计算。}
+      However, it should be noted that today, due to the computational power of even personal computers and due to the increased demands on the quality of the simulations, the Euler equations are only relatively seldom employed for flow computations.
+    }{
+      然而，应当指出，如今由于即使是个人计算机也具备的强大计算能力，以及对模拟质量要求的不断提高，欧拉方程已只是相对偶尔地用于流动计算。
     }
   }
 }

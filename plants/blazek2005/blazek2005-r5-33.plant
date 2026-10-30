@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Whitaker, D.L.: Three-Dimensional Unstructured Grid Euler Computations Using a Fully-Implicit, Upwind Method. AIAA Paper 93-3337, 1993.}
 @taxon["reference"]

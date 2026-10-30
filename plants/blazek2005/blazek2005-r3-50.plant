@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Patera, A.T.: A Spectral Element Method for Fluid Dynamics; Laminar Flow in a Channel Expansion. J. Computational Physics, 54 (1984), pp. 468-488.}
 @taxon["reference"]

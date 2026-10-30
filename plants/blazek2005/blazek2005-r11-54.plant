@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Shewchuk, J.R.: Triangle: Engineering a 2D Quality Mesh Generator and Delaunay Triangulator. Proc. 1st Workshop Appl. Computational Geometry, Philadelphia, USA, May 1996, pp. 124-133.}
 @taxon["reference"]

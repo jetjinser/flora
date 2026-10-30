@@ -113,6 +113,8 @@ The numbered source files beneath each prefix are stable page identities, not a 
 
 `project.scm` declares the source modules, site routes, renderer adapter, and output assets. The sitemap and RSS renderers write `sitemap.xml` and `feed.xml` into the site output alongside the HTML pages, using `https://flora.purejs.icu` as the site URL. HTML pages advertise `feed.xml` for feed-reader autodiscovery; the RSS XML links `feed.css` for browser display. `plants/` contains pages, `plants/lib/` contains the site command library as self-documenting pages, `lp/` contains the experimental literate-programming library, and `tests/` contains its Guile checks. Generated HTML and programs are written to `build/`.
 
+Flora's reader preloads `(forester commands)` and `(flora commands)` for ordinary pages, so Flora-authored `.plant` files do not need a repeated `@use-commands{flora}` header. The command manifest is in `flora.scm`; projects that use Flora's commands can import that set with `@use-commands{flora}`.
+
 ## Writing conventions
 
 Write Chinese prose without manual spaces between CJK text and Latin words or digits. `style.css` uses `text-autospace` for visual separation. Keep spaces required inside English phrases, code, and Scheme source. See [Grove writing](plants/grove-0001.plant).

@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Bowyer, A.: Computing Dirichlet Tessellations. Computer Journal, 24 (1981), pp. 162-166.}
 @taxon["reference"]

@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Chang, Q.; Huang, Z.: Efficient Algebraic Multigrid Algorithms and their Convergence. SIAM J. Sci. Comput., 24 (2002), pp. 597-618.}
 @taxon["reference"]

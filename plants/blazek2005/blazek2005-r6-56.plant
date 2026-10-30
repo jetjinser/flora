@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Pahlke, K.; Blazek, J.; Kirchner, A.: Time-Accurate Euler Computations for Rotor Flows. European Forum: Recent Developments and Applications in Aeronautical CFD, Paper No. 15, Bristol, UK, 1993.}
 @taxon["reference"]

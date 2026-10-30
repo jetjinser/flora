@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Chang, H.T.; Jiann, H.S.; van Leer, B.: Optimal Multistage Schemes for Euler Equations with Residual Smoothing. AIAA Journal, 33 (1995), pp. 1008-1016.}
 @taxon["reference"]

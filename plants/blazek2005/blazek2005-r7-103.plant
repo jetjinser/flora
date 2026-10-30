@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Garnier, E.; Mossi, M.; Sagaut, P.; Comte, P.; Deville, M.: On the Use of Shock-Capturing Schemes for Large-Eddy Simulation. J. Computational Physics, 153 (1999), pp. 273-311.}
 @taxon["reference"]

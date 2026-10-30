@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Batina, J.T.: A Gridless Euler/Navier-Stokes Solution Algorithm for Complex-Aircraft Applications. AIAA Paper 93-0333, 1993.}
 @taxon["reference"]

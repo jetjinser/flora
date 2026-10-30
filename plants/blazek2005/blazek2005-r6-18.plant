@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Dong, H.; Zhong, X.: Time-Accurate Simulations of Hypersonic Boundary Layer Stability and Transition over Blunt Bodies Using Implicit Parallel Algorithms. AIAA Paper 2002-0156, 2002.}
 @taxon["reference"]

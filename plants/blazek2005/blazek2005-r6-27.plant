@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Cuthill, E.; McKee, J.: Reducing the Bandwidth of Sparse Symmetric Matrices. Proc. ACM 24th National Conference, 1969, pp. 157-161.}
 @taxon["reference"]

@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Kadioğlu, M.; Mudrick, S.: On the Implementation of the GMRES(m) Method to Elliptic Equations in Meteorology. J. Computational Physics, 102 (1992), pp. 348-359.}
 @taxon["reference"]

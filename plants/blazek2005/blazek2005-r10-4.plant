@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Cranck, J.; Nicholson, P.: A Practical Method for Numerical Evaluation of Solutions of Partial Differential Equations of the Heat Conduction Type. Proc. Cambridge Philosophical Soc., 43 (1947), pp. 50-67.}
 @taxon["reference"]

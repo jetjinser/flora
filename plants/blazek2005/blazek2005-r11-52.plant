@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Watson, D.F.: Computing the n-Dimensional Delaunay Tessellation with Application to Voronoj Polytopes. Computer Journal, 24 (1981), pp. 167-172.}
 @taxon["reference"]

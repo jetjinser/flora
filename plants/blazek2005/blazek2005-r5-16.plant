@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Strang, W.Z.; Tomaro, R.F.; Grismer, M.J.: The Defining Methods of Cobalt60: A Parallel, Implicit, Unstructured Euler/Navier-Stokes Flow Solver. AIAA Paper 99-0786, 1999.}
 @taxon["reference"]

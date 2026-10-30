@@ -1,63 +1,68 @@
-@use-commands{flora}
 
 @title{Boundary Conditions 第8章 边界条件}
 @summary{虚单元概念,固壁、远场、入流/出流边界的数值处理。}
 @taxon["chapter"]
 
 @bi{
-  @lang["en"]{Any numerical simulation can consider only a part of the real physical domain or of the system. The truncation of the domain leads to artificial boundaries, where we have to prescribe values of certain physical quantities. Furthermore, walls which are exposed to the flow represent natural boundaries of the physical domain. The numerical treatment of the boundary conditions requires a particular care. An improper implementation can result in an inaccurate simulation of the real system. Additionally, the stability and the convergence speed of the solution scheme can be negatively influenced.}
-  @lang["zh-Hans"]{任何数值模拟都只能考虑真实物理域或系统的一部分。对求解域作截断会产生人工边界，在这些边界上我们必须给定某些物理量的值。此外，暴露于流动中的壁面构成物理域的自然边界。边界条件的数值处理需要格外细心：不当的实现会导致对真实系统的模拟不准确，此外求解格式的稳定性和收敛速度也会受到不利影响。}
+  Any numerical simulation can consider only a part of the real physical domain or of the system. The truncation of the domain leads to artificial boundaries, where we have to prescribe values of certain physical quantities. Furthermore, walls which are exposed to the flow represent natural boundaries of the physical domain. The numerical treatment of the boundary conditions requires a particular care. An improper implementation can result in an inaccurate simulation of the real system. Additionally, the stability and the convergence speed of the solution scheme can be negatively influenced.
+}{
+  任何数值模拟都只能考虑真实物理域或系统的一部分。对求解域作截断会产生人工边界，在这些边界上我们必须给定某些物理量的值。此外，暴露于流动中的壁面构成物理域的自然边界。边界条件的数值处理需要格外细心：不当的实现会导致对真实系统的模拟不准确，此外求解格式的稳定性和收敛速度也会受到不利影响。
 }
 
 @bi{
-  @lang["en"]{The following types of boundary conditions are in general encountered in the numerical solution of the Euler and the Navier-Stokes equations:
-    @itemize{
-      @item{solid wall,}
-      @item{farfield in external flows,}
-      @item{inflow and outflow in internal flows,}
-      @item{injection boundary,}
-      @item{symmetry,}
-      @item{coordinate cut and periodic boundary,}
-      @item{boundary between blocks.}
-    }
-  }
-  @lang["zh-Hans"]{在Euler方程与Navier-Stokes方程的数值求解中，通常会遇到下列几类边界条件：
-    @itemize{
-      @item{固壁；}
-      @item{外流中的远场；}
-      @item{内流中的入流与出流；}
-      @item{喷注边界；}
-      @item{对称面；}
-      @item{坐标切割与周期边界；}
-      @item{网格块之间的边界。}
-    }
-  }
+  The following types of boundary conditions are in general encountered in the numerical solution of the Euler and the Navier-Stokes equations:
+      @itemize{
+        @item{solid wall,}
+        @item{farfield in external flows,}
+        @item{inflow and outflow in internal flows,}
+        @item{injection boundary,}
+        @item{symmetry,}
+        @item{coordinate cut and periodic boundary,}
+        @item{boundary between blocks.}
+      }
+
+}{
+  在Euler方程与Navier-Stokes方程的数值求解中，通常会遇到下列几类边界条件：
+      @itemize{
+        @item{固壁；}
+        @item{外流中的远场；}
+        @item{内流中的入流与出流；}
+        @item{喷注边界；}
+        @item{对称面；}
+        @item{坐标切割与周期边界；}
+        @item{网格块之间的边界。}
+      }
+
 }
 
 @bi{
-  @lang["en"]{The numerical treatment of these boundary conditions is described in detail in the following sections. For literature on further boundary conditions like heat radiation on walls or like free surfaces, the reader is referred to Section 3.4.}
-  @lang["zh-Hans"]{这些边界条件的数值处理将在下面几节中详细讨论。关于壁面热辐射、自由表面等其他边界条件的文献，读者可参阅3.4节。}
+  The numerical treatment of these boundary conditions is described in detail in the following sections. For literature on further boundary conditions like heat radiation on walls or like free surfaces, the reader is referred to Section 3.4.
+}{
+  这些边界条件的数值处理将在下面几节中详细讨论。关于壁面热辐射、自由表面等其他边界条件的文献，读者可参阅3.4节。
 }
 
 @subtree[#:id "blazek2005-8-1"]{
   @title{8.1 Concept of Dummy Cells 虚单元的概念}
 
   @bi{
-    @lang["en"]{Before we proceed with the discussion of the boundary conditions, we should mention the concept of @emph{dummy cells} or @emph{dummy points}. This approach is very popular on structured grids. However, dummy cells offer some advantages also on unstructured grids. The dummy cells are additional layers of grid cells or points outside the physical domain. This is sketched in Fig. 8.1 for the case of a 2-D structured grid. As we can see, the whole computational domain is surrounded by two layers of dummy cells (denoted by dashed line). The dummy cells (points) are usually not generated as the grid inside the domain (except on interfaces between grid blocks). Rather, the cells are only virtual, although geometrical quantities like volumes or face vectors are associated with them.}
-    @lang["zh-Hans"]{在继续讨论边界条件之前，我们应当提一下@emph{虚单元}（dummy cells）或@emph{虚点}（dummy points）的概念。这一做法在结构网格上非常流行，不过虚单元在非结构网格上也有一些优点。虚单元是物理域之外附加的网格单元层或点层。图8.1以二维结构网格为例对此作了示意。可以看到，整个计算域被两层虚单元（用虚线表示）包围。虚单元（点）通常不像域内网格那样生成（网格块之间的交界面除外）：它们只是虚拟的单元，尽管体积、面向量等几何量也与之相关联。}
+    Before we proceed with the discussion of the boundary conditions, we should mention the concept of @emph{dummy cells} or @emph{dummy points}. This approach is very popular on structured grids. However, dummy cells offer some advantages also on unstructured grids. The dummy cells are additional layers of grid cells or points outside the physical domain. This is sketched in Fig. 8.1 for the case of a 2-D structured grid. As we can see, the whole computational domain is surrounded by two layers of dummy cells (denoted by dashed line). The dummy cells (points) are usually not generated as the grid inside the domain (except on interfaces between grid blocks). Rather, the cells are only virtual, although geometrical quantities like volumes or face vectors are associated with them.
+  }{
+    在继续讨论边界条件之前，我们应当提一下@emph{虚单元}（dummy cells）或@emph{虚点}（dummy points）的概念。这一做法在结构网格上非常流行，不过虚单元在非结构网格上也有一些优点。虚单元是物理域之外附加的网格单元层或点层。图8.1以二维结构网格为例对此作了示意。可以看到，整个计算域被两层虚单元（用虚线表示）包围。虚单元（点）通常不像域内网格那样生成（网格块之间的交界面除外）：它们只是虚拟的单元，尽管体积、面向量等几何量也与之相关联。
   }
 
   @bi{
-    @lang["en"]{The purpose of the dummy cells is to simplify the computation of the fluxes, gradients, dissipation, etc. along the boundaries. This is achieved by the possibility to extend the stencil of the spatial discretisation scheme beyond the physical boundaries. As we can see in Fig. 8.1, the same discretisation scheme can be employed at the boundaries as inside the physical domain. Thus, we can solve the governing equations in the same way for all "physical" grid points. This makes the discretisation schemes much easier to implement. Furthermore, all grid points of a structured grid can be accessed in a single loop, which is of significant advantage particularly on vector computers. The condition is of course that the dummy cells (points) contain appropriate values of the conservative variables as well as of the geometrical quantities. Clearly, the number of dummy cell layers must be such that the part of the stencil outside the physical domain is completely covered. The conservative variables in the dummy cells (points) are obtained from boundary conditions. The geometrical quantities are usually taken from the corresponding control volume at the boundary. In the case of boundaries between multiple grid blocks (like in Fig. 3.4), all flow variables and the geometry are transferred from the neighbouring block.}
-    @lang["zh-Hans"]{虚单元的目的是简化边界上通量、梯度、耗散等的计算。其实现方式是把空间离散格式的模板（stencil）延伸到物理边界之外。如图8.1所示，在边界处可以采用与物理域内部相同的离散格式。这样，对所有“物理”网格点都能以同样的方式求解控制方程。这使离散格式易于实现。此外，结构网格的所有网格点可以在单个循环中遍历，这在向量计算机上具有显著优势。当然，前提是虚单元（点）中要存有守恒变量以及几何量的适当取值。显然，虚单元层的数目必须使模板位于物理域之外的部分被完全覆盖。虚单元（点）中的守恒变量由边界条件确定，几何量通常取自边界处相应的控制体。在多个网格块之间的边界情形（如图3.4），所有流动变量和几何量都从相邻块传递过来。}
+    The purpose of the dummy cells is to simplify the computation of the fluxes, gradients, dissipation, etc. along the boundaries. This is achieved by the possibility to extend the stencil of the spatial discretisation scheme beyond the physical boundaries. As we can see in Fig. 8.1, the same discretisation scheme can be employed at the boundaries as inside the physical domain. Thus, we can solve the governing equations in the same way for all "physical" grid points. This makes the discretisation schemes much easier to implement. Furthermore, all grid points of a structured grid can be accessed in a single loop, which is of significant advantage particularly on vector computers. The condition is of course that the dummy cells (points) contain appropriate values of the conservative variables as well as of the geometrical quantities. Clearly, the number of dummy cell layers must be such that the part of the stencil outside the physical domain is completely covered. The conservative variables in the dummy cells (points) are obtained from boundary conditions. The geometrical quantities are usually taken from the corresponding control volume at the boundary. In the case of boundaries between multiple grid blocks (like in Fig. 3.4), all flow variables and the geometry are transferred from the neighbouring block.
+  }{
+    虚单元的目的是简化边界上通量、梯度、耗散等的计算。其实现方式是把空间离散格式的模板（stencil）延伸到物理边界之外。如图8.1所示，在边界处可以采用与物理域内部相同的离散格式。这样，对所有“物理”网格点都能以同样的方式求解控制方程。这使离散格式易于实现。此外，结构网格的所有网格点可以在单个循环中遍历，这在向量计算机上具有显著优势。当然，前提是虚单元（点）中要存有守恒变量以及几何量的适当取值。显然，虚单元层的数目必须使模板位于物理域之外的部分被完全覆盖。虚单元（点）中的守恒变量由边界条件确定，几何量通常取自边界处相应的控制体。在多个网格块之间的边界情形（如图3.4），所有流动变量和几何量都从相邻块传递过来。
   }
 
   @figure["blazek2005/fig-8-1.png" "图8.1:二维计算域周围的两层虚单元"]{
   @emph{图8.1:二维计算域（粗线）周围的两层虚单元（虚线）。}实心圆点表示二阶单元顶点（对偶）格式的标准模板，实心矩形勾画出二阶单元中心格式的模板（见4.3节）。
 }
   @bi{
-    @lang["en"]{The grey-shaded dummy cells (and the associated points) in Fig. 8.1 represent a certain problem, since it is not quite clear how to set their values if there is no adjacent grid block. Their values are not required by the standard cross-type discretisation stencil. However, the cells (points) are important for the computation of gradients (viscous fluxes - see Section 4.4), or for the transfer operators within multigrid (Section 9.4). The simplest way to solve the problem is to average the values from the adjacent "regular" dummy cells, as indicated in Fig. 8.1 by arrows. However, this does not work satisfactorily for wall or symmetry boundaries. In these cases, it is better to extend the physical boundary into the dummy cell layers (see the structured 2-D code on the CD-ROM).}
-    @lang["zh-Hans"]{图8.1中灰色阴影的虚单元（及其相应点）带来一个难题：如果没有相邻的网格块，如何设置它们的取值并不十分明确。标准十字型离散模板并不需要它们的值。然而，这些单元（点）对梯度的计算（黏性通量——见4.4节）或多重网格中的转移算子（9.4节）十分重要。最简单的解决办法是由相邻的“规则”虚单元取平均，如图8.1中箭头所示。但这对于壁面或对称边界并不奏效。在这些情形下，更好的做法是把物理边界延伸到虚单元层中（参见CD-ROM上的结构化二维代码）。}
+    The grey-shaded dummy cells (and the associated points) in Fig. 8.1 represent a certain problem, since it is not quite clear how to set their values if there is no adjacent grid block. Their values are not required by the standard cross-type discretisation stencil. However, the cells (points) are important for the computation of gradients (viscous fluxes - see Section 4.4), or for the transfer operators within multigrid (Section 9.4). The simplest way to solve the problem is to average the values from the adjacent "regular" dummy cells, as indicated in Fig. 8.1 by arrows. However, this does not work satisfactorily for wall or symmetry boundaries. In these cases, it is better to extend the physical boundary into the dummy cell layers (see the structured 2-D code on the CD-ROM).
+  }{
+    图8.1中灰色阴影的虚单元（及其相应点）带来一个难题：如果没有相邻的网格块，如何设置它们的取值并不十分明确。标准十字型离散模板并不需要它们的值。然而，这些单元（点）对梯度的计算（黏性通量——见4.4节）或多重网格中的转移算子（9.4节）十分重要。最简单的解决办法是由相邻的“规则”虚单元取平均，如图8.1中箭头所示。但这对于壁面或对称边界并不奏效。在这些情形下，更好的做法是把物理边界延伸到虚单元层中（参见CD-ROM上的结构化二维代码）。
   }
 }
 
@@ -68,48 +73,55 @@
     @title{8.2.1 Inviscid Flow 无黏流动}
 
     @bi{
-      @lang["en"]{In the case of an inviscid flow, the fluid slips over the surface. Since there is no friction force, the velocity vector must be tangent to the surface. This is equivalent to the condition that there is no flow normal to the surface, i.e.,}
-      @lang["zh-Hans"]{对于无黏流动，流体在表面上滑移。由于不存在摩擦力，速度矢量必定与表面相切。这等价于没有沿表面法向流动的条件，即}
+      In the case of an inviscid flow, the fluid slips over the surface. Since there is no friction force, the velocity vector must be tangent to the surface. This is equivalent to the condition that there is no flow normal to the surface, i.e.,
+    }{
+      对于无黏流动，流体在表面上滑移。由于不存在摩擦力，速度矢量必定与表面相切。这等价于没有沿表面法向流动的条件，即
     }
 
     @tex-display-math[#:id "eq-8-1"]{\vec{v}\cdot\vec{n}=0\quad\text{at the surface}, \tag{8.1}}
 
     @bi{
-      @lang["en"]{where @tex-math{\vec{n}} denotes the unit normal vector at the surface. Hence, the contravariant velocity @tex-math{V} (Eq. (2.22)) is zero at the wall. Consequently, the vector of convective fluxes Eq. (2.21) reduces to the pressure term alone, i.e,}
-      @lang["zh-Hans"]{其中@tex-math{\vec{n}}表示表面处的单位法向量。因此，逆变速度@tex-math{V}（式(2.22)）在壁面上为零。于是，对流通量向量式(2.21)只剩下压力项，即}
+      where @tex-math{\vec{n}} denotes the unit normal vector at the surface. Hence, the contravariant velocity @tex-math{V} (Eq. (2.22)) is zero at the wall. Consequently, the vector of convective fluxes Eq. (2.21) reduces to the pressure term alone, i.e,
+    }{
+      其中@tex-math{\vec{n}}表示表面处的单位法向量。因此，逆变速度@tex-math{V}（式(2.22)）在壁面上为零。于是，对流通量向量式(2.21)只剩下压力项，即
     }
 
     @tex-display-math[#:id "eq-8-2"]{(\vec{F}_c)_w=\begin{bmatrix} 0\\ n_x\,p_w\\ n_y\,p_w\\ n_z\,p_w\\ 0 \end{bmatrix} \tag{8.2}}
 
     @bi{
-      @lang["en"]{with @tex-math{p_w} being the wall pressure.}
-      @lang["zh-Hans"]{其中@tex-math{p_w}为壁面压力。}
+      with @tex-math{p_w} being the wall pressure.
+    }{
+      其中@tex-math{p_w}为壁面压力。
     }
 
     @emph{Structured Cell-Centred Scheme 结构化单元中心格式}
 
     @bi{
-      @lang["en"]{Within the cell-centred scheme, the pressure is evaluated at the centroid of the cell. However, @tex-math{p_w} in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} is required at the face of the boundary cell. We can obtain the wall pressure most easily by extrapolation from the interior of the domain. Considering Fig. 8.2, we could simply set @tex-math{p_w=p_2}. Higher accuracy is achieved by using either a two-point}
-      @lang["zh-Hans"]{在单元中心格式中，压力在单元的形心处求值。然而，式@link["blazek2005-ch08#eq-8-2"]{(8.2)}中的@tex-math{p_w}却需要取在边界单元的面上。最简便的做法是由域内外推得到壁面压力。参见图8.2，我们可以简单地取@tex-math{p_w=p_2}。若采用两点公式}
+      Within the cell-centred scheme, the pressure is evaluated at the centroid of the cell. However, @tex-math{p_w} in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} is required at the face of the boundary cell. We can obtain the wall pressure most easily by extrapolation from the interior of the domain. Considering Fig. 8.2, we could simply set @tex-math{p_w=p_2}. Higher accuracy is achieved by using either a two-point
+    }{
+      在单元中心格式中，压力在单元的形心处求值。然而，式@link["blazek2005-ch08#eq-8-2"]{(8.2)}中的@tex-math{p_w}却需要取在边界单元的面上。最简便的做法是由域内外推得到壁面压力。参见图8.2，我们可以简单地取@tex-math{p_w=p_2}。若采用两点公式
     }
 
     @tex-display-math[#:id "eq-8-3"]{p_w=\frac{1}{2}\left(3p_2-p_3\right), \tag{8.3}}
 
     @bi{
-      @lang["en"]{or a three-point extrapolation formula}
-      @lang["zh-Hans"]{或三点外推公式}
+      or a three-point extrapolation formula
+    }{
+      或三点外推公式
     }
 
     @tex-display-math[#:id "eq-8-4"]{p_w=\frac{1}{8}\left(15p_2-10p_3+3p_4\right). \tag{8.4}}
 
     @bi{
-      @lang["en"]{In order to account for grid stretching, distances to the wall could be employed instead of the constant coefficients @link["blazek2005-r8-1"]{[1]}.}
-      @lang["zh-Hans"]{为了计及网格拉伸的影响，可以用到壁面的距离来代替其中的常数系数@link["blazek2005-r8-1"]{[1]}。}
+      In order to account for grid stretching, distances to the wall could be employed instead of the constant coefficients @link["blazek2005-r8-1"]{[1]}.
+    }{
+      为了计及网格拉伸的影响，可以用到壁面的距离来代替其中的常数系数@link["blazek2005-r8-1"]{[1]}。
     }
 
     @bi{
-      @lang["en"]{The above extrapolation formulae @link["blazek2005-ch08#eq-8-3"]{(8.3)}, @link["blazek2005-ch08#eq-8-4"]{(8.4)} do not account for the grid and the surface geometry. An alternative approach - the so-called @emph{normal-momentum relation} - was developed by Rizzi @link["blazek2005-r8-2"]{[2]}. It is based on the fact that the wall represents a streamline in inviscid flow. Differentiation of the zero-normal-flow condition in Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} along the surface streamline, and the substitution of the result into the momentum equation yields}
-      @lang["zh-Hans"]{上述外推公式@link["blazek2005-ch08#eq-8-3"]{(8.3)}、@link["blazek2005-ch08#eq-8-4"]{(8.4)}没有考虑网格与表面几何。另一种方法——所谓的@emph{法向动量关系}（normal-momentum relation）——由Rizzi提出@link["blazek2005-r8-2"]{[2]}。它基于这样一个事实：在无黏流动中壁面代表一条流线。把式@link["blazek2005-ch08#eq-8-1"]{(8.1)}的法向零流动条件沿表面流线求导，并将结果代入动量方程，便得到}
+      The above extrapolation formulae @link["blazek2005-ch08#eq-8-3"]{(8.3)}, @link["blazek2005-ch08#eq-8-4"]{(8.4)} do not account for the grid and the surface geometry. An alternative approach - the so-called @emph{normal-momentum relation} - was developed by Rizzi @link["blazek2005-r8-2"]{[2]}. It is based on the fact that the wall represents a streamline in inviscid flow. Differentiation of the zero-normal-flow condition in Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} along the surface streamline, and the substitution of the result into the momentum equation yields
+    }{
+      上述外推公式@link["blazek2005-ch08#eq-8-3"]{(8.3)}、@link["blazek2005-ch08#eq-8-4"]{(8.4)}没有考虑网格与表面几何。另一种方法——所谓的@emph{法向动量关系}（normal-momentum relation）——由Rizzi提出@link["blazek2005-r8-2"]{[2]}。它基于这样一个事实：在无黏流动中壁面代表一条流线。把式@link["blazek2005-ch08#eq-8-1"]{(8.1)}的法向零流动条件沿表面流线求导，并将结果代入动量方程，便得到
     }
 
     @tex-display-math[#:id "eq-8-5"]{\rho\vec{v}\cdot\left(\vec{v}\cdot\vec{\nabla}\right)\vec{n}=\vec{n}\cdot\vec{\nabla}p\,. \tag{8.5}}
@@ -121,91 +133,105 @@
     @emph{图8.3:结构化单元顶点对偶控制体格式的固壁边界条件。}虚点记为(i,0)和(i,1)。计算对流通量式(8.2)的位置用菱形标出。另请对照图4.6中的示意。
 }
     @bi{
-      @lang["en"]{Equation @link["blazek2005-ch08#eq-8-5"]{(8.5)} relates the density, the velocity and the wall geometry to the normal derivative of the pressure. It was demonstrated that the normal-momentum relation gives very accurate results @link["blazek2005-r8-1"]{[1]}. However, problems can arise with the numerical solution of the normal-momentum relation in the case of complex geometries. Detailed description of the implementation and accuracy comparisons can be found in Ref. @link["blazek2005-r8-1"]{[1]}.}
-      @lang["zh-Hans"]{式@link["blazek2005-ch08#eq-8-5"]{(8.5)}把密度、速度和壁面几何与压力的法向导数联系起来。已经证明，法向动量关系能给出非常精确的结果@link["blazek2005-r8-1"]{[1]}。然而，在复杂几何情形下，法向动量关系的数值求解可能出现问题。实现的详细描述与精度比较见文献@link["blazek2005-r8-1"]{[1]}。}
+      Equation @link["blazek2005-ch08#eq-8-5"]{(8.5)} relates the density, the velocity and the wall geometry to the normal derivative of the pressure. It was demonstrated that the normal-momentum relation gives very accurate results @link["blazek2005-r8-1"]{[1]}. However, problems can arise with the numerical solution of the normal-momentum relation in the case of complex geometries. Detailed description of the implementation and accuracy comparisons can be found in Ref. @link["blazek2005-r8-1"]{[1]}.
+    }{
+      式@link["blazek2005-ch08#eq-8-5"]{(8.5)}把密度、速度和壁面几何与压力的法向导数联系起来。已经证明，法向动量关系能给出非常精确的结果@link["blazek2005-r8-1"]{[1]}。然而，在复杂几何情形下，法向动量关系的数值求解可能出现问题。实现的详细描述与精度比较见文献@link["blazek2005-r8-1"]{[1]}。
     }
 
     @bi{
-      @lang["en"]{The values of the conservative variables in the dummy cells can be obtained by linear extrapolation from the interior, i.e.,}
-      @lang["zh-Hans"]{虚单元中守恒变量的取值可以由域内线性外推得到，即}
+      The values of the conservative variables in the dummy cells can be obtained by linear extrapolation from the interior, i.e.,
+    }{
+      虚单元中守恒变量的取值可以由域内线性外推得到，即
     }
 
     @tex-display-math[#:id "eq-8-6"]{\begin{aligned} \vec{W}_1&=2\vec{W}_2-\vec{W}_3\\ \vec{W}_0&=3\vec{W}_2-2\vec{W}_3\,. \end{aligned} \tag{8.6}}
 
     @bi{
-      @lang["en"]{The indices in Eq. @link["blazek2005-ch08#eq-8-6"]{(8.6)} correspond to Fig. 8.2. If the dummy cells are to be utilised within the spatial discretisation scheme (e.g., for the evaluation of the dissipation operator), it is important that the calculation of the convective fluxes is compatible to Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}.}
-      @lang["zh-Hans"]{式@link["blazek2005-ch08#eq-8-6"]{(8.6)}中的下标与图8.2对应。如果要在空间离散格式中使用虚单元（例如计算耗散算子），重要的是对流通量的计算要与式@link["blazek2005-ch08#eq-8-2"]{(8.2)}相容。}
+      The indices in Eq. @link["blazek2005-ch08#eq-8-6"]{(8.6)} correspond to Fig. 8.2. If the dummy cells are to be utilised within the spatial discretisation scheme (e.g., for the evaluation of the dissipation operator), it is important that the calculation of the convective fluxes is compatible to Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}.
+    }{
+      式@link["blazek2005-ch08#eq-8-6"]{(8.6)}中的下标与图8.2对应。如果要在空间离散格式中使用虚单元（例如计算耗散算子），重要的是对流通量的计算要与式@link["blazek2005-ch08#eq-8-2"]{(8.2)}相容。
     }
 
     @emph{Structured Cell-Vertex Scheme 结构化单元顶点格式}
 
     @bi{
-      @lang["en"]{The implementation of the boundary condition Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} is straightforward for the cell-vertex discretisation scheme with overlapping control volumes (Subsection 4.2.2). The convective fluxes at the wall faces are computed according to Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}. The wall pressure @tex-math{p_w} is obtained by averaging the nodal values as indicated in Eq. (4.26) for a 2-D, or in Eq. (4.27) for a 3-D case. The distribution formula (Eq. (4.30) in 2D) accounts now for only two (four in 3D) cells (compare Fig. 4.4 to Fig. 8.3).}
-      @lang["zh-Hans"]{对于具有重叠控制体的单元顶点离散格式（小节4.2.2），边界条件式@link["blazek2005-ch08#eq-8-1"]{(8.1)}的实现很直接。壁面上的对流通量按式@link["blazek2005-ch08#eq-8-2"]{(8.2)}计算。壁面压力@tex-math{p_w}通过节点值平均得到：二维情形如式(4.26)所示，三维情形如式(4.27)所示。分布公式（二维为式(4.30)）此时只涉及两个（三维为四个）单元（请比较图4.4与图8.3）。}
+      The implementation of the boundary condition Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} is straightforward for the cell-vertex discretisation scheme with overlapping control volumes (Subsection 4.2.2). The convective fluxes at the wall faces are computed according to Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}. The wall pressure @tex-math{p_w} is obtained by averaging the nodal values as indicated in Eq. (4.26) for a 2-D, or in Eq. (4.27) for a 3-D case. The distribution formula (Eq. (4.30) in 2D) accounts now for only two (four in 3D) cells (compare Fig. 4.4 to Fig. 8.3).
+    }{
+      对于具有重叠控制体的单元顶点离散格式（小节4.2.2），边界条件式@link["blazek2005-ch08#eq-8-1"]{(8.1)}的实现很直接。壁面上的对流通量按式@link["blazek2005-ch08#eq-8-2"]{(8.2)}计算。壁面压力@tex-math{p_w}通过节点值平均得到：二维情形如式(4.26)所示，三维情形如式(4.27)所示。分布公式（二维为式(4.30)）此时只涉及两个（三维为四个）单元（请比较图4.4与图8.3）。
     }
 
     @bi{
-      @lang["en"]{Several different ways can be followed in the case of the cell-vertex scheme with dual control volumes (Subsection 4.2.3). One approach is to apply the condition in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} separately for each face of the control volume which is on the wall. Thus, according to Fig. 8.3, we can write}
-      @lang["zh-Hans"]{对于具有对偶控制体的单元顶点格式（小节4.2.3），可以采用几种不同的做法。一种做法是对位于壁面上的控制体的每个面分别应用式@link["blazek2005-ch08#eq-8-2"]{(8.2)}中的条件。于是，按照图8.3，可以写出}
+      Several different ways can be followed in the case of the cell-vertex scheme with dual control volumes (Subsection 4.2.3). One approach is to apply the condition in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} separately for each face of the control volume which is on the wall. Thus, according to Fig. 8.3, we can write
+    }{
+      对于具有对偶控制体的单元顶点格式（小节4.2.3），可以采用几种不同的做法。一种做法是对位于壁面上的控制体的每个面分别应用式@link["blazek2005-ch08#eq-8-2"]{(8.2)}中的条件。于是，按照图8.3，可以写出
     }
 
     @tex-display-math[#:id "eq-8-7"]{(\vec{F}_{c,w})_{i,2}=\begin{bmatrix} 0\\ (n_x)_{i-1,2}\,(p_w)_{i-1/4,2}\\ (n_y)_{i-1,2}\,(p_w)_{i-1/4,2}\\ (n_z)_{i-1,2}\,(p_w)_{i-1/4,2}\\ 0 \end{bmatrix}+\begin{bmatrix} 0\\ (n_x)_{i,2}\,(p_w)_{i+1/4,2}\\ (n_y)_{i,2}\,(p_w)_{i+1/4,2}\\ (n_z)_{i,2}\,(p_w)_{i+1/4,2}\\ 0 \end{bmatrix}. \tag{8.7}}
 
     @bi{
-      @lang["en"]{The pressures @tex-math{(p_w)_{i-1/4,2}} and @tex-math{(p_w)_{i+1/4,2}} in Eq. @link["blazek2005-ch08#eq-8-7"]{(8.7)} can be obtained by linear interpolation, e.g.,}
-      @lang["zh-Hans"]{式@link["blazek2005-ch08#eq-8-7"]{(8.7)}中的压力@tex-math{(p_w)_{i-1/4,2}}和@tex-math{(p_w)_{i+1/4,2}}可通过线性插值得到，例如}
+      The pressures @tex-math{(p_w)_{i-1/4,2}} and @tex-math{(p_w)_{i+1/4,2}} in Eq. @link["blazek2005-ch08#eq-8-7"]{(8.7)} can be obtained by linear interpolation, e.g.,
+    }{
+      式@link["blazek2005-ch08#eq-8-7"]{(8.7)}中的压力@tex-math{(p_w)_{i-1/4,2}}和@tex-math{(p_w)_{i+1/4,2}}可通过线性插值得到，例如
     }
 
     @tex-display-math[#:id "eq-8-8"]{(p_w)_{i+1/4,2}=\frac{1}{4}\left[3(p_w)_{i,2}+(p_w)_{i+1,2}\right]. \tag{8.8}}
 
     @bi{
-      @lang["en"]{The corresponding 3-D formula will be presented further below in the subsection on unstructured grids.}
-      @lang["zh-Hans"]{相应的三维公式将在后面非结构网格小节中给出。}
+      The corresponding 3-D formula will be presented further below in the subsection on unstructured grids.
+    }{
+      相应的三维公式将在后面非结构网格小节中给出。
     }
 
     @bi{
-      @lang["en"]{Another possible implementation employs the condition in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} directly in the respective wall node (i.e., node @tex-math{(i,2)} in Fig. 8.3). The wall pressure @tex-math{p_w} is simply set equal to @tex-math{p_{i,2}}. The unit normal vector is computed as the average of the normal vectors of all wall facets which share the node @tex-math{(i,2)}. This approach requires a correction of the velocity vector. After the solution update by the time-stepping scheme, the velocity vector at the wall is projected onto the tangential plane @link["blazek2005-r8-3"]{[3]}, @link["blazek2005-r8-4"]{[4]}, i.e.,}
-      @lang["zh-Hans"]{另一种可行做法是直接在相应壁面节点处（即图8.3中的节点@tex-math{(i,2)}）应用式@link["blazek2005-ch08#eq-8-2"]{(8.2)}中的条件。壁面压力@tex-math{p_w}直接取为@tex-math{p_{i,2}}。单位法向量取为共享节点@tex-math{(i,2)}的所有壁面小面（facet）法向量的平均。这一做法需要对速度矢量作修正：在用时间推进格式更新解之后，把壁面上的速度矢量投影到切平面上@link["blazek2005-r8-3"]{[3]}、@link["blazek2005-r8-4"]{[4]}，即}
+      Another possible implementation employs the condition in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} directly in the respective wall node (i.e., node @tex-math{(i,2)} in Fig. 8.3). The wall pressure @tex-math{p_w} is simply set equal to @tex-math{p_{i,2}}. The unit normal vector is computed as the average of the normal vectors of all wall facets which share the node @tex-math{(i,2)}. This approach requires a correction of the velocity vector. After the solution update by the time-stepping scheme, the velocity vector at the wall is projected onto the tangential plane @link["blazek2005-r8-3"]{[3]}, @link["blazek2005-r8-4"]{[4]}, i.e.,
+    }{
+      另一种可行做法是直接在相应壁面节点处（即图8.3中的节点@tex-math{(i,2)}）应用式@link["blazek2005-ch08#eq-8-2"]{(8.2)}中的条件。壁面压力@tex-math{p_w}直接取为@tex-math{p_{i,2}}。单位法向量取为共享节点@tex-math{(i,2)}的所有壁面小面（facet）法向量的平均。这一做法需要对速度矢量作修正：在用时间推进格式更新解之后，把壁面上的速度矢量投影到切平面上@link["blazek2005-r8-3"]{[3]}、@link["blazek2005-r8-4"]{[4]}，即
     }
 
     @tex-display-math[#:id "eq-8-9"]{(\vec{v}_{i,2})_{corr}=\vec{v}_{i,2}-\left[\vec{v}_{i,2}\cdot(\vec{n}_{av})_{i,2}\right]\cdot(\vec{n}_{av})_{i,2} \tag{8.9}}
 
     @bi{
-      @lang["en"]{with @tex-math{\vec{n}_{av}} being the averaged unit normal vector. In this way, the flow will become tangential to the wall.}
-      @lang["zh-Hans"]{其中@tex-math{\vec{n}_{av}}为平均后的单位法向量。这样，流动将与壁面相切。}
+      with @tex-math{\vec{n}_{av}} being the averaged unit normal vector. In this way, the flow will become tangential to the wall.
+    }{
+      其中@tex-math{\vec{n}_{av}}为平均后的单位法向量。这样，流动将与壁面相切。
     }
 
     @bi{
-      @lang["en"]{In order to assign values to the dummy points, it is sufficient to extrapolate the conservative variables (Eq. (2.20)) from the interior field by using a relation similar to Eq. @link["blazek2005-ch08#eq-8-6"]{(8.6)}.}
-      @lang["zh-Hans"]{为给虚点赋值，只需用与式@link["blazek2005-ch08#eq-8-6"]{(8.6)}类似的关系，把守恒变量（式(2.20)）从内场外推即可。}
+      In order to assign values to the dummy points, it is sufficient to extrapolate the conservative variables (Eq. (2.20)) from the interior field by using a relation similar to Eq. @link["blazek2005-ch08#eq-8-6"]{(8.6)}.
+    }{
+      为给虚点赋值，只需用与式@link["blazek2005-ch08#eq-8-6"]{(8.6)}类似的关系，把守恒变量（式(2.20)）从内场外推即可。
     }
 
     @emph{Unstructured Cell-Centred Scheme 非结构单元中心格式}
 
     @bi{
-      @lang["en"]{The wall boundary condition in Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} can be implemented for a cell-centred unstructured scheme in a way similar to that on structured grids. If the boundary cell is a quadrilateral, hexahedron or a prism (with triangular face on the wall), the pressure can be extrapolated to the wall by using Eq. @link["blazek2005-ch08#eq-8-3"]{(8.3)}. The neighbouring cell (number 3 in Fig. 8.2) is known from the face-based data structure described in Subsection 5.2.1. For the case of a triangular or tetrahedral cell, in Ref. @link["blazek2005-r8-5"]{[5]} and @link["blazek2005-r8-6"]{[6]} it was suggested to employ one layer of dummy cells. The velocity components in the dummy cells were obtained by reflecting the velocity vectors in the boundary cells at the wall. For example, in the dummy cell 1 in Fig. 8.2, the velocity would become}
-      @lang["zh-Hans"]{式@link["blazek2005-ch08#eq-8-1"]{(8.1)}的壁面边界条件在非结构单元中心格式中的实现方式与结构网格类似。如果边界单元是四边形、六面体或棱柱（壁面为三角形的面），可以用式@link["blazek2005-ch08#eq-8-3"]{(8.3)}把压力外推到壁面。相邻单元（图8.2中的3号单元）可由小节5.2.1所述的基于面的数据结构得到。对于三角形或四面体单元，文献@link["blazek2005-r8-5"]{[5]}和@link["blazek2005-r8-6"]{[6]}建议采用一层虚单元，虚单元中的速度分量通过把边界单元的速度矢量关于壁面反射得到。例如，在图8.2中的虚单元1内，速度变为}
+      The wall boundary condition in Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} can be implemented for a cell-centred unstructured scheme in a way similar to that on structured grids. If the boundary cell is a quadrilateral, hexahedron or a prism (with triangular face on the wall), the pressure can be extrapolated to the wall by using Eq. @link["blazek2005-ch08#eq-8-3"]{(8.3)}. The neighbouring cell (number 3 in Fig. 8.2) is known from the face-based data structure described in Subsection 5.2.1. For the case of a triangular or tetrahedral cell, in Ref. @link["blazek2005-r8-5"]{[5]} and @link["blazek2005-r8-6"]{[6]} it was suggested to employ one layer of dummy cells. The velocity components in the dummy cells were obtained by reflecting the velocity vectors in the boundary cells at the wall. For example, in the dummy cell 1 in Fig. 8.2, the velocity would become
+    }{
+      式@link["blazek2005-ch08#eq-8-1"]{(8.1)}的壁面边界条件在非结构单元中心格式中的实现方式与结构网格类似。如果边界单元是四边形、六面体或棱柱（壁面为三角形的面），可以用式@link["blazek2005-ch08#eq-8-3"]{(8.3)}把压力外推到壁面。相邻单元（图8.2中的3号单元）可由小节5.2.1所述的基于面的数据结构得到。对于三角形或四面体单元，文献@link["blazek2005-r8-5"]{[5]}和@link["blazek2005-r8-6"]{[6]}建议采用一层虚单元，虚单元中的速度分量通过把边界单元的速度矢量关于壁面反射得到。例如，在图8.2中的虚单元1内，速度变为
     }
 
     @tex-display-math[#:id "eq-8-10"]{\vec{v}_1=\vec{v}_2-2V_2\,\vec{n}\,, \tag{8.10}}
 
     @bi{
-      @lang["en"]{where @tex-math{V_2=u_2n_x+v_2n_y+w_2n_z} is the contravariant velocity and @tex-math{\vec{n}=[n_x,n_y,n_z]^T} stands for the wall unit-normal vector. The pressure and density in the dummy cells were set equal to the values in the corresponding boundary cell (this implies @tex-math{p_w=p_2}).}
-      @lang["zh-Hans"]{其中@tex-math{V_2=u_2n_x+v_2n_y+w_2n_z}为逆变速度，@tex-math{\vec{n}=[n_x,n_y,n_z]^T}表示壁面单位法向量。虚单元中的压力和密度取为与相应边界单元中的值相等（这意味着@tex-math{p_w=p_2}）。}
+      where @tex-math{V_2=u_2n_x+v_2n_y+w_2n_z} is the contravariant velocity and @tex-math{\vec{n}=[n_x,n_y,n_z]^T} stands for the wall unit-normal vector. The pressure and density in the dummy cells were set equal to the values in the corresponding boundary cell (this implies @tex-math{p_w=p_2}).
+    }{
+      其中@tex-math{V_2=u_2n_x+v_2n_y+w_2n_z}为逆变速度，@tex-math{\vec{n}=[n_x,n_y,n_z]^T}表示壁面单位法向量。虚单元中的压力和密度取为与相应边界单元中的值相等（这意味着@tex-math{p_w=p_2}）。
     }
 
     @emph{Unstructured Median-Dual Scheme 非结构中位对偶格式}
 
     @bi{
-      @lang["en"]{The boundary condition Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} requires more attention in the case of the median-dual unstructured discretisation scheme. The situation is shown in Fig. 8.4 for the 2-D and in Fig. 8.5 for the 3-D case. The convective fluxes in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} are computed separately at each face of the control volume which is located on the wall. This is identical to the first approach discussed above for the structured cell-vertex scheme with dual control volumes. For quadrilateral elements (like 1-3-4-5 in Fig. 8.4), the pressure is interpolated correspondingly to Eq. @link["blazek2005-ch08#eq-8-8"]{(8.8)}. In the case of hexahedra, prisms or pyramids, where the face of the control volume is a quadrilateral (like face 1-4-5-6 in Fig. 8.5), the interpolation formula reads}
-      @lang["zh-Hans"]{在非结构中位对偶（median-dual）离散格式的情形下，边界条件式@link["blazek2005-ch08#eq-8-1"]{(8.1)}需要更多的注意。二维情形如图8.4所示，三维情形如图8.5所示。式@link["blazek2005-ch08#eq-8-2"]{(8.2)}的对流通量在位于壁面上的控制体每个面处分别计算。这与上文针对具有对偶控制体的结构化单元顶点格式讨论的第一种做法相同。对于四边形元素（如图8.4中的1-3-4-5），压力按与式@link["blazek2005-ch08#eq-8-8"]{(8.8)}相应的方式插值。对于六面体、棱柱或棱锥，其控制体面为四边形（如图8.5中的面1-4-5-6），插值公式为}
+      The boundary condition Eq. @link["blazek2005-ch08#eq-8-1"]{(8.1)} requires more attention in the case of the median-dual unstructured discretisation scheme. The situation is shown in Fig. 8.4 for the 2-D and in Fig. 8.5 for the 3-D case. The convective fluxes in Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)} are computed separately at each face of the control volume which is located on the wall. This is identical to the first approach discussed above for the structured cell-vertex scheme with dual control volumes. For quadrilateral elements (like 1-3-4-5 in Fig. 8.4), the pressure is interpolated correspondingly to Eq. @link["blazek2005-ch08#eq-8-8"]{(8.8)}. In the case of hexahedra, prisms or pyramids, where the face of the control volume is a quadrilateral (like face 1-4-5-6 in Fig. 8.5), the interpolation formula reads
+    }{
+      在非结构中位对偶（median-dual）离散格式的情形下，边界条件式@link["blazek2005-ch08#eq-8-1"]{(8.1)}需要更多的注意。二维情形如图8.4所示，三维情形如图8.5所示。式@link["blazek2005-ch08#eq-8-2"]{(8.2)}的对流通量在位于壁面上的控制体每个面处分别计算。这与上文针对具有对偶控制体的结构化单元顶点格式讨论的第一种做法相同。对于四边形元素（如图8.4中的1-3-4-5），压力按与式@link["blazek2005-ch08#eq-8-8"]{(8.8)}相应的方式插值。对于六面体、棱柱或棱锥，其控制体面为四边形（如图8.5中的面1-4-5-6），插值公式为
     }
 
     @tex-display-math[#:id "eq-8-11"]{p_w=\frac{1}{16}\left(9p_1+3p_4+3p_6+p_5\right). \tag{8.11}}
 
     @bi{
-      @lang["en"]{If the boundary elements are tetrahedra or prisms (or triangles in 2-D), the pressure at the wall face should be evaluated like in the finite element method}
-      @lang["zh-Hans"]{如果边界元素是四面体或棱柱（二维情形为三角形），壁面上的压力应当按有限元方法计算}
+      If the boundary elements are tetrahedra or prisms (or triangles in 2-D), the pressure at the wall face should be evaluated like in the finite element method
+    }{
+      如果边界元素是四面体或棱柱（二维情形为三角形），壁面上的压力应当按有限元方法计算
     }
 
     @figure["blazek2005/fig-8-4.png" "图8.4:二维非结构对偶控制体混合网格格式的固壁边界条件"]{
@@ -215,22 +241,25 @@
     @emph{图8.5:三维非结构混合网格格式的固壁边界条件。}计算对流通量式(8.2)的位置用菱形标出。
 }
     @bi{
-      @lang["en"]{@link["blazek2005-r8-7"]{[7]}. At the wall segment 1-2 in Fig. 8.4 for example, the pressure at the face 1-2* would be computed as}
-      @lang["zh-Hans"]{@link["blazek2005-r8-7"]{[7]}。例如，对于图8.4中的壁面段1-2，面1-2*上的压力应按下式计算}
+      @link["blazek2005-r8-7"]{[7]}. At the wall segment 1-2 in Fig. 8.4 for example, the pressure at the face 1-2* would be computed as
+    }{
+      @link["blazek2005-r8-7"]{[7]}。例如，对于图8.4中的壁面段1-2，面1-2*上的压力应按下式计算
     }
 
     @tex-display-math[#:id "eq-8-12"]{p_w=\frac{1}{6}\left(5p_1+p_2\right). \tag{8.12}}
 
     @bi{
-      @lang["en"]{In the case of a tetrahedra with, e.g., the wall face 1-2-3 in Fig. 8.5, the pressure is evaluated as}
-      @lang["zh-Hans"]{对于四面体，例如图8.5中的壁面1-2-3，压力按下式计算}
+      In the case of a tetrahedra with, e.g., the wall face 1-2-3 in Fig. 8.5, the pressure is evaluated as
+    }{
+      对于四面体，例如图8.5中的壁面1-2-3，压力按下式计算
     }
 
     @tex-display-math[#:id "eq-8-13"]{p_w=\frac{1}{8}\left(6p_1+p_2+p_3\right). \tag{8.13}}
 
     @bi{
-      @lang["en"]{It should be stressed that this finite-element type interpolation is important for an accurate flow solution @link["blazek2005-r8-7"]{[7]}.}
-      @lang["zh-Hans"]{应当强调，这种有限元型插值对获得准确的流动解十分重要@link["blazek2005-r8-7"]{[7]}。}
+      It should be stressed that this finite-element type interpolation is important for an accurate flow solution @link["blazek2005-r8-7"]{[7]}.
+    }{
+      应当强调，这种有限元型插值对获得准确的流动解十分重要@link["blazek2005-r8-7"]{[7]}。
     }
   }
 
@@ -238,84 +267,97 @@
     @title{8.2.2 Viscous Flow 黏性流动}
 
     @bi{
-      @lang["en"]{For a viscous fluid which passes a solid wall, the relative velocity between the surface and the fluid directly at the surface is assumed to be zero. Therefore, we speak of @emph{noslip} boundary condition. In the case of a stationary wall surface, the Cartesian velocity components become}
-      @lang["zh-Hans"]{对于流经固壁的黏性流体，假设表面与紧贴表面的流体之间的相对速度为零。因此，我们称之为@emph{无滑移}（noslip）边界条件。对于固定的壁面，笛卡儿速度分量变为}
+      For a viscous fluid which passes a solid wall, the relative velocity between the surface and the fluid directly at the surface is assumed to be zero. Therefore, we speak of @emph{noslip} boundary condition. In the case of a stationary wall surface, the Cartesian velocity components become
+    }{
+      对于流经固壁的黏性流体，假设表面与紧贴表面的流体之间的相对速度为零。因此，我们称之为@emph{无滑移}（noslip）边界条件。对于固定的壁面，笛卡儿速度分量变为
     }
 
     @tex-display-math[#:id "eq-8-14"]{u=v=w=0\quad\text{at the surface}. \tag{8.14}}
 
     @bi{
-      @lang["en"]{There are two basic consequences of the noslip condition. First, we do not need to solve the momentum equations on the wall. This fact is utilised in the cell-vertex scheme. Second, the convective fluxes through the noslip wall are given again by Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}, and the terms in Eq. (2.24) simplify to @tex-math{\vec{\Theta}=k\vec{\nabla}T}. Hence, the wall pressure in the convective fluxes is obtained in the same way as described above for the inviscid flow. However, the dummy cells (points) are treated in a different way.}
-      @lang["zh-Hans"]{无滑移条件带来两个基本推论。第一，我们不需要在壁面上求解动量方程——单元顶点格式正是利用了这一点。第二，通过无滑移壁面的对流通量仍由式@link["blazek2005-ch08#eq-8-2"]{(8.2)}给出，而式(2.24)中的各项简化为@tex-math{\vec{\Theta}=k\vec{\nabla}T}。因此，对流通量中的壁面压力仍按上文无黏流动中所述的方式求得。不过，虚单元（点）的处理方式有所不同。}
+      There are two basic consequences of the noslip condition. First, we do not need to solve the momentum equations on the wall. This fact is utilised in the cell-vertex scheme. Second, the convective fluxes through the noslip wall are given again by Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}, and the terms in Eq. (2.24) simplify to @tex-math{\vec{\Theta}=k\vec{\nabla}T}. Hence, the wall pressure in the convective fluxes is obtained in the same way as described above for the inviscid flow. However, the dummy cells (points) are treated in a different way.
+    }{
+      无滑移条件带来两个基本推论。第一，我们不需要在壁面上求解动量方程——单元顶点格式正是利用了这一点。第二，通过无滑移壁面的对流通量仍由式@link["blazek2005-ch08#eq-8-2"]{(8.2)}给出，而式(2.24)中的各项简化为@tex-math{\vec{\Theta}=k\vec{\nabla}T}。因此，对流通量中的壁面压力仍按上文无黏流动中所述的方式求得。不过，虚单元（点）的处理方式有所不同。
     }
 
     @emph{Cell-Centred Scheme 单元中心格式}
 
     @bi{
-      @lang["en"]{The implementation of the noslip boundary condition in Eq. @link["blazek2005-ch08#eq-8-14"]{(8.14)} can be simplified by the utilisation of dummy cells. In the case of an adiabatic wall (no heat flux through the wall), we can set (see Fig. 8.2)}
-      @lang["zh-Hans"]{利用虚单元可以简化式@link["blazek2005-ch08#eq-8-14"]{(8.14)}无滑移边界条件的实现。对于绝热壁（无热流通过壁面），可以令（见图8.2）}
+      The implementation of the noslip boundary condition in Eq. @link["blazek2005-ch08#eq-8-14"]{(8.14)} can be simplified by the utilisation of dummy cells. In the case of an adiabatic wall (no heat flux through the wall), we can set (see Fig. 8.2)
+    }{
+      利用虚单元可以简化式@link["blazek2005-ch08#eq-8-14"]{(8.14)}无滑移边界条件的实现。对于绝热壁（无热流通过壁面），可以令（见图8.2）
     }
 
     @tex-display-math[#:id "eq-8-15"]{\begin{aligned} \rho_1&=\rho_2\,,\quad E_1=E_2\\ u_1&=-u_2\,,\quad v_1=-v_2\,,\quad w_1=-w_2 \end{aligned} \tag{8.15}}
 
     @bi{
-      @lang["en"]{and likewise for the cells 0 and 3. The approach is applicable to both, structured and unstructured schemes (cf. Ref. @link["blazek2005-r8-6"]{[6]}).}
-      @lang["zh-Hans"]{对单元0和3同理。这一做法既适用于结构格式，也适用于非结构格式（参见文献@link["blazek2005-r8-6"]{[6]}）。}
+      and likewise for the cells 0 and 3. The approach is applicable to both, structured and unstructured schemes (cf. Ref. @link["blazek2005-r8-6"]{[6]}).
+    }{
+      对单元0和3同理。这一做法既适用于结构格式，也适用于非结构格式（参见文献@link["blazek2005-r8-6"]{[6]}）。
     }
 
     @bi{
-      @lang["en"]{If the wall temperature is given, the velocity components are still reversed as in Eq. @link["blazek2005-ch08#eq-8-15"]{(8.15)}. The temperature in the dummy cells is linearly extrapolated from the interior field by using the specified wall temperature. Since the pressure gradient normal to the wall is zero, the pressure in the boundary element is prescribed also in the dummy cells (i.e., @tex-math{p_0=p_1=p_2}). The density and the total energy in the dummy cells are evaluated from the interpolated values.}
-      @lang["zh-Hans"]{如果给定壁温，速度分量仍按式@link["blazek2005-ch08#eq-8-15"]{(8.15)}那样反号。虚单元中的温度利用给定的壁温从内场线性外推。由于垂直于壁面的压力梯度为零，边界元素中的压力也规定用于虚单元（即@tex-math{p_0=p_1=p_2}）。虚单元中的密度和总能由插值得到的值算出。}
+      If the wall temperature is given, the velocity components are still reversed as in Eq. @link["blazek2005-ch08#eq-8-15"]{(8.15)}. The temperature in the dummy cells is linearly extrapolated from the interior field by using the specified wall temperature. Since the pressure gradient normal to the wall is zero, the pressure in the boundary element is prescribed also in the dummy cells (i.e., @tex-math{p_0=p_1=p_2}). The density and the total energy in the dummy cells are evaluated from the interpolated values.
+    }{
+      如果给定壁温，速度分量仍按式@link["blazek2005-ch08#eq-8-15"]{(8.15)}那样反号。虚单元中的温度利用给定的壁温从内场线性外推。由于垂直于壁面的压力梯度为零，边界元素中的压力也规定用于虚单元（即@tex-math{p_0=p_1=p_2}）。虚单元中的密度和总能由插值得到的值算出。
     }
 
     @emph{Cell-Vertex Scheme 单元顶点格式}
 
     @bi{
-      @lang["en"]{Since the momentum equations need not to be solved, there is no contribution from the convective fluxes (Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}) at the wall. The viscous fluxes in Eq. (2.23) contribute only the temperature gradient normal to the wall to the energy equation. For an adiabatic wall, @tex-math{\vec{\nabla}T_w\cdot\vec{n}} is zero. Hence, we do not have to compute any convective or viscous fluxes through the wall. The residuals of the momentum equations should be set to zero, in order to prevent the generation of nonzero velocity components at the wall nodes.}
-      @lang["zh-Hans"]{由于不必求解动量方程，壁面上没有来自对流通量（式@link["blazek2005-ch08#eq-8-2"]{(8.2)}）的贡献。式(2.23)的黏性通量对能量方程只贡献垂直于壁面的温度梯度。对于绝热壁，@tex-math{\vec{\nabla}T_w\cdot\vec{n}}为零。因此，我们完全不必计算通过壁面的对流通量或黏性通量。为了防止在壁面节点上产生非零速度分量，应把动量方程的残差置零。}
+      Since the momentum equations need not to be solved, there is no contribution from the convective fluxes (Eq. @link["blazek2005-ch08#eq-8-2"]{(8.2)}) at the wall. The viscous fluxes in Eq. (2.23) contribute only the temperature gradient normal to the wall to the energy equation. For an adiabatic wall, @tex-math{\vec{\nabla}T_w\cdot\vec{n}} is zero. Hence, we do not have to compute any convective or viscous fluxes through the wall. The residuals of the momentum equations should be set to zero, in order to prevent the generation of nonzero velocity components at the wall nodes.
+    }{
+      由于不必求解动量方程，壁面上没有来自对流通量（式@link["blazek2005-ch08#eq-8-2"]{(8.2)}）的贡献。式(2.23)的黏性通量对能量方程只贡献垂直于壁面的温度梯度。对于绝热壁，@tex-math{\vec{\nabla}T_w\cdot\vec{n}}为零。因此，我们完全不必计算通过壁面的对流通量或黏性通量。为了防止在壁面节点上产生非零速度分量，应把动量方程的残差置零。
     }
 
     @bi{
-      @lang["en"]{In the case of a prescribed wall temperature, we can directly set the total energy at the wall (e.g., node @tex-math{(i,2)} in Fig. 8.3) using (perfect gas assumed)}
-      @lang["zh-Hans"]{如果给定壁温，在完全气体假设下可以直接设置壁面上的总能（例如图8.3中的节点@tex-math{(i,2)}）}
+      In the case of a prescribed wall temperature, we can directly set the total energy at the wall (e.g., node @tex-math{(i,2)} in Fig. 8.3) using (perfect gas assumed)
+    }{
+      如果给定壁温，在完全气体假设下可以直接设置壁面上的总能（例如图8.3中的节点@tex-math{(i,2)}）
     }
 
     @tex-display-math[#:id "eq-8-16"]{(\rho E)_{i,2}=\frac{c_p}{\gamma}\,\rho_{i,2}\,T_w\,, \tag{8.16}}
 
     @bi{
-      @lang["en"]{where @tex-math{T_w} denotes the given wall temperature. The residuals of the momentum and of the energy equation have to be zeroed out. The same strategy is applicable also to unstructured schemes.}
-      @lang["zh-Hans"]{其中@tex-math{T_w}表示给定的壁温。动量方程和能量方程的残差都必须置零。同一策略也适用于非结构格式。}
+      where @tex-math{T_w} denotes the given wall temperature. The residuals of the momentum and of the energy equation have to be zeroed out. The same strategy is applicable also to unstructured schemes.
+    }{
+      其中@tex-math{T_w}表示给定的壁温。动量方程和能量方程的残差都必须置零。同一策略也适用于非结构格式。
     }
 
     @bi{
-      @lang["en"]{Another approach for non-adiabatic walls, which seems to be more robust for some applications, does not solve the governing equations at the wall at all. Both, the density and the energy are directly specified}
-      @lang["zh-Hans"]{对于非绝热壁，另一种做法在某些应用中似乎更为稳健：它完全不在壁面上求解控制方程，而是直接给定密度和能量}
+      Another approach for non-adiabatic walls, which seems to be more robust for some applications, does not solve the governing equations at the wall at all. Both, the density and the energy are directly specified
+    }{
+      对于非绝热壁，另一种做法在某些应用中似乎更为稳健：它完全不在壁面上求解控制方程，而是直接给定密度和能量
     }
 
     @tex-display-math[#:id "eq-8-17"]{\rho_{i,2}=\frac{p_{i,3}}{T_w\,R}\quad\text{and}\quad(\rho E)_{i,2}=\frac{p_{i,3}}{\gamma}\,. \tag{8.17}}
 
     @bi{
-      @lang["en"]{The relations in Eq. @link["blazek2005-ch08#eq-8-17"]{(8.17)} assume that there is no pressure gradient normal to the wall (therefore @tex-math{p_{i,2}=p_{i,3}}). Since all conservative variables are prescribed, the residuals of all equations should be set to zero at @tex-math{(i,2)}. This technique can be utilised on unstructured grids as well. However, the extrapolation of the pressure requires additional operations on triangular or tetrahedral grids.}
-      @lang["zh-Hans"]{式@link["blazek2005-ch08#eq-8-17"]{(8.17)}中的关系假设垂直于壁面没有压力梯度（因此@tex-math{p_{i,2}=p_{i,3}}）。由于所有守恒变量都已给定，@tex-math{(i,2)}处所有方程的残差都应置零。该技术同样可用于非结构网格。不过，在三角形或四面体网格上，压力的外推需要额外的运算。}
+      The relations in Eq. @link["blazek2005-ch08#eq-8-17"]{(8.17)} assume that there is no pressure gradient normal to the wall (therefore @tex-math{p_{i,2}=p_{i,3}}). Since all conservative variables are prescribed, the residuals of all equations should be set to zero at @tex-math{(i,2)}. This technique can be utilised on unstructured grids as well. However, the extrapolation of the pressure requires additional operations on triangular or tetrahedral grids.
+    }{
+      式@link["blazek2005-ch08#eq-8-17"]{(8.17)}中的关系假设垂直于壁面没有压力梯度（因此@tex-math{p_{i,2}=p_{i,3}}）。由于所有守恒变量都已给定，@tex-math{(i,2)}处所有方程的残差都应置零。该技术同样可用于非结构网格。不过，在三角形或四面体网格上，压力的外推需要额外的运算。
     }
 
     @bi{
-      @lang["en"]{If the wall is adiabatic, the values in the dummy points are obtained as follows}
-      @lang["zh-Hans"]{如果壁面绝热，虚点中的值按如下方式得到}
+      If the wall is adiabatic, the values in the dummy points are obtained as follows
+    }{
+      如果壁面绝热，虚点中的值按如下方式得到
     }
 
     @tex-display-math[#:id "eq-8-18"]{\begin{aligned} \rho_{i,1}&=\rho_{i,3}\,,\quad E_{i,1}=E_{i,3}\\ u_{i,1}&=-u_{i,3}\,,\quad v_{i,1}=-v_{i,3}\,,\quad w_{i,1}=-w_{i,3}\,. \end{aligned} \tag{8.18}}
 
     @bi{
-      @lang["en"]{The same applies to the nodes 0 and 4. If the wall temperature is given, the temperature in the dummy points is extrapolated from the interior, i.e.,}
-      @lang["zh-Hans"]{对节点0和4同样如此。如果给定壁温，虚点中的温度由内场外推，即}
+      The same applies to the nodes 0 and 4. If the wall temperature is given, the temperature in the dummy points is extrapolated from the interior, i.e.,
+    }{
+      对节点0和4同样如此。如果给定壁温，虚点中的温度由内场外推，即
     }
 
     @tex-display-math[#:id "eq-8-19"]{T_{i,1}=2T_w-T_{i,3}\quad\text{and}\quad T_{i,0}=3T_w-2T_{i,3} \tag{8.19}}
 
     @bi{
-      @lang["en"]{with the indices according to Fig. 8.3. The velocity components are again reversed as in Eq. @link["blazek2005-ch08#eq-8-18"]{(8.18)}. The density and energy are computed with the interpolated temperature value and with the pressure @tex-math{p_{i,3}}.}
-      @lang["zh-Hans"]{下标按图8.3。速度分量仍按式@link["blazek2005-ch08#eq-8-18"]{(8.18)}那样反号。密度和能量用插值得到的温度值以及压力@tex-math{p_{i,3}}计算。}
+      with the indices according to Fig. 8.3. The velocity components are again reversed as in Eq. @link["blazek2005-ch08#eq-8-18"]{(8.18)}. The density and energy are computed with the interpolated temperature value and with the pressure @tex-math{p_{i,3}}.
+    }{
+      下标按图8.3。速度分量仍按式@link["blazek2005-ch08#eq-8-18"]{(8.18)}那样反号。密度和能量用插值得到的温度值以及压力@tex-math{p_{i,3}}计算。
     }
   }
 }
@@ -324,45 +366,50 @@
   @title{8.3 Farfield 远场}
 
   @bi{
-    @lang["en"]{The numerical simulation of external flows past airfoils, wings, cars and other configurations has to be conducted within a bounded domain. For this reason, artificial farfield boundary conditions become necessary. The numerical implementation of the farfield boundary conditions has to fulfil two basic requirements. First, the truncation of the domain should have no notable effects on the flow solution as compared to the infinite domain. Second, any outgoing disturbances must not be reflected back into the flow field @link["blazek2005-r8-9"]{[9]}. Due to their elliptic nature, sub- and transonic flow problems are particularly sensitive to the farfield boundary conditions. An inadequate implementation can lead to a significant slow down of convergence to the steady state. Furthermore, the accuracy of the solution is likely to be negatively influenced. Various methodologies were developed, which are capable of absorbing the outgoing waves at the artificial boundaries @link["blazek2005-r8-10"]{[10]}-@link["blazek2005-r8-15"]{[15]}. An review of different non-reflecting boundary conditions can be found in @link["blazek2005-r8-16"]{[16]}.}
-    @lang["zh-Hans"]{绕翼型、机翼、汽车及其他外形的外流数值模拟必须在有界域内进行，因此人工远场边界条件成为必需。远场边界条件的数值实现须满足两个基本要求：第一，与无限域相比，求解域的截断不应对流动解产生明显影响；第二，任何向外传播的扰动都不得被反射回流场@link["blazek2005-r8-9"]{[9]}。由于其椭圆性质，亚声速与跨声速流动问题对远场边界条件特别敏感。不当的实现会显著减慢向定常态的收敛，而且解的精度也很可能受到不利影响。人们已发展出多种能够在人工边界处吸收外传波的方法@link["blazek2005-r8-10"]{[10]}-@link["blazek2005-r8-15"]{[15]}。关于各种无反射边界条件的综述可见@link["blazek2005-r8-16"]{[16]}。}
+    The numerical simulation of external flows past airfoils, wings, cars and other configurations has to be conducted within a bounded domain. For this reason, artificial farfield boundary conditions become necessary. The numerical implementation of the farfield boundary conditions has to fulfil two basic requirements. First, the truncation of the domain should have no notable effects on the flow solution as compared to the infinite domain. Second, any outgoing disturbances must not be reflected back into the flow field @link["blazek2005-r8-9"]{[9]}. Due to their elliptic nature, sub- and transonic flow problems are particularly sensitive to the farfield boundary conditions. An inadequate implementation can lead to a significant slow down of convergence to the steady state. Furthermore, the accuracy of the solution is likely to be negatively influenced. Various methodologies were developed, which are capable of absorbing the outgoing waves at the artificial boundaries @link["blazek2005-r8-10"]{[10]}-@link["blazek2005-r8-15"]{[15]}. An review of different non-reflecting boundary conditions can be found in @link["blazek2005-r8-16"]{[16]}.
+  }{
+    绕翼型、机翼、汽车及其他外形的外流数值模拟必须在有界域内进行，因此人工远场边界条件成为必需。远场边界条件的数值实现须满足两个基本要求：第一，与无限域相比，求解域的截断不应对流动解产生明显影响；第二，任何向外传播的扰动都不得被反射回流场@link["blazek2005-r8-9"]{[9]}。由于其椭圆性质，亚声速与跨声速流动问题对远场边界条件特别敏感。不当的实现会显著减慢向定常态的收敛，而且解的精度也很可能受到不利影响。人们已发展出多种能够在人工边界处吸收外传波的方法@link["blazek2005-r8-10"]{[10]}-@link["blazek2005-r8-15"]{[15]}。关于各种无反射边界条件的综述可见@link["blazek2005-r8-16"]{[16]}。
   }
 
   @bi{
-    @lang["en"]{In the following two subsections, we shall discuss the concept of characteristic variables as it was described by Whitfield and Janus @link["blazek2005-r8-12"]{[12]}. We shall also present an extension of the farfield boundary conditions for lifting bodies.}
-    @lang["zh-Hans"]{在下面两个小节中，我们将讨论Whitfield和Janus@link["blazek2005-r8-12"]{[12]}所述的特征变量（characteristic variables）概念，并给出针对升力体的远场边界条件扩展。}
+    In the following two subsections, we shall discuss the concept of characteristic variables as it was described by Whitfield and Janus @link["blazek2005-r8-12"]{[12]}. We shall also present an extension of the farfield boundary conditions for lifting bodies.
+  }{
+    在下面两个小节中，我们将讨论Whitfield和Janus@link["blazek2005-r8-12"]{[12]}所述的特征变量（characteristic variables）概念，并给出针对升力体的远场边界条件扩展。
   }
 
   @subtree[#:id "blazek2005-8-3-1"]{
     @title{8.3.1 Concept of Characteristic Variables 特征变量的概念}
 
     @bi{
-      @lang["en"]{Depending on the sign of the eigenvalues of the convective flux Jacobians (Appendix A.11, Eq. (A.84) or (A.88)), the information is transported out of or into the computational domain along the characteristics. For example, in the case of subsonic inflow there are four incoming characteristics (in 3D) and one outgoing (@tex-math{\lambda_5} in Eq. (A.88)). The situation reverses for subsonic outflow. According to the one-dimensional theory of Kreiss @link["blazek2005-r8-17"]{[17]}, the number of conditions to be imposed from outside at the boundary should be equal to the number of @emph{incoming} characteristics. The remaining conditions should be determined from the solution inside the domain.}
-      @lang["zh-Hans"]{信息沿特征线流出或流入计算域，取决于对流通量雅可比矩阵特征值的符号（附录A.11，式(A.84)或(A.88)）。例如，亚声速入流时有四条入射特征线（三维）和一条出射特征线（式(A.88)中的@tex-math{\lambda_5}）；亚声速出流时情形正好相反。根据Kreiss的一维理论@link["blazek2005-r8-17"]{[17]}，在边界上从域外施加的条件数应等于@emph{入射}特征线的条数，其余条件应由域内的解确定。}
+      Depending on the sign of the eigenvalues of the convective flux Jacobians (Appendix A.11, Eq. (A.84) or (A.88)), the information is transported out of or into the computational domain along the characteristics. For example, in the case of subsonic inflow there are four incoming characteristics (in 3D) and one outgoing (@tex-math{\lambda_5} in Eq. (A.88)). The situation reverses for subsonic outflow. According to the one-dimensional theory of Kreiss @link["blazek2005-r8-17"]{[17]}, the number of conditions to be imposed from outside at the boundary should be equal to the number of @emph{incoming} characteristics. The remaining conditions should be determined from the solution inside the domain.
+    }{
+      信息沿特征线流出或流入计算域，取决于对流通量雅可比矩阵特征值的符号（附录A.11，式(A.84)或(A.88)）。例如，亚声速入流时有四条入射特征线（三维）和一条出射特征线（式(A.88)中的@tex-math{\lambda_5}）；亚声速出流时情形正好相反。根据Kreiss的一维理论@link["blazek2005-r8-17"]{[17]}，在边界上从域外施加的条件数应等于@emph{入射}特征线的条数，其余条件应由域内的解确定。
     }
 
     @bi{
-      @lang["en"]{The approach of Whitfield and Janus @link["blazek2005-r8-12"]{[12]} is based on the characteristic form of the Euler equations (2.45) normal to the boundary. The methodology was found to perform very well on structured and unstructured grids in a large variety of flow cases. It can be applied not only to farfield boundaries but also to inviscid solid walls (Subsection 8.2.1).}
-      @lang["zh-Hans"]{Whitfield和Janus的方法@link["blazek2005-r8-12"]{[12]}基于边界法向方向上Euler方程(2.45)的特征形式。实践表明，该方法在结构与非结构网格上对多种流动情形都表现很好。它不仅可用于远场边界，也可用于无黏固壁（小节8.2.1）。}
+      The approach of Whitfield and Janus @link["blazek2005-r8-12"]{[12]} is based on the characteristic form of the Euler equations (2.45) normal to the boundary. The methodology was found to perform very well on structured and unstructured grids in a large variety of flow cases. It can be applied not only to farfield boundaries but also to inviscid solid walls (Subsection 8.2.1).
+    }{
+      Whitfield和Janus的方法@link["blazek2005-r8-12"]{[12]}基于边界法向方向上Euler方程(2.45)的特征形式。实践表明，该方法在结构与非结构网格上对多种流动情形都表现很好。它不仅可用于远场边界，也可用于无黏固壁（小节8.2.1）。
     }
 
     @bi{
-      @lang["en"]{The two basic flow situations at the farfield boundary are sketched in Fig. 8.6. The flow can either enter or it can leave the domain. Therefore, depending on the local Mach number, four different types of farfield boundary conditions have to be treated:
-        @itemize{
-          @item{supersonic inflow,}
-          @item{supersonic outflow,}
-          @item{subsonic inflow, and}
-          @item{subsonic outflow.}
-        }
-      }
-      @lang["zh-Hans"]{远场边界处的两种基本流动情形绘于图8.6。流动既可能进入也可能离开计算域。因此，依局部马赫数不同，需要处理四种不同类型的远场边界条件：
-        @itemize{
-          @item{超声速入流；}
-          @item{超声速出流；}
-          @item{亚声速入流；}
-          @item{亚声速出流。}
-        }
-      }
+      The two basic flow situations at the farfield boundary are sketched in Fig. 8.6. The flow can either enter or it can leave the domain. Therefore, depending on the local Mach number, four different types of farfield boundary conditions have to be treated:
+              @itemize{
+                @item{supersonic inflow,}
+                @item{supersonic outflow,}
+                @item{subsonic inflow, and}
+                @item{subsonic outflow.}
+              }
+
+    }{
+      远场边界处的两种基本流动情形绘于图8.6。流动既可能进入也可能离开计算域。因此，依局部马赫数不同，需要处理四种不同类型的远场边界条件：
+              @itemize{
+                @item{超声速入流；}
+                @item{超声速出流；}
+                @item{亚声速入流；}
+                @item{亚声速出流。}
+              }
+
     }
 
     @figure["blazek2005/fig-8-6.png" "图8.6:远场边界:入流(a)与出流(b)情形"]{
@@ -371,22 +418,25 @@
     @emph{Supersonic Inflow 超声速入流}
 
     @bi{
-      @lang["en"]{For supersonic inflow, all eigenvalues have the same sign. Since the flow is entering the physical domain, the conservative variables on the boundary (point @tex-math{b} in Fig. 8.6) are determined by freestream values only. Thus,}
-      @lang["zh-Hans"]{对于超声速入流，所有特征值同号。由于流动进入物理域，边界上（图8.6中的点@tex-math{b}）的守恒变量完全由自由来流值确定，即}
+      For supersonic inflow, all eigenvalues have the same sign. Since the flow is entering the physical domain, the conservative variables on the boundary (point @tex-math{b} in Fig. 8.6) are determined by freestream values only. Thus,
+    }{
+      对于超声速入流，所有特征值同号。由于流动进入物理域，边界上（图8.6中的点@tex-math{b}）的守恒变量完全由自由来流值确定，即
     }
 
     @tex-display-math[#:id "eq-8-20"]{\vec{W}_b=\vec{W}_a\,. \tag{8.20}}
 
     @bi{
-      @lang["en"]{The values @tex-math{\vec{W}_a} are specified based on the given Mach number @tex-math{M_\infty} and on two flow angles (angle of attack, side-slip angle).}
-      @lang["zh-Hans"]{@tex-math{\vec{W}_a}的值根据给定的马赫数@tex-math{M_\infty}和两个气流角（迎角、侧滑角）确定。}
+      The values @tex-math{\vec{W}_a} are specified based on the given Mach number @tex-math{M_\infty} and on two flow angles (angle of attack, side-slip angle).
+    }{
+      @tex-math{\vec{W}_a}的值根据给定的马赫数@tex-math{M_\infty}和两个气流角（迎角、侧滑角）确定。
     }
 
     @emph{Supersonic Outflow 超声速出流}
 
     @bi{
-      @lang["en"]{In this case, all eigenvalues have also the same sign. However, the flow leaves now the physical domain and all conservative variables at the boundary must be determined from the solution inside the domain. This can be accomplished simply by setting}
-      @lang["zh-Hans"]{这种情形下所有特征值同样同号。但此时流动离开物理域，边界上所有守恒变量都必须由域内的解确定，只需令}
+      In this case, all eigenvalues have also the same sign. However, the flow leaves now the physical domain and all conservative variables at the boundary must be determined from the solution inside the domain. This can be accomplished simply by setting
+    }{
+      这种情形下所有特征值同样同号。但此时流动离开物理域，边界上所有守恒变量都必须由域内的解确定，只需令
     }
 
     @tex-display-math[#:id "eq-8-21"]{\vec{W}_b=\vec{W}_d\,. \tag{8.21}}
@@ -394,34 +444,39 @@
     @emph{Subsonic Inflow 亚声速入流}
 
     @bi{
-      @lang["en"]{Here, four characteristics enter and one leaves the physical domain. Therefore, four characteristic variables are prescribed based on the freestream values. One characteristic variable is extrapolated from the interior of the physical domain. This leads to the following set of boundary conditions @link["blazek2005-r8-12"]{[12]}}
-      @lang["zh-Hans"]{此时，四条特征线进入、一条离开物理域。因此，四个特征变量根据自由来流值给定，一个特征变量由物理域内外推。由此得到下列边界条件@link["blazek2005-r8-12"]{[12]}}
+      Here, four characteristics enter and one leaves the physical domain. Therefore, four characteristic variables are prescribed based on the freestream values. One characteristic variable is extrapolated from the interior of the physical domain. This leads to the following set of boundary conditions @link["blazek2005-r8-12"]{[12]}
+    }{
+      此时，四条特征线进入、一条离开物理域。因此，四个特征变量根据自由来流值给定，一个特征变量由物理域内外推。由此得到下列边界条件@link["blazek2005-r8-12"]{[12]}
     }
 
     @tex-display-math[#:id "eq-8-22"]{\begin{aligned} p_b&=\frac{1}{2}\left\{p_a+p_d-\rho_0c_0\left[n_x(u_a-u_d)+n_y(v_a-v_d)+n_z(w_a-w_d)\right]\right\}\\ \rho_b&=\rho_a+(p_b-p_a)/c_0^2\\ u_b&=u_a-n_x(p_a-p_b)/(\rho_0c_0)\\ v_b&=v_a-n_y(p_a-p_b)/(\rho_0c_0)\\ w_b&=w_a-n_z(p_a-p_b)/(\rho_0c_0)\,, \end{aligned} \tag{8.22}}
 
     @bi{
-      @lang["en"]{where @tex-math{\rho_0} and @tex-math{c_0} represent a reference state. The reference state is normally set equal to the state at the interior point (point @tex-math{d} in Fig. 8.6). The values in point @tex-math{a} are determined from the freestream state.}
-      @lang["zh-Hans"]{其中@tex-math{\rho_0}和@tex-math{c_0}表示一个参考状态。参考状态通常取为内点处（图8.6中的点@tex-math{d}）的状态。点@tex-math{a}处的值由自由来流状态确定。}
+      where @tex-math{\rho_0} and @tex-math{c_0} represent a reference state. The reference state is normally set equal to the state at the interior point (point @tex-math{d} in Fig. 8.6). The values in point @tex-math{a} are determined from the freestream state.
+    }{
+      其中@tex-math{\rho_0}和@tex-math{c_0}表示一个参考状态。参考状态通常取为内点处（图8.6中的点@tex-math{d}）的状态。点@tex-math{a}处的值由自由来流状态确定。
     }
 
     @emph{Subsonic Outflow 亚声速出流}
 
     @bi{
-      @lang["en"]{In the case of subsonic outflow, four flow variables (density and the three velocity components) have to be extrapolated from the interior of the physical domain. The remaining fifth variable (pressure) must be specified externally. The primitive variables at the farfield boundary are obtained from @link["blazek2005-r8-12"]{[12]}}
-      @lang["zh-Hans"]{对于亚声速出流，四个流动变量（密度和三个速度分量）必须由物理域内部外推得到，余下的第五个变量（压力）必须从外部给定。远场边界处的原始变量由下式得到@link["blazek2005-r8-12"]{[12]}}
+      In the case of subsonic outflow, four flow variables (density and the three velocity components) have to be extrapolated from the interior of the physical domain. The remaining fifth variable (pressure) must be specified externally. The primitive variables at the farfield boundary are obtained from @link["blazek2005-r8-12"]{[12]}
+    }{
+      对于亚声速出流，四个流动变量（密度和三个速度分量）必须由物理域内部外推得到，余下的第五个变量（压力）必须从外部给定。远场边界处的原始变量由下式得到@link["blazek2005-r8-12"]{[12]}
     }
 
     @tex-display-math[#:id "eq-8-23"]{\begin{aligned} p_b&=p_a\\ \rho_b&=\rho_d+(p_b-p_a)/c_0^2\\ u_b&=u_d+n_x(p_d-p_b)/(\rho_0c_0)\\ v_b&=v_d+n_y(p_d-p_b)/(\rho_0c_0)\\ w_b&=w_d+n_z(p_d-p_b)/(\rho_0c_0) \end{aligned} \tag{8.23}}
 
     @bi{
-      @lang["en"]{with @tex-math{p_a} being the prescribed static pressure.}
-      @lang["zh-Hans"]{其中@tex-math{p_a}为给定的静压。}
+      with @tex-math{p_a} being the prescribed static pressure.
+    }{
+      其中@tex-math{p_a}为给定的静压。
     }
 
     @bi{
-      @lang["en"]{Physical properties in the dummy cells can be obtained by linear extrapolation from the states @tex-math{b} and @tex-math{d}.}
-      @lang["zh-Hans"]{虚单元中的物理量可由状态@tex-math{b}和@tex-math{d}线性外推得到。}
+      Physical properties in the dummy cells can be obtained by linear extrapolation from the states @tex-math{b} and @tex-math{d}.
+    }{
+      虚单元中的物理量可由状态@tex-math{b}和@tex-math{d}线性外推得到。
     }
   }
 
@@ -429,60 +484,69 @@
     @title{8.3.2 Modifications for Lifting Bodies 升力体情形的修正}
 
     @bi{
-      @lang["en"]{The above characteristic farfield boundary conditions assume zero circulation, which is not correct for a lifting body in sub- or transonic flow. For this reason, the farfield boundary has to be located very far away from the body. Otherwise, the flow solution will be inaccurate. The distance to the farfield can be significantly shortened (by one order of magnitude), if the freestream flow includes the effect of a single vortex (horse-shoe vortex in 3D). The vortex is assumed to be centred at the lifting body. The strength of the vortex is proportional to the lift produced by the body. In the following, we shall present implementations of the vortex correction in 2D and in 3D.}
-      @lang["zh-Hans"]{上述特征远场边界条件假设环量为零，这对亚声速或跨声速流动中的升力体并不正确。因此，远场边界必须放在离物体非常远的地方，否则流动解会不准确。如果自由来流中包含一个单独涡的影响（三维情形为马蹄涡），到远场的距离可以显著缩短（约一个数量级）。该涡假定位于升力体的中心，其强度与物体产生的升力成正比。下面我们给出涡修正的二维和三维实现。}
+      The above characteristic farfield boundary conditions assume zero circulation, which is not correct for a lifting body in sub- or transonic flow. For this reason, the farfield boundary has to be located very far away from the body. Otherwise, the flow solution will be inaccurate. The distance to the farfield can be significantly shortened (by one order of magnitude), if the freestream flow includes the effect of a single vortex (horse-shoe vortex in 3D). The vortex is assumed to be centred at the lifting body. The strength of the vortex is proportional to the lift produced by the body. In the following, we shall present implementations of the vortex correction in 2D and in 3D.
+    }{
+      上述特征远场边界条件假设环量为零，这对亚声速或跨声速流动中的升力体并不正确。因此，远场边界必须放在离物体非常远的地方，否则流动解会不准确。如果自由来流中包含一个单独涡的影响（三维情形为马蹄涡），到远场的距离可以显著缩短（约一个数量级）。该涡假定位于升力体的中心，其强度与物体产生的升力成正比。下面我们给出涡修正的二维和三维实现。
     }
 
     @emph{Vortex Correction in 2D 二维涡修正}
 
     @bi{
-      @lang["en"]{The approach, which we want to describe here, was suggested by Usab and Murman @link["blazek2005-r8-18"]{[18]}. The components of the corrected freestream velocity are given by the expressions (compressible flow assumed)}
-      @lang["zh-Hans"]{这里要叙述的方法由Usab和Murman提出@link["blazek2005-r8-18"]{[18]}。修正后自由来流速度的分量由下列表达式给出（假设可压缩流动）}
+      The approach, which we want to describe here, was suggested by Usab and Murman @link["blazek2005-r8-18"]{[18]}. The components of the corrected freestream velocity are given by the expressions (compressible flow assumed)
+    }{
+      这里要叙述的方法由Usab和Murman提出@link["blazek2005-r8-18"]{[18]}。修正后自由来流速度的分量由下列表达式给出（假设可压缩流动）
     }
 
     @tex-display-math[#:id "eq-8-24"]{\begin{aligned} u_\infty^{*}&=u_\infty+\left(\frac{\Gamma\sqrt{1-M_\infty^2}}{2\pi\,d}\right)\frac{1}{1-M_\infty^2\sin^2(\theta-\alpha)}\,\sin\theta\\ v_\infty^{*}&=v_\infty-\left(\frac{\Gamma\sqrt{1-M_\infty^2}}{2\pi\,d}\right)\frac{1}{1-M_\infty^2\sin^2(\theta-\alpha)}\,\cos\theta \end{aligned} \tag{8.24}}
 
     @bi{
-      @lang["en"]{with @tex-math{\Gamma} being the circulation, @tex-math{(d,\theta)} the polar coordinates of the farfield point, @tex-math{\alpha} the angle of attack, and @tex-math{M_\infty} denoting the freestream Mach number, respectively. The circulation is obtained from}
-      @lang["zh-Hans"]{其中@tex-math{\Gamma}为环量，@tex-math{(d,\theta)}为远场点的极坐标，@tex-math{\alpha}为迎角，@tex-math{M_\infty}为自由来流马赫数。环量由下式求得}
+      with @tex-math{\Gamma} being the circulation, @tex-math{(d,\theta)} the polar coordinates of the farfield point, @tex-math{\alpha} the angle of attack, and @tex-math{M_\infty} denoting the freestream Mach number, respectively. The circulation is obtained from
+    }{
+      其中@tex-math{\Gamma}为环量，@tex-math{(d,\theta)}为远场点的极坐标，@tex-math{\alpha}为迎角，@tex-math{M_\infty}为自由来流马赫数。环量由下式求得
     }
 
     @tex-display-math[#:id "eq-8-25"]{\Gamma=\frac{1}{2}\|\vec{v}_\infty\|_2\,a\,C_L \tag{8.25}}
 
     @bi{
-      @lang["en"]{by using the theorem of Kutta-Joukowsky. In Equation @link["blazek2005-ch08#eq-8-25"]{(8.25)}, @tex-math{a} represents the chord length of the airfoil and @tex-math{C_L} is the lift coefficient evaluated by the integration of the surface pressure. The polar coordinates in Eq. @link["blazek2005-ch08#eq-8-24"]{(8.24)} are computed as}
-      @lang["zh-Hans"]{其中用到了Kutta-Joukowsky定理。式@link["blazek2005-ch08#eq-8-25"]{(8.25)}中，@tex-math{a}表示翼型弦长，@tex-math{C_L}为通过表面压力积分求得的升力系数。式@link["blazek2005-ch08#eq-8-24"]{(8.24)}中的极坐标按下式计算}
+      by using the theorem of Kutta-Joukowsky. In Equation @link["blazek2005-ch08#eq-8-25"]{(8.25)}, @tex-math{a} represents the chord length of the airfoil and @tex-math{C_L} is the lift coefficient evaluated by the integration of the surface pressure. The polar coordinates in Eq. @link["blazek2005-ch08#eq-8-24"]{(8.24)} are computed as
+    }{
+      其中用到了Kutta-Joukowsky定理。式@link["blazek2005-ch08#eq-8-25"]{(8.25)}中，@tex-math{a}表示翼型弦长，@tex-math{C_L}为通过表面压力积分求得的升力系数。式@link["blazek2005-ch08#eq-8-24"]{(8.24)}中的极坐标按下式计算
     }
 
     @tex-display-math[#:id "eq-8-26"]{\begin{aligned} d&=\sqrt{(x-x_{ref})^2+(y-y_{ref})^2}\\ \theta&=\tan\left(\frac{y-y_{ref}}{x-x_{ref}}\right)\,, \end{aligned} \tag{8.26}}
 
     @bi{
-      @lang["en"]{where @tex-math{x_{ref}} and @tex-math{y_{ref}} are the coordinates of the reference point (location of the vortex - e.g., at 1/4 chord).}
-      @lang["zh-Hans"]{其中@tex-math{x_{ref}}和@tex-math{y_{ref}}为参考点（涡所在位置，例如1/4弦长处）的坐标。}
+      where @tex-math{x_{ref}} and @tex-math{y_{ref}} are the coordinates of the reference point (location of the vortex - e.g., at 1/4 chord).
+    }{
+      其中@tex-math{x_{ref}}和@tex-math{y_{ref}}为参考点（涡所在位置，例如1/4弦长处）的坐标。
     }
 
     @bi{
-      @lang["en"]{The modified freestream pressure @tex-math{p_\infty^{*}} is given by}
-      @lang["zh-Hans"]{修正后的自由来流压力@tex-math{p_\infty^{*}}由下式给出}
+      The modified freestream pressure @tex-math{p_\infty^{*}} is given by
+    }{
+      修正后的自由来流压力@tex-math{p_\infty^{*}}由下式给出
     }
 
     @tex-display-math[#:id "eq-8-27"]{p_\infty^{*}=\left[p_\infty^{(\gamma-1)/\gamma}+\left(\frac{\gamma-1}{\gamma}\right)\frac{\rho_\infty\left(\|\vec{v}_\infty\|_2^2-\|\vec{v}_\infty^{*}\|_2^2\right)}{2\,p_\infty^{1/\gamma}}\right]^{\gamma/(\gamma-1)} \tag{8.27}}
 
     @bi{
-      @lang["en"]{with @tex-math{\|\vec{v}_\infty^{*}\|_2^2=(u_\infty^{*})^2+(v_\infty^{*})^2}. The corrected freestream density is obtained from the equation of the state}
-      @lang["zh-Hans"]{其中@tex-math{\|\vec{v}_\infty^{*}\|_2^2=(u_\infty^{*})^2+(v_\infty^{*})^2}。修正后的自由来流密度由状态方程得到}
+      with @tex-math{\|\vec{v}_\infty^{*}\|_2^2=(u_\infty^{*})^2+(v_\infty^{*})^2}. The corrected freestream density is obtained from the equation of the state
+    }{
+      其中@tex-math{\|\vec{v}_\infty^{*}\|_2^2=(u_\infty^{*})^2+(v_\infty^{*})^2}。修正后的自由来流密度由状态方程得到
     }
 
     @tex-display-math[#:id "eq-8-28"]{\rho_\infty^{*}=\rho_\infty\left(\frac{p_\infty^{*}}{p_\infty}\right)^{1/\gamma}\,. \tag{8.28}}
 
     @bi{
-      @lang["en"]{The corrected quantities @tex-math{u_\infty^{*}}, @tex-math{v_\infty^{*}}, @tex-math{p_\infty^{*}}, and @tex-math{\rho_\infty^{*}} are inserted into Eq. @link["blazek2005-ch08#eq-8-22"]{(8.22)} or Eq. @link["blazek2005-ch08#eq-8-23"]{(8.23)} instead of @tex-math{u_a}, @tex-math{v_a}, @tex-math{p_a}, and @tex-math{\rho_a}.}
-      @lang["zh-Hans"]{将修正后的量@tex-math{u_\infty^{*}}、@tex-math{v_\infty^{*}}、@tex-math{p_\infty^{*}}和@tex-math{\rho_\infty^{*}}代入式@link["blazek2005-ch08#eq-8-22"]{(8.22)}或式@link["blazek2005-ch08#eq-8-23"]{(8.23)}，代替其中的@tex-math{u_a}、@tex-math{v_a}、@tex-math{p_a}和@tex-math{\rho_a}。}
+      The corrected quantities @tex-math{u_\infty^{*}}, @tex-math{v_\infty^{*}}, @tex-math{p_\infty^{*}}, and @tex-math{\rho_\infty^{*}} are inserted into Eq. @link["blazek2005-ch08#eq-8-22"]{(8.22)} or Eq. @link["blazek2005-ch08#eq-8-23"]{(8.23)} instead of @tex-math{u_a}, @tex-math{v_a}, @tex-math{p_a}, and @tex-math{\rho_a}.
+    }{
+      将修正后的量@tex-math{u_\infty^{*}}、@tex-math{v_\infty^{*}}、@tex-math{p_\infty^{*}}和@tex-math{\rho_\infty^{*}}代入式@link["blazek2005-ch08#eq-8-22"]{(8.22)}或式@link["blazek2005-ch08#eq-8-23"]{(8.23)}，代替其中的@tex-math{u_a}、@tex-math{v_a}、@tex-math{p_a}和@tex-math{\rho_a}。
     }
 
     @bi{
-      @lang["en"]{The above vortex correction Eqs. @link["blazek2005-ch08#eq-8-24"]{(8.24)}-@link["blazek2005-ch08#eq-8-28"]{(8.28)} is strictly valid for subsonic flow only. However, the modification of the freestream conditions proved to be helpful in transonic flow as well. This is demonstrated in Fig. 8.7, where the dependence of the lift coefficient on the distance to the farfield boundary was investigated. The farfield radius was set to 5, 20, 50, and 99 chords. As we can see, simulations without the vortex correction experiences a strong dependence on the farfield distance. On the contrary, simulations with the vortex remain sufficiently accurate up to a distance of about 20 chords. This leads to a significant reduction of the number of grid cells/points. It was demonstrated in Ref. @link["blazek2005-r8-19"]{[19]} that by using higher-order terms in the vortex correction, the farfield boundary can be placed only about 5 chords away without loss of accuracy.}
-      @lang["zh-Hans"]{上述涡修正式@link["blazek2005-ch08#eq-8-24"]{(8.24)}-@link["blazek2005-ch08#eq-8-28"]{(8.28)}严格来说只对亚声速流动成立。不过，实践证明对自由来流条件的这一修正在跨声速流动中同样有帮助。图8.7展示了这方面的结果，其中研究了升力系数对远场边界距离的依赖关系。远场半径取为5、20、50和99倍弦长。可以看到，不加涡修正的模拟对远场距离有强烈的依赖性；相反，带涡的模拟在约20倍弦长的距离内仍保持足够精度。这使网格单元/点数显著减少。文献@link["blazek2005-r8-19"]{[19]}证明，若在涡修正中使用更高阶的项，远场边界可以只放在约5倍弦长处而不损失精度。}
+      The above vortex correction Eqs. @link["blazek2005-ch08#eq-8-24"]{(8.24)}-@link["blazek2005-ch08#eq-8-28"]{(8.28)} is strictly valid for subsonic flow only. However, the modification of the freestream conditions proved to be helpful in transonic flow as well. This is demonstrated in Fig. 8.7, where the dependence of the lift coefficient on the distance to the farfield boundary was investigated. The farfield radius was set to 5, 20, 50, and 99 chords. As we can see, simulations without the vortex correction experiences a strong dependence on the farfield distance. On the contrary, simulations with the vortex remain sufficiently accurate up to a distance of about 20 chords. This leads to a significant reduction of the number of grid cells/points. It was demonstrated in Ref. @link["blazek2005-r8-19"]{[19]} that by using higher-order terms in the vortex correction, the farfield boundary can be placed only about 5 chords away without loss of accuracy.
+    }{
+      上述涡修正式@link["blazek2005-ch08#eq-8-24"]{(8.24)}-@link["blazek2005-ch08#eq-8-28"]{(8.28)}严格来说只对亚声速流动成立。不过，实践证明对自由来流条件的这一修正在跨声速流动中同样有帮助。图8.7展示了这方面的结果，其中研究了升力系数对远场边界距离的依赖关系。远场半径取为5、20、50和99倍弦长。可以看到，不加涡修正的模拟对远场距离有强烈的依赖性；相反，带涡的模拟在约20倍弦长的距离内仍保持足够精度。这使网格单元/点数显著减少。文献@link["blazek2005-r8-19"]{[19]}证明，若在涡修正中使用更高阶的项，远场边界可以只放在约5倍弦长处而不损失精度。
     }
 
     @figure["blazek2005/fig-8-7.png" "图8.7:到远场边界的距离和单个涡对升力系数的影响"]{
@@ -491,53 +555,61 @@
     @emph{Vortex Correction in 3D 三维涡修正}
 
     @bi{
-      @lang["en"]{The effect of a wing on the farfield boundary can be approximated by a horse-shoe vortex. In the case of compressible flow, the modified freestream velocity components can be obtained from @link["blazek2005-r8-20"]{[20]}, @link["blazek2005-r8-21"]{[21]}}
-      @lang["zh-Hans"]{机翼对远场边界的影响可以用马蹄涡来近似。对于可压缩流动，修正后的自由来流速度分量可由下式得到@link["blazek2005-r8-20"]{[20]}、@link["blazek2005-r8-21"]{[21]}}
+      The effect of a wing on the farfield boundary can be approximated by a horse-shoe vortex. In the case of compressible flow, the modified freestream velocity components can be obtained from @link["blazek2005-r8-20"]{[20]}, @link["blazek2005-r8-21"]{[21]}
+    }{
+      机翼对远场边界的影响可以用马蹄涡来近似。对于可压缩流动，修正后的自由来流速度分量可由下式得到@link["blazek2005-r8-20"]{[20]}、@link["blazek2005-r8-21"]{[21]}
     }
 
     @tex-display-math[#:id "eq-8-29"]{\begin{aligned} u_\infty^{*}&=u_\infty+\frac{\Gamma\beta^2}{2\pi}\,\mathcal{A}\\ v_\infty^{*}&=v_\infty-\frac{\Gamma}{2\pi}\left[\frac{z+l}{(z+l)^2+y^2}\,\mathcal{B}-\frac{z-l}{(z-l)^2+y^2}\,\mathcal{C}+\frac{x\beta^2}{x^2+y^2\beta^2}\,\mathcal{A}\right]\\ w_\infty^{*}&=w_\infty+\frac{\Gamma}{2\pi}\left[\frac{y}{(z+l)^2+y^2}\,\mathcal{B}-\frac{y}{(z-l)^2+y^2}\,\mathcal{C}\right], \end{aligned} \tag{8.29}}
 
     @bi{
-      @lang["en"]{where @tex-math{\Gamma} denotes the circulation, @tex-math{(x,y,z)} the Cartesian coordinates of the farfield point, and @tex-math{l} stands for the half span, respectively. Furthermore, in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} it was assumed that the flow is in the positive @tex-math{x}-direction with the wing being oriented along the @tex-math{z}-axis. The terms @tex-math{\mathcal{A}}, @tex-math{\mathcal{B}} and @tex-math{\mathcal{C}} in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} read}
-      @lang["zh-Hans"]{其中@tex-math{\Gamma}表示环量，@tex-math{(x,y,z)}为远场点的笛卡儿坐标，@tex-math{l}为半展长。此外，式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中假设流动沿正@tex-math{x}方向，机翼沿@tex-math{z}轴布置。式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中的@tex-math{\mathcal{A}}、@tex-math{\mathcal{B}}和@tex-math{\mathcal{C}}为}
+      where @tex-math{\Gamma} denotes the circulation, @tex-math{(x,y,z)} the Cartesian coordinates of the farfield point, and @tex-math{l} stands for the half span, respectively. Furthermore, in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} it was assumed that the flow is in the positive @tex-math{x}-direction with the wing being oriented along the @tex-math{z}-axis. The terms @tex-math{\mathcal{A}}, @tex-math{\mathcal{B}} and @tex-math{\mathcal{C}} in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} read
+    }{
+      其中@tex-math{\Gamma}表示环量，@tex-math{(x,y,z)}为远场点的笛卡儿坐标，@tex-math{l}为半展长。此外，式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中假设流动沿正@tex-math{x}方向，机翼沿@tex-math{z}轴布置。式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中的@tex-math{\mathcal{A}}、@tex-math{\mathcal{B}}和@tex-math{\mathcal{C}}为
     }
 
     @tex-display-math[#:id "eq-8-30"]{\begin{aligned} \mathcal{A}&=\frac{z+l}{\sqrt{\psi_+}}-\frac{z-l}{\sqrt{\psi_-}}\\ \mathcal{B}&=1+\frac{x}{\sqrt{\psi_+}}\\ \mathcal{C}&=1+\frac{x}{\sqrt{\psi_-}}\,. \end{aligned} \tag{8.30}}
 
     @bi{
-      @lang["en"]{The abbreviations are given by}
-      @lang["zh-Hans"]{其中缩写定义为}
+      The abbreviations are given by
+    }{
+      其中缩写定义为
     }
 
     @tex-display-math[#:id "eq-8-31"]{\begin{aligned} \psi_+&=x^2+\beta^2(z+l)^2+y^2\beta^2\\ \psi_-&=x^2+\beta^2(z-l)^2+y^2\beta^2\\ \beta&=\sqrt{1-M_\infty^2} \end{aligned} \tag{8.31}}
 
     @bi{
-      @lang["en"]{with @tex-math{M_\infty} being the freestream Mach number. The circulation @tex-math{\Gamma} is calculated using Eq. @link["blazek2005-ch08#eq-8-25"]{(8.25)}, where @tex-math{a} represents the mean chord. The corrected values of pressure (@tex-math{p_\infty^{*}}) and of density (@tex-math{\rho_\infty^{*}}) are obtained from the formulae @link["blazek2005-ch08#eq-8-27"]{(8.27)} and @link["blazek2005-ch08#eq-8-28"]{(8.28)}, respectively. The quantities @tex-math{u_a}, @tex-math{v_a}, @tex-math{w_a}, @tex-math{p_a}, and @tex-math{\rho_a} in Eq. @link["blazek2005-ch08#eq-8-22"]{(8.22)} or Eq. @link["blazek2005-ch08#eq-8-23"]{(8.23)} are replaced by their corrected values @tex-math{u_\infty^{*}}, @tex-math{v_\infty^{*}}, @tex-math{w_\infty^{*}}, @tex-math{p_\infty^{*}}, and @tex-math{\rho_\infty^{*}}.}
-      @lang["zh-Hans"]{其中@tex-math{M_\infty}为自由来流马赫数。环量@tex-math{\Gamma}仍用式@link["blazek2005-ch08#eq-8-25"]{(8.25)}计算，此时@tex-math{a}表示平均弦长。修正后的压力（@tex-math{p_\infty^{*}}）和密度（@tex-math{\rho_\infty^{*}}）分别由公式@link["blazek2005-ch08#eq-8-27"]{(8.27)}和@link["blazek2005-ch08#eq-8-28"]{(8.28)}求得。式@link["blazek2005-ch08#eq-8-22"]{(8.22)}或式@link["blazek2005-ch08#eq-8-23"]{(8.23)}中的@tex-math{u_a}、@tex-math{v_a}、@tex-math{w_a}、@tex-math{p_a}和@tex-math{\rho_a}替换为其修正值@tex-math{u_\infty^{*}}、@tex-math{v_\infty^{*}}、@tex-math{w_\infty^{*}}、@tex-math{p_\infty^{*}}和@tex-math{\rho_\infty^{*}}。}
+      with @tex-math{M_\infty} being the freestream Mach number. The circulation @tex-math{\Gamma} is calculated using Eq. @link["blazek2005-ch08#eq-8-25"]{(8.25)}, where @tex-math{a} represents the mean chord. The corrected values of pressure (@tex-math{p_\infty^{*}}) and of density (@tex-math{\rho_\infty^{*}}) are obtained from the formulae @link["blazek2005-ch08#eq-8-27"]{(8.27)} and @link["blazek2005-ch08#eq-8-28"]{(8.28)}, respectively. The quantities @tex-math{u_a}, @tex-math{v_a}, @tex-math{w_a}, @tex-math{p_a}, and @tex-math{\rho_a} in Eq. @link["blazek2005-ch08#eq-8-22"]{(8.22)} or Eq. @link["blazek2005-ch08#eq-8-23"]{(8.23)} are replaced by their corrected values @tex-math{u_\infty^{*}}, @tex-math{v_\infty^{*}}, @tex-math{w_\infty^{*}}, @tex-math{p_\infty^{*}}, and @tex-math{\rho_\infty^{*}}.
+    }{
+      其中@tex-math{M_\infty}为自由来流马赫数。环量@tex-math{\Gamma}仍用式@link["blazek2005-ch08#eq-8-25"]{(8.25)}计算，此时@tex-math{a}表示平均弦长。修正后的压力（@tex-math{p_\infty^{*}}）和密度（@tex-math{\rho_\infty^{*}}）分别由公式@link["blazek2005-ch08#eq-8-27"]{(8.27)}和@link["blazek2005-ch08#eq-8-28"]{(8.28)}求得。式@link["blazek2005-ch08#eq-8-22"]{(8.22)}或式@link["blazek2005-ch08#eq-8-23"]{(8.23)}中的@tex-math{u_a}、@tex-math{v_a}、@tex-math{w_a}、@tex-math{p_a}和@tex-math{\rho_a}替换为其修正值@tex-math{u_\infty^{*}}、@tex-math{v_\infty^{*}}、@tex-math{w_\infty^{*}}、@tex-math{p_\infty^{*}}和@tex-math{\rho_\infty^{*}}。
     }
 
     @bi{
-      @lang["en"]{The expressions for the corrected velocity components @tex-math{v_\infty^{*}} and @tex-math{w_\infty^{*}} in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} becomes infinite at locations, where the vortex lines cross the outflow boundary. These are the points}
-      @lang["zh-Hans"]{式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中修正速度分量@tex-math{v_\infty^{*}}和@tex-math{w_\infty^{*}}的表达式，在涡线穿过出流边界的位置会变为无穷大。这些点是}
+      The expressions for the corrected velocity components @tex-math{v_\infty^{*}} and @tex-math{w_\infty^{*}} in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} becomes infinite at locations, where the vortex lines cross the outflow boundary. These are the points
+    }{
+      式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中修正速度分量@tex-math{v_\infty^{*}}和@tex-math{w_\infty^{*}}的表达式，在涡线穿过出流边界的位置会变为无穷大。这些点是
     }
 
     @tex-display-math{\begin{aligned} z&=+l\,,\quad y=0\,,\\ z&=-l\,,\quad y=0\,, \end{aligned}}
 
     @bi{
-      @lang["en"]{and @tex-math{x=x_{farf}}. In order to avoid the numerical singularity, in Ref. @link["blazek2005-r8-21"]{[21]} it was suggested to constrain the values of}
-      @lang["zh-Hans"]{以及@tex-math{x=x_{farf}}。为避免数值奇性，文献@link["blazek2005-r8-21"]{[21]}建议把}
+      and @tex-math{x=x_{farf}}. In order to avoid the numerical singularity, in Ref. @link["blazek2005-r8-21"]{[21]} it was suggested to constrain the values of
+    }{
+      以及@tex-math{x=x_{farf}}。为避免数值奇性，文献@link["blazek2005-r8-21"]{[21]}建议把
     }
 
     @tex-display-math{(z+l)^2+y^2\quad\text{and}\quad(z-l)^2+y^2}
 
     @bi{
-      @lang["en"]{in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} to the 1/4 wingspan, i.e., @tex-math{l/2}. This measure reduces the corrections to the velocities @tex-math{v_\infty} and @tex-math{w_\infty} within the distance @tex-math{l/2} around the vortex lines @tex-math{z=l} and @tex-math{z=-l}.}
-      @lang["zh-Hans"]{在式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中的取值限制在1/4展长，即@tex-math{l/2}以内。这一措施把涡线@tex-math{z=l}和@tex-math{z=-l}周围@tex-math{l/2}距离内对速度@tex-math{v_\infty}和@tex-math{w_\infty}的修正量减小。}
+      in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} to the 1/4 wingspan, i.e., @tex-math{l/2}. This measure reduces the corrections to the velocities @tex-math{v_\infty} and @tex-math{w_\infty} within the distance @tex-math{l/2} around the vortex lines @tex-math{z=l} and @tex-math{z=-l}.
+    }{
+      在式@link["blazek2005-ch08#eq-8-29"]{(8.29)}中的取值限制在1/4展长，即@tex-math{l/2}以内。这一措施把涡线@tex-math{z=l}和@tex-math{z=-l}周围@tex-math{l/2}距离内对速度@tex-math{v_\infty}和@tex-math{w_\infty}的修正量减小。
     }
 
     @bi{
-      @lang["en"]{The numerical results presented in @link["blazek2005-r8-21"]{[21]} indicate a reduced sensitivity of the lift and drag coefficient with respect to the farfield distance, if the vortex correction in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} is applied. It was found that a distance of @tex-math{7\cdot l} to the farfield boundary is sufficient for accurate results.}
-      @lang["zh-Hans"]{文献@link["blazek2005-r8-21"]{[21]}给出的数值结果表明，应用式@link["blazek2005-ch08#eq-8-29"]{(8.29)}的涡修正后，升力系数和阻力系数对远场距离的敏感性降低。研究发现，到远场边界@tex-math{7\cdot l}的距离足以获得准确的结果。}
+      The numerical results presented in @link["blazek2005-r8-21"]{[21]} indicate a reduced sensitivity of the lift and drag coefficient with respect to the farfield distance, if the vortex correction in Eq. @link["blazek2005-ch08#eq-8-29"]{(8.29)} is applied. It was found that a distance of @tex-math{7\cdot l} to the farfield boundary is sufficient for accurate results.
+    }{
+      文献@link["blazek2005-r8-21"]{[21]}给出的数值结果表明，应用式@link["blazek2005-ch08#eq-8-29"]{(8.29)}的涡修正后，升力系数和阻力系数对远场距离的敏感性降低。研究发现，到远场边界@tex-math{7\cdot l}的距离足以获得准确的结果。
     }
   }
 }
@@ -546,101 +618,116 @@
   @title{8.4 Inlet/Outlet Boundary 入流/出流边界}
 
   @bi{
-    @lang["en"]{Various approaches were devised for the implementation of numerical inlet, and in particular, of outlet (also named open) boundary conditions for the Navier-Stokes equations @link["blazek2005-r8-22"]{[22]}-@link["blazek2005-r8-26"]{[26]}. Here, we will concentrate on methodologies, which were developed for turbomachinery applications. Suitable non-reflecting inlet and outlet boundary conditions were described, e.g., in @link["blazek2005-r8-27"]{[27]}-@link["blazek2005-r8-30"]{[30]}. Giles @link["blazek2005-r8-31"]{[31]}, and Hirsch and Verhoff @link["blazek2005-r8-32"]{[32]} suggested non-reflecting boundary conditions for the Euler equations, which are intended for domains with a short distance between the body and the inlet or the outlet plane.}
-    @lang["zh-Hans"]{针对Navier-Stokes方程的数值入流、特别是出流（也称为开放，open）边界条件的实现，已提出了多种方法@link["blazek2005-r8-22"]{[22]}-@link["blazek2005-r8-26"]{[26]}。这里我们集中讨论为叶轮机械应用而发展的方法。合适的无反射入流与出流边界条件可参见例如@link["blazek2005-r8-27"]{[27]}-@link["blazek2005-r8-30"]{[30]}。Giles@link["blazek2005-r8-31"]{[31]}以及Hirsch和Verhoff@link["blazek2005-r8-32"]{[32]}为Euler方程提出了无反射边界条件，适用于物体与入流或出流平面之间距离较短的求解域。}
+    Various approaches were devised for the implementation of numerical inlet, and in particular, of outlet (also named open) boundary conditions for the Navier-Stokes equations @link["blazek2005-r8-22"]{[22]}-@link["blazek2005-r8-26"]{[26]}. Here, we will concentrate on methodologies, which were developed for turbomachinery applications. Suitable non-reflecting inlet and outlet boundary conditions were described, e.g., in @link["blazek2005-r8-27"]{[27]}-@link["blazek2005-r8-30"]{[30]}. Giles @link["blazek2005-r8-31"]{[31]}, and Hirsch and Verhoff @link["blazek2005-r8-32"]{[32]} suggested non-reflecting boundary conditions for the Euler equations, which are intended for domains with a short distance between the body and the inlet or the outlet plane.
+  }{
+    针对Navier-Stokes方程的数值入流、特别是出流（也称为开放，open）边界条件的实现，已提出了多种方法@link["blazek2005-r8-22"]{[22]}-@link["blazek2005-r8-26"]{[26]}。这里我们集中讨论为叶轮机械应用而发展的方法。合适的无反射入流与出流边界条件可参见例如@link["blazek2005-r8-27"]{[27]}-@link["blazek2005-r8-30"]{[30]}。Giles@link["blazek2005-r8-31"]{[31]}以及Hirsch和Verhoff@link["blazek2005-r8-32"]{[32]}为Euler方程提出了无反射边界条件，适用于物体与入流或出流平面之间距离较短的求解域。
   }
 
   @bi{
-    @lang["en"]{In certain cases, the inlet and outlet boundary are additionally periodic with respect to the velocity as well as the pressure and temperature gradient. This type of flow is encountered, for example, in the simulation of heat exchangers @link["blazek2005-r8-33"]{[33]}. The implementation of periodic inlet and outlet boundary conditions was presented in @link["blazek2005-r8-34"]{[34]}-@link["blazek2005-r8-36"]{[36]} for LES in channels.}
-    @lang["zh-Hans"]{在某些情形下，入流和出流边界除速度外，其压力梯度和温度梯度也是周期性的。例如在换热器的模拟中就会遇到这类流动@link["blazek2005-r8-33"]{[33]}。针对槽道LES的周期入流和出流边界条件的实现见@link["blazek2005-r8-34"]{[34]}-@link["blazek2005-r8-36"]{[36]}。}
+    In certain cases, the inlet and outlet boundary are additionally periodic with respect to the velocity as well as the pressure and temperature gradient. This type of flow is encountered, for example, in the simulation of heat exchangers @link["blazek2005-r8-33"]{[33]}. The implementation of periodic inlet and outlet boundary conditions was presented in @link["blazek2005-r8-34"]{[34]}-@link["blazek2005-r8-36"]{[36]} for LES in channels.
+  }{
+    在某些情形下，入流和出流边界除速度外，其压力梯度和温度梯度也是周期性的。例如在换热器的模拟中就会遇到这类流动@link["blazek2005-r8-33"]{[33]}。针对槽道LES的周期入流和出流边界条件的实现见@link["blazek2005-r8-34"]{[34]}-@link["blazek2005-r8-36"]{[36]}。
   }
 
   @emph{Subsonic Inlet 亚声速入流}
 
   @bi{
-    @lang["en"]{A common procedure consists of the specification of the total pressure, total temperature, and of two flow angles. One characteristic variable has to be interpolated from the interior of the flow domain. One possibility is to employ the outgoing Riemann invariant @link["blazek2005-r8-30"]{[30]}, which is defined as}
-    @lang["zh-Hans"]{常用的做法是给定总压、总温和两个气流角。有一个特征变量需要从流动域内插值。一种可能的做法是利用外传黎曼不变量（Riemann invariant）@link["blazek2005-r8-30"]{[30]}，其定义为}
+    A common procedure consists of the specification of the total pressure, total temperature, and of two flow angles. One characteristic variable has to be interpolated from the interior of the flow domain. One possibility is to employ the outgoing Riemann invariant @link["blazek2005-r8-30"]{[30]}, which is defined as
+  }{
+    常用的做法是给定总压、总温和两个气流角。有一个特征变量需要从流动域内插值。一种可能的做法是利用外传黎曼不变量（Riemann invariant）@link["blazek2005-r8-30"]{[30]}，其定义为
   }
 
   @tex-display-math[#:id "eq-8-32"]{\mathcal{R}^{-}=\vec{v}_d\cdot\vec{n}-\frac{2c_d}{\gamma-1}\,, \tag{8.32}}
 
   @bi{
-    @lang["en"]{where the index @tex-math{d} denotes the state inside the domain (cf. Fig. 8.6a). The Riemann invariant is used to determine either the absolute velocity or the the speed of sound at the boundary. In practice, it was found that selecting the speed of sound leads to a more stable scheme, particularly for low Mach-number flows. Therefore, we set}
-    @lang["zh-Hans"]{其中下标@tex-math{d}表示域内状态（参见图8.6a）。黎曼不变量用来确定边界上的绝对速度或声速。实践中发现，选取声速会得到更稳定的格式，对低马赫数流动尤其如此。因此，我们令}
+    where the index @tex-math{d} denotes the state inside the domain (cf. Fig. 8.6a). The Riemann invariant is used to determine either the absolute velocity or the the speed of sound at the boundary. In practice, it was found that selecting the speed of sound leads to a more stable scheme, particularly for low Mach-number flows. Therefore, we set
+  }{
+    其中下标@tex-math{d}表示域内状态（参见图8.6a）。黎曼不变量用来确定边界上的绝对速度或声速。实践中发现，选取声速会得到更稳定的格式，对低马赫数流动尤其如此。因此，我们令
   }
 
   @tex-display-math[#:id "eq-8-33"]{c_b=\frac{-\mathcal{R}^{-}(\gamma-1)}{(\gamma-1)\cos^2\theta+2}\left\{1+\cos\theta\sqrt{\frac{\left[(\gamma-1)\cos^2\theta+2\right]c_0^2}{(\gamma-1)(\mathcal{R}^{-})^2}-\frac{\gamma-1}{2}}\right\} \tag{8.33}}
 
   @bi{
-    @lang["en"]{with @tex-math{\theta} being the flow angle relative to the boundary, and @tex-math{c_0} denoting the stagnation speed of sound. Hence,}
-    @lang["zh-Hans"]{其中@tex-math{\theta}为相对于边界的气流角，@tex-math{c_0}表示滞止声速。于是}
+    with @tex-math{\theta} being the flow angle relative to the boundary, and @tex-math{c_0} denoting the stagnation speed of sound. Hence,
+  }{
+    其中@tex-math{\theta}为相对于边界的气流角，@tex-math{c_0}表示滞止声速。于是
   }
 
   @tex-display-math[#:id "eq-8-34"]{\cos\theta=-\frac{\vec{v}_d\cdot\vec{n}}{\|\vec{v}_d\|_2} \tag{8.34}}
 
   @bi{
-    @lang["en"]{and}
-    @lang["zh-Hans"]{以及}
+    and
+  }{
+    以及
   }
 
   @tex-display-math[#:id "eq-8-35"]{c_0^2=c_d^2+\frac{\gamma-1}{2}\|\vec{v}_d\|_2^2\,, \tag{8.35}}
 
   @bi{
-    @lang["en"]{where @tex-math{\|\vec{v}_d\|_2} denotes the total velocity at the interior point @tex-math{d} (Fig. 8.6a). The unit normal vector @tex-math{\vec{n}} in Eq. @link["blazek2005-ch08#eq-8-34"]{(8.34)} was assumed to point out of the domain.}
-    @lang["zh-Hans"]{其中@tex-math{\|\vec{v}_d\|_2}表示内点@tex-math{d}处的总速度（图8.6a）。式@link["blazek2005-ch08#eq-8-34"]{(8.34)}中的单位法向量@tex-math{\vec{n}}假设指向域外。}
+    where @tex-math{\|\vec{v}_d\|_2} denotes the total velocity at the interior point @tex-math{d} (Fig. 8.6a). The unit normal vector @tex-math{\vec{n}} in Eq. @link["blazek2005-ch08#eq-8-34"]{(8.34)} was assumed to point out of the domain.
+  }{
+    其中@tex-math{\|\vec{v}_d\|_2}表示内点@tex-math{d}处的总速度（图8.6a）。式@link["blazek2005-ch08#eq-8-34"]{(8.34)}中的单位法向量@tex-math{\vec{n}}假设指向域外。
   }
 
   @bi{
-    @lang["en"]{Quantities like the static temperature, pressure, density, or the absolute velocity at the boundary are evaluated as follows}
-    @lang["zh-Hans"]{边界上的静温、静压、密度或绝对速度等量按如下方式求值}
+    Quantities like the static temperature, pressure, density, or the absolute velocity at the boundary are evaluated as follows
+  }{
+    边界上的静温、静压、密度或绝对速度等量按如下方式求值
   }
 
   @tex-display-math[#:id "eq-8-36"]{\begin{aligned} T_b&=T_0\left(\frac{c_b^2}{c_0^2}\right)\\ p_b&=p_0\left(\frac{T_b}{T_0}\right)^{\gamma/(\gamma-1)}\\ \rho_b&=\frac{p_b}{RT_b}\\ \|\vec{v}_b\|_2&=\sqrt{2c_p\left(T_0-T_b\right)}\,, \end{aligned} \tag{8.36}}
 
   @bi{
-    @lang["en"]{where @tex-math{T_0} and @tex-math{p_0} are the given values of total temperature and pressure, @tex-math{R} and @tex-math{c_p} represent the specific gas constant and the heat coefficient at constant pressure, respectively. The velocity components at the inlet are obtained by decomposing @tex-math{\|\vec{v}_b\|_2} according to the two (one in 2D) prescribed flow angles.}
-    @lang["zh-Hans"]{其中@tex-math{T_0}和@tex-math{p_0}为给定的总温和总压，@tex-math{R}和@tex-math{c_p}分别表示气体常数和定压比热。入口处的速度分量通过按两个（二维为一个）给定的气流角分解@tex-math{\|\vec{v}_b\|_2}得到。}
+    where @tex-math{T_0} and @tex-math{p_0} are the given values of total temperature and pressure, @tex-math{R} and @tex-math{c_p} represent the specific gas constant and the heat coefficient at constant pressure, respectively. The velocity components at the inlet are obtained by decomposing @tex-math{\|\vec{v}_b\|_2} according to the two (one in 2D) prescribed flow angles.
+  }{
+    其中@tex-math{T_0}和@tex-math{p_0}为给定的总温和总压，@tex-math{R}和@tex-math{c_p}分别表示气体常数和定压比热。入口处的速度分量通过按两个（二维为一个）给定的气流角分解@tex-math{\|\vec{v}_b\|_2}得到。
   }
 
   @emph{Subsonic Outlet 亚声速出流}
 
   @bi{
-    @lang["en"]{In turbomachinery, the static pressure is usually prescribed at the outlet. The subsonic outlet boundary can be treated in a way quite similar to the outflow condition in Eq. @link["blazek2005-ch08#eq-8-23"]{(8.23)}. Only the ambient pressure @tex-math{p_a} is replaced here by the given static exit pressure.}
-    @lang["zh-Hans"]{在叶轮机械中，出口处通常给定静压。亚声速出流边界的处理方式与式@link["blazek2005-ch08#eq-8-23"]{(8.23)}的出流条件非常相似，只是把环境压力@tex-math{p_a}换成给定的出口静压。}
+    In turbomachinery, the static pressure is usually prescribed at the outlet. The subsonic outlet boundary can be treated in a way quite similar to the outflow condition in Eq. @link["blazek2005-ch08#eq-8-23"]{(8.23)}. Only the ambient pressure @tex-math{p_a} is replaced here by the given static exit pressure.
+  }{
+    在叶轮机械中，出口处通常给定静压。亚声速出流边界的处理方式与式@link["blazek2005-ch08#eq-8-23"]{(8.23)}的出流条件非常相似，只是把环境压力@tex-math{p_a}换成给定的出口静压。
   }
 
   @bi{
-    @lang["en"]{Flow variables in the dummy cells (points) can be obtained by linearly extrapolating the states at the boundary and at the interior point @tex-math{d}.}
-    @lang["zh-Hans"]{虚单元（点）中的流动变量可以通过对边界处和内点@tex-math{d}处的状态作线性外推得到。}
+    Flow variables in the dummy cells (points) can be obtained by linearly extrapolating the states at the boundary and at the interior point @tex-math{d}.
+  }{
+    虚单元（点）中的流动变量可以通过对边界处和内点@tex-math{d}处的状态作线性外推得到。
   }
 }
 @subtree[#:id "blazek2005-8-5"]{
   @title{8.5 Injection Boundary 注入边界}
 
   @bi{
-    @lang["en"]{The injection velocity and other flow variables are computed from the given mass flow rate @tex-math{\dot{m}} and the injection temperature @tex-math{T_{inj}}. We will assume here that the mass is injected perpendicular to the boundary. The convective fluxes are evaluated using Eq. (2.21) with the contravariant velocity @tex-math{V} set equal to the injection velocity, i.e.,}
-    @lang["zh-Hans"]{注入速度和其他流动变量由给定的质量流量@tex-math{\dot{m}}与注入温度@tex-math{T_{inj}}算出。这里我们假设质量流沿垂直于边界的方向注入。对流通量用式(2.21)计算，并把逆变速度@tex-math{V}取为注入速度，即}
+    The injection velocity and other flow variables are computed from the given mass flow rate @tex-math{\dot{m}} and the injection temperature @tex-math{T_{inj}}. We will assume here that the mass is injected perpendicular to the boundary. The convective fluxes are evaluated using Eq. (2.21) with the contravariant velocity @tex-math{V} set equal to the injection velocity, i.e.,
+  }{
+    注入速度和其他流动变量由给定的质量流量@tex-math{\dot{m}}与注入温度@tex-math{T_{inj}}算出。这里我们假设质量流沿垂直于边界的方向注入。对流通量用式(2.21)计算，并把逆变速度@tex-math{V}取为注入速度，即
   }
 
   @tex-display-math[#:id "eq-8-37"]{V=V_{inj}=\frac{\dot{m}}{\rho_{inj}}\,. \tag{8.37}}
 
   @bi{
-    @lang["en"]{Velocity components are evaluated using the face normal vector as}
-    @lang["zh-Hans"]{速度分量利用面法向量按下式求值}
+    Velocity components are evaluated using the face normal vector as
+  }{
+    速度分量利用面法向量按下式求值
   }
 
   @tex-display-math[#:id "eq-8-38"]{\vec{v}_{inj}=-\vec{n}\,V_{inj} \tag{8.38}}
 
   @bi{
-    @lang["en"]{(see Fig. 8.8). The density @tex-math{\rho_{inj}} in Eq. @link["blazek2005-ch08#eq-8-37"]{(8.37)} is a function of @tex-math{T_{inj}} and of the pressure at the boundary @tex-math{p_b}. Hence, in the case of perfect gas we have}
-    @lang["zh-Hans"]{（见图8.8）。式@link["blazek2005-ch08#eq-8-37"]{(8.37)}中的密度@tex-math{\rho_{inj}}是@tex-math{T_{inj}}和边界压力@tex-math{p_b}的函数。因此，对于完全气体有}
+    (see Fig. 8.8). The density @tex-math{\rho_{inj}} in Eq. @link["blazek2005-ch08#eq-8-37"]{(8.37)} is a function of @tex-math{T_{inj}} and of the pressure at the boundary @tex-math{p_b}. Hence, in the case of perfect gas we have
+  }{
+    （见图8.8）。式@link["blazek2005-ch08#eq-8-37"]{(8.37)}中的密度@tex-math{\rho_{inj}}是@tex-math{T_{inj}}和边界压力@tex-math{p_b}的函数。因此，对于完全气体有
   }
 
   @tex-display-math[#:id "eq-8-39"]{\rho_{inj}=\frac{p_b}{R\,T_{inj}}\,. \tag{8.39}}
 
   @bi{
-    @lang["en"]{For the cell-centred scheme sketched in Fig. 8.8a, @tex-math{p_b} can be set identical to the pressure in the boundary cell, i.e., @tex-math{p_b=p_2}. The median-dual cell-vertex scheme requires an interpolation of @tex-math{p_b} from the points defining the particular face area (i.e., from @tex-math{(i,2)} and @tex-math{(i+1,2)} in Fig. 8.8b). Formulae like @link["blazek2005-ch08#eq-8-8"]{(8.8)}, @link["blazek2005-ch08#eq-8-11"]{(8.11)}-@link["blazek2005-ch08#eq-8-13"]{(8.13)} can be utilised for this purpose. Values in the dummy cells (points) are obtained by 0-th order or by linear extrapolation from the interior.}
-    @lang["zh-Hans"]{对于图8.8a中所描绘的单元中心格式，@tex-math{p_b}可以直接取为边界单元内的压力，即@tex-math{p_b=p_2}。中位对偶单元顶点格式则需要由定义相应面面积的各点插值@tex-math{p_b}（即由图8.8b中的@tex-math{(i,2)}和@tex-math{(i+1,2)}插值）。为此可以利用式@link["blazek2005-ch08#eq-8-8"]{(8.8)}、@link["blazek2005-ch08#eq-8-11"]{(8.11)}-@link["blazek2005-ch08#eq-8-13"]{(8.13)}之类的公式。虚单元（点）中的值由域内作零阶外推或线性外推得到。}
+    For the cell-centred scheme sketched in Fig. 8.8a, @tex-math{p_b} can be set identical to the pressure in the boundary cell, i.e., @tex-math{p_b=p_2}. The median-dual cell-vertex scheme requires an interpolation of @tex-math{p_b} from the points defining the particular face area (i.e., from @tex-math{(i,2)} and @tex-math{(i+1,2)} in Fig. 8.8b). Formulae like @link["blazek2005-ch08#eq-8-8"]{(8.8)}, @link["blazek2005-ch08#eq-8-11"]{(8.11)}-@link["blazek2005-ch08#eq-8-13"]{(8.13)} can be utilised for this purpose. Values in the dummy cells (points) are obtained by 0-th order or by linear extrapolation from the interior.
+  }{
+    对于图8.8a中所描绘的单元中心格式，@tex-math{p_b}可以直接取为边界单元内的压力，即@tex-math{p_b=p_2}。中位对偶单元顶点格式则需要由定义相应面面积的各点插值@tex-math{p_b}（即由图8.8b中的@tex-math{(i,2)}和@tex-math{(i+1,2)}插值）。为此可以利用式@link["blazek2005-ch08#eq-8-8"]{(8.8)}、@link["blazek2005-ch08#eq-8-11"]{(8.11)}-@link["blazek2005-ch08#eq-8-13"]{(8.13)}之类的公式。虚单元（点）中的值由域内作零阶外推或线性外推得到。
   }
 
   @figure["blazek2005/fig-8-8.png" "图8.8:结构化单元中心格式(a)与单元顶点对偶控制体格式(b)的注入边界条件"]{
@@ -651,53 +738,59 @@
   @title{8.6 Symmetry Plane 对称面}
 
   @bi{
-    @lang["en"]{If the flow is to be symmetrical with respect to a line or a plane, the first condition which must be met is that there is no flux across the boundary. This is equivalent to the requirement that the velocity normal to the symmetry boundary is zero. Furthermore, the following gradients have to vanish:
-      @itemize{
-        @item{gradient of a scalar quantity normal to the boundary,}
-        @item{gradient of the tangential velocity normal to the boundary,}
-        @item{gradient of the normal velocity along the boundary (since @tex-math{\vec{v}\cdot\vec{n}=0}).}
-      }
-    }
-    @lang["zh-Hans"]{如果流动相对于某条直线或某个平面是对称的，那么首先必须满足的条件是边界上没有通量通过。这等价于要求垂直于对称边界的速度为零。此外，下列梯度必须为零：
-      @itemize{
-        @item{标量在垂直于边界方向上的梯度；}
-        @item{切向速度在垂直于边界方向上的梯度；}
-        @item{法向速度沿边界方向的梯度（因为@tex-math{\vec{v}\cdot\vec{n}=0}）。}
-      }
-    }
+    If the flow is to be symmetrical with respect to a line or a plane, the first condition which must be met is that there is no flux across the boundary. This is equivalent to the requirement that the velocity normal to the symmetry boundary is zero. Furthermore, the following gradients have to vanish:
+          @itemize{
+            @item{gradient of a scalar quantity normal to the boundary,}
+            @item{gradient of the tangential velocity normal to the boundary,}
+            @item{gradient of the normal velocity along the boundary (since @tex-math{\vec{v}\cdot\vec{n}=0}).}
+          }
+
+  }{
+    如果流动相对于某条直线或某个平面是对称的，那么首先必须满足的条件是边界上没有通量通过。这等价于要求垂直于对称边界的速度为零。此外，下列梯度必须为零：
+          @itemize{
+            @item{标量在垂直于边界方向上的梯度；}
+            @item{切向速度在垂直于边界方向上的梯度；}
+            @item{法向速度沿边界方向的梯度（因为@tex-math{\vec{v}\cdot\vec{n}=0}）。}
+          }
+
   }
 
   @bi{
-    @lang["en"]{We can write these conditions as}
-    @lang["zh-Hans"]{这些条件可以写为}
+    We can write these conditions as
+  }{
+    这些条件可以写为
   }
 
   @tex-display-math[#:id "eq-8-40"]{\begin{aligned} \vec{n}\cdot\vec{\nabla}U&=0\\ \vec{n}\cdot\vec{\nabla}\left(\vec{v}\cdot\vec{t}\right)&=0\\ \vec{t}\cdot\vec{\nabla}\left(\vec{v}\cdot\vec{n}\right)&=0\,, \end{aligned} \tag{8.40}}
 
   @bi{
-    @lang["en"]{where @tex-math{U} stands for a scalar variable and @tex-math{\vec{t}} denotes a vector tangential to the symmetry boundary.}
-    @lang["zh-Hans"]{其中@tex-math{U}表示标量变量，@tex-math{\vec{t}}表示与对称边界相切的向量。}
+    where @tex-math{U} stands for a scalar variable and @tex-math{\vec{t}} denotes a vector tangential to the symmetry boundary.
+  }{
+    其中@tex-math{U}表示标量变量，@tex-math{\vec{t}}表示与对称边界相切的向量。
   }
 
   @emph{Cell-Centred Scheme 单元中心格式}
 
   @bi{
-    @lang["en"]{The implementation of the symmetry boundary condition can be largely simplified by employing dummy cells. The flow variables in the dummy cells are obtained using the concept of @emph{reflected cells}. This means that scalar quantities like density or pressure in the dummy cells are set equal to the values in the opposite interior cells, i.e.,}
-    @lang["zh-Hans"]{采用虚单元可以大大简化对称边界条件的实现。虚单元中的流动变量利用@emph{镜像单元}（reflected cells）的概念得到。也就是说，虚单元中密度、压力等标量取为对面内部单元中的值，即}
+    The implementation of the symmetry boundary condition can be largely simplified by employing dummy cells. The flow variables in the dummy cells are obtained using the concept of @emph{reflected cells}. This means that scalar quantities like density or pressure in the dummy cells are set equal to the values in the opposite interior cells, i.e.,
+  }{
+    采用虚单元可以大大简化对称边界条件的实现。虚单元中的流动变量利用@emph{镜像单元}（reflected cells）的概念得到。也就是说，虚单元中密度、压力等标量取为对面内部单元中的值，即
   }
 
   @tex-display-math[#:id "eq-8-41"]{U_1=U_2\quad\text{and}\quad U_0=U_3\,. \tag{8.41}}
 
   @bi{
-    @lang["en"]{The notation corresponds to that in Fig. 8.2. The velocity components are reflected with respect to the boundary as indicated in Eq. @link["blazek2005-ch08#eq-8-10"]{(8.10)}. The normal gradient of the normal velocity in the dummy cell equals to that in the opposite interior cell, but it has a reversed sign.}
-    @lang["zh-Hans"]{记号与图8.2一致。速度分量按式@link["blazek2005-ch08#eq-8-10"]{(8.10)}所示相对于边界作反射。虚单元中法向速度的法向梯度与对面内部单元中的相等，但符号相反。}
+    The notation corresponds to that in Fig. 8.2. The velocity components are reflected with respect to the boundary as indicated in Eq. @link["blazek2005-ch08#eq-8-10"]{(8.10)}. The normal gradient of the normal velocity in the dummy cell equals to that in the opposite interior cell, but it has a reversed sign.
+  }{
+    记号与图8.2一致。速度分量按式@link["blazek2005-ch08#eq-8-10"]{(8.10)}所示相对于边界作反射。虚单元中法向速度的法向梯度与对面内部单元中的相等，但符号相反。
   }
 
   @emph{Cell-Vertex Scheme (Dual Control Volume) 单元顶点格式（对偶控制体）}
 
   @bi{
-    @lang["en"]{Two different approaches can be followed. One possibility is to construct the missing half of the control volume by mirroring the grid on the boundary. The fluxes and the gradients are then evaluated like in the interior using reflected flow variables (see above). The second methodology computes the fluxes for the halved control volume (but not across the boundary). The components of the residual normal to the symmetry plane are then zeroed out. It is also necessary to correct normal vectors of those faces of the control volume, which touch the boundary (like at point @tex-math{2^{*}} in Fig. 8.4). The modification consists of removing all components of the face vector, which are normal to the symmetry plane. The gradients have also to be corrected according to Eq. @link["blazek2005-ch08#eq-8-40"]{(8.40)}.}
-    @lang["zh-Hans"]{可以遵循两种不同的做法。一种可能是通过对边界上的网格作镜像来补出控制体缺失的一半，然后像内部区域一样，用反射后的流动变量计算通量和梯度（见上文）。第二种方法对减半的控制体计算通量（但不跨越边界），然后把残差中垂直于对称面的分量置零。此外，还必须修正控制体中触及边界的那些面的法向量（如图8.4中点@tex-math{2^{*}}处），修正办法是去掉面向量中所有垂直于对称面的分量。梯度还须按式@link["blazek2005-ch08#eq-8-40"]{(8.40)}进行修正。}
+    Two different approaches can be followed. One possibility is to construct the missing half of the control volume by mirroring the grid on the boundary. The fluxes and the gradients are then evaluated like in the interior using reflected flow variables (see above). The second methodology computes the fluxes for the halved control volume (but not across the boundary). The components of the residual normal to the symmetry plane are then zeroed out. It is also necessary to correct normal vectors of those faces of the control volume, which touch the boundary (like at point @tex-math{2^{*}} in Fig. 8.4). The modification consists of removing all components of the face vector, which are normal to the symmetry plane. The gradients have also to be corrected according to Eq. @link["blazek2005-ch08#eq-8-40"]{(8.40)}.
+  }{
+    可以遵循两种不同的做法。一种可能是通过对边界上的网格作镜像来补出控制体缺失的一半，然后像内部区域一样，用反射后的流动变量计算通量和梯度（见上文）。第二种方法对减半的控制体计算通量（但不跨越边界），然后把残差中垂直于对称面的分量置零。此外，还必须修正控制体中触及边界的那些面的法向量（如图8.4中点@tex-math{2^{*}}处），修正办法是去掉面向量中所有垂直于对称面的分量。梯度还须按式@link["blazek2005-ch08#eq-8-40"]{(8.40)}进行修正。
   }
 }
 
@@ -705,18 +798,21 @@
   @title{8.7 Coordinate Cut 坐标切割}
 
   @bi{
-    @lang["en"]{This type of boundary condition is encountered only in the case of structured grids. The coordinate cut represents an artificial, not a physical, boundary. It is a line (plane in 3D) composed of grid points with different computational coordinate(s) but the same physical location. This means that the grid is folded such that it touches itself. As we shall see in Subsection 11.1.1, the coordinate cut appears for the so-called C- (Fig. 11.5) or O-grid topology (Fig. 11.9). The flow variables and their gradients have to stay continuous across the cut.}
-    @lang["zh-Hans"]{这种边界条件只在结构网格的情形下遇到。坐标切割（coordinate cut）是人工边界，而非物理边界。它由计算坐标不同但物理位置相同的网格点构成（二维为一条线，三维为一个平面）。这意味着网格被折叠得与自己相接触。正如我们将在第11.1.1小节看到的，坐标切割出现在所谓的C-网格拓扑（图11.5）或O-网格拓扑（图11.9）中。流动变量及其梯度在切割两侧必须保持连续。}
+    This type of boundary condition is encountered only in the case of structured grids. The coordinate cut represents an artificial, not a physical, boundary. It is a line (plane in 3D) composed of grid points with different computational coordinate(s) but the same physical location. This means that the grid is folded such that it touches itself. As we shall see in Subsection 11.1.1, the coordinate cut appears for the so-called C- (Fig. 11.5) or O-grid topology (Fig. 11.9). The flow variables and their gradients have to stay continuous across the cut.
+  }{
+    这种边界条件只在结构网格的情形下遇到。坐标切割（coordinate cut）是人工边界，而非物理边界。它由计算坐标不同但物理位置相同的网格点构成（二维为一条线，三维为一个平面）。这意味着网格被折叠得与自己相接触。正如我们将在第11.1.1小节看到的，坐标切割出现在所谓的C-网格拓扑（图11.5）或O-网格拓扑（图11.9）中。流动变量及其梯度在切割两侧必须保持连续。
   }
 
   @bi{
-    @lang["en"]{The best way to implement the cut boundary condition is to employ dummy cells (points). The situation is sketched in Fig. 8.9. As we can see, the dummy layers here are not virtual, but they coincide with the grid on the opposite side of the cut. Hence, the values of physical quantities in the dummy cells (cell-centred scheme), or in the dummy points (cell-vertex scheme), are obtained directly from the opposite cells (points). In the case of the cell-centred scheme, the fluxes across the faces of the boundary cell (shaded in Fig. 8.9a) are evaluated exactly like in the interior field.}
-    @lang["zh-Hans"]{实现切割边界条件的最好办法是采用虚单元（点）。情形如图8.9所示。可以看到，这里的虚层并不是虚拟的，它们与切割另一侧的网格重合。因此，虚单元（单元中心格式）或虚点（单元顶点格式）中物理量的值直接取自对面的单元（点）。对于单元中心格式，边界单元（图8.9a中的阴影部分）各面上的通量完全像内部流场中那样计算。}
+    The best way to implement the cut boundary condition is to employ dummy cells (points). The situation is sketched in Fig. 8.9. As we can see, the dummy layers here are not virtual, but they coincide with the grid on the opposite side of the cut. Hence, the values of physical quantities in the dummy cells (cell-centred scheme), or in the dummy points (cell-vertex scheme), are obtained directly from the opposite cells (points). In the case of the cell-centred scheme, the fluxes across the faces of the boundary cell (shaded in Fig. 8.9a) are evaluated exactly like in the interior field.
+  }{
+    实现切割边界条件的最好办法是采用虚单元（点）。情形如图8.9所示。可以看到，这里的虚层并不是虚拟的，它们与切割另一侧的网格重合。因此，虚单元（单元中心格式）或虚点（单元顶点格式）中物理量的值直接取自对面的单元（点）。对于单元中心格式，边界单元（图8.9a中的阴影部分）各面上的通量完全像内部流场中那样计算。
   }
 
   @bi{
-    @lang["en"]{The cut boundary can be treated in two different ways for the cell-vertex scheme. One possibility is to generate a complete control volume at the cut (the second part is denoted by a dashed line in Fig. 8.9b). Using the dummy points, the fluxes can be calculated in the same way as inside the domain. If the implementation is done correctly, the flow quantities at the points 2 (upper grid part) and 5 (lower part) will be equal. The second approach is to integrate the fluxes separately for each half of the control volume. The residuals at the points 2 and 5 in Fig. 8.9b are then added. It is important that the partial control volumes at the points 2 and 5 are summed up as well.}
-    @lang["zh-Hans"]{对于单元顶点格式，切割边界可以用两种不同的方式处理。一种可能是在切割处生成完整的控制体（第二部分在图8.9b中用虚线表示），利用虚点，通量可以像域内一样计算。如果实现正确，点2（上网格部分）与点5（下部分）处的流动量将相等。第二种方法是对控制体的每一半分别积分通量，然后把图8.9b中点2和点5处的残差相加。重要的是，点2和点5处的部分控制体也必须求和。}
+    The cut boundary can be treated in two different ways for the cell-vertex scheme. One possibility is to generate a complete control volume at the cut (the second part is denoted by a dashed line in Fig. 8.9b). Using the dummy points, the fluxes can be calculated in the same way as inside the domain. If the implementation is done correctly, the flow quantities at the points 2 (upper grid part) and 5 (lower part) will be equal. The second approach is to integrate the fluxes separately for each half of the control volume. The residuals at the points 2 and 5 in Fig. 8.9b are then added. It is important that the partial control volumes at the points 2 and 5 are summed up as well.
+  }{
+    对于单元顶点格式，切割边界可以用两种不同的方式处理。一种可能是在切割处生成完整的控制体（第二部分在图8.9b中用虚线表示），利用虚点，通量可以像域内一样计算。如果实现正确，点2（上网格部分）与点5（下部分）处的流动量将相等。第二种方法是对控制体的每一半分别积分通量，然后把图8.9b中点2和点5处的残差相加。重要的是，点2和点5处的部分控制体也必须求和。
   }
 
   @figure["blazek2005/fig-8-9.png" "图8.9:坐标切割(粗线):单元中心格式(a),对偶控制体格式(b)"]{
@@ -727,46 +823,53 @@
   @title{8.8 Periodic Boundaries 周期边界}
 
   @bi{
-    @lang["en"]{There are certain practical applications where the flow field is periodic with respect to one or multiple coordinate directions. In such a case, it is sufficient to simulate the flow only within one of the repeating regions. The correct interaction with the remaining physical domain is enforced via periodic boundary conditions.}
-    @lang["zh-Hans"]{在某些实际应用中，流场相对于一个或多个坐标方向是周期性的。在这种情况下，只需在其中一个重复区域内模拟流动即可，而与其余物理域的正确相互作用则通过周期边界条件来保证。}
+    There are certain practical applications where the flow field is periodic with respect to one or multiple coordinate directions. In such a case, it is sufficient to simulate the flow only within one of the repeating regions. The correct interaction with the remaining physical domain is enforced via periodic boundary conditions.
+  }{
+    在某些实际应用中，流场相对于一个或多个坐标方向是周期性的。在这种情况下，只需在其中一个重复区域内模拟流动即可，而与其余物理域的正确相互作用则通过周期边界条件来保证。
   }
 
   @bi{
-    @lang["en"]{We can distinguish between two basic types of periodic boundaries. The first one covers @emph{translational} periodicity. This means that one periodic boundary can be transformed into the other boundary by pure coordinate translation. The second type represents periodic boundaries, which were generated by coordinate rotation. Thus, we speak of @emph{rotational} periodicity.}
-    @lang["zh-Hans"]{周期边界可以分为两种基本类型。第一种是@emph{平移}周期性（translational periodicity），即一个周期边界通过纯粹的坐标平移就能变换成另一个边界。第二种类型是由坐标旋转生成的周期边界，因此我们称之为@emph{旋转}周期性（rotational periodicity）。}
+    We can distinguish between two basic types of periodic boundaries. The first one covers @emph{translational} periodicity. This means that one periodic boundary can be transformed into the other boundary by pure coordinate translation. The second type represents periodic boundaries, which were generated by coordinate rotation. Thus, we speak of @emph{rotational} periodicity.
+  }{
+    周期边界可以分为两种基本类型。第一种是@emph{平移}周期性（translational periodicity），即一个周期边界通过纯粹的坐标平移就能变换成另一个边界。第二种类型是由坐标旋转生成的周期边界，因此我们称之为@emph{旋转}周期性（rotational periodicity）。
   }
 
   @bi{
-    @lang["en"]{In the following, we shall describe the implementation of the periodic boundary conditions for the cell-centred and the cell-vertex scheme. We shall also consider the case of rotational periodicity. Further details of the treatment of periodic boundaries can be found in Refs. @link["blazek2005-r8-37"]{[37]}, @link["blazek2005-r8-38"]{[38]}.}
-    @lang["zh-Hans"]{下面我们将描述单元中心格式和单元顶点格式中周期边界条件的实现，并讨论旋转周期性的情形。关于周期边界处理的更多细节可参见文献@link["blazek2005-r8-37"]{[37]}、@link["blazek2005-r8-38"]{[38]}。}
+    In the following, we shall describe the implementation of the periodic boundary conditions for the cell-centred and the cell-vertex scheme. We shall also consider the case of rotational periodicity. Further details of the treatment of periodic boundaries can be found in Refs. @link["blazek2005-r8-37"]{[37]}, @link["blazek2005-r8-38"]{[38]}.
+  }{
+    下面我们将描述单元中心格式和单元顶点格式中周期边界条件的实现，并讨论旋转周期性的情形。关于周期边界处理的更多细节可参见文献@link["blazek2005-r8-37"]{[37]}、@link["blazek2005-r8-38"]{[38]}。
   }
 
   @emph{Cell-Centred Scheme 单元中心格式}
 
   @bi{
-    @lang["en"]{The utilisation of the dummy-cells concept enables a simple implementation of the periodic boundary condition. Let us consider the example from turbomachinery in Fig. 8.10. The configuration is periodic in the vertical direction. The shaded cells 1 and 2 are located on the lower and the upper periodic boundary, respectively. Due to the periodicity condition, the first dummy-cell layer corresponds to the boundary cells at the opposite periodic boundary. The second dummy-cell layer communicates with the second layer of the physical cells and so on. Hence, all scalar quantities (density, pressure, etc.) in the dummy cells are obtained directly from the corresponding physical cells, i.e,}
-    @lang["zh-Hans"]{利用虚单元概念可以简单地实现周期边界条件。让我们考察图8.10中来自叶轮机械的例子。该构型在竖直方向上是周期的。阴影单元1和2分别位于下部和上部周期边界上。根据周期性条件，第一层虚单元对应于对面周期边界上的边界单元，第二层虚单元与第二层物理单元通信，依此类推。于是，虚单元中所有标量（密度、压力等）都直接取自相应的物理单元，即}
+    The utilisation of the dummy-cells concept enables a simple implementation of the periodic boundary condition. Let us consider the example from turbomachinery in Fig. 8.10. The configuration is periodic in the vertical direction. The shaded cells 1 and 2 are located on the lower and the upper periodic boundary, respectively. Due to the periodicity condition, the first dummy-cell layer corresponds to the boundary cells at the opposite periodic boundary. The second dummy-cell layer communicates with the second layer of the physical cells and so on. Hence, all scalar quantities (density, pressure, etc.) in the dummy cells are obtained directly from the corresponding physical cells, i.e,
+  }{
+    利用虚单元概念可以简单地实现周期边界条件。让我们考察图8.10中来自叶轮机械的例子。该构型在竖直方向上是周期的。阴影单元1和2分别位于下部和上部周期边界上。根据周期性条件，第一层虚单元对应于对面周期边界上的边界单元，第二层虚单元与第二层物理单元通信，依此类推。于是，虚单元中所有标量（密度、压力等）都直接取自相应的物理单元，即
   }
 
   @tex-display-math[#:id "eq-8-42"]{U_{1'}=U_1\quad\text{and}\quad U_{2'}=U_2\,. \tag{8.42}}
 
   @bi{
-    @lang["en"]{The same relations hold also for the vector quantities (velocity, gradients) in the case of translational periodicity. Rotational-periodic boundaries require a correction of the vector variables. This will be discussed further below.}
-    @lang["zh-Hans"]{在平移周期性的情形下，同样的关系对向量量（速度、梯度）也成立。旋转周期边界则要求对向量变量作修正，这将在下文进一步讨论。}
+    The same relations hold also for the vector quantities (velocity, gradients) in the case of translational periodicity. Rotational-periodic boundaries require a correction of the vector variables. This will be discussed further below.
+  }{
+    在平移周期性的情形下，同样的关系对向量量（速度、梯度）也成立。旋转周期边界则要求对向量变量作修正，这将在下文进一步讨论。
   }
 
   @emph{Cell-Vertex Scheme (Dual Control Volume) 单元顶点格式（对偶控制体）}
 
   @bi{
-    @lang["en"]{This situation is sketched in Fig. 8.11. One approach for the treatment of periodic boundaries consists of the integration of the fluxes around the faces of the shaded control volumes. The residuals at the points 1 and 2 in Fig. 8.11 are then summed in order to obtain the complete net flux. Thus,}
-    @lang["zh-Hans"]{情形如图8.11所示。处理周期边界的一种方法是绕阴影控制体的各个面积分通量，然后把图8.11中点1和点2处的残差相加，以得到完整的净通量，即}
+    This situation is sketched in Fig. 8.11. One approach for the treatment of periodic boundaries consists of the integration of the fluxes around the faces of the shaded control volumes. The residuals at the points 1 and 2 in Fig. 8.11 are then summed in order to obtain the complete net flux. Thus,
+  }{
+    情形如图8.11所示。处理周期边界的一种方法是绕阴影控制体的各个面积分通量，然后把图8.11中点1和点2处的残差相加，以得到完整的净通量，即
   }
 
   @tex-display-math[#:id "eq-8-43"]{\vec{R}_{1,sum}=\vec{R}_1+\vec{R}_{2'}\quad\text{and}\quad \vec{R}_{2,sum}=\vec{R}_2+\vec{R}_{1'}\,. \tag{8.43}}
 
   @bi{
-    @lang["en"]{The partial control volumes at the points 1 and 2 (shaded in Fig. 8.11) have to be added up as well. In the case of translational periodicity, the residuals from the opposite boundary remain unchanged, i.e., @tex-math{\vec{R}_{1'}=\vec{R}_1} and @tex-math{\vec{R}_{2'}=\vec{R}_2}. This results in @tex-math{\vec{R}_{1,sum}=\vec{R}_{2,sum}}. Rotationally periodic boundaries require a transformation of the momentum equations before Eq. @link["blazek2005-ch08#eq-8-43"]{(8.43)} can be applied.}
-    @lang["zh-Hans"]{点1和点2处的部分控制体（图8.11中的阴影部分）也必须相加。在平移周期性的情形下，来自对面边界的残差保持不变，即@tex-math{\vec{R}_{1'}=\vec{R}_1}和@tex-math{\vec{R}_{2'}=\vec{R}_2}，由此得到@tex-math{\vec{R}_{1,sum}=\vec{R}_{2,sum}}。旋转周期边界则要求先对动量方程作变换，然后才能应用式@link["blazek2005-ch08#eq-8-43"]{(8.43)}。}
+    The partial control volumes at the points 1 and 2 (shaded in Fig. 8.11) have to be added up as well. In the case of translational periodicity, the residuals from the opposite boundary remain unchanged, i.e., @tex-math{\vec{R}_{1'}=\vec{R}_1} and @tex-math{\vec{R}_{2'}=\vec{R}_2}. This results in @tex-math{\vec{R}_{1,sum}=\vec{R}_{2,sum}}. Rotationally periodic boundaries require a transformation of the momentum equations before Eq. @link["blazek2005-ch08#eq-8-43"]{(8.43)} can be applied.
+  }{
+    点1和点2处的部分控制体（图8.11中的阴影部分）也必须相加。在平移周期性的情形下，来自对面边界的残差保持不变，即@tex-math{\vec{R}_{1'}=\vec{R}_1}和@tex-math{\vec{R}_{2'}=\vec{R}_2}，由此得到@tex-math{\vec{R}_{1,sum}=\vec{R}_{2,sum}}。旋转周期边界则要求先对动量方程作变换，然后才能应用式@link["blazek2005-ch08#eq-8-43"]{(8.43)}。
   }
 
   @figure["blazek2005/fig-8-10.png" "图8.10:二维非结构/结构网格单元中心格式的周期边界(粗线)"]{
@@ -781,34 +884,39 @@
   @emph{Rotational Periodicity 旋转周期性}
 
   @bi{
-    @lang["en"]{The rotational periodicity condition is based on a rotation of the coordinate system. Therefore, all vector quantities like velocity or gradients of scalars have to be transformed accordingly. Scalar quantities like pressure or density, which are invariant with respect to coordinate rotation, remain unchanged. If we assume the rotational axis is parallel to the @tex-math{x}-axis (see Fig. 8.12), the rotation matrix becomes}
-    @lang["zh-Hans"]{旋转周期条件基于坐标系的旋转。因此，所有向量量（如速度以及标量的梯度）都必须相应地变换；而压力、密度等对坐标旋转不变的标量则保持不变。如果我们假设旋转轴平行于@tex-math{x}轴（见图8.12），则旋转矩阵为}
+    The rotational periodicity condition is based on a rotation of the coordinate system. Therefore, all vector quantities like velocity or gradients of scalars have to be transformed accordingly. Scalar quantities like pressure or density, which are invariant with respect to coordinate rotation, remain unchanged. If we assume the rotational axis is parallel to the @tex-math{x}-axis (see Fig. 8.12), the rotation matrix becomes
+  }{
+    旋转周期条件基于坐标系的旋转。因此，所有向量量（如速度以及标量的梯度）都必须相应地变换；而压力、密度等对坐标旋转不变的标量则保持不变。如果我们假设旋转轴平行于@tex-math{x}轴（见图8.12），则旋转矩阵为
   }
 
   @tex-display-math[#:id "eq-8-44"]{\bar{\mathcal{R}}=\begin{bmatrix} 1 & 0 & 0\\ 0 & \cos\phi & \sin\phi\\ 0 & -\sin\phi & \cos\phi \end{bmatrix}\,, \tag{8.44}}
 
   @bi{
-    @lang["en"]{where the angle @tex-math{\phi} between the periodic boundaries @tex-math{A} and @tex-math{B} is positive in the clockwise direction. Hence, for example, the velocity vector transformed from boundary @tex-math{A} to @tex-math{B} (cells @tex-math{1'}, @tex-math{2'} in Fig. 8.10 and points @tex-math{1'}-@tex-math{4'} in Fig. 8.11) reads}
-    @lang["zh-Hans"]{其中周期边界@tex-math{A}与@tex-math{B}之间的角度@tex-math{\phi}以顺时针方向为正。因此，例如从边界@tex-math{A}变换到边界@tex-math{B}的速度向量（图8.10中的单元@tex-math{1'}、@tex-math{2'}，图8.11中的点@tex-math{1'}-@tex-math{4'}）为}
+    where the angle @tex-math{\phi} between the periodic boundaries @tex-math{A} and @tex-math{B} is positive in the clockwise direction. Hence, for example, the velocity vector transformed from boundary @tex-math{A} to @tex-math{B} (cells @tex-math{1'}, @tex-math{2'} in Fig. 8.10 and points @tex-math{1'}-@tex-math{4'} in Fig. 8.11) reads
+  }{
+    其中周期边界@tex-math{A}与@tex-math{B}之间的角度@tex-math{\phi}以顺时针方向为正。因此，例如从边界@tex-math{A}变换到边界@tex-math{B}的速度向量（图8.10中的单元@tex-math{1'}、@tex-math{2'}，图8.11中的点@tex-math{1'}-@tex-math{4'}）为
   }
 
   @tex-display-math[#:id "eq-8-45"]{\vec{v}_B=\bar{\mathcal{R}}\,\vec{v}_A\,. \tag{8.45}}
 
   @bi{
-    @lang["en"]{It is easy to show that the @tex-math{x}-component of @tex-math{\vec{v}_A} (i.e., @tex-math{u_A}) is not changed by the rotation. Thus, @tex-math{u_B=u_A}. The gradients of all flow quantities are transformed in similar way.}
-    @lang["zh-Hans"]{容易证明，@tex-math{\vec{v}_A}的@tex-math{x}分量（即@tex-math{u_A}）不因旋转而改变，因此@tex-math{u_B=u_A}。所有流动量的梯度都以类似方式变换。}
+    It is easy to show that the @tex-math{x}-component of @tex-math{\vec{v}_A} (i.e., @tex-math{u_A}) is not changed by the rotation. Thus, @tex-math{u_B=u_A}. The gradients of all flow quantities are transformed in similar way.
+  }{
+    容易证明，@tex-math{\vec{v}_A}的@tex-math{x}分量（即@tex-math{u_A}）不因旋转而改变，因此@tex-math{u_B=u_A}。所有流动量的梯度都以类似方式变换。
   }
 
   @bi{
-    @lang["en"]{As stated above, in the case of the cell-vertex scheme the residuals of the momentum equations must be corrected before the summation in Eq. @link["blazek2005-ch08#eq-8-43"]{(8.43)} can take place. The application of the rotation matrix Eq. @link["blazek2005-ch08#eq-8-44"]{(8.44)} leads to}
-    @lang["zh-Hans"]{如上所述，在单元顶点格式的情形下，必须先修正动量方程的残差，然后才能按式@link["blazek2005-ch08#eq-8-43"]{(8.43)}求和。应用旋转矩阵式@link["blazek2005-ch08#eq-8-44"]{(8.44)}得到}
+    As stated above, in the case of the cell-vertex scheme the residuals of the momentum equations must be corrected before the summation in Eq. @link["blazek2005-ch08#eq-8-43"]{(8.43)} can take place. The application of the rotation matrix Eq. @link["blazek2005-ch08#eq-8-44"]{(8.44)} leads to
+  }{
+    如上所述，在单元顶点格式的情形下，必须先修正动量方程的残差，然后才能按式@link["blazek2005-ch08#eq-8-43"]{(8.43)}求和。应用旋转矩阵式@link["blazek2005-ch08#eq-8-44"]{(8.44)}得到
   }
 
   @tex-display-math[#:id "eq-8-46"]{\vec{R}_{B,sum}^{u,v,w}=\vec{R}_{B}^{u,v,w}+\bar{\mathcal{R}}\,\vec{R}_{A}^{u,v,w}\,. \tag{8.46}}
 
   @bi{
-    @lang["en"]{The superscript @tex-math{u,v,w} in Eq. @link["blazek2005-ch08#eq-8-46"]{(8.46)} denotes the three momentum equations.}
-    @lang["zh-Hans"]{式@link["blazek2005-ch08#eq-8-46"]{(8.46)}中的上标@tex-math{u,v,w}表示三个动量方程。}
+    The superscript @tex-math{u,v,w} in Eq. @link["blazek2005-ch08#eq-8-46"]{(8.46)} denotes the three momentum equations.
+  }{
+    式@link["blazek2005-ch08#eq-8-46"]{(8.46)}中的上标@tex-math{u,v,w}表示三个动量方程。
   }
 }
 
@@ -816,32 +924,37 @@
   @title{8.9 Interface Between Grid Blocks 网格块之间的界面}
 
   @bi{
-    @lang["en"]{During the discussion of the spatial discretisation with structured grids in Section 3.1, it became evident that it is usually not possible to generate a single grid inside a geometrically complex domain (see Fig. 3.4). We mentioned two possible methodologies how to solve the problem. The first one was the multiblock approach and the second one was the Chimera technique. In the following, we shall describe the basic implementation issues of the multiblock approach. For more throughout discussion, the reader is referred to Refs. @link["blazek2005-r8-39"]{[39]}-@link["blazek2005-r8-45"]{[45]}. A very helpful introduction to the multiblock methodology was presented in @link["blazek2005-r8-46"]{[46]}. Details of the Chimera technique, which is not treated here, can be found in Refs. @link["blazek2005-r8-47"]{[47]}-@link["blazek2005-r8-51"]{[51]}.}
-    @lang["zh-Hans"]{在第3.1节讨论结构网格的空间离散时我们已经看到，对于几何上复杂的求解域，通常不可能生成单一网格（见图3.4）。我们提到了解决这一问题的两种可行方法：第一种是多块（multiblock）方法，第二种是Chimera技术。下面我们将描述多块方法的基本实现问题。更全面的讨论可参见文献@link["blazek2005-r8-39"]{[39]}-@link["blazek2005-r8-45"]{[45]}。文献@link["blazek2005-r8-46"]{[46]}对多块方法作了非常有帮助的介绍。此处不加讨论的Chimera技术的细节可参见文献@link["blazek2005-r8-47"]{[47]}-@link["blazek2005-r8-51"]{[51]}。}
+    During the discussion of the spatial discretisation with structured grids in Section 3.1, it became evident that it is usually not possible to generate a single grid inside a geometrically complex domain (see Fig. 3.4). We mentioned two possible methodologies how to solve the problem. The first one was the multiblock approach and the second one was the Chimera technique. In the following, we shall describe the basic implementation issues of the multiblock approach. For more throughout discussion, the reader is referred to Refs. @link["blazek2005-r8-39"]{[39]}-@link["blazek2005-r8-45"]{[45]}. A very helpful introduction to the multiblock methodology was presented in @link["blazek2005-r8-46"]{[46]}. Details of the Chimera technique, which is not treated here, can be found in Refs. @link["blazek2005-r8-47"]{[47]}-@link["blazek2005-r8-51"]{[51]}.
+  }{
+    在第3.1节讨论结构网格的空间离散时我们已经看到，对于几何上复杂的求解域，通常不可能生成单一网格（见图3.4）。我们提到了解决这一问题的两种可行方法：第一种是多块（multiblock）方法，第二种是Chimera技术。下面我们将描述多块方法的基本实现问题。更全面的讨论可参见文献@link["blazek2005-r8-39"]{[39]}-@link["blazek2005-r8-45"]{[45]}。文献@link["blazek2005-r8-46"]{[46]}对多块方法作了非常有帮助的介绍。此处不加讨论的Chimera技术的细节可参见文献@link["blazek2005-r8-47"]{[47]}-@link["blazek2005-r8-51"]{[51]}。
   }
 
   @bi{
-    @lang["en"]{Within the multiblock technique, the physical domain is split into a certain number of virtual parts. Consequently, the computational domain becomes also divided into the same number of blocks. In a general case, the physical solution in a particular block will depend on the flow in one or multiple neighbouring blocks. Therefore, we have to provide a data structure which allows for an efficient exchange of information between the blocks. The structure is also required for communication, if different processors are used to solve the governing equations in the grid blocks.}
-    @lang["zh-Hans"]{在多块技术中，物理域被分割成一定数目的虚拟部分，计算域也随之被划分成相同数目的块。在一般情形下，某个特定块内的物理解会依赖于一个或多个相邻块中的流动。因此，我们必须提供一种数据结构，使各块之间能够高效地交换信息；如果用不同的处理器求解各网格块中的控制方程，这种结构也是通信所必需的。}
+    Within the multiblock technique, the physical domain is split into a certain number of virtual parts. Consequently, the computational domain becomes also divided into the same number of blocks. In a general case, the physical solution in a particular block will depend on the flow in one or multiple neighbouring blocks. Therefore, we have to provide a data structure which allows for an efficient exchange of information between the blocks. The structure is also required for communication, if different processors are used to solve the governing equations in the grid blocks.
+  }{
+    在多块技术中，物理域被分割成一定数目的虚拟部分，计算域也随之被划分成相同数目的块。在一般情形下，某个特定块内的物理解会依赖于一个或多个相邻块中的流动。因此，我们必须提供一种数据结构，使各块之间能够高效地交换信息；如果用不同的处理器求解各网格块中的控制方程，这种结构也是通信所必需的。
   }
 
   @bi{
-    @lang["en"]{The first part of the data structure consists of the numbering of the block boundaries. One particular numbering scheme is displayed in Fig. 8.13. The numbering strategy in Fig. 8.13 can be summarised as follows:}
-    @lang["zh-Hans"]{数据结构的第一部分是块边界的编号。图8.13展示了一种具体的编号方案。图8.13中的编号策略可以归纳如下：}
+    The first part of the data structure consists of the numbering of the block boundaries. One particular numbering scheme is displayed in Fig. 8.13. The numbering strategy in Fig. 8.13 can be summarised as follows:
+  }{
+    数据结构的第一部分是块边界的编号。图8.13展示了一种具体的编号方案。图8.13中的编号策略可以归纳如下：
   }
 
   @tex-display-math{\begin{array}{ll} \text{boundary 1}: & i=IBEG\\ \text{boundary 2}: & i=IEND\\ \text{boundary 3}: & j=JBEG\\ \text{boundary 4}: & j=JEND\\ \text{boundary 5}: & k=KBEG\\ \text{boundary 6}: & k=KEND\,. \end{array}}
 
   @bi{
-    @lang["en"]{It is important that all blocks employ the same numbering scheme. The indices @tex-math{i}, @tex-math{j}, @tex-math{k} of the grid points in the computational space are defined in the ranges}
-    @lang["zh-Hans"]{重要的是，所有块都要采用同一个编号方案。计算空间中网格点的指标@tex-math{i}、@tex-math{j}、@tex-math{k}定义为如下范围}
+    It is important that all blocks employ the same numbering scheme. The indices @tex-math{i}, @tex-math{j}, @tex-math{k} of the grid points in the computational space are defined in the ranges
+  }{
+    重要的是，所有块都要采用同一个编号方案。计算空间中网格点的指标@tex-math{i}、@tex-math{j}、@tex-math{k}定义为如下范围
   }
 
   @tex-display-math{\begin{aligned} IBEG&\le i\le IEND\\ JBEG&\le j\le JEND\\ KBEG&\le k\le KEND\,. \end{aligned}}
 
   @bi{
-    @lang["en"]{The cell indices @tex-math{I}, @tex-math{J}, @tex-math{K}, which are required by the cell-centred scheme are defined in a similar way. Since the multiblock approach is usually implemented using dummy cells/points, the physical cells/points will have a certain offset from the start or the end of each range (see Fig. 8.1).}
-    @lang["zh-Hans"]{单元中心格式所需要的单元指标@tex-math{I}、@tex-math{J}、@tex-math{K}以类似的方式定义。由于多块方法通常利用虚单元/点来实现，物理单元/点相对每个范围的起点或终点会有一定的偏移（见图8.1）。}
+    The cell indices @tex-math{I}, @tex-math{J}, @tex-math{K}, which are required by the cell-centred scheme are defined in a similar way. Since the multiblock approach is usually implemented using dummy cells/points, the physical cells/points will have a certain offset from the start or the end of each range (see Fig. 8.1).
+  }{
+    单元中心格式所需要的单元指标@tex-math{I}、@tex-math{J}、@tex-math{K}以类似的方式定义。由于多块方法通常利用虚单元/点来实现，物理单元/点相对每个范围的起点或终点会有一定的偏移（见图8.1）。
   }
 
   @figure["blazek2005/fig-8-13.png" "图8.13:计算空间各边及块边界的编号"]{
@@ -854,18 +967,21 @@
   @emph{图8.15:两个块A与B之间流动变量的交换。}阴影区@tex-math{A'}、@tex-math{B'}为被交换的流动变量;虚层用虚线表示。
 }
   @bi{
-    @lang["en"]{The boundary of each block is divided into a number of non-overlapping patches. This allows the specification of different boundary conditions on the same block boundary. The situation is depicted in Fig. 8.14. For a unique identification of each patch it is necessary to store the number of the corresponding block and the number of the block boundary. Furthermore, the origin, the height and the width of the patch must be stored. For this purpose, the coordinates @tex-math{L1BEG}, @tex-math{L1END}, @tex-math{L2BEG} and @tex-math{L2END} are used in Fig. 8.14. It is suggested to orient the coordinate system of the patch according to the @emph{cyclic directions}. This means, that if we consider the @tex-math{i}-coordinate, @tex-math{j} and @tex-math{k} will be the first and the second cyclic direction. In the case of the @tex-math{j}-coordinate, the cyclic directions will become @tex-math{k} and @tex-math{i}, respectively. Therefore, since the patch in Fig. 8.14 is on the @tex-math{j=JBEG} boundary, the @tex-math{l_1}-coordinate is oriented in the @tex-math{k}-direction and @tex-math{l_2} in the @tex-math{i}-direction. The application of the cyclic directions allows for a unique definition of the orientation of each patch.}
-    @lang["zh-Hans"]{每个块的边界被划分为若干互不重叠的区块（patch）。这样就可以在同一块边界上规定不同的边界条件，情形描绘于图8.14。为了唯一地标识每个区块，必须存储相应块的编号和块边界的编号；此外，还必须存储区块的原点、高度和宽度。为此，图8.14中使用了坐标@tex-math{L1BEG}、@tex-math{L1END}、@tex-math{L2BEG}和@tex-math{L2END}。建议按照@emph{循环方向}（cyclic directions）来定向区块的坐标系：这就是说，如果考虑@tex-math{i}坐标，则@tex-math{j}和@tex-math{k}分别是第一和第二循环方向；对于@tex-math{j}坐标，循环方向则相应变为@tex-math{k}和@tex-math{i}。因此，由于图8.14中的区块位于@tex-math{j=JBEG}边界上，@tex-math{l_1}坐标沿@tex-math{k}方向，@tex-math{l_2}沿@tex-math{i}方向。利用循环方向可以唯一地定义每个区块的取向。}
+    The boundary of each block is divided into a number of non-overlapping patches. This allows the specification of different boundary conditions on the same block boundary. The situation is depicted in Fig. 8.14. For a unique identification of each patch it is necessary to store the number of the corresponding block and the number of the block boundary. Furthermore, the origin, the height and the width of the patch must be stored. For this purpose, the coordinates @tex-math{L1BEG}, @tex-math{L1END}, @tex-math{L2BEG} and @tex-math{L2END} are used in Fig. 8.14. It is suggested to orient the coordinate system of the patch according to the @emph{cyclic directions}. This means, that if we consider the @tex-math{i}-coordinate, @tex-math{j} and @tex-math{k} will be the first and the second cyclic direction. In the case of the @tex-math{j}-coordinate, the cyclic directions will become @tex-math{k} and @tex-math{i}, respectively. Therefore, since the patch in Fig. 8.14 is on the @tex-math{j=JBEG} boundary, the @tex-math{l_1}-coordinate is oriented in the @tex-math{k}-direction and @tex-math{l_2} in the @tex-math{i}-direction. The application of the cyclic directions allows for a unique definition of the orientation of each patch.
+  }{
+    每个块的边界被划分为若干互不重叠的区块（patch）。这样就可以在同一块边界上规定不同的边界条件，情形描绘于图8.14。为了唯一地标识每个区块，必须存储相应块的编号和块边界的编号；此外，还必须存储区块的原点、高度和宽度。为此，图8.14中使用了坐标@tex-math{L1BEG}、@tex-math{L1END}、@tex-math{L2BEG}和@tex-math{L2END}。建议按照@emph{循环方向}（cyclic directions）来定向区块的坐标系：这就是说，如果考虑@tex-math{i}坐标，则@tex-math{j}和@tex-math{k}分别是第一和第二循环方向；对于@tex-math{j}坐标，循环方向则相应变为@tex-math{k}和@tex-math{i}。因此，由于图8.14中的区块位于@tex-math{j=JBEG}边界上，@tex-math{l_1}坐标沿@tex-math{k}方向，@tex-math{l_2}沿@tex-math{i}方向。利用循环方向可以唯一地定义每个区块的取向。
   }
 
   @bi{
-    @lang["en"]{The remaining part of the data structure makes sure that data can be exchanged between those patches, which represent interfaces between the blocks (we assume here that the blocks communicate only across their faces). For this purpose, it is required to extend the above patch data structure by the numbers of the adjacent block and patch. It is furthermore necessary to code the orientation of the communicating patches with respect to each other.}
-    @lang["zh-Hans"]{数据结构的其余部分保证数据能够在那些代表块间界面的区块之间交换（这里我们假设各块只通过其面通信）。为此，需要在上述区块数据结构中补充相邻块与相邻区块的编号；此外，还必须对相互通信的区块彼此之间的取向进行编码。}
+    The remaining part of the data structure makes sure that data can be exchanged between those patches, which represent interfaces between the blocks (we assume here that the blocks communicate only across their faces). For this purpose, it is required to extend the above patch data structure by the numbers of the adjacent block and patch. It is furthermore necessary to code the orientation of the communicating patches with respect to each other.
+  }{
+    数据结构的其余部分保证数据能够在那些代表块间界面的区块之间交换（这里我们假设各块只通过其面通信）。为此，需要在上述区块数据结构中补充相邻块与相邻区块的编号；此外，还必须对相互通信的区块彼此之间的取向进行编码。
   }
 
   @bi{
-    @lang["en"]{The exchange of flow quantities between two blocks is sketched in Fig. 8.15. The procedure consists of two steps. In the first step, variables from the part of the domain, which is overlapped by the dummy layers of the adjacent patch are written to the own dummy cells/points or to a temporary storage (@tex-math{A'} and @tex-math{B'} in Fig. 8.15). This is done for all blocks. In the second step, the data in @tex-math{A'} and @tex-math{B'} is exchanged between both blocks. This means that @tex-math{A'} is written to the dummy layers of block B and @tex-math{B'} to the dummy layers of block A. If the two patches have a different orientation, the data must be transformed accordingly. In cases where the grid lines do not match at the block interface, further operations are required as described, e.g., in @link["blazek2005-r8-52"]{[52]}, @link["blazek2005-r8-53"]{[53]}.}
-    @lang["zh-Hans"]{两个块之间流动量的交换如图8.15所示。该过程由两步组成。第一步，把域中被相邻区块的虚层所覆盖的那部分区域内的变量写入本块的虚单元/点或临时存储区（图8.15中的@tex-math{A'}和@tex-math{B'}）；对所有块都执行这一步。第二步，在两个块之间交换@tex-math{A'}和@tex-math{B'}中的数据，也就是说，把@tex-math{A'}写入块B的虚层，把@tex-math{B'}写入块A的虚层。如果两个区块的取向不同，数据必须作相应变换。当网格线在块界面处不对齐时，还需要一些其他操作，如文献@link["blazek2005-r8-52"]{[52]}、@link["blazek2005-r8-53"]{[53]}所述。}
+    The exchange of flow quantities between two blocks is sketched in Fig. 8.15. The procedure consists of two steps. In the first step, variables from the part of the domain, which is overlapped by the dummy layers of the adjacent patch are written to the own dummy cells/points or to a temporary storage (@tex-math{A'} and @tex-math{B'} in Fig. 8.15). This is done for all blocks. In the second step, the data in @tex-math{A'} and @tex-math{B'} is exchanged between both blocks. This means that @tex-math{A'} is written to the dummy layers of block B and @tex-math{B'} to the dummy layers of block A. If the two patches have a different orientation, the data must be transformed accordingly. In cases where the grid lines do not match at the block interface, further operations are required as described, e.g., in @link["blazek2005-r8-52"]{[52]}, @link["blazek2005-r8-53"]{[53]}.
+  }{
+    两个块之间流动量的交换如图8.15所示。该过程由两步组成。第一步，把域中被相邻区块的虚层所覆盖的那部分区域内的变量写入本块的虚单元/点或临时存储区（图8.15中的@tex-math{A'}和@tex-math{B'}）；对所有块都执行这一步。第二步，在两个块之间交换@tex-math{A'}和@tex-math{B'}中的数据，也就是说，把@tex-math{A'}写入块B的虚层，把@tex-math{B'}写入块A的虚层。如果两个区块的取向不同，数据必须作相应变换。当网格线在块界面处不对齐时，还需要一些其他操作，如文献@link["blazek2005-r8-52"]{[52]}、@link["blazek2005-r8-53"]{[53]}所述。
   }
 }
 
@@ -873,32 +989,37 @@
   @title{8.10 Flow Gradients at Boundaries of Unstructured Grids 非结构网格边界上的流动梯度}
 
   @bi{
-    @lang["en"]{We already stated in Subsection 5.3.4 that the evaluation of the flow gradients requires some care in the case of the median-dual scheme. If the gradients are calculated on triangular or tetrahedral grids using the Green-Gauss approach in Eq. (5.50), the contributions from the boundaries of the domain (except at symmetry or periodic boundaries) must be evaluated similar to Eq. @link["blazek2005-ch08#eq-8-12"]{(8.12)} or Eq. @link["blazek2005-ch08#eq-8-13"]{(8.13)}, instead of the arithmetic average. Otherwise, the gradient will not be accurate. Considering the notation in Fig. 8.4, the contribution to the boundary node 1 reads}
-    @lang["zh-Hans"]{我们在第5.3.4小节中已经指出，对于中位对偶（median-dual）格式，流动梯度的计算需要格外小心。如果在三角形或四面体网格上用式(5.50)的Green-Gauss方法计算梯度，那么来自求解域边界的贡献（对称边界和周期边界除外）必须像式@link["blazek2005-ch08#eq-8-12"]{(8.12)}或式@link["blazek2005-ch08#eq-8-13"]{(8.13)}那样计算，而不是取算术平均，否则梯度将不准确。采用图8.4中的记号，边界节点1处的贡献为}
+    We already stated in Subsection 5.3.4 that the evaluation of the flow gradients requires some care in the case of the median-dual scheme. If the gradients are calculated on triangular or tetrahedral grids using the Green-Gauss approach in Eq. (5.50), the contributions from the boundaries of the domain (except at symmetry or periodic boundaries) must be evaluated similar to Eq. @link["blazek2005-ch08#eq-8-12"]{(8.12)} or Eq. @link["blazek2005-ch08#eq-8-13"]{(8.13)}, instead of the arithmetic average. Otherwise, the gradient will not be accurate. Considering the notation in Fig. 8.4, the contribution to the boundary node 1 reads
+  }{
+    我们在第5.3.4小节中已经指出，对于中位对偶（median-dual）格式，流动梯度的计算需要格外小心。如果在三角形或四面体网格上用式(5.50)的Green-Gauss方法计算梯度，那么来自求解域边界的贡献（对称边界和周期边界除外）必须像式@link["blazek2005-ch08#eq-8-12"]{(8.12)}或式@link["blazek2005-ch08#eq-8-13"]{(8.13)}那样计算，而不是取算术平均，否则梯度将不准确。采用图8.4中的记号，边界节点1处的贡献为
   }
 
   @tex-display-math{\frac{1}{6}\left(5U_1+U_2\right)\vec{n}_{12}\,\frac{\Delta S_{12}}{2}\,,}
 
   @bi{
-    @lang["en"]{where @tex-math{\Delta S_{12}} is the length of the boundary face between node 1 and 2 (therefore halved). Corresponding to Eq. @link["blazek2005-ch08#eq-8-13"]{(8.13)}, the contribution of the triangular face 1-2-3 to node 1 in Fig. 8.5 becomes}
-    @lang["zh-Hans"]{其中@tex-math{\Delta S_{12}}是节点1与2之间边界面的长度（因此取其一半）。对应于式@link["blazek2005-ch08#eq-8-13"]{(8.13)}，图8.5中三角形面1-2-3对节点1的贡献变为}
+    where @tex-math{\Delta S_{12}} is the length of the boundary face between node 1 and 2 (therefore halved). Corresponding to Eq. @link["blazek2005-ch08#eq-8-13"]{(8.13)}, the contribution of the triangular face 1-2-3 to node 1 in Fig. 8.5 becomes
+  }{
+    其中@tex-math{\Delta S_{12}}是节点1与2之间边界面的长度（因此取其一半）。对应于式@link["blazek2005-ch08#eq-8-13"]{(8.13)}，图8.5中三角形面1-2-3对节点1的贡献变为
   }
 
   @tex-display-math{\frac{1}{8}\left(6U_1+U_2+U_3\right)\vec{n}_{123}\,\frac{\Delta S_{123}}{3}}
 
   @bi{
-    @lang["en"]{with @tex-math{\Delta S_{123}/3} being the grey area in the triangle 1-2-3. On mixed grids, it is more appropriate to employ the least squares approach with virtual edges @link["blazek2005-r8-8"]{[8]} (see Fig. 5.15).}
-    @lang["zh-Hans"]{其中@tex-math{\Delta S_{123}/3}是三角形1-2-3中的灰色面积。在混合网格上，更合适的做法是采用带虚拟边的最小二乘法@link["blazek2005-r8-8"]{[8]}（见图5.15）。}
+    with @tex-math{\Delta S_{123}/3} being the grey area in the triangle 1-2-3. On mixed grids, it is more appropriate to employ the least squares approach with virtual edges @link["blazek2005-r8-8"]{[8]} (see Fig. 5.15).
+  }{
+    其中@tex-math{\Delta S_{123}/3}是三角形1-2-3中的灰色面积。在混合网格上，更合适的做法是采用带虚拟边的最小二乘法@link["blazek2005-r8-8"]{[8]}（见图5.15）。
   }
 
   @bi{
-    @lang["en"]{The cell-centred scheme requires no special provisions at symmetry or periodic boundaries. The implementation is identical to that discussed for the fluxes in Section 8.6 or 8.8. This holds also for the median-dual scheme, if the gradients are evaluated using the least-squares approach. The only additional work required is to set certain gradients to zero as described previously in Section 8.6 (cf. Eq. @link["blazek2005-ch08#eq-8-40"]{(8.40)}).}
-    @lang["zh-Hans"]{单元中心格式在对称边界或周期边界处不需要任何特殊处理，其实现与第8.6节或第8.8节中对通量的讨论完全相同。对于中位对偶格式，如果梯度用最小二乘法计算，情况也是如此。唯一需要额外做的工作是把某些梯度置零，如前面第8.6节所述（参见式@link["blazek2005-ch08#eq-8-40"]{(8.40)}）。}
+    The cell-centred scheme requires no special provisions at symmetry or periodic boundaries. The implementation is identical to that discussed for the fluxes in Section 8.6 or 8.8. This holds also for the median-dual scheme, if the gradients are evaluated using the least-squares approach. The only additional work required is to set certain gradients to zero as described previously in Section 8.6 (cf. Eq. @link["blazek2005-ch08#eq-8-40"]{(8.40)}).
+  }{
+    单元中心格式在对称边界或周期边界处不需要任何特殊处理，其实现与第8.6节或第8.8节中对通量的讨论完全相同。对于中位对偶格式，如果梯度用最小二乘法计算，情况也是如此。唯一需要额外做的工作是把某些梯度置零，如前面第8.6节所述（参见式@link["blazek2005-ch08#eq-8-40"]{(8.40)}）。
   }
 
   @bi{
-    @lang["en"]{If the Green-Gauss approach is employed within the median-dual scheme (i.e., if Eq. (5.50) is applied), it is necessary to correct normal vectors of those faces of the control volume, which touch the boundary (like at point @tex-math{2^{*}} in Fig. 8.4). This is done by setting all components of the face vector to zero, which are normal to the symmetry plane. Finally, the gradients are corrected as discussed in Section 8.6. At periodic boundaries, the gradients and the volumes from both sides of the boundary have to be summed up as presented in Section 8.8 for the fluxes (Eq. @link["blazek2005-ch08#eq-8-43"]{(8.43)}). In the case of rotational periodicity, the gradients needs to be transformed by applying the rotation matrix in Eq. @link["blazek2005-ch08#eq-8-44"]{(8.44)}.}
-    @lang["zh-Hans"]{如果在中位对偶格式中采用Green-Gauss方法（即应用式(5.50)），就必须修正控制体中触及边界的那些面的法向量（如图8.4中点@tex-math{2^{*}}处）：做法是把面向量中所有垂直于对称面的分量置零。最后，梯度按第8.6节所述进行修正。在周期边界处，边界两侧的梯度和体积必须按第8.8节对通量的做法（式@link["blazek2005-ch08#eq-8-43"]{(8.43)}）求和。在旋转周期性的情形下，梯度需要通过应用式@link["blazek2005-ch08#eq-8-44"]{(8.44)}中的旋转矩阵来变换。}
+    If the Green-Gauss approach is employed within the median-dual scheme (i.e., if Eq. (5.50) is applied), it is necessary to correct normal vectors of those faces of the control volume, which touch the boundary (like at point @tex-math{2^{*}} in Fig. 8.4). This is done by setting all components of the face vector to zero, which are normal to the symmetry plane. Finally, the gradients are corrected as discussed in Section 8.6. At periodic boundaries, the gradients and the volumes from both sides of the boundary have to be summed up as presented in Section 8.8 for the fluxes (Eq. @link["blazek2005-ch08#eq-8-43"]{(8.43)}). In the case of rotational periodicity, the gradients needs to be transformed by applying the rotation matrix in Eq. @link["blazek2005-ch08#eq-8-44"]{(8.44)}.
+  }{
+    如果在中位对偶格式中采用Green-Gauss方法（即应用式(5.50)），就必须修正控制体中触及边界的那些面的法向量（如图8.4中点@tex-math{2^{*}}处）：做法是把面向量中所有垂直于对称面的分量置零。最后，梯度按第8.6节所述进行修正。在周期边界处，边界两侧的梯度和体积必须按第8.8节对通量的做法（式@link["blazek2005-ch08#eq-8-43"]{(8.43)}）求和。在旋转周期性的情形下，梯度需要通过应用式@link["blazek2005-ch08#eq-8-44"]{(8.44)}中的旋转矩阵来变换。
   }
 }
 

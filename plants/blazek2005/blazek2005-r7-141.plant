@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Ghosal, S.; Lund, T.S.; Moin, P.; Akselvoll, K.: A Dynamic Localization Model for Large-Eddy Simulation of Turbulent Flows. J. Fluid Mechanics, 286 (1995), pp. 229-255.}
 @taxon["reference"]

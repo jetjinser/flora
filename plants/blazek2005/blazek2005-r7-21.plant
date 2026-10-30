@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Shur, M.; Strelets, M.; Travin, A.; Spalart, P.: Turbulence Modeling in Rotating and Curved Channels: Assessment of the Spalart-Shur Correction Term. AIAA Paper 98-0325, 1998.}
 @taxon["reference"]

@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Vallet, M.G.; Hecht, F.; Mantel, B.: Anisotropic Control of Mesh Generation Based upon a Voronoj Type Method. Proc. 3rd Int. Conf. Num. Grid Generation in Comput. Fluid Dynamics an Related Fields, Barcelona, Spain. Arcilla, A.S. et al. (eds.), North-Holland, 1991, pp. 93-103.}
 @taxon["reference"]

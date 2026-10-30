@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Pinelli, A.; Vacca, A.; Quarteroni, A.: A Spectral Multidomain Method for the Numerical Simulation of Turbulent Flows. J. Computational Physics, 136 (1997), pp. 546-558.}
 @taxon["reference"]

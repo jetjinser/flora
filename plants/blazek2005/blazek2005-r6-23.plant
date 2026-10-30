@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Vijayan, P.; Kallinderis, Y.: A 3-D Finite-Volume Scheme for the Euler Equations on Adaptive Tetrahedral Grids. J. Computational Physics, 113 (1994), pp. 249-267.}
 @taxon["reference"]

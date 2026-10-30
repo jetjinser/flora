@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Chalot, F.; Marquez, B.; Ravachol, M.; Ducros, F.; Nicoud, F.; Poinsot, T.: A Consistent Finite Element Approach to Large Eddy Simulation. AIAA Paper 98-2652, 1998.}
 @taxon["reference"]

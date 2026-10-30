@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Lenormand, E.; Sagaut, P.; Phuoc, L.T.; Comte, P.: Subgrid-Scale Models for Large-Eddy Simulations of Compressible Wall Bounded Flows. AIAA Journal, 38 (2000), pp. 1340-1350.}
 @taxon["reference"]

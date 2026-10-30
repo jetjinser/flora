@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Cook, A.W.; Riley, J.J.: Direct Numerical Simulation of a Turbulent Reactive Plume on a Parallel Computer. J. Computational Physics, 129 (1996), pp. 263-283.}
 @taxon["reference"]

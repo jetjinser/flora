@@ -16,14 +16,12 @@
 - 文献条目 `<书>-r<章>-<编号>`(附录章号小写,如 `blazek2005-ra-3`);公式锚点 `eq-<章>-<编号>` 是页内 fragment,不占树命名空间,无需前缀。
 
 ```scheme
-@use-modules[(flora commands) (language scribble commands)]
-
 @title{Governing Equations 第2章 控制方程}
 @summary{一句话中文摘要。}
 @taxon["chapter"]
 ```
 
-- 第一行 `@use-modules` 固定不变;`(flora commands)` 提供 `@bi`、`@emph`、`@sidenote`、`@defn` 等,并转出 `bilingual`/`lang`/`term`。
+- Flora 的 reader 会为站内普通页面预载命令,所以译本页面不需要重复写模块导入。若在其他项目中单独使用这些页面,由该项目通过 `@use-commands{flora}` 提供命令集。`(flora commands)` 提供 `@bi`、`@emph`、`@sidenote`、`@defn` 与 Flora 的术语命令 `@term`,并转出 Forester 的 `bilingual`/`lang`。
 - taxon 约定:正文章节 `chapter`、索引/主题索引 `index`、文献条目页 `reference`;前置材料页不写 taxon。taxon 会以首字母大写形式显示在标题上方(如 "Chapter.")。
 - 小节用可嵌套的 `@subtree[#:id "..."]{ @title{4.2.1 Cell-Centred Scheme 单元中心格式} ... }`,**每个小节必须有稳定 ID**,命名 `blazek2005-<章>-<节>`(如 `blazek2005-3-1-2`);每个小节会生成独立路由页(`blazek2005-3-1-2.html`)。
 - 标题双语:英文原题在前、中文译名在后。

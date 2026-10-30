@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Sharov, D.; Nakahashi, K.: A Boundary Recovery Algorithm for Delaunay Tetrahedral Meshing. Proc. 5th Int. Conf. Num. Grid Generation in Comput. Field Simul., Mississippi State Univ., 1996, pp. 229-238.}
 @taxon["reference"]

@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{George, P.L.; Hecht, F.; Saltel, E.: Fully Automatic Mesh Generator for 3-D Domains of any Shape. Impact of Computing in Science and Eng., 2 (1990), pp. 187-218.}
 @taxon["reference"]

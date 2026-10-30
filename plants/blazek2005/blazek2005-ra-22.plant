@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Pulliam, T.H.; Steger, J.L.: Implicit Finite Difference Simulations of 3-D Compressible Flows. AIAA Journal 18 (1980) 159-167.}
 @taxon["reference"]

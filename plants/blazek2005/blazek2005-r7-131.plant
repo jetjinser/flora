@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Yan, H.; Knight, D.; Zheltovodov, A.A.: Large-eddy Simulation of Supersonic Flat-Plate Boundary Layers Using the Monotonically Integrated Large-Eddy Simulation (MILES) Technique. J. Fluids Eng., 124 (2002), pp. 868-875.}
 @taxon["reference"]

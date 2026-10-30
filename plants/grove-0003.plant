@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{构建阶段与缓存：读取、分析、渲染}
 @summary{说明Grove构建的阶段分工，以及内容IR的复用、依赖登记与失效。}

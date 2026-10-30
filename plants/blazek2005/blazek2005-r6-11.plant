@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Kunz, R.F.; Lakshminarayana, B.: Stability of Explicit Navier-Stokes Procedures Using k-ε and k-ω/Algebraic Reynolds Stress Turbulence Models. J. Computational Physics, 103 (1992), pp. 141-159.}
 @taxon["reference"]

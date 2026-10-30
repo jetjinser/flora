@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Yokota, J.W.; Caughey, D.A.: An L-U Implicit Multigrid Algorithm for the Three-Dimensional Euler Equations. AIAA Paper 87-0453, 1987.}
 @taxon["reference"]

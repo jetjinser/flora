@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{文学编程库：接口与构建约定}
 @summary{说明LP模块职责、身份、源码范围、模块准备、缓存与支持边界。}

@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Baum, M.; Poinsot, T.; Thevenin, D.: Accurate Boundary Conditions for Multicomponent Reactive Flows. J. Computational Physics, 116 (1994), pp. 247-261.}
 @taxon["reference"]

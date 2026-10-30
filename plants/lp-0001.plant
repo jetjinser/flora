@@ -1,4 +1,3 @@
-@use-commands{flora}
 @use-modules[(lp core) (lp scribble) (lp forester) (lp checked)]
 
 @title{文学编程：片段、计划与实例}

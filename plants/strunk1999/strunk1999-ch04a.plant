@@ -1,25 +1,27 @@
-@use-commands{flora}
 
 @title{Words and Expressions Commonly Misused 常被误用的词与短语（A–F）}
 @summary{从Aggravate到Fortuitous的常见误用词条。}
 @taxon["reference"]
 
 @bi{
-  @lang["en"]{Many of the words and expressions listed here are not so much bad English as bad style, the commonplaces of careless writing. As illustrated under @emph{Feature}, the proper correction is likely to be not the replacement of one word or set of words by another, but the replacement of vague generality by definite statement.}
-  @lang["zh-Hans"]{这里列出的许多词与短语，与其说是糟糕的英语，不如说是糟糕的文风，是粗心写作的老生常谈。正如@emph{Feature}条下所示，恰当的修改往往不是用一个词或一组词去替换另一个词或一组词，而是用明确的陈述去替换含混的泛泛之论。}
+  Many of the words and expressions listed here are not so much bad English as bad style, the commonplaces of careless writing. As illustrated under @emph{Feature}, the proper correction is likely to be not the replacement of one word or set of words by another, but the replacement of vague generality by definite statement.
+}{
+  这里列出的许多词与短语，与其说是糟糕的英语，不如说是糟糕的文风，是粗心写作的老生常谈。正如@emph{Feature}条下所示，恰当的修改往往不是用一个词或一组词去替换另一个词或一组词，而是用明确的陈述去替换含混的泛泛之论。
 }
 
 @bi{
-  @lang["en"]{The shape of our language is not rigid; in questions of usage we have no lawgiver whose word is final. Students whose curiosity is aroused by the interpretations that follow, or whose doubts are raised, will wish to pursue their investigations further. Books useful in such pursuits are @emph{Merriam-Webster's Collegiate Dictionary}, Tenth Edition; @emph{The American Heritage Dictionary of the English Language}, Third Edition; @emph{Webster's Third New International Dictionary}; @emph{The New Fowler's Modern English Usage}, Third Edition, edited by R. W. Burchfield; @emph{Modern American Usage: A Guide} by Wilson Follett and Erik Wensberg; and @emph{The Careful Writer} by Theodore M. Bernstein.}
-  @lang["zh-Hans"]{我们语言的形态并非一成不变；在用法问题上，我们没有一言九鼎的立法者。被后文的阐释激起好奇心、或由此产生疑问的学生，会希望进一步探究。有助于此类探究的书籍有：《韦氏大学英语词典》第十版（Merriam-Webster's Collegiate Dictionary, Tenth Edition）；《美国传统英语词典》第三版（The American Heritage Dictionary of the English Language, Third Edition）；《韦氏第三版新国际英语词典》（Webster's Third New International Dictionary）；R. W. Burchfield编《新福勒现代英语用法》第三版（The New Fowler's Modern English Usage, Third Edition）；Wilson Follett与Erik Wensberg著《现代美式用法：指南》（Modern American Usage: A Guide）；以及Theodore M. Bernstein著《细心的写作者》（The Careful Writer）。}
+  The shape of our language is not rigid; in questions of usage we have no lawgiver whose word is final. Students whose curiosity is aroused by the interpretations that follow, or whose doubts are raised, will wish to pursue their investigations further. Books useful in such pursuits are @emph{Merriam-Webster's Collegiate Dictionary}, Tenth Edition; @emph{The American Heritage Dictionary of the English Language}, Third Edition; @emph{Webster's Third New International Dictionary}; @emph{The New Fowler's Modern English Usage}, Third Edition, edited by R. W. Burchfield; @emph{Modern American Usage: A Guide} by Wilson Follett and Erik Wensberg; and @emph{The Careful Writer} by Theodore M. Bernstein.
+}{
+  我们语言的形态并非一成不变；在用法问题上，我们没有一言九鼎的立法者。被后文的阐释激起好奇心、或由此产生疑问的学生，会希望进一步探究。有助于此类探究的书籍有：《韦氏大学英语词典》第十版（Merriam-Webster's Collegiate Dictionary, Tenth Edition）；《美国传统英语词典》第三版（The American Heritage Dictionary of the English Language, Third Edition）；《韦氏第三版新国际英语词典》（Webster's Third New International Dictionary）；R. W. Burchfield编《新福勒现代英语用法》第三版（The New Fowler's Modern English Usage, Third Edition）；Wilson Follett与Erik Wensberg著《现代美式用法：指南》（Modern American Usage: A Guide）；以及Theodore M. Bernstein著《细心的写作者》（The Careful Writer）。
 }
 
 @subtree[#:id "strunk1999-usage-aggravate"]{
   @title{Aggravate. Irritate.}
 
   @bi{
-    @lang["en"]{@emph{Aggravate. Irritate.} The first means "to add to" an already troublesome or vexing matter or condition. The second means "to vex" or "to annoy" or "to chafe."}
-    @lang["zh-Hans"]{@emph{Aggravate. Irritate.} 前者的意思是"加重"本已麻烦或恼人的事情或状况。后者的意思是"使恼怒"、"使烦扰"或"使烦躁"。}
+    @emph{Aggravate. Irritate.} The first means "to add to" an already troublesome or vexing matter or condition. The second means "to vex" or "to annoy" or "to chafe."
+  }{
+    @emph{Aggravate. Irritate.} 前者的意思是"加重"本已麻烦或恼人的事情或状况。后者的意思是"使恼怒"、"使烦扰"或"使烦躁"。
   }
 }
 
@@ -27,8 +29,9 @@
   @title{All right.}
 
   @bi{
-    @lang["en"]{@emph{All right.} Idiomatic in familiar speech as a detached phrase in the sense "Agreed," or "Go ahead," or "O. K." Properly written as two words—@emph{all right}.}
-    @lang["zh-Hans"]{@emph{All right.} 在熟悉的言谈中，作为一个独立短语，表示"Agreed（同意）"、"Go ahead（干吧）"或"O. K.（行）"的意思，是地道的用法。正确地书写应为两个词——@emph{all right}。}
+    @emph{All right.} Idiomatic in familiar speech as a detached phrase in the sense "Agreed," or "Go ahead," or "O. K." Properly written as two words—@emph{all right}.
+  }{
+    @emph{All right.} 在熟悉的言谈中，作为一个独立短语，表示"Agreed（同意）"、"Go ahead（干吧）"或"O. K.（行）"的意思，是地道的用法。正确地书写应为两个词——@emph{all right}。
   }
 }
 
@@ -36,8 +39,9 @@
   @title{Allude.}
 
   @bi{
-    @lang["en"]{@emph{Allude.} Do not confuse with @emph{elude}. You @emph{allude} to a book; you @emph{elude} a pursuer. Note, too, that @emph{allude} is not synonymous with @emph{refer}. An allusion is an indirect mention, a reference is a specific one.}
-    @lang["zh-Hans"]{@emph{Allude.} 不要与@emph{elude}混淆。你@emph{allude}一本书（暗指一本书）；你@emph{elude}一个追赶者（躲避追赶者）。另请注意，@emph{allude}与@emph{refer}并非同义。暗指是一种间接的提及，而指称则是明确具体的提及。}
+    @emph{Allude.} Do not confuse with @emph{elude}. You @emph{allude} to a book; you @emph{elude} a pursuer. Note, too, that @emph{allude} is not synonymous with @emph{refer}. An allusion is an indirect mention, a reference is a specific one.
+  }{
+    @emph{Allude.} 不要与@emph{elude}混淆。你@emph{allude}一本书（暗指一本书）；你@emph{elude}一个追赶者（躲避追赶者）。另请注意，@emph{allude}与@emph{refer}并非同义。暗指是一种间接的提及，而指称则是明确具体的提及。
   }
 }
 
@@ -45,8 +49,9 @@
   @title{Allusion.}
 
   @bi{
-    @lang["en"]{@emph{Allusion.} Easily confused with @emph{illusion}. The first means "an indirect reference"; the second means "an unreal image" or "a false impression."}
-    @lang["zh-Hans"]{@emph{Allusion.} 容易与@emph{illusion}混淆。前者意为"间接的提及"；后者意为"不真实的影像"或"错误的印象"。}
+    @emph{Allusion.} Easily confused with @emph{illusion}. The first means "an indirect reference"; the second means "an unreal image" or "a false impression."
+  }{
+    @emph{Allusion.} 容易与@emph{illusion}混淆。前者意为"间接的提及"；后者意为"不真实的影像"或"错误的印象"。
   }
 }
 
@@ -54,8 +59,9 @@
   @title{Alternate. Alternative.}
 
   @bi{
-    @lang["en"]{@emph{Alternate. Alternative.} The words are not always interchangeable as nouns or adjectives. The first means every other one in a series; the second, one of two possibilities. As the other one of a series of two, an @emph{alternate} may stand for "a substitute," but an @emph{alternative}, although used in a similar sense, connotes a matter of choice that is never present with @emph{alternate}.}
-    @lang["zh-Hans"]{@emph{Alternate. Alternative.} 这两个词作为名词或形容词时并不总是可以互换。前者指一系列中每隔一个的那一个；后者指两种可能性中的一种。作为两者构成的一系列中的另一个，@emph{alternate}可以表示"替代者"，但@emph{alternative}尽管用法相似，却含有"选择"之意，而这一含义在@emph{alternate}中从不出现。}
+    @emph{Alternate. Alternative.} The words are not always interchangeable as nouns or adjectives. The first means every other one in a series; the second, one of two possibilities. As the other one of a series of two, an @emph{alternate} may stand for "a substitute," but an @emph{alternative}, although used in a similar sense, connotes a matter of choice that is never present with @emph{alternate}.
+  }{
+    @emph{Alternate. Alternative.} 这两个词作为名词或形容词时并不总是可以互换。前者指一系列中每隔一个的那一个；后者指两种可能性中的一种。作为两者构成的一系列中的另一个，@emph{alternate}可以表示"替代者"，但@emph{alternative}尽管用法相似，却含有"选择"之意，而这一含义在@emph{alternate}中从不出现。
   }
 
   @blockquote{As the flooded road left them no alternative, they took the alternate route.}
@@ -65,15 +71,17 @@
   @title{Among. Between.}
 
   @bi{
-    @lang["en"]{@emph{Among. Between.} When more than two things or persons are involved, @emph{among} is usually called for:}
-    @lang["zh-Hans"]{@emph{Among. Between.} 当涉及两个以上的事物或人时，通常要用@emph{among}：}
+    @emph{Among. Between.} When more than two things or persons are involved, @emph{among} is usually called for:
+  }{
+    @emph{Among. Between.} 当涉及两个以上的事物或人时，通常要用@emph{among}：
   }
 
   @blockquote{The money was divided among the four players.}
 
   @bi{
-    @lang["en"]{When, however, more than two are involved but each is considered individually, @emph{between} is preferred:}
-    @lang["zh-Hans"]{然而，当涉及两个以上但每一个都被单独考虑时，则宜用@emph{between}：}
+    When, however, more than two are involved but each is considered individually, @emph{between} is preferred:
+  }{
+    然而，当涉及两个以上但每一个都被单独考虑时，则宜用@emph{between}：
   }
 
   @blockquote{an agreement between the six heirs.}
@@ -83,8 +91,9 @@
   @title{And/or.}
 
   @bi{
-    @lang["en"]{@emph{And/or.} A device, or shortcut, that damages a sentence and often leads to confusion or ambiguity.}
-    @lang["zh-Hans"]{@emph{And/or.} 一种损害句子、并常常导致混乱或歧义的写法或捷径。}
+    @emph{And/or.} A device, or shortcut, that damages a sentence and often leads to confusion or ambiguity.
+  }{
+    @emph{And/or.} 一种损害句子、并常常导致混乱或歧义的写法或捷径。
   }
 
   @itemize{
@@ -97,8 +106,9 @@
   @title{Anticipate.}
 
   @bi{
-    @lang["en"]{@emph{Anticipate.} Use @emph{expect} in the sense of simple expectation.}
-    @lang["zh-Hans"]{@emph{Anticipate.} 表示单纯的预期时，应用@emph{expect}。}
+    @emph{Anticipate.} Use @emph{expect} in the sense of simple expectation.
+  }{
+    @emph{Anticipate.} 表示单纯的预期时，应用@emph{expect}。
   }
 
   @itemize{
@@ -112,8 +122,9 @@
   }
 
   @bi{
-    @lang["en"]{In the second example, the word @emph{anticipated} is ambiguous. It could mean simply that the brother believed the upturn would occur, or it could mean that he acted in advance of the expected upturn—by buying stock, perhaps.}
-    @lang["zh-Hans"]{在第二例中，@emph{anticipated}一词含义模糊。它可能仅仅表示这位兄弟相信行情会上涨，也可能表示他在预期上涨之前就采取了行动——也许是买进了股票。}
+    In the second example, the word @emph{anticipated} is ambiguous. It could mean simply that the brother believed the upturn would occur, or it could mean that he acted in advance of the expected upturn—by buying stock, perhaps.
+  }{
+    在第二例中，@emph{anticipated}一词含义模糊。它可能仅仅表示这位兄弟相信行情会上涨，也可能表示他在预期上涨之前就采取了行动——也许是买进了股票。
   }
 }
 
@@ -121,8 +132,9 @@
   @title{Anybody.}
 
   @bi{
-    @lang["en"]{@emph{Anybody.} In the sense of "any person," not to be written as two words. @emph{Any body} means "any corpse," or "any human form," or "any group." The rule holds equally for @emph{everybody}, @emph{nobody}, and @emph{somebody}.}
-    @lang["zh-Hans"]{@emph{Anybody.} 表示"任何人"时，不应写成两个词。@emph{Any body}意为"任何尸体"、"任何人的形体"或"任何群体"。这条规则同样适用于@emph{everybody}、@emph{nobody}和@emph{somebody}。}
+    @emph{Anybody.} In the sense of "any person," not to be written as two words. @emph{Any body} means "any corpse," or "any human form," or "any group." The rule holds equally for @emph{everybody}, @emph{nobody}, and @emph{somebody}.
+  }{
+    @emph{Anybody.} 表示"任何人"时，不应写成两个词。@emph{Any body}意为"任何尸体"、"任何人的形体"或"任何群体"。这条规则同样适用于@emph{everybody}、@emph{nobody}和@emph{somebody}。
   }
 }
 
@@ -130,8 +142,9 @@
   @title{Anyone.}
 
   @bi{
-    @lang["en"]{@emph{Anyone.} In the sense of "anybody," written as one word. @emph{Any one} means "any single person" or "any single thing."}
-    @lang["zh-Hans"]{@emph{Anyone.} 表示"anybody（任何人）"时，写作一个词。@emph{Any one}意为"任何一个单个人"或"任何一件单个事物"。}
+    @emph{Anyone.} In the sense of "anybody," written as one word. @emph{Any one} means "any single person" or "any single thing."
+  }{
+    @emph{Anyone.} 表示"anybody（任何人）"时，写作一个词。@emph{Any one}意为"任何一个单个人"或"任何一件单个事物"。
   }
 }
 
@@ -139,8 +152,9 @@
   @title{As good or better than.}
 
   @bi{
-    @lang["en"]{@emph{As good or better than.} Expressions of this type should be corrected by rearranging the sentences.}
-    @lang["zh-Hans"]{@emph{As good or better than.} 这类表达应通过重新安排句子来改正。}
+    @emph{As good or better than.} Expressions of this type should be corrected by rearranging the sentences.
+  }{
+    @emph{As good or better than.} 这类表达应通过重新安排句子来改正。
   }
 
   @itemize{
@@ -153,8 +167,9 @@
   @title{As to whether.}
 
   @bi{
-    @lang["en"]{@emph{As to whether.} @emph{Whether} is sufficient.}
-    @lang["zh-Hans"]{@emph{As to whether.} @emph{Whether}就足够了。}
+    @emph{As to whether.} @emph{Whether} is sufficient.
+  }{
+    @emph{As to whether.} @emph{Whether}就足够了。
   }
 }
 
@@ -162,8 +177,9 @@
   @title{As yet.}
 
   @bi{
-    @lang["en"]{@emph{As yet.} @emph{Yet} nearly always is as good, if not better.}
-    @lang["zh-Hans"]{@emph{As yet.} @emph{Yet}几乎总是同样好，甚至更好。}
+    @emph{As yet.} @emph{Yet} nearly always is as good, if not better.
+  }{
+    @emph{As yet.} @emph{Yet}几乎总是同样好，甚至更好。
   }
 
   @itemize{
@@ -172,8 +188,9 @@
   }
 
   @bi{
-    @lang["en"]{The chief exception is at the beginning of a sentence, where @emph{yet} means something different.}
-    @lang["zh-Hans"]{主要的例外是在句首，那里的@emph{yet}含义不同。}
+    The chief exception is at the beginning of a sentence, where @emph{yet} means something different.
+  }{
+    主要的例外是在句首，那里的@emph{yet}含义不同。
   }
 
   @blockquote{Yet (or despite everything) he has not succeeded. As yet (or so far) he has not succeeded.}
@@ -183,8 +200,9 @@
   @title{Being.}
 
   @bi{
-    @lang["en"]{@emph{Being.} Not appropriate after @emph{regard… as}.}
-    @lang["zh-Hans"]{@emph{Being.} 用在regard… as之后不恰当。}
+    @emph{Being.} Not appropriate after @emph{regard… as}.
+  }{
+    @emph{Being.} 用在regard… as之后不恰当。
   }
 
   @itemize{
@@ -197,8 +215,9 @@
   @title{But.}
 
   @bi{
-    @lang["en"]{@emph{But.} Unnecessary after @emph{doubt} and @emph{help}.}
-    @lang["zh-Hans"]{@emph{But.} 用在doubt和help之后是多余的。}
+    @emph{But.} Unnecessary after @emph{doubt} and @emph{help}.
+  }{
+    @emph{But.} 用在doubt和help之后是多余的。
   }
 
   @itemize{
@@ -212,13 +231,15 @@
   }
 
   @bi{
-    @lang["en"]{The too-frequent use of @emph{but} as a conjunction leads to the fault discussed under @link["strunk1999-rule-18"]{Rule 18}. A loose sentence formed with @emph{but} can usually be converted into a periodic sentence formed with @emph{although}.}
-    @lang["zh-Hans"]{@emph{but}作为连词过于频繁地使用，会导致@link["strunk1999-rule-18"]{规则18}下所讨论的毛病。用@emph{but}构成的松散句，通常可以改写成用@emph{although}构成的掉尾句。}
+    The too-frequent use of @emph{but} as a conjunction leads to the fault discussed under @link["strunk1999-rule-18"]{Rule 18}. A loose sentence formed with @emph{but} can usually be converted into a periodic sentence formed with @emph{although}.
+  }{
+    @emph{but}作为连词过于频繁地使用，会导致@link["strunk1999-rule-18"]{规则18}下所讨论的毛病。用@emph{but}构成的松散句，通常可以改写成用@emph{although}构成的掉尾句。
   }
 
   @bi{
-    @lang["en"]{Particularly awkward is one @emph{but} closely following another, thus making a contrast to a contrast, or a reservation to a reservation. This is easily corrected by rearrangement.}
-    @lang["zh-Hans"]{尤其别扭的是@emph{but}紧跟另一个@emph{but}，从而构成对照中的对照，或保留中的保留。这通过重新安排很容易改正。}
+    Particularly awkward is one @emph{but} closely following another, thus making a contrast to a contrast, or a reservation to a reservation. This is easily corrected by rearrangement.
+  }{
+    尤其别扭的是@emph{but}紧跟另一个@emph{but}，从而构成对照中的对照，或保留中的保留。这通过重新安排很容易改正。
   }
 
   @itemize{
@@ -231,8 +252,9 @@
   @title{Can.}
 
   @bi{
-    @lang["en"]{@emph{Can.} Means "am (is, are) able." Not to be used as a substitute for @emph{may}.}
-    @lang["zh-Hans"]{@emph{Can.} 意为"am (is, are) able（能够）"。不可用作@emph{may}的替代。}
+    @emph{Can.} Means "am (is, are) able." Not to be used as a substitute for @emph{may}.
+  }{
+    @emph{Can.} 意为"am (is, are) able（能够）"。不可用作@emph{may}的替代。
   }
 }
 
@@ -240,8 +262,9 @@
   @title{Care less.}
 
   @bi{
-    @lang["en"]{@emph{Care less.} The dismissive "I couldn't care less" is often used with the shortened "not" mistakenly (and mysteriously) omitted: "I could care less." The error destroys the meaning of the sentence and is careless indeed.}
-    @lang["zh-Hans"]{@emph{Care less.} 表示不屑的"I couldn't care less"，常被误用（而且令人费解地）省略了缩写的"not"："I could care less."这个错误破坏了句子的意思，实在粗心。}
+    @emph{Care less.} The dismissive "I couldn't care less" is often used with the shortened "not" mistakenly (and mysteriously) omitted: "I could care less." The error destroys the meaning of the sentence and is careless indeed.
+  }{
+    @emph{Care less.} 表示不屑的"I couldn't care less"，常被误用（而且令人费解地）省略了缩写的"not"："I could care less."这个错误破坏了句子的意思，实在粗心。
   }
 }
 
@@ -249,8 +272,9 @@
   @title{Case.}
 
   @bi{
-    @lang["en"]{@emph{Case.} Often unnecessary.}
-    @lang["zh-Hans"]{@emph{Case.} 常常是多余的。}
+    @emph{Case.} Often unnecessary.
+  }{
+    @emph{Case.} 常常是多余的。
   }
 
   @itemize{
@@ -268,8 +292,9 @@
   @title{Certainly.}
 
   @bi{
-    @lang["en"]{@emph{Certainly.} Used indiscriminately by some speakers, much as others use @emph{very}, in an attempt to intensify any and every statement. A mannerism of this kind, bad in speech, is even worse in writing.}
-    @lang["zh-Hans"]{@emph{Certainly.} 有些说话者不加区分地使用它，就像另一些人使用@emph{very}那样，试图加强任何一句话。这类矫揉的习惯在言谈中已属糟糕，在写作中则更糟。}
+    @emph{Certainly.} Used indiscriminately by some speakers, much as others use @emph{very}, in an attempt to intensify any and every statement. A mannerism of this kind, bad in speech, is even worse in writing.
+  }{
+    @emph{Certainly.} 有些说话者不加区分地使用它，就像另一些人使用@emph{very}那样，试图加强任何一句话。这类矫揉的习惯在言谈中已属糟糕，在写作中则更糟。
   }
 }
 
@@ -277,8 +302,9 @@
   @title{Character.}
 
   @bi{
-    @lang["en"]{@emph{Character.} Often simply redundant, used from a mere @bold{habit} of wordiness.}
-    @lang["zh-Hans"]{@emph{Character.} 常常纯属冗余，出于喜好冗长的@bold{习惯}而使用。}
+    @emph{Character.} Often simply redundant, used from a mere @bold{habit} of wordiness.
+  }{
+    @emph{Character.} 常常纯属冗余，出于喜好冗长的@bold{习惯}而使用。
   }
 
   @itemize{
@@ -291,8 +317,9 @@
   @title{Claim (verb).}
 
   @bi{
-    @lang["en"]{@emph{Claim (verb).} With object-noun, means "lay claim to." May be used with a dependent clause if this sense is clearly intended: "She claimed that she was the sole heir." (But even here @emph{claimed to be} would be better.) Not to be used as a substitute for @emph{declare}, @emph{maintain}, or @emph{charge}.}
-    @lang["zh-Hans"]{@emph{Claim（动词）.} 接宾语名词时，意为"lay claim to（索取、主张所有权）"。如果确实意在表达这一含义，可以接从属子句："She claimed that she was the sole heir."（但即便在这里，@emph{claimed to be}也会更好。）不可用作@emph{declare}、@emph{maintain}或@emph{charge}的替代。}
+    @emph{Claim (verb).} With object-noun, means "lay claim to." May be used with a dependent clause if this sense is clearly intended: "She claimed that she was the sole heir." (But even here @emph{claimed to be} would be better.) Not to be used as a substitute for @emph{declare}, @emph{maintain}, or @emph{charge}.
+  }{
+    @emph{Claim（动词）.} 接宾语名词时，意为"lay claim to（索取、主张所有权）"。如果确实意在表达这一含义，可以接从属子句："She claimed that she was the sole heir."（但即便在这里，@emph{claimed to be}也会更好。）不可用作@emph{declare}、@emph{maintain}或@emph{charge}的替代。
   }
 
   @itemize{
@@ -305,8 +332,9 @@
   @title{Clever.}
 
   @bi{
-    @lang["en"]{@emph{Clever.} Note that the word means one thing when applied to people, another when applied to horses. A clever horse is a good-natured one, not an ingenious one.}
-    @lang["zh-Hans"]{@emph{Clever.} 注意这个词用于人时是一种意思，用于马时又是另一种意思。一匹@emph{clever}的马是脾气温和的马，而不是机敏的马。}
+    @emph{Clever.} Note that the word means one thing when applied to people, another when applied to horses. A clever horse is a good-natured one, not an ingenious one.
+  }{
+    @emph{Clever.} 注意这个词用于人时是一种意思，用于马时又是另一种意思。一匹@emph{clever}的马是脾气温和的马，而不是机敏的马。
   }
 }
 
@@ -314,8 +342,9 @@
   @title{Compare.}
 
   @bi{
-    @lang["en"]{@emph{Compare.} To @emph{compare to} is to point out or imply resemblances between objects regarded as essentially of a different order; to @emph{compare with} is mainly to point out differences between objects regarded as essentially of the same order. Thus, life has been @emph{compared to} a pilgrimage, @emph{to} a drama, @emph{to} a battle; Congress may be @emph{compared with} the British Parliament. Paris has been @emph{compared to} ancient Athens; it may be @emph{compared with} modern London.}
-    @lang["zh-Hans"]{@emph{Compare.} @emph{compare to}是指出或暗示被认为本质上属于不同类别的事物之间的相似之处；@emph{compare with}主要是指出被认为本质上属于同一类别的事物之间的差异。因此，人生曾被@emph{compared to}朝圣之旅、戏剧、战斗；国会可以与英国议会@emph{compared with}。巴黎曾被@emph{compared to}古代雅典；它可以与现代伦敦@emph{compared with}。}
+    @emph{Compare.} To @emph{compare to} is to point out or imply resemblances between objects regarded as essentially of a different order; to @emph{compare with} is mainly to point out differences between objects regarded as essentially of the same order. Thus, life has been @emph{compared to} a pilgrimage, @emph{to} a drama, @emph{to} a battle; Congress may be @emph{compared with} the British Parliament. Paris has been @emph{compared to} ancient Athens; it may be @emph{compared with} modern London.
+  }{
+    @emph{Compare.} @emph{compare to}是指出或暗示被认为本质上属于不同类别的事物之间的相似之处；@emph{compare with}主要是指出被认为本质上属于同一类别的事物之间的差异。因此，人生曾被@emph{compared to}朝圣之旅、戏剧、战斗；国会可以与英国议会@emph{compared with}。巴黎曾被@emph{compared to}古代雅典；它可以与现代伦敦@emph{compared with}。
   }
 }
 
@@ -323,8 +352,9 @@
   @title{Comprise.}
 
   @bi{
-    @lang["en"]{@emph{Comprise.} Literally, "embrace": A zoo comprises mammals, reptiles, and birds (because it "embraces," or "includes," them). But animals do not comprise ("embrace") a zoo—they constitute a zoo.}
-    @lang["zh-Hans"]{@emph{Comprise.} 字面意思是"embrace（包含）"：A zoo comprises mammals, reptiles, and birds（因为它"包含"或"包括"它们）。但动物并不comprise（"包含"）一个动物园——它们constitute（构成）一个动物园。}
+    @emph{Comprise.} Literally, "embrace": A zoo comprises mammals, reptiles, and birds (because it "embraces," or "includes," them). But animals do not comprise ("embrace") a zoo—they constitute a zoo.
+  }{
+    @emph{Comprise.} 字面意思是"embrace（包含）"：A zoo comprises mammals, reptiles, and birds（因为它"包含"或"包括"它们）。但动物并不comprise（"包含"）一个动物园——它们constitute（构成）一个动物园。
   }
 }
 
@@ -332,8 +362,9 @@
   @title{Consider.}
 
   @bi{
-    @lang["en"]{@emph{Consider.} Not followed by @emph{as} when it means "believe to be."}
-    @lang["zh-Hans"]{@emph{Consider.} 意为"believe to be（认为是）"时不接@emph{as}。}
+    @emph{Consider.} Not followed by @emph{as} when it means "believe to be."
+  }{
+    @emph{Consider.} 意为"believe to be（认为是）"时不接@emph{as}。
   }
 
   @itemize{
@@ -342,8 +373,9 @@
   }
 
   @bi{
-    @lang["en"]{When @emph{considered} means "examined" or "discussed," it is followed by @emph{as}:}
-    @lang["zh-Hans"]{当@emph{considered}意为"examined（考察）"或"discussed（讨论）"时，它接@emph{as}：}
+    When @emph{considered} means "examined" or "discussed," it is followed by @emph{as}:
+  }{
+    当@emph{considered}意为"examined（考察）"或"discussed（讨论）"时，它接@emph{as}：
   }
 
   @blockquote{The lecturer considered Eisenhower first as soldier and second as administrator.}
@@ -353,8 +385,9 @@
   @title{Contact.}
 
   @bi{
-    @lang["en"]{@emph{Contact.} As a transitive verb, the word is vague and self-important. Do not @emph{contact} people; get in touch with them, look them up, phone them, find them, or meet them.}
-    @lang["zh-Hans"]{@emph{Contact.} 作及物动词时，这个词含义模糊且自命不凡。不要@emph{contact}别人；而要get in touch with them（与他们取得联系）、look them up（去找他们）、phone them（给他们打电话）、find them（找到他们）或meet them（与他们见面）。}
+    @emph{Contact.} As a transitive verb, the word is vague and self-important. Do not @emph{contact} people; get in touch with them, look them up, phone them, find them, or meet them.
+  }{
+    @emph{Contact.} 作及物动词时，这个词含义模糊且自命不凡。不要@emph{contact}别人；而要get in touch with them（与他们取得联系）、look them up（去找他们）、phone them（给他们打电话）、find them（找到他们）或meet them（与他们见面）。
   }
 }
 
@@ -362,8 +395,9 @@
   @title{Cope.}
 
   @bi{
-    @lang["en"]{@emph{Cope.} An intransitive verb used with @emph{with}. In formal @bold{writing}, one doesn't "cope," one "copes with" something or somebody.}
-    @lang["zh-Hans"]{@emph{Cope.} 一个与@emph{with}连用的不及物动词。在正式的@bold{写作}中，人不说"cope"，而说"cope with"某事或某人。}
+    @emph{Cope.} An intransitive verb used with @emph{with}. In formal @bold{writing}, one doesn't "cope," one "copes with" something or somebody.
+  }{
+    @emph{Cope.} 一个与@emph{with}连用的不及物动词。在正式的@bold{写作}中，人不说"cope"，而说"cope with"某事或某人。
   }
 
   @itemize{
@@ -376,8 +410,9 @@
   @title{Currently.}
 
   @bi{
-    @lang["en"]{@emph{Currently.} In the sense of @emph{now} with a verb in the present tense, @emph{currently} is usually redundant; emphasis is better achieved through a more precise reference to time.}
-    @lang["zh-Hans"]{@emph{Currently.} 在与现在时动词连用、表示@emph{now}（现在）的意思时，@emph{currently}通常是多余的；通过更精确地指称时间，能更好地达到强调效果。}
+    @emph{Currently.} In the sense of @emph{now} with a verb in the present tense, @emph{currently} is usually redundant; emphasis is better achieved through a more precise reference to time.
+  }{
+    @emph{Currently.} 在与现在时动词连用、表示@emph{now}（现在）的意思时，@emph{currently}通常是多余的；通过更精确地指称时间，能更好地达到强调效果。
   }
 
   @itemize{
@@ -390,8 +425,9 @@
   @title{Data.}
 
   @bi{
-    @lang["en"]{@emph{Data.} Like @emph{strata}, @emph{phenomena}, and @emph{media}, @emph{data} is a plural and is best used with a plural verb. The word, however, is slowly gaining acceptance as a singular.}
-    @lang["zh-Hans"]{@emph{Data.} 与@emph{strata}、@emph{phenomena}和@emph{media}一样，@emph{data}是复数，最好与复数动词连用。不过，这个词正缓慢地被接受为单数。}
+    @emph{Data.} Like @emph{strata}, @emph{phenomena}, and @emph{media}, @emph{data} is a plural and is best used with a plural verb. The word, however, is slowly gaining acceptance as a singular.
+  }{
+    @emph{Data.} 与@emph{strata}、@emph{phenomena}和@emph{media}一样，@emph{data}是复数，最好与复数动词连用。不过，这个词正缓慢地被接受为单数。
   }
 
   @itemize{
@@ -404,8 +440,9 @@
   @title{Different than.}
 
   @bi{
-    @lang["en"]{@emph{Different than.} Here logic supports established usage: one thing differs @emph{from} another, hence, @emph{different from}. Or, @emph{other than}, @emph{unlike}.}
-    @lang["zh-Hans"]{@emph{Different than.} 在这里，逻辑支持既定的用法：一事物与另一事物相@emph{differ from}，因此应说@emph{different from}。或者用@emph{other than}、@emph{unlike}。}
+    @emph{Different than.} Here logic supports established usage: one thing differs @emph{from} another, hence, @emph{different from}. Or, @emph{other than}, @emph{unlike}.
+  }{
+    @emph{Different than.} 在这里，逻辑支持既定的用法：一事物与另一事物相@emph{differ from}，因此应说@emph{different from}。或者用@emph{other than}、@emph{unlike}。
   }
 }
 
@@ -413,8 +450,9 @@
   @title{Disinterested.}
 
   @bi{
-    @lang["en"]{@emph{Disinterested.} Means "impartial." Do not confuse it with @emph{uninterested}, which means "not interested in."}
-    @lang["zh-Hans"]{@emph{Disinterested.} 意为"impartial（公正无私的）"。不要把它与@emph{uninterested}混淆，后者意为"not interested in（对……不感兴趣）"。}
+    @emph{Disinterested.} Means "impartial." Do not confuse it with @emph{uninterested}, which means "not interested in."
+  }{
+    @emph{Disinterested.} 意为"impartial（公正无私的）"。不要把它与@emph{uninterested}混淆，后者意为"not interested in（对……不感兴趣）"。
   }
 
   @blockquote{Let a disinterested person judge our dispute. (an impartial person) This man is obviously uninterested in our dispute. (couldn't care less)}
@@ -424,8 +462,9 @@
   @title{Divided into.}
 
   @bi{
-    @lang["en"]{@emph{Divided into.} Not to be misused for @emph{composed of}. The @bold{line} is sometimes difficult to draw; doubtless plays are divided into acts, but poems are composed of stanzas. An apple, halved, is divided into sections, but an apple is composed of seeds, flesh, and skin.}
-    @lang["zh-Hans"]{@emph{Divided into.} 不可误用为@emph{composed of}。这条@bold{界限}有时难以划清；无疑，戏剧分为若干幕，但诗则由若干节组成。一个苹果切开后分为若干块，但一个苹果由种子、果肉和果皮构成。}
+    @emph{Divided into.} Not to be misused for @emph{composed of}. The @bold{line} is sometimes difficult to draw; doubtless plays are divided into acts, but poems are composed of stanzas. An apple, halved, is divided into sections, but an apple is composed of seeds, flesh, and skin.
+  }{
+    @emph{Divided into.} 不可误用为@emph{composed of}。这条@bold{界限}有时难以划清；无疑，戏剧分为若干幕，但诗则由若干节组成。一个苹果切开后分为若干块，但一个苹果由种子、果肉和果皮构成。
   }
 }
 
@@ -433,8 +472,9 @@
   @title{Due to.}
 
   @bi{
-    @lang["en"]{@emph{Due to.} Loosely used for @emph{through}, @emph{because of} or @emph{owing to}, in adverbial phrases.}
-    @lang["zh-Hans"]{@emph{Due to.} 在状语短语中，被宽泛地用来代替@emph{through}、@emph{because of}或@emph{owing to}。}
+    @emph{Due to.} Loosely used for @emph{through}, @emph{because of} or @emph{owing to}, in adverbial phrases.
+  }{
+    @emph{Due to.} 在状语短语中，被宽泛地用来代替@emph{through}、@emph{because of}或@emph{owing to}。
   }
 
   @itemize{
@@ -443,8 +483,9 @@
   }
 
   @bi{
-    @lang["en"]{In correct use, synonymous with @emph{attributable to}: "The accident was due to bad weather"; "losses due to preventable fires."}
-    @lang["zh-Hans"]{在正确的用法中，它等同于@emph{attributable to}："The accident was due to bad weather"；"losses due to preventable fires"。}
+    In correct use, synonymous with @emph{attributable to}: "The accident was due to bad weather"; "losses due to preventable fires."
+  }{
+    在正确的用法中，它等同于@emph{attributable to}："The accident was due to bad weather"；"losses due to preventable fires"。
   }
 }
 
@@ -452,8 +493,9 @@
   @title{Each and every one.}
 
   @bi{
-    @lang["en"]{@emph{Each and every one.} Pitchman's jargon. Avoid, except in dialogue.}
-    @lang["zh-Hans"]{@emph{Each and every one.} 推销员的行话。除对话外，应避免。}
+    @emph{Each and every one.} Pitchman's jargon. Avoid, except in dialogue.
+  }{
+    @emph{Each and every one.} 推销员的行话。除对话外，应避免。
   }
 
   @itemize{
@@ -466,13 +508,15 @@
   @title{Effect.}
 
   @bi{
-    @lang["en"]{@emph{Effect.} As a noun, means "result"; as a verb, means "to bring about," "to accomplish" (not to be confused with @emph{affect}, which means "to influence").}
-    @lang["zh-Hans"]{@emph{Effect.} 作名词时意为"result（结果）"；作动词时意为"to bring about（实现）"、"to accomplish（完成）"（不要与@emph{affect}混淆，后者意为"to influence（影响）"）。}
+    @emph{Effect.} As a noun, means "result"; as a verb, means "to bring about," "to accomplish" (not to be confused with @emph{affect}, which means "to influence").
+  }{
+    @emph{Effect.} 作名词时意为"result（结果）"；作动词时意为"to bring about（实现）"、"to accomplish（完成）"（不要与@emph{affect}混淆，后者意为"to influence（影响）"）。
   }
 
   @bi{
-    @lang["en"]{As a noun, often loosely used in perfunctory writing about fashions, music, painting, and other arts: "a Southwestern effect"; "effects in pale green"; "very delicate effects"; "subtle effects"; "a charming effect was produced." The writer who has a definite meaning to express will not take refuge in such vagueness.}
-    @lang["zh-Hans"]{作名词时，在关于时装、音乐、绘画及其他艺术的敷衍文字中常被宽泛地使用："a Southwestern effect"；"effects in pale green"；"very delicate effects"；"subtle effects"；"a charming effect was produced."有明确意思要表达的写作者，不会躲进这样的含混之中。}
+    As a noun, often loosely used in perfunctory writing about fashions, music, painting, and other arts: "a Southwestern effect"; "effects in pale green"; "very delicate effects"; "subtle effects"; "a charming effect was produced." The writer who has a definite meaning to express will not take refuge in such vagueness.
+  }{
+    作名词时，在关于时装、音乐、绘画及其他艺术的敷衍文字中常被宽泛地使用："a Southwestern effect"；"effects in pale green"；"very delicate effects"；"subtle effects"；"a charming effect was produced."有明确意思要表达的写作者，不会躲进这样的含混之中。
   }
 }
 
@@ -480,8 +524,9 @@
   @title{Enormity.}
 
   @bi{
-    @lang["en"]{@emph{Enormity.} Use only in the sense of "monstrous wickedness." Misleading, if not wrong, when used to express bigness.}
-    @lang["zh-Hans"]{@emph{Enormity.} 只用于"monstrous wickedness（穷凶极恶）"这一含义。用它表达"巨大"时，即便不算错误，也会造成误导。}
+    @emph{Enormity.} Use only in the sense of "monstrous wickedness." Misleading, if not wrong, when used to express bigness.
+  }{
+    @emph{Enormity.} 只用于"monstrous wickedness（穷凶极恶）"这一含义。用它表达"巨大"时，即便不算错误，也会造成误导。
   }
 }
 
@@ -489,8 +534,9 @@
   @title{Enthuse.}
 
   @bi{
-    @lang["en"]{@emph{Enthuse.} An annoying verb growing out of the noun @emph{enthusiasm}. Not recommended.}
-    @lang["zh-Hans"]{@emph{Enthuse.} 一个由名词@emph{enthusiasm}衍生出来的、令人恼火的动词。不推荐使用。}
+    @emph{Enthuse.} An annoying verb growing out of the noun @emph{enthusiasm}. Not recommended.
+  }{
+    @emph{Enthuse.} 一个由名词@emph{enthusiasm}衍生出来的、令人恼火的动词。不推荐使用。
   }
 
   @itemize{
@@ -508,13 +554,15 @@
   @title{Etc.}
 
   @bi{
-    @lang["en"]{@emph{Etc.} Literally, "and other things"; sometimes loosely used to mean "and other persons." The phrase is equivalent to @emph{and the rest}, @emph{and so forth}, and hence is not to be used if one of these would be insufficient—that is, if the reader would be left in doubt as to any important particulars. Least open to objection when it represents the last terms of a list already given almost in full, or immaterial words at the end of a quotation.}
-    @lang["zh-Hans"]{@emph{Etc.} 字面意思是"and other things（以及其他事物）"；有时被宽泛地用来表示"and other persons（以及其他的人）"。这个短语等同于@emph{and the rest}、@emph{and so forth}，因此，如果这些说法中的任何一个都不足以达意——也就是说，如果读者会对任何重要细节心存疑问——就不应使用它。当它表示一份几乎已完整给出的清单的最后几项，或引文末尾无关紧要的词句时，最不容易招致反对。}
+    @emph{Etc.} Literally, "and other things"; sometimes loosely used to mean "and other persons." The phrase is equivalent to @emph{and the rest}, @emph{and so forth}, and hence is not to be used if one of these would be insufficient—that is, if the reader would be left in doubt as to any important particulars. Least open to objection when it represents the last terms of a list already given almost in full, or immaterial words at the end of a quotation.
+  }{
+    @emph{Etc.} 字面意思是"and other things（以及其他事物）"；有时被宽泛地用来表示"and other persons（以及其他的人）"。这个短语等同于@emph{and the rest}、@emph{and so forth}，因此，如果这些说法中的任何一个都不足以达意——也就是说，如果读者会对任何重要细节心存疑问——就不应使用它。当它表示一份几乎已完整给出的清单的最后几项，或引文末尾无关紧要的词句时，最不容易招致反对。
   }
 
   @bi{
-    @lang["en"]{At the end of a list introduced by @emph{such as}, @emph{for example}, or any similar expression, @emph{etc.} is incorrect. In formal writing, @emph{etc.} is a misfit. An item important enough to call for @emph{etc.} is probably important enough to be named.}
-    @lang["zh-Hans"]{在以@emph{such as}、@emph{for example}或任何类似表达引出的清单末尾，@emph{etc.}是不正确的。在正式写作中，@emph{etc.}并不合适。一个重要到需要用到@emph{etc.}的条目，大概也重要到值得被点名。}
+    At the end of a list introduced by @emph{such as}, @emph{for example}, or any similar expression, @emph{etc.} is incorrect. In formal writing, @emph{etc.} is a misfit. An item important enough to call for @emph{etc.} is probably important enough to be named.
+  }{
+    在以@emph{such as}、@emph{for example}或任何类似表达引出的清单末尾，@emph{etc.}是不正确的。在正式写作中，@emph{etc.}并不合适。一个重要到需要用到@emph{etc.}的条目，大概也重要到值得被点名。
   }
 }
 
@@ -522,8 +570,9 @@
   @title{Fact.}
 
   @bi{
-    @lang["en"]{@emph{Fact.} Use this word only of matters capable of direct verification, not of matters of judgment. That a particular event happened on a given date and that lead melts at a certain temperature are facts. But such conclusions as that Napoleon was the greatest of modern generals or that the climate of California is delightful, however defensible they may be, are not properly called facts.}
-    @lang["zh-Hans"]{@emph{Fact.} 这个词只用于能够直接验证的事情，而不用于判断性的事情。某个事件发生在某个特定日期、铅在某个温度下熔化，这些是事实。但诸如拿破仑是现代最伟大的将领、加利福尼亚的气候宜人这样的结论，无论多么站得住脚，都不宜称为事实。}
+    @emph{Fact.} Use this word only of matters capable of direct verification, not of matters of judgment. That a particular event happened on a given date and that lead melts at a certain temperature are facts. But such conclusions as that Napoleon was the greatest of modern generals or that the climate of California is delightful, however defensible they may be, are not properly called facts.
+  }{
+    @emph{Fact.} 这个词只用于能够直接验证的事情，而不用于判断性的事情。某个事件发生在某个特定日期、铅在某个温度下熔化，这些是事实。但诸如拿破仑是现代最伟大的将领、加利福尼亚的气候宜人这样的结论，无论多么站得住脚，都不宜称为事实。
   }
 }
 
@@ -531,8 +580,9 @@
   @title{Facility.}
 
   @bi{
-    @lang["en"]{@emph{Facility.} Why must jails, hospitals, and schools suddenly become "facilities"?}
-    @lang["zh-Hans"]{@emph{Facility.} 为什么监狱、医院和学校非得突然变成"facilities（设施）"不可？}
+    @emph{Facility.} Why must jails, hospitals, and schools suddenly become "facilities"?
+  }{
+    @emph{Facility.} 为什么监狱、医院和学校非得突然变成"facilities（设施）"不可？
   }
 
   @itemize{
@@ -550,8 +600,9 @@
   @title{Factor.}
 
   @bi{
-    @lang["en"]{@emph{Factor.} A hackneyed word; the expressions of which it is a part can usually be replaced by something more direct and idiomatic.}
-    @lang["zh-Hans"]{@emph{Factor.} 一个陈腐的词；包含它的短语通常可以用更直接、更地道的说法替换。}
+    @emph{Factor.} A hackneyed word; the expressions of which it is a part can usually be replaced by something more direct and idiomatic.
+  }{
+    @emph{Factor.} 一个陈腐的词；包含它的短语通常可以用更直接、更地道的说法替换。
   }
 
   @itemize{
@@ -569,8 +620,9 @@
   @title{Farther. Further.}
 
   @bi{
-    @lang["en"]{@emph{Farther. Further.} The two words are commonly interchanged, but there is a distinction worth observing: @emph{farther} serves best as a distance word, @emph{further} as a time or quantity word. You chase a ball @emph{farther} than the other fellow; you pursue a subject @emph{further}.}
-    @lang["zh-Hans"]{@emph{Farther. Further.} 这两个词常被互换使用，但有一个值得注意的区别：@emph{farther}最适合用作表示距离的词，@emph{further}则用于表示时间或数量。你追球比同伴追得@emph{farther}（更远）；你对一个题目探究得@emph{further}（更深入）。}
+    @emph{Farther. Further.} The two words are commonly interchanged, but there is a distinction worth observing: @emph{farther} serves best as a distance word, @emph{further} as a time or quantity word. You chase a ball @emph{farther} than the other fellow; you pursue a subject @emph{further}.
+  }{
+    @emph{Farther. Further.} 这两个词常被互换使用，但有一个值得注意的区别：@emph{farther}最适合用作表示距离的词，@emph{further}则用于表示时间或数量。你追球比同伴追得@emph{farther}（更远）；你对一个题目探究得@emph{further}（更深入）。
   }
 }
 
@@ -578,20 +630,23 @@
   @title{Feature.}
 
   @bi{
-    @lang["en"]{@emph{Feature.} Another hackneyed word; like @emph{factor}, it usually adds nothing to the sentence in which it occurs.}
-    @lang["zh-Hans"]{@emph{Feature.} 又一个陈腐的词；像@emph{factor}一样，它通常对所出现的句子毫无增益。}
+    @emph{Feature.} Another hackneyed word; like @emph{factor}, it usually adds nothing to the sentence in which it occurs.
+  }{
+    @emph{Feature.} 又一个陈腐的词；像@emph{factor}一样，它通常对所出现的句子毫无增益。
   }
 
   @blockquote{A feature of the entertainment especially worthy of mention was the singing of Allison Jones.}
 
   @bi{
-    @lang["en"]{(Better use the same number of words to tell what Allison Jones sang and how she sang it.)}
-    @lang["zh-Hans"]{（最好用同样多的字数，说明Allison Jones唱了什么、以及她是怎样唱的。）}
+    (Better use the same number of words to tell what Allison Jones sang and how she sang it.)
+  }{
+    （最好用同样多的字数，说明Allison Jones唱了什么、以及她是怎样唱的。）
   }
 
   @bi{
-    @lang["en"]{As a verb, in the sense of "offer as a special attraction," it is to be avoided.}
-    @lang["zh-Hans"]{作动词时，意为"offer as a special attraction（作为特别卖点推出）"，应避免。}
+    As a verb, in the sense of "offer as a special attraction," it is to be avoided.
+  }{
+    作动词时，意为"offer as a special attraction（作为特别卖点推出）"，应避免。
   }
 }
 
@@ -599,8 +654,9 @@
   @title{Finalize.}
 
   @bi{
-    @lang["en"]{@emph{Finalize.} A pompous, ambiguous verb. (See Chapter V, @link["strunk1999-reminder-21"]{Reminder 21}.)}
-    @lang["zh-Hans"]{@emph{Finalize.} 一个浮夸、含义模糊的动词。（见第五章@link["strunk1999-reminder-21"]{提醒21}。）}
+    @emph{Finalize.} A pompous, ambiguous verb. (See Chapter V, @link["strunk1999-reminder-21"]{Reminder 21}.)
+  }{
+    @emph{Finalize.} 一个浮夸、含义模糊的动词。（见第五章@link["strunk1999-reminder-21"]{提醒21}。）
   }
 }
 
@@ -608,8 +664,9 @@
   @title{Fix.}
 
   @bi{
-    @lang["en"]{@emph{Fix.} Colloquial in America for @emph{arrange}, @emph{prepare}, @emph{mend}. The usage is well established. But bear in mind that this verb is from @emph{figere}: "to make firm," "to place definitely." These are the preferred meanings of the word.}
-    @lang["zh-Hans"]{@emph{Fix.} 在美国口语中表示@emph{arrange}、@emph{prepare}、@emph{mend}。这种用法已牢固确立。但请记住，这个动词源自@emph{figere}："to make firm（使牢固）"、"to place definitely（明确地放置）"。这些才是这个词更可取的含义。}
+    @emph{Fix.} Colloquial in America for @emph{arrange}, @emph{prepare}, @emph{mend}. The usage is well established. But bear in mind that this verb is from @emph{figere}: "to make firm," "to place definitely." These are the preferred meanings of the word.
+  }{
+    @emph{Fix.} 在美国口语中表示@emph{arrange}、@emph{prepare}、@emph{mend}。这种用法已牢固确立。但请记住，这个动词源自@emph{figere}："to make firm（使牢固）"、"to place definitely（明确地放置）"。这些才是这个词更可取的含义。
   }
 }
 
@@ -617,8 +674,9 @@
   @title{Flammable.}
 
   @bi{
-    @lang["en"]{@emph{Flammable.} An oddity, chiefly useful in saving lives. The common word meaning "combustible" is @emph{inflammable}. But some people are thrown off by the @emph{in-} and think @emph{inflammable} means "not combustible." For this reason, gasoline or explosives are now marked FLAMMABLE. Unless you are operating such a truck and hence are concerned with the safety of children and illiterates, use @emph{inflammable}.}
-    @lang["zh-Hans"]{@emph{Flammable.} 一个奇特的做法，主要用处是挽救生命。表示"combustible（易燃）"的常用词是@emph{inflammable}。但有些人被@emph{in-}这个前缀弄糊涂，以为@emph{inflammable}意为"不燃"。为此，汽油或爆炸物现在都标为FLAMMABLE。除非你驾驶的是这样一辆卡车、因而要顾及儿童和文盲的安全，否则还是用@emph{inflammable}。}
+    @emph{Flammable.} An oddity, chiefly useful in saving lives. The common word meaning "combustible" is @emph{inflammable}. But some people are thrown off by the @emph{in-} and think @emph{inflammable} means "not combustible." For this reason, gasoline or explosives are now marked FLAMMABLE. Unless you are operating such a truck and hence are concerned with the safety of children and illiterates, use @emph{inflammable}.
+  }{
+    @emph{Flammable.} 一个奇特的做法，主要用处是挽救生命。表示"combustible（易燃）"的常用词是@emph{inflammable}。但有些人被@emph{in-}这个前缀弄糊涂，以为@emph{inflammable}意为"不燃"。为此，汽油或爆炸物现在都标为FLAMMABLE。除非你驾驶的是这样一辆卡车、因而要顾及儿童和文盲的安全，否则还是用@emph{inflammable}。
   }
 }
 
@@ -626,8 +684,9 @@
   @title{Folk.}
 
   @bi{
-    @lang["en"]{@emph{Folk.} A collective noun, equivalent to @emph{people}. Use the singular form only. @emph{Folks}, in the sense of "parents," "family," "those present," is colloquial and too folksy for formal writing.}
-    @lang["zh-Hans"]{@emph{Folk.} 一个集合名词，等同于@emph{people}。只使用单数形式。@emph{Folks}表示"父母"、"家人"、"在场的人"时，属于口语，对正式写作来说也过于随便。}
+    @emph{Folk.} A collective noun, equivalent to @emph{people}. Use the singular form only. @emph{Folks}, in the sense of "parents," "family," "those present," is colloquial and too folksy for formal writing.
+  }{
+    @emph{Folk.} 一个集合名词，等同于@emph{people}。只使用单数形式。@emph{Folks}表示"父母"、"家人"、"在场的人"时，属于口语，对正式写作来说也过于随便。
   }
 
   @itemize{
@@ -640,7 +699,8 @@
   @title{Fortuitous.}
 
   @bi{
-    @lang["en"]{@emph{Fortuitous.} Limited to what happens by chance; not to be used for @emph{fortunate} or @emph{lucky}.}
-    @lang["zh-Hans"]{@emph{Fortuitous.} 限于指偶然发生之事；不可用来表示@emph{fortunate}或@emph{lucky}。}
+    @emph{Fortuitous.} Limited to what happens by chance; not to be used for @emph{fortunate} or @emph{lucky}.
+  }{
+    @emph{Fortuitous.} 限于指偶然发生之事；不可用来表示@emph{fortunate}或@emph{lucky}。
   }
 }

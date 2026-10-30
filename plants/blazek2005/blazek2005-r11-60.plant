@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Baker, T.J.: Three Dimensional Mesh Generation by Triangulation of Arbitrary Point Sets. AIAA Paper 87-1124, 1987.}
 @taxon["reference"]

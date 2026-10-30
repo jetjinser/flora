@@ -1,4 +1,3 @@
-@use-commands{flora}
 @use-modules[(grove math catalog) (grove relation dsl)]
 
 @title{用miniKanren查询数学规则}

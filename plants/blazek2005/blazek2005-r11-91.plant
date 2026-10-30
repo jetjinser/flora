@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Müller, J.D.: Quality Estimates and Stretched Meshes Based on Delaunay Triangulations. AIAA Journal, 32 (1994), pp. 2372-2379.}
 @taxon["reference"]

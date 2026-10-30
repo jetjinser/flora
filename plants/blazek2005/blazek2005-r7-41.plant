@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Rung, T.; Bunge, U.; Schatz, M.; Thiele, F.: Restatement of the Spalart-Allmaras Eddy-Viscosity Model in Strain-Adaptive Formulation. AIAA Journal, 41 (2003), pp. 1396-1399.}
 @taxon["reference"]

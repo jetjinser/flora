@@ -4,6 +4,7 @@
 (set! %load-path (cons (dirname (current-filename)) %load-path))
 
 (use-modules (cjk-fonts)
+             (flora)
              (flora entity-metadata)
              (flora entity-presentation)
              (flora figure-assets)
@@ -29,6 +30,8 @@
              (forester site)
              (grove site)
              (grove ir)
+             (system base language)
+             (language scribble spec)
              (lp forester)
              (grove render html)
              (grove render html image)
@@ -47,9 +50,27 @@
          "lp-0009.plant")))
 (define read-flora-document
   (make-scribble-document-reader))
-(define-values (prepare-literate read-flora-page-document)
+(define (flora-page-environment)
+  (let ((environment (default-environment scribble)))
+    ;; These are project defaults for Flora pages. Keep @use-commands available
+    ;; for documents that need a different or additional command set.
+    (module-use! environment (resolve-interface '(flora)))
+    (for-each
+      (lambda (name)
+        (module-use! environment (resolve-interface name)))
+      command-modules)
+    environment))
+(define read-flora-page
+  (make-scribble-document-reader #:environment-factory flora-page-environment))
+(define-values (prepare-literate read-flora-module-page)
   (make-scribble-module-session literate-module-sources
     #:read-document read-flora-document))
+(define (read-flora-page-document path)
+  (if (member (canonicalize-path path)
+              (map canonicalize-path literate-module-sources)
+              string=?)
+      (read-flora-module-page path)
+      (read-flora-page path)))
 (define (prepare-flora)
   (prepare-literate))
 
@@ -260,7 +281,6 @@
       #:template
       (lambda (id date)
         (string-append
-          "@use-commands{flora}\n\n"
           "@title{}\n"
           "@published{" date "}\n")))
     #:output-directory output-directory))

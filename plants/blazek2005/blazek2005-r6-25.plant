@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Pothen, A.; Simon, H.D.; Liou, K.P.: Partitioning Sparse Matrices with Eigenvectors of Graphs. SIAM J. Matrix Anal. Appl., 11 (1990), pp. 430-452.}
 @taxon["reference"]

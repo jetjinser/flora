@@ -1,4 +1,3 @@
-@use-commands{flora}
 
 @title{Rizzi, A.: Numerical Implementation of Solid-Body Boundary Conditions for the Euler Equations. ZAMM, 58 (1978), pp. 301-304.}
 @taxon["reference"]
