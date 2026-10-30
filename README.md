@@ -125,17 +125,11 @@ Each page should make sense when opened or linked on its own. Describe topic rel
 
 ## Checks
 
-Run the offline project tests and validate the whole site after changing
-program examples:
+Run the offline tests and validate the whole site after changing program
+examples:
 
 ```sh
-guile --no-auto-compile -L . tests/lp-core.scm
-guile --no-auto-compile -L ../grove/modules -L . tests/doi-metadata.scm
-guile --no-auto-compile -L ../grove/modules -L . tests/zenodo-metadata.scm
-guile --no-auto-compile -L ../grove/modules -L . tests/crossref-metadata.scm
-guile --no-auto-compile -L ../grove/modules -L . tests/entity-snapshot.scm
-guile --no-auto-compile -L . tests/entity-metadata.scm
-guile --no-auto-compile -L . tests/lp-project.scm
+make test
 make validate
 make build
 ```

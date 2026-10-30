@@ -12,7 +12,6 @@ Jiri Blazek《Computational Fluid Dynamics: Principles and Applications》2nd ed
 | 插图(全部从扫描页裁剪嵌入) | 127:图2.1–2.5、3.1–3.7、4.1–4.12、5.1–5.19、6.1–6.6、7.1–7.3、8.1–8.15、9.1–9.12、10.1–10.9、11.1–11.24、12.1–12.8、A.1–A.7 |
 | 文献条目页 | 1067(第2章 41、第3章 247、第4章 103、第5章 75、第6章 108、第7章 161、第8章 53、第9章 109、第10章 20、第11章 123、附录A 27) |
 | 正文文献引用链接 | 约 2400(第2–9章/附录A 约 2000,第10章 52、第11章 348,双语 lane 各计一半) |
-| `grove check` | 1932 artifacts |
 
 表 6.1、6.2(纯数值表)用 `@verbatim` 重建;索引 403 词条按字母分组的单页中英对照(`blazek2005-idx-a…w` 为分组 id)。
 
@@ -23,7 +22,6 @@ Jiri Blazek《Computational Fluid Dynamics: Principles and Applications》2nd ed
 | 页面 | 文件名即 id | `blazek2005-ch02`、`blazek2005-ch09` |
 | 小节 | `blazek2005-<章>-<节>` | `blazek2005-3-1-2` |
 | 前置材料小节 | `blazek2005-front-ack` / `blazek2005-front-symbols` / `blazek2005-front-abbrev` | |
-| 章内小节分组 | `blazek2005-<章>-ref`(参考文献树,已由 backmatter 取代) | `blazek2005-2-ref`(已删) |
 | 公式锚点 | `eq-<章>-<编号>` | `eq-4-58` |
 | 文献条目 | `blazek2005-r<章>-<编号>`,章号小写(附录A 为 `ra`) | `blazek2005-r7-154`、`blazek2005-ra-3` |
 | 插图文件 | `assets/blazek2005/fig-<章>-<图>.png` | `cfd/fig-11-24.png` |

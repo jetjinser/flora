@@ -6,34 +6,13 @@ narrative detail lives in git history and the grove commit messages.
 
 ## Open
 
-### Serve fast path: the reuse decision still churns on resolution candidates
+### Serve rebuild after document changes still requires full analysis
 
-The render side is fixed (grove `2b43dab`): `render-html-changed`
-skips the per-page walk when only load-time style artifacts are dirty,
-so the render half of an asset-only cycle is cheap. What still blocks
-the seconds-scale cycle is `forest-reusable?` (preview/worker.scm):
-it demands `changed` ⊆ declared extra sources, and the worker's
-changed set still carries **module-resolution candidates** - paths
-`compiled-inputs` records on purpose ("observe absent higher-priority
-candidates") plus runtime module sources outside the project. Measured
-2026-10-16 on the flora tree: a style.css edit reports changed =
-(style.css + flora/modules/**/*.scm candidates + the worker's module
-sources), so `reuse?` is #f and the cycle re-renders all 1816 pages
-(~19 s render, ~40 s wall). With reuse forced (#t) the cycle renders in
-~15 s and the fast path is not yet reached; with reuse and the fast
-path together the render should collapse to the style artifacts alone.
-
-Attempts to filter nonexistent first sightings in `diff-known-stamps`
-regressed the serve lifecycle suite (the "new nested sources through a
-source-directory symlink" and its delete cycle), so that path needs a
-focused pass: a changed-set notion that distinguishes project-visible
-edits from watch-set growth without losing new-source discovery. Until
-then the fast path is dormant for flora's serve.
-
-### Serve fast path: per-document invalidation stays third
-
-The fresh project load floor (~10 s) and the ~68 s re-derivation floor
-are unchanged; see the ledger below for the measurements.
+The last profile (2026-10-16) measured a fresh project load at ~10 s and
+full re-derivation at ~68 s. Grove later added retained-model rebuilds
+for changes outside analysis inputs, so asset-only edits can skip that
+work. Document and analysis-input changes still require a fresh analysis;
+re-measure this path before pursuing finer-grained invalidation.
 
 For reference, the `--profile` numbers that chose forest-level reuse
 over cache-read tuning (grove `d4980fc`, warm tree, 0 affected): total
@@ -53,6 +32,13 @@ materialization is. A module edit re-analyzing all 1122 documents takes
   the neighboring-file assertion could run before the runtime-input rebuild
   settled. The test now waits for the watcher idle signal before editing the
   neighbor.
+
+- Preview model reuse — Grove `9b5979b` and `c23603e`: watcher roots now
+  follow collected documents and declared dependencies instead of
+  recursively observing module-resolution candidates. Asset-only changes
+  can reuse the retained model; changes to documents and analysis inputs
+  still trigger fresh analysis. This supersedes the 2026-10-16 observation
+  that stylesheet edits always invalidated Flora's retained model.
 
 - Asset pipelines — grove `7f8beaa`: the `blazek2005-figures` pipeline
   replaced `regenerate-figures.sh`; figures re-crop only when the PDF,

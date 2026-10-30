@@ -1,36 +1,36 @@
 
 @title{Principles of Solution of the Governing Equations 第3章 控制方程求解原理}
-@summary{空间与时间离散ï¼显式与隐式格式ï¼湍流建模与边界条件概述。}
+@summary{空间与时间离散，显式与隐式格式，湍流建模与边界条件概述。}
 @taxon["chapter"]
 
 @bi{
   In the previous chapter, we obtained the complete system of the Navier-Stokes/Euler equations. We introduced additional thermodynamic relations for a perfect gas, and we also defined additional transport equations for a chemically reacting gas. Hence, we are now ready to solve the whole system of governing equations for the flow variables. As you can imagine, there exists a vast number of solution methodologies. If we do not consider analytical methods, which are applicable only to simplified flow problems, nearly all solution strategies follow the same path. First of all, the space where the flow is to be computed - the physical space, is divided into a large number of geometrical elements called grid cells. This process is termed grid generation (some authors use the term mesh with identical meaning). It can also be viewed as placing first grid points (also called nodes or vertices) in the physical space and then connecting them by straight lines - grid lines. A two-dimensional (2-D) grid consists normally of triangles and/or of quadrilaterals. In three dimensions (3-D), it is usually built of tetrahedra, hexahedra, prisms, or pyramids. The most important requirements placed on a grid generation tool are that there must be no holes between the grid cells but also that the grid cells do not overlap. Additionally, the grid should be smooth, i.e., there should be no abrupt changes in the volume of the grid cells or in the stretching ratio, and the elements should be as regular as possible. Furthermore, if the grid consists of quadrilaterals or of hexahedra, there should be no large kinks in the grid lines. Otherwise, numerical errors would increase significantly.
 }{
-  上一章中ï¼我们得到了完整的 Navier-Stokes/Euler 方程组ï¼为完全气体引入了补充的热力学关系ï¼也为化学反应气体定义了补充的输运方程。至此ï¼我们已经准备好对整个控制方程组求解流动变量。可以想见ï¼求解方法学数量极为庞大。如果不考虑只适用于简化流动问题的解析方法ï¼那么几乎所有的求解策略都遵循同一条路径。首先ï¼把要计算流动的空间——即物理空间(physical space)——划分为大量称为网格单元(grid cells)的几何元素。这一过程称为网格生成(grid generation)(有些作者使用术语meshï¼含义相同)。它也可以理解为:先在物理空间中放置网格点(也称为节点(nodes)或顶点(vertices))ï¼然后用直线——即网格线(grid lines)——把它们连接起来。二维(2-D)网格通常由三角形和/或四边形构成;三维(3-D)网格通常由四面体、六面体、棱柱或四棱锥构成。对网格生成工具最重要的要求是:网格单元之间不得有空洞ï¼同时网格单元彼此不得重叠。此外ï¼网格应当光滑ï¼也就是说ï¼网格单元的体积或拉伸比不应有突变ï¼单元应尽可能规则。再者ï¼如果网格由四边形或六面体构成ï¼网格线中不应出现大的折拐ï¼否则数值误差会显著增大。
+  上一章中，我们得到了完整的 Navier-Stokes/Euler 方程组，为完全气体引入了补充的热力学关系，也为化学反应气体定义了补充的输运方程。至此，我们已经准备好对整个控制方程组求解流动变量。可以想见，求解方法学数量极为庞大。如果不考虑只适用于简化流动问题的解析方法，那么几乎所有的求解策略都遵循同一条路径。首先，把要计算流动的空间——即物理空间(physical space)——划分为大量称为网格单元(grid cells)的几何元素。这一过程称为网格生成(grid generation)(有些作者使用术语mesh，含义相同)。它也可以理解为:先在物理空间中放置网格点(也称为节点(nodes)或顶点(vertices))，然后用直线——即网格线(grid lines)——把它们连接起来。二维(2-D)网格通常由三角形和/或四边形构成;三维(3-D)网格通常由四面体、六面体、棱柱或四棱锥构成。对网格生成工具最重要的要求是:网格单元之间不得有空洞，同时网格单元彼此不得重叠。此外，网格应当光滑，也就是说，网格单元的体积或拉伸比不应有突变，单元应尽可能规则。再者，如果网格由四边形或六面体构成，网格线中不应出现大的折拐，否则数值误差会显著增大。
 }
 
 @bi{
   On one hand, the grid can be generated to follow closely the boundaries of the physical space, in which case we speak of body-fitted grid (Fig. 3.1a). The main advantage of this approach is that the flow can be resolved very accurately at the boundaries, which is essential in the case of shear layers along solid bodies. The price to be paid is a high degree of complexity of the grid generation tools, especially in the case of "real-life" geometries. On the other hand, the so-called Cartesian grids @link["blazek2005-r3-1"]{[1]}, @link["blazek2005-r3-2"]{[2]}, where the edges of the grid cells are oriented parallel to the Cartesian coordinates, can be generated very easily. Their advantage is that the evaluation of the fluxes in Eq. (2.19) is much more simple then for body-fitted grids. But when considering Fig. 3.1b it becomes clear that a general and accurate treatment of the boundaries is difficult to accomplish @link["blazek2005-r3-3"]{[3]}. Because of this serious disadvantage, the body-fitted approach is preferred, particularly in the industrial environment, where the geometrical complexity of simulated configurations is usually very high.
 }{
-  一方面ï¼可以把网格生成得紧贴物理空间的边界ï¼这时我们称之为贴体网格(body-fitted grid)(图3.1a)。这种方法的主要优点是能够非常精确地分辨边界处的流动ï¼这对于沿固壁的剪切层至关重要。付出的代价是网格生成工具的复杂度很高ï¼对于"真实寿命"几何尤其如此。另一方面ï¼所谓的笛卡尔网格(Cartesian grids)@link["blazek2005-r3-1"]{[1]}、@link["blazek2005-r3-2"]{[2]}——其网格单元的棱边平行于笛卡尔坐标轴——可以非常容易地生成。它们的优点是:式(2.19)中通量的计算比贴体网格情形简单得多。但由图3.1b可以清楚地看出ï¼要对边界做一般而精确的处理是很困难的@link["blazek2005-r3-3"]{[3]}。由于这一严重缺点ï¼人们更倾向于采用贴体方法ï¼尤其是在工业环境中ï¼因为那里所模拟外形的几何复杂度通常非常高。
+  一方面，可以把网格生成得紧贴物理空间的边界，这时我们称之为贴体网格(body-fitted grid)(图3.1a)。这种方法的主要优点是能够非常精确地分辨边界处的流动，这对于沿固壁的剪切层至关重要。付出的代价是网格生成工具的复杂度很高，对于"真实寿命"几何尤其如此。另一方面，所谓的笛卡尔网格(Cartesian grids)@link["blazek2005-r3-1"]{[1]}、@link["blazek2005-r3-2"]{[2]}——其网格单元的棱边平行于笛卡尔坐标轴——可以非常容易地生成。它们的优点是:式(2.19)中通量的计算比贴体网格情形简单得多。但由图3.1b可以清楚地看出，要对边界做一般而精确的处理是很困难的@link["blazek2005-r3-3"]{[3]}。由于这一严重缺点，人们更倾向于采用贴体方法，尤其是在工业环境中，因为那里所模拟外形的几何复杂度通常非常高。
 }
 
 @bi{
   Nowadays, the overwhelming number of numerical methods for the solution of the Euler- and the Navier-Stokes equations employ a separate discretisation in space and in time - the so-called method of lines @link["blazek2005-r3-4"]{[4]}. Herewith, dependent on the particular algorithm chosen, the grid is used either to construct control volumes and to evaluate the flux integrals, or to approximate the spatial derivatives of the flow quantities. In a further step, the resulting time-dependent equations are advanced in time, starting from a known initial solution, with the aid of a suitable method. Another possibility, when the flow variables do not change in time, is to find the steady-state solution of the governing equations by means of an iterative process.
 }{
-  如今ï¼求解 Euler 方程和 Navier-Stokes 方程的数值方法中ï¼绝大多数都采用空间与时间分别离散的做法——即所谓的线法(method of lines)@link["blazek2005-r3-4"]{[4]}。此时ï¼依所选的具体算法而定ï¼网格要么用来构造控制体并计算通量积分ï¼要么用来近似流动量的空间导数。下一步ï¼从已知的初始解出发ï¼借助适当的方法把所得的时间相关方程在时间上推进。另一种可能性是:当流动变量不随时间变化时ï¼通过迭代过程求控制方程的定常解。
+  如今，求解 Euler 方程和 Navier-Stokes 方程的数值方法中，绝大多数都采用空间与时间分别离散的做法——即所谓的线法(method of lines)@link["blazek2005-r3-4"]{[4]}。此时，依所选的具体算法而定，网格要么用来构造控制体并计算通量积分，要么用来近似流动量的空间导数。下一步，从已知的初始解出发，借助适当的方法把所得的时间相关方程在时间上推进。另一种可能性是:当流动变量不随时间变化时，通过迭代过程求控制方程的定常解。
 }
 
 @bi{
   The way we derived the governing equations (2.19), the continuity equation (2.3) contains a time derivative of the density. Since the density, as an independent variable, is used to calculate the pressure (Eq. (2.29)), there is a coupling between the time evolution of the density and of the pressure in the momentum equations. Solution methods employing discretisations of the governing equations (2.19) are for this reason called density-based schemes. The problem with this formulation is that for an incompressible fluid the pressure is no longer driven by any independent variable, because the time derivative of the density disappears from the continuity equation. Another difficulty arises from the growing disparity between acoustic and convective wave speeds with decreasing Mach number, which renders the governing equations increasingly stiff and hence hard to solve @link["blazek2005-r3-5"]{[5]}. Basically, three approaches were developed to cope with the problem. The first possibility is to solve a Poisson equation in pressure, which can be derived from the momentum equations @link["blazek2005-r3-6"]{[6]}-@link["blazek2005-r3-8"]{[8]}. These methods are denoted as pressure-based. The second approach, called the artificial compressibility method, is based on the idea to substitute time derivative of the pressure for that of the density in the continuity equation @link["blazek2005-r3-9"]{[9]}, @link["blazek2005-r3-10"]{[10]}. In this way, velocity and pressure field are directly coupled. The third solution, and the most general one, is based on preconditioning of the governing equations @link["blazek2005-r3-11"]{[11]}-@link["blazek2005-r3-19"]{[19]}. This methodology allows it to employ the same numerical scheme for very low as well as high Mach number flows. We shall discuss this approach more extensively in Section 9.5.
 }{
-  按照我们推导控制方程(2.19)的方式ï¼连续性方程(2.3)中含有密度的时间导数。由于密度作为独立变量被用来计算压力(式(2.29))ï¼密度的时间演化与动量方程中压力的时间演化之间存在耦合。因此ï¼采用控制方程(2.19)离散化的求解方法称为密度基方法(density-based schemes)。这种表述的问题在于:对于不可压缩流体ï¼压力不再由任何独立变量驱动ï¼因为密度的时间导数从连续性方程中消失了。另一个困难来自声速波速与对流波速之差随马赫数降低而不断扩大ï¼这使得控制方程越来越刚性(stiff)ï¼从而难以求解@link["blazek2005-r3-5"]{[5]}。为应对这一问题ï¼基本上发展出了三种途径。第一种可能是在压力上求解一个 Poisson 方程ï¼该方程可以从动量方程导出@link["blazek2005-r3-6"]{[6]}-@link["blazek2005-r3-8"]{[8]}ï¼这类方法称为压力基方法(pressure-based)。第二种途径称为人工压缩性方法(artificial compressibility method)ï¼其思想是在连续性方程中用压力的时间导数代替密度的时间导数@link["blazek2005-r3-9"]{[9]}、@link["blazek2005-r3-10"]{[10]}。这样ï¼速度场与压力场便直接耦合起来。第三种解法也是最一般的一种ï¼基于控制方程的预处理(preconditioning)@link["blazek2005-r3-11"]{[11]}-@link["blazek2005-r3-19"]{[19]}。这一方法学使得同一个数值格式既可以用于极低马赫数流动ï¼也可以用于高马赫数流动。我们将在9.5节更详细地讨论这一方法。
+  按照我们推导控制方程(2.19)的方式，连续性方程(2.3)中含有密度的时间导数。由于密度作为独立变量被用来计算压力(式(2.29))，密度的时间演化与动量方程中压力的时间演化之间存在耦合。因此，采用控制方程(2.19)离散化的求解方法称为密度基方法(density-based schemes)。这种表述的问题在于:对于不可压缩流体，压力不再由任何独立变量驱动，因为密度的时间导数从连续性方程中消失了。另一个困难来自声速波速与对流波速之差随马赫数降低而不断扩大，这使得控制方程越来越刚性(stiff)，从而难以求解@link["blazek2005-r3-5"]{[5]}。为应对这一问题，基本上发展出了三种途径。第一种可能是在压力上求解一个 Poisson 方程，该方程可以从动量方程导出@link["blazek2005-r3-6"]{[6]}-@link["blazek2005-r3-8"]{[8]}，这类方法称为压力基方法(pressure-based)。第二种途径称为人工压缩性方法(artificial compressibility method)，其思想是在连续性方程中用压力的时间导数代替密度的时间导数@link["blazek2005-r3-9"]{[9]}、@link["blazek2005-r3-10"]{[10]}。这样，速度场与压力场便直接耦合起来。第三种解法也是最一般的一种，基于控制方程的预处理(preconditioning)@link["blazek2005-r3-11"]{[11]}-@link["blazek2005-r3-19"]{[19]}。这一方法学使得同一个数值格式既可以用于极低马赫数流动，也可以用于高马赫数流动。我们将在9.5节更详细地讨论这一方法。
 }
 
 @bi{
   In the following, we shall learn more about the very basic principles of various solution methodologies for the numerical approximation of the governing equations in space and in time, for the turbulence modelling, and also for the boundary treatment.
 }{
-  接下来ï¼我们将进一步了解各种求解方法学的基本原理:控制方程在空间与时间上的数值近似、湍流建模ï¼以及边界处理。
+  接下来，我们将进一步了解各种求解方法学的基本原理:控制方程在空间与时间上的数值近似、湍流建模，以及边界处理。
 }
 
 @figure["blazek2005/fig-3-1.png" "图3.1:固体壁面附近的贴体网格(a)与笛卡尔网格(b)(此处以二维显示)"]{
@@ -47,24 +47,24 @@
           }
 
   }{
-    让我们首先关注第一步——Navier-Stokes 方程的空间离散化ï¼也就是对流通量、黏性通量以及源项的数值近似。过去为此目的设计了许多不同的方法学ï¼而且发展仍在继续。为了对它们加以归类ï¼我们首先可以把空间离散格式分为如下三大类:有限差分、有限体积和有限元。所有这些方法都依赖某种网格来离散控制方程(2.19)。基本上存在两种不同类型的网格:
+    让我们首先关注第一步——Navier-Stokes 方程的空间离散化，也就是对流通量、黏性通量以及源项的数值近似。过去为此目的设计了许多不同的方法学，而且发展仍在继续。为了对它们加以归类，我们首先可以把空间离散格式分为如下三大类:有限差分、有限体积和有限元。所有这些方法都依赖某种网格来离散控制方程(2.19)。基本上存在两种不同类型的网格:
           @itemize{
-            @item{结构网格(structured grids)(图3.2)——每个网格点(顶点、节点)由索引@tex-math{i,j,k}及相应的笛卡尔坐标@tex-math{x_{i,j,k}}、@tex-math{y_{i,j,k}}、@tex-math{z_{i,j,k}}唯一标识。网格单元在二维为四边形ï¼在三维为六面体。如果网格像图3.1a那样是贴体的ï¼我们也称之为曲线网格(curvilinear grid)。}
-            @item{非结构网格(unstructured grids)(图3.3)——网格单元与网格点都没有特定的排列次序ï¼即相邻单元或相邻网格点无法由其索引直接确定(例如单元6与单元119相邻)。过去ï¼网格单元在二维为三角形ï¼在三维为四面体。如今ï¼为了恰当地分辨边界层ï¼非结构网格通常在二维由四边形与三角形的混合构成ï¼在三维由六面体、四面体、棱柱与四棱锥混合构成。因此ï¼这种情况我们称之为混合网格(hybrid 或 mixed grids)。}
+            @item{结构网格(structured grids)(图3.2)——每个网格点(顶点、节点)由索引@tex-math{i,j,k}及相应的笛卡尔坐标@tex-math{x_{i,j,k}}、@tex-math{y_{i,j,k}}、@tex-math{z_{i,j,k}}唯一标识。网格单元在二维为四边形，在三维为六面体。如果网格像图3.1a那样是贴体的，我们也称之为曲线网格(curvilinear grid)。}
+            @item{非结构网格(unstructured grids)(图3.3)——网格单元与网格点都没有特定的排列次序，即相邻单元或相邻网格点无法由其索引直接确定(例如单元6与单元119相邻)。过去，网格单元在二维为三角形，在三维为四面体。如今，为了恰当地分辨边界层，非结构网格通常在二维由四边形与三角形的混合构成，在三维由六面体、四面体、棱柱与四棱锥混合构成。因此，这种情况我们称之为混合网格(hybrid 或 mixed grids)。}
           }
 
   }
 
   @figure["blazek2005/fig-3-2.png" "图3.2:结构化贴体网格方法(二维):(a)物理空间;(b)计算空间"]{
-  @emph{图3.2:结构化贴体网格方法(二维):(a)为物理空间;(b)为计算空间;@tex-math{\xi}、@tex-math{\eta}表示一个曲线坐标系。}图例:(a)中@tex-math{\xi}、@tex-math{\eta}为沿网格方向的曲线坐标轴,solid body——固体壁面ï¼网格点标记为 i-1,j;i,j;i+1,j;i,j+1;i,j-1;(b)中坐标轴为 i(@tex-math{\xi})与 j(@tex-math{\eta})ï¼网格点标记同(a)。
+  @emph{图3.2:结构化贴体网格方法(二维):(a)为物理空间;(b)为计算空间;@tex-math{\xi}、@tex-math{\eta}表示一个曲线坐标系。}图例:(a)中@tex-math{\xi}、@tex-math{\eta}为沿网格方向的曲线坐标轴,solid body——固体壁面，网格点标记为 i-1,j;i,j;i+1,j;i,j+1;i,j-1;(b)中坐标轴为 i(@tex-math{\xi})与 j(@tex-math{\eta})，网格点标记同(a)。
 }
   @figure["blazek2005/fig-3-3.png" "图3.3:二维非结构混合网格;数字标记各个单元"]{
-  @emph{图3.3:二维非结构混合网格方法;数字标记各个单元。}图例:solid body——固体壁面;图中数字(如1、56、119、6、32、88、10、203)为各单元编号ï¼近壁为四边形单元、外层为三角形与六边形单元的混合。
+  @emph{图3.3:二维非结构混合网格方法;数字标记各个单元。}图例:solid body——固体壁面;图中数字(如1、56、119、6、32、88、10、203)为各单元编号，近壁为四边形单元、外层为三角形与六边形单元的混合。
 }
   @bi{
     The main advantage of structured grids follows from the property that the indices @tex-math{i,j,k} represent a linear address space - also called the computational space, since it directly corresponds to how the flow variables are stored in the computer memory. This property allows it to access the neighbours of a grid point very quickly and easily, just by adding or subtracting an integer value to or from the corresponding index (e.g., like (i+1), (k-3), etc. - see Fig. 3.2). As one can imagine, the evaluation of gradients, fluxes, and also the treatment of boundary conditions is greatly simplified by this feature. The same holds for the implementation of an implicit scheme, because of the well-ordered, banded flux Jacobian matrix. But there is also a disadvantage. This is the generation of structured grids for complex geometries. As sketched in Fig. 3.4, one possibility is to divide the physical space into a number of topologically simpler parts - blocks - which can be more easily meshed. We therefore speak of multiblock approach @link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-24"]{[24]}. Of course, the complexity of the flow solver is increased, since special logic is required to exchange physical quantities or fluxes between the blocks. Additional flexibility is added, if the grid points at both sides of an interface can be placed independently of each other, i.e., if the grid lines are allowed not to meet at a block boundary (like inside C or F in Fig. 3.4). Those grid points, which are located only on one side of a block interface are called hanging nodes. The advantage of this approach is quite obvious - the number of grid lines can be chosen separately for each block as required. The price paid for the enhanced flexibility is an increased overhead for the conservative treatment of the hanging nodes @link["blazek2005-r3-25"]{[25]}, @link["blazek2005-r3-26"]{[26]}. The multiblock methodology also offers interesting possibilities with respect to the implementation of the flow solver on a parallel computer by means of domain decomposition. However, very long times (often weeks or months) are still required for the grid generation in the case of complex configurations.
   }{
-    结构网格的主要优点源于这样一个性质:索引@tex-math{i,j,k}构成一个线性地址空间——也称为计算空间(computational space)ï¼因为它直接对应于流动变量在计算机存储器中的存放方式。这一性质使得我们可以仅对相应的索引加减一个整数值ï¼就非常快捷、方便地访问某个网格点的邻居(例如(i+1)、(k-3)等——见图3.2)。可以想见ï¼梯度与通量的计算以及边界条件的处理都因这一特点而大为简化。隐式格式的实现也是如此ï¼因为通量雅可比矩阵排列规整、呈带状。但结构网格也有缺点ï¼那就是为复杂几何生成结构网格十分困难。如图3.4所示ï¼一种可能的做法是把物理空间划分成若干拓扑上更简单的部分——即块(blocks)——它们更容易被划分网格。因此我们称之为多块法(multiblock approach)@link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-24"]{[24]}。当然ï¼流动求解器的复杂性随之增加ï¼因为需要专门的逻辑在各块之间交换物理量或通量。如果界面两侧的网格点可以彼此独立布置ï¼即允许网格线在块边界处不相互对接(如图3.4中C或F内部那样)ï¼灵活性还会进一步增加。那些只位于块界面一侧的网格点称为悬挂节点(hanging nodes)。这种做法的优点显而易见——网格线的数目可以按需要逐块单独选取。为这种增强的灵活性所付出的代价ï¼是悬挂节点守恒处理的开销增大@link["blazek2005-r3-25"]{[25]}、@link["blazek2005-r3-26"]{[26]}。多块方法学还为借助区域分解(domain decomposition)在并行计算机上实现流动求解器提供了有吸引力的可能性。然而ï¼对于复杂外形ï¼网格生成仍然需要很长的时间(往往数周或数月)。
+    结构网格的主要优点源于这样一个性质:索引@tex-math{i,j,k}构成一个线性地址空间——也称为计算空间(computational space)，因为它直接对应于流动变量在计算机存储器中的存放方式。这一性质使得我们可以仅对相应的索引加减一个整数值，就非常快捷、方便地访问某个网格点的邻居(例如(i+1)、(k-3)等——见图3.2)。可以想见，梯度与通量的计算以及边界条件的处理都因这一特点而大为简化。隐式格式的实现也是如此，因为通量雅可比矩阵排列规整、呈带状。但结构网格也有缺点，那就是为复杂几何生成结构网格十分困难。如图3.4所示，一种可能的做法是把物理空间划分成若干拓扑上更简单的部分——即块(blocks)——它们更容易被划分网格。因此我们称之为多块法(multiblock approach)@link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-24"]{[24]}。当然，流动求解器的复杂性随之增加，因为需要专门的逻辑在各块之间交换物理量或通量。如果界面两侧的网格点可以彼此独立布置，即允许网格线在块边界处不相互对接(如图3.4中C或F内部那样)，灵活性还会进一步增加。那些只位于块界面一侧的网格点称为悬挂节点(hanging nodes)。这种做法的优点显而易见——网格线的数目可以按需要逐块单独选取。为这种增强的灵活性所付出的代价，是悬挂节点守恒处理的开销增大@link["blazek2005-r3-25"]{[25]}、@link["blazek2005-r3-26"]{[26]}。多块方法学还为借助区域分解(domain decomposition)在并行计算机上实现流动求解器提供了有吸引力的可能性。然而，对于复杂外形，网格生成仍然需要很长的时间(往往数周或数月)。
   }
 
   @figure["blazek2005/fig-3-4.png" "图3.4:具有相容/非相容块间界面的结构化多块网格;粗线表示块边界"]{
@@ -73,22 +73,22 @@
   @bi{
     Another methodology, related to block structured grids, represents the so-called Chimera technique @link["blazek2005-r3-27"]{[27]}-@link["blazek2005-r3-32"]{[32]}. The basic idea here is to generate first the grids separately around each geometrical entity in the domain. After that, the grids are combined together in such a way that they overlap each other where they meet. The situation is depicted in Fig. 3.5 for a simple configuration. The crucial operation is an accurate transfer of quantities between the different grids at the overlapping region. Therefore, the extension of the overlap is adjusted accordingly to the required interpolation order. The advantage of the Chimera technique over the multiblock approach is the possibility to generate the particular grids completely independent of each other, without having to take care of the interface between the grids. On the other hand, the problem of the Chimera technique is that the conservation properties of the governing equations are not satisfied through the overlapping region.
   }{
-    另一种与块结构网格相关联的方法学是所谓的 Chimera 技术(嵌合网格技术)@link["blazek2005-r3-27"]{[27]}-@link["blazek2005-r3-32"]{[32]}。其基本思想是:先在计算域中每个几何体周围分别生成网格ï¼然后再把这些网格组合起来ï¼使它们在相遇处彼此重叠。图3.5以一个简单外形展示了这一情形。关键操作是在重叠区域于不同网格之间准确传递物理量。因此ï¼重叠范围要按照所需的插值阶数相应调整。与多块方法相比,Chimera 技术的优点是各片网格可以完全独立地生成ï¼而不必操心网格之间的界面。另一方面,Chimera 技术的问题在于:控制方程的守恒性质在重叠区域内得不到满足。
+    另一种与块结构网格相关联的方法学是所谓的 Chimera 技术(嵌合网格技术)@link["blazek2005-r3-27"]{[27]}-@link["blazek2005-r3-32"]{[32]}。其基本思想是:先在计算域中每个几何体周围分别生成网格，然后再把这些网格组合起来，使它们在相遇处彼此重叠。图3.5以一个简单外形展示了这一情形。关键操作是在重叠区域于不同网格之间准确传递物理量。因此，重叠范围要按照所需的插值阶数相应调整。与多块方法相比,Chimera 技术的优点是各片网格可以完全独立地生成，而不必操心网格之间的界面。另一方面,Chimera 技术的问题在于:控制方程的守恒性质在重叠区域内得不到满足。
   }
 
   @figure["blazek2005/fig-3-5.png" "图3.5:Chimera技术示意(二维示例)"]{
-  @emph{图3.5:Chimera技术示意(二维示例)。}图例:背景为均匀笛卡尔网格ï¼物面附近为贴体的极坐标型网格ï¼两者相互重叠。
+  @emph{图3.5:Chimera技术示意(二维示例)。}图例:背景为均匀笛卡尔网格，物面附近为贴体的极坐标型网格，两者相互重叠。
 }
   @bi{
     The second type of grids are the unstructured grids. They offer the largest flexibility in the treatment of complex geometries @link["blazek2005-r3-33"]{[33]}. The main advantage of the unstructured grids is based on the fact that triangular (in 2-D) or tetrahedral grids (in 3-D) can be in principle generated automatically, independent of the complexity of the domain. In practice, it is of course still necessary to set some parameters appropriately, in order to obtain a good quality grid. Furthermore, in order to resolve the boundary layers accurately, it is advisable to employ in 2-D rectangular and in 3-D prismatic or hexahedral elements near solid walls @link["blazek2005-r3-34"]{[34]}-@link["blazek2005-r3-41"]{[41]}. Another benefit of such mixed grids is the reduction of the number of grid cells, edges, faces and possibly also of grid points. One should keep in mind though that the generation of mixed grids is not trivial for geometrically demanding cases. Nevertheless, the time required to built an unstructured, mixed grid for a complex configuration is still significantly lower than what is necessary for a multiblock structured grid. Since the geometrical fidelity of the flow simulations is nowadays rapidly increasing, the ability to generate grids fast and with minimum user interaction becomes more and more important. This is particularly true in industrial environment. Further advantage of unstructured grids is that solution dependent grid refinement and coarsening can be handled in a relatively native and seamless manner. To mention also the disadvantages of unstructured methods, one of them is the necessity to employ sophisticated data structures within the flow solver. Such data structures work with indirect addressing, which, depending on the computer hardware, leads to more or less reduced computational efficiency. The memory requirements are in general higher as compared to the structured schemes, too. But despite all difficulties, the capability to handle geometrically complex problems in short turn-around times still weights much more. From this point, it is not surprising that for example nearly all vendors of commercial CFD software switched over to unstructured flow solvers. A detailed review of various methodologies for spatial and temporal discretisation on unstructured grids appeared recently in @link["blazek2005-r3-42"]{[42]}.
   }{
-    第二类网格是非结构网格。它们在处理复杂几何方面提供了最大的灵活性@link["blazek2005-r3-33"]{[33]}。非结构网格的主要优点基于这样一个事实:三角形网格(二维)或四面体网格(三维)原则上可以自动生成ï¼而与计算域的复杂程度无关。当然ï¼实践中仍需适当设置一些参数才能获得高质量的网格。此外ï¼为了精确分辨边界层ï¼建议在固壁附近采用二维的矩形、三维的棱柱或六面体单元@link["blazek2005-r3-34"]{[34]}-@link["blazek2005-r3-41"]{[41]}。这类混合网格的另一个好处是减少了网格单元、棱边、面以及可能的网格点的数目。不过应当记住ï¼对于几何上要求苛刻的情形ï¼混合网格的生成并非易事。尽管如此ï¼为复杂外形生成非结构混合网格所需的时间仍显著低于多块结构网格所需的时间。由于流动模拟的几何保真度如今正在迅速提高ï¼快速、最少人机交互地生成网格的能力变得越来越重要ï¼在工业环境中尤其如此。非结构网格的又一优点是:与解相关的网格加密和粗化能够以相对自然、无缝的方式处理。谈及非结构方法的缺点ï¼其一是流动求解器内部必须采用复杂的数据结构。这类数据结构采用间接寻址ï¼依计算机硬件的不同ï¼会不同程度地降低计算效率。与结构格式相比ï¼内存需求一般也更高。尽管有种种困难ï¼在短时间内处理几何复杂问题的能力仍然重要得多。由此看来ï¼例如几乎所有商业 CFD 软件厂商都转而采用非结构流动求解器ï¼并不令人惊讶。关于非结构网格上空间与时间离散的各种方法学ï¼近期有一篇详细的综述见@link["blazek2005-r3-42"]{[42]}。
+    第二类网格是非结构网格。它们在处理复杂几何方面提供了最大的灵活性@link["blazek2005-r3-33"]{[33]}。非结构网格的主要优点基于这样一个事实:三角形网格(二维)或四面体网格(三维)原则上可以自动生成，而与计算域的复杂程度无关。当然，实践中仍需适当设置一些参数才能获得高质量的网格。此外，为了精确分辨边界层，建议在固壁附近采用二维的矩形、三维的棱柱或六面体单元@link["blazek2005-r3-34"]{[34]}-@link["blazek2005-r3-41"]{[41]}。这类混合网格的另一个好处是减少了网格单元、棱边、面以及可能的网格点的数目。不过应当记住，对于几何上要求苛刻的情形，混合网格的生成并非易事。尽管如此，为复杂外形生成非结构混合网格所需的时间仍显著低于多块结构网格所需的时间。由于流动模拟的几何保真度如今正在迅速提高，快速、最少人机交互地生成网格的能力变得越来越重要，在工业环境中尤其如此。非结构网格的又一优点是:与解相关的网格加密和粗化能够以相对自然、无缝的方式处理。谈及非结构方法的缺点，其一是流动求解器内部必须采用复杂的数据结构。这类数据结构采用间接寻址，依计算机硬件的不同，会不同程度地降低计算效率。与结构格式相比，内存需求一般也更高。尽管有种种困难，在短时间内处理几何复杂问题的能力仍然重要得多。由此看来，例如几乎所有商业 CFD 软件厂商都转而采用非结构流动求解器，并不令人惊讶。关于非结构网格上空间与时间离散的各种方法学，近期有一篇详细的综述见@link["blazek2005-r3-42"]{[42]}。
   }
 
   @bi{
     Having generated the grid, the next question is how to actually discretise the governing equations. As we already said, we can basically choose between three methodologies: finite differences, finite volumes, and finite elements. We want to discuss all of them briefly in the next subsections.
   }{
-    网格生成之后ï¼下一个问题就是究竟如何离散控制方程。如前所述ï¼基本上可以在三种方法学之间选择:有限差分、有限体积和有限元。下面几小节将对它们逐一作简要讨论。
+    网格生成之后，下一个问题就是究竟如何离散控制方程。如前所述，基本上可以在三种方法学之间选择:有限差分、有限体积和有限元。下面几小节将对它们逐一作简要讨论。
   }
 
   @subtree[#:id "blazek2005-3-1-1"]{
@@ -97,13 +97,13 @@
     @bi{
       The finite difference method was among the first approaches applied to the numerical solution of differential equations. It was first utilised by Euler, probably in 1768. The finite difference method is directly applied to the differential form of the governing equations. The principle is to employ a Taylor series expansion for the discretisation of the derivatives of the flow variables. Let us for illustration consider the following example.
     }{
-      有限差分法是最早应用于微分方程数值求解的方法之一ï¼由 Euler 于1768年(大概)首先使用。有限差分法直接应用于控制方程的微分形式。其原理是利用 Taylor 级数展开来离散流动变量的导数。为便于说明ï¼考察下面的例子。
+      有限差分法是最早应用于微分方程数值求解的方法之一，由 Euler 于1768年(大概)首先使用。有限差分法直接应用于控制方程的微分形式。其原理是利用 Taylor 级数展开来离散流动变量的导数。为便于说明，考察下面的例子。
     }
 
     @bi{
       Suppose we would like to compute the first derivative of a scalar function @tex-math{U(x)} at some point @tex-math{x_0}. If we develop now @tex-math{U(x_0+\Delta x)} as a Taylor series in @tex-math{x}, we obtain
     }{
-      假设我们想计算某个标量函数@tex-math{U(x)}在点@tex-math{x_0}处的一阶导数。若把@tex-math{U(x_0+\Delta x)}按@tex-math{x}作 Taylor 级数展开ï¼便得到
+      假设我们想计算某个标量函数@tex-math{U(x)}在点@tex-math{x_0}处的一阶导数。若把@tex-math{U(x_0+\Delta x)}按@tex-math{x}作 Taylor 级数展开，便得到
     }
 
     @tex-display-math[#:id "eq-3-1"]{U(x_0+\Delta x)=U(x_0)+\Delta x\left.\frac{\partial U}{\partial x}\right|_{x_0}+\frac{\Delta x^{2}}{2}\left.\frac{\partial^{2} U}{\partial x^{2}}\right|_{x_0}+\cdots \tag{3.1}}
@@ -119,13 +119,13 @@
     @bi{
       The above approximation is of first order, since the truncation error (abbreviated as @tex-math{\mathcal{O}(\Delta x)}), which is proportional to the largest term of the remainder, goes to zero with the first power of @tex-math{\Delta x} (for a discussion on the order of accuracy see Chapter 10). The same procedure can be applied to derive more accurate finite difference formulae and to obtain approximations to higher-order derivatives.
     }{
-      上述近似是一阶的ï¼因为截断误差(记作@tex-math{\mathcal{O}(\Delta x)})与余项中最大的项成正比ï¼并随@tex-math{\Delta x}的一次方趋于零(关于精度的阶的讨论见第10章)。同样的步骤也可用来推导更精确的有限差分公式ï¼以及得到高阶导数的近似。
+      上述近似是一阶的，因为截断误差(记作@tex-math{\mathcal{O}(\Delta x)})与余项中最大的项成正比，并随@tex-math{\Delta x}的一次方趋于零(关于精度的阶的讨论见第10章)。同样的步骤也可用来推导更精确的有限差分公式，以及得到高阶导数的近似。
     }
 
     @bi{
       An important advantage of the finite difference methodology is its simplicity. Another advantage is the possibility to easily obtain high-order approximations, and hence to achieve high-order accuracy of the spatial discretisation. On the other hand, because the method requires a structured grid, the range of application is clearly restricted. Furthermore, the finite difference method cannot be directly applied in body-fitted (curvilinear) coordinates, but the governing equations have to be first transformed into a Cartesian coordinate system - or in other words - from the physical to the computational space (Fig. 3.2). The problem herewith is that the Jacobian of coordinate transformation appears in the flow equations (see, e.g., Appendix A.1). This Jacobian has to be consistently discretised in order to avoid the introduction of additional numerical errors. Thus, the finite difference method can be applied only to rather simple geometries. Nowadays, it is sometimes utilised for the direct numerical simulation of turbulence (DNS), but it is only very rarely used for industrial applications. More details to the finite difference method can be found for example in @link["blazek2005-r3-43"]{[43]}, or in textbooks on the solution of partial differential equations.
     }{
-      有限差分方法学的一个重要优点是其简单性;另一个优点是容易获得高阶近似ï¼从而实现空间离散的高阶精度。另一方面ï¼由于该方法要求结构网格ï¼应用范围明显受限。此外ï¼有限差分法不能直接在贴体(曲线)坐标中使用ï¼而必须先把控制方程变换到笛卡尔坐标系——换言之ï¼从物理空间变换到计算空间(图3.2)。这里的问题在于坐标变换的雅可比行列式会出现在流动方程中(例如见附录A.1)。为避免引入额外的数值误差ï¼必须对该雅可比量进行一致地离散。因此ï¼有限差分法只能应用于相当简单的几何。如今ï¼它有时用于湍流的直接数值模拟(DNS)ï¼但很少用于工业应用。关于有限差分法的更多细节ï¼例如可参见@link["blazek2005-r3-43"]{[43]}或有关偏微分方程求解的教科书。
+      有限差分方法学的一个重要优点是其简单性;另一个优点是容易获得高阶近似，从而实现空间离散的高阶精度。另一方面，由于该方法要求结构网格，应用范围明显受限。此外，有限差分法不能直接在贴体(曲线)坐标中使用，而必须先把控制方程变换到笛卡尔坐标系——换言之，从物理空间变换到计算空间(图3.2)。这里的问题在于坐标变换的雅可比行列式会出现在流动方程中(例如见附录A.1)。为避免引入额外的数值误差，必须对该雅可比量进行一致地离散。因此，有限差分法只能应用于相当简单的几何。如今，它有时用于湍流的直接数值模拟(DNS)，但很少用于工业应用。关于有限差分法的更多细节，例如可参见@link["blazek2005-r3-43"]{[43]}或有关偏微分方程求解的教科书。
     }
   }
 
@@ -135,7 +135,7 @@
     @bi{
       The finite volume method directly utilises the conservation laws - the integral formulation of the Navier-Stokes/Euler equations. It was first employed by McDonald @link["blazek2005-r3-44"]{[44]} for the simulation of 2-D inviscid flows. The finite volume method discretises the governing equations by first dividing the physical space into a number of arbitrary polyhedral control volumes. The surface integral on the right-hand side of Equation (2.19) is then approximated by the sum of the fluxes crossing the individual faces of the control volume. The accuracy of the spatial discretisation depends on the particular scheme with which the fluxes are evaluated.
     }{
-      有限体积法直接利用守恒定律——即 Navier-Stokes/Euler 方程的积分形式。它由 McDonald@link["blazek2005-r3-44"]{[44]}首先用于二维无黏流动的模拟。有限体积法离散控制方程的做法是:先把物理空间划分成若干任意多面体控制体ï¼然后用穿过控制体各个面的通量之和来近似式(2.19)右端的面积分。空间离散的精度取决于计算通量所用的具体格式。
+      有限体积法直接利用守恒定律——即 Navier-Stokes/Euler 方程的积分形式。它由 McDonald@link["blazek2005-r3-44"]{[44]}首先用于二维无黏流动的模拟。有限体积法离散控制方程的做法是:先把物理空间划分成若干任意多面体控制体，然后用穿过控制体各个面的通量之和来近似式(2.19)右端的面积分。空间离散的精度取决于计算通量所用的具体格式。
     }
 
     @bi{
@@ -146,10 +146,10 @@
               }
 
     }{
-      相对于网格ï¼控制体的形状与位置有几种不同的定义方式。可以区分出两种基本途径:
+      相对于网格，控制体的形状与位置有几种不同的定义方式。可以区分出两种基本途径:
               @itemize{
-                @item{格心格式(cell-centred scheme)(图3.6a)——流动量存储在网格单元的形心处ï¼因此控制体与网格单元完全重合。}
-                @item{格点格式(cell-vertex scheme)(图3.6b)——流动变量存储在网格点上。此时控制体既可以取共享该网格点的所有单元的并集ï¼也可以取围绕该网格点居中的某个体积。前者称为重叠型控制体(overlapping control volumes)ï¼后者称为对偶控制体(dual control volumes)。}
+                @item{格心格式(cell-centred scheme)(图3.6a)——流动量存储在网格单元的形心处，因此控制体与网格单元完全重合。}
+                @item{格点格式(cell-vertex scheme)(图3.6b)——流动变量存储在网格点上。此时控制体既可以取共享该网格点的所有单元的并集，也可以取围绕该网格点居中的某个体积。前者称为重叠型控制体(overlapping control volumes)，后者称为对偶控制体(dual control volumes)。}
               }
 
     }
@@ -157,28 +157,28 @@
     @bi{
       We shall discuss the advantages and disadvantages of cell-centred and cell-vertex formulations in both chapters on spatial discretisation.
     }{
-      我们将在后面两章讨论空间离散的内容时ï¼再详细比较格心与格点两种表述的优缺点。
+      我们将在后面两章讨论空间离散的内容时，再详细比较格心与格点两种表述的优缺点。
     }
 
     @figure["blazek2005/fig-3-6.png" "图3.6:格心格式(a)与格点格式(b)(对偶控制体)的控制体"]{
-    @emph{图3.6:格心格式(a)与格点格式(b)(对偶控制体)的控制体。}图例:(a)中阴影四边形为控制体ï¼其四个角点(实心圆点)为网格点ï¼形心处的实心方块表示流动量的存储位置;(b)中阴影四边形为围绕中心网格点(实心圆点)的对偶控制体。
+    @emph{图3.6:格心格式(a)与格点格式(b)(对偶控制体)的控制体。}图例:(a)中阴影四边形为控制体，其四个角点(实心圆点)为网格点，形心处的实心方块表示流动量的存储位置;(b)中阴影四边形为围绕中心网格点(实心圆点)的对偶控制体。
 }
     @bi{
       The main advantage of the finite volume method is that the spatial discretisation is carried out directly in the physical space. Thus, there are no problems with any transformation between the physical and the computational coordinate system, like in the case of the finite difference method. Compared to the finite differences, one further advantage of the finite volume method is that it is very flexible - it can be rather easily implemented on structured as well as on unstructured grids. This renders the finite volume method particularly suitable for the treatment of flows in complex geometries.
     }{
-      有限体积法的主要优点在于空间离散直接在物理空间中进行。因此ï¼不会像有限差分法那样遇到物理坐标系与计算坐标系之间的任何变换问题。与有限差分相比ï¼有限体积法的另一个优点是非常灵活——它既可以相当容易地在结构网格上实现ï¼也可以在非结构网格上实现。这使得有限体积法特别适合处理复杂几何中的流动。
+      有限体积法的主要优点在于空间离散直接在物理空间中进行。因此，不会像有限差分法那样遇到物理坐标系与计算坐标系之间的任何变换问题。与有限差分相比，有限体积法的另一个优点是非常灵活——它既可以相当容易地在结构网格上实现，也可以在非结构网格上实现。这使得有限体积法特别适合处理复杂几何中的流动。
     }
 
     @bi{
       Since the finite volume method is based on the direct discretisation of the conservation laws, mass, momentum and energy are also conserved by the numerical scheme. This leads to another important feature of the method, namely the ability to compute weak solutions of the governing equations correctly. However, one additional condition has to be fulfilled in the case of the Euler equations. This is known as the entropy condition. It is necessary because of the non-uniqueness of the weak solutions. The entropy condition prevents the occurrence of unphysical features like expansion shocks, which violate the second law of thermodynamics (decrease of the entropy). As a further consequence of the conservative discretisation, the Rankine-Hugoniot relations, which must hold across a solution discontinuity (such as a shockwave or a contact discontinuity), are satisfied directly.
     }{
-      由于有限体积法基于对守恒定律的直接离散ï¼数值格式也使质量、动量和能量保持守恒。由此得到该方法的另一个重要特性ï¼即能够正确计算控制方程的弱解(weak solutions)。不过ï¼对于 Euler 方程还须满足一个附加条件ï¼即所谓的熵条件(entropy condition)。它之所以必要ï¼是因为弱解不唯一。熵条件可防止出现膨胀激波这类违反热力学第二定律(熵减小)的非物理现象。作为守恒离散的进一步结果ï¼跨越解的间断(如激波或接触间断)必须成立的 Rankine-Hugoniot 关系被直接满足。
+      由于有限体积法基于对守恒定律的直接离散，数值格式也使质量、动量和能量保持守恒。由此得到该方法的另一个重要特性，即能够正确计算控制方程的弱解(weak solutions)。不过，对于 Euler 方程还须满足一个附加条件，即所谓的熵条件(entropy condition)。它之所以必要，是因为弱解不唯一。熵条件可防止出现膨胀激波这类违反热力学第二定律(熵减小)的非物理现象。作为守恒离散的进一步结果，跨越解的间断(如激波或接触间断)必须成立的 Rankine-Hugoniot 关系被直接满足。
     }
 
     @bi{
       It is interesting to note that under certain conditions, the finite volume method can be shown to be equivalent to the finite difference method, or to a low-order finite element method. Because of its attractive properties, the finite volume method is nowadays very popular and in wide use. It will be presented in the following chapters.
     }{
-      有趣的是ï¼在一定条件下可以证明有限体积法等价于有限差分法或低阶有限元法。凭借其吸引人的特性ï¼有限体积法如今广受欢迎、应用广泛。后续各章将对其进行介绍。
+      有趣的是，在一定条件下可以证明有限体积法等价于有限差分法或低阶有限元法。凭借其吸引人的特性，有限体积法如今广受欢迎、应用广泛。后续各章将对其进行介绍。
     }
   }
 
@@ -188,25 +188,25 @@
     @bi{
       The finite element method was originally employed for structural analysis only. It was first introduced by Turner et al. @link["blazek2005-r3-45"]{[45]} in 1956. About ten years later, researchers started to use the finite element method also for the numerical solution of field equations in continuous media. However, only with the beginning of the 90's, did the finite element method gain popularity in the solution of the Euler and the Navier-Stokes equations. A good introduction into the classical finite element methodology can be found in @link["blazek2005-r3-46"]{[46]}. Applications to flow problems are described in @link["blazek2005-r3-47"]{[47]}, @link["blazek2005-r3-48"]{[48]}, and more recently in @link["blazek2005-r3-49"]{[49]}.
     }{
-      有限元法最初只用于结构分析ï¼由 Turner 等@link["blazek2005-r3-45"]{[45]}于1956年首先提出。大约十年之后ï¼研究者们才开始把有限元法也用于连续介质中场方程的数值求解。然而ï¼直到20世纪90年代初ï¼有限元法才在 Euler 方程与 Navier-Stokes 方程的求解中流行起来。关于经典有限元方法学的一本很好的入门读物见@link["blazek2005-r3-46"]{[46]};在流动问题中的应用见@link["blazek2005-r3-47"]{[47]}、@link["blazek2005-r3-48"]{[48]}ï¼以及更近期的@link["blazek2005-r3-49"]{[49]}。
+      有限元法最初只用于结构分析，由 Turner 等@link["blazek2005-r3-45"]{[45]}于1956年首先提出。大约十年之后，研究者们才开始把有限元法也用于连续介质中场方程的数值求解。然而，直到20世纪90年代初，有限元法才在 Euler 方程与 Navier-Stokes 方程的求解中流行起来。关于经典有限元方法学的一本很好的入门读物见@link["blazek2005-r3-46"]{[46]};在流动问题中的应用见@link["blazek2005-r3-47"]{[47]}、@link["blazek2005-r3-48"]{[48]}，以及更近期的@link["blazek2005-r3-49"]{[49]}。
     }
 
     @bi{
       The finite element method, as it is in general applied to the solution of the Euler/Navier-Stokes equations, starts with a subdivision of the physical space into triangular (in 2-D) or into tetrahedral (in 3-D) elements. Thus, an unstructured grid has to be generated. Depending on the element type and the required accuracy, a certain number of points at the boundaries and/or inside an element is specified, where the solution of the flow problem has to be found. The total number of points multiplied with the number of unknowns determines the number of degrees of freedom. Furthermore, the so-called shape functions have to be defined, which represent the variation of the solution inside an element. In practical implementations, linear elements are usually employed, which use the grid nodes exclusively. The shape functions are then linear distributions, whose value is zero outside the corresponding element. This results in a second-order accurate representation of the solution on smooth grids.
     }{
-      有限元法应用于 Euler/Navier-Stokes 方程求解时ï¼一般从把物理空间细分为三角形单元(二维)或四面体单元(三维)开始ï¼因此需要生成非结构网格。根据单元类型和所需精度ï¼要在单元的边界上和/或内部指定一定数目的点ï¼流动问题的解要在这些点上求出。点的总数乘以未知量数目便确定自由度的数目。此外ï¼还须定义所谓的形函数(shape functions)ï¼它们表示解在一个单元内部的变化。实际实现中通常采用线性单元ï¼即只使用网格节点。此时形函数为线性分布ï¼在相应单元之外取值为零。这在光滑网格上给出二阶精度的解的表示。
+      有限元法应用于 Euler/Navier-Stokes 方程求解时，一般从把物理空间细分为三角形单元(二维)或四面体单元(三维)开始，因此需要生成非结构网格。根据单元类型和所需精度，要在单元的边界上和/或内部指定一定数目的点，流动问题的解要在这些点上求出。点的总数乘以未知量数目便确定自由度的数目。此外，还须定义所谓的形函数(shape functions)，它们表示解在一个单元内部的变化。实际实现中通常采用线性单元，即只使用网格节点。此时形函数为线性分布，在相应单元之外取值为零。这在光滑网格上给出二阶精度的解的表示。
     }
 
     @bi{
       Within the finite element method, it is necessary to transform the governing equations from the differential into an equivalent integral form. This can be accomplished in two different ways. The first one is based on the variational principle, i.e., a physical solution is sought, for which a certain functional possesses an extremum. The second possibility is known as the method of weighted residuals or the weak formulation. Here, it is required that the weighted average of the residuals is identically zero over the physical domain. The residuals can be viewed as the errors of the approximation of the solution. The weak formulation has the same advantage as the finite volume discretisation of the conservation laws - it allows the treatment of discontinuous solutions such as shocks. Therefore, the weak formulation is preferred over the variational methodology.
     }{
-      在有限元法中ï¼需要把控制方程从微分形式变换为等价的积分形式。这可以通过两种不同的途径实现。第一种基于变分原理ï¼即寻找某个泛函取极值的物理解。第二种途径称为加权余量法(method of weighted residuals)或弱形式(weak formulation)ï¼它要求余量的加权平均值在整个物理域上恒等于零。余量可以看作解的近似误差。弱形式具有与守恒定律的有限体积离散相同的优点——可以处理激波等间断解。因此ï¼人们更倾向于采用弱形式而非变分方法。
+      在有限元法中，需要把控制方程从微分形式变换为等价的积分形式。这可以通过两种不同的途径实现。第一种基于变分原理，即寻找某个泛函取极值的物理解。第二种途径称为加权余量法(method of weighted residuals)或弱形式(weak formulation)，它要求余量的加权平均值在整个物理域上恒等于零。余量可以看作解的近似误差。弱形式具有与守恒定律的有限体积离散相同的优点——可以处理激波等间断解。因此，人们更倾向于采用弱形式而非变分方法。
     }
 
     @bi{
       The finite element method is attractive because of its integral formulation and the use of unstructured grids, which are both preferable for flows in or around complex geometries. The method is also particularly suitable for the treatment of non-Newtonian fluids. The finite element method has a very rigorous mathematical foundation, particularly for elliptic and parabolic problems. Although it can be shown in certain cases that the method is mathematically equivalent to the finite volume discretisation, the numerical effort is noticeably higher. This may explain why the finite volume method became more popular. However, both methods are sometimes combined - particularly on unstructured grids. So for example, the treatment of the boundaries and the discretisation of the viscous fluxes is usually "borrowed" from the finite element method.
     }{
-      有限元法的吸引人之处在于其积分形式与非结构网格的使用ï¼这两者对于复杂几何内部或周围的流动都更为有利。该方法还特别适合处理非牛顿流体。有限元法具有非常严格的数学基础ï¼对椭圆型和抛物型问题尤其如此。虽然在某些情形下可以证明该方法在数学上等价于有限体积离散ï¼但其数值工作量明显更高ï¼这也许可以解释为什么有限体积法变得更为流行。不过ï¼这两种方法有时会被结合使用——特别是在非结构网格上。例如ï¼边界处理和黏性通量的离散通常就是从有限元法那里"借"来的。
+      有限元法的吸引人之处在于其积分形式与非结构网格的使用，这两者对于复杂几何内部或周围的流动都更为有利。该方法还特别适合处理非牛顿流体。有限元法具有非常严格的数学基础，对椭圆型和抛物型问题尤其如此。虽然在某些情形下可以证明该方法在数学上等价于有限体积离散，但其数值工作量明显更高，这也许可以解释为什么有限体积法变得更为流行。不过，这两种方法有时会被结合使用——特别是在非结构网格上。例如，边界处理和黏性通量的离散通常就是从有限元法那里"借"来的。
     }
   }
 
@@ -216,7 +216,7 @@
     @bi{
       There are few other numerical schemes which are only seldom used in practice, but which are, in certain situations, superior to the methods discussed above. Two particular approaches should be mentioned here briefly.
     }{
-      还有少数其他数值格式ï¼它们在实践中很少使用ï¼但在某些情形下却优于上面讨论的方法。这里简要提及两种具体途径。
+      还有少数其他数值格式，它们在实践中很少使用，但在某些情形下却优于上面讨论的方法。这里简要提及两种具体途径。
     }
 
     @emph{Spectral Element Method 谱元法}
@@ -224,7 +224,7 @@
     @bi{
       The first such example is the Spectral Element Method @link["blazek2005-r3-50"]{[50]}-@link["blazek2005-r3-53"]{[53]}. The spectral element method combines the geometrical flexibility of the finite element technique with the high-order spatial accuracy (e.g., 10th-order) and the rapid convergence rate of the spectral schemes @link["blazek2005-r3-54"]{[54]}. The method is based on a high-order polynomial representation of the solution (usually Lagrangian interpolants), combined with a standard Galerkin finite element method, or the method of weighted residuals. The spectral element method is appropriate either for a particular problem in which high-order regularity is guaranteed, or for which high-order regularity is not the exception, like in incompressible fluid mechanics. It is especially suitable for vortical flows. The advantage of the spectral element method is primarily its non-diffusive, non-dispersive approximation of the convection operator, and its good approximation of convection-diffusion boundary layers. The method can treat geometrically and physically complex problems, supposed the condition of high-order regularity is fulfilled. Apart from the rather narrow range of applications, the principal disadvantage of the spectral element method is its very high numerical effort as compared for example to the finite volume method.
     }{
-      第一个例子是谱元法(Spectral Element Method)@link["blazek2005-r3-50"]{[50]}-@link["blazek2005-r3-53"]{[53]}。谱元法把有限元技术的几何灵活性与谱格式的高阶空间精度(例如10阶)及快速收敛速率结合起来@link["blazek2005-r3-54"]{[54]}。该方法基于解的高阶多项式表示(通常为 Lagrange 插值)ï¼并与标准 Galerkin 有限元法或加权余量法相结合。谱元法或者适用于高阶正则性有保证的特定问题ï¼或者适用于高阶正则性并不罕见的领域ï¼如不可压缩流体力学。它尤其适合涡流动。谱元法的优点主要在于其对流算子的无耗散、无频散近似ï¼以及对流-扩散边界层的良好近似。只要满足高阶正则性条件ï¼该方法就能处理几何与物理上都复杂的问题。除了适用范围相当狭窄之外ï¼谱元法的主要缺点是数值工作量非常高ï¼例如与有限体积法相比。
+      第一个例子是谱元法(Spectral Element Method)@link["blazek2005-r3-50"]{[50]}-@link["blazek2005-r3-53"]{[53]}。谱元法把有限元技术的几何灵活性与谱格式的高阶空间精度(例如10阶)及快速收敛速率结合起来@link["blazek2005-r3-54"]{[54]}。该方法基于解的高阶多项式表示(通常为 Lagrange 插值)，并与标准 Galerkin 有限元法或加权余量法相结合。谱元法或者适用于高阶正则性有保证的特定问题，或者适用于高阶正则性并不罕见的领域，如不可压缩流体力学。它尤其适合涡流动。谱元法的优点主要在于其对流算子的无耗散、无频散近似，以及对流-扩散边界层的良好近似。只要满足高阶正则性条件，该方法就能处理几何与物理上都复杂的问题。除了适用范围相当狭窄之外，谱元法的主要缺点是数值工作量非常高，例如与有限体积法相比。
     }
 
     @emph{Gridless Method 无网格方法}
@@ -232,13 +232,13 @@
     @bi{
       Another discretisation scheme, which gained recently some interest, is the so-called Gridless Method @link["blazek2005-r3-55"]{[55]}-@link["blazek2005-r3-57"]{[57]}. This method employs only clouds of points for the spatial discretisation. It does not require that the points are connected to form a grid as in conventional structured or unstructured grid schemes. The gridless method is based on the differential form of the governing equations, written in the Cartesian coordinate system. Gradients of the flow variables are determined by a least-squares reconstruction, using a specified number of neighbours surrounding the particular point. The gridless method is neither a finite difference nor a finite volume or a finite element approach since coordinate transformations, face areas or volumes do not have to be computed. It can be viewed as a mix between the finite difference and the finite element method. The principal advantages of the gridless method are its flexibility in solving flows about complex configurations (similar to unstructured methods), and the possibility to locate or cluster the points (or the clouds of points) where it is appropriate. For example, it would be easily possible to select only the neighbours in the characteristic directions when computing gradients. However, there is one unresolved problem. Although the gridless method solves the conservation law form of the Euler or the Navier-Stokes equations, it is not clear whether conservation of mass, momentum and energy is really ensured.
     }{
-      近来受到一定关注的另一种离散格式是所谓的无网格方法(Gridless Method)@link["blazek2005-r3-55"]{[55]}-@link["blazek2005-r3-57"]{[57]}。该方法只用点云进行空间离散ï¼不要求把点连接起来构成像传统结构或非结构网格格式那样的网格。无网格方法基于在笛卡尔坐标系中写出的控制方程微分形式ï¼利用围绕给定点的指定数目的邻居ï¼通过最小二乘重构来确定流动变量的梯度。无网格方法既不是有限差分、也不是有限体积或有限元途径ï¼因为它无须计算坐标变换、面积或体积。它可以视为有限差分法与有限元法的一种混合。无网格方法的主要优点是:求解复杂外形流动的灵活性(与非结构方法类似)ï¼以及在合适之处布点或聚点(或点云)的可能性。例如ï¼在计算梯度时可以轻而易举地只选取特征方向上的邻居。然而ï¼存在一个尚未解决的问题:虽然无网格方法求解的是 Euler 或 Navier-Stokes 方程的守恒律形式ï¼但质量、动量和能量的守恒是否真正得到保证并不清楚。
+      近来受到一定关注的另一种离散格式是所谓的无网格方法(Gridless Method)@link["blazek2005-r3-55"]{[55]}-@link["blazek2005-r3-57"]{[57]}。该方法只用点云进行空间离散，不要求把点连接起来构成像传统结构或非结构网格格式那样的网格。无网格方法基于在笛卡尔坐标系中写出的控制方程微分形式，利用围绕给定点的指定数目的邻居，通过最小二乘重构来确定流动变量的梯度。无网格方法既不是有限差分、也不是有限体积或有限元途径，因为它无须计算坐标变换、面积或体积。它可以视为有限差分法与有限元法的一种混合。无网格方法的主要优点是:求解复杂外形流动的灵活性(与非结构方法类似)，以及在合适之处布点或聚点(或点云)的可能性。例如，在计算梯度时可以轻而易举地只选取特征方向上的邻居。然而，存在一个尚未解决的问题:虽然无网格方法求解的是 Euler 或 Navier-Stokes 方程的守恒律形式，但质量、动量和能量的守恒是否真正得到保证并不清楚。
     }
 
     @bi{
       Whichever spatial discretisation scheme we might select, it is important to ensure that the scheme is consistent, i.e., that it converges to the solution of the discretised equations, when the grid is sufficiently refined. It is therefore very important to check how much the solution changes, if the grid is refined (e.g., if we would double the number of grid points). If the solution improves only marginally, we speak of grid converged solution. Another rather self-evident requirement is that the discretisation scheme possesses the order of accuracy, which is appropriate for the flow problem being solved. This rule is sometimes given up in favour of faster convergence, particularly in industrial environment (bad solution is better than no solution). This is of course a very dangerous practice. We shall return to the question of accuracy, stability and consistency later in Chapter 10.
     }{
-      无论选择哪种空间离散格式ï¼重要的问题是保证格式的一致性(consistency)ï¼即当网格充分加密时ï¼格式收敛于离散化方程的解。因此ï¼非常重要的是检查网格加密(例如把网格点数目加倍)后解改变了多少。如果解只有微小的改进ï¼我们称之为网格收敛解(grid converged solution)。另一个不言而喻的要求是:离散格式具有与所求解流动问题相称的精度阶。有时为了更快收敛ï¼这条规则会被放弃ï¼在工业环境中尤其如此(坏的解总比没有解好)。当然ï¼这是非常危险的做法。我们稍后将回到精度、稳定性与一致性的问题ï¼见第10章。
+      无论选择哪种空间离散格式，重要的问题是保证格式的一致性(consistency)，即当网格充分加密时，格式收敛于离散化方程的解。因此，非常重要的是检查网格加密(例如把网格点数目加倍)后解改变了多少。如果解只有微小的改进，我们称之为网格收敛解(grid converged solution)。另一个不言而喻的要求是:离散格式具有与所求解流动问题相称的精度阶。有时为了更快收敛，这条规则会被放弃，在工业环境中尤其如此(坏的解总比没有解好)。当然，这是非常危险的做法。我们稍后将回到精度、稳定性与一致性的问题，见第10章。
     }
   }
 
@@ -248,13 +248,13 @@
     @bi{
       So far, we discussed only the basic choices which exist for the spatial discretisation. But within each of the above three main methods - finite difference, finite volume and finite element - various numerical schemes exist to perform the spatial discretisation. In this context, it is convenient to differentiate between the discretisation of the convective and the viscous fluxes (@tex-math{\vec{F}_c} and @tex-math{\vec{F}_v} in Eq. (2.19), respectively). Because of the physical nature of the viscous fluxes, the only reasonable way is to employ central differences (central averaging) for their discretisation. Thus, their discretisation on structured grids is straightforward. On unstructured triangular or tetrahedral grids, the viscous fluxes are best approximated using the Galerkin finite element methodology, even in the case of a finite volume scheme @link["blazek2005-r3-58"]{[58]}. The situation becomes more complicated for unstructured mixed grids, where a modified averaging of gradients is more appropriate @link["blazek2005-r3-59"]{[59]}-@link["blazek2005-r3-63"]{[63]}.
     }{
-      到目前为止ï¼我们只讨论了空间离散可作的基本选择。但在上述三种主要方法——有限差分、有限体积和有限元——之中ï¼执行空间离散的数值格式多种多样。在此背景下ï¼把对流通量与黏性通量(分别为式(2.19)中的@tex-math{\vec{F}_c}与@tex-math{\vec{F}_v})的离散区分开来讨论会比较方便。鉴于黏性通量的物理性质ï¼唯一合理的方式是采用中心差分(中心平均)来离散它们ï¼因此它们在结构网格上的离散是直截了当的。在非结构的三角形或四面体网格上ï¼即便采用有限体积格式ï¼黏性通量也最好用 Galerkin 有限元方法学来近似@link["blazek2005-r3-58"]{[58]}。对于非结构混合网格ï¼情形变得更为复杂ï¼此时对梯度作修正后的平均更为合适@link["blazek2005-r3-59"]{[59]}-@link["blazek2005-r3-63"]{[63]}。
+      到目前为止，我们只讨论了空间离散可作的基本选择。但在上述三种主要方法——有限差分、有限体积和有限元——之中，执行空间离散的数值格式多种多样。在此背景下，把对流通量与黏性通量(分别为式(2.19)中的@tex-math{\vec{F}_c}与@tex-math{\vec{F}_v})的离散区分开来讨论会比较方便。鉴于黏性通量的物理性质，唯一合理的方式是采用中心差分(中心平均)来离散它们，因此它们在结构网格上的离散是直截了当的。在非结构的三角形或四面体网格上，即便采用有限体积格式，黏性通量也最好用 Galerkin 有限元方法学来近似@link["blazek2005-r3-58"]{[58]}。对于非结构混合网格，情形变得更为复杂，此时对梯度作修正后的平均更为合适@link["blazek2005-r3-59"]{[59]}-@link["blazek2005-r3-63"]{[63]}。
     }
 
     @bi{
       However, the real variety is found in the discretisation of the convective fluxes. In order to classify the individual methodologies, we will restrict our attention to schemes developed for the finite volume method, although most of the concepts are also directly applicable to the finite difference or the finite element method.
     }{
-      然而ï¼真正的多样性体现在对流通量的离散上。为了对各种方法学进行分类ï¼我们把注意力集中于为有限体积法发展的格式ï¼尽管其中多数概念同样可以直接应用于有限差分法或有限元法。
+      然而，真正的多样性体现在对流通量的离散上。为了对各种方法学进行分类，我们把注意力集中于为有限体积法发展的格式，尽管其中多数概念同样可以直接应用于有限差分法或有限元法。
     }
 
     @emph{Central Schemes 中心格式}
@@ -262,7 +262,7 @@
     @bi{
       To the first category we may count schemes, which are based solely on central difference formulae or on central averaging, respectively. These are denoted as central schemes. The principle is to average the conservative variables to the left and to the right in order to evaluate the flux at a side of the control volume. Since the central schemes cannot recognise and suppress an odd-even decoupling of the solution (i.e., the generation of two independent solutions of the discretised equations), the so-called artificial dissipation (because of its similarity to the viscous terms) has to be added for stabilisation. The most widely known implementation is due to Jameson et al. @link["blazek2005-r3-64"]{[64]}. On structured grids, it is based on a blend of 2nd- and 4th-differences scaled by the maximum eigenvalue of the convective flux Jacobian. A combination of an undivided Laplacian and biharmonic operator is employed on unstructured grids @link["blazek2005-r3-65"]{[65]}. The scheme can be improved remarkably using different scaling factors for each equation. This approach is known as the matrix dissipation scheme @link["blazek2005-r3-66"]{[66]}. It should be mentioned that on unstructured, mixed element grids the explicit Runge-Kutta time-stepping scheme can become unstable, when combined with the conventional central scheme @link["blazek2005-r3-67"]{[67]}.
     }{
-      第一类可以计入那些完全基于中心差分公式或中心平均的格式ï¼它们被称为中心格式(central schemes)。其原理是:为了计算控制体某个面上的通量ï¼把守恒变量向左、向右取平均。由于中心格式无法识别并抑制解的奇偶失联(odd-even decouplingï¼即产生离散化方程的两个相互独立的解)ï¼必须加入所谓的人工耗散(artificial dissipationï¼因其与黏性项相似而得名)以使其稳定。最广为人知的实现出自 Jameson 等@link["blazek2005-r3-64"]{[64]}。在结构网格上ï¼它基于二阶差分与四阶差分的混合ï¼并以对流通量雅可比矩阵的最大特征值作为标度。在非结构网格上则采用未分割 Laplacian 算子与双调和算子的组合@link["blazek2005-r3-65"]{[65]}。若对方程采用不同的标度因子ï¼该格式可以得到显著改进ï¼这一途径称为矩阵耗散格式(matrix dissipation scheme)@link["blazek2005-r3-66"]{[66]}。应当指出ï¼在非结构混合单元网格上ï¼显式 Runge-Kutta 时间推进格式与常规中心格式结合时可能变得不稳定@link["blazek2005-r3-67"]{[67]}。
+      第一类可以计入那些完全基于中心差分公式或中心平均的格式，它们被称为中心格式(central schemes)。其原理是:为了计算控制体某个面上的通量，把守恒变量向左、向右取平均。由于中心格式无法识别并抑制解的奇偶失联(odd-even decoupling，即产生离散化方程的两个相互独立的解)，必须加入所谓的人工耗散(artificial dissipation，因其与黏性项相似而得名)以使其稳定。最广为人知的实现出自 Jameson 等@link["blazek2005-r3-64"]{[64]}。在结构网格上，它基于二阶差分与四阶差分的混合，并以对流通量雅可比矩阵的最大特征值作为标度。在非结构网格上则采用未分割 Laplacian 算子与双调和算子的组合@link["blazek2005-r3-65"]{[65]}。若对方程采用不同的标度因子，该格式可以得到显著改进，这一途径称为矩阵耗散格式(matrix dissipation scheme)@link["blazek2005-r3-66"]{[66]}。应当指出，在非结构混合单元网格上，显式 Runge-Kutta 时间推进格式与常规中心格式结合时可能变得不稳定@link["blazek2005-r3-67"]{[67]}。
     }
 
     @emph{Upwind Schemes 上风格式}
@@ -277,7 +277,7 @@
               }
               Each of these is described briefly in the following subsections.
     }{
-      另一方面ï¼还有更先进的空间离散格式ï¼它们是通过考虑 Euler 方程的物理性质而构造的。由于它们区分上游与下游的影响(波传播方向)ï¼故称为上风格式(upwind schemes)。这些格式大致可分为四大类:
+      另一方面，还有更先进的空间离散格式，它们是通过考虑 Euler 方程的物理性质而构造的。由于它们区分上游与下游的影响(波传播方向)，故称为上风格式(upwind schemes)。这些格式大致可分为四大类:
               @itemize{
                 @item{通量向量分裂(flux-vector splitting);}
                 @item{通量差分分裂(flux-difference splitting);}
@@ -292,7 +292,7 @@
     @bi{
       One class of the flux-vector splitting schemes decomposes the vector of the convective fluxes into two parts according to the sign of certain characteristic variables, which are in general similar to but not identical to the eigenvalues of the convective flux Jacobian. The two parts of the flux vector are then discretised by upwind biased differences. The very first flux-vector splitting schemes of this type were developed in the beginning of the 1980's by Steger and Warming @link["blazek2005-r3-68"]{[68]} and by Van Leer @link["blazek2005-r3-69"]{[69]}, respectively. A second class of flux-vector splitting schemes decompose the flux vector into a convective and a pressure (an acoustic) part. This idea is utilised by schemes like AUSM (Advection Upstream Splitting Method) of Liou et al. @link["blazek2005-r3-70"]{[70]}, @link["blazek2005-r3-71"]{[71]}, or the CUSP scheme (Convective Upwind Split Pressure) of Jameson @link["blazek2005-r3-72"]{[72]}, @link["blazek2005-r3-73"]{[73]}, respectively. Further similar approaches are the Low-Diffusion Flux-Splitting Scheme (LDFSS) introduced by Edwards @link["blazek2005-r3-74"]{[74]}, or the Mach number-based Advection Pressure Splitting (MAPS) scheme of Rossow @link["blazek2005-r3-75"]{[75]}, @link["blazek2005-r3-76"]{[76]}. The second group of flux-vector splitting schemes gained recently larger popularity particularly because of their improved resolution of shear layers, but only a moderate computational effort. An advantage of the flux-vector splitting schemes is also that they can be quite easily extended to real gas flows, as opposed to flux-difference splitting or TVD schemes. We shall return to real gas simulations further below.
     }{
-      其中一类的通量向量分裂格式ï¼依据某些特征变量的符号把对流通量向量分解为两部分ï¼这些特征变量一般与对流通量雅可比矩阵的特征值相似但不相同。通量向量的这两部分随后用偏上风的差分来离散。最早属于这种类型的通量向量分裂格式由 Steger 与 Warming@link["blazek2005-r3-68"]{[68]}以及 Van Leer@link["blazek2005-r3-69"]{[69]}于20世纪80年代初分别发展。第二类通量向量分裂格式则把通量向量分解为对流部分与压力(即声学)部分。Liou 等的 AUSM 格式(Advection Upstream Splitting Methodï¼迎风对流分裂方法)@link["blazek2005-r3-70"]{[70]}、@link["blazek2005-r3-71"]{[71]}ï¼以及 Jameson 的 CUSP 格式(Convective Upwind Split Pressureï¼对流上风分裂压力)@link["blazek2005-r3-72"]{[72]}、@link["blazek2005-r3-73"]{[73]}都利用了这一思想。进一步的类似途径还有 Edwards 提出的低耗散通量分裂格式(LDFSS,Low-Diffusion Flux-Splitting Scheme)@link["blazek2005-r3-74"]{[74]}ï¼以及 Rossow 的基于马赫数的对流-压力分裂格式(MAPS,Mach number-based Advection Pressure Splitting)@link["blazek2005-r3-75"]{[75]}、@link["blazek2005-r3-76"]{[76]}。第二类通量向量分裂格式近来获得了更大的流行ï¼特别是因为它们改善了剪切层的分辨率ï¼而计算量只有中等水平。与通量差分分裂或 TVD 格式相比ï¼通量向量分裂格式的另一个优点是:它们可以相当容易地推广到真实气体流动。我们稍后再回到真实气体模拟。
+      其中一类的通量向量分裂格式，依据某些特征变量的符号把对流通量向量分解为两部分，这些特征变量一般与对流通量雅可比矩阵的特征值相似但不相同。通量向量的这两部分随后用偏上风的差分来离散。最早属于这种类型的通量向量分裂格式由 Steger 与 Warming@link["blazek2005-r3-68"]{[68]}以及 Van Leer@link["blazek2005-r3-69"]{[69]}于20世纪80年代初分别发展。第二类通量向量分裂格式则把通量向量分解为对流部分与压力(即声学)部分。Liou 等的 AUSM 格式(Advection Upstream Splitting Method，迎风对流分裂方法)@link["blazek2005-r3-70"]{[70]}、@link["blazek2005-r3-71"]{[71]}，以及 Jameson 的 CUSP 格式(Convective Upwind Split Pressure，对流上风分裂压力)@link["blazek2005-r3-72"]{[72]}、@link["blazek2005-r3-73"]{[73]}都利用了这一思想。进一步的类似途径还有 Edwards 提出的低耗散通量分裂格式(LDFSS,Low-Diffusion Flux-Splitting Scheme)@link["blazek2005-r3-74"]{[74]}，以及 Rossow 的基于马赫数的对流-压力分裂格式(MAPS,Mach number-based Advection Pressure Splitting)@link["blazek2005-r3-75"]{[75]}、@link["blazek2005-r3-76"]{[76]}。第二类通量向量分裂格式近来获得了更大的流行，特别是因为它们改善了剪切层的分辨率，而计算量只有中等水平。与通量差分分裂或 TVD 格式相比，通量向量分裂格式的另一个优点是:它们可以相当容易地推广到真实气体流动。我们稍后再回到真实气体模拟。
     }
 
     @emph{Flux-Difference Splitting Schemes 通量差分分裂格式}
@@ -300,7 +300,7 @@
     @bi{
       The second group - flux-difference splitting schemes - is based on the solution of the locally one-dimensional Euler equations for discontinuous states at an interface. This corresponds to the Riemann (shock tube) problem. The values on either side of the interface are generally termed as the left and right state. The idea to solve the Riemann problem at the interface between two control volumes was first introduced by Godunov @link["blazek2005-r3-77"]{[77]} back in 1959. In order to reduce the numerical effort required for an exact solution of the Riemann problem, approximate Riemann solvers were developed, e.g., by Osher et al. @link["blazek2005-r3-78"]{[78]} and Roe @link["blazek2005-r3-79"]{[79]}. Roe's solver is often used today because of its excellent resolution of boundary layers and a crisp representation of shocks. It can be easily implemented on structured as well as on unstructured grids @link["blazek2005-r3-80"]{[80]}.
     }{
-      第二类——通量差分分裂格式(flux-difference splitting schemes)——基于对界面上间断状态求解局部一维 Euler 方程ï¼这对应于 Riemann(激波管)问题。界面两侧的值通常称为左状态(left state)与右状态(right state)。在两个控制体之间的界面处求解 Riemann 问题的思想最早由 Godunov@link["blazek2005-r3-77"]{[77]}于1959年提出。为了减少精确求解 Riemann 问题所需的数值工作量ï¼人们发展了近似 Riemann 求解器ï¼例如 Osher 等@link["blazek2005-r3-78"]{[78]}与 Roe@link["blazek2005-r3-79"]{[79]}的求解器。Roe 求解器至今仍经常使用ï¼因为它对边界层的分辨率极佳ï¼且对激波的表示十分清晰。它可以容易地在结构网格与非结构网格上实现@link["blazek2005-r3-80"]{[80]}。
+      第二类——通量差分分裂格式(flux-difference splitting schemes)——基于对界面上间断状态求解局部一维 Euler 方程，这对应于 Riemann(激波管)问题。界面两侧的值通常称为左状态(left state)与右状态(right state)。在两个控制体之间的界面处求解 Riemann 问题的思想最早由 Godunov@link["blazek2005-r3-77"]{[77]}于1959年提出。为了减少精确求解 Riemann 问题所需的数值工作量，人们发展了近似 Riemann 求解器，例如 Osher 等@link["blazek2005-r3-78"]{[78]}与 Roe@link["blazek2005-r3-79"]{[79]}的求解器。Roe 求解器至今仍经常使用，因为它对边界层的分辨率极佳，且对激波的表示十分清晰。它可以容易地在结构网格与非结构网格上实现@link["blazek2005-r3-80"]{[80]}。
     }
 
     @emph{TVD Schemes TVD 格式}
@@ -308,7 +308,7 @@
     @bi{
       The idea of TVD schemes was first introduced by Harten @link["blazek2005-r3-81"]{[81]} in 1983. The TVD schemes are based on a concept aimed at preventing the generation of new extrema in the flow solution. The principal conditions for a TVD scheme are that maxima must be non-increasing, minima non-decreasing, and no new local extrema may be created. Such a scheme is called monotonicity preserving. Thus, a discretisation methodology with TVD properties allows it to resolve a shock wave without any spurious oscillations of the solution. The TVD schemes are in general implemented as an average of the convective fluxes combined with an additional dissipation term. The dissipation term can either depend on the sign of the characteristic speeds or not. In the first case, we speak of an upwind TVD scheme @link["blazek2005-r3-82"]{[82]}, in the second case of a symmetric TVD scheme @link["blazek2005-r3-83"]{[83]}. The experience shows that the upwind TVD scheme should be preferred since it offers a better shock and boundary layer resolution than the symmetric TVD scheme. The disadvantage of the TVD schemes is that they cannot be easily extended to higher than second-order spatial accuracy. This limitation can be overcome using the ENO (Essentially Non-Oscillatory) discretisation schemes @link["blazek2005-r3-84"]{[84]}-@link["blazek2005-r3-89"]{[89]}.
     }{
-      TVD 格式的思想由 Harten@link["blazek2005-r3-81"]{[81]}于1983年首先提出。TVD 格式基于一种旨在防止流动解中产生新极值的概念。TVD 格式的基本条件是:极大值必须不增ï¼极小值必须不减ï¼且不得产生新的局部极值。这样的格式称为保持单调性(monotonicity preserving)。因此ï¼具有 TVD 性质的离散方法学能够在没有任何虚假振荡的情况下分辨激波。TVD 格式一般实现为对流通量的平均再加上一个附加耗散项。该耗散项可以依赖也可以不依赖特征速度的符号。前一种情形称为上风 TVD 格式@link["blazek2005-r3-82"]{[82]}ï¼后一种情形称为对称 TVD 格式@link["blazek2005-r3-83"]{[83]}。经验表明应当优先选用上风 TVD 格式ï¼因为它对激波和边界层的分辨率优于对称 TVD 格式。TVD 格式的缺点是难以推广到高于二阶的空间精度。利用 ENO(Essentially Non-Oscillatoryï¼基本无振荡)离散格式@link["blazek2005-r3-84"]{[84]}-@link["blazek2005-r3-89"]{[89]}可以克服这一局限。
+      TVD 格式的思想由 Harten@link["blazek2005-r3-81"]{[81]}于1983年首先提出。TVD 格式基于一种旨在防止流动解中产生新极值的概念。TVD 格式的基本条件是:极大值必须不增，极小值必须不减，且不得产生新的局部极值。这样的格式称为保持单调性(monotonicity preserving)。因此，具有 TVD 性质的离散方法学能够在没有任何虚假振荡的情况下分辨激波。TVD 格式一般实现为对流通量的平均再加上一个附加耗散项。该耗散项可以依赖也可以不依赖特征速度的符号。前一种情形称为上风 TVD 格式@link["blazek2005-r3-82"]{[82]}，后一种情形称为对称 TVD 格式@link["blazek2005-r3-83"]{[83]}。经验表明应当优先选用上风 TVD 格式，因为它对激波和边界层的分辨率优于对称 TVD 格式。TVD 格式的缺点是难以推广到高于二阶的空间精度。利用 ENO(Essentially Non-Oscillatory，基本无振荡)离散格式@link["blazek2005-r3-84"]{[84]}-@link["blazek2005-r3-89"]{[89]}可以克服这一局限。
     }
 
     @emph{Fluctuation-Splitting Schemes 脉动分裂格式}
@@ -316,7 +316,7 @@
     @bi{
       The last group - the fluctuation-splitting schemes - provides for true multidimensional upwinding. The aim is to resolve accurately also those flow features which are not aligned with the grid. This is a significant advantage over all above upwind schemes, which split the equations according only to the orientation of the grid cells. Within the fluctuation-splitting methodology, the flow variables are associated with the grid nodes. Intermediate residuals are computed as flux balances over the grid cells, which consists of triangles in 2-D and of tetrahedra in 3-D. The cell-based residuals are then distributed in an upwind-biased manner to the nodes. After that, the solution is updated using the nodal values. In the case of systems of equations (Euler or Navier-Stokes), the cell-based residuals have to be decomposed into scalar waves. Since the decomposition is not unique in 2-D and in 3-D, several approaches were developed in the past. The variety reaches from the wave model of Roe @link["blazek2005-r3-90"]{[90]}, @link["blazek2005-r3-91"]{[91]} over the algebraic scheme of Sidilkover @link["blazek2005-r3-92"]{[92]} to the most advanced characteristic decomposition method @link["blazek2005-r3-93"]{[93]}-@link["blazek2005-r3-96"]{[96]}. Despite the above mentioned advantage over the dimensionally split Riemann, TVD, etc. solvers, the fluctuation-splitting approaches are so far used only in research codes. This can be attributed to the complexity and the high numerical effort, as well as to convergence problems.
     }{
-      最后一类——脉动分裂格式(fluctuation-splitting schemes)——提供了真正的多维上风。其目标是把那些与网格方向不一致的流动特征也精确分辨出来。与上面所有仅按网格单元方向对方程进行分裂的上风格式相比ï¼这是一个显著的优势。在脉动分裂方法学中ï¼流动变量与网格节点相关联;中间残差作为网格单元(二维为三角形ï¼三维为四面体)上的通量平衡来计算;然后把这些基于单元的残差以偏上风的方式分配到节点上;之后利用节点值更新解。对于方程组(Euler 或 Navier-Stokes 方程)ï¼基于单元的残差还须分解为标量波。由于这种分解在二维和三维都不唯一ï¼过去发展了若干种途径:从 Roe 的波模型@link["blazek2005-r3-90"]{[90]}、@link["blazek2005-r3-91"]{[91]}ï¼经 Sidilkover 的代数格式@link["blazek2005-r3-92"]{[92]}ï¼直到最先进的特征分解方法@link["blazek2005-r3-93"]{[93]}-@link["blazek2005-r3-96"]{[96]}。尽管相对按维分裂的 Riemann、TVD 等求解器具有上述优势ï¼脉动分裂途径迄今仍只用于研究性代码ï¼其原因可归结为复杂性高、数值工作量大ï¼以及收敛问题。
+      最后一类——脉动分裂格式(fluctuation-splitting schemes)——提供了真正的多维上风。其目标是把那些与网格方向不一致的流动特征也精确分辨出来。与上面所有仅按网格单元方向对方程进行分裂的上风格式相比，这是一个显著的优势。在脉动分裂方法学中，流动变量与网格节点相关联;中间残差作为网格单元(二维为三角形，三维为四面体)上的通量平衡来计算;然后把这些基于单元的残差以偏上风的方式分配到节点上;之后利用节点值更新解。对于方程组(Euler 或 Navier-Stokes 方程)，基于单元的残差还须分解为标量波。由于这种分解在二维和三维都不唯一，过去发展了若干种途径:从 Roe 的波模型@link["blazek2005-r3-90"]{[90]}、@link["blazek2005-r3-91"]{[91]}，经 Sidilkover 的代数格式@link["blazek2005-r3-92"]{[92]}，直到最先进的特征分解方法@link["blazek2005-r3-93"]{[93]}-@link["blazek2005-r3-96"]{[96]}。尽管相对按维分裂的 Riemann、TVD 等求解器具有上述优势，脉动分裂途径迄今仍只用于研究性代码，其原因可归结为复杂性高、数值工作量大，以及收敛问题。
     }
 
     @emph{Central versus Upwind Schemes 中心格式与上风格式的比较}
@@ -324,7 +324,7 @@
     @bi{
       You may ask now, what are the benefits and the drawbacks of the individual spatial discretisation methods. Generally speaking, central schemes require lower numerical effort, and hence less CPU time per evaluation, as compared to upwind schemes. On the other hand, upwind schemes are able to capture discontinuities much more accurately than central schemes. Furthermore, because of their lower numerical diffusion, the upwind schemes can resolve boundary layers using less grid points. Particularly, Roe's flux-difference splitting scheme and the CUSP flux-vector splitting scheme allow a very accurate computation of boundary layers. The negative side of the upwind schemes emerges for second- or higher-order spatial accuracy. The problem is that the so-called limiter functions (or simply limiters) have to be employed in order to prevent the generation of spurious oscillations near strong discontinuities. Limiters are known to stall the convergence of an iteration scheme, because of their accidental switching in smooth flow regions. A remedy was suggested by Venkatakrishnan @link["blazek2005-r3-97"]{[97]}-@link["blazek2005-r3-99"]{[99]}, which works satisfactorily for most practical cases. However, small wiggles in the solution must be taken into account. Another disadvantage of the limiter functions is that they require high computational effort, particularly on unstructured grids.
     }{
-      你也许会问:各种空间离散方法的收益与代价各是什么?一般而言ï¼与上风格式相比ï¼中心格式所需的数值工作量更低ï¼每次计算的 CPU 时间也更少。另一方面ï¼上风格式捕捉间断的精度远高于中心格式。此外ï¼由于其数值扩散较低ï¼上风格式可以用更少的网格点分辨边界层。特别是 Roe 的通量差分分裂格式与 CUSP 通量向量分裂格式能够非常精确地计算边界层。上风格式的负面效应在二阶或更高阶空间精度时显现:问题在于必须采用所谓的限制器函数(limiter functionsï¼或简称限制器 limiters)ï¼以防止在强间断附近产生虚假振荡。众所周知ï¼限制器会在光滑流动区域意外切换ï¼从而使迭代格式的收敛停滞。Venkatakrishnan@link["blazek2005-r3-97"]{[97]}-@link["blazek2005-r3-99"]{[99]}提出了一种补救措施ï¼对大多数实际问题效果令人满意ï¼但必须考虑到解中会出现微小波纹。限制器函数的另一个缺点是计算工作量大ï¼在非结构网格上尤其如此。
+      你也许会问:各种空间离散方法的收益与代价各是什么?一般而言，与上风格式相比，中心格式所需的数值工作量更低，每次计算的 CPU 时间也更少。另一方面，上风格式捕捉间断的精度远高于中心格式。此外，由于其数值扩散较低，上风格式可以用更少的网格点分辨边界层。特别是 Roe 的通量差分分裂格式与 CUSP 通量向量分裂格式能够非常精确地计算边界层。上风格式的负面效应在二阶或更高阶空间精度时显现:问题在于必须采用所谓的限制器函数(limiter functions，或简称限制器 limiters)，以防止在强间断附近产生虚假振荡。众所周知，限制器会在光滑流动区域意外切换，从而使迭代格式的收敛停滞。Venkatakrishnan@link["blazek2005-r3-97"]{[97]}-@link["blazek2005-r3-99"]{[99]}提出了一种补救措施，对大多数实际问题效果令人满意，但必须考虑到解中会出现微小波纹。限制器函数的另一个缺点是计算工作量大，在非结构网格上尤其如此。
     }
 
     @emph{Upwind Schemes for Real Gas Flows 真实气体流动的上风格式}
@@ -332,7 +332,7 @@
     @bi{
       With respect to real gas simulations, and in particular to chemically reacting flows, several extensions of the upwind discretisation schemes were presented. For the case of fluids in thermodynamic and chemical equilibrium, modifications of the Van Leer flux-vector splitting @link["blazek2005-r3-69"]{[69]} and of Roe's approximate Riemann solver @link["blazek2005-r3-79"]{[79]} were described in Refs. @link["blazek2005-r3-100"]{[100]}-@link["blazek2005-r3-102"]{[102]}. Formulations of the both upwind methods for the more complex case of flows with non-equilibrium chemistry and thermodynamics were provided in @link["blazek2005-r3-103"]{[103]}-@link["blazek2005-r3-108"]{[108]} and in the references cited therein. In particular, the articles @link["blazek2005-r3-102"]{[102]}, @link["blazek2005-r3-106"]{[106]} and @link["blazek2005-r3-107"]{[107]}, respectively, give a good overview of the methodologies employed for the upwind discretisation schemes. Recently, a summary of the governing equations together with Jacobian and transformation matrices, which may be required by an upwind scheme, was presented in Ref. @link["blazek2005-r3-109"]{[109]} for the case of chemically reacting flows.
     }{
-      针对真实气体模拟ï¼特别是化学反应流动ï¼已有若干对上风离散格式的推广。对于热力学与化学平衡的流体情形,Van Leer 通量向量分裂@link["blazek2005-r3-69"]{[69]}与 Roe 近似 Riemann 求解器@link["blazek2005-r3-79"]{[79]}的修改在文献@link["blazek2005-r3-100"]{[100]}-@link["blazek2005-r3-102"]{[102]}中给出。对于化学与热力学均处于非平衡的更复杂流动情形ï¼这两种上风方法的表述见@link["blazek2005-r3-103"]{[103]}-@link["blazek2005-r3-108"]{[108]}及其所引文献。其中文献@link["blazek2005-r3-102"]{[102]}、@link["blazek2005-r3-106"]{[106]}与@link["blazek2005-r3-107"]{[107]}分别对上风离散格式所采用的方法学给出了很好的概述。最近ï¼文献@link["blazek2005-r3-109"]{[109]}针对化学反应流动ï¼汇总了控制方程以及上风格式可能需要的雅可比矩阵和变换矩阵。
+      针对真实气体模拟，特别是化学反应流动，已有若干对上风离散格式的推广。对于热力学与化学平衡的流体情形,Van Leer 通量向量分裂@link["blazek2005-r3-69"]{[69]}与 Roe 近似 Riemann 求解器@link["blazek2005-r3-79"]{[79]}的修改在文献@link["blazek2005-r3-100"]{[100]}-@link["blazek2005-r3-102"]{[102]}中给出。对于化学与热力学均处于非平衡的更复杂流动情形，这两种上风方法的表述见@link["blazek2005-r3-103"]{[103]}-@link["blazek2005-r3-108"]{[108]}及其所引文献。其中文献@link["blazek2005-r3-102"]{[102]}、@link["blazek2005-r3-106"]{[106]}与@link["blazek2005-r3-107"]{[107]}分别对上风离散格式所采用的方法学给出了很好的概述。最近，文献@link["blazek2005-r3-109"]{[109]}针对化学反应流动，汇总了控制方程以及上风格式可能需要的雅可比矩阵和变换矩阵。
     }
   }
 }
@@ -343,13 +343,13 @@
   @bi{
     As already mentioned at the beginning of this chapter, the prevailing number of numerical schemes for the solution of the Euler and the Navier-Stokes equations applies the method of lines, i.e., a separate discretisation in space and in time. This approach offers the largest flexibility, since different levels of approximation can be easily selected for the convective and the viscous fluxes, as well as for the time integration - just as required by the problem solved. Therefore, we shall follow this methodology here. For the discussion of other methods, where time and space discretisations are coupled, the reader is referred to Ref. @link["blazek2005-r3-43"]{[43]}.
   }{
-    正如本章开头已经提到的ï¼求解 Euler 方程与 Navier-Stokes 方程的数值格式中ï¼绝大多数都采用线法ï¼即空间与时间分别离散。这一途径提供了最大的灵活性ï¼因为可以按照所解问题的需要ï¼方便地为对流通量、黏性通量以及时间积分各自选取不同水平的近似。因此ï¼我们在这里也遵循这一方法学。至于时间离散与空间离散相互耦合的其他方法ï¼请读者参见文献@link["blazek2005-r3-43"]{[43]}。
+    正如本章开头已经提到的，求解 Euler 方程与 Navier-Stokes 方程的数值格式中，绝大多数都采用线法，即空间与时间分别离散。这一途径提供了最大的灵活性，因为可以按照所解问题的需要，方便地为对流通量、黏性通量以及时间积分各自选取不同水平的近似。因此，我们在这里也遵循这一方法学。至于时间离散与空间离散相互耦合的其他方法，请读者参见文献@link["blazek2005-r3-43"]{[43]}。
   }
 
   @bi{
     When the method of lines is applied to the governing equations (2.19), it leads, written down for each control volume, to a system of coupled ordinary differential equations in time
   }{
-    把线法应用于控制方程(2.19)ï¼并对每个控制体写出ï¼便得到一组在时间上相互耦合的常微分方程
+    把线法应用于控制方程(2.19)，并对每个控制体写出，便得到一组在时间上相互耦合的常微分方程
   }
 
   @tex-display-math[#:id "eq-3-3"]{\frac{d(\Omega\,\overline{M}\vec{W})}{dt}=-\vec{R}\,. \tag{3.3}}
@@ -357,13 +357,13 @@
   @bi{
     For clarity, we omitted any cell indices. In Eq. @link["blazek2005-ch03#eq-3-3"]{(3.3)}, @tex-math{\Omega} denotes volume of the control volume and @tex-math{\vec{R}} stands for the complete spatial (finite volume) discretisation including the source term - the so-called residual. The residual is a non-linear function of the conservative variables @tex-math{\vec{W}}. Finally, @tex-math{\overline{M}} represents what is termed the mass matrix. For a cell-vertex scheme, it relates the average value of @tex-math{\vec{W}} in the control volume to the point values at the associated interior node and the neighbouring nodes @link["blazek2005-r3-110"]{[110]}, @link["blazek2005-r3-111"]{[111]}. In the case of a cell-centred scheme, the mass matrix can be substituted by an identity matrix, without compromising the temporal accuracy of the scheme. The same holds for a cell-vertex scheme applied on a uniform grid, since then the nodes coincide with the centroids of the control volumes. The mass matrix is a function of the grid only and couples the system of differential equations (3.3). For steady-state cases, where time accuracy is not a concern, the mass matrix can be "lumped", i.e., replaced by the identity matrix. In this way, the expensive inversion of @tex-math{\overline{M}} can be avoided and the system (3.3) is decoupled. In this respect, it is important to realise that at the steady-state, the solution accuracy is determined solely by the approximation order of the residual. Thus, the mass matrix becomes important only for cell-vertex schemes applied to unsteady flows.
   }{
-    为清晰起见ï¼我们略去了所有单元索引。在方程@link["blazek2005-ch03#eq-3-3"]{(3.3)}中,@tex-math{\Omega}表示控制体的体积,@tex-math{\vec{R}}代表包含源项在内的完整空间(有限体积)离散——即所谓的残差(residual)。残差是守恒变量@tex-math{\vec{W}}的非线性函数。最后,@tex-math{\overline{M}}表示所谓的质量矩阵(mass matrix)。对于格点格式ï¼它把控制体内@tex-math{\vec{W}}的平均值与相关内部节点及邻近节点上的点值联系起来@link["blazek2005-r3-110"]{[110]}、@link["blazek2005-r3-111"]{[111]}。对于格心格式ï¼质量矩阵可以用单位矩阵代替ï¼而不损害格式的时间精度。对于施加在均匀网格上的格点格式也是如此ï¼因为此时节点与控制体的形心重合。质量矩阵只是网格的函数ï¼它使常微分方程组(3.3)相互耦合。对于定常情形ï¼时间精度无关紧要ï¼质量矩阵可以"集总"(lumped)ï¼即用单位矩阵代替。这样便可以避免对@tex-math{\overline{M}}作代价高昂的求逆ï¼且方程组(3.3)得以解耦。在这一点上ï¼重要的是认识到:在定常状态ï¼解的精度完全由残差的近似阶决定。因此ï¼质量矩阵只在把格点格式用于非定常流动时才变得重要。
+    为清晰起见，我们略去了所有单元索引。在方程@link["blazek2005-ch03#eq-3-3"]{(3.3)}中,@tex-math{\Omega}表示控制体的体积,@tex-math{\vec{R}}代表包含源项在内的完整空间(有限体积)离散——即所谓的残差(residual)。残差是守恒变量@tex-math{\vec{W}}的非线性函数。最后,@tex-math{\overline{M}}表示所谓的质量矩阵(mass matrix)。对于格点格式，它把控制体内@tex-math{\vec{W}}的平均值与相关内部节点及邻近节点上的点值联系起来@link["blazek2005-r3-110"]{[110]}、@link["blazek2005-r3-111"]{[111]}。对于格心格式，质量矩阵可以用单位矩阵代替，而不损害格式的时间精度。对于施加在均匀网格上的格点格式也是如此，因为此时节点与控制体的形心重合。质量矩阵只是网格的函数，它使常微分方程组(3.3)相互耦合。对于定常情形，时间精度无关紧要，质量矩阵可以"集总"(lumped)，即用单位矩阵代替。这样便可以避免对@tex-math{\overline{M}}作代价高昂的求逆，且方程组(3.3)得以解耦。在这一点上，重要的是认识到:在定常状态，解的精度完全由残差的近似阶决定。因此，质量矩阵只在把格点格式用于非定常流动时才变得重要。
   }
 
   @bi{
     If we assume a static grid, we may take the volume @tex-math{\Omega} and the mass matrix outside the time derivative. Then, we can approximate the time derivative by the following non-linear scheme @link["blazek2005-r3-43"]{[43]}
   }{
-    如果假设网格是静止的ï¼就可以把体积@tex-math{\Omega}和质量矩阵移到时间导数之外。于是ï¼可以用如下的非线性格式@link["blazek2005-r3-43"]{[43]}来近似时间导数
+    如果假设网格是静止的，就可以把体积@tex-math{\Omega}和质量矩阵移到时间导数之外。于是，可以用如下的非线性格式@link["blazek2005-r3-43"]{[43]}来近似时间导数
   }
 
   @tex-display-math[#:id "eq-3-4"]{\frac{\Omega\,\overline{M}}{\Delta t}\,\Delta\vec{W}^{n}=-\frac{\beta}{1+\omega}\,\vec{R}^{n+1}-\frac{1-\beta}{1+\omega}\,\vec{R}^{n}+\frac{\omega\,\Omega\,\overline{M}}{(1+\omega)\,\Delta t}\,\Delta\vec{W}^{n-1} \tag{3.4}}
@@ -393,7 +393,7 @@
   @bi{
     is fulfilled, otherwise the time accuracy is reduced to 1st-order. Depending on the settings of the parameters @tex-math{\beta} and @tex-math{\omega}, we can obtain either explicit (@tex-math{\beta=0}) or implicit time-stepping schemes. We shall discuss this two main classes briefly in the following paragraphs, and in more detail later in Chapter 6.
   }{
-    得到满足ï¼方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}在时间上具有二阶精度;否则时间精度降为一阶。根据参数@tex-math{\beta}与@tex-math{\omega}的设置ï¼我们可以得到显式(@tex-math{\beta=0})或隐式的时间推进格式。下面几段将简要讨论这两个主要类别ï¼更详细的讨论见后面的第6章。
+    得到满足，方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}在时间上具有二阶精度;否则时间精度降为一阶。根据参数@tex-math{\beta}与@tex-math{\omega}的设置，我们可以得到显式(@tex-math{\beta=0})或隐式的时间推进格式。下面几段将简要讨论这两个主要类别，更详细的讨论见后面的第6章。
   }
 
   @subtree[#:id "blazek2005-3-2-1"]{
@@ -402,7 +402,7 @@
     @bi{
       A basic explicit time-integration scheme is obtained by setting @tex-math{\beta=0} and @tex-math{\omega=0} in Eq. @link["blazek2005-ch03#eq-3-4"]{(3.4)}. In this case, the time derivative is approximated by a forward difference and the residual is evaluated at the current time level only (based on known flow quantities), i.e.,
     }{
-      在方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}中令@tex-math{\beta=0}、@tex-math{\omega=0}ï¼便得到一个基本的显式时间积分格式。此时ï¼时间导数用前向差分近似ï¼残差只在当前时间层上计算(基于已知的流动量)ï¼即
+      在方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}中令@tex-math{\beta=0}、@tex-math{\omega=0}，便得到一个基本的显式时间积分格式。此时，时间导数用前向差分近似，残差只在当前时间层上计算(基于已知的流动量)，即
     }
 
     @tex-display-math[#:id "eq-3-7"]{\Delta\vec{W}^{n}=-\frac{\Delta t}{\Omega}\,\vec{R}^{n}\,, \tag{3.7}}
@@ -410,37 +410,37 @@
     @bi{
       where the mass matrix was lumped. This represents a single-stage scheme, because a new solution @tex-math{\vec{W}^{n+1}} results from only one evaluation of the residual. The scheme Eq. @link["blazek2005-ch03#eq-3-7"]{(3.7)} is of no practical value, since it is stable only if combined with a first-order upwind spatial discretisation.
     }{
-      其中质量矩阵已被集总。这是一个单步(single-stage)格式ï¼因为新解@tex-math{\vec{W}^{n+1}}仅由一次残差计算得出。方程@link["blazek2005-ch03#eq-3-7"]{(3.7)}没有实用价值ï¼因为它只有与一阶上风空间离散结合时才是稳定的。
+      其中质量矩阵已被集总。这是一个单步(single-stage)格式，因为新解@tex-math{\vec{W}^{n+1}}仅由一次残差计算得出。方程@link["blazek2005-ch03#eq-3-7"]{(3.7)}没有实用价值，因为它只有与一阶上风空间离散结合时才是稳定的。
     }
 
     @bi{
       Very popular are multistage time-stepping schemes (Runge-Kutta schemes), where the solution is advanced in several stages @link["blazek2005-r3-64"]{[64]} and the residual is evaluated at intermediate states. Coefficients are used to weight the residual at each stage. The coefficients can be optimised in order to expand the stability region and to improve the damping properties of the scheme and hence its convergence and robustness @link["blazek2005-r3-64"]{[64]}, @link["blazek2005-r3-112"]{[112]}, @link["blazek2005-r3-113"]{[113]}. Also, depending on the stage coefficients and the number of stages, a multistage scheme can be extended to 2nd- or higher-order accuracy in time. Special Runge-Kutta schemes were also designed to preserve the properties of the TVD and ENO spatial discretisation methods, while maximising the allowable time step @link["blazek2005-r3-114"]{[114]}.
     }{
-      非常流行的是多步时间推进格式(Runge-Kutta 格式):解分若干步(stage)向前推进@link["blazek2005-r3-64"]{[64]}ï¼残差在中间状态上计算ï¼并用系数对各步的残差加权。可以对这些系数进行优化ï¼以扩大稳定域、改善格式的阻尼特性ï¼从而提高其收敛性与稳健性@link["blazek2005-r3-64"]{[64]}、@link["blazek2005-r3-112"]{[112]}、@link["blazek2005-r3-113"]{[113]}。而且ï¼依各步系数与步数而定ï¼多步格式还可以扩展到时间上的二阶或更高阶精度。人们还设计了特殊的 Runge-Kutta 格式ï¼在使允许时间步长最大化的同时ï¼保持 TVD 与 ENO 空间离散方法的性质@link["blazek2005-r3-114"]{[114]}。
+      非常流行的是多步时间推进格式(Runge-Kutta 格式):解分若干步(stage)向前推进@link["blazek2005-r3-64"]{[64]}，残差在中间状态上计算，并用系数对各步的残差加权。可以对这些系数进行优化，以扩大稳定域、改善格式的阻尼特性，从而提高其收敛性与稳健性@link["blazek2005-r3-64"]{[64]}、@link["blazek2005-r3-112"]{[112]}、@link["blazek2005-r3-113"]{[113]}。而且，依各步系数与步数而定，多步格式还可以扩展到时间上的二阶或更高阶精度。人们还设计了特殊的 Runge-Kutta 格式，在使允许时间步长最大化的同时，保持 TVD 与 ENO 空间离散方法的性质@link["blazek2005-r3-114"]{[114]}。
     }
 
     @bi{
       Explicit multistage time-stepping schemes can be employed in connection with any spatial discretisation scheme. They can be easily implemented on serial, vector, as well as on parallel computers. Explicit schemes are numerically cheap, and they require only a small amount of computer memory. On the other hand, the maximum permissible time step is severely restricted because of stability limitations. Particularly for viscous flows and highly stretched grid cells, the convergence to steady state slows down considerably. Furthermore, in the case of stiff equation systems (e.g., real gas simulation, turbulence models), or of stiff source terms, it can take extremely long to achieve the steady state. Or even worse, an explicit scheme may become unstable or lead to spurious steady solutions @link["blazek2005-r3-115"]{[115]}.
     }{
-      显式多步时间推进格式可以与任何空间离散格式配合使用ï¼并且可以容易地在串行、向量以及并行计算机上实现。显式格式在数值上代价低廉ï¼所需计算机内存也很少。另一方面ï¼由于稳定性限制ï¼最大允许时间步长受到严格约束。对于黏性流动和高度拉伸的网格单元ï¼收敛到定常状态的过程会显著变慢。此外ï¼在方程组刚性很强(例如真实气体模拟、湍流模型)或源项刚性的情形下ï¼达到定常状态可能需要极长的时间;更糟的是ï¼显式格式可能变得不稳定ï¼或导致虚假的定常解@link["blazek2005-r3-115"]{[115]}。
+      显式多步时间推进格式可以与任何空间离散格式配合使用，并且可以容易地在串行、向量以及并行计算机上实现。显式格式在数值上代价低廉，所需计算机内存也很少。另一方面，由于稳定性限制，最大允许时间步长受到严格约束。对于黏性流动和高度拉伸的网格单元，收敛到定常状态的过程会显著变慢。此外，在方程组刚性很强(例如真实气体模拟、湍流模型)或源项刚性的情形下，达到定常状态可能需要极长的时间;更糟的是，显式格式可能变得不稳定，或导致虚假的定常解@link["blazek2005-r3-115"]{[115]}。
     }
 
     @bi{
       If we are interested in steady-state solutions only, we can select from (or combine) several convergence acceleration methodologies. The first, and very common, technique is local time-stepping. The idea is to advance the solution in each control volume with the maximum allowable time step. As a result, the convergence to the steady state is considerably accelerated. However, the transient solutions are no longer temporally accurate. Another approach is the so-called characteristic time-stepping. Here, not only locally varying time steps are used, but also each equation (continuity, momentum and energy equation) is integrated with its own time step. The potential of this concept was presented for 2-D Euler equations in Ref. @link["blazek2005-r3-116"]{[116]}. A further acceleration technique, which is similar to the characteristic time-stepping is Jacobi preconditioning @link["blazek2005-r3-117"]{[117]}-@link["blazek2005-r3-119"]{[119]}. It is basically a point-implicit Jacobi relaxation, which is carried out at each stage of a Runge-Kutta scheme. Jacobi preconditioning can be seen as a time-stepping in which all wave components (eigenvalues of the flux Jacobian) are scaled to have the same effective speed. It also adds an implicit component to the basic explicit scheme.
     }{
-      如果我们只关心定常解ï¼便可以从若干种收敛加速方法学中选取(或组合使用)。第一种也是非常常用的技术是局部时间步进(local time-stepping):让每个控制体内的解以最大允许时间步长推进。这样ï¼向定常态的收敛会显著加快ï¼但瞬态解不再具有时间精度。另一种途径是所谓的特征时间步进(characteristic time-stepping):不仅使用逐点变化的时间步长ï¼而且每条方程(连续性、动量与能量方程)都用各自的时间步长积分。文献@link["blazek2005-r3-116"]{[116]}针对二维 Euler 方程展示了这一概念的潜力。与特征时间步进类似的又一种加速技术是 Jacobi 预处理(Jacobi preconditioning)@link["blazek2005-r3-117"]{[117]}-@link["blazek2005-r3-119"]{[119]}。它基本上是一种点隐式 Jacobi 松弛ï¼在 Runge-Kutta 格式的每一步执行。可以把 Jacobi 预处理看作这样一种时间推进:所有波分量(通量雅可比矩阵的特征值)都被标度到相同的有效速度。它还在基本显式格式中加入了一个隐式分量。
+      如果我们只关心定常解，便可以从若干种收敛加速方法学中选取(或组合使用)。第一种也是非常常用的技术是局部时间步进(local time-stepping):让每个控制体内的解以最大允许时间步长推进。这样，向定常态的收敛会显著加快，但瞬态解不再具有时间精度。另一种途径是所谓的特征时间步进(characteristic time-stepping):不仅使用逐点变化的时间步长，而且每条方程(连续性、动量与能量方程)都用各自的时间步长积分。文献@link["blazek2005-r3-116"]{[116]}针对二维 Euler 方程展示了这一概念的潜力。与特征时间步进类似的又一种加速技术是 Jacobi 预处理(Jacobi preconditioning)@link["blazek2005-r3-117"]{[117]}-@link["blazek2005-r3-119"]{[119]}。它基本上是一种点隐式 Jacobi 松弛，在 Runge-Kutta 格式的每一步执行。可以把 Jacobi 预处理看作这样一种时间推进:所有波分量(通量雅可比矩阵的特征值)都被标度到相同的有效速度。它还在基本显式格式中加入了一个隐式分量。
     }
 
     @bi{
       Another very popular acceleration method is aimed at increasing the maximum possible time step by introducing a certain amount of implicitness in the explicit scheme. It is termed implicit residual smoothing or residual averaging @link["blazek2005-r3-120"]{[120]}, @link["blazek2005-r3-121"]{[121]}. On a structured grid, the method requires the solution of a tridiagonal matrix for each conservative variable. In the case of unstructured grids, the matrix is usually inverted by means of Jacobi iteration. The standard implicit residual smoothing allows an increase of the time step by a factor of 2-3. Several other implicit residual smoothing techniques were developed. For example the upwind implicit residual smoothing methodology @link["blazek2005-r3-122"]{[122]}, which was designed to be employed together with an upwind spatial discretisation. In comparison to the standard technique, it allows for significantly larger time steps and it also improves the robustness of the time-stepping process @link["blazek2005-r3-123"]{[123]}. One further method is the implicit-explicit residual smoothing @link["blazek2005-r3-124"]{[124]}, @link["blazek2005-r3-125"]{[125]}, which is intended to improve the damping properties of the time discretisation at larger time steps.
     }{
-      另一种非常流行的加速方法ï¼是通过在显式格式中引入一定的隐式成分来增大最大可行时间步长ï¼称为隐式残差光滑(implicit residual smoothing)或残差平均(residual averaging)@link["blazek2005-r3-120"]{[120]}、@link["blazek2005-r3-121"]{[121]}。在结构网格上ï¼该方法要求对每个守恒变量求解一个三对角矩阵;在非结构网格上ï¼该矩阵通常用 Jacobi 迭代求逆。标准的隐式残差光滑允许把时间步长增大2至3倍。此外还发展了其他几种隐式残差光滑技术ï¼例如上风隐式残差光滑(upwind implicit residual smoothing)方法@link["blazek2005-r3-122"]{[122]}ï¼它专为与上风空间离散配合使用而设计;与标准技术相比ï¼它允许显著更大的时间步长ï¼并改善了时间推进过程的稳健性@link["blazek2005-r3-123"]{[123]}。还有一种方法是隐-显残差光滑(implicit-explicit residual smoothing)@link["blazek2005-r3-124"]{[124]}、@link["blazek2005-r3-125"]{[125]}ï¼用于改善时间离散在较大时间步长下的阻尼特性。
+      另一种非常流行的加速方法，是通过在显式格式中引入一定的隐式成分来增大最大可行时间步长，称为隐式残差光滑(implicit residual smoothing)或残差平均(residual averaging)@link["blazek2005-r3-120"]{[120]}、@link["blazek2005-r3-121"]{[121]}。在结构网格上，该方法要求对每个守恒变量求解一个三对角矩阵;在非结构网格上，该矩阵通常用 Jacobi 迭代求逆。标准的隐式残差光滑允许把时间步长增大2至3倍。此外还发展了其他几种隐式残差光滑技术，例如上风隐式残差光滑(upwind implicit residual smoothing)方法@link["blazek2005-r3-122"]{[122]}，它专为与上风空间离散配合使用而设计;与标准技术相比，它允许显著更大的时间步长，并改善了时间推进过程的稳健性@link["blazek2005-r3-123"]{[123]}。还有一种方法是隐-显残差光滑(implicit-explicit residual smoothing)@link["blazek2005-r3-124"]{[124]}、@link["blazek2005-r3-125"]{[125]}，用于改善时间离散在较大时间步长下的阻尼特性。
     }
 
     @bi{
       The last and probably the most important convergence acceleration technique, which should be mentioned here, is the multigrid method. It was developed in the 1960's in Russia by Fedorenko @link["blazek2005-r3-126"]{[126]} and Bakhvalov @link["blazek2005-r3-127"]{[127]}. They applied multigrid for the solution of elliptic boundary-value problems. The methodology was further advanced and promoted by Brandt @link["blazek2005-r3-128"]{[128]}, @link["blazek2005-r3-129"]{[129]}. The idea of multigrid is based on the observation that iterative schemes usually eliminate high-frequency errors in the solution (i.e., oscillations between the control volumes) very effectively. On the other hand, they perform quite poor in reducing low-frequency (i.e., global) solution errors. Therefore, after advancing the solution on a given grid, it is transferred to a coarser grid, where the low-frequency errors become partly high-frequency ones and where they are again effectively damped by an iterative solver. The procedure is repeated recursively on a sequence of progressively coarser grids, where each multigrid level helps to annihilate a certain bandwidth of error frequencies. After the coarsest grid is reached, the solution corrections are successively collected and interpolated back to the initial fine grid, where the solution is then updated. This complete multigrid cycle is repeated until the solution changes less than a given threshold. In order to accelerate the convergence even further, it is possible to start the multigrid process on a coarse grid, carry out a number of cycles and then to transfer the solution to a finer grid, where the multigrid cycles are performed again. The procedure is then successively repeated until the finest grid is reached. This methodology is known as Full Multigrid (FMG) @link["blazek2005-r3-129"]{[129]}.
     }{
-      这里应当提到的最后一种、大概也是最重要的收敛加速技术是多重网格法(multigrid method)。它由 Fedorenko@link["blazek2005-r3-126"]{[126]}与 Bakhvalov@link["blazek2005-r3-127"]{[127]}于20世纪60年代在苏联发展ï¼用于求解椭圆型边值问题。这一方法学后来由 Brandt@link["blazek2005-r3-128"]{[128]}、@link["blazek2005-r3-129"]{[129]}进一步发展并推广。多重网格的思想基于这样的观察:迭代格式通常能非常有效地消除解中的高频误差(即控制体之间的振荡)ï¼但在消减低频(即全局)误差方面却表现相当差。因此ï¼在给定网格上推进解之后ï¼把它转移到较粗的网格上——在粗网格上ï¼低频误差部分地变成高频误差ï¼从而再次被迭代求解器有效阻尼。该过程在逐级变粗的一系列网格上递归重复ï¼每一层多重网格都有助于消灭一定频带宽度的误差。到达最粗网格后ï¼依次收集解的修正并插值回初始细网格ï¼在那里更新解。这一完整的多重网格循环不断重复ï¼直到解的变化小于给定阈值。为了进一步加速收敛ï¼还可以先在粗网格上启动多重网格过程ï¼执行若干个循环ï¼然后把解转移到较细的网格上再次执行多重网格循环;如此逐级重复ï¼直到最细网格。这一方法学称为完全多重网格(Full Multigrid,FMG)@link["blazek2005-r3-129"]{[129]}。
+      这里应当提到的最后一种、大概也是最重要的收敛加速技术是多重网格法(multigrid method)。它由 Fedorenko@link["blazek2005-r3-126"]{[126]}与 Bakhvalov@link["blazek2005-r3-127"]{[127]}于20世纪60年代在苏联发展，用于求解椭圆型边值问题。这一方法学后来由 Brandt@link["blazek2005-r3-128"]{[128]}、@link["blazek2005-r3-129"]{[129]}进一步发展并推广。多重网格的思想基于这样的观察:迭代格式通常能非常有效地消除解中的高频误差(即控制体之间的振荡)，但在消减低频(即全局)误差方面却表现相当差。因此，在给定网格上推进解之后，把它转移到较粗的网格上——在粗网格上，低频误差部分地变成高频误差，从而再次被迭代求解器有效阻尼。该过程在逐级变粗的一系列网格上递归重复，每一层多重网格都有助于消灭一定频带宽度的误差。到达最粗网格后，依次收集解的修正并插值回初始细网格，在那里更新解。这一完整的多重网格循环不断重复，直到解的变化小于给定阈值。为了进一步加速收敛，还可以先在粗网格上启动多重网格过程，执行若干个循环，然后把解转移到较细的网格上再次执行多重网格循环;如此逐级重复，直到最细网格。这一方法学称为完全多重网格(Full Multigrid,FMG)@link["blazek2005-r3-129"]{[129]}。
     }
 
     @figure["blazek2005/fig-3-7.png" "图3.7:NACA 0012翼型无黏跨声速流动的收敛历史"]{
@@ -449,7 +449,7 @@
     @bi{
       As already mentioned, the multigrid method was originally developed for the solution of elliptic boundary-value problems (Poisson equation), where it is very efficient. Jameson first proposed to employ multigrid also for the solution of the Euler equations @link["blazek2005-r3-120"]{[120]}, @link["blazek2005-r3-130"]{[130]}. The approach was based on the so-called Full Approximation Storage (FAS) scheme @link["blazek2005-r3-129"]{[129]}, where multigrid is directly applied to the non-linear governing equations. Nowadays, multigrid represents a standard acceleration technique for the solution of the Navier-Stokes equations. Examples of implementations can be found in Refs. @link["blazek2005-r3-131"]{[131]}-@link["blazek2005-r3-136"]{[136]} for structured grids, and in Refs. @link["blazek2005-r3-137"]{[137]}-@link["blazek2005-r3-146"]{[146]} for unstructured grids. Although not as fast as in the case of elliptic differential equations, it was often demonstrated that multigrid can accelerate the solution of the Euler or the Navier-Stokes equations by a factor between 5 and 10. An example for transonic flow is shown in Fig. 3.7. Recent research also revealed that faster convergence can be achieved if the governing equations are decomposed into hyperbolic and elliptic parts @link["blazek2005-r3-147"]{[147]}. We shall return to the multigrid methodology again in Section 9.4.
     }{
-      如前所述ï¼多重网格法最初是为求解椭圆型边值问题(Poisson 方程)而发展的ï¼在那里它非常高效。Jameson 首先提议把多重网格也用于 Euler 方程的求解@link["blazek2005-r3-120"]{[120]}、@link["blazek2005-r3-130"]{[130]}ï¼其途径基于所谓的完全近似存储(Full Approximation Storage,FAS)格式@link["blazek2005-r3-129"]{[129]}ï¼即把多重网格直接应用于非线性控制方程。如今ï¼多重网格已成为求解 Navier-Stokes 方程的标准加速技术。结构网格上的实现例子见文献@link["blazek2005-r3-131"]{[131]}-@link["blazek2005-r3-136"]{[136]}ï¼非结构网格上的见文献@link["blazek2005-r3-137"]{[137]}-@link["blazek2005-r3-146"]{[146]}。虽然没有在椭圆型微分方程情形下那么快ï¼但已多次证明多重网格能把 Euler 或 Navier-Stokes 方程的求解加速5至10倍。跨声速流动的一个例子示于图3.7。近期研究还表明ï¼若把控制方程分解为双曲部分与椭圆部分ï¼可以实现更快的收敛@link["blazek2005-r3-147"]{[147]}。我们将在9.4节再次回到多重网格方法学。
+      如前所述，多重网格法最初是为求解椭圆型边值问题(Poisson 方程)而发展的，在那里它非常高效。Jameson 首先提议把多重网格也用于 Euler 方程的求解@link["blazek2005-r3-120"]{[120]}、@link["blazek2005-r3-130"]{[130]}，其途径基于所谓的完全近似存储(Full Approximation Storage,FAS)格式@link["blazek2005-r3-129"]{[129]}，即把多重网格直接应用于非线性控制方程。如今，多重网格已成为求解 Navier-Stokes 方程的标准加速技术。结构网格上的实现例子见文献@link["blazek2005-r3-131"]{[131]}-@link["blazek2005-r3-136"]{[136]}，非结构网格上的见文献@link["blazek2005-r3-137"]{[137]}-@link["blazek2005-r3-146"]{[146]}。虽然没有在椭圆型微分方程情形下那么快，但已多次证明多重网格能把 Euler 或 Navier-Stokes 方程的求解加速5至10倍。跨声速流动的一个例子示于图3.7。近期研究还表明，若把控制方程分解为双曲部分与椭圆部分，可以实现更快的收敛@link["blazek2005-r3-147"]{[147]}。我们将在9.4节再次回到多重网格方法学。
     }
   }
 }
@@ -459,13 +459,13 @@
   @bi{
     A family of implicit time integration schemes is obtained from Eq. @link["blazek2005-ch03#eq-3-4"]{(3.4)} by setting @tex-math{\beta\neq 0}. Very popular for the simulation of unsteady flows is the 3-point implicit backward-difference scheme with @tex-math{\beta=1} and @tex-math{\omega=1/2}, which is 2nd-order accurate in time. In this case, the scheme is mostly employed within the so-called @emph{dual time-stepping} approach @link["blazek2005-r3-148"]{[148]}-@link["blazek2005-r3-150"]{[150]}, @link["blazek2005-r3-110"]{[110]}, @link["blazek2005-r3-111"]{[111]}, where a steady-state problem is solved in pseudo-time at each physical time step.
   }{
-    在方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}中令@tex-math{\beta\neq 0}ï¼便得到一族隐式时间积分格式。对于非定常流动的模拟ï¼非常流行的是@tex-math{\beta=1}、@tex-math{\omega=1/2}的三点隐式后向差分格式ï¼它在时间上具有二阶精度。此时ï¼该格式大多在所谓的双时间步进(dual time-stepping)方法@link["blazek2005-r3-148"]{[148]}-@link["blazek2005-r3-150"]{[150]}、@link["blazek2005-r3-110"]{[110]}、@link["blazek2005-r3-111"]{[111]}中使用ï¼即在每一物理时间步内ï¼以伪时间(pseudo-time)求解一个定常问题。
+    在方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}中令@tex-math{\beta\neq 0}，便得到一族隐式时间积分格式。对于非定常流动的模拟，非常流行的是@tex-math{\beta=1}、@tex-math{\omega=1/2}的三点隐式后向差分格式，它在时间上具有二阶精度。此时，该格式大多在所谓的双时间步进(dual time-stepping)方法@link["blazek2005-r3-148"]{[148]}-@link["blazek2005-r3-150"]{[150]}、@link["blazek2005-r3-110"]{[110]}、@link["blazek2005-r3-111"]{[111]}中使用，即在每一物理时间步内，以伪时间(pseudo-time)求解一个定常问题。
   }
 
   @bi{
     For the solution of stationary flow problems, a scheme with @tex-math{\omega=0} is more suitable, since it requires less computer memory. Herewith, if we linearise the residual @tex-math{\vec{R}^{n+1}} in Eq. @link["blazek2005-ch03#eq-3-4"]{(3.4)} about the current time level, we obtain the scheme
   }{
-    对于定常流动问题的求解,@tex-math{\omega=0}的格式更为合适ï¼因为它所需的计算机内存更少。此时ï¼若把方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}中的残差@tex-math{\vec{R}^{n+1}}在当前时间层上线性化ï¼便得到格式
+    对于定常流动问题的求解,@tex-math{\omega=0}的格式更为合适，因为它所需的计算机内存更少。此时，若把方程@link["blazek2005-ch03#eq-3-4"]{(3.4)}中的残差@tex-math{\vec{R}^{n+1}}在当前时间层上线性化，便得到格式
   }
 
   @tex-display-math[#:id "eq-3-8"]{\left(\overline{M}\,\frac{\Omega}{\Delta t}+\beta\,\frac{\partial\vec{R}}{\partial\vec{W}}\right)\Delta\vec{W}^{n}=-\vec{R}^{n}\,. \tag{3.8}}
@@ -473,61 +473,61 @@
   @bi{
     The term @tex-math{\partial\vec{R}/\partial\vec{W}} is denoted as the flux Jacobian. It constitutes a large sparse matrix. The expression enclosed in parenthesis on the left-hand side of Eq. @link["blazek2005-ch03#eq-3-8"]{(3.8)} is also referred to as the @emph{implicit operator}. As already discussed above, the mass matrix @tex-math{\overline{M}} can be replaced by the identity matrix, without influencing the steady state solution. The parameter @tex-math{\beta} in Eq. @link["blazek2005-ch03#eq-3-8"]{(3.8)} is generally set to 1, which results in a 1st-order accurate temporal discretisation. A 2nd-order time accurate scheme is obtained for @tex-math{\beta=1/2}. However, this is not advised since the scheme with @tex-math{\beta=1} is much more robust, and the time accuracy plays no role for steady problems anyway.
   }{
-    项@tex-math{\partial\vec{R}/\partial\vec{W}}称为通量雅可比矩阵(flux Jacobian)ï¼它构成一个大型稀疏矩阵。方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}左端括号内的表达式也称为隐式算子(implicit operator)。如前文所述ï¼质量矩阵@tex-math{\overline{M}}可以用单位矩阵代替ï¼而不影响定常解。方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}中的参数@tex-math{\beta}一般取1ï¼这给出时间上一阶精度的离散;@tex-math{\beta=1/2}时可得到时间二阶精度的格式。不过并不建议这样做ï¼因为@tex-math{\beta=1}的格式稳健得多ï¼而且对定常问题来说ï¼时间精度本来就无关紧要。
+    项@tex-math{\partial\vec{R}/\partial\vec{W}}称为通量雅可比矩阵(flux Jacobian)，它构成一个大型稀疏矩阵。方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}左端括号内的表达式也称为隐式算子(implicit operator)。如前文所述，质量矩阵@tex-math{\overline{M}}可以用单位矩阵代替，而不影响定常解。方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}中的参数@tex-math{\beta}一般取1，这给出时间上一阶精度的离散;@tex-math{\beta=1/2}时可得到时间二阶精度的格式。不过并不建议这样做，因为@tex-math{\beta=1}的格式稳健得多，而且对定常问题来说，时间精度本来就无关紧要。
   }
 
   @bi{
     The principal advantage of implicit schemes as compared to explicit ones is that significantly larger time steps can be used, without hampering the stability of the time integration process. In fact, for @tex-math{\Delta t\rightarrow\infty} the scheme @link["blazek2005-ch03#eq-3-8"]{(3.8)} transforms into standard Newton's method, which exhibits quadratic convergence. However, the condition for quadratic convergence is that the flux Jacobian contains the complete linearisation of the residual. Another important advantage of implicit schemes is their superior robustness and convergence speed in the case of stiff equation systems and/or source terms, which are often encountered in real gas simulations, turbulence modelling, or in the case of highly stretched grids (high Reynolds number flows). On the other hand, the faster (in terms of time steps or iterations) and the more robust an implicit scheme is, the higher is usually the computational effort per time step or iteration. Therefore, an explicit scheme accelerated by multigrid can be equally or even more efficient. Furthermore, implicit schemes are significantly more difficult to vectorise or to parallelise than their explicit counterparts.
   }{
-    与显式格式相比ï¼隐式格式的主要优点是可以使用大得多的时间步长ï¼而不损害时间积分过程的稳定性。事实上ï¼当@tex-math{\Delta t\rightarrow\infty}时ï¼格式@link["blazek2005-ch03#eq-3-8"]{(3.8)}就转化为标准的Newton法ï¼后者具有二次收敛性。但二次收敛的条件是通量雅可比矩阵包含残差的完整线性化。隐式格式的另一重要优点是:对于刚性方程组和/或源项——它们常出现在真实气体模拟、湍流建模或高度拉伸网格(高雷诺数流动)的情形中——隐式格式具有更优的稳健性与收敛速度。另一方面ï¼隐式格式越快(以时间步数或迭代次数计)、越稳健ï¼每时间步或每迭代的计算量通常也越大。因此ï¼经多重网格加速的显式格式可能同样高效ï¼甚至更高效。此外ï¼隐式格式比显式格式难于向量化或并行化得多。
+    与显式格式相比，隐式格式的主要优点是可以使用大得多的时间步长，而不损害时间积分过程的稳定性。事实上，当@tex-math{\Delta t\rightarrow\infty}时，格式@link["blazek2005-ch03#eq-3-8"]{(3.8)}就转化为标准的Newton法，后者具有二次收敛性。但二次收敛的条件是通量雅可比矩阵包含残差的完整线性化。隐式格式的另一重要优点是:对于刚性方程组和/或源项——它们常出现在真实气体模拟、湍流建模或高度拉伸网格(高雷诺数流动)的情形中——隐式格式具有更优的稳健性与收敛速度。另一方面，隐式格式越快(以时间步数或迭代次数计)、越稳健，每时间步或每迭代的计算量通常也越大。因此，经多重网格加速的显式格式可能同样高效，甚至更高效。此外，隐式格式比显式格式难于向量化或并行化得多。
   }
 
   @bi{
     Written down for each control volume, the implicit scheme in Eq. @link["blazek2005-ch03#eq-3-8"]{(3.8)} represents a large system of linear equations, which has to be solved for the update @tex-math{\Delta\vec{W}^{n}} at each time step @tex-math{\Delta t}. This task can be accomplished using either a @emph{direct} or an @emph{iterative} method.
   }{
-    对每个控制体写出ï¼方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}中的隐式格式便代表一个大型线性方程组ï¼在每个时间步@tex-math{\Delta t}内都须对其求解以得到增量@tex-math{\Delta\vec{W}^{n}}。这一任务既可以用直接法(direct)ï¼也可以用迭代法(iterative)完成。
+    对每个控制体写出，方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}中的隐式格式便代表一个大型线性方程组，在每个时间步@tex-math{\Delta t}内都须对其求解以得到增量@tex-math{\Delta\vec{W}^{n}}。这一任务既可以用直接法(direct)，也可以用迭代法(iterative)完成。
   }
 
   @bi{
     The direct methods are based on the exact inversion of the left-hand side of Eq. @link["blazek2005-ch03#eq-3-8"]{(3.8)} using either the Gaussian elimination or some direct sparse matrix method @link["blazek2005-r3-151"]{[151]}, @link["blazek2005-r3-152"]{[152]}. Although quadratic convergence was demonstrated on structured @link["blazek2005-r3-153"]{[153]}-@link["blazek2005-r3-156"]{[156]} as well as on unstructured grids @link["blazek2005-r3-157"]{[157]}, direct methods are not an option for 3-D problems because they require an excessively high computational effort and a huge amount of computer memory.
   }{
-    直接法基于用Gaussian消元或某种直接稀疏矩阵方法@link["blazek2005-r3-151"]{[151]}、@link["blazek2005-r3-152"]{[152]}对方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}的左端作精确求逆。尽管二次收敛性在结构网格@link["blazek2005-r3-153"]{[153]}-@link["blazek2005-r3-156"]{[156]}以及非结构网格@link["blazek2005-r3-157"]{[157]}上都已得到证明ï¼但对三维问题而言ï¼直接法并不可行ï¼因为它们需要过高的计算量和海量的计算机内存。
+    直接法基于用Gaussian消元或某种直接稀疏矩阵方法@link["blazek2005-r3-151"]{[151]}、@link["blazek2005-r3-152"]{[152]}对方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}的左端作精确求逆。尽管二次收敛性在结构网格@link["blazek2005-r3-153"]{[153]}-@link["blazek2005-r3-156"]{[156]}以及非结构网格@link["blazek2005-r3-157"]{[157]}上都已得到证明，但对三维问题而言，直接法并不可行，因为它们需要过高的计算量和海量的计算机内存。
   }
 
   @bi{
     Thus, the only practical method for larger grids or 3-D problems are iterative methods. Here, the linear system is solved for @tex-math{\Delta\vec{W}^{n}} at each time step using some iterative matrix inversion methodology. In order to reduce the memory requirements and also to increase the diagonal dominance, the flux Jacobian @tex-math{\partial\vec{R}/\partial\vec{W}} is mostly based on linearisation of a 1st-order accurate spatial discretisation of the right-hand side. The two main consequences of this approximation are that the quadratic convergence of Newton's scheme cannot be achieved and that the maximum time step becomes limited. On the other hand, the numerical effort of an iteration step is significantly reduced, which leads to a numerically highly efficient scheme.
   }{
-    因此ï¼对较大的网格或三维问题ï¼唯一实用的方法是迭代法。此时ï¼线性方程组在每个时间步内用某种迭代矩阵求逆方法对@tex-math{\Delta\vec{W}^{n}}求解。为了减少内存需求并增大对角占优ï¼通量雅可比矩阵@tex-math{\partial\vec{R}/\partial\vec{W}}大多基于右端项一阶精度空间离散的线性化。这一近似带来两个主要后果:一是无法达到Newton法的二次收敛性ï¼二是最大时间步长受到限制。但另一方面ï¼每次迭代的数值工作量显著减少ï¼从而得到数值上非常高效的格式。
+    因此，对较大的网格或三维问题，唯一实用的方法是迭代法。此时，线性方程组在每个时间步内用某种迭代矩阵求逆方法对@tex-math{\Delta\vec{W}^{n}}求解。为了减少内存需求并增大对角占优，通量雅可比矩阵@tex-math{\partial\vec{R}/\partial\vec{W}}大多基于右端项一阶精度空间离散的线性化。这一近似带来两个主要后果:一是无法达到Newton法的二次收敛性，二是最大时间步长受到限制。但另一方面，每次迭代的数值工作量显著减少，从而得到数值上非常高效的格式。
   }
 
   @bi{
     In the case of structured grids, iterative methods like the @emph{Alternating Direction Implicit} (ADI) scheme @link["blazek2005-r3-158"]{[158]}-@link["blazek2005-r3-161"]{[161]}, the (line) Jacobi or the Gauss-Seidel relaxation scheme @link["blazek2005-r3-162"]{[162]}-@link["blazek2005-r3-166"]{[166]}, and particularly the @emph{Lower-Upper Symmetric Gauss-Seidel} (LU-SGS; also referenced to as LU-SSOR - Lower-Upper Symmetric Successive Overrelaxation) scheme @link["blazek2005-r3-167"]{[167]}-@link["blazek2005-r3-171"]{[171]} are mainly employed. All these methods are based on splitting of the implicit operator into a sum or product of parts, which can be each inverted more easily. Because of the associated @emph{factorisation error} (the difference with respect to the original matrix) and also the simplification of the flux Jacobian, it does not pay off to solve the linear system very accurately. In fact, only one iteration is carried out at each time step of the ADI and the LU-SGS method.
   }{
-    对结构网格ï¼主要采用如下迭代方法:交替方向隐式(Alternating Direction Implicit,ADI)格式@link["blazek2005-r3-158"]{[158]}-@link["blazek2005-r3-161"]{[161]}、(线)Jacobi或Gauss-Seidel松弛格式@link["blazek2005-r3-162"]{[162]}-@link["blazek2005-r3-166"]{[166]}ï¼特别是下上对称Gauss-Seidel(Lower-Upper Symmetric Gauss-Seidel,LU-SGS;也称LU-SSOR——Lower-Upper Symmetric Successive Overrelaxation)格式@link["blazek2005-r3-167"]{[167]}-@link["blazek2005-r3-171"]{[171]}。这些方法都基于把隐式算子分裂为若干部分的和或积ï¼使每一部分都更容易求逆。由于存在随之而来的因子化误差(factorisation error)(相对于原矩阵的差异)ï¼再加上通量雅可比矩阵的简化ï¼把线性方程组解得非常精确并不划算。事实上,ADI方法与LU-SGS方法在每个时间步只进行一次迭代。
+    对结构网格，主要采用如下迭代方法:交替方向隐式(Alternating Direction Implicit,ADI)格式@link["blazek2005-r3-158"]{[158]}-@link["blazek2005-r3-161"]{[161]}、(线)Jacobi或Gauss-Seidel松弛格式@link["blazek2005-r3-162"]{[162]}-@link["blazek2005-r3-166"]{[166]}，特别是下上对称Gauss-Seidel(Lower-Upper Symmetric Gauss-Seidel,LU-SGS;也称LU-SSOR——Lower-Upper Symmetric Successive Overrelaxation)格式@link["blazek2005-r3-167"]{[167]}-@link["blazek2005-r3-171"]{[171]}。这些方法都基于把隐式算子分裂为若干部分的和或积，使每一部分都更容易求逆。由于存在随之而来的因子化误差(factorisation error)(相对于原矩阵的差异)，再加上通量雅可比矩阵的简化，把线性方程组解得非常精确并不划算。事实上,ADI方法与LU-SGS方法在每个时间步只进行一次迭代。
   }
 
   @bi{
     Implicit iterative methods for unstructured grids are in the most cases based on the Gauss-Seidel relaxation scheme @link["blazek2005-r3-172"]{[172]}-@link["blazek2005-r3-175"]{[175]}. In order to improve the convergence, it is possible to use the red-black Gauss-Seidel methodology. Its extension to unstructured grids was demonstrated in Refs. @link["blazek2005-r3-176"]{[176]}-@link["blazek2005-r3-178"]{[178]}. A particularly interesting possibility is also offered by an implementation of the LU-SGS scheme on unstructured grids @link["blazek2005-r3-18"]{[18]}, @link["blazek2005-r3-179"]{[179]}, @link["blazek2005-r3-180"]{[180]}, because of its very low memory requirements and numerical effort.
   }{
-    非结构网格的隐式迭代方法大多基于Gauss-Seidel松弛格式@link["blazek2005-r3-172"]{[172]}-@link["blazek2005-r3-175"]{[175]}。为了改进收敛ï¼可以采用红黑(red-black)Gauss-Seidel方法ï¼其在非结构网格上的推广见文献@link["blazek2005-r3-176"]{[176]}-@link["blazek2005-r3-178"]{[178]}。另一个特别有趣的可能性是在非结构网格上实现LU-SGS格式@link["blazek2005-r3-18"]{[18]}、@link["blazek2005-r3-179"]{[179]}、@link["blazek2005-r3-180"]{[180]}ï¼其内存需求和数值工作量都非常低。
+    非结构网格的隐式迭代方法大多基于Gauss-Seidel松弛格式@link["blazek2005-r3-172"]{[172]}-@link["blazek2005-r3-175"]{[175]}。为了改进收敛，可以采用红黑(red-black)Gauss-Seidel方法，其在非结构网格上的推广见文献@link["blazek2005-r3-176"]{[176]}-@link["blazek2005-r3-178"]{[178]}。另一个特别有趣的可能性是在非结构网格上实现LU-SGS格式@link["blazek2005-r3-18"]{[18]}、@link["blazek2005-r3-179"]{[179]}、@link["blazek2005-r3-180"]{[180]}，其内存需求和数值工作量都非常低。
   }
 
   @bi{
     Because of the success of the line-implicit methods on structured grids, a few attempts were made to adopt this methodology on unstructured grids @link["blazek2005-r3-181"]{[181]}, @link["blazek2005-r3-182"]{[182]}. The approach was to construct continuous lines such that each grid point or each grid cell (in the case of a cell-centred scheme) is visited only once - the so-called Hamiltonian tour @link["blazek2005-r3-183"]{[183]}. The lines were oriented primarily in coordinate directions, but they were folded at the boundaries and where necessary (therefore they were nicknamed "snakes"). A tri-diagonal solver was then employed to invert the left-hand side of Eq. @link["blazek2005-ch03#eq-3-8"]{(3.8)}. Later on, it was recognised that folding the lines can slow down the convergence. To overcome this, each line was broken up into multiple @emph{linelets} @link["blazek2005-r3-184"]{[184]}. However, the performance on a vector computer was rather poor. The idea of linelets was also employed to improve the convergence of an explicit scheme on highly stretched viscous unstructured grids using an implicit solver in the direction across the boundary layer @link["blazek2005-r3-145"]{[145]}.
   }{
-    由于线隐式方法在结构网格上的成功ï¼也有一些尝试把这一方法学移植到非结构网格上@link["blazek2005-r3-181"]{[181]}、@link["blazek2005-r3-182"]{[182]}。其做法是构造连续的"线"ï¼使每个网格点或每个网格单元(格心格式情形)只被访问一次——即所谓的哈密顿回路(Hamiltonian tour)@link["blazek2005-r3-183"]{[183]}。这些线主要沿坐标方向布置ï¼但在边界处及必要处需要折叠(因此被戏称为"蛇"(snakes))。随后用三对角求解器对方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}的左端求逆。后来人们认识到ï¼折叠线会减慢收敛;为克服这一点ï¼每条线被拆分成多个线段(linelet)@link["blazek2005-r3-184"]{[184]}。然而ï¼其在向量计算机上的性能相当差。线段的思想还被用来改进显式格式在高度拉伸的黏性非结构网格上的收敛性ï¼即在横穿边界层的方向上使用隐式求解器@link["blazek2005-r3-145"]{[145]}。
+    由于线隐式方法在结构网格上的成功，也有一些尝试把这一方法学移植到非结构网格上@link["blazek2005-r3-181"]{[181]}、@link["blazek2005-r3-182"]{[182]}。其做法是构造连续的"线"，使每个网格点或每个网格单元(格心格式情形)只被访问一次——即所谓的哈密顿回路(Hamiltonian tour)@link["blazek2005-r3-183"]{[183]}。这些线主要沿坐标方向布置，但在边界处及必要处需要折叠(因此被戏称为"蛇"(snakes))。随后用三对角求解器对方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}的左端求逆。后来人们认识到，折叠线会减慢收敛;为克服这一点，每条线被拆分成多个线段(linelet)@link["blazek2005-r3-184"]{[184]}。然而，其在向量计算机上的性能相当差。线段的思想还被用来改进显式格式在高度拉伸的黏性非结构网格上的收敛性，即在横穿边界层的方向上使用隐式求解器@link["blazek2005-r3-145"]{[145]}。
   }
 
   @bi{
     More sophisticated iterative techniques, which treat the linear equation system in a more global way, are the so-called @emph{Krylov subspace} methods. Their development was triggered by the introduction of an efficient iterative scheme for solving large, sparse linear systems - namely the @emph{conjugate gradient} method by Hestenes and Stiefel @link["blazek2005-r3-185"]{[185]}. The original conjugate gradient method is restricted to Hermitian positive definite matrices only, but for an @tex-math{n\times n} matrix it converges in at most @tex-math{n} iterations. Since then, a variety of Krylov subspace methods was proposed for the solution of arbitrary non-singular matrices, as they occur in CFD applications. For example, there are methods like the @emph{Conjugate Gradient Squared} (CGS) @link["blazek2005-r3-186"]{[186]}, the @emph{Bi-Conjugate Gradient Stabilised} (Bi-CGSTAB) @link["blazek2005-r3-187"]{[187]}, or the @emph{Transpose-Free Quasi-Minimum Residual} (TFQMR) @link["blazek2005-r3-188"]{[188]} scheme.
   }{
-    更精细的迭代技术以更全局的方式处理线性方程组ï¼即所谓的Krylov子空间(Krylov subspace)方法。其发展源于Hestenes和Stiefel@link["blazek2005-r3-185"]{[185]}提出的一种求解大型稀疏线性方程组的高效迭代格式——共轭梯度法(conjugate gradient method)。原始的共轭梯度法只限于Hermite正定矩阵ï¼但对@tex-math{n\times n}矩阵ï¼它至多@tex-math{n}次迭代即收敛。此后ï¼为求解CFD应用中出现的任意非奇异矩阵ï¼人们提出了多种Krylov子空间方法。例如:共轭梯度平方法(Conjugate Gradient Squared,CGS)@link["blazek2005-r3-186"]{[186]}、稳定双共轭梯度法(Bi-Conjugate Gradient Stabilised,Bi-CGSTAB)@link["blazek2005-r3-187"]{[187]}ï¼以及无转置拟最小残量法(Transpose-Free Quasi-Minimum Residual,TFQMR)@link["blazek2005-r3-188"]{[188]}格式等。
+    更精细的迭代技术以更全局的方式处理线性方程组，即所谓的Krylov子空间(Krylov subspace)方法。其发展源于Hestenes和Stiefel@link["blazek2005-r3-185"]{[185]}提出的一种求解大型稀疏线性方程组的高效迭代格式——共轭梯度法(conjugate gradient method)。原始的共轭梯度法只限于Hermite正定矩阵，但对@tex-math{n\times n}矩阵，它至多@tex-math{n}次迭代即收敛。此后，为求解CFD应用中出现的任意非奇异矩阵，人们提出了多种Krylov子空间方法。例如:共轭梯度平方法(Conjugate Gradient Squared,CGS)@link["blazek2005-r3-186"]{[186]}、稳定双共轭梯度法(Bi-Conjugate Gradient Stabilised,Bi-CGSTAB)@link["blazek2005-r3-187"]{[187]}，以及无转置拟最小残量法(Transpose-Free Quasi-Minimum Residual,TFQMR)@link["blazek2005-r3-188"]{[188]}格式等。
   }
 
   @bi{
     However, the most widely employed method is the @emph{Generalised Minimal Residual} (GMRES) scheme developed by Saad and Schultz @link["blazek2005-r3-189"]{[189]}. If we rewrite the implicit scheme in Eq. @link["blazek2005-ch03#eq-3-8"]{(3.8)} as
   }{
-    然而ï¼使用最广泛的方法是Saad和Schultz@link["blazek2005-r3-189"]{[189]}发展的广义最小残量(Generalised Minimal Residual,GMRES)格式。若把方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}中的隐式格式改写为
+    然而，使用最广泛的方法是Saad和Schultz@link["blazek2005-r3-189"]{[189]}发展的广义最小残量(Generalised Minimal Residual,GMRES)格式。若把方程@link["blazek2005-ch03#eq-3-8"]{(3.8)}中的隐式格式改写为
   }
 
   @tex-display-math[#:id "eq-3-9"]{\bar{J}\,\Delta\vec{W}^{n}=-\vec{R}^{n}\ , \tag{3.9}}
@@ -535,7 +535,7 @@
   @bi{
     then @tex-math{\bar{J}} represents a large, sparse, and non-symmetric matrix (the left-hand side). Starting from an initial guess @tex-math{\Delta\vec{W}_0^{n}}, the GMRES(@tex-math{m}) method seeks a solution @tex-math{\Delta\vec{W}^{n}} in the form @tex-math{\Delta\vec{W}^{n}=\Delta\vec{W}_0^{n}+\vec{y}_m}, where @tex-math{\vec{y}_m} belongs to the Krylov subspace
   }{
-    则@tex-math{\bar{J}}表示一个大型、稀疏且非对称的矩阵(即左端)。从初始猜测@tex-math{\Delta\vec{W}_0^{n}}出发,GMRES(@tex-math{m})方法寻求形如@tex-math{\Delta\vec{W}^{n}=\Delta\vec{W}_0^{n}+\vec{y}_m}的解@tex-math{\Delta\vec{W}^{n}}ï¼其中@tex-math{\vec{y}_m}属于Krylov子空间
+    则@tex-math{\bar{J}}表示一个大型、稀疏且非对称的矩阵(即左端)。从初始猜测@tex-math{\Delta\vec{W}_0^{n}}出发,GMRES(@tex-math{m})方法寻求形如@tex-math{\Delta\vec{W}^{n}=\Delta\vec{W}_0^{n}+\vec{y}_m}的解@tex-math{\Delta\vec{W}^{n}}，其中@tex-math{\vec{y}_m}属于Krylov子空间
   }
 
   @tex-display-math[#:id "eq-3-10"]{\begin{aligned} &\mathcal{K}_m\equiv\mathrm{span}\left\{\vec{r}_0,\ \bar{J}\vec{r}_0,\ \bar{J}^{2}\vec{r}_0,\ \cdots,\ \bar{J}^{m-1}\vec{r}_0\right\}\\[4pt] &\vec{r}_0=\bar{J}\,\Delta\vec{W}_0^{n}+\vec{R}^{n}\ , \end{aligned} \tag{3.10}}
@@ -543,13 +543,13 @@
   @bi{
     such that the residual @tex-math{\Vert\bar{J}\,\Delta\vec{W}^{n}+\vec{R}^{n}\Vert} becomes a minimum. The parameter @tex-math{m} specifies the dimension of the Krylov subspace, or in other words the number of @emph{search directions} (@tex-math{\bar{J}^{i}\vec{r}_0}). Since all directions have to be stored, @tex-math{m} is usually chosen between 10 and 40, the higher number being necessary for poorly conditioned matrices (which arise in the simulation of turbulent flows, real gas, etc.). GMRES has to be restarted, if no convergence is achieved within @tex-math{m} sub-iterations. The GMRES method requires significantly more memory than, e.g., Bi-CGSTAB or TFQMR, but it is more robust, smoothly converging and usually also faster. A very detailed comparison of the various methodologies can be found in Ref. @link["blazek2005-r3-190"]{[190]}.
   }{
-    以使残差@tex-math{\Vert\bar{J}\,\Delta\vec{W}^{n}+\vec{R}^{n}\Vert}达到最小。参数@tex-math{m}规定Krylov子空间的维数ï¼换言之即搜索方向(search directions)@tex-math{(\bar{J}^{i}\vec{r}_0)}的数目。由于所有方向都必须存储,@tex-math{m}通常取10到40之间;对于病态矩阵(出现在湍流流动、真实气体等的模拟中)ï¼需要取较大的数值。若在@tex-math{m}次子迭代内未达到收敛,GMRES必须重启。GMRES方法所需的内存明显多于例如Bi-CGSTAB或TFQMRï¼但它更稳健、收敛平滑ï¼通常也更快。关于各种方法学非常详细的比较见文献@link["blazek2005-r3-190"]{[190]}。
+    以使残差@tex-math{\Vert\bar{J}\,\Delta\vec{W}^{n}+\vec{R}^{n}\Vert}达到最小。参数@tex-math{m}规定Krylov子空间的维数，换言之即搜索方向(search directions)@tex-math{(\bar{J}^{i}\vec{r}_0)}的数目。由于所有方向都必须存储,@tex-math{m}通常取10到40之间;对于病态矩阵(出现在湍流流动、真实气体等的模拟中)，需要取较大的数值。若在@tex-math{m}次子迭代内未达到收敛,GMRES必须重启。GMRES方法所需的内存明显多于例如Bi-CGSTAB或TFQMR，但它更稳健、收敛平滑，通常也更快。关于各种方法学非常详细的比较见文献@link["blazek2005-r3-190"]{[190]}。
   }
 
   @bi{
     Nevertheless, as with other conjugate gradient methods, preconditioning is absolutely essential for CFD problems. Here, we solve
   }{
-    尽管如此ï¼与其他共轭梯度类方法一样ï¼预处理(preconditioning)对CFD问题来说是绝对必不可少的。此时ï¼我们求解
+    尽管如此，与其他共轭梯度类方法一样，预处理(preconditioning)对CFD问题来说是绝对必不可少的。此时，我们求解
   }
 
   @tex-display-math[#:id "eq-3-11"]{\left(\bar{P}_L\,\bar{J}\right)\Delta\vec{W}^{n}=-\bar{P}_L\,\vec{R}^{n}\quad\mbox{, or}\quad \bar{J}\,\bar{P}_R\left(\bar{P}_R^{-1}\Delta\vec{W}^{n}\right)=-\vec{R}^{n} \tag{3.11}}
@@ -557,13 +557,13 @@
   @bi{
     instead of the system in Eq. @link["blazek2005-ch03#eq-3-9"]{(3.9)}. The matrices @tex-math{\bar{P}_L} and @tex-math{\bar{P}_R} denote left and right preconditioners, respectively. The preconditioner should approximate @tex-math{\bar{J}^{-1}} as close as possible, in order to cluster the eigenvalues near unity. On the other hand, it should be of course easy to invert. One particularly efficient preconditioner is the @emph{Incomplete Lower Upper} factorisation method @link["blazek2005-r3-191"]{[191]} with zero fill-in (ILU(0)). For the discussion of different preconditioning techniques in connection with GMRES the reader is referred to @link["blazek2005-r3-97"]{[97]}, @link["blazek2005-r3-192"]{[192]}-@link["blazek2005-r3-195"]{[195]}.
   }{
-    来代替方程@link["blazek2005-ch03#eq-3-9"]{(3.9)}中的方程组。矩阵@tex-math{\bar{P}_L}和@tex-math{\bar{P}_R}分别表示左预处理子和右预处理子。预处理子应尽可能逼近@tex-math{\bar{J}^{-1}}ï¼以便把特征值聚集到1附近;当然ï¼它同时应当容易求逆。一种特别高效的预处理子是零填充(zero fill-in)的不完全下上(Incomplete Lower Upper)分解方法@link["blazek2005-r3-191"]{[191]}ï¼即ILU(0)。关于与GMRES配合使用的不同预处理技术的讨论ï¼读者可参阅@link["blazek2005-r3-97"]{[97]}、@link["blazek2005-r3-192"]{[192]}-@link["blazek2005-r3-195"]{[195]}。
+    来代替方程@link["blazek2005-ch03#eq-3-9"]{(3.9)}中的方程组。矩阵@tex-math{\bar{P}_L}和@tex-math{\bar{P}_R}分别表示左预处理子和右预处理子。预处理子应尽可能逼近@tex-math{\bar{J}^{-1}}，以便把特征值聚集到1附近;当然，它同时应当容易求逆。一种特别高效的预处理子是零填充(zero fill-in)的不完全下上(Incomplete Lower Upper)分解方法@link["blazek2005-r3-191"]{[191]}，即ILU(0)。关于与GMRES配合使用的不同预处理技术的讨论，读者可参阅@link["blazek2005-r3-97"]{[97]}、@link["blazek2005-r3-192"]{[192]}-@link["blazek2005-r3-195"]{[195]}。
   }
 
   @bi{
     Since the GMRES method requires a considerable amount of computer memory for storing the search directions and possibly also the preconditioning matrix, it is a good idea to circumvent an explicit formation and storage of the flux Jacobian @tex-math{\partial\vec{R}/\partial\vec{W}}. This is offered by the so-called @emph{matrix-free} approach. The idea is based on the observation that GMRES (and some other Krylov subspace methods) employs only matrix vector products of the form
   }{
-    由于GMRES方法在存储搜索方向以及可能的预处理矩阵上需要相当多的计算机内存ï¼最好能避免通量雅可比矩阵@tex-math{\partial\vec{R}/\partial\vec{W}}的显式构造与存储。这正是所谓的无矩阵(matrix-free)方法所能做到的。其思想基于如下观察:GMRES(以及某些其他Krylov子空间方法)只使用如下形式的矩阵-向量乘积
+    由于GMRES方法在存储搜索方向以及可能的预处理矩阵上需要相当多的计算机内存，最好能避免通量雅可比矩阵@tex-math{\partial\vec{R}/\partial\vec{W}}的显式构造与存储。这正是所谓的无矩阵(matrix-free)方法所能做到的。其思想基于如下观察:GMRES(以及某些其他Krylov子空间方法)只使用如下形式的矩阵-向量乘积
   }
 
   @tex-display-math{\frac{\partial\vec{R}}{\partial\vec{W}}\,\Delta\vec{W}^{n}\,,}
@@ -579,13 +579,13 @@
   @bi{
     thus requiring only residual evaluations. The parameter @tex-math{\epsilon} has to be chosen with some care, in order to minimise the numerical error (see, e.g., @link["blazek2005-r3-196"]{[196]} or @link["blazek2005-r3-197"]{[197]}). Another, and even more important, advantage of the matrix-free approach is that (numerically) accurate linearisation of a high-order residual @tex-math{\vec{R}^{n}} can be easily utilised in the implicit scheme. Hence, the quadratic convergence of Newton's scheme can be achieved at moderate costs. In this case we speak of @emph{Newton-Krylov} approach @link["blazek2005-r3-197"]{[197]}-@link["blazek2005-r3-201"]{[201]}, @link["blazek2005-r3-110"]{[110]}. Practical experience indicates that from all Krylov subspace methods, GMRES is best suited for the matrix-free implementation @link["blazek2005-r3-202"]{[202]}. An interesting possibility is to utilise the LU-SGS scheme as a preconditioner for the matrix-free GMRES method. Since the LU-SGS scheme also does not require an explicit storage of the flux Jacobian, the memory requirements can be even further reduced. The computational efficiency of this approach was recently demonstrated for 3-D inviscid and laminar flows on unstructured grids @link["blazek2005-r3-203"]{[203]}.
   }{
-    因而只需要残差计算。参数@tex-math{\epsilon}的选取须加小心ï¼以使数值误差最小(参见例如@link["blazek2005-r3-196"]{[196]}或@link["blazek2005-r3-197"]{[197]})。无矩阵方法的另一个、甚至更重要的优点是:可以在隐式格式中方便地利用高阶残差@tex-math{\vec{R}^{n}}的(数值上)精确线性化。于是,Newton格式的二次收敛性能够以适中的代价实现。这种情形称为Newton-Krylov方法@link["blazek2005-r3-197"]{[197]}-@link["blazek2005-r3-201"]{[201]}、@link["blazek2005-r3-110"]{[110]}。实践经验表明ï¼在所有Krylov子空间方法中,GMRES最适合无矩阵实现@link["blazek2005-r3-202"]{[202]}。一个有趣的可能性是把LU-SGS格式用作无矩阵GMRES方法的预处理子。由于LU-SGS格式同样不需要显式存储通量雅可比矩阵ï¼内存需求还可以进一步降低。最近已有工作在非结构网格上的三维无黏和层流流动中展示了这一方法的计算效率@link["blazek2005-r3-203"]{[203]}。
+    因而只需要残差计算。参数@tex-math{\epsilon}的选取须加小心，以使数值误差最小(参见例如@link["blazek2005-r3-196"]{[196]}或@link["blazek2005-r3-197"]{[197]})。无矩阵方法的另一个、甚至更重要的优点是:可以在隐式格式中方便地利用高阶残差@tex-math{\vec{R}^{n}}的(数值上)精确线性化。于是,Newton格式的二次收敛性能够以适中的代价实现。这种情形称为Newton-Krylov方法@link["blazek2005-r3-197"]{[197]}-@link["blazek2005-r3-201"]{[201]}、@link["blazek2005-r3-110"]{[110]}。实践经验表明，在所有Krylov子空间方法中,GMRES最适合无矩阵实现@link["blazek2005-r3-202"]{[202]}。一个有趣的可能性是把LU-SGS格式用作无矩阵GMRES方法的预处理子。由于LU-SGS格式同样不需要显式存储通量雅可比矩阵，内存需求还可以进一步降低。最近已有工作在非结构网格上的三维无黏和层流流动中展示了这一方法的计算效率@link["blazek2005-r3-203"]{[203]}。
   }
 
   @bi{
     The convergence of an implicit scheme can also be enhanced by using multigrid. There are basically two possible ways. First, we can employ multigrid inside an implicit scheme - as a solver for the linear equation system @link["blazek2005-ch03#eq-3-9"]{(3.9)} arising at each time step, or as a preconditioner for one of the conjugate gradient methods @link["blazek2005-r3-204"]{[204]}, @link["blazek2005-r3-205"]{[205]}. Second, the implicit scheme itself can serve as a smoother within the FAS multigrid method, which is applied directly to the governing equations @link["blazek2005-r3-206"]{[206]}-@link["blazek2005-r3-209"]{[209]}, @link["blazek2005-r3-178"]{[178]}. Some investigations show that at least for purely aerodynamic problems, rather "simple" implicit schemes (like Gauss-Seidel) combined with multigrid result in computationally more efficient solvers (in terms of the CPU time) than, e.g., GMRES @link["blazek2005-r3-178"]{[178]}, @link["blazek2005-r3-198"]{[198]}.
   }{
-    隐式格式的收敛也可以借助多重网格来增强。基本上有两种可能的途径。第一ï¼可以在隐式格式内部使用多重网格——作为每个时间步所产生的线性方程组@link["blazek2005-ch03#eq-3-9"]{(3.9)}的求解器ï¼或者作为某个共轭梯度类方法的预处理子@link["blazek2005-r3-204"]{[204]}、@link["blazek2005-r3-205"]{[205]}。第二ï¼隐式格式本身可以作为FAS多重网格方法中的光滑子(smoother)ï¼直接作用于控制方程@link["blazek2005-r3-206"]{[206]}-@link["blazek2005-r3-209"]{[209]}、@link["blazek2005-r3-178"]{[178]}。一些研究表明ï¼至少对纯气动问题,"简单"的隐式格式(如Gauss-Seidel)与多重网格相结合ï¼所得求解器在计算上(以CPU时间计)比例如GMRES更高效@link["blazek2005-r3-178"]{[178]}、@link["blazek2005-r3-198"]{[198]}。
+    隐式格式的收敛也可以借助多重网格来增强。基本上有两种可能的途径。第一，可以在隐式格式内部使用多重网格——作为每个时间步所产生的线性方程组@link["blazek2005-ch03#eq-3-9"]{(3.9)}的求解器，或者作为某个共轭梯度类方法的预处理子@link["blazek2005-r3-204"]{[204]}、@link["blazek2005-r3-205"]{[205]}。第二，隐式格式本身可以作为FAS多重网格方法中的光滑子(smoother)，直接作用于控制方程@link["blazek2005-r3-206"]{[206]}-@link["blazek2005-r3-209"]{[209]}、@link["blazek2005-r3-178"]{[178]}。一些研究表明，至少对纯气动问题,"简单"的隐式格式(如Gauss-Seidel)与多重网格相结合，所得求解器在计算上(以CPU时间计)比例如GMRES更高效@link["blazek2005-r3-178"]{[178]}、@link["blazek2005-r3-198"]{[198]}。
   }
 }
 
@@ -595,25 +595,25 @@
   @bi{
     The solution of the governing equations (2.19) does not raise any fundamental difficulties in the case of inviscid or laminar flows. The simulation of turbulent flows, however, presents a significant problem. Despite the performance of modern supercomputers, a direct simulation of turbulence by the time-dependent Navier-Stokes equations (2.19), called the @emph{Direct Numerical Simulation} (DNS), is still possible only for rather simple flow cases at low Reynolds numbers (@tex-math{Re}). The restrictions of the DNS become quite obvious when recalling that the number of grid points needed for sufficient spatial resolution scales as @tex-math{Re^{9/4}} and the CPU-time as @tex-math{Re^{3}}. This does not mean that DNS is completely useless. It is an important tool for understanding the turbulent structures and the laminar-turbulent transition. DNS also plays a vital role in the development and calibration of new or improved turbulence models. However, in engineering applications, the effects of turbulence can be taken into account only approximately, using models of various complexities.
   }{
-    对于无黏或层流流动ï¼求解控制方程(2.19)不会带来任何根本性的困难。然而ï¼湍流流动的模拟则是一个重大难题。尽管现代超级计算机性能强大ï¼用含时间的Navier-Stokes方程(2.19)对湍流作直接模拟——即所谓的直接数值模拟(Direct Numerical Simulation,DNS)——目前仍然只适用于低雷诺数(@tex-math{Re})下相当简单的流动情形。只要回想一下:为获得足够的空间分辨率,DNS所需的网格点数按@tex-math{Re^{9/4}}增长,CPU时间按@tex-math{Re^{3}}增长ï¼其局限便显而易见。但这并不意味着DNS完全无用。它是理解湍流结构和层流-湍流转捩的重要工具ï¼在发展及标定新的或经过改进的湍流模型方面也起着至关重要的作用。然而在工程应用中ï¼湍流的影响只能用复杂程度各不相同的模型近似地加以考虑。
+    对于无黏或层流流动，求解控制方程(2.19)不会带来任何根本性的困难。然而，湍流流动的模拟则是一个重大难题。尽管现代超级计算机性能强大，用含时间的Navier-Stokes方程(2.19)对湍流作直接模拟——即所谓的直接数值模拟(Direct Numerical Simulation,DNS)——目前仍然只适用于低雷诺数(@tex-math{Re})下相当简单的流动情形。只要回想一下:为获得足够的空间分辨率,DNS所需的网格点数按@tex-math{Re^{9/4}}增长,CPU时间按@tex-math{Re^{3}}增长，其局限便显而易见。但这并不意味着DNS完全无用。它是理解湍流结构和层流-湍流转捩的重要工具，在发展及标定新的或经过改进的湍流模型方面也起着至关重要的作用。然而在工程应用中，湍流的影响只能用复杂程度各不相同的模型近似地加以考虑。
   }
 
   @bi{
     The first level of approximation is reached for the @emph{Large-Eddy Simulation} (LES) approach. The development of LES is founded on the observation that the small scales of turbulent motion posses a more universal character than the large scales, which transport the turbulent energy. Thus, the idea is to resolve only the large eddies accurately and to approximate the effects of the small scales by relatively simple @emph{subgrid-scale} models. Since LES requires significantly less grid points than DNS, the investigation of turbulent flows at much higher Reynolds numbers becomes feasible. But because LES is inherently three-dimensional and unsteady, it still remains computationally very demanding. Thus, LES is still far away from becoming an engineering tool. However, LES is well suited for detailed studies of complex flow physics including massively separated unsteady flows, large scale mixing (e.g., fuel and oxidiser), aerodynamic noise, or for the investigation of flow control strategies. LES is also very promising for more accurate computations of flows in combustion chambers or engines, heat transfer and of rotating flows. An overview of research activities in LES was recently published in @link["blazek2005-r3-210"]{[210]}.
   }{
-    第一个近似层次是大涡模拟(Large-Eddy Simulation,LES)方法。LES的发展基于这样一个观察:湍流运动的小尺度比输运湍流能量的大尺度更具普适性。于是ï¼其思想是只精确分辨大涡ï¼而用相对简单的亚格子(subgrid-scale)模型来近似小尺度的作用。由于LES所需的网格点数远少于DNSï¼研究雷诺数高得多的湍流流动便成为可行。但LES本质上是三维且非定常的ï¼计算上仍然非常昂贵ï¼因此距离成为工程工具还很遥远。不过,LES非常适合对复杂流动物理进行细致研究ï¼包括大范围分离的非定常流动、大尺度混合(例如燃料与氧化剂)、气动噪声ï¼以及流动控制策略的研究。LES对于燃烧室或发动机内流动、传热以及旋转流动的更精确计算也很有前景。有关LES研究活动的综述最近发表于文献@link["blazek2005-r3-210"]{[210]}。
+    第一个近似层次是大涡模拟(Large-Eddy Simulation,LES)方法。LES的发展基于这样一个观察:湍流运动的小尺度比输运湍流能量的大尺度更具普适性。于是，其思想是只精确分辨大涡，而用相对简单的亚格子(subgrid-scale)模型来近似小尺度的作用。由于LES所需的网格点数远少于DNS，研究雷诺数高得多的湍流流动便成为可行。但LES本质上是三维且非定常的，计算上仍然非常昂贵，因此距离成为工程工具还很遥远。不过,LES非常适合对复杂流动物理进行细致研究，包括大范围分离的非定常流动、大尺度混合(例如燃料与氧化剂)、气动噪声，以及流动控制策略的研究。LES对于燃烧室或发动机内流动、传热以及旋转流动的更精确计算也很有前景。有关LES研究活动的综述最近发表于文献@link["blazek2005-r3-210"]{[210]}。
   }
 
   @bi{
     The next level of approximation is represented by the so-called @emph{Reynolds-Averaged Navier-Stokes} equations (RANS). This approach, which was presented by Reynolds in 1895, is based on the decomposition of the flow variables into mean and fluctuating parts, followed by time or ensemble averaging @link["blazek2005-r3-211"]{[211]} (see also @link["blazek2005-r3-212"]{[212]}, @link["blazek2005-r3-213"]{[213]}). In cases where the density is not constant, it is advisable to apply the density (mass) weighted or Favre decomposition @link["blazek2005-r3-214"]{[214]}, @link["blazek2005-r3-215"]{[215]} to the velocity components. Otherwise, the averaged governing equations would become considerably more complicated due to additional correlations involving density fluctuations. It is common to assume that Morkovin's hypothesis @link["blazek2005-r3-216"]{[216]} is valid, which states that the turbulence structure of boundary layers and wakes is not notably influenced by density fluctuations for Mach numbers below 5.
   }{
-    下一个近似层次是所谓的雷诺平均Navier-Stokes方程(Reynolds-Averaged Navier-Stokes equations,RANS)。这一方法由Reynolds于1895年提出ï¼其基础是把流动变量分解为平均部分与脉动部分ï¼随后进行时间平均或系综平均@link["blazek2005-r3-211"]{[211]}(另见@link["blazek2005-r3-212"]{[212]}、@link["blazek2005-r3-213"]{[213]})。在密度不恒定的情形下ï¼建议对速度分量采用密度(质量)加权平均或Favre分解@link["blazek2005-r3-214"]{[214]}、@link["blazek2005-r3-215"]{[215]};否则ï¼由于出现涉及密度脉动的附加关联项ï¼平均后的控制方程会复杂得多。通常假定Morkovin假设@link["blazek2005-r3-216"]{[216]}成立ï¼即:在马赫数低于5时ï¼边界层与尾迹的湍流结构不受密度脉动的显著影响。
+    下一个近似层次是所谓的雷诺平均Navier-Stokes方程(Reynolds-Averaged Navier-Stokes equations,RANS)。这一方法由Reynolds于1895年提出，其基础是把流动变量分解为平均部分与脉动部分，随后进行时间平均或系综平均@link["blazek2005-r3-211"]{[211]}(另见@link["blazek2005-r3-212"]{[212]}、@link["blazek2005-r3-213"]{[213]})。在密度不恒定的情形下，建议对速度分量采用密度(质量)加权平均或Favre分解@link["blazek2005-r3-214"]{[214]}、@link["blazek2005-r3-215"]{[215]};否则，由于出现涉及密度脉动的附加关联项，平均后的控制方程会复杂得多。通常假定Morkovin假设@link["blazek2005-r3-216"]{[216]}成立，即:在马赫数低于5时，边界层与尾迹的湍流结构不受密度脉动的显著影响。
   }
 
   @bi{
     By inserting the decomposed variables into the Navier-Stokes equations (2.19) and averaging, we obtain formally the same equations for the mean variables with the exception of two additional terms. The tensor of the viscous stresses is extended by one term - the @emph{Reynolds-stress tensor} @link["blazek2005-r3-211"]{[211]}
   }{
-    把分解后的变量代入Navier-Stokes方程(2.19)并作平均ï¼除两个附加项之外ï¼所得平均变量的方程在形式上与原来相同。黏性应力张量增加了一项——雷诺应力张量(Reynolds-stress tensor)@link["blazek2005-r3-211"]{[211]}
+    把分解后的变量代入Navier-Stokes方程(2.19)并作平均，除两个附加项之外，所得平均变量的方程在形式上与原来相同。黏性应力张量增加了一项——雷诺应力张量(Reynolds-stress tensor)@link["blazek2005-r3-211"]{[211]}
   }
 
   @tex-display-math[#:id "eq-3-13"]{\overline{\tau}_{ij}^{\,R}=-\bar{\rho}\,\widetilde{v_i''\,v_j''}\ , \tag{3.13}}
@@ -621,7 +621,7 @@
   @bi{
     where @tex-math{v_i''}, @tex-math{v_j''} denote the density-weighted fluctuating parts of the velocity components @tex-math{u,v,w}; @tex-math{\overline{\phantom{x}}} and @tex-math{\widetilde{\phantom{x}}} stand for ensemble and density weighted averaging, respectively. The Reynolds-stress tensor represents the transport of mean momentum due to turbulent fluctuations. Furthermore, the diffusive heat flux @tex-math{k\nabla T} in the energy equation (cf. Eq. (2.8)) is enhanced by the so-called @emph{turbulent heat-flux vector} @link["blazek2005-r3-43"]{[43]}
   }{
-    其中@tex-math{v_i''}、@tex-math{v_j''}表示速度分量@tex-math{u,v,w}的密度加权脉动部分;上横线@tex-math{\overline{\phantom{x}}}与波浪线@tex-math{\widetilde{\phantom{x}}}分别代表系综平均和密度加权平均。雷诺应力张量表示湍流脉动对平均动量的输运。此外ï¼能量方程中的扩散热流@tex-math{k\nabla T}(参见式(2.8))还须加上所谓的湍流热流向量(turbulent heat-flux vector)@link["blazek2005-r3-43"]{[43]}
+    其中@tex-math{v_i''}、@tex-math{v_j''}表示速度分量@tex-math{u,v,w}的密度加权脉动部分;上横线@tex-math{\overline{\phantom{x}}}与波浪线@tex-math{\widetilde{\phantom{x}}}分别代表系综平均和密度加权平均。雷诺应力张量表示湍流脉动对平均动量的输运。此外，能量方程中的扩散热流@tex-math{k\nabla T}(参见式(2.8))还须加上所谓的湍流热流向量(turbulent heat-flux vector)@link["blazek2005-r3-43"]{[43]}
   }
 
   @tex-display-math[#:id "eq-3-14"]{\vec{F}_D^{\,T}=-\bar{\rho}\,\widetilde{h''\,\vec{v}''}\,. \tag{3.14}}
@@ -629,31 +629,31 @@
   @bi{
     Thus, we can see that the solution of the Reynolds-averaged Navier-Stokes equations requires the modelling of the Reynolds stresses @link["blazek2005-ch03#eq-3-13"]{(3.13)} and of the turbulent heat flux @link["blazek2005-ch03#eq-3-14"]{(3.14)}. The advantages of this approach are that considerably coarser grids can be used as compared to LES, and that stationary mean solution can be assumed (at least for attached or moderately separated flows). Clearly, both features significantly reduce the computational effort in comparison to LES or even DNS. Therefore, the RANS approach is very popular in engineering applications. Of course, because of the averaging procedure, no detailed information can be obtained about the turbulent structures.
   }{
-    由此可见ï¼雷诺平均Navier-Stokes方程的求解需要对雷诺应力@link["blazek2005-ch03#eq-3-13"]{(3.13)}和湍流热流@link["blazek2005-ch03#eq-3-14"]{(3.14)}进行建模。这一方法的优点是:与LES相比可以使用粗得多的网格ï¼而且(至少对附着或中等分离的流动)可以假定平均解是定常的。显然ï¼与LES乃至DNS相比ï¼这两个特点都显著降低了计算量。因此,RANS方法在工程应用中非常流行。当然ï¼由于平均过程的存在ï¼无法获得关于湍流结构的详细信息。
+    由此可见，雷诺平均Navier-Stokes方程的求解需要对雷诺应力@link["blazek2005-ch03#eq-3-13"]{(3.13)}和湍流热流@link["blazek2005-ch03#eq-3-14"]{(3.14)}进行建模。这一方法的优点是:与LES相比可以使用粗得多的网格，而且(至少对附着或中等分离的流动)可以假定平均解是定常的。显然，与LES乃至DNS相比，这两个特点都显著降低了计算量。因此,RANS方法在工程应用中非常流行。当然，由于平均过程的存在，无法获得关于湍流结构的详细信息。
   }
 
   @bi{
     A large variety of turbulence models was devised to close the RANS equations and the research still continues. The models can be divided into @emph{first}- and @emph{second-order} closures, respectively.
   }{
-    人们设计了种类繁多的湍流模型来使RANS方程封闭ï¼相关研究至今仍在继续。这些模型可分为一阶(first-)封闭与二阶(second-order)封闭两类。
+    人们设计了种类繁多的湍流模型来使RANS方程封闭，相关研究至今仍在继续。这些模型可分为一阶(first-)封闭与二阶(second-order)封闭两类。
   }
 
   @bi{
     The most complex, but also the most flexible, are second-order closure models. The @emph{Reynolds-Stress Transport} (RST) model, which was first proposed by Rotta @link["blazek2005-r3-217"]{[217]}, solves modelled transport equations for the Reynolds-stress tensor. The partial differential equations for the six stress components have to be closed by one additional relation. Usually, an equation for the turbulent dissipation rate is employed. The RST models are able to account for strong nonlocal and history effects. Furthermore, they are able to capture the influence of streamline curvature or system rotation on the turbulent flow.
   }{
-    最复杂但也最灵活的是二阶封闭模型。雷诺应力输运(Reynolds-Stress Transport,RST)模型由Rotta@link["blazek2005-r3-217"]{[217]}首先提出ï¼它为雷诺应力张量求解模型化的输运方程。六个应力分量的偏微分方程需要用一条附加关系来封闭ï¼通常采用湍流耗散率方程。RST模型能够考虑强烈的非局部效应和历史效应ï¼而且能够捕捉流线曲率或系统旋转对湍流流动的影响。
+    最复杂但也最灵活的是二阶封闭模型。雷诺应力输运(Reynolds-Stress Transport,RST)模型由Rotta@link["blazek2005-r3-217"]{[217]}首先提出，它为雷诺应力张量求解模型化的输运方程。六个应力分量的偏微分方程需要用一条附加关系来封闭，通常采用湍流耗散率方程。RST模型能够考虑强烈的非局部效应和历史效应，而且能够捕捉流线曲率或系统旋转对湍流流动的影响。
   }
 
   @bi{
     Closely related to the RST approach are the @emph{Algebraic Reynolds-Stress} (ARS) models. They can be viewed as a combination of lower level models and the RST approach. The ARS models employ only two transport equations, mostly for the turbulent kinetic energy and the dissipation rate. The components of the Reynolds-stress tensor are related to the transport quantities by non-linear algebraic equations @link["blazek2005-r3-218"]{[218]}. The ARS approach is capable of predicting rotational turbulent flows and secondary flows in channels with accuracy similar to the RST models. Detailed overviews of the RST and ARS models can be found in @link["blazek2005-r3-219"]{[219]}, @link["blazek2005-r3-220"]{[220]}.
   }{
-    与RST方法密切相关的是代数雷诺应力(Algebraic Reynolds-Stress,ARS)模型。它们可以看作较低层次模型与RST方法的结合。ARS模型只用两个输运方程ï¼多数是湍动能和耗散率的方程;雷诺应力张量的分量则通过非线性代数方程与这些输运量联系起来@link["blazek2005-r3-218"]{[218]}。ARS方法预测旋转湍流和通道内二次流的精度与RST模型相近。关于RST和ARS模型的详细综述见@link["blazek2005-r3-219"]{[219]}、@link["blazek2005-r3-220"]{[220]}。
+    与RST方法密切相关的是代数雷诺应力(Algebraic Reynolds-Stress,ARS)模型。它们可以看作较低层次模型与RST方法的结合。ARS模型只用两个输运方程，多数是湍动能和耗散率的方程;雷诺应力张量的分量则通过非线性代数方程与这些输运量联系起来@link["blazek2005-r3-218"]{[218]}。ARS方法预测旋转湍流和通道内二次流的精度与RST模型相近。关于RST和ARS模型的详细综述见@link["blazek2005-r3-219"]{[219]}、@link["blazek2005-r3-220"]{[220]}。
   }
 
   @bi{
     Because of numerical problems with the RST and ARS models, which are primarily caused by the stiffness of the RST and the non-linearity of the ARS equations, first-order closures are more widely used in practice. In these models, the Reynolds stresses are expressed by means of a single scalar value, the so-called @emph{turbulent eddy viscosity}. This approach is based on the @emph{eddy viscosity hypothesis} of Boussinesq @link["blazek2005-r3-221"]{[221]}, @link["blazek2005-r3-222"]{[222]}, which assumes a linear relationship between the turbulent shear stress and the mean strain rate, similar to laminar flow. Herewith, the dynamic viscosity @tex-math{\mu} in the viscous stress tensor (2.15) or in the governing equations (2.19) is replaced by the sum of a laminar and a turbulent component
   }{
-    由于RST与ARS模型存在数值问题——主要由RST方程的刚性和ARS方程的非线性引起——实践中更广泛使用的是一阶封闭。这类模型中ï¼雷诺应力用单一标量值表示ï¼即所谓的湍流涡黏性(turbulent eddy viscosity)。该做法基于Boussinesq的涡黏性假设(eddy viscosity hypothesis)@link["blazek2005-r3-221"]{[221]}、@link["blazek2005-r3-222"]{[222]}ï¼即假定湍流切应力与平均应变率之间呈线性关系ï¼与层流类似。于是ï¼黏性应力张量(2.15)或控制方程(2.19)中的动力黏度@tex-math{\mu}被层流分量与湍流分量之和所代替
+    由于RST与ARS模型存在数值问题——主要由RST方程的刚性和ARS方程的非线性引起——实践中更广泛使用的是一阶封闭。这类模型中，雷诺应力用单一标量值表示，即所谓的湍流涡黏性(turbulent eddy viscosity)。该做法基于Boussinesq的涡黏性假设(eddy viscosity hypothesis)@link["blazek2005-r3-221"]{[221]}、@link["blazek2005-r3-222"]{[222]}，即假定湍流切应力与平均应变率之间呈线性关系，与层流类似。于是，黏性应力张量(2.15)或控制方程(2.19)中的动力黏度@tex-math{\mu}被层流分量与湍流分量之和所代替
   }
 
   @tex-display-math[#:id "eq-3-15"]{\mu=\mu_L+\mu_T\,. \tag{3.15}}
@@ -661,7 +661,7 @@
   @bi{
     As described earlier, the laminar viscosity is computed, for example, with the aid of the Sutherland formula (2.30). In analogy, the turbulent heat-flux vector @link["blazek2005-ch03#eq-3-14"]{(3.14)} is modelled as
   }{
-    如前所述ï¼层流黏度例如可用Sutherland公式(2.30)计算。类似地ï¼湍流热流向量@link["blazek2005-ch03#eq-3-14"]{(3.14)}被建模为
+    如前所述，层流黏度例如可用Sutherland公式(2.30)计算。类似地，湍流热流向量@link["blazek2005-ch03#eq-3-14"]{(3.14)}被建模为
   }
 
   @tex-display-math[#:id "eq-3-16"]{\vec{F}_D^{\,T}=-k_T\,\nabla T\ , \tag{3.16}}
@@ -669,7 +669,7 @@
   @bi{
     where @tex-math{k_T} denotes the @emph{turbulent thermal conductivity coefficient}. Hence, the thermal conductivity coefficient in Eq. (2.24) is evaluated as
   }{
-    其中@tex-math{k_T}表示湍流热传导系数(turbulent thermal conductivity coefficient)。于是ï¼式(2.24)中的热传导系数按
+    其中@tex-math{k_T}表示湍流热传导系数(turbulent thermal conductivity coefficient)。于是，式(2.24)中的热传导系数按
   }
 
   @tex-display-math[#:id "eq-3-17"]{k=k_L+k_T=c_p\left(\frac{\mu_L}{Pr_L}+\frac{\mu_T}{Pr_T}\right)\,. \tag{3.17}}
@@ -677,25 +677,25 @@
   @bi{
     The turbulent Prandtl number is in general assumed to be constant in the flow field (@tex-math{Pr_T=0.9} for air). The coefficient of the turbulent eddy viscosity @tex-math{\mu_T} has to be determined with the aid of a turbulence model. The limitations of the eddy viscosity approach are given by the assumption of equilibrium between the turbulence and the mean strain field, and by the independence on system rotation. The accuracy of the eddy-viscosity based models can be significantly improved either by using correction terms @link["blazek2005-r3-223"]{[223]}, @link["blazek2005-r3-224"]{[224]}, or by employing @emph{non-linear eddy viscosity} approaches @link["blazek2005-r3-225"]{[225]}-@link["blazek2005-r3-227"]{[227]}.
   }{
-    来计算。湍流Prandtl数一般假定在整个流场中为常数(对空气@tex-math{Pr_T=0.9})。湍流涡黏性系数@tex-math{\mu_T}必须借助湍流模型来确定。涡黏性方法的局限来自两方面:一是假定湍流与平均应变场之间处于平衡ï¼二是假定与系统旋转无关。基于涡黏性的模型的精度可以显著改进:或者使用修正项@link["blazek2005-r3-223"]{[223]}、@link["blazek2005-r3-224"]{[224]}ï¼或者采用非线性涡黏性(non-linear eddy viscosity)方法@link["blazek2005-r3-225"]{[225]}-@link["blazek2005-r3-227"]{[227]}。
+    来计算。湍流Prandtl数一般假定在整个流场中为常数(对空气@tex-math{Pr_T=0.9})。湍流涡黏性系数@tex-math{\mu_T}必须借助湍流模型来确定。涡黏性方法的局限来自两方面:一是假定湍流与平均应变场之间处于平衡，二是假定与系统旋转无关。基于涡黏性的模型的精度可以显著改进:或者使用修正项@link["blazek2005-r3-223"]{[223]}、@link["blazek2005-r3-224"]{[224]}，或者采用非线性涡黏性(non-linear eddy viscosity)方法@link["blazek2005-r3-225"]{[225]}-@link["blazek2005-r3-227"]{[227]}。
   }
 
   @bi{
     The first-order closures can be categorised into @emph{zero-}, @emph{one-}, and @emph{multiple-equation} models, corresponding to the number of transport equations they utilise. Within the zero-equation or, as they are also denoted, @emph{algebraic} models, the turbulent eddy viscosity is calculated from empirical relations, which employ only local mean flow variables. Therefore, no history effects can be simulated, which prevents a reliable prediction of separated flows. The most popular algebraic model, which is still in use for some applications, was developed by Baldwin and Lomax @link["blazek2005-r3-228"]{[228]}.
   }{
-    一阶封闭可以按其所用输运方程的数目分为零方程(zero-)、单方程(one-)和多方程(multiple-equation)模型。在零方程模型——也称为代数(algebraic)模型——中ï¼湍流涡黏性由只使用当地平均流动变量的经验关系式计算ï¼因此无法模拟历史效应ï¼这使得对分离流动的可靠预测无从谈起。最流行的代数模型由Baldwin和Lomax@link["blazek2005-r3-228"]{[228]}发展ï¼至今仍在某些应用中使用。
+    一阶封闭可以按其所用输运方程的数目分为零方程(zero-)、单方程(one-)和多方程(multiple-equation)模型。在零方程模型——也称为代数(algebraic)模型——中，湍流涡黏性由只使用当地平均流动变量的经验关系式计算，因此无法模拟历史效应，这使得对分离流动的可靠预测无从谈起。最流行的代数模型由Baldwin和Lomax@link["blazek2005-r3-228"]{[228]}发展，至今仍在某些应用中使用。
   }
 
   @bi{
     History effects are taken into account by the one- and two-equation models, where the convection and the diffusion of turbulence is modelled by transport equations. The most widely used one-equation turbulence model is due to Spalart and Allmaras @link["blazek2005-r3-229"]{[229]}, which is based on an eddy-viscosity like variable. The model is numerically very stable and easy to implement on structured as well as on unstructured grids.
   }{
-    单方程和两方程模型考虑历史效应ï¼湍流的对流与扩散用输运方程来建模。使用最广泛的单方程湍流模型是Spalart和Allmaras@link["blazek2005-r3-229"]{[229]}提出的ï¼它基于一个类涡黏性变量。该模型数值上非常稳定ï¼在结构网格和非结构网格上都易于实现。
+    单方程和两方程模型考虑历史效应，湍流的对流与扩散用输运方程来建模。使用最广泛的单方程湍流模型是Spalart和Allmaras@link["blazek2005-r3-229"]{[229]}提出的，它基于一个类涡黏性变量。该模型数值上非常稳定，在结构网格和非结构网格上都易于实现。
   }
 
   @bi{
     In the case of the two-equation models, practically all approaches employ the transport equation for the turbulent kinetic energy. Among a large number of two-equation models, the @tex-math{K-\varepsilon} model of Launder and Spalding @link["blazek2005-r3-230"]{[230]} and the @tex-math{K-\omega} model of Wilcox @link["blazek2005-r3-231"]{[231]} are most often used in engineering applications. They offer a reasonable compromise between computational effort and accuracy. An interesting comparison between the Spalart-Allmaras model and various two-equation turbulence models was recently published in @link["blazek2005-r3-232"]{[232]}.
   }{
-    在两方程模型中ï¼几乎所有方法都采用湍动能的输运方程。在大量的两方程模型中,Launder和Spalding的@tex-math{K-\varepsilon}模型@link["blazek2005-r3-230"]{[230]}与Wilcox的@tex-math{K-\omega}模型@link["blazek2005-r3-231"]{[231]}在工程应用中最为常用。它们在计算量与精度之间提供了合理的折中。最近发表了一项关于Spalart-Allmaras模型与多种两方程湍流模型之间的有趣比较@link["blazek2005-r3-232"]{[232]}。
+    在两方程模型中，几乎所有方法都采用湍动能的输运方程。在大量的两方程模型中,Launder和Spalding的@tex-math{K-\varepsilon}模型@link["blazek2005-r3-230"]{[230]}与Wilcox的@tex-math{K-\omega}模型@link["blazek2005-r3-231"]{[231]}在工程应用中最为常用。它们在计算量与精度之间提供了合理的折中。最近发表了一项关于Spalart-Allmaras模型与多种两方程湍流模型之间的有趣比较@link["blazek2005-r3-232"]{[232]}。
   }
 }
 
@@ -705,19 +705,19 @@
   @bi{
     Regardless of the numerical methodology chosen to solve the governing equations (2.19), we have to specify suitable @emph{initial} and @emph{boundary} conditions. The initial conditions determine the state of the fluid at the time @tex-math{t=0}, or at the first step of an iterative scheme. Clearly, the better (the closer to the solution) the initial guess will be, the faster the final solution will be obtained. Moreover, the probability of breakdown of the numerical solution process will be reduced correspondingly. Therefore, it is important that the initial solution satisfies at least the governing equations and the additional thermodynamic relations. A common practice in external aerodynamics consists of prescribing freestream values of pressure, density and velocity components (given as Mach number, angle of attack and sideslip angle) in the whole flow field. In turbomachinery, it is important to specify the flow directions in the complete domain to one's best knowledge. The same holds also for the pressure field. It is therefore quite worthwhile to employ lower-order approximations (like potential methods) to generate a physically meaningful initial guess.
   }{
-    无论选择何种数值方法来求解控制方程(2.19)ï¼都必须规定合适的初始条件与边界条件。初始条件确定@tex-math{t=0}时刻或迭代格式第一步时的流体状态。显然ï¼初始猜测越好(越接近解)ï¼获得最终解就越快ï¼而且数值求解过程发散的概率也会相应降低。因此ï¼初始解至少应满足控制方程以及补充的热力学关系ï¼这一点很重要。外流空气动力学中的常见做法是在整个流场内给定压力、密度和速度分量的自由来流值(以马赫数、迎角和侧滑角的形式给出)。在叶轮机械中ï¼重要的是要凭已有知识尽可能好地在整个域内给定流动方向;对压力场也是如此。因此ï¼采用低阶近似方法(如位势方法)来生成物理上有意义的初始猜测是相当值得的。
+    无论选择何种数值方法来求解控制方程(2.19)，都必须规定合适的初始条件与边界条件。初始条件确定@tex-math{t=0}时刻或迭代格式第一步时的流体状态。显然，初始猜测越好(越接近解)，获得最终解就越快，而且数值求解过程发散的概率也会相应降低。因此，初始解至少应满足控制方程以及补充的热力学关系，这一点很重要。外流空气动力学中的常见做法是在整个流场内给定压力、密度和速度分量的自由来流值(以马赫数、迎角和侧滑角的形式给出)。在叶轮机械中，重要的是要凭已有知识尽可能好地在整个域内给定流动方向;对压力场也是如此。因此，采用低阶近似方法(如位势方法)来生成物理上有意义的初始猜测是相当值得的。
   }
 
   @bi{
     Any numerical flow simulation considers only a certain part of the physical domain. The truncation of the computational domain creates artificial boundaries, where values of the physical quantities have to be specified. Examples are the farfield boundary in external aerodynamics; the inlet, outlet and the periodic boundary in the case of internal flows; and finally the symmetry plane. The main problem when constructing such boundary conditions is of course that the solution on the truncated domain should stay as close as possible to a solution which would be obtained for the whole physical domain. In the case of the farfield, inlet and outlet boundaries, @emph{characteristic} boundary conditions @link["blazek2005-r3-233"]{[233]}-@link["blazek2005-r3-235"]{[235]} are often used in order to suppress the generation of non-physical disturbances in the flow field. But despite this, the farfield or the inlet and outlet boundaries may still not be placed too close to the object under consideration (wing, blade, etc.). Otherwise, the accuracy of the solution would be reduced. For external flows, when a lifting body is considered, it is possible to correct the flow variables at the farfield boundary using a single vortex centred at the airfoil or the wing @link["blazek2005-r3-235"]{[235]}-@link["blazek2005-r3-237"]{[237]}. In this way, the distance between the body and the farfield boundary can be significantly reduced without impairing the solution accuracy, or improving the accuracy for a given outer boundary position @link["blazek2005-r3-160"]{[160]}, @link["blazek2005-r3-237"]{[237]}, @link["blazek2005-r3-238"]{[238]}. For internal flow problems, formulations for the inlet and outlet boundaries based on linearised Euler equations and Fourier series expansion of the perturbations were developed @link["blazek2005-r3-239"]{[239]}-@link["blazek2005-r3-241"]{[241]}. These formulations allow for a very close placement of the inlet and outlet boundaries to a blade without influencing the solution.
   }{
-    任何数值流动模拟都只考虑物理域的某一部分。计算域的截断产生了人工边界ï¼在这些边界上必须给定物理量的值。例如:外流空气动力学中的远场(farfield)边界;内流情形的入口、出口和周期性边界;还有对称面。构造这类边界条件的主要问题当然是:截断域上的解应当尽可能接近对整个物理域所得到的解。对远场、入口和出口边界ï¼常采用特征边界条件(characteristic boundary conditions)@link["blazek2005-r3-233"]{[233]}-@link["blazek2005-r3-235"]{[235]}ï¼以抑制流场中非物理扰动的产生。尽管如此ï¼远场或入口、出口边界仍不能放置得离所研究的物体(机翼、叶片等)太近ï¼否则解的精度会降低。对于外流ï¼当考虑有升力的物体时ï¼可以用一个以翼型或机翼为中心的点涡来修正远场边界上的流动变量@link["blazek2005-r3-235"]{[235]}-@link["blazek2005-r3-237"]{[237]}。这样ï¼在不损害解精度的前提下ï¼物体与远场边界之间的距离可以显著缩短;或者在给定外边界位置时提高解的精度@link["blazek2005-r3-160"]{[160]}、@link["blazek2005-r3-237"]{[237]}、@link["blazek2005-r3-238"]{[238]}。对于内流问题ï¼人们发展了基于线性化Euler方程和扰动Fourier级数展开的入口与出口边界公式@link["blazek2005-r3-239"]{[239]}-@link["blazek2005-r3-241"]{[241]}。这些公式允许把入口和出口边界放置得非常靠近叶片而不影响解。
+    任何数值流动模拟都只考虑物理域的某一部分。计算域的截断产生了人工边界，在这些边界上必须给定物理量的值。例如:外流空气动力学中的远场(farfield)边界;内流情形的入口、出口和周期性边界;还有对称面。构造这类边界条件的主要问题当然是:截断域上的解应当尽可能接近对整个物理域所得到的解。对远场、入口和出口边界，常采用特征边界条件(characteristic boundary conditions)@link["blazek2005-r3-233"]{[233]}-@link["blazek2005-r3-235"]{[235]}，以抑制流场中非物理扰动的产生。尽管如此，远场或入口、出口边界仍不能放置得离所研究的物体(机翼、叶片等)太近，否则解的精度会降低。对于外流，当考虑有升力的物体时，可以用一个以翼型或机翼为中心的点涡来修正远场边界上的流动变量@link["blazek2005-r3-235"]{[235]}-@link["blazek2005-r3-237"]{[237]}。这样，在不损害解精度的前提下，物体与远场边界之间的距离可以显著缩短;或者在给定外边界位置时提高解的精度@link["blazek2005-r3-160"]{[160]}、@link["blazek2005-r3-237"]{[237]}、@link["blazek2005-r3-238"]{[238]}。对于内流问题，人们发展了基于线性化Euler方程和扰动Fourier级数展开的入口与出口边界公式@link["blazek2005-r3-239"]{[239]}-@link["blazek2005-r3-241"]{[241]}。这些公式允许把入口和出口边界放置得非常靠近叶片而不影响解。
   }
 
   @bi{
     A different type of boundary condition is found when the surface of a body is exposed to the fluid. In the case of inviscid flow governed by the Euler equations (2.45), the appropriate boundary condition is to require the flow to be tangential to the surface, i.e.,
   }{
-    当物体的表面暴露于流体之中时ï¼出现另一类边界条件。对于由Euler方程(2.45)控制的无黏流动ï¼合适的边界条件是要求流动与表面相切ï¼即
+    当物体的表面暴露于流体之中时，出现另一类边界条件。对于由Euler方程(2.45)控制的无黏流动，合适的边界条件是要求流动与表面相切，即
   }
 
   @tex-display-math{\vec{v}\cdot\vec{n}=0\qquad\mbox{at the surface.}}
@@ -725,7 +725,7 @@
   @bi{
     By contrast, for the Navier-Stokes equations no relative velocity between the surface and the fluid immediately at the surface is assumed - the so-called @emph{no-slip} boundary condition
   }{
-    相反ï¼对于Navier-Stokes方程ï¼则假定表面与紧贴表面的流体之间没有相对速度——即所谓的无滑移(no-slip)边界条件
+    相反，对于Navier-Stokes方程，则假定表面与紧贴表面的流体之间没有相对速度——即所谓的无滑移(no-slip)边界条件
   }
 
   @tex-display-math{u=v=w=0\qquad\mbox{at the surface.}}
@@ -733,18 +733,18 @@
   @bi{
     The treatment of walls becomes more involved in cases, where, e.g., a specified wall temperature distribution has to be met, or when the heat radiation has to be taken into account (see, e.g., @link["blazek2005-r3-242"]{[242]}, @link["blazek2005-r3-243"]{[243]}).
   }{
-    在某些情形下ï¼壁面的处理变得更加复杂ï¼例如必须满足给定的壁面温度分布ï¼或必须考虑热辐射(参见例如@link["blazek2005-r3-242"]{[242]}、@link["blazek2005-r3-243"]{[243]})。
+    在某些情形下，壁面的处理变得更加复杂，例如必须满足给定的壁面温度分布，或必须考虑热辐射(参见例如@link["blazek2005-r3-242"]{[242]}、@link["blazek2005-r3-243"]{[243]})。
   }
 
   @bi{
     Furthermore, boundary conditions have to be defined for surfaces where different fluids (e.g., air and water) meet together @link["blazek2005-r3-244"]{[244]}-@link["blazek2005-r3-247"]{[247]}. But apart from the physical boundary conditions and those imposed by truncating the flow domain, there can be boundaries generated by the numerical solution method itself. These are for example coordinate cuts and block or zonal boundaries @link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-26"]{[26]}.
   }{
-    此外ï¼还必须为不同流体(例如空气和水)相遇的表面定义边界条件@link["blazek2005-r3-244"]{[244]}-@link["blazek2005-r3-247"]{[247]}。除了物理边界条件和由流动域截断所施加的边界条件之外ï¼还可能有由数值求解方法本身产生的边界ï¼例如坐标割缝(coordinate cuts)以及块(block)或分区(zonal)边界@link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-26"]{[26]}。
+    此外，还必须为不同流体(例如空气和水)相遇的表面定义边界条件@link["blazek2005-r3-244"]{[244]}-@link["blazek2005-r3-247"]{[247]}。除了物理边界条件和由流动域截断所施加的边界条件之外，还可能有由数值求解方法本身产生的边界，例如坐标割缝(coordinate cuts)以及块(block)或分区(zonal)边界@link["blazek2005-r3-20"]{[20]}-@link["blazek2005-r3-26"]{[26]}。
   }
 
   @bi{
     The correct implementation of boundary condition is the crucial point of every flow solver. Not only the accuracy of the solution depends strongly on a proper physical and numerical treatment of the boundaries, but also the robustness and the convergence speed are considerably influenced. More details of various important boundary conditions are presented in Chapter 8.
   }{
-    边界条件的正确实现是每个流动求解器的关键所在。解的精度不仅在很大程度上取决于边界的物理与数值处理是否恰当ï¼求解器的稳健性和收敛速度也会受到显著影响。各种重要边界条件的更多细节见第8章。
+    边界条件的正确实现是每个流动求解器的关键所在。解的精度不仅在很大程度上取决于边界的物理与数值处理是否恰当，求解器的稳健性和收敛速度也会受到显著影响。各种重要边界条件的更多细节见第8章。
   }
 }

@@ -28,6 +28,9 @@ validate:
 	$(GROVE) check
 
 test:
+	guile --no-auto-compile -L . tests/lp-core.scm
+	guile --no-auto-compile -L . tests/lp-project.scm
+	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/figure-page-cache.scm
 	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/entity-snapshot.scm
 	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/doi-metadata.scm
 	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/zenodo-metadata.scm

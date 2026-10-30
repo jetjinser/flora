@@ -12,7 +12,10 @@
              (srfi srfi-13)
              (srfi srfi-64))
 
-(load "../project.scm")
+(define figure-assets-module (resolve-module '(flora figure-assets)))
+(define render-page (module-ref figure-assets-module 'render-page))
+(define page-cache-directory
+  (module-ref figure-assets-module 'pdf-page-cache-directory))
 
 (define test-root (mkdtemp "/tmp/flora-page-cache-test-XXXXXX"))
 (define test-cache (string-append test-root "/cache"))
@@ -21,20 +24,14 @@
 (define input-a (string-append test-root "/input-a.pdf"))
 (define input-b (string-append test-root "/input-b.pdf"))
 (define calls-file (string-append test-root "/calls"))
-(define original-cache figure-page-cache)
 (define original-path (getenv "PATH"))
 
 (define (read-text path)
   (call-with-input-file path get-string-all))
 
 (define (render-page-one pdf)
-  (render-page
-   pdf 1
-   (string-append
-    figure-page-cache "/"
-    (content-fingerprint
-     (string-append figure-page-rasterizer-version "\n"
-                    (file-fingerprint pdf))))))
+  (render-page pdf 1
+    (page-cache-directory test-cache "test-rasterizer-v1" pdf)))
 
 (test-begin "Flora figure page cache")
 (dynamic-wind
@@ -51,7 +48,6 @@
           "#!/bin/sh\ninput=\nprefix=\nwhile [ \"$#\" -gt 0 ]; do\n  case \"$1\" in *.pdf) input=$1;; esac\n  prefix=$1\n  shift\ndone\nprintf '%s\\n' called >> '~a'\ncase \"$input\" in *input-a.pdf) raster=from-pdf-a;; *) raster=from-pdf-b;; esac\nprintf '%s' \"$raster\" > \"$prefix-001.png\"\n"
           calls-file)))
     (chmod fake-rasterizer #o755)
-    (set! figure-page-cache test-cache)
     (setenv "PATH" (string-append fake-bin ":" original-path)))
   (lambda ()
     (let* ((a-path (render-page-one input-a))
@@ -69,7 +65,6 @@
       (test-equal "the second PDF cannot reuse the first PDF's raster"
         "from-pdf-b" b-content)))
   (lambda ()
-    (set! figure-page-cache original-cache)
     (if original-path
         (setenv "PATH" original-path)
         (unsetenv "PATH"))

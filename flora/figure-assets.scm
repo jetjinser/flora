@@ -33,10 +33,8 @@
        (lambda (in)
          (let* ((input-pdf (in pdf))
                 (page-cache
-                 (string-append cache-root "/"
-                   (content-fingerprint
-                    (string-append rasterizer-version "\n"
-                                   (file-fingerprint input-pdf))))))
+                 (pdf-page-cache-directory cache-root rasterizer-version
+                                           input-pdf)))
            (unless (file-exists? cache-root) (mkdir cache-root))
            (append-map
             (lambda (figure)
@@ -100,6 +98,11 @@
         (error "pdftoppm failed" page))
       (rename-file (string-append prefix "-" padded ".png") cached))
     cached))
+
+(define (pdf-page-cache-directory cache-root rasterizer-version pdf)
+  (string-append cache-root "/"
+    (content-fingerprint
+      (string-append rasterizer-version "\n" (file-fingerprint pdf)))))
 
 (define (encode-variant cache-root command args output)
   (let ((temporary (string-append cache-root "/" (basename output))))

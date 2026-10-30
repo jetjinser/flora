@@ -6,7 +6,7 @@
 @bi{
   The application of the @emph{method of lines}, i.e., the separate spatial and temporal discretisation of the governing equations (2.19), leads, written down for each control volume, to a system of coupled ordinary differential equations in time
 }{
-  应用线方法(method of lines)ï¼即对控制方程(2.19)在空间和时间上分别进行离散化ï¼并对每个控制体写出来ï¼便得到一个时间上相互耦合的常微分方程组
+  应用线方法(method of lines)，即对控制方程(2.19)在空间和时间上分别进行离散化，并对每个控制体写出来，便得到一个时间上相互耦合的常微分方程组
 }
 
 @tex-display-math[#:id "eq-6-1"]{\frac{d\left(\Omega\bar{M}\vec{W}\right)_I}{dt} = -\vec{R}_I. \tag{6.1}}
@@ -14,13 +14,13 @@
 @bi{
   In Eq. @link["blazek2005-ch06#eq-6-1"]{(6.1)}, @tex-math{\Omega} represents the volume, @tex-math{\vec{R}} the residual, @tex-math{\bar{M}} the mass matrix, and the index @tex-math{I} denotes the particular control volume. The system @link["blazek2005-ch06#eq-6-1"]{(6.1)} has to be integrated in time - either to obtain a steady-state solution (@tex-math{\vec{R}_I = 0}), or to reproduce the time history of an unsteady flow.
 }{
-  在方程@link["blazek2005-ch06#eq-6-1"]{(6.1)}中,@tex-math{\Omega}表示体积,@tex-math{\vec{R}}为残差,@tex-math{\bar{M}}为质量矩阵ï¼下标@tex-math{I}指某个具体的控制体。方程组@link["blazek2005-ch06#eq-6-1"]{(6.1)}必须在时间上积分——或者为了得到定常解(@tex-math{\vec{R}_I = 0})ï¼或者为了重现非定常流动的时间历程。
+  在方程@link["blazek2005-ch06#eq-6-1"]{(6.1)}中,@tex-math{\Omega}表示体积,@tex-math{\vec{R}}为残差,@tex-math{\bar{M}}为质量矩阵，下标@tex-math{I}指某个具体的控制体。方程组@link["blazek2005-ch06#eq-6-1"]{(6.1)}必须在时间上积分——或者为了得到定常解(@tex-math{\vec{R}_I = 0})，或者为了重现非定常流动的时间历程。
 }
 
 @bi{
   We briefly discussed the aspects of the solution of the equation system @link["blazek2005-ch06#eq-6-1"]{(6.1)} in Section 3.2. We saw that the various @emph{explicit} and @emph{implicit} methods can be derived from a basic non-linear scheme. It reads for a stationary grid
 }{
-  我们在3.2节简要讨论过方程组@link["blazek2005-ch06#eq-6-1"]{(6.1)}求解的若干问题。我们看到ï¼各种显式(explicit)和隐式(implicit)方法都可以从一个基本的非线性格式导出。对静止网格ï¼该格式为
+  我们在3.2节简要讨论过方程组@link["blazek2005-ch06#eq-6-1"]{(6.1)}求解的若干问题。我们看到，各种显式(explicit)和隐式(implicit)方法都可以从一个基本的非线性格式导出。对静止网格，该格式为
 }
 
 @tex-display-math[#:id "eq-6-2"]{\frac{\left(\Omega\bar{M}\right)_I}{\Delta t_I}\Delta\vec{W}_I^n = -\frac{\beta}{1+\omega}\vec{R}_I^{n+1} - \frac{1-\beta}{1+\omega}\vec{R}_I^n + \frac{\omega}{1+\omega}\frac{\left(\Omega\bar{M}\right)_I}{\Delta t_I}\Delta\vec{W}_I^{n-1}, \tag{6.2}}
@@ -36,13 +36,13 @@
 @bi{
   stands for the @emph{update} (correction) of the solution. The superscripts @tex-math{n} and @tex-math{(n+1)} denote the time levels. Hence, @tex-math{\vec{W}^n} means the flow solution at the present time @tex-math{t}. Consequently, @tex-math{\vec{W}^{n+1}} represents the solution at the time @tex-math{(t+\Delta t)}. The parameters @tex-math{\beta} and @tex-math{\omega} determine the discretisation type (explicit or implicit) and also the temporal accuracy. For example, the condition expressed by Eq. (3.6) must be fulfilled to achieve second-order temporal accuracy.
 }{
-  表示解的更新(updateï¼即修正量)。上标@tex-math{n}和@tex-math{(n+1)}表示时间层。因此,@tex-math{\vec{W}^n}指当前时刻@tex-math{t}的流动解ï¼而@tex-math{\vec{W}^{n+1}}表示时刻@tex-math{(t+\Delta t)}的解。参数@tex-math{\beta}和@tex-math{\omega}决定离散化类型(显式或隐式)ï¼也决定时间精度。例如ï¼要达到二阶时间精度ï¼必须满足方程(3.6)所表达的条件。
+  表示解的更新(update，即修正量)。上标@tex-math{n}和@tex-math{(n+1)}表示时间层。因此,@tex-math{\vec{W}^n}指当前时刻@tex-math{t}的流动解，而@tex-math{\vec{W}^{n+1}}表示时刻@tex-math{(t+\Delta t)}的解。参数@tex-math{\beta}和@tex-math{\omega}决定离散化类型(显式或隐式)，也决定时间精度。例如，要达到二阶时间精度，必须满足方程(3.6)所表达的条件。
 }
 
 @bi{
   In the following sections, we shall consider the most popular explicit and implicit time-stepping methods in some detail. We shall also present how the maximum allowable time step can be evaluated for a particular scheme. Furthermore, we shall discuss the issues of the appropriate implementations on structured as well as on unstructured grids. Finally, the last section will be devoted to time-accurate solutions of unsteady flow problems.
 }{
-  在下面几节中ï¼我们将较为详细地讨论最常用的显式和隐式时间推进方法。我们还将说明如何针对具体格式计算最大允许时间步长。此外ï¼我们还要讨论在结构网格和非结构网格上的恰当实现问题。最后ï¼本章末节将专门讨论非定常流动问题的时间精确解。
+  在下面几节中，我们将较为详细地讨论最常用的显式和隐式时间推进方法。我们还将说明如何针对具体格式计算最大允许时间步长。此外，我们还要讨论在结构网格和非结构网格上的恰当实现问题。最后，本章末节将专门讨论非定常流动问题的时间精确解。
 }
 
 @subtree[#:id "blazek2005-6-1"]{
@@ -51,13 +51,13 @@
   @bi{
     An explicit scheme starts from a known solution @tex-math{\vec{W}^n} and employs the corresponding residual @tex-math{\vec{R}^n} in order to obtain a new solution at time @tex-math{(t+\Delta t)}. In other words, the new solution @tex-math{\vec{W}^{n+1}} depends solely on values already known. This fact makes the explicit schemes very simple and easy to implement.
   }{
-    显式格式从已知解@tex-math{\vec{W}^n}出发ï¼利用相应的残差@tex-math{\vec{R}^n}来得到时刻@tex-math{(t+\Delta t)}的新解。换言之ï¼新解@tex-math{\vec{W}^{n+1}}只依赖于已经已知的值。这一事实使显式格式非常简单、易于实现。
+    显式格式从已知解@tex-math{\vec{W}^n}出发，利用相应的残差@tex-math{\vec{R}^n}来得到时刻@tex-math{(t+\Delta t)}的新解。换言之，新解@tex-math{\vec{W}^{n+1}}只依赖于已经已知的值。这一事实使显式格式非常简单、易于实现。
   }
 
   @bi{
     As we discussed it in Subsection 3.2.1, a basic explicit scheme can be derived from Eq. @link["blazek2005-ch06#eq-6-2"]{(6.2)} by setting @tex-math{\beta = 0} and @tex-math{\omega = 0}. This results in
   }{
-    如3.2.1小节所述ï¼在方程@link["blazek2005-ch06#eq-6-2"]{(6.2)}中取@tex-math{\beta = 0}和@tex-math{\omega = 0}ï¼即可导出一种基本的显式格式。这给出
+    如3.2.1小节所述，在方程@link["blazek2005-ch06#eq-6-2"]{(6.2)}中取@tex-math{\beta = 0}和@tex-math{\omega = 0}，即可导出一种基本的显式格式。这给出
   }
 
   @tex-display-math[#:id "eq-6-4"]{\bar{M}_I\Delta\vec{W}_I^n = -\frac{\Delta t_I}{\Omega_I}\vec{R}_I^n \tag{6.4}}
@@ -65,13 +65,13 @@
   @bi{
     which is termed the @emph{forward Euler} approximation. The mass matrix @tex-math{\bar{M}} can be lumped (i.e., substituted by the identity matrix) for steady problems or for the cell-centred discretisation.
   }{
-    该式称为前向Euler(forward Euler)近似。对于定常问题或单元中心离散化ï¼质量矩阵@tex-math{\bar{M}}可以集中(lumpedï¼即用单位矩阵代替)。
+    该式称为前向Euler(forward Euler)近似。对于定常问题或单元中心离散化，质量矩阵@tex-math{\bar{M}}可以集中(lumped，即用单位矩阵代替)。
   }
 
   @bi{
     The by far most popular and widespread explicit method is the @emph{multistage} (Runge-Kutta) time-stepping scheme and its variant the @emph{hybrid} multistage scheme. Therefore, we shall describe both methods below.
   }{
-    目前最流行、应用最广的显式方法是多步(multistage,Runge-Kutta)时间推进格式及其变体——混合(hybrid)多步格式。因此ï¼下面我们将介绍这两种方法。
+    目前最流行、应用最广的显式方法是多步(multistage,Runge-Kutta)时间推进格式及其变体——混合(hybrid)多步格式。因此，下面我们将介绍这两种方法。
   }
 
   @subtree[#:id "blazek2005-6-1-1"]{
@@ -80,7 +80,7 @@
     @bi{
       The concept of explicit multistage schemes was first presented by Jameson et al. @link["blazek2005-r6-1"]{[1]}. The multistage scheme advances the solution in a number of steps - so-called @emph{stages} - which can be viewed as a sequence of updates according to Eq. @link["blazek2005-ch06#eq-6-4"]{(6.4)}. Applied to the discretised governing equations @link["blazek2005-ch06#eq-6-1"]{(6.1)}, where the mass matrix was lumped, an @tex-math{m}-stage scheme reads
     }{
-      显式多步格式的概念最早由Jameson等人@link["blazek2005-r6-1"]{[1]}提出。多步格式通过若干步——所谓阶段(stages)——来推进解ï¼每一步都可以看作按方程@link["blazek2005-ch06#eq-6-4"]{(6.4)}进行的一次更新。将其应用于质量矩阵已集中的离散化控制方程@link["blazek2005-ch06#eq-6-1"]{(6.1)},@tex-math{m}步(m-stage)格式为
+      显式多步格式的概念最早由Jameson等人@link["blazek2005-r6-1"]{[1]}提出。多步格式通过若干步——所谓阶段(stages)——来推进解，每一步都可以看作按方程@link["blazek2005-ch06#eq-6-4"]{(6.4)}进行的一次更新。将其应用于质量矩阵已集中的离散化控制方程@link["blazek2005-ch06#eq-6-1"]{(6.1)},@tex-math{m}步(m-stage)格式为
     }
 
     @tex-display-math[#:id "eq-6-5"]{\begin{aligned}\vec{W}_I^{(0)} &= \vec{W}_I^n \\\vec{W}_I^{(1)} &= \vec{W}_I^{(0)} - \alpha_1\frac{\Delta t_I}{\Omega_I}\vec{R}_I^{(0)} \\\vec{W}_I^{(2)} &= \vec{W}_I^{(0)} - \alpha_2\frac{\Delta t_I}{\Omega_I}\vec{R}_I^{(1)} \\&\;\;\vdots \\\vec{W}_I^{n+1} = \vec{W}_I^{(m)} &= \vec{W}_I^{(0)} - \alpha_m\frac{\Delta t_I}{\Omega_I}\vec{R}_I^{(m-1)}.\end{aligned} \tag{6.5}}
@@ -88,22 +88,22 @@
     @bi{
       In the above expressions @link["blazek2005-ch06#eq-6-5"]{(6.5)}, @tex-math{\alpha_k} represents the stage coefficients. Furthermore, the denotation @tex-math{\vec{R}_I^{(k)}} means that the residual is evaluated with the solution @tex-math{\vec{W}_I^{(k)}} from the @tex-math{k}-th stage.
     }{
-      在上面的表达式@link["blazek2005-ch06#eq-6-5"]{(6.5)}中,@tex-math{\alpha_k}表示阶段系数。此外ï¼记号@tex-math{\vec{R}_I^{(k)}}表示残差用第@tex-math{k}步的解@tex-math{\vec{W}_I^{(k)}}来求值。
+      在上面的表达式@link["blazek2005-ch06#eq-6-5"]{(6.5)}中,@tex-math{\alpha_k}表示阶段系数。此外，记号@tex-math{\vec{R}_I^{(k)}}表示残差用第@tex-math{k}步的解@tex-math{\vec{W}_I^{(k)}}来求值。
     }
 
     @bi{
       Unlike in the classical Runge-Kutta schemes, only the zeroth solution and the newest residual are stored here in order to reduce the memory requirements. The stage coefficients can be tuned to increase the maximum time step and to improve the stability for a particular spatial discretisation @link["blazek2005-r6-2"]{[2]}-@link["blazek2005-r6-4"]{[4]}. For consistency, it is only required that @tex-math{\alpha_m = 1}. A consequence of the modification to the Runge-Kutta scheme is that second-order time accuracy can be realised only if @tex-math{\alpha_{m-1} = 1/2}. Otherwise, the multistage scheme is first-order accurate in time.
     }{
-      与经典Runge-Kutta格式不同ï¼这里为了减少内存需求ï¼只存储第零步的解和最新的残差。针对具体的空间离散化ï¼可以调整阶段系数ï¼以增大最大时间步长并改善稳定性@link["blazek2005-r6-2"]{[2]}-@link["blazek2005-r6-4"]{[4]}。为保持一致性ï¼只要求@tex-math{\alpha_m = 1}。对Runge-Kutta格式作这一修改的后果是:只有当@tex-math{\alpha_{m-1} = 1/2}时才能实现二阶时间精度;否则ï¼多步格式在时间上只有一阶精度。
+      与经典Runge-Kutta格式不同，这里为了减少内存需求，只存储第零步的解和最新的残差。针对具体的空间离散化，可以调整阶段系数，以增大最大时间步长并改善稳定性@link["blazek2005-r6-2"]{[2]}-@link["blazek2005-r6-4"]{[4]}。为保持一致性，只要求@tex-math{\alpha_m = 1}。对Runge-Kutta格式作这一修改的后果是:只有当@tex-math{\alpha_{m-1} = 1/2}时才能实现二阶时间精度;否则，多步格式在时间上只有一阶精度。
     }
 
     @bi{
       The above multistage approach @link["blazek2005-ch06#eq-6-5"]{(6.5)} is particularly suitable for upwind spatial discretisation on structured as well as unstructured grids. Central discretisation schemes perform more efficiently with the hybrid multistage methodology, which will be described next. Sets of optimised stage coefficients for first- and second-order upwind schemes are presented in Table 6.1 for three- to five-stage schemes @link["blazek2005-r6-2"]{[2]}. Practical experience shows that the coefficients for the first-order scheme should be preferred in cases, where the flow field contains strong shocks, regardless of the order of the spatial discretisation. This can be explained by the fact that every higher-order scheme switches to first order at shocks to prevent oscillations of the solution. However, the residuals at strong shocks influence the convergence to steady state most significantly.
     }{
-      上述多步方法@link["blazek2005-ch06#eq-6-5"]{(6.5)}特别适合于结构网格和非结构网格上的上风空间离散化。中心离散化格式与下面要介绍的混合多步方法配合使用则效率更高。表6.1给出一阶和二阶上风格式在3步至5步格式下的优化阶段系数@link["blazek2005-r6-2"]{[2]}。实践经验表明ï¼当流场中含有强激波时ï¼无论空间离散化的阶数如何ï¼都应优先选用一阶格式的系数。这可以解释为:任何高阶格式都会在激波处降为一阶ï¼以防止解的振荡;而强激波处的残差对收敛到定态的影响最为显著。
+      上述多步方法@link["blazek2005-ch06#eq-6-5"]{(6.5)}特别适合于结构网格和非结构网格上的上风空间离散化。中心离散化格式与下面要介绍的混合多步方法配合使用则效率更高。表6.1给出一阶和二阶上风格式在3步至5步格式下的优化阶段系数@link["blazek2005-r6-2"]{[2]}。实践经验表明，当流场中含有强激波时，无论空间离散化的阶数如何，都应优先选用一阶格式的系数。这可以解释为:任何高阶格式都会在激波处降为一阶，以防止解的振荡;而强激波处的残差对收敛到定态的影响最为显著。
     }
 
-    (见原书第185页 表6.1ï¼多步格式:一阶与二阶上风空间离散化的优化阶段系数(α)与CFL数(σ))
+    (见原书第185页 表6.1，多步格式:一阶与二阶上风空间离散化的优化阶段系数(α)与CFL数(σ))
 
     @verbatim{
           first-order scheme       second-order scheme
@@ -118,7 +118,7 @@ alpha_5               1.0000                1.0000
 
     @emph{表6.1:多步格式:一阶与二阶上风空间离散化的优化阶段系数(α)与CFL数(σ)。}
 
-    (见原书第185页 表6.2ï¼混合多步格式:中心格式与上风空间离散化的优化阶段系数(α)、混合系数(β)及CFL数(σ))
+    (见原书第185页 表6.2，混合多步格式:中心格式与上风空间离散化的优化阶段系数(α)、混合系数(β)及CFL数(σ))
 
     @verbatim{
          central scheme    1st-order upwind   2nd-order upwind
@@ -131,7 +131,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
 5        1.0000  0.44      1.0000  0.44       1.0000  0.44
     }
 
-    @emph{表6.2:混合多步格式:中心格式与上风空间离散化的优化阶段系数(α)、混合系数(β)及CFL数(σ)。}注意:一阶与二阶上风格式的系数完全相同ï¼但CFL数不同。
+    @emph{表6.2:混合多步格式:中心格式与上风空间离散化的优化阶段系数(α)、混合系数(β)及CFL数(σ)。}注意:一阶与二阶上风格式的系数完全相同，但CFL数不同。
 
     @bi{
       The main disadvantage of every explicit scheme is that the time step (@tex-math{\Delta t}) is severely restricted by the characteristics of the governing equations as well as by the grid geometry. We shall discuss the computation of the maximum allowable time step in Subsection 6.1.4. Theoretical aspects of the determination of the time step and the so-called @emph{CFL number} will be considered in Section 10.3 on stability analysis.
@@ -146,13 +146,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The computational work of an explicit multistage scheme @link["blazek2005-ch06#eq-6-5"]{(6.5)}, applied to the system @link["blazek2005-ch06#eq-6-1"]{(6.1)}, can be substantially reduced if the viscous fluxes and the dissipation are not re-evaluated at each stage. Additionally, the dissipation terms from different stages can be blended to increase the stability of the scheme. Methods of this type were devised by Martinelli @link["blazek2005-r6-5"]{[5]} and by Mavriplis et al. @link["blazek2005-r6-6"]{[6]}. They are known as hybrid multistage schemes. Provided the stage coefficients are carefully optimised, the hybrid schemes are as robust as the basic multistage schemes.
     }{
-      把显式多步格式@link["blazek2005-ch06#eq-6-5"]{(6.5)}应用于方程组@link["blazek2005-ch06#eq-6-1"]{(6.1)}时ï¼如果黏性通量和耗散不在每个阶段都重新求值ï¼计算量可以大幅减少。此外ï¼还可以把不同阶段的耗散项混合(blend)起来ï¼以提高格式的稳定性。这类方法由Martinelli@link["blazek2005-r6-5"]{[5]}和Mavriplis等人@link["blazek2005-r6-6"]{[6]}提出ï¼称为混合多步格式(hybrid multistage schemes)。只要阶段系数经过仔细优化ï¼混合格式与基本多步格式一样稳健。
+      把显式多步格式@link["blazek2005-ch06#eq-6-5"]{(6.5)}应用于方程组@link["blazek2005-ch06#eq-6-1"]{(6.1)}时，如果黏性通量和耗散不在每个阶段都重新求值，计算量可以大幅减少。此外，还可以把不同阶段的耗散项混合(blend)起来，以提高格式的稳定性。这类方法由Martinelli@link["blazek2005-r6-5"]{[5]}和Mavriplis等人@link["blazek2005-r6-6"]{[6]}提出，称为混合多步格式(hybrid multistage schemes)。只要阶段系数经过仔细优化，混合格式与基本多步格式一样稳健。
     }
 
     @bi{
       Let us for illustration consider a popular 5-stage hybrid scheme, where the dissipative terms are evaluated at odd stages - generally denoted as the (5,3)-scheme. First, we split the spatial discretisation into two parts, i.e.,
     }{
-      为便于说明ï¼考虑一种常用的5步混合格式ï¼其耗散项只在奇数步求值——一般记为(5,3)格式。首先ï¼把空间离散化分成两部分ï¼即
+      为便于说明，考虑一种常用的5步混合格式，其耗散项只在奇数步求值——一般记为(5,3)格式。首先，把空间离散化分成两部分，即
     }
 
     @tex-display-math[#:id "eq-6-6"]{\vec{R}_I = \left(\vec{R}_c\right)_I - \left(\vec{R}_d\right)_I. \tag{6.6}}
@@ -160,7 +160,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The first part, @tex-math{\vec{R}_c}, contains the central discretisation of the convective fluxes, which can be either the average of variables or the average of fluxes. It also includes the source term. The second part, @tex-math{\vec{R}_d}, is composed of the viscous fluxes and the numerical dissipation. For example, in the case of the central scheme with artificial dissipation (Subsections 4.3.1 or 5.3.1) we would set
     }{
-      第一部分@tex-math{\vec{R}_c}包含对流通量的中心离散化——可以是变量平均ï¼也可以是通量平均——还包括源项。第二部分@tex-math{\vec{R}_d}由黏性通量和数值耗散组成。例如ï¼对于带人工耗散的中心格式(4.3.1或5.3.1小节)ï¼可取
+      第一部分@tex-math{\vec{R}_c}包含对流通量的中心离散化——可以是变量平均，也可以是通量平均——还包括源项。第二部分@tex-math{\vec{R}_d}由黏性通量和数值耗散组成。例如，对于带人工耗散的中心格式(4.3.1或5.3.1小节)，可取
     }
 
     @tex-display-math{\begin{aligned}\left(\vec{R}_c\right)_I &= \sum_{k=1}^{N_F}\left[\vec{F}_c(\vec{W}_{av})\Delta S\right]_k - \left(\vec{Q}\Omega\right)_I \\\left(\vec{R}_d\right)_I &= \sum_{k=1}^{N_F}\left[\vec{F}_v\Delta S + \vec{D}\right]_k,\end{aligned}}
@@ -196,7 +196,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       It should be mentioned that it is also popular to evaluate the dissipation term @tex-math{\vec{R}_d} in the first two stages only, without any blending. A well-known (5,2)-scheme, which is often employed with the central spatial discretisation, uses the stage coefficients of Table 6.2. However, the (5,2)-scheme is less suitable for viscous flows and multigrid than the above (5,3)-scheme.
     }{
-      应当指出ï¼另一种常见的做法是只在头两步求值耗散项@tex-math{\vec{R}_d}ï¼而不做任何混合。著名的(5,2)格式常与中心空间离散化配合使用ï¼它采用表6.2中的阶段系数。然而ï¼与上述(5,3)格式相比,(5,2)格式不太适合黏性流动和多重网格。
+      应当指出，另一种常见的做法是只在头两步求值耗散项@tex-math{\vec{R}_d}，而不做任何混合。著名的(5,2)格式常与中心空间离散化配合使用，它采用表6.2中的阶段系数。然而，与上述(5,3)格式相比,(5,2)格式不太适合黏性流动和多重网格。
     }
   }
 
@@ -206,13 +206,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       There are certain cases in which the source term @tex-math{\vec{Q}} in Eq. (4.2) or (5.2) becomes dominant. Such situation is often encountered when chemistry or turbulence models are employed. The problem is that a large source term changes the flow variables rapidly in space and in time. The changes due to a strong source term happen at much smaller time scales than those of the flow equations. This increases the @emph{stiffness} of the governing equations significantly. The stiffness is defined as the ratio of the largest to the smallest eigenvalue of the Jacobian matrix @tex-math{\partial\vec{R}/\partial\vec{W}}. The stiffness can also be viewed as the ratio of the largest to the smallest time scale.
     }{
-      在某些情形下ï¼方程(4.2)或(5.2)中的源项@tex-math{\vec{Q}}会变得占主导地位。采用化学或湍流模型时经常会遇到这种情况。问题在于ï¼大的源项会使流动变量在空间和时间上迅速变化。强源项引起的变化发生在比流动方程的时间尺度小得多的时间尺度上。这会显著增大控制方程的刚性(stiffness)。刚性定义为雅可比矩阵@tex-math{\partial\vec{R}/\partial\vec{W}}的最大特征值与最小特征值之比。刚性也可以看作最大时间尺度与最小时间尺度之比。
+      在某些情形下，方程(4.2)或(5.2)中的源项@tex-math{\vec{Q}}会变得占主导地位。采用化学或湍流模型时经常会遇到这种情况。问题在于，大的源项会使流动变量在空间和时间上迅速变化。强源项引起的变化发生在比流动方程的时间尺度小得多的时间尺度上。这会显著增大控制方程的刚性(stiffness)。刚性定义为雅可比矩阵@tex-math{\partial\vec{R}/\partial\vec{W}}的最大特征值与最小特征值之比。刚性也可以看作最大时间尺度与最小时间尺度之比。
     }
 
     @bi{
       When we apply one of the above explicit multistage schemes (or any other purely explicit scheme) to a stiff system of equations, we will have to reduce the time step considerably in order to stabilise the time integration. Hence, the convergence to the steady state will become very slow. More seriously, an explicit scheme can even fail to find the correct solution @link["blazek2005-r6-7"]{[7]}. A remedy suggested by Curtiss et al. @link["blazek2005-r6-8"]{[8]} is to treat the source term in an implicit way. In order to demonstrate the approach, we rewrite the basic explicit scheme in Eq. @link["blazek2005-ch06#eq-6-4"]{(6.4)} as follows (cf. Eq. (4.2) or (5.2))
     }{
-      把上述显式多步格式(或任何其他纯显式格式)应用于刚性方程组时ï¼为使时间积分稳定ï¼必须大幅减小时间步长ï¼于是向定态的收敛会变得非常慢。更严重的是ï¼显式格式甚至可能找不到正确的解@link["blazek2005-r6-7"]{[7]}。Curtiss等人@link["blazek2005-r6-8"]{[8]}提出的补救办法是以隐式方式处理源项。为演示这一方法ï¼把方程@link["blazek2005-ch06#eq-6-4"]{(6.4)}的基本显式格式改写如下(参见方程(4.2)或(5.2))
+      把上述显式多步格式(或任何其他纯显式格式)应用于刚性方程组时，为使时间积分稳定，必须大幅减小时间步长，于是向定态的收敛会变得非常慢。更严重的是，显式格式甚至可能找不到正确的解@link["blazek2005-r6-7"]{[7]}。Curtiss等人@link["blazek2005-r6-8"]{[8]}提出的补救办法是以隐式方式处理源项。为演示这一方法，把方程@link["blazek2005-ch06#eq-6-4"]{(6.4)}的基本显式格式改写如下(参见方程(4.2)或(5.2))
     }
 
     @tex-display-math[#:id "eq-6-9"]{\begin{aligned}\frac{\Omega_I}{\Delta t_I}\Delta\vec{W}_I^n &= -\left[\sum_{k=1}^{N_F}\left(\vec{F}_c^n - \vec{F}_v^n\right)_k\Delta S_k - \Omega_I\vec{Q}_I^{n+1}\right] \\&= -\left(\vec{R}_Q\right)_I^n + \Omega_I\vec{Q}_I^{n+1},\end{aligned} \tag{6.9}}
@@ -220,7 +220,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where the source term is now evaluated at the new time level @tex-math{(n+1)}. For simplicity, the mass matrix was omitted from Eq. @link["blazek2005-ch06#eq-6-9"]{(6.9)}. Since the value of the source term at the time @tex-math{(n+1)} is unknown, we have to approximate it. For this purpose, we linearise the source term about the current time level @tex-math{n}, resulting in
     }{
-      其中源项现在在新时间层@tex-math{(n+1)}处求值。为简单起见ï¼方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}中略去了质量矩阵。由于时刻@tex-math{(n+1)}的源项值未知ï¼必须对它作近似。为此ï¼把源项在当前时间层@tex-math{n}处线性化ï¼得到
+      其中源项现在在新时间层@tex-math{(n+1)}处求值。为简单起见，方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}中略去了质量矩阵。由于时刻@tex-math{(n+1)}的源项值未知，必须对它作近似。为此，把源项在当前时间层@tex-math{n}处线性化，得到
     }
 
     @tex-display-math[#:id "eq-6-10"]{\vec{Q}^{n+1} \approx \vec{Q}^n + \frac{\partial\vec{Q}}{\partial\vec{W}}\Delta\vec{W}^n. \tag{6.10}}
@@ -228,7 +228,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       If we insert Eq. @link["blazek2005-ch06#eq-6-10"]{(6.10)} into Eq. @link["blazek2005-ch06#eq-6-9"]{(6.9)} and rearrange the terms, we obtain the following relation @link["blazek2005-r6-9"]{[9]}, @link["blazek2005-r6-10"]{[10]}
     }{
-      把方程@link["blazek2005-ch06#eq-6-10"]{(6.10)}代入方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}并整理各项ï¼得到如下关系@link["blazek2005-r6-9"]{[9]}、@link["blazek2005-r6-10"]{[10]}
+      把方程@link["blazek2005-ch06#eq-6-10"]{(6.10)}代入方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}并整理各项，得到如下关系@link["blazek2005-r6-9"]{[9]}、@link["blazek2005-r6-10"]{[10]}
     }
 
     @tex-display-math[#:id "eq-6-11"]{\left[\frac{1}{\Delta t_I}\bar{I} - \left(\frac{\partial\vec{Q}}{\partial\vec{W}}\right)_I\right]\Delta\vec{W}_I^n = -\frac{1}{\Omega_I}\left[\left(\vec{R}_Q\right)_I^n - \Omega_I\vec{Q}_I^n\right], \tag{6.11}}
@@ -236,13 +236,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{\bar{I}} represents the identity matrix. The formulation @link["blazek2005-ch06#eq-6-11"]{(6.11)} is called @emph{point implicit} because the term in square brackets on the left-hand side - the implicit operator - depends only on values in the control volume @tex-math{\Omega_I} itself. A comparison with Eq. @link["blazek2005-ch06#eq-6-9"]{(6.9)} reveals that the scalar time step @tex-math{\Delta t} changed now to a matrix. Thus, each flow equation becomes scaled by an individual parameter, corresponding to the associated eigenvalue. In this way, the disparity between the time scales is offset and the time step restriction due to the source term is alleviated.
     }{
-      其中@tex-math{\bar{I}}表示单位矩阵。式@link["blazek2005-ch06#eq-6-11"]{(6.11)}称为点隐式(point implicit)ï¼因为左端方括号内的项——即隐式算子——只依赖控制体@tex-math{\Omega_I}自身的值。与方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}比较可知ï¼标量时间步长@tex-math{\Delta t}现在变成了一个矩阵。这样ï¼每个流动方程都被一个单独的参数(对应于相应的特征值)所缩放。如此一来ï¼时间尺度之间的差异得到补偿ï¼源项造成的时间步长限制得以缓解。
+      其中@tex-math{\bar{I}}表示单位矩阵。式@link["blazek2005-ch06#eq-6-11"]{(6.11)}称为点隐式(point implicit)，因为左端方括号内的项——即隐式算子——只依赖控制体@tex-math{\Omega_I}自身的值。与方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}比较可知，标量时间步长@tex-math{\Delta t}现在变成了一个矩阵。这样，每个流动方程都被一个单独的参数(对应于相应的特征值)所缩放。如此一来，时间尺度之间的差异得到补偿，源项造成的时间步长限制得以缓解。
     }
 
     @bi{
       When we apply the above point-implicit approach to the multistage scheme in Eq. @link["blazek2005-ch06#eq-6-5"]{(6.5)}, we obtain for the @tex-math{k}-th stage
     }{
-      把上述点隐式方法应用于方程@link["blazek2005-ch06#eq-6-5"]{(6.5)}的多步格式ï¼对第@tex-math{k}步得到
+      把上述点隐式方法应用于方程@link["blazek2005-ch06#eq-6-5"]{(6.5)}的多步格式，对第@tex-math{k}步得到
     }
 
     @tex-display-math[#:id "eq-6-12"]{\vec{W}_I^{(k)} = \vec{W}_I^{(0)} - \left[\left(\vec{R}_Q\right)_I^{(k-1)} - \Omega_I\vec{Q}_I^{(0)}\right]\left[\frac{\Omega_I}{\alpha_k\Delta t_I}\bar{I} - \left(\frac{\partial\vec{Q}}{\partial\vec{W}}\right)_I\right]^{-1} \tag{6.12}}
@@ -250,13 +250,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       with @tex-math{\vec{R}_Q} defined in Eq. @link["blazek2005-ch06#eq-6-9"]{(6.9)}. A similar expression holds also for the hybrid multistage scheme in Eq. @link["blazek2005-ch06#eq-6-7"]{(6.7)}. The interested reader may find a detailed investigation of the influence of the source term on stability in Refs. @link["blazek2005-r6-11"]{[11]}-@link["blazek2005-r6-13"]{[13]}.
     }{
-      其中@tex-math{\vec{R}_Q}由方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}定义。对方程@link["blazek2005-ch06#eq-6-7"]{(6.7)}的混合多步格式也有类似的表达式。关于源项对稳定性影响的详细研究ï¼有兴趣的读者可参阅文献@link["blazek2005-r6-11"]{[11]}-@link["blazek2005-r6-13"]{[13]}。
+      其中@tex-math{\vec{R}_Q}由方程@link["blazek2005-ch06#eq-6-9"]{(6.9)}定义。对方程@link["blazek2005-ch06#eq-6-7"]{(6.7)}的混合多步格式也有类似的表达式。关于源项对稳定性影响的详细研究，有兴趣的读者可参阅文献@link["blazek2005-r6-11"]{[11]}-@link["blazek2005-r6-13"]{[13]}。
     }
 
     @bi{
       A more elaborate approach is to treat the stiff source term by means of an semi-implicit Runge-Kutta scheme, originally suggested by Rosenbrock @link["blazek2005-r6-14"]{[14]}. The scheme is numerically more stable than the approach in Eq. @link["blazek2005-ch06#eq-6-12"]{(6.12)}, however it requires the inversion of a large system of linear equations at each stage. Details of the semi-implicit Runge-Kutta scheme and applications can be found in Refs. @link["blazek2005-r6-15"]{[15]}-@link["blazek2005-r6-18"]{[18]}.
     }{
-      更精细的做法是用半隐式Runge-Kutta格式来处理刚性源项ï¼该格式最早由Rosenbrock@link["blazek2005-r6-14"]{[14]}提出。这种格式在数值上比方程@link["blazek2005-ch06#eq-6-12"]{(6.12)}的方法更稳定ï¼但要求在每个阶段对一个大型线性方程组求逆。半隐式Runge-Kutta格式的细节及应用可参见文献@link["blazek2005-r6-15"]{[15]}-@link["blazek2005-r6-18"]{[18]}。
+      更精细的做法是用半隐式Runge-Kutta格式来处理刚性源项，该格式最早由Rosenbrock@link["blazek2005-r6-14"]{[14]}提出。这种格式在数值上比方程@link["blazek2005-ch06#eq-6-12"]{(6.12)}的方法更稳定，但要求在每个阶段对一个大型线性方程组求逆。半隐式Runge-Kutta格式的细节及应用可参见文献@link["blazek2005-r6-15"]{[15]}-@link["blazek2005-r6-18"]{[18]}。
     }
   }
 
@@ -266,7 +266,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Every explicit time-stepping scheme remains stable only up to a certain value of the time step @tex-math{\Delta t}. To be stable, a time-stepping scheme has to fulfil the so-called @emph{Courant-Friedrichs-Lewy (CFL)} condition @link["blazek2005-r6-19"]{[19]}. It states that the domain of dependence of the numerical method has to include the domain of dependence of the partial differential equation. The CFL condition means for the basic explicit scheme @link["blazek2005-ch06#eq-6-4"]{(6.4)} that the time step should be equal to or smaller than the time required to transport information across the stencil of the spatial discretisation scheme. Hence, in 1D the condition for the time step would read for the linear convection equation
     }{
-      每一种显式时间推进格式都只在时间步长@tex-math{\Delta t}不超过某个值时才保持稳定。为使格式稳定ï¼时间推进格式必须满足所谓的Courant-Friedrichs-Lewy(CFL)条件@link["blazek2005-r6-19"]{[19]}。该条件指出:数值方法的依赖域必须包含偏微分方程的依赖域。对基本显式格式@link["blazek2005-ch06#eq-6-4"]{(6.4)}而言,CFL条件意味着时间步长应等于或小于信息越过空间离散化格式模板(stencil)所需的时间。因此ï¼对一维线性对流方程ï¼时间步长条件为
+      每一种显式时间推进格式都只在时间步长@tex-math{\Delta t}不超过某个值时才保持稳定。为使格式稳定，时间推进格式必须满足所谓的Courant-Friedrichs-Lewy(CFL)条件@link["blazek2005-r6-19"]{[19]}。该条件指出:数值方法的依赖域必须包含偏微分方程的依赖域。对基本显式格式@link["blazek2005-ch06#eq-6-4"]{(6.4)}而言,CFL条件意味着时间步长应等于或小于信息越过空间离散化格式模板(stencil)所需的时间。因此，对一维线性对流方程，时间步长条件为
     }
 
     @tex-display-math[#:id "eq-6-13"]{\Delta t = \sigma\frac{\Delta x}{\left|\Lambda_c\right|}, \tag{6.13}}
@@ -274,13 +274,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{\Delta x/|\Lambda_c|} represents the time necessary to propagate information over the cell size @tex-math{\Delta x} with the velocity @tex-math{\Lambda_c}. The velocity @tex-math{\Lambda_c} corresponds to the maximum eigenvalue of the convective flux Jacobian. The positive coefficient @tex-math{\sigma} denotes the @emph{CFL number}. The magnitude of the CFL number depends on the type and the parameters of the time-stepping scheme, as well as on the form of the spatial discretisation scheme. We shall investigate the dependency of @tex-math{\sigma} in Section 10.3 for two model problems. Tables 6.1 and 6.2 list the CFL numbers for various multistage schemes and discretisations.
     }{
-      其中@tex-math{\Delta x/|\Lambda_c|}表示以速度@tex-math{\Lambda_c}把信息传播过一个单元尺寸@tex-math{\Delta x}所需的时间。速度@tex-math{\Lambda_c}对应于对流通量雅可比的最大特征值。正常数@tex-math{\sigma}表示CFL数(CFL number)。CFL数的大小取决于时间推进格式的类型和参数ï¼也取决于空间离散化格式的形式。我们将在10.3节中针对两个模型问题研究@tex-math{\sigma}的依赖关系。表6.1和表6.2列出了各种多步格式和离散化的CFL数。
+      其中@tex-math{\Delta x/|\Lambda_c|}表示以速度@tex-math{\Lambda_c}把信息传播过一个单元尺寸@tex-math{\Delta x}所需的时间。速度@tex-math{\Lambda_c}对应于对流通量雅可比的最大特征值。正常数@tex-math{\sigma}表示CFL数(CFL number)。CFL数的大小取决于时间推进格式的类型和参数，也取决于空间离散化格式的形式。我们将在10.3节中针对两个模型问题研究@tex-math{\sigma}的依赖关系。表6.1和表6.2列出了各种多步格式和离散化的CFL数。
     }
 
     @bi{
       The maximum time step can be determined for linear model equations with the aid of Von Neumann stability analysis (Section 10.3). However, the maximum time step can be calculated only approximately in multiple dimensions and for non-linear governing equations. In the following, we will present relations for the estimation of the time step on structured and unstructured grids, and for inviscid as well as for viscous flows.
     }{
-      对于线性模型方程ï¼可以借助Von Neumann稳定性分析(10.3节)确定最大时间步长。然而ï¼在多维情形和非线性控制方程下ï¼最大时间步长只能近似计算。下面我们将给出在结构网格和非结构网格上、对无黏和黏性流动估计时间步长的关系式。
+      对于线性模型方程，可以借助Von Neumann稳定性分析(10.3节)确定最大时间步长。然而，在多维情形和非线性控制方程下，最大时间步长只能近似计算。下面我们将给出在结构网格和非结构网格上、对无黏和黏性流动估计时间步长的关系式。
     }
 
     @emph{Time Step on Structured Grids 结构网格上的时间步长}
@@ -290,7 +290,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       On a structured grid, the time step @tex-math{\Delta t} can be determined for a control volume @tex-math{\Omega_I} from the approximate relation @link["blazek2005-r6-20"]{[20]}-@link["blazek2005-r6-22"]{[22]}
     }{
-      在结构网格上ï¼对控制体@tex-math{\Omega_I}ï¼时间步长@tex-math{\Delta t}可以由近似关系@link["blazek2005-r6-20"]{[20]}-@link["blazek2005-r6-22"]{[22]}确定
+      在结构网格上，对控制体@tex-math{\Omega_I}，时间步长@tex-math{\Delta t}可以由近似关系@link["blazek2005-r6-20"]{[20]}-@link["blazek2005-r6-22"]{[22]}确定
     }
 
     @tex-display-math[#:id "eq-6-14"]{\Delta t_I = \sigma\frac{\Omega_I}{\left(\hat{\Lambda}_c^{I} + \hat{\Lambda}_c^{J} + \hat{\Lambda}_c^{K}\right)_I}. \tag{6.14}}
@@ -298,7 +298,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The CFL number @tex-math{\sigma} is given for multistage schemes in Table 6.1 and for hybrid schemes in Table 6.2. The spectral radii of the convective flux Jacobians (A.9) read for the three grid directions
     }{
-      CFL数@tex-math{\sigma}对多步格式在表6.1中给出ï¼对混合格式在表6.2中给出。对流通量雅可比(A.9)的谱半径对三个网格方向分别为
+      CFL数@tex-math{\sigma}对多步格式在表6.1中给出，对混合格式在表6.2中给出。对流通量雅可比(A.9)的谱半径对三个网格方向分别为
     }
 
     @tex-display-math[#:id "eq-6-15"]{\begin{aligned}\hat{\Lambda}_c^{I} &= \left(\left|\vec{v}\cdot\vec{n}^{I}\right| + c\right)\Delta S^{I} \\\hat{\Lambda}_c^{J} &= \left(\left|\vec{v}\cdot\vec{n}^{J}\right| + c\right)\Delta S^{J} \\\hat{\Lambda}_c^{K} &= \left(\left|\vec{v}\cdot\vec{n}^{K}\right| + c\right)\Delta S^{K}.\end{aligned} \tag{6.15}}
@@ -306,7 +306,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The normal vectors and face areas in Eq. @link["blazek2005-ch06#eq-6-15"]{(6.15)} are obtained by averaging the corresponding values from the two opposite sides of the control volume in the respective direction. For example, if a dual control volume (Subsection 4.2.3) would be oriented as sketched in Fig. 4.1b, we would use in the @tex-math{I}-direction
     }{
-      方程@link["blazek2005-ch06#eq-6-15"]{(6.15)}中的法向量和面面积ï¼由相应方向上控制体两个相对侧面处的对应值平均得到。例如ï¼若对偶控制体(4.2.3小节)的取向如图4.1b所示ï¼则在@tex-math{I}方向上应取
+      方程@link["blazek2005-ch06#eq-6-15"]{(6.15)}中的法向量和面面积，由相应方向上控制体两个相对侧面处的对应值平均得到。例如，若对偶控制体(4.2.3小节)的取向如图4.1b所示，则在@tex-math{I}方向上应取
     }
 
     @tex-display-math[#:id "eq-6-16"]{\vec{n}_{i,j,k}^{I} = \frac{1}{2}\left(\vec{n}_1 - \vec{n}_2\right), \quad \Delta S_{i,j,k}^{I} = \frac{1}{2}\left(\Delta S_1 + \Delta S_2\right). \tag{6.16}}
@@ -314,7 +314,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Similar expressions hold for the @tex-math{J}- and @tex-math{K}-direction. With Eq. @link["blazek2005-ch06#eq-6-14"]{(6.14)}, we obtain a @emph{local} time step, which is valid for one control volume only. If we are interested in a steady state solution, we may use the local time step to accelerate the convergence (cf. Section 9.1). However, if time accuracy is important, we have to employ one @emph{global} time step for all volumes, i.e.,
     }{
-      @tex-math{J}方向和@tex-math{K}方向也有类似的表达式。用方程@link["blazek2005-ch06#eq-6-14"]{(6.14)}得到的是局部(local)时间步ï¼它只对一个控制体有效。如果我们要求定常解ï¼可以用局部时间步来加速收敛(参见9.1节)。但如果时间精度重要ï¼就必须对所有控制体采用同一个全局(global)时间步ï¼即
+      @tex-math{J}方向和@tex-math{K}方向也有类似的表达式。用方程@link["blazek2005-ch06#eq-6-14"]{(6.14)}得到的是局部(local)时间步，它只对一个控制体有效。如果我们要求定常解，可以用局部时间步来加速收敛(参见9.1节)。但如果时间精度重要，就必须对所有控制体采用同一个全局(global)时间步，即
     }
 
     @tex-display-math[#:id "eq-6-17"]{\Delta t = \min_I\left(\Delta t_I\right), \tag{6.17}}
@@ -330,7 +330,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       For viscous flows, the spectral radii of the viscous flux Jacobians (A.10) have to be included in the computation of @tex-math{\Delta t}. They can severely limit the maximum time step in boundary layers. The time step can be evaluated from @link["blazek2005-r6-5"]{[5]}, @link["blazek2005-r6-21"]{[21]}, @link["blazek2005-r6-22"]{[22]}
     }{
-      对黏性流动ï¼计算@tex-math{\Delta t}时还必须计入黏性通量雅可比(A.10)的谱半径。在边界层内ï¼它们可能严重限制最大时间步长。时间步长可由下式计算@link["blazek2005-r6-5"]{[5]}、@link["blazek2005-r6-21"]{[21]}、@link["blazek2005-r6-22"]{[22]}
+      对黏性流动，计算@tex-math{\Delta t}时还必须计入黏性通量雅可比(A.10)的谱半径。在边界层内，它们可能严重限制最大时间步长。时间步长可由下式计算@link["blazek2005-r6-5"]{[5]}、@link["blazek2005-r6-21"]{[21]}、@link["blazek2005-r6-22"]{[22]}
     }
 
     @tex-display-math[#:id "eq-6-18"]{\Delta t_I = \sigma\frac{\Omega_I}{\left(\hat{\Lambda}_c^{I} + \hat{\Lambda}_c^{J} + \hat{\Lambda}_c^{K}\right)_I + C\left(\hat{\Lambda}_v^{I} + \hat{\Lambda}_v^{J} + \hat{\Lambda}_v^{K}\right)_I}. \tag{6.18}}
@@ -338,7 +338,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The constant which multiplies the viscous spectral radii is usually set as @tex-math{C = 4} for central spatial discretisations, @tex-math{C = 2} for first-order upwind and @tex-math{C = 1} for second-order upwind discretisations. If we assume that an eddy-viscosity turbulence model is employed, the viscous spectral radii are given by @link["blazek2005-r6-21"]{[21]}, @link["blazek2005-r6-22"]{[22]}
     }{
-      乘在黏性谱半径上的常数ï¼对中心空间离散化通常取@tex-math{C = 4}ï¼一阶上风离散化取@tex-math{C = 2}ï¼二阶上风离散化取@tex-math{C = 1}。若假定采用涡黏性湍流模型ï¼则黏性谱半径由下式给出@link["blazek2005-r6-21"]{[21]}、@link["blazek2005-r6-22"]{[22]}
+      乘在黏性谱半径上的常数，对中心空间离散化通常取@tex-math{C = 4}，一阶上风离散化取@tex-math{C = 2}，二阶上风离散化取@tex-math{C = 1}。若假定采用涡黏性湍流模型，则黏性谱半径由下式给出@link["blazek2005-r6-21"]{[21]}、@link["blazek2005-r6-22"]{[22]}
     }
 
     @tex-display-math[#:id "eq-6-19"]{\Lambda_v^{I} = \max\left(\frac{4}{3\rho},\frac{\gamma}{\rho}\right)\left(\frac{\mu_L}{Pr_L} + \frac{\mu_T}{Pr_T}\right)\frac{\left(\Delta S^{I}\right)^2}{\Omega} \tag{6.19}}
@@ -370,7 +370,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{\hat{\Lambda}_c} and @tex-math{\hat{\Lambda}_v} represent a sum of the convective and viscous spectral radii over all faces of the control volume. As on structured grids, @tex-math{1 \le C \le 4} is usually used. In the case of the cell-centred scheme, the spectral radii are defined as @link["blazek2005-r6-6"]{[6]}
     }{
-      其中@tex-math{\hat{\Lambda}_c}和@tex-math{\hat{\Lambda}_v}表示控制体所有面上对流谱半径和黏性谱半径之和。与结构网格上一样ï¼通常取@tex-math{1 \le C \le 4}。对单元中心格式ï¼谱半径定义为@link["blazek2005-r6-6"]{[6]}
+      其中@tex-math{\hat{\Lambda}_c}和@tex-math{\hat{\Lambda}_v}表示控制体所有面上对流谱半径和黏性谱半径之和。与结构网格上一样，通常取@tex-math{1 \le C \le 4}。对单元中心格式，谱半径定义为@link["blazek2005-r6-6"]{[6]}
     }
 
     @tex-display-math[#:id "eq-6-21"]{\begin{aligned}\left(\hat{\Lambda}_c\right)_I &= \sum_{J=1}^{N_F}\left(\left|\vec{v}_{IJ}\cdot\vec{n}_{IJ}\right| + c_{IJ}\right)\Delta S_{IJ} \\\left(\hat{\Lambda}_v\right)_I &= \frac{1}{\Omega_I}\sum_{J=1}^{N_F}\left[\max\left(\frac{4}{3\rho_{IJ}},\frac{\gamma_{IJ}}{\rho_{IJ}}\right)\left(\frac{\mu_L}{Pr_L} + \frac{\mu_T}{Pr_T}\right)_{IJ}\left(\Delta S_{IJ}\right)^2\right].\end{aligned} \tag{6.21}}
@@ -386,7 +386,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The spectral radii predicted by Eq. @link["blazek2005-ch06#eq-6-21"]{(6.21)} are too large, particularly on mixed element grids. This leads to a smaller time step than required for the stability. The implementation in Ref. @link["blazek2005-r6-23"]{[23]} offers a more accurate estimation of the time step, namely
     }{
-      方程@link["blazek2005-ch06#eq-6-21"]{(6.21)}预测的谱半径偏大ï¼在混合单元网格上尤其如此。这导致时间步长小于稳定所需的值。文献@link["blazek2005-r6-23"]{[23]}中的实现提供了对时间步长更准确的估计ï¼即
+      方程@link["blazek2005-ch06#eq-6-21"]{(6.21)}预测的谱半径偏大，在混合单元网格上尤其如此。这导致时间步长小于稳定所需的值。文献@link["blazek2005-r6-23"]{[23]}中的实现提供了对时间步长更准确的估计，即
     }
 
     @tex-display-math[#:id "eq-6-22"]{\Delta t_I = \sigma\frac{\Omega_I}{\left(\hat{\Lambda}_c^{x} + \hat{\Lambda}_c^{y} + \hat{\Lambda}_c^{z}\right)_I + C\left(\hat{\Lambda}_v^{x} + \hat{\Lambda}_v^{y} + \hat{\Lambda}_v^{z}\right)_I} \tag{6.22}}
@@ -418,7 +418,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{S_x}, @tex-math{S_y} and @tex-math{S_z} denote the @tex-math{x}-, @tex-math{y}- and the @tex-math{z}-component of the face vector @tex-math{\vec{S} = \vec{n}\cdot\Delta S}. The CFL numbers stay in general the same as on structured grids. Thus, the values collected in Tables 6.1 and 6.2 still apply. Furthermore, the convergence to steady state can also be accelerated by local time stepping, in the same way as on the structured grids. A global time step, necessary for simulating unsteady flows, can be obtained from Eq. @link["blazek2005-ch06#eq-6-17"]{(6.17)} as before.
     }{
-      其中@tex-math{S_x}、@tex-math{S_y}和@tex-math{S_z}表示面向量@tex-math{\vec{S} = \vec{n}\cdot\Delta S}的@tex-math{x}、@tex-math{y}和@tex-math{z}分量。CFL数一般与结构网格上的相同ï¼因此表6.1和表6.2中收集的数值仍然适用。此外ï¼向定态的收敛同样可以用局部时间推进来加速ï¼做法与结构网格上一样。模拟非定常流动所需的全局时间步ï¼与前面一样由方程@link["blazek2005-ch06#eq-6-17"]{(6.17)}得到。
+      其中@tex-math{S_x}、@tex-math{S_y}和@tex-math{S_z}表示面向量@tex-math{\vec{S} = \vec{n}\cdot\Delta S}的@tex-math{x}、@tex-math{y}和@tex-math{z}分量。CFL数一般与结构网格上的相同，因此表6.1和表6.2中收集的数值仍然适用。此外，向定态的收敛同样可以用局部时间推进来加速，做法与结构网格上一样。模拟非定常流动所需的全局时间步，与前面一样由方程@link["blazek2005-ch06#eq-6-17"]{(6.17)}得到。
     }
   }
 }
@@ -429,7 +429,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     Various implicit time integration schemes can be obtained by setting @tex-math{\beta \ne 0} in Eq. @link["blazek2005-ch06#eq-6-2"]{(6.2)}. An implicit scheme with @tex-math{\omega = 0} was found to be best suited for the solution of stationary flow problems (for unsteady flows see Section 6.3). Herewith, Eq. @link["blazek2005-ch06#eq-6-2"]{(6.2)} simplifies to
   }{
-    在方程@link["blazek2005-ch06#eq-6-2"]{(6.2)}中取@tex-math{\beta \ne 0}ï¼可以得到各种隐式时间积分格式。实践发现,@tex-math{\omega = 0}的隐式格式最适合求解定常流动问题(非定常流动见6.3节)。于是ï¼方程@link["blazek2005-ch06#eq-6-2"]{(6.2)}简化为
+    在方程@link["blazek2005-ch06#eq-6-2"]{(6.2)}中取@tex-math{\beta \ne 0}，可以得到各种隐式时间积分格式。实践发现,@tex-math{\omega = 0}的隐式格式最适合求解定常流动问题(非定常流动见6.3节)。于是，方程@link["blazek2005-ch06#eq-6-2"]{(6.2)}简化为
   }
 
   @tex-display-math[#:id "eq-6-26"]{\frac{\left(\Omega\bar{M}\right)_I}{\Delta t_I}\Delta\vec{W}_I^n = -\beta\vec{R}_I^{n+1} - \left(1-\beta\right)\vec{R}_I^n. \tag{6.26}}
@@ -437,7 +437,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     As we can see, the implicit formulation leads to a set of non-linear equations for the unknown flow variables at the time @tex-math{(t+\Delta t)}. The solution of Eq. @link["blazek2005-ch06#eq-6-26"]{(6.26)} requires the evaluation of the residual at the new time level, i.e., @tex-math{\vec{R}^{n+1}}. Since we do not know @tex-math{\vec{W}^{n+1}}, this cannot be done directly. However, we can linearise the residual @tex-math{\vec{R}^{n+1}} in Eq. @link["blazek2005-ch06#eq-6-26"]{(6.26)} about the current time level, i.e.,
   }{
-    可以看出ï¼隐式形式导出一组关于时刻@tex-math{(t+\Delta t)}未知流动变量的非线性方程。求解方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}需要在新时间层上求值残差ï¼即@tex-math{\vec{R}^{n+1}}。由于我们不知道@tex-math{\vec{W}^{n+1}}ï¼这无法直接进行。不过ï¼可以把方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}中的残差@tex-math{\vec{R}^{n+1}}在当前时间层处线性化ï¼即
+    可以看出，隐式形式导出一组关于时刻@tex-math{(t+\Delta t)}未知流动变量的非线性方程。求解方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}需要在新时间层上求值残差，即@tex-math{\vec{R}^{n+1}}。由于我们不知道@tex-math{\vec{W}^{n+1}}，这无法直接进行。不过，可以把方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}中的残差@tex-math{\vec{R}^{n+1}}在当前时间层处线性化，即
   }
 
   @tex-display-math[#:id "eq-6-27"]{\vec{R}_I^{n+1} \approx \vec{R}_I^n + \left(\frac{\partial\vec{R}}{\partial\vec{W}}\right)_I\Delta\vec{W}^n, \tag{6.27}}
@@ -445,13 +445,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where the term @tex-math{\partial\vec{R}/\partial\vec{W}} is referred to as the @emph{flux Jacobian}. We should mention that the flux Jacobian is often derived from a rather crude approximation to the spatial discretisation represented by @tex-math{\vec{R}^n}. For example, in the case of higher-order upwind discretisations, it is quite common to base the flux Jacobian solely on a first-order upwind scheme. However, for best efficiency and robustness, the flux Jacobian should still reflect the most important features of the spatial discretisation.
   }{
-    其中@tex-math{\partial\vec{R}/\partial\vec{W}}一项称为通量雅可比(flux Jacobian)。应当指出ï¼通量雅可比常常是由@tex-math{\vec{R}^n}所表示的空间离散化的一个相当粗糙的近似导出的。例如ï¼对高阶上风离散化ï¼通常只基于一阶上风格式来构造通量雅可比。然而ï¼为了获得最佳效率和稳健性ï¼通量雅可比仍应反映空间离散化最重要的特征。
+    其中@tex-math{\partial\vec{R}/\partial\vec{W}}一项称为通量雅可比(flux Jacobian)。应当指出，通量雅可比常常是由@tex-math{\vec{R}^n}所表示的空间离散化的一个相当粗糙的近似导出的。例如，对高阶上风离散化，通常只基于一阶上风格式来构造通量雅可比。然而，为了获得最佳效率和稳健性，通量雅可比仍应反映空间离散化最重要的特征。
   }
 
   @bi{
     If we substitute now the linearisation in Eq. @link["blazek2005-ch06#eq-6-27"]{(6.27)} for @tex-math{\vec{R}^{n+1}} into Eq. @link["blazek2005-ch06#eq-6-26"]{(6.26)}, we obtain the following implicit scheme
   }{
-    现在把方程@link["blazek2005-ch06#eq-6-27"]{(6.27)}中@tex-math{\vec{R}^{n+1}}的线性化代入方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}ï¼便得到如下隐式格式
+    现在把方程@link["blazek2005-ch06#eq-6-27"]{(6.27)}中@tex-math{\vec{R}^{n+1}}的线性化代入方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}，便得到如下隐式格式
   }
 
   @tex-display-math[#:id "eq-6-28"]{\left[\frac{\left(\Omega\bar{M}\right)_I}{\Delta t_I} + \beta\left(\frac{\partial\vec{R}}{\partial\vec{W}}\right)_I\right]\Delta\vec{W}^n = -\vec{R}_I^n, \tag{6.28}}
@@ -459,37 +459,37 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The term in square brackets on the left-hand side of Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} is referred to as the @emph{implicit operator} or the @emph{system matrix}. Consequently, the right-hand side of Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} is called the @emph{explicit operator}. It is only the explicit operator that determines the spatial accuracy of the solution.
   }{
-    方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}左端方括号内的项称为隐式算子(implicit operator)或系统矩阵(system matrix)。相应地ï¼方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}的右端称为显式算子(explicit operator)。决定解的空间精度的只是显式算子。
+    方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}左端方括号内的项称为隐式算子(implicit operator)或系统矩阵(system matrix)。相应地，方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}的右端称为显式算子(explicit operator)。决定解的空间精度的只是显式算子。
   }
 
   @bi{
     The implicit operator constitutes a large, sparse, and non-symmetric block matrix with dimensions equal to the total number of cells (cell-centred scheme) or grid points (cell-vertex scheme). Below we will discuss further the form of the implicit operator for structured as well as for unstructured grids. As we already saw in Section 3.2, the mass matrix @tex-math{\bar{M}} can be replaced by the identity matrix, without influencing the steady state solution. The parameter @tex-math{\beta} in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} is generally set to 1, which results in a 1st-order accurate temporal discretisation. A 2nd-order time accurate scheme is obtained for @tex-math{\beta = 1/2}. However, this is not recommended since the scheme with @tex-math{\beta = 1} is much more robust, and the time accuracy is of no importance for steady problems.
   }{
-    隐式算子构成一个大型、稀疏、非对称的块矩阵ï¼其维数等于单元总数(单元中心格式)或网格点总数(单元顶点格式)。下面我们将进一步讨论隐式算子在结构网格和非结构网格上的形式。如3.2节所述ï¼质量矩阵@tex-math{\bar{M}}可以用单位矩阵代替ï¼而不影响定常解。方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的参数@tex-math{\beta}一般取1ï¼这样得到一阶精度的时间离散化。@tex-math{\beta = 1/2}时可以得到二阶时间精度格式ï¼但不推荐这样做ï¼因为@tex-math{\beta = 1}的格式稳健得多ï¼而且对定常问题时间精度并不重要。
+    隐式算子构成一个大型、稀疏、非对称的块矩阵，其维数等于单元总数(单元中心格式)或网格点总数(单元顶点格式)。下面我们将进一步讨论隐式算子在结构网格和非结构网格上的形式。如3.2节所述，质量矩阵@tex-math{\bar{M}}可以用单位矩阵代替，而不影响定常解。方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的参数@tex-math{\beta}一般取1，这样得到一阶精度的时间离散化。@tex-math{\beta = 1/2}时可以得到二阶时间精度格式，但不推荐这样做，因为@tex-math{\beta = 1}的格式稳健得多，而且对定常问题时间精度并不重要。
   }
 
   @bi{
     In the case of stiff governing equations, the source term has to be included in the implicit operator. This happens quite naturally with the linearisation of the residual in Eq. @link["blazek2005-ch06#eq-6-27"]{(6.27)}, which leads to a formulation identical to Eq. @link["blazek2005-ch06#eq-6-10"]{(6.10)}. As demonstrated in Ref. @link["blazek2005-r6-12"]{[12]}, the above implicit scheme @link["blazek2005-ch06#eq-6-28"]{(6.28)} remains stable for any time step if the eigenvalues of @tex-math{\partial\vec{Q}/\partial\vec{W}} are all negative or zero.
   }{
-    当控制方程为刚性方程时ï¼必须把源项纳入隐式算子。方程@link["blazek2005-ch06#eq-6-27"]{(6.27)}中残差的线性化十分自然地做到了这一点ï¼它给出的形式与方程@link["blazek2005-ch06#eq-6-10"]{(6.10)}完全相同。如文献@link["blazek2005-r6-12"]{[12]}所证明的ï¼只要@tex-math{\partial\vec{Q}/\partial\vec{W}}的特征值全为负或零ï¼上述隐式格式@link["blazek2005-ch06#eq-6-28"]{(6.28)}对任意时间步长都保持稳定。
+    当控制方程为刚性方程时，必须把源项纳入隐式算子。方程@link["blazek2005-ch06#eq-6-27"]{(6.27)}中残差的线性化十分自然地做到了这一点，它给出的形式与方程@link["blazek2005-ch06#eq-6-10"]{(6.10)}完全相同。如文献@link["blazek2005-r6-12"]{[12]}所证明的，只要@tex-math{\partial\vec{Q}/\partial\vec{W}}的特征值全为负或零，上述隐式格式@link["blazek2005-ch06#eq-6-28"]{(6.28)}对任意时间步长都保持稳定。
   }
 
   @bi{
     The solution of the linear equation system @link["blazek2005-ch06#eq-6-28"]{(6.28)} requires the inversion of the implicit operator, i.e., the inversion of a very large matrix. In principle, this can be done in two ways. The first one consists of a direct matrix inversion, using either the Gaussian elimination or some direct sparse matrix method @link["blazek2005-r6-24"]{[24]}, @link["blazek2005-r6-25"]{[25]}. However, because of the excessive amount of memory and the very high computational effort, this approach is not suited for practical problems @link["blazek2005-r6-26"]{[26]}.
   }{
-    求解线性方程组@link["blazek2005-ch06#eq-6-28"]{(6.28)}需要对隐式算子求逆ï¼即对一个非常大的矩阵求逆。原则上这有两种做法。第一种是直接矩阵求逆ï¼采用Gaussian消元或某种直接稀疏矩阵方法@link["blazek2005-r6-24"]{[24]}、@link["blazek2005-r6-25"]{[25]}。然而ï¼由于内存需求过大、计算量极高ï¼这一方法不适合实际问题@link["blazek2005-r6-26"]{[26]}。
+    求解线性方程组@link["blazek2005-ch06#eq-6-28"]{(6.28)}需要对隐式算子求逆，即对一个非常大的矩阵求逆。原则上这有两种做法。第一种是直接矩阵求逆，采用Gaussian消元或某种直接稀疏矩阵方法@link["blazek2005-r6-24"]{[24]}、@link["blazek2005-r6-25"]{[25]}。然而，由于内存需求过大、计算量极高，这一方法不适合实际问题@link["blazek2005-r6-26"]{[26]}。
   }
 
   @bi{
     The second possibility of inverting the implicit operator represent iterative methods. We mentioned the most widely used ones in Subsection 3.2.2. Iterative methods can be divided roughly into two groups. The first one consists of approaches which decompose the implicit operator into several parts - a process called @emph{factorisation}. The factors are constructed in such a way that they can be more easily inverted than the original implicit operator. To the second group belong schemes, which employ a Krylov-subspace method for the inversion of the implicit operator. In this case, the implicit time-stepping scheme @link["blazek2005-ch06#eq-6-28"]{(6.28)} is usually turned into Newton's method by setting @tex-math{\Delta t \rightarrow \infty}. The scheme is then named @emph{Newton-Krylov} method.
   }{
-    对隐式算子求逆的第二类方法是迭代方法。我们在3.2.2小节提到了使用最广的几种迭代方法。迭代方法大致可以分为两类。第一类是把隐式算子分解成若干部分的做法——这一过程称为因式分解(factorisation)。各因子的构造方式使其比原来的隐式算子更容易求逆。第二类是采用Krylov子空间方法求隐式算子之逆的格式。在这种情形下ï¼通常令@tex-math{\Delta t \rightarrow \infty}ï¼把隐式时间推进格式@link["blazek2005-ch06#eq-6-28"]{(6.28)}化为牛顿法ï¼这样的格式随即称为Newton-Krylov方法。
+    对隐式算子求逆的第二类方法是迭代方法。我们在3.2.2小节提到了使用最广的几种迭代方法。迭代方法大致可以分为两类。第一类是把隐式算子分解成若干部分的做法——这一过程称为因式分解(factorisation)。各因子的构造方式使其比原来的隐式算子更容易求逆。第二类是采用Krylov子空间方法求隐式算子之逆的格式。在这种情形下，通常令@tex-math{\Delta t \rightarrow \infty}，把隐式时间推进格式@link["blazek2005-ch06#eq-6-28"]{(6.28)}化为牛顿法，这样的格式随即称为Newton-Krylov方法。
   }
 
   @bi{
     In the following, we shall discuss first the matrix structure of the implicit operator. Then, we shall investigate the possibilities of computing the flux Jacobian @tex-math{\partial\vec{R}/\partial\vec{W}} in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)}. Finally, we shall present the three most popular iterative methods in detail.
   }{
-    下面我们先讨论隐式算子的矩阵结构ï¼然后研究计算方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中通量雅可比@tex-math{\partial\vec{R}/\partial\vec{W}}的各种途径ï¼最后详细介绍三种最常用的迭代方法。
+    下面我们先讨论隐式算子的矩阵结构，然后研究计算方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中通量雅可比@tex-math{\partial\vec{R}/\partial\vec{W}}的各种途径，最后详细介绍三种最常用的迭代方法。
   }
 
   @subtree[#:id "blazek2005-6-2-1"]{
@@ -498,7 +498,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Referring to Eq. @link["blazek2005-ch06#eq-6-27"]{(6.27)}, we can write the linearisation of the residual @tex-math{\vec{R}^{n+1}} in the form
     }{
-      参照方程@link["blazek2005-ch06#eq-6-27"]{(6.27)}ï¼可以把残差@tex-math{\vec{R}^{n+1}}的线性化写成
+      参照方程@link["blazek2005-ch06#eq-6-27"]{(6.27)}，可以把残差@tex-math{\vec{R}^{n+1}}的线性化写成
     }
 
     @tex-display-math[#:id "eq-6-29"]{\vec{R}^{n+1} \approx \vec{R}^n + \sum_{m=1}^{N_F}\left\{\frac{\partial}{\partial\vec{W}}\left[\left(\vec{F}_c - \vec{F}_v\right)_m\Delta S_m\right]\Delta\vec{W}^n\right\} - \frac{\partial(\Omega\vec{Q})}{\partial\vec{W}}\Delta\vec{W}^n \tag{6.29}}
@@ -506,7 +506,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       with @tex-math{N_F} being the number of faces of the control volume @tex-math{\Omega} (cf. Eq. (4.2) or (5.2)). Thus, the flux Jacobian reads
     }{
-      其中@tex-math{N_F}为控制体@tex-math{\Omega}的面数(参见方程(4.2)或(5.2))。于是ï¼通量雅可比为
+      其中@tex-math{N_F}为控制体@tex-math{\Omega}的面数(参见方程(4.2)或(5.2))。于是，通量雅可比为
     }
 
     @tex-display-math[#:id "eq-6-30"]{\frac{\partial\vec{R}}{\partial\vec{W}} = \sum_{m=1}^{N_F}\frac{\partial\left(\vec{F}_c\right)_m}{\partial\vec{W}}\Delta S_m - \sum_{m=1}^{N_F}\frac{\partial\left(\vec{F}_v\right)_m}{\partial\vec{W}}\Delta S_m - \frac{\partial\left(\Omega\vec{Q}\right)}{\partial\vec{W}}. \tag{6.30}}
@@ -514,13 +514,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       It should be stressed that the flux Jacobian has to be conceived as an operator which acts on the update @tex-math{\Delta\vec{W}}. As stated above, the convective and viscous fluxes in Eq. @link["blazek2005-ch06#eq-6-30"]{(6.30)} do not necessarily have to be identical to the fluxes in the explicit operator.
     }{
-      需要强调的是ï¼必须把通量雅可比理解为作用在更新量@tex-math{\Delta\vec{W}}上的一个算子。如上所述ï¼方程@link["blazek2005-ch06#eq-6-30"]{(6.30)}中的对流通量和黏性通量不一定非要与显式算子中的通量完全相同。
+      需要强调的是，必须把通量雅可比理解为作用在更新量@tex-math{\Delta\vec{W}}上的一个算子。如上所述，方程@link["blazek2005-ch06#eq-6-30"]{(6.30)}中的对流通量和黏性通量不一定非要与显式算子中的通量完全相同。
     }
 
     @bi{
       Because of the significant differences between the implicit operators on structured and unstructured grids, we shall treat each case separately.
     }{
-      由于结构网格和非结构网格上的隐式算子差别很大ï¼我们将分别讨论这两种情形。
+      由于结构网格和非结构网格上的隐式算子差别很大，我们将分别讨论这两种情形。
     }
 
     @emph{Implicit Operator on Structured Grids 结构网格上的隐式算子}
@@ -528,7 +528,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       In order to derive the form of the system matrix in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)}, let us consider the 1-D grid in Fig. 6.1. Let us further assume that the cell-vertex scheme with dual control volumes (Subsection 4.2.3) and a simple average of fluxes are used for the spatial discretisation (cf. Fig. 4.8). In the absence of viscous fluxes, the residual is given by
     }{
-      为了导出方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中系统矩阵的形式ï¼考察图6.1所示的一维网格。进一步假设空间离散化采用带对偶控制体的单元顶点格式(4.2.3小节)和简单的通量平均(参见图4.8)。在没有黏性通量的情形下ï¼残差为
+      为了导出方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中系统矩阵的形式，考察图6.1所示的一维网格。进一步假设空间离散化采用带对偶控制体的单元顶点格式(4.2.3小节)和简单的通量平均(参见图4.8)。在没有黏性通量的情形下，残差为
     }
 
     @tex-display-math[#:id "eq-6-31"]{\vec{R}_i^n = \left(\vec{F}_c\right)_{i+1/2}\Delta S_{i+1/2} + \left(\vec{F}_c\right)_{i-1/2}\Delta S_{i-1/2} - \Omega_i\vec{Q}_i. \tag{6.31}}
@@ -536,7 +536,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Furthermore, the derivative of the convective fluxes at the face @tex-math{m = i + 1/2} in Eq. @link["blazek2005-ch06#eq-6-30"]{(6.30)} can be expressed as follows
     }{
-      此外ï¼方程@link["blazek2005-ch06#eq-6-30"]{(6.30)}中对流通量在面@tex-math{m = i + 1/2}处的导数可以表示为
+      此外，方程@link["blazek2005-ch06#eq-6-30"]{(6.30)}中对流通量在面@tex-math{m = i + 1/2}处的导数可以表示为
     }
 
     @tex-display-math[#:id "eq-6-32"]{\begin{aligned}\frac{\partial\left(\vec{F}_c\right)_{i+1/2}}{\partial\vec{W}} &= \frac{\partial}{\partial\vec{W}}\left\{\frac{1}{2}\left[\vec{F}_c(\vec{W}_{i+1}^n) + \vec{F}_c(\vec{W}_i^n)\right]\right\} \\&= \frac{1}{2}\left[\left(\bar{A}_c\right)_{i+1} + \left(\bar{A}_c\right)_i\right],\end{aligned} \tag{6.32}}
@@ -544,7 +544,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{\bar{A}_c} denotes the convective flux Jacobian (Section A.9). Hence, according to Eqs. @link["blazek2005-ch06#eq-6-29"]{(6.29)}, @link["blazek2005-ch06#eq-6-31"]{(6.31)}, and @link["blazek2005-ch06#eq-6-32"]{(6.32)}, the residual at @tex-math{(t+\Delta t)} is approximated as
     }{
-      其中@tex-math{\bar{A}_c}表示对流通量雅可比(A.9节)。于是ï¼根据方程@link["blazek2005-ch06#eq-6-29"]{(6.29)}、@link["blazek2005-ch06#eq-6-31"]{(6.31)}和@link["blazek2005-ch06#eq-6-32"]{(6.32)},@tex-math{(t+\Delta t)}处的残差近似为
+      其中@tex-math{\bar{A}_c}表示对流通量雅可比(A.9节)。于是，根据方程@link["blazek2005-ch06#eq-6-29"]{(6.29)}、@link["blazek2005-ch06#eq-6-31"]{(6.31)}和@link["blazek2005-ch06#eq-6-32"]{(6.32)},@tex-math{(t+\Delta t)}处的残差近似为
     }
 
     @tex-display-math[#:id "eq-6-33"]{\begin{aligned}\vec{R}_i^{n+1} \approx \vec{R}_i^n &+ \frac{1}{2}\left[\left(\bar{A}_c\right)_{i+1}\Delta\vec{W}_{i+1}^n + \left(\bar{A}_c\right)_i\Delta\vec{W}_i^n\right]\Delta S_{i+1/2} \\&+ \frac{1}{2}\left[\left(\bar{A}_c\right)_{i-1}\Delta\vec{W}_{i-1}^n + \left(\bar{A}_c\right)_i\Delta\vec{W}_i^n\right]\Delta S_{i-1/2} \\&- \frac{\partial(\Omega_i\vec{Q}_i)}{\partial\vec{W}}.\end{aligned} \tag{6.33}}
@@ -552,7 +552,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Finally, for @tex-math{\beta = 1} and a lumped mass matrix we can derive from Eq. @link["blazek2005-ch06#eq-6-26"]{(6.26)} the implicit scheme
     }{
-      最后ï¼对@tex-math{\beta = 1}和集中质量矩阵ï¼可以从方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}导出隐式格式
+      最后，对@tex-math{\beta = 1}和集中质量矩阵，可以从方程@link["blazek2005-ch06#eq-6-26"]{(6.26)}导出隐式格式
     }
 
     @tex-display-math[#:id "eq-6-34"]{\left\{\frac{\Omega_i}{\Delta t_i}\bar{I} + \frac{1}{2}\left[\left(\bar{A}_c\right)_i\Delta S_{i+1/2} + \left(\bar{A}_c\right)_i\Delta S_{i-1/2}\right] - \frac{\partial(\Omega_i\vec{Q}_i)}{\partial\vec{W}} + \frac{1}{2}\left[\left(\bar{A}_c\right)_{i+1}\Delta S_{i+1/2}\right] + \frac{1}{2}\left[\left(\bar{A}_c\right)_{i-1}\Delta S_{i-1/2}\right]\right\}\Delta\vec{W}^n = -\vec{R}_i^n, \tag{6.34}}
@@ -560,11 +560,11 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{\bar{I}} stands for the identity matrix. It should be noted that the unit normal vector in each matrix @tex-math{\bar{A}_c} is evaluated at the same side of the control volume as the associated area @tex-math{\Delta S}. As we can see, the implicit operator involves the same 3-point stencil (nodes @tex-math{i-1}, @tex-math{i}, and @tex-math{i+1}) as the spatial discretisation.
     }{
-      其中@tex-math{\bar{I}}代表单位矩阵。应当注意ï¼每个矩阵@tex-math{\bar{A}_c}中的单位法向量都在与相应面积@tex-math{\Delta S}相同的控制体一侧求值。可以看到ï¼隐式算子涉及与空间离散化相同的三点模板(节点@tex-math{i-1}、@tex-math{i}和@tex-math{i+1})。
+      其中@tex-math{\bar{I}}代表单位矩阵。应当注意，每个矩阵@tex-math{\bar{A}_c}中的单位法向量都在与相应面积@tex-math{\Delta S}相同的控制体一侧求值。可以看到，隐式算子涉及与空间离散化相同的三点模板(节点@tex-math{i-1}、@tex-math{i}和@tex-math{i+1})。
     }
 
     @figure["blazek2005/fig-6-1.png" "图6.1:一维结构网格及相应的三点模板隐式算子矩阵"]{
-    @emph{图6.1:一维结构网格及相应的三点模板隐式算子矩阵。}图例:左上为模板(stencil)——节点@tex-math{L}(@tex-math{i-1})、@tex-math{D}(@tex-math{i})、@tex-math{U}(@tex-math{i+1});左下为网格(grid)——编号1至8的8个网格节点;右侧为隐式算子——@tex-math{8\times 8}块三对角矩阵ï¼非零块为@tex-math{L}、@tex-math{D}、@tex-math{U}ï¼角落处为0。
+    @emph{图6.1:一维结构网格及相应的三点模板隐式算子矩阵。}图例:左上为模板(stencil)——节点@tex-math{L}(@tex-math{i-1})、@tex-math{D}(@tex-math{i})、@tex-math{U}(@tex-math{i+1});左下为网格(grid)——编号1至8的8个网格节点;右侧为隐式算子——@tex-math{8\times 8}块三对角矩阵，非零块为@tex-math{L}、@tex-math{D}、@tex-math{U}，角落处为0。
 }
     @figure["blazek2005/fig-6-2.png" "图6.2:二维结构网格(左)及相应的五点模板隐式算子矩阵(右)"]{
     @emph{图6.2:二维结构网格(左)及相应的五点模板隐式算子矩阵(右)。}图例:模板(stencil)由节点@tex-math{i,j}及其四个邻居@tex-math{i-1,j}、@tex-math{i+1,j}、@tex-math{i,j-1}、@tex-math{i,j+1}组成;网格(grid)为@tex-math{8\times 4}个节点,@tex-math{i}方向编号1至8,@tex-math{j}方向编号1至4;右侧矩阵中非零块矩阵以实心方块表示。
@@ -572,7 +572,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       In order to visualise the system matrix, we denote all terms in the implicit operator associated with the central node @tex-math{i} as @tex-math{\mathbf{D}}, i.e.,
     }{
-      为了将系统矩阵可视化ï¼把隐式算子中与中心节点@tex-math{i}相关联的所有项记为@tex-math{\mathbf{D}}ï¼即
+      为了将系统矩阵可视化，把隐式算子中与中心节点@tex-math{i}相关联的所有项记为@tex-math{\mathbf{D}}，即
     }
 
     @tex-display-math{\mathbf{D} \equiv \frac{\Omega_i}{\Delta t_i}\bar{I} + \frac{1}{2}\left[\left(\bar{A}_c\right)_i\Delta S_{i+1/2} + \left(\bar{A}_c\right)_i\Delta S_{i-1/2}\right] - \frac{\partial(\Omega_i\vec{Q}_i)}{\partial\vec{W}},}
@@ -580,7 +580,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       with the downwind node @tex-math{(i+1)} as @tex-math{\mathbf{U}}, i.e.,
     }{
-      把下游节点@tex-math{(i+1)}记为@tex-math{\mathbf{U}}ï¼即
+      把下游节点@tex-math{(i+1)}记为@tex-math{\mathbf{U}}，即
     }
 
     @tex-display-math{\mathbf{U} \equiv \frac{1}{2}\left(\bar{A}_c\right)_{i+1}\Delta S_{i+1/2},}
@@ -588,7 +588,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       and with the upwind node @tex-math{(i-1)} as @tex-math{\mathbf{L}}, i.e.,
     }{
-      把上游节点@tex-math{(i-1)}记为@tex-math{\mathbf{L}}ï¼即
+      把上游节点@tex-math{(i-1)}记为@tex-math{\mathbf{L}}，即
     }
 
     @tex-display-math{\mathbf{L} \equiv \frac{1}{2}\left(\bar{A}_c\right)_{i-1}\Delta S_{i-1/2},}
@@ -596,19 +596,19 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       respectively. Writing down Eq. @link["blazek2005-ch06#eq-6-34"]{(6.34)} for all eight nodes of the grid in Fig. 6.1, we obtain the @tex-math{8\times 8} block-tridiagonal matrix displayed on the right side of Fig. 6.1. Each of the blocks @tex-math{\mathbf{L}}, @tex-math{\mathbf{D}}, and @tex-math{\mathbf{U}} represents a @tex-math{3\times 3} matrix in 1D (because of the three conservation equations).
     }{
-      对图6.1中网格的全部8个节点写出方程@link["blazek2005-ch06#eq-6-34"]{(6.34)}ï¼就得到图6.1右侧所示的@tex-math{8\times 8}块三对角矩阵。一维情形下ï¼每个块@tex-math{\mathbf{L}}、@tex-math{\mathbf{D}}和@tex-math{\mathbf{U}}都是一个@tex-math{3\times 3}矩阵(因为有三个守恒方程)。
+      对图6.1中网格的全部8个节点写出方程@link["blazek2005-ch06#eq-6-34"]{(6.34)}，就得到图6.1右侧所示的@tex-math{8\times 8}块三对角矩阵。一维情形下，每个块@tex-math{\mathbf{L}}、@tex-math{\mathbf{D}}和@tex-math{\mathbf{U}}都是一个@tex-math{3\times 3}矩阵(因为有三个守恒方程)。
     }
 
     @bi{
       The same ideas carry over to multiple dimensions. For example, if the spatial discretisation in 2D would involve the 5-point stencil sketched in Fig. 6.2, we would obtain a block-pentadiagonal matrix. This is shown on the right side of Fig. 6.2. The nodes were ordered such that the @tex-math{i}-index runs faster than the @tex-math{j}-index (corresponds to @tex-math{mat(i,j)} in FORTRAN). It should be noted that the second off-diagonal is at the distance of eight elements from the main diagonal (the total number of nodes in @tex-math{i}-direction). Finally, the system matrix would become block-septadiagonal in 3D, if we would employ the 7-point stencil of Fig. 4.9b for the spatial discretisation.
     }{
-      同样的思想可以推广到多维。例如ï¼若二维空间离散化涉及图6.2所示的五点模板ï¼就会得到块五对角矩阵ï¼如图6.2右侧所示。节点编号时让@tex-math{i}指标比@tex-math{j}指标变化得更快(对应FORTRAN中的@tex-math{mat(i,j)})。应当注意ï¼第二条次对角线与主对角线相距八个元素(即@tex-math{i}方向的节点总数)。最后ï¼如果空间离散化采用图4.9b的七点模板ï¼三维情形的系统矩阵将变为块七对角矩阵。
+      同样的思想可以推广到多维。例如，若二维空间离散化涉及图6.2所示的五点模板，就会得到块五对角矩阵，如图6.2右侧所示。节点编号时让@tex-math{i}指标比@tex-math{j}指标变化得更快(对应FORTRAN中的@tex-math{mat(i,j)})。应当注意，第二条次对角线与主对角线相距八个元素(即@tex-math{i}方向的节点总数)。最后，如果空间离散化采用图4.9b的七点模板，三维情形的系统矩阵将变为块七对角矩阵。
     }
 
     @bi{
       In summary, we can state that the system matrix always possesses a regular, sparse and banded form for structured grids. It should be further mentioned that the term
     }{
-      总之ï¼对结构网格ï¼系统矩阵总是具有规则的、稀疏的带状形式。还应指出ï¼方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的项
+      总之，对结构网格，系统矩阵总是具有规则的、稀疏的带状形式。还应指出，方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的项
     }
 
     @tex-display-math[#:id "eq-6-35"]{\left(\Omega\bar{M}\right)_I/\Delta t_I \tag{6.35}}
@@ -616,7 +616,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)}, which is always located on the main diagonal, can cause difficulties. Namely, if the time step becomes large, some iterative matrix inversion schemes (e.g., Gauss-Seidel) may fail due to reduced diagonal dominance of the implicit operator.
     }{
-      ——它总是位于主对角线上——可能引起困难:当时间步长变大时ï¼某些迭代矩阵求逆格式(如Gauss-Seidel)可能因隐式算子对角占优减弱而失效。
+      ——它总是位于主对角线上——可能引起困难:当时间步长变大时，某些迭代矩阵求逆格式(如Gauss-Seidel)可能因隐式算子对角占优减弱而失效。
     }
 
     @emph{Implicit Operator on Unstructured Grids 非结构网格上的隐式算子}
@@ -624,7 +624,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The appearance of the system matrix changes completely when we proceed from structured to unstructured grids. This can be demonstrated with the aid of a small unstructured grid sketched in Fig. 6.3. We want assume that the spatial discretisation is given by the cell-centred scheme presented in Subsection 5.2.1, which uses flow values only from the nearest neighbours (e.g., like a first-order upwind scheme - see Subsections 5.3.2 and 5.3.3). Thus, for example, the stencil for cell 2 includes the cells 18, 10, and 13. The resulting system matrix is displayed on the right side of Fig. 6.3. It is obvious that since the grid cells (nodes in the case of a median-dual scheme) are in general numbered in an arbitrary order, no regular pattern can be expected for the matrix. Only the main diagonal, which contains at least the expression @link["blazek2005-ch06#eq-6-35"]{(6.35)} and possibly the derivative of the source term, is always present.
     }{
-      从结构网格过渡到非结构网格时ï¼系统矩阵的外观完全改变。这一点可以借助图6.3所示的小型非结构网格来说明。设空间离散化由5.2.1小节的单元中心格式给出ï¼该格式只使用最近邻单元的流动值(例如像一阶上风格式那样——见5.3.2和5.3.3小节)。于是ï¼例如单元2的模板包括单元18、10和13。所得的系统矩阵显示在图6.3的右侧。显然ï¼由于网格单元(中位对偶格式情形下为节点)一般按任意顺序编号ï¼矩阵不会呈现出规则的模式。只有主对角线——它至少包含表达式@link["blazek2005-ch06#eq-6-35"]{(6.35)}ï¼可能还包含源项的导数——总是存在。
+      从结构网格过渡到非结构网格时，系统矩阵的外观完全改变。这一点可以借助图6.3所示的小型非结构网格来说明。设空间离散化由5.2.1小节的单元中心格式给出，该格式只使用最近邻单元的流动值(例如像一阶上风格式那样——见5.3.2和5.3.3小节)。于是，例如单元2的模板包括单元18、10和13。所得的系统矩阵显示在图6.3的右侧。显然，由于网格单元(中位对偶格式情形下为节点)一般按任意顺序编号，矩阵不会呈现出规则的模式。只有主对角线——它至少包含表达式@link["blazek2005-ch06#eq-6-35"]{(6.35)}，可能还包含源项的导数——总是存在。
     }
 
     @figure["blazek2005/fig-6-3.png" "图6.3:二维非结构网格(左)及相应的最近邻模板隐式算子矩阵(右)"]{
@@ -633,7 +633,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The quasi-random distribution of nonzero elements in the system matrix is undesirable. It slows down the convergence of iterative inversion methods like Gauss-Seidel. Furthermore, preconditioning techniques for Krylov-subspace methods like ILU (Incomplete Lower-Upper) factorisation scheme cannot be used efficiently. Therefore, strategies were developed where the cells (nodes) are renumbered such that the bandwidth of the system matrix is considerably reduced, i.e., the nonzero elements are clustered close to the main diagonal. The best-known renumbering strategy is the @emph{Reverse-Cuthill-McKee} (RCM) algorithm @link["blazek2005-r6-27"]{[27]}, @link["blazek2005-r6-28"]{[28]}. Figure 6.4 shows the resulting cell numbering and the system matrix when the RCM algorithm is applied to the example grid of Fig. 6.3. As we can see, the bandwidth of the matrix is significantly reduced and the matrix obtains a more regular structure.
     }{
-      系统矩阵中非零元素的准随机分布是不可取的。它会减慢Gauss-Seidel等迭代求逆方法的收敛速度。此外,ILU(不完全下-上三角分解,Incomplete Lower-Upper)这类Krylov子空间方法的预条件技术也无法高效使用。因此ï¼人们发展了通过对单元(节点)重新编号来大幅减小系统矩阵带宽的策略ï¼即使非零元素聚集到主对角线附近。最著名的重新编号策略是逆Cuthill-McKee(Reverse-Cuthill-McKee,RCM)算法@link["blazek2005-r6-27"]{[27]}、@link["blazek2005-r6-28"]{[28]}。图6.4给出了把RCM算法应用于图6.3示例网格后得到的单元编号和系统矩阵。可以看到ï¼矩阵的带宽显著减小ï¼矩阵获得了更规则的结构。
+      系统矩阵中非零元素的准随机分布是不可取的。它会减慢Gauss-Seidel等迭代求逆方法的收敛速度。此外,ILU(不完全下-上三角分解,Incomplete Lower-Upper)这类Krylov子空间方法的预条件技术也无法高效使用。因此，人们发展了通过对单元(节点)重新编号来大幅减小系统矩阵带宽的策略，即使非零元素聚集到主对角线附近。最著名的重新编号策略是逆Cuthill-McKee(Reverse-Cuthill-McKee,RCM)算法@link["blazek2005-r6-27"]{[27]}、@link["blazek2005-r6-28"]{[28]}。图6.4给出了把RCM算法应用于图6.3示例网格后得到的单元编号和系统矩阵。可以看到，矩阵的带宽显著减小，矩阵获得了更规则的结构。
     }
 
     @figure["blazek2005/fig-6-4.png" "图6.4:用逆Cuthill-McKee排序把图6.3隐式算子的带宽从18减至5"]{
@@ -642,7 +642,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Several other renumbering strategies were developed in order to minimise cache misses or to allow for vectorisation of the numerical scheme. An overview can be found, e.g., in Ref. @link["blazek2005-r6-29"]{[29]}.
     }{
-      为了减少缓存未命中或允许数值格式向量化ï¼还发展了其他一些重新编号策略。综述可参见例如文献@link["blazek2005-r6-29"]{[29]}。
+      为了减少缓存未命中或允许数值格式向量化，还发展了其他一些重新编号策略。综述可参见例如文献@link["blazek2005-r6-29"]{[29]}。
     }
   }
 
@@ -652,7 +652,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Depending on the type of the underlying spatial discretisation scheme, an analytical evaluation of the flux Jacobian @tex-math{\partial\vec{R}/\partial\vec{W}} in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} may become very complex if not impossible. In order to make the concepts more clear, we shall derive the flux Jacobian for inviscid flows and then discuss the extension to the Navier-Stokes equations.
     }{
-      视底层空间离散化格式的类型而定ï¼解析求出方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的通量雅可比@tex-math{\partial\vec{R}/\partial\vec{W}}可能非常复杂ï¼甚至不可能。为使概念更清晰ï¼我们先对无黏流动导出通量雅可比ï¼然后再讨论向Navier-Stokes方程的推广。
+      视底层空间离散化格式的类型而定，解析求出方程@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的通量雅可比@tex-math{\partial\vec{R}/\partial\vec{W}}可能非常复杂，甚至不可能。为使概念更清晰，我们先对无黏流动导出通量雅可比，然后再讨论向Navier-Stokes方程的推广。
     }
 
     @emph{Central Scheme 中心格式}
@@ -660,7 +660,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The flux Jacobian is most easily formulated in the case of the central spatial discretisation. As we already saw for the example in Fig. 6.1, @tex-math{\partial\vec{R}/\partial\vec{W}} consists of the convective flux Jacobians (cf. Eq. @link["blazek2005-ch06#eq-6-34"]{(6.34)}), which can be derived analytically (see Section A.9). Artificial viscosity is usually included in a simplified form, without the non-linear pressure sensor (Eq. (4.55)). We shall return to this point below in Subsection 6.2.3.
     }{
-      在中心空间离散化的情形下ï¼通量雅可比最容易构造。如图6.1的例子所示,@tex-math{\partial\vec{R}/\partial\vec{W}}由对流通量雅可比组成(参见方程@link["blazek2005-ch06#eq-6-34"]{(6.34)})ï¼它们可以解析导出(见A.9节)。人工黏性通常以简化形式纳入ï¼即不含非线性压力传感器(方程(4.55))。这一点将在6.2.3小节再讨论。
+      在中心空间离散化的情形下，通量雅可比最容易构造。如图6.1的例子所示,@tex-math{\partial\vec{R}/\partial\vec{W}}由对流通量雅可比组成(参见方程@link["blazek2005-ch06#eq-6-34"]{(6.34)})，它们可以解析导出(见A.9节)。人工黏性通常以简化形式纳入，即不含非线性压力传感器(方程(4.55))。这一点将在6.2.3小节再讨论。
     }
 
     @emph{Flux-Vector Splitting Scheme 通量向量分裂格式}
@@ -668,13 +668,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The evaluation of the flux Jacobian becomes more involved when one of the flux-vector splitting schemes (Subsection 4.3.2) is used as the basis for its derivation. Let us, for illustration, consider the scheme due to Steger and Warming @link["blazek2005-r6-30"]{[30]}. Previous investigations @link["blazek2005-r6-31"]{[31]} revealed that the Steger-Warming splitting is preferable over, e.g., the Van Leer's flux-vector splitting scheme (Eq. (4.60)) for various upwind discretisations of the implicit operator.
     }{
-      当以通量向量分裂格式(4.3.2小节)之一为基础来导出通量雅可比时ï¼其求值变得更加复杂。为说明起见ï¼考察Steger和Warming@link["blazek2005-r6-30"]{[30]}的格式。已有的研究@link["blazek2005-r6-31"]{[31]}表明ï¼对隐式算子的各种上风离散化,Steger-Warming分裂比例如Van Leer的通量向量分裂格式(方程(4.60))更可取。
+      当以通量向量分裂格式(4.3.2小节)之一为基础来导出通量雅可比时，其求值变得更加复杂。为说明起见，考察Steger和Warming@link["blazek2005-r6-30"]{[30]}的格式。已有的研究@link["blazek2005-r6-31"]{[31]}表明，对隐式算子的各种上风离散化,Steger-Warming分裂比例如Van Leer的通量向量分裂格式(方程(4.60))更可取。
     }
 
     @bi{
       The basic idea of the Steger-Warming flux-vector splitting scheme is to divide the convective fluxes into a positive and a negative part, i.e.,
     }{
-      Steger-Warming通量向量分裂格式的基本思想是把对流通量分成正、负两部分ï¼即
+      Steger-Warming通量向量分裂格式的基本思想是把对流通量分成正、负两部分，即
     }
 
     @tex-display-math[#:id "eq-6-36"]{\vec{F}_c = \vec{F}_c^{+} + \vec{F}_c^{-} \tag{6.36}}
@@ -698,7 +698,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{\bar{\Lambda}_c} is given by Eq. (A.84). Using the splitting defined in Eq. @link["blazek2005-ch06#eq-6-36"]{(6.36)}, we obtain for the product of the flux Jacobian with the update @tex-math{\Delta\vec{W}^n} in Eq. @link["blazek2005-ch06#eq-6-29"]{(6.29)}
     }{
-      其中@tex-math{\bar{\Lambda}_c}由方程(A.84)给出。利用方程@link["blazek2005-ch06#eq-6-36"]{(6.36)}定义的分裂ï¼对通量雅可比与方程@link["blazek2005-ch06#eq-6-29"]{(6.29)}中更新量@tex-math{\Delta\vec{W}^n}的乘积得到
+      其中@tex-math{\bar{\Lambda}_c}由方程(A.84)给出。利用方程@link["blazek2005-ch06#eq-6-36"]{(6.36)}定义的分裂，对通量雅可比与方程@link["blazek2005-ch06#eq-6-29"]{(6.29)}中更新量@tex-math{\Delta\vec{W}^n}的乘积得到
     }
 
     @tex-display-math[#:id "eq-6-39"]{\frac{\partial\vec{R}_I}{\partial\vec{W}}\Delta\vec{W}^n = \sum_{m=1}^{N_F}\left[\frac{\partial\left(\vec{F}_c^{+}\Delta S\right)_m}{\partial\vec{W}_{L,m}}\Delta\vec{W}_{L,m}^n + \frac{\partial\left(\vec{F}_c^{-}\Delta S\right)_m}{\partial\vec{W}_{R,m}}\Delta\vec{W}_{R,m}^n\right]. \tag{6.39}}
@@ -706,13 +706,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       In the above Eq. @link["blazek2005-ch06#eq-6-39"]{(6.39)}, @tex-math{\Delta\vec{W}_{L,m}^n} and @tex-math{\Delta\vec{W}_{R,m}^n} denote the updates of the left and right state at the face @tex-math{m}, respectively. On structured grids, the left and right state can be evaluated by the MUSCL approach (Eq. (4.46)). On unstructured grids, the reconstruction methods discussed in Subsection 5.3.3 can be applied. However, the stencil becomes wider with increasing accuracy, which leads to larger bandwidth of the system matrix. Therefore, and in order to reduce the numerical complexity, only first-order accurate approximation is usually employed in Eq. @link["blazek2005-ch06#eq-6-39"]{(6.39)}. As a compromise, we could reconstruct the left and right state with higher accuracy but retain the stencil of the first-order scheme for the evaluation of the derivatives @link["blazek2005-r6-32"]{[32]}.
     }{
-      在上面的方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中,@tex-math{\Delta\vec{W}_{L,m}^n}和@tex-math{\Delta\vec{W}_{R,m}^n}分别表示面@tex-math{m}处左状态和右状态的更新量。在结构网格上ï¼左、右状态可以用MUSCL方法(方程(4.46))求值;在非结构网格上ï¼可以采用5.3.3小节讨论的重构方法。然而ï¼模板随精度提高而变宽ï¼导致系统矩阵的带宽增大。因此ï¼也为了降低数值复杂性ï¼方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中通常只采用一阶精度近似。作为一种折中ï¼可以用更高精度重构左、右状态ï¼但在求导数时保留一阶格式的模板@link["blazek2005-r6-32"]{[32]}。
+      在上面的方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中,@tex-math{\Delta\vec{W}_{L,m}^n}和@tex-math{\Delta\vec{W}_{R,m}^n}分别表示面@tex-math{m}处左状态和右状态的更新量。在结构网格上，左、右状态可以用MUSCL方法(方程(4.46))求值;在非结构网格上，可以采用5.3.3小节讨论的重构方法。然而，模板随精度提高而变宽，导致系统矩阵的带宽增大。因此，也为了降低数值复杂性，方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中通常只采用一阶精度近似。作为一种折中，可以用更高精度重构左、右状态，但在求导数时保留一阶格式的模板@link["blazek2005-r6-32"]{[32]}。
     }
 
     @bi{
       To proceed with the discussion on the evaluation of the derivatives @tex-math{\partial\vec{F}_c^{\pm}/\partial\vec{W}} in Eq. @link["blazek2005-ch06#eq-6-39"]{(6.39)}, let us consider, e.g., the positive flux at face @tex-math{m}
     }{
-      为继续讨论方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中导数@tex-math{\partial\vec{F}_c^{\pm}/\partial\vec{W}}的求值ï¼以面@tex-math{m}处的正通量为例来考察
+      为继续讨论方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中导数@tex-math{\partial\vec{F}_c^{\pm}/\partial\vec{W}}的求值，以面@tex-math{m}处的正通量为例来考察
     }
 
     @tex-display-math{\frac{\partial\left(\vec{F}_c^{+}\Delta S\right)_m}{\partial\vec{W}_{L,m}} = \frac{\partial}{\partial\vec{W}_{L,m}}\left[\left(\bar{A}_{SW}^{+}\vec{W}\right)_{L,m}\Delta S_m\right]}
@@ -720,7 +720,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       which becomes with Eqs. @link["blazek2005-ch06#eq-6-37"]{(6.37)}, @link["blazek2005-ch06#eq-6-38"]{(6.38)}
     }{
-      利用方程@link["blazek2005-ch06#eq-6-37"]{(6.37)}和@link["blazek2005-ch06#eq-6-38"]{(6.38)}ï¼它变为
+      利用方程@link["blazek2005-ch06#eq-6-37"]{(6.37)}和@link["blazek2005-ch06#eq-6-38"]{(6.38)}，它变为
     }
 
     @tex-display-math[#:id "eq-6-40"]{\begin{aligned}\frac{\partial\left(\vec{F}_c^{+}\Delta S\right)_m}{\partial\vec{W}_{L,m}} = \frac{\Delta S_m}{2}\left[\left(\bar{A}_c\right)_{L,m} + \left|\left(\bar{A}_c\right)_{L,m}\right|\right] \\+ \frac{\Delta S_m}{2}\left[\frac{\partial\left(\bar{A}_c\right)_{L,m}}{\partial\vec{W}_{L,m}} + \frac{\partial\left|\left(\bar{A}_c\right)_{L,m}\right|}{\partial\vec{W}_{L,m}}\right]\vec{W}_{L,m}^n.\end{aligned} \tag{6.40}}
@@ -728,13 +728,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       An expression similar to Eq. @link["blazek2005-ch06#eq-6-40"]{(6.40)} can also be found for the negative flux. As we can see, the first term in Eq. @link["blazek2005-ch06#eq-6-40"]{(6.40)} consists of convective flux Jacobians (see Section A.9) and thus presents no difficulty. However, the second term involves derivatives of matrix elements. Although it is possible to obtain the derivatives analytically either by hand calculation or by using a symbolic algebra package, this will produce a large, computationally inefficient code @link["blazek2005-r6-33"]{[33]}. Alternatively, it is possible to assume the matrix @tex-math{\bar{A}_c} is locally constant so that the second term in Eq. @link["blazek2005-ch06#eq-6-40"]{(6.40)} can be neglected. However, depending on the type of the implicit scheme, this may severely restrict the CFL number @link["blazek2005-r6-34"]{[34]}.
     }{
-      对负通量也可以得到与方程@link["blazek2005-ch06#eq-6-40"]{(6.40)}类似的表达式。可以看到ï¼方程@link["blazek2005-ch06#eq-6-40"]{(6.40)}的第一项由对流通量雅可比组成(见A.9节)ï¼因而没有困难;但第二项涉及矩阵元素的导数。虽然可以通过手工推导或使用符号代数软件解析地得到这些导数ï¼但这会产生庞大而计算效率低下的代码@link["blazek2005-r6-33"]{[33]}。另一种可能的做法是假定矩阵@tex-math{\bar{A}_c}局部为常值ï¼从而可以忽略方程@link["blazek2005-ch06#eq-6-40"]{(6.40)}中的第二项。然而ï¼视隐式格式的类型而定ï¼这可能会严重限制CFL数@link["blazek2005-r6-34"]{[34]}。
+      对负通量也可以得到与方程@link["blazek2005-ch06#eq-6-40"]{(6.40)}类似的表达式。可以看到，方程@link["blazek2005-ch06#eq-6-40"]{(6.40)}的第一项由对流通量雅可比组成(见A.9节)，因而没有困难;但第二项涉及矩阵元素的导数。虽然可以通过手工推导或使用符号代数软件解析地得到这些导数，但这会产生庞大而计算效率低下的代码@link["blazek2005-r6-33"]{[33]}。另一种可能的做法是假定矩阵@tex-math{\bar{A}_c}局部为常值，从而可以忽略方程@link["blazek2005-ch06#eq-6-40"]{(6.40)}中的第二项。然而，视隐式格式的类型而定，这可能会严重限制CFL数@link["blazek2005-r6-34"]{[34]}。
     }
 
     @bi{
       Other approaches that we could use to compute the derivatives @tex-math{\partial\vec{F}_c^{\pm}/\partial\vec{W}} in Eq. @link["blazek2005-ch06#eq-6-39"]{(6.39)} would be the automatic differentiation of the source code (e.g., using ADIFOR @link["blazek2005-r6-35"]{[35]}) or the finite-difference method (see, e.g., @link["blazek2005-r6-26"]{[26]}, @link["blazek2005-r6-33"]{[33]}). Herewith, the derivative of the @tex-math{i}-th component of a vector @tex-math{\vec{F}} with respect to the @tex-math{j}-th component of a dependent variable @tex-math{\vec{X}} can be approximated as
     }{
-      计算方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中导数@tex-math{\partial\vec{F}_c^{\pm}/\partial\vec{W}}的其他可行方法还有源代码的自动微分(例如使用ADIFOR@link["blazek2005-r6-35"]{[35]})或有限差分法(参见例如@link["blazek2005-r6-26"]{[26]}、@link["blazek2005-r6-33"]{[33]})。这样ï¼向量@tex-math{\vec{F}}的第@tex-math{i}个分量对因变量@tex-math{\vec{X}}第@tex-math{j}个分量的导数可以近似为
+      计算方程@link["blazek2005-ch06#eq-6-39"]{(6.39)}中导数@tex-math{\partial\vec{F}_c^{\pm}/\partial\vec{W}}的其他可行方法还有源代码的自动微分(例如使用ADIFOR@link["blazek2005-r6-35"]{[35]})或有限差分法(参见例如@link["blazek2005-r6-26"]{[26]}、@link["blazek2005-r6-33"]{[33]})。这样，向量@tex-math{\vec{F}}的第@tex-math{i}个分量对因变量@tex-math{\vec{X}}第@tex-math{j}个分量的导数可以近似为
     }
 
     @tex-display-math[#:id "eq-6-41"]{\frac{\partial f_i}{\partial x_j} \approx \frac{f_i\left(\vec{X} + h_j\vec{e}^{\,j}\right) - f_i\left(\vec{X}\right)}{h_j}, \tag{6.41}}
@@ -750,7 +750,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       with @tex-math{\epsilon} being the machine accuracy and @tex-math{\text{typ}\,x_j} a typical size of @tex-math{x_j}. The reader is also referred to @link["blazek2005-r6-37"]{[37]} and @link["blazek2005-r6-38"]{[38]} for hints on efficient numerical evaluation of Jacobian matrices.
     }{
-      其中@tex-math{\epsilon}为机器精度,@tex-math{\text{typ}\,x_j}为@tex-math{x_j}的典型大小。关于雅可比矩阵的高效数值求值ï¼还可参阅@link["blazek2005-r6-37"]{[37]}和@link["blazek2005-r6-38"]{[38]}中的提示。
+      其中@tex-math{\epsilon}为机器精度,@tex-math{\text{typ}\,x_j}为@tex-math{x_j}的典型大小。关于雅可比矩阵的高效数值求值，还可参阅@link["blazek2005-r6-37"]{[37]}和@link["blazek2005-r6-38"]{[38]}中的提示。
     }
 
     @emph{Flux-Difference Splitting Scheme 通量差分分裂格式}
@@ -758,7 +758,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       In the case of the flux-difference splitting scheme due to Roe (Subsection 4.3.3, Eq. (4.91)), we can write the product of the flux Jacobian with the update in Eq. @link["blazek2005-ch06#eq-6-29"]{(6.29)} as
     }{
-      对Roe的通量差分分裂格式(4.3.3小节ï¼方程(4.91))ï¼通量雅可比与方程@link["blazek2005-ch06#eq-6-29"]{(6.29)}中更新量的乘积可以写为
+      对Roe的通量差分分裂格式(4.3.3小节，方程(4.91))，通量雅可比与方程@link["blazek2005-ch06#eq-6-29"]{(6.29)}中更新量的乘积可以写为
     }
 
     @tex-display-math[#:id "eq-6-43"]{\begin{aligned}\frac{\partial\vec{R}_I}{\partial\vec{W}}\Delta\vec{W}^n = \sum_{m=1}^{N_F}\frac{\Delta S_m}{2}\Big\{ &\left(\bar{A}_c\right)_{L,m}\Delta\vec{W}_{L,m}^n + \left(\bar{A}_c\right)_{R,m}\Delta\vec{W}_{R,m}^n \\&- \frac{\partial}{\partial\vec{W}_{L,m}}\left[\left|\bar{A}_{Roe}\right|_m\left(\vec{W}_{R,m}^n - \vec{W}_{L,m}^n\right)\right]\Delta\vec{W}_{L,m}^n \\&- \frac{\partial}{\partial\vec{W}_{R,m}}\left[\left|\bar{A}_{Roe}\right|_m\left(\vec{W}_{R,m}^n - \vec{W}_{L,m}^n\right)\right]\Delta\vec{W}_{R,m}^n\Big\}.\end{aligned} \tag{6.43}}
@@ -766,13 +766,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Similar to flux-vector splitting, the expression @link["blazek2005-ch06#eq-6-43"]{(6.43)} contains convective flux Jacobians as well as derivatives of the Roe matrix @tex-math{\bar{A}_{Roe}}. The derivatives were presented in @link["blazek2005-r6-34"]{[34]}. Since the corresponding formulae are very complex (see also Ref. @link["blazek2005-r6-33"]{[33]}), it is a better idea to evaluate the term @tex-math{\partial\vec{F}_c/\partial\vec{W}} numerically, as discussed above.
     }{
-      与通量向量分裂类似ï¼表达式@link["blazek2005-ch06#eq-6-43"]{(6.43)}既包含对流通量雅可比ï¼也包含Roe矩阵@tex-math{\bar{A}_{Roe}}的导数。这些导数已在@link["blazek2005-r6-34"]{[34]}中给出。由于相应的公式非常复杂(另见文献@link["blazek2005-r6-33"]{[33]})ï¼更好的做法是像上文讨论的那样ï¼用数值方法求值@tex-math{\partial\vec{F}_c/\partial\vec{W}}项。
+      与通量向量分裂类似，表达式@link["blazek2005-ch06#eq-6-43"]{(6.43)}既包含对流通量雅可比，也包含Roe矩阵@tex-math{\bar{A}_{Roe}}的导数。这些导数已在@link["blazek2005-r6-34"]{[34]}中给出。由于相应的公式非常复杂(另见文献@link["blazek2005-r6-33"]{[33]})，更好的做法是像上文讨论的那样，用数值方法求值@tex-math{\partial\vec{F}_c/\partial\vec{W}}项。
     }
 
     @bi{
       However, we can also simplify Eq. @link["blazek2005-ch06#eq-6-43"]{(6.43)} by assuming locally constant Roe matrices @link["blazek2005-r6-39"]{[39]}
     }{
-      不过ï¼我们也可以假设Roe矩阵局部为常数@link["blazek2005-r6-39"]{[39]}ï¼从而简化式@link["blazek2005-ch06#eq-6-43"]{(6.43)}:
+      不过，我们也可以假设Roe矩阵局部为常数@link["blazek2005-r6-39"]{[39]}，从而简化式@link["blazek2005-ch06#eq-6-43"]{(6.43)}:
     }
 
     @tex-display-math[#:id "eq-6-44"]{\frac{\partial\vec{R}_I}{\partial\vec{W}}\Delta\vec{W}^n \approx \sum_{m=1}^{N_F}\frac{\Delta S_m}{2}\Big\{ \left(\bar{A}_c\right)_{L,m}\Delta\vec{W}_{L,m}^n + \left(\bar{A}_c\right)_{R,m}\Delta\vec{W}_{R,m}^n - \left|\bar{A}_{Roe}\right|_m\left(\Delta\vec{W}_{R,m}^n - \Delta\vec{W}_{L,m}^n\right)\Big\}. \tag{6.44}}
@@ -780,7 +780,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       In contrast to the Steger-Warming flux-vector splitting scheme, the above approximate linearisation @link["blazek2005-ch06#eq-6-44"]{(6.44)} degrades the performance of the implicit scheme only slightly @link["blazek2005-r6-34"]{[34]}.
     }{
-      与Steger-Warming通量向量分裂格式不同ï¼上述近似线性化@link["blazek2005-ch06#eq-6-44"]{(6.44)}对隐式格式性能的降低非常有限@link["blazek2005-r6-34"]{[34]}。
+      与Steger-Warming通量向量分裂格式不同，上述近似线性化@link["blazek2005-ch06#eq-6-44"]{(6.44)}对隐式格式性能的降低非常有限@link["blazek2005-r6-34"]{[34]}。
     }
 
     @emph{Viscous Flows 黏性流动}
@@ -788,13 +788,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       For the Navier-Stokes equations, we have to account also for the viscous fluxes in the implicit operator. The derivative @tex-math{\partial\vec{F}_v/\partial\vec{W}}, i.e., the viscous flux Jacobian in Eq. @link["blazek2005-ch06#eq-6-30"]{(6.30)} is in general not straightforward to obtain. Additional complexity arises due to the fact that the viscous flux vector contains derivatives of flow variables. For this reason, we have either to evaluate the viscous flux Jacobian by finite differences (Eq. @link["blazek2005-ch06#eq-6-41"]{(6.41)}), or we have to use a simplified formulation.
     }{
-      对于Navier-Stokes方程ï¼还必须在隐式算子中计入黏性通量。导数@tex-math{\partial\vec{F}_v/\partial\vec{W}}ï¼即式@link["blazek2005-ch06#eq-6-30"]{(6.30)}中的黏性通量雅可比ï¼一般不容易直接得到。额外的复杂性来自黏性通量向量本身包含流动变量的导数这一事实。因此ï¼要么用有限差分(式@link["blazek2005-ch06#eq-6-41"]{(6.41)})求黏性通量雅可比ï¼要么采用简化的形式。
+      对于Navier-Stokes方程，还必须在隐式算子中计入黏性通量。导数@tex-math{\partial\vec{F}_v/\partial\vec{W}}，即式@link["blazek2005-ch06#eq-6-30"]{(6.30)}中的黏性通量雅可比，一般不容易直接得到。额外的复杂性来自黏性通量向量本身包含流动变量的导数这一事实。因此，要么用有限差分(式@link["blazek2005-ch06#eq-6-41"]{(6.41)})求黏性通量雅可比，要么采用简化的形式。
     }
 
     @bi{
       In the case of the TSL approximation of the Navier-Stokes equations (cf. Subsection 2.4.3 and Section A.6), it is possible to find the viscous flux Jacobian analytically by assuming locally constant dynamic viscosity and thermal conductivity coefficients. Then, according to the discussion in Appendix A.10, the term related to the viscous fluxes in Eq. @link["blazek2005-ch06#eq-6-29"]{(6.29)} becomes
     }{
-      在Navier-Stokes方程的TSL近似下(参见2.4.3小节与附录A.6节)ï¼通过假设动力黏度与热传导系数局部为常数ï¼可以解析地求出黏性通量雅可比。于是ï¼根据附录A.10中的讨论ï¼式@link["blazek2005-ch06#eq-6-29"]{(6.29)}中与黏性通量相关的项变为
+      在Navier-Stokes方程的TSL近似下(参见2.4.3小节与附录A.6节)，通过假设动力黏度与热传导系数局部为常数，可以解析地求出黏性通量雅可比。于是，根据附录A.10中的讨论，式@link["blazek2005-ch06#eq-6-29"]{(6.29)}中与黏性通量相关的项变为
     }
 
     @tex-display-math[#:id "eq-6-45"]{\frac{\partial(\vec{F}_v\Delta S)_m}{\partial\vec{W}}\Delta\vec{W}^n \approx \left[\left(\bar{A}^{*}_v\right)_{R,m}\Delta\vec{W}_{R,m}^n - \left(\bar{A}^{*}_v\right)_{L,m}\Delta\vec{W}_{L,m}^n\right]\Delta S_m. \tag{6.45}}
@@ -802,7 +802,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       In above Eq. @link["blazek2005-ch06#eq-6-45"]{(6.45)}, @tex-math{\bar{A}^{*}_v} stands for the viscous flux Jacobian given by Eq. (A.71) or Eq. (A.75) but without the spatial operators @tex-math{\partial_y(\cdot)} (cf. Eq. (A.74) and (A.79)). The Jacobians are evaluated using either the left or the right state for all variables except for the dynamic viscosity, which is determined from an arithmetic average. It should be mentioned that Eq. @link["blazek2005-ch06#eq-6-45"]{(6.45)} leads to a second-order central difference approximation in the implicit operator, supposed the left and right state are computed with first-order accuracy.
     }{
-      在上式@link["blazek2005-ch06#eq-6-45"]{(6.45)}中,@tex-math{\bar{A}^{*}_v}表示由式(A.71)或式(A.75)给出的黏性通量雅可比ï¼但不含空间算子@tex-math{\partial_y(\cdot)}(参见式(A.74)与(A.79))。除动力黏度取算术平均外ï¼这些雅可比对其余所有变量要么用左状态、要么用右状态求值。应当指出ï¼假如左右状态以一阶精度计算ï¼式@link["blazek2005-ch06#eq-6-45"]{(6.45)}在隐式算子中给出的是二阶中心差分近似。
+      在上式@link["blazek2005-ch06#eq-6-45"]{(6.45)}中,@tex-math{\bar{A}^{*}_v}表示由式(A.71)或式(A.75)给出的黏性通量雅可比，但不含空间算子@tex-math{\partial_y(\cdot)}(参见式(A.74)与(A.79))。除动力黏度取算术平均外，这些雅可比对其余所有变量要么用左状态、要么用右状态求值。应当指出，假如左右状态以一阶精度计算，式@link["blazek2005-ch06#eq-6-45"]{(6.45)}在隐式算子中给出的是二阶中心差分近似。
     }
   }
 }
@@ -812,7 +812,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The @emph{Alternating Direction Implicit} (ADI) scheme was one of the first iterative implicit schemes @link["blazek2005-r6-40"]{[40]}. The ADI scheme can be implemented on structured grids only. It is based on an approximate splitting (or, in other words, factorisation) of the implicit operator in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} into two (in 2D) or three (in 3D) factors. Each factor contains the linearisation of the convective and viscous fluxes for one particular direction in the computational space. In 3D, this leads to the formulation @link["blazek2005-r6-40"]{[40]}, @link["blazek2005-r6-41"]{[41]}
   }{
-    交替方向隐式(@emph{Alternating Direction Implicit},ADI)格式是最早的迭代式隐式格式之一@link["blazek2005-r6-40"]{[40]}。ADI格式只能在结构网格上实现。它基于把式@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的隐式算子近似分裂(或者说ï¼因式分解)为二维时的两个、三维时的三个因子。每个因子包含计算空间中某一特定方向的对流通量与黏性通量的线性化。在三维情形ï¼这导出如下形式@link["blazek2005-r6-40"]{[40]}、@link["blazek2005-r6-41"]{[41]}
+    交替方向隐式(@emph{Alternating Direction Implicit},ADI)格式是最早的迭代式隐式格式之一@link["blazek2005-r6-40"]{[40]}。ADI格式只能在结构网格上实现。它基于把式@link["blazek2005-ch06#eq-6-28"]{(6.28)}中的隐式算子近似分裂(或者说，因式分解)为二维时的两个、三维时的三个因子。每个因子包含计算空间中某一特定方向的对流通量与黏性通量的线性化。在三维情形，这导出如下形式@link["blazek2005-r6-40"]{[40]}、@link["blazek2005-r6-41"]{[41]}
   }
 
   @tex-display-math[#:id "eq-6-46"]{\begin{gathered}
@@ -824,13 +824,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     For clarity, the node indices @tex-math{i, j, k} were omitted from Eq. @link["blazek2005-ch06#eq-6-46"]{(6.46)} where not required. Furthermore, the superscripts @tex-math{I, J, K} in Eq. @link["blazek2005-ch06#eq-6-46"]{(6.46)} mark the flux vector or of the face area associated with certain coordinate in the computational space. For example, @tex-math{\Delta S^{I}_{i+1/2,j,k}} corresponds to @tex-math{\Delta S_2} in Fig. 4.1b. By replacing the node indices by cell indices, the scheme in Eq. @link["blazek2005-ch06#eq-6-46"]{(6.46)} can be applied to a cell-centred discretisation.
   }{
-    为清晰起见ï¼式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中在不必要之处省略了节点指标@tex-math{i}、@tex-math{j}、@tex-math{k}。此外ï¼式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中的上标@tex-math{I}、@tex-math{J}、@tex-math{K}标记与计算空间中某一坐标相关联的通量向量或面面积。例如,@tex-math{\Delta S^{I}_{i+1/2,j,k}}对应于图4.1b中的@tex-math{\Delta S_2}。把节点指标换成单元指标ï¼式@link["blazek2005-ch06#eq-6-46"]{(6.46)}的格式即可用于单元中心离散。
+    为清晰起见，式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中在不必要之处省略了节点指标@tex-math{i}、@tex-math{j}、@tex-math{k}。此外，式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中的上标@tex-math{I}、@tex-math{J}、@tex-math{K}标记与计算空间中某一坐标相关联的通量向量或面面积。例如,@tex-math{\Delta S^{I}_{i+1/2,j,k}}对应于图4.1b中的@tex-math{\Delta S_2}。把节点指标换成单元指标，式@link["blazek2005-ch06#eq-6-46"]{(6.46)}的格式即可用于单元中心离散。
   }
 
   @bi{
     The derivatives of the convective and viscous fluxes in Eq. @link["blazek2005-ch06#eq-6-46"]{(6.46)} can be evaluated as discussed in the previous subsection. The ADI method is traditionally coupled to the central scheme with artificial dissipation. In such a case, a formulation similar to that in Eq. @link["blazek2005-ch06#eq-6-34"]{(6.34)} holds for each factor (of course, the linearisation of the source term is included in one factor only). In order to obtain a robust and efficient scheme, it is necessary to include a linearisation of the artificial dissipation terms in the implicit operator @link["blazek2005-r6-42"]{[42]}-@link["blazek2005-r6-44"]{[44]}. The linearisation is in general simplified by treating the spectral radii and the dissipation coefficients as independent of @tex-math{\vec{W}}. Hence, according to Eq. (4.48) the factor, e.g., in the @emph{I}-direction becomes
   }{
-    式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中对流通量与黏性通量的导数可以按上一小节所讨论的方法计算。ADI方法传统上与带人工耗散的中心格式耦合使用。在这种情形下ï¼每个因子都具有与式@link["blazek2005-ch06#eq-6-34"]{(6.34)}类似的形式(当然ï¼源项的线性化只包含在一个因子中)。为了得到稳健而高效的格式ï¼必须在隐式算子中纳入人工耗散项的线性化@link["blazek2005-r6-42"]{[42]}-@link["blazek2005-r6-44"]{[44]}。该线性化一般通过把谱半径与耗散系数视为与@tex-math{\vec{W}}无关来简化。于是ï¼根据式(4.48)ï¼例如@emph{I}方向上的因子变为
+    式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中对流通量与黏性通量的导数可以按上一小节所讨论的方法计算。ADI方法传统上与带人工耗散的中心格式耦合使用。在这种情形下，每个因子都具有与式@link["blazek2005-ch06#eq-6-34"]{(6.34)}类似的形式(当然，源项的线性化只包含在一个因子中)。为了得到稳健而高效的格式，必须在隐式算子中纳入人工耗散项的线性化@link["blazek2005-r6-42"]{[42]}-@link["blazek2005-r6-44"]{[44]}。该线性化一般通过把谱半径与耗散系数视为与@tex-math{\vec{W}}无关来简化。于是，根据式(4.48)，例如@emph{I}方向上的因子变为
   }
 
   @tex-display-math{\left\{ \frac{\Omega}{\Delta t}\bar{I} + \frac{\partial\left[\left(\vec{F}^{I}_{c} - \vec{F}^{I}_{v}\right)\Delta S^{I}\right]_{i+1/2}}{\partial\vec{W}} + \frac{\partial\left[\left(\vec{F}^{I}_{c} - \vec{F}^{I}_{v}\right)\Delta S^{I}\right]_{i-1/2}}{\partial\vec{W}} - \frac{\partial\left(\vec{D}^{I}_{IM}\Delta S^{I}\right)_{i+1/2}}{\partial\vec{W}} - \frac{\partial\left(\vec{D}^{I}_{IM}\Delta S^{I}\right)_{i-1/2}}{\partial\vec{W}} \right\}}
@@ -846,13 +846,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The implicit dissipation terms in other directions are defined in similar way. It is also possible to retain only the second-order differences in the implicit operator @link["blazek2005-r6-43"]{[43]}, @link["blazek2005-r6-44"]{[44]}. This reduces the matrix for each of the factors from block-pentadiagonal to block-tridiagonal form (as sketched in Fig. 6.1). However, as pointed out in Ref. @link["blazek2005-r6-44"]{[44]}, this restricts the stability of the scheme.
   }{
-    其他方向的隐式耗散项按类似方式定义。也可以在隐式算子中只保留二阶差分@link["blazek2005-r6-43"]{[43]}、@link["blazek2005-r6-44"]{[44]}。这会把每个因子的矩阵从块五对角形式约化为块三对角形式(如图6.1所示意)。然而ï¼正如文献@link["blazek2005-r6-44"]{[44]}所指出的ï¼这会限制格式的稳定性。
+    其他方向的隐式耗散项按类似方式定义。也可以在隐式算子中只保留二阶差分@link["blazek2005-r6-43"]{[43]}、@link["blazek2005-r6-44"]{[44]}。这会把每个因子的矩阵从块五对角形式约化为块三对角形式(如图6.1所示意)。然而，正如文献@link["blazek2005-r6-44"]{[44]}所指出的，这会限制格式的稳定性。
   }
 
   @bi{
     The inversion of the implicit operator in Eq. @link["blazek2005-ch06#eq-6-46"]{(6.46)} proceeds in three steps (two steps in 2D), i.e.,
   }{
-    式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中隐式算子的求逆分三步进行(二维时为两步)ï¼即
+    式@link["blazek2005-ch06#eq-6-46"]{(6.46)}中隐式算子的求逆分三步进行(二维时为两步)，即
   }
 
   @tex-display-math[#:id "eq-6-48"]{\begin{aligned}
@@ -864,13 +864,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where @tex-math{\mathbf{D}} represents the diagonal, @tex-math{\mathbf{L}} the lower-diagonal and @tex-math{\mathbf{U}} the upper-diagonal terms, respectively. Each step requires the inversion of a block-tridiagonal or a block-pentadiagonal matrix (if @tex-math{\epsilon^{(4)}_{IM} > 0} in Eq. @link["blazek2005-ch06#eq-6-47"]{(6.47)}). This is done by a direct solution method. In order to reduce the numerical effort, Pulliam and Chaussee @link["blazek2005-r6-45"]{[45]} suggested a diagonalised form of the ADI scheme. Herewith, the block matrices (composed of convective and viscous flux Jacobians) are transformed into diagonal matrices. Hence, only non-block tri- or pentadiagonal matrices have to be inverted, which results in significant savings of computational work and memory @link["blazek2005-r6-43"]{[43]}. Although the diagonalisation is strictly valid only for Euler equations, it can be employed for viscous flows as well @link["blazek2005-r6-43"]{[43]}. The linearisation of the viscous fluxes (e.g., like in Eq. @link["blazek2005-ch06#eq-6-45"]{(6.45)}) is then either omitted in the implicit operator, or it can be approximated by the viscous eigenvalue (Eq. @link["blazek2005-ch06#eq-6-19"]{(6.19)}).
   }{
-    其中@tex-math{\mathbf{D}}表示对角项,@tex-math{\mathbf{L}}表示下对角项,@tex-math{\mathbf{U}}表示上对角项。每一步都需要对块三对角或块五对角矩阵求逆(若式@link["blazek2005-ch06#eq-6-47"]{(6.47)}中的@tex-math{\epsilon^{(4)}_{IM} > 0})。这由直接解法完成。为了减少数值工作量,Pulliam与Chaussee@link["blazek2005-r6-45"]{[45]}提出了ADI格式的对角化形式。由此ï¼块矩阵(由对流通量与黏性通量雅可比组成)被变换为对角矩阵。于是只需对非块的三对角或五对角矩阵求逆ï¼可显著节省计算量与内存@link["blazek2005-r6-43"]{[43]}。虽然这种对角化严格来说只对欧拉方程成立ï¼但它同样可用于黏性流动@link["blazek2005-r6-43"]{[43]}。此时ï¼黏性通量的线性化(例如式@link["blazek2005-ch06#eq-6-45"]{(6.45)}那样)要么在隐式算子中省略ï¼要么可以用黏性特征值(式@link["blazek2005-ch06#eq-6-19"]{(6.19)})来近似。
+    其中@tex-math{\mathbf{D}}表示对角项,@tex-math{\mathbf{L}}表示下对角项,@tex-math{\mathbf{U}}表示上对角项。每一步都需要对块三对角或块五对角矩阵求逆(若式@link["blazek2005-ch06#eq-6-47"]{(6.47)}中的@tex-math{\epsilon^{(4)}_{IM} > 0})。这由直接解法完成。为了减少数值工作量,Pulliam与Chaussee@link["blazek2005-r6-45"]{[45]}提出了ADI格式的对角化形式。由此，块矩阵(由对流通量与黏性通量雅可比组成)被变换为对角矩阵。于是只需对非块的三对角或五对角矩阵求逆，可显著节省计算量与内存@link["blazek2005-r6-43"]{[43]}。虽然这种对角化严格来说只对欧拉方程成立，但它同样可用于黏性流动@link["blazek2005-r6-43"]{[43]}。此时，黏性通量的线性化(例如式@link["blazek2005-ch06#eq-6-45"]{(6.45)}那样)要么在隐式算子中省略，要么可以用黏性特征值(式@link["blazek2005-ch06#eq-6-19"]{(6.19)})来近似。
   }
 
   @bi{
     The splitting of the implicit operator introduces what is called the @emph{factorisation error}. It is the difference between the implicit operator of the base scheme in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} and the factorised operator. In the case of the ADI scheme, this error term is scaled by the factor @tex-math{(\Delta t)^{N}}, where @tex-math{N} denotes the number of space dimensions. This term causes the ADI scheme to loose its unconditional stability in 3D @link["blazek2005-r6-46"]{[46]}. However, the stability is improved if the fourth-order differences of the artificial viscosity are included in the implicit operator @link["blazek2005-r6-44"]{[44]}. In fact, the ADI scheme was successfully used for the solution of various 3-D problems @link["blazek2005-r6-43"]{[43]}, @link["blazek2005-r6-47"]{[47]}. An interesting implementation of the ADI scheme on multiblock grids, which treats the block boundaries implicitly, was presented by Rosenfeld et al. @link["blazek2005-r6-48"]{[48]}.
   }{
-    对隐式算子的分裂引入了所谓的因式分解误差(factorisation error)。它是式@link["blazek2005-ch06#eq-6-28"]{(6.28)}基本格式的隐式算子与因式分解后算子之差。对ADI格式而言ï¼该误差项以因子@tex-math{(\Delta t)^{N}}缩放ï¼其中@tex-math{N}为空间维数。这一项使ADI格式在三维中失去无条件稳定性@link["blazek2005-r6-46"]{[46]}。不过ï¼如果把人工黏性的四阶差分包含在隐式算子中ï¼稳定性会得到改善@link["blazek2005-r6-44"]{[44]}。事实上,ADI格式已被成功地用于求解各种三维问题@link["blazek2005-r6-43"]{[43]}、@link["blazek2005-r6-47"]{[47]}。Rosenfeld等人@link["blazek2005-r6-48"]{[48]}提出了一种在多块网格上隐式处理块边界的ADI格式的有趣实现。
+    对隐式算子的分裂引入了所谓的因式分解误差(factorisation error)。它是式@link["blazek2005-ch06#eq-6-28"]{(6.28)}基本格式的隐式算子与因式分解后算子之差。对ADI格式而言，该误差项以因子@tex-math{(\Delta t)^{N}}缩放，其中@tex-math{N}为空间维数。这一项使ADI格式在三维中失去无条件稳定性@link["blazek2005-r6-46"]{[46]}。不过，如果把人工黏性的四阶差分包含在隐式算子中，稳定性会得到改善@link["blazek2005-r6-44"]{[44]}。事实上,ADI格式已被成功地用于求解各种三维问题@link["blazek2005-r6-43"]{[43]}、@link["blazek2005-r6-47"]{[47]}。Rosenfeld等人@link["blazek2005-r6-48"]{[48]}提出了一种在多块网格上隐式处理块边界的ADI格式的有趣实现。
   }
 
   @bi{
@@ -886,19 +886,19 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The implicit @emph{Lower-Upper Symmetric Gauss-Seidel} (LU-SGS) scheme, which is also called the @emph{Lower-Upper Symmetric Successive Overrelaxation} (LU-SSOR) scheme, became widely-used because of its low numerical complexity and modest memory requirements, which are both comparable to an explicit multistage scheme. Furthermore, the LU-SGS scheme can be implemented easily on vector and parallel computers. It can also be used on structured as well as on unstructured grids.
   }{
-    隐式下-上对称Gauss-Seidel(@emph{Lower-Upper Symmetric Gauss-Seidel},LU-SGS)格式ï¼也称为下-上对称逐次超松弛(@emph{Lower-Upper Symmetric Successive Overrelaxation},LU-SSOR)格式ï¼因其数值复杂度低、内存需求适中——两者均与显式多级格式相当——而得到广泛使用。此外,LU-SGS格式易于在向量机与并行计算机上实现ï¼既可用于结构网格ï¼也可用于非结构网格。
+    隐式下-上对称Gauss-Seidel(@emph{Lower-Upper Symmetric Gauss-Seidel},LU-SGS)格式，也称为下-上对称逐次超松弛(@emph{Lower-Upper Symmetric Successive Overrelaxation},LU-SSOR)格式，因其数值复杂度低、内存需求适中——两者均与显式多级格式相当——而得到广泛使用。此外,LU-SGS格式易于在向量机与并行计算机上实现，既可用于结构网格，也可用于非结构网格。
   }
 
   @bi{
     The LU-SGS scheme has its origins in the work of Jameson and Turkel @link["blazek2005-r6-49"]{[49]}, who considered decompositions of the implicit operator into lower and upper diagonally dominant factors. The LU-SGS method itself was introduced by Yoon and Jameson @link["blazek2005-r6-50"]{[50]}-@link["blazek2005-r6-52"]{[52]} as a relaxation method for solving the unfactored implicit scheme in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)}. It was further developed and applied to 3-D viscous flow fields by Rieger and Jameson @link["blazek2005-r6-53"]{[53]}. Since then, various researchers applied the LU-SGS scheme to viscous flows on structured @link["blazek2005-r6-54"]{[54]}-@link["blazek2005-r6-61"]{[61]} and on unstructured grids @link["blazek2005-r6-62"]{[62]}-@link["blazek2005-r6-66"]{[66]}. The LU-SGS approach is often used for the simulation of chemically reacting flows @link["blazek2005-r6-67"]{[67]}-@link["blazek2005-r6-71"]{[71]}.
   }{
-    LU-SGS格式源于Jameson与Turkel@link["blazek2005-r6-49"]{[49]}的工作ï¼他们研究了把隐式算子分解为下、上对角占优因子的方法。LU-SGS方法本身由Yoon与Jameson@link["blazek2005-r6-50"]{[50]}-@link["blazek2005-r6-52"]{[52]}提出ï¼作为求解式@link["blazek2005-ch06#eq-6-28"]{(6.28)}未分解隐式格式的一种松弛方法。Rieger与Jameson@link["blazek2005-r6-53"]{[53]}进一步发展了该方法并将其应用于三维黏性流场。此后ï¼多位研究者把LU-SGS格式应用于结构网格@link["blazek2005-r6-54"]{[54]}-@link["blazek2005-r6-61"]{[61]}与非结构网格@link["blazek2005-r6-62"]{[62]}-@link["blazek2005-r6-66"]{[66]}上的黏性流动。LU-SGS方法也常用于化学反应流动的模拟@link["blazek2005-r6-67"]{[67]}-@link["blazek2005-r6-71"]{[71]}。
+    LU-SGS格式源于Jameson与Turkel@link["blazek2005-r6-49"]{[49]}的工作，他们研究了把隐式算子分解为下、上对角占优因子的方法。LU-SGS方法本身由Yoon与Jameson@link["blazek2005-r6-50"]{[50]}-@link["blazek2005-r6-52"]{[52]}提出，作为求解式@link["blazek2005-ch06#eq-6-28"]{(6.28)}未分解隐式格式的一种松弛方法。Rieger与Jameson@link["blazek2005-r6-53"]{[53]}进一步发展了该方法并将其应用于三维黏性流场。此后，多位研究者把LU-SGS格式应用于结构网格@link["blazek2005-r6-54"]{[54]}-@link["blazek2005-r6-61"]{[61]}与非结构网格@link["blazek2005-r6-62"]{[62]}-@link["blazek2005-r6-66"]{[66]}上的黏性流动。LU-SGS方法也常用于化学反应流动的模拟@link["blazek2005-r6-67"]{[67]}-@link["blazek2005-r6-71"]{[71]}。
   }
 
   @bi{
     The LU-SGS scheme employs a simplification of the first-order accurate flux-vector splitting approach due to Steger and Warming (see Subsection 6.2.2) for the linearisation of the convective fluxes in Eq. @link["blazek2005-ch06#eq-6-29"]{(6.29)}. The linearisation is always kept the same regardless of the discretisation of the explicit operator. The LU-SGS scheme is further based on the factorisation of the implicit operator in Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} into the following three parts
   }{
-    对于式@link["blazek2005-ch06#eq-6-29"]{(6.29)}中对流通量的线性化,LU-SGS格式采用Steger与Warming(见6.2.2小节)一阶精度通量向量分裂方法的一种简化形式。无论显式算子如何离散ï¼该线性化始终保持不变。此外,LU-SGS格式基于把式@link["blazek2005-ch06#eq-6-28"]{(6.28)}的隐式算子因式分解为以下三部分
+    对于式@link["blazek2005-ch06#eq-6-29"]{(6.29)}中对流通量的线性化,LU-SGS格式采用Steger与Warming(见6.2.2小节)一阶精度通量向量分裂方法的一种简化形式。无论显式算子如何离散，该线性化始终保持不变。此外,LU-SGS格式基于把式@link["blazek2005-ch06#eq-6-28"]{(6.28)}的隐式算子因式分解为以下三部分
   }
 
   @tex-display-math[#:id "eq-6-49"]{\left(\mathbf{D} + \mathbf{L}\right)\mathbf{D}^{-1}\left(\mathbf{D} + \mathbf{U}\right)\Delta\vec{W}^{n} = -\vec{R}^{n}_{I}. \tag{6.49}}
@@ -906,13 +906,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The factors are constructed such that @tex-math{\mathbf{L}} consists only of terms in the strictly lower triangular matrix, @tex-math{\mathbf{U}} of terms in the strictly upper triangular matrix and @tex-math{\mathbf{D}} of diagonal terms. It is important to remark that the number of factors remains always the same independent of the number of space dimensions.
   }{
-    这些因子的构造使得@tex-math{\mathbf{L}}只包含严格下三角矩阵中的项,@tex-math{\mathbf{U}}只包含严格上三角矩阵中的项ï¼而@tex-math{\mathbf{D}}只包含对角项。值得注意的是ï¼因子的数目始终保持不变ï¼与空间维数无关。
+    这些因子的构造使得@tex-math{\mathbf{L}}只包含严格下三角矩阵中的项,@tex-math{\mathbf{U}}只包含严格上三角矩阵中的项，而@tex-math{\mathbf{D}}只包含对角项。值得注意的是，因子的数目始终保持不变，与空间维数无关。
   }
 
   @bi{
     The system matrix of the LU-SGS scheme (Eq. @link["blazek2005-ch06#eq-6-49"]{(6.49)})) can be inverted in two steps - a forward and a backward sweep, i.e.,
   }{
-    LU-SGS格式的系统矩阵(式@link["blazek2005-ch06#eq-6-49"]{(6.49)}))可以分两步求逆——一次前扫与一次后扫ï¼即
+    LU-SGS格式的系统矩阵(式@link["blazek2005-ch06#eq-6-49"]{(6.49)}))可以分两步求逆——一次前扫与一次后扫，即
   }
 
   @tex-display-math[#:id "eq-6-50"]{\begin{aligned}
@@ -923,7 +923,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     with @tex-math{\vec{W}^{n+1} = \vec{W}^{n} + \Delta\vec{W}^{n}}. The operators @tex-math{\mathbf{L}}, @tex-math{\mathbf{D}}, and @tex-math{\mathbf{U}} and also the inversion procedure differ on structured and unstructured grids in some respects. Therefore, we shall discuss below each case separately.
   }{
-    其中@tex-math{\vec{W}^{n+1} = \vec{W}^{n} + \Delta\vec{W}^{n}}。算子@tex-math{\mathbf{L}}、@tex-math{\mathbf{D}}、@tex-math{\mathbf{U}}以及求逆过程在结构网格与非结构网格上存在若干差异。因此ï¼下面分别讨论这两种情形。
+    其中@tex-math{\vec{W}^{n+1} = \vec{W}^{n} + \Delta\vec{W}^{n}}。算子@tex-math{\mathbf{L}}、@tex-math{\mathbf{D}}、@tex-math{\mathbf{U}}以及求逆过程在结构网格与非结构网格上存在若干差异。因此，下面分别讨论这两种情形。
   }
 
   @emph{LU-SGS on Structured Grids 结构网格上的LU-SGS}
@@ -931,7 +931,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     On structured grids, the operators are defined as (see @link["blazek2005-r6-50"]{[50]}-@link["blazek2005-r6-52"]{[52]}, and @link["blazek2005-r6-68"]{[68]}, @link["blazek2005-r6-55"]{[55]})
   }{
-    在结构网格上ï¼算子定义为(参见@link["blazek2005-r6-50"]{[50]}-@link["blazek2005-r6-52"]{[52]}以及@link["blazek2005-r6-68"]{[68]}、@link["blazek2005-r6-55"]{[55]})
+    在结构网格上，算子定义为(参见@link["blazek2005-r6-50"]{[50]}-@link["blazek2005-r6-52"]{[52]}以及@link["blazek2005-r6-68"]{[68]}、@link["blazek2005-r6-55"]{[55]})
   }
 
   @tex-display-math[#:id "eq-6-51"]{\begin{aligned}
@@ -947,19 +947,19 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     For better readability, only those node indices (or cell indices in the case of a cell-centred scheme) are shown in Eq. @link["blazek2005-ch06#eq-6-51"]{(6.51)}, which differ from @tex-math{i, j, k}. The superscripts @tex-math{i, j, k} at @tex-math{\Delta S} indicate the direction in the computational space. The unit normal vectors in the positive/negative flux Jacobians @tex-math{\bar{A}^{\pm}} and in the viscous flux Jacobians @tex-math{\bar{A}_{v}} are evaluated at the same side of the control volume like the associated face areas @tex-math{\Delta S}. Note that the unit normal vectors are assumed to point outwards of the control volume. In contrast, in various references it is supposed that the unit normal vectors from opposite sides of the control volume point in the same direction.
   }{
-    为了便于阅读ï¼式@link["blazek2005-ch06#eq-6-51"]{(6.51)}中只标出了与@tex-math{i}、@tex-math{j}、@tex-math{k}不同的那些节点指标(单元中心格式下为单元指标)。@tex-math{\Delta S}上的上标@tex-math{i}、@tex-math{j}、@tex-math{k}指示计算空间中的方向。正/负通量雅可比@tex-math{\bar{A}^{\pm}}以及黏性通量雅可比@tex-math{\bar{A}_{v}}中的单位法向量ï¼与相关联的面面积@tex-math{\Delta S}一样ï¼在控制体的同一侧取值。注意ï¼这里假定单位法向量指向控制体外侧。相反ï¼在各种文献中则假定控制体相对两侧的单位法向量指向同一方向。
+    为了便于阅读，式@link["blazek2005-ch06#eq-6-51"]{(6.51)}中只标出了与@tex-math{i}、@tex-math{j}、@tex-math{k}不同的那些节点指标(单元中心格式下为单元指标)。@tex-math{\Delta S}上的上标@tex-math{i}、@tex-math{j}、@tex-math{k}指示计算空间中的方向。正/负通量雅可比@tex-math{\bar{A}^{\pm}}以及黏性通量雅可比@tex-math{\bar{A}_{v}}中的单位法向量，与相关联的面面积@tex-math{\Delta S}一样，在控制体的同一侧取值。注意，这里假定单位法向量指向控制体外侧。相反，在各种文献中则假定控制体相对两侧的单位法向量指向同一方向。
   }
 
   @bi{
     The viscous flux Jacobians in Eq. @link["blazek2005-ch06#eq-6-51"]{(6.51)} are either computed numerically, or are replaced by their TSL approximation, corresponding to Eq. @link["blazek2005-ch06#eq-6-45"]{(6.45)}. It is possible to apply the TSL approximation in all computational coordinates, regardless of the actual orientation of the boundary layer(s). A further simplification consists of substituting the viscous flux Jacobians by the viscous spectral radii (Eq. @link["blazek2005-ch06#eq-6-19"]{(6.19)}), i.e., @tex-math{\bar{A}_{v}\Delta S \approx \hat{\Lambda}_{v}}, as suggested in @link["blazek2005-r6-63"]{[63]}.
   }{
-    式@link["blazek2005-ch06#eq-6-51"]{(6.51)}中的黏性通量雅可比要么数值计算ï¼要么按式@link["blazek2005-ch06#eq-6-45"]{(6.45)}用其TSL近似代替。无论边界层的实际取向如何ï¼都可以在所有计算坐标上应用TSL近似。进一步的简化是把黏性通量雅可比用黏性谱半径(式@link["blazek2005-ch06#eq-6-19"]{(6.19)})代替ï¼即@tex-math{\bar{A}_{v}\Delta S \approx \hat{\Lambda}_{v}}ï¼如文献@link["blazek2005-r6-63"]{[63]}所建议。
+    式@link["blazek2005-ch06#eq-6-51"]{(6.51)}中的黏性通量雅可比要么数值计算，要么按式@link["blazek2005-ch06#eq-6-45"]{(6.45)}用其TSL近似代替。无论边界层的实际取向如何，都可以在所有计算坐标上应用TSL近似。进一步的简化是把黏性通量雅可比用黏性谱半径(式@link["blazek2005-ch06#eq-6-19"]{(6.19)})代替，即@tex-math{\bar{A}_{v}\Delta S \approx \hat{\Lambda}_{v}}，如文献@link["blazek2005-r6-63"]{[63]}所建议。
   }
 
   @bi{
     The split convective flux Jacobians @tex-math{\bar{A}^{\pm}} are constructed in such a way that the eigenvalues of the (+) matrices are all non-negative, and of the (-) matrices are all non-positive. In general, the matrices are defined as @link["blazek2005-r6-49"]{[49]}
   }{
-    分裂的对流通量雅可比@tex-math{\bar{A}^{\pm}}的构造方式是:(+)矩阵的特征值全部非负,(-)矩阵的特征值全部非正。一般地ï¼这些矩阵定义为@link["blazek2005-r6-49"]{[49]}
+    分裂的对流通量雅可比@tex-math{\bar{A}^{\pm}}的构造方式是:(+)矩阵的特征值全部非负,(-)矩阵的特征值全部非正。一般地，这些矩阵定义为@link["blazek2005-r6-49"]{[49]}
   }
 
   @tex-display-math[#:id "eq-6-52"]{\bar{A}^{\pm}\Delta S = \frac{1}{2}\left(\bar{A}_{c}\Delta S \pm r_{A}\bar{I}\right), \quad r_{A} = \omega\hat{\Lambda}_{c}, \tag{6.52}}
@@ -967,13 +967,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where @tex-math{\bar{A}_{c}} stands for the convective flux Jacobian (Section A.9) and @tex-math{\hat{\Lambda}_{c}} represents the spectral radius of the convective flux Jacobian (given by Eq. (4.53) or Eq. @link["blazek2005-ch06#eq-6-15"]{(6.15)}), respectively. Note the similarity between the above approximation @link["blazek2005-ch06#eq-6-52"]{(6.52)} and Eq. @link["blazek2005-ch06#eq-6-40"]{(6.40)}, when the derivatives of @tex-math{\bar{A}_{c}} are neglected. The factor @tex-math{\omega} in Eq. @link["blazek2005-ch06#eq-6-52"]{(6.52)} represents an overrelaxation parameter. It also determines the amount of implicit dissipation and hence influences the convergence properties of the scheme. The factor can be chosen in the range @tex-math{1 < \omega \le 2}. Higher values of @tex-math{\omega} increase the stability of the LU-SGS scheme, but may slow down the convergence to steady state. The definition of the Jacobians @tex-math{\bar{A}^{\pm}} in Eq. @link["blazek2005-ch06#eq-6-52"]{(6.52)} ensures a diagonally dominant system matrix, which is very important for the efficiency and robustness of the iterative inversion procedure @link["blazek2005-ch06#eq-6-50"]{(6.50)}.
   }{
-    其中@tex-math{\bar{A}_{c}}为对流通量雅可比(见A.9节),@tex-math{\hat{\Lambda}_{c}}为对流通量雅可比的谱半径(由式(4.53)或式@link["blazek2005-ch06#eq-6-15"]{(6.15)}给出)。当忽略@tex-math{\bar{A}_{c}}的导数时ï¼上述近似@link["blazek2005-ch06#eq-6-52"]{(6.52)}与式@link["blazek2005-ch06#eq-6-40"]{(6.40)}相似。式@link["blazek2005-ch06#eq-6-52"]{(6.52)}中的因子@tex-math{\omega}为超松弛参数ï¼它同时决定隐式耗散的量ï¼从而影响格式的收敛特性。该因子可在@tex-math{1 < \omega \le 2}范围内选取。@tex-math{\omega}值越高,LU-SGS格式的稳定性越好ï¼但可能减慢到定态的收敛。式@link["blazek2005-ch06#eq-6-52"]{(6.52)}中雅可比@tex-math{\bar{A}^{\pm}}的定义保证了系统矩阵对角占优ï¼这对迭代求逆过程@link["blazek2005-ch06#eq-6-50"]{(6.50)}的效率与稳健性非常重要。
+    其中@tex-math{\bar{A}_{c}}为对流通量雅可比(见A.9节),@tex-math{\hat{\Lambda}_{c}}为对流通量雅可比的谱半径(由式(4.53)或式@link["blazek2005-ch06#eq-6-15"]{(6.15)}给出)。当忽略@tex-math{\bar{A}_{c}}的导数时，上述近似@link["blazek2005-ch06#eq-6-52"]{(6.52)}与式@link["blazek2005-ch06#eq-6-40"]{(6.40)}相似。式@link["blazek2005-ch06#eq-6-52"]{(6.52)}中的因子@tex-math{\omega}为超松弛参数，它同时决定隐式耗散的量，从而影响格式的收敛特性。该因子可在@tex-math{1 < \omega \le 2}范围内选取。@tex-math{\omega}值越高,LU-SGS格式的稳定性越好，但可能减慢到定态的收敛。式@link["blazek2005-ch06#eq-6-52"]{(6.52)}中雅可比@tex-math{\bar{A}^{\pm}}的定义保证了系统矩阵对角占优，这对迭代求逆过程@link["blazek2005-ch06#eq-6-50"]{(6.50)}的效率与稳健性非常重要。
   }
 
   @bi{
     The splitting according to Eq. @link["blazek2005-ch06#eq-6-52"]{(6.52)} together with averaged face vectors allow a simplified evaluation of the diagonal operator @tex-math{\mathbf{D}}
   }{
-    按式@link["blazek2005-ch06#eq-6-52"]{(6.52)}的分裂ï¼再结合平均后的面向量ï¼可简化对角算子@tex-math{\mathbf{D}}的计算
+    按式@link["blazek2005-ch06#eq-6-52"]{(6.52)}的分裂，再结合平均后的面向量，可简化对角算子@tex-math{\mathbf{D}}的计算
   }
 
   @tex-display-math[#:id "eq-6-53"]{\begin{aligned}
@@ -984,13 +984,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The spectral radii of the convective flux Jacobians @tex-math{\hat{\Lambda}_{c}} are given in Eq. @link["blazek2005-ch06#eq-6-15"]{(6.15)}. The face areas and normal vectors are averaged in the respective @emph{I}-, @emph{J}-, or @emph{K}-direction according to Eq. @link["blazek2005-ch06#eq-6-16"]{(6.16)}. As we shall see immediately, this approximation helps to reduce the operation count and the memory requirements significantly.
   }{
-    对流通量雅可比的谱半径@tex-math{\hat{\Lambda}_{c}}由式@link["blazek2005-ch06#eq-6-15"]{(6.15)}给出。面面积与法向量分别按式@link["blazek2005-ch06#eq-6-16"]{(6.16)}在@emph{I}、@emph{J}或@emph{K}方向上作平均。正如马上将看到的ï¼这一近似有助于显著减少运算量与内存需求。
+    对流通量雅可比的谱半径@tex-math{\hat{\Lambda}_{c}}由式@link["blazek2005-ch06#eq-6-15"]{(6.15)}给出。面面积与法向量分别按式@link["blazek2005-ch06#eq-6-16"]{(6.16)}在@emph{I}、@emph{J}或@emph{K}方向上作平均。正如马上将看到的，这一近似有助于显著减少运算量与内存需求。
   }
 
   @bi{
     A distinguishing feature of the LU-SGS method is how the forward and the backward sweep in Eq. @link["blazek2005-ch06#eq-6-50"]{(6.50)} are carried out. In 2D, the sweeps are accomplished along diagonal lines @tex-math{(i+j) = \mathrm{const.}} in computational space. This is depicted in Fig. 6.5 for the forward sweep (first line of Eq. @link["blazek2005-ch06#eq-6-50"]{(6.50)})). In this way, the off-diagonal terms involved in the @tex-math{\mathbf{L}} and the @tex-math{\mathbf{U}} operator become known from the previous part of a sweep (denoted by crosses in Fig. 6.5). In 3D, the implicit operator is inverted on @tex-math{i+j+k = \mathrm{const.}} planes, as sketched in Fig. 6.6. Hence, the LU-SGS scheme can be written as
   }{
-    LU-SGS方法的一个显著特点在于式@link["blazek2005-ch06#eq-6-50"]{(6.50)}中前扫与后扫的执行方式。在二维中ï¼扫掠沿计算空间中的对角线@tex-math{(i+j) = \mathrm{const.}}进行。图6.5描绘了前扫(式@link["blazek2005-ch06#eq-6-50"]{(6.50)}第一行)的情形。这样,@tex-math{\mathbf{L}}算子与@tex-math{\mathbf{U}}算子所涉及的非对角项便可以从扫掠的前一部分获得(在图6.5中用叉号表示)。在三维中ï¼隐式算子在@tex-math{i+j+k = \mathrm{const.}}平面上求逆ï¼如图6.6所示意。于是,LU-SGS格式可以写为
+    LU-SGS方法的一个显著特点在于式@link["blazek2005-ch06#eq-6-50"]{(6.50)}中前扫与后扫的执行方式。在二维中，扫掠沿计算空间中的对角线@tex-math{(i+j) = \mathrm{const.}}进行。图6.5描绘了前扫(式@link["blazek2005-ch06#eq-6-50"]{(6.50)}第一行)的情形。这样,@tex-math{\mathbf{L}}算子与@tex-math{\mathbf{U}}算子所涉及的非对角项便可以从扫掠的前一部分获得(在图6.5中用叉号表示)。在三维中，隐式算子在@tex-math{i+j+k = \mathrm{const.}}平面上求逆，如图6.6所示意。于是,LU-SGS格式可以写为
   }
 
   @tex-display-math[#:id "eq-6-54"]{\begin{aligned}
@@ -1007,7 +1007,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     As we can see from Eq. @link["blazek2005-ch06#eq-6-54"]{(6.54)}, the only term which needs to be inverted is the diagonal term @tex-math{\mathbf{D}}. Thus, the LU-SGS methodology transforms the inversion of a sparse banded matrix into the inversion of a block-diagonal matrix. Furthermore, if the viscous flux Jacobians in Eq. @link["blazek2005-ch06#eq-6-53"]{(6.53)} are approximated by the viscous spectral radii, the operator @tex-math{\mathbf{D}} becomes a diagonal matrix (except for the source term). Hence, the LU-SGS scheme requires a very small computational effort as compared to other implicit schemes (e.g., the ADI scheme discussed previously). Furthermore, the inversion of the diagonal operator can be carried out independently for each node (cell) of the diagonal plane, which makes the scheme easy to vectorise. The indices of the nodes/cells on the diagonal planes can be obtained with the following pseudo-code @link["blazek2005-r6-72"]{[72]}:
   }{
-    由式@link["blazek2005-ch06#eq-6-54"]{(6.54)}可见ï¼唯一需要求逆的是对角项@tex-math{\mathbf{D}}。这样,LU-SGS方法把稀疏带状矩阵的求逆转化为块对角矩阵的求逆。此外ï¼若式@link["blazek2005-ch06#eq-6-53"]{(6.53)}中的黏性通量雅可比用黏性谱半径近似ï¼算子@tex-math{\mathbf{D}}便成为对角矩阵(源项除外)。因此ï¼与其他隐式格式(例如前面讨论过的ADI格式)相比,LU-SGS格式所需的计算量非常小。而且ï¼对角算子的求逆可以对角面上的每个节点(单元)独立进行ï¼这使该格式易于向量化。对角面上节点/单元的指标可用如下伪代码获得@link["blazek2005-r6-72"]{[72]}:
+    由式@link["blazek2005-ch06#eq-6-54"]{(6.54)}可见，唯一需要求逆的是对角项@tex-math{\mathbf{D}}。这样,LU-SGS方法把稀疏带状矩阵的求逆转化为块对角矩阵的求逆。此外，若式@link["blazek2005-ch06#eq-6-53"]{(6.53)}中的黏性通量雅可比用黏性谱半径近似，算子@tex-math{\mathbf{D}}便成为对角矩阵(源项除外)。因此，与其他隐式格式(例如前面讨论过的ADI格式)相比,LU-SGS格式所需的计算量非常小。而且，对角算子的求逆可以对角面上的每个节点(单元)独立进行，这使该格式易于向量化。对角面上节点/单元的指标可用如下伪代码获得@link["blazek2005-r6-72"]{[72]}:
   }
 
   @verbatim{
@@ -1025,13 +1025,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The number of diagonal planes is: @code{nplanes = imax + jmax + kmax - 2}. Obviously, the above code can be optimised for higher computational efficiency.
   }{
-    对角面的数目为:@code{nplanes = imax + jmax + kmax - 2}。显然ï¼为了获得更高的计算效率ï¼可对上述代码进行优化。
+    对角面的数目为:@code{nplanes = imax + jmax + kmax - 2}。显然，为了获得更高的计算效率，可对上述代码进行优化。
   }
 
   @bi{
     In order to avoid explicit evaluation and storage of the convective flux Jacobians in @tex-math{\mathbf{L}} and @tex-math{\mathbf{U}}, the products @tex-math{\bar{A}^{\pm}\Delta\vec{W}^{n}} can be substituted by Taylor series expansion of the fluxes @link["blazek2005-r6-53"]{[53]}. Using Eq. @link["blazek2005-ch06#eq-6-52"]{(6.52)}, we can write
   }{
-    为了避免在@tex-math{\mathbf{L}}与@tex-math{\mathbf{U}}中显式计算并存储对流通量雅可比ï¼乘积@tex-math{\bar{A}^{\pm}\Delta\vec{W}^{n}}可以用通量的Taylor级数展开代替@link["blazek2005-r6-53"]{[53]}。利用式@link["blazek2005-ch06#eq-6-52"]{(6.52)}ï¼可以写出
+    为了避免在@tex-math{\mathbf{L}}与@tex-math{\mathbf{U}}中显式计算并存储对流通量雅可比，乘积@tex-math{\bar{A}^{\pm}\Delta\vec{W}^{n}}可以用通量的Taylor级数展开代替@link["blazek2005-r6-53"]{[53]}。利用式@link["blazek2005-ch06#eq-6-52"]{(6.52)}，可以写出
   }
 
   @tex-display-math[#:id "eq-6-55"]{\left(\bar{A}^{\pm}\Delta S\right)\Delta\vec{W}^{n} \approx \frac{1}{2}\left(\Delta\vec{F}_{c}\Delta S \pm r_{A}\bar{I}\Delta\vec{W}^{n}\right) \tag{6.55}}
@@ -1047,13 +1047,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The simplification given by Eq. @link["blazek2005-ch06#eq-6-55"]{(6.55)} is possible due to the sweeping along diagonal planes, since @tex-math{\vec{F}^{n+1}_{c}} is then known. This leads to a further significant decrease of the numerical effort of the LU-SGS scheme.
   }{
-    由于是沿对角面扫掠,@tex-math{\vec{F}^{n+1}_{c}}此时已知ï¼式@link["blazek2005-ch06#eq-6-55"]{(6.55)}给出的简化才成为可能。这使LU-SGS格式的数值工作量进一步显著下降。
+    由于是沿对角面扫掠,@tex-math{\vec{F}^{n+1}_{c}}此时已知，式@link["blazek2005-ch06#eq-6-55"]{(6.55)}给出的简化才成为可能。这使LU-SGS格式的数值工作量进一步显著下降。
   }
 
   @bi{
     The time step @tex-math{\Delta t} can be computed in the same way as presented in Subsection 6.1.4, using Eq. @link["blazek2005-ch06#eq-6-14"]{(6.14)}. However, it should be noted that the implicit LU-SGS scheme in Eq. @link["blazek2005-ch06#eq-6-49"]{(6.49)} represents an approximate Newton iteration in the case of @tex-math{\Delta t \to \infty} as stated by Rieger and Jameson @link["blazek2005-r6-53"]{[53]}. Thus in general, CFL numbers of the order of @tex-math{10^{4}} to @tex-math{10^{6}} are used in practice for stationary flows. The convergence is then controlled by the overrelaxation parameter @tex-math{\omega}. For the simulation of unsteady flows, we may employ the formulation presented below in Section 6.3. Another possibility is to use the modified version of the LU-SGS scheme described in Ref. @link["blazek2005-r6-73"]{[73]}.
   }{
-    时间步长@tex-math{\Delta t}可以按6.1.4小节所述方法、用式@link["blazek2005-ch06#eq-6-14"]{(6.14)}计算。但应注意ï¼如Rieger与Jameson@link["blazek2005-r6-53"]{[53]}所述ï¼当@tex-math{\Delta t \to \infty}时ï¼式@link["blazek2005-ch06#eq-6-49"]{(6.49)}的隐式LU-SGS格式代表一次近似Newton迭代。因此ï¼实践中对定常流动一般使用@tex-math{10^{4}}到@tex-math{10^{6}}量级的CFL数。此时收敛由超松弛参数@tex-math{\omega}控制。对于非定常流动的模拟ï¼可以采用下文6.3节给出的形式;另一种可能是使用文献@link["blazek2005-r6-73"]{[73]}所述的LU-SGS格式的修正版本。
+    时间步长@tex-math{\Delta t}可以按6.1.4小节所述方法、用式@link["blazek2005-ch06#eq-6-14"]{(6.14)}计算。但应注意，如Rieger与Jameson@link["blazek2005-r6-53"]{[53]}所述，当@tex-math{\Delta t \to \infty}时，式@link["blazek2005-ch06#eq-6-49"]{(6.49)}的隐式LU-SGS格式代表一次近似Newton迭代。因此，实践中对定常流动一般使用@tex-math{10^{4}}到@tex-math{10^{6}}量级的CFL数。此时收敛由超松弛参数@tex-math{\omega}控制。对于非定常流动的模拟，可以采用下文6.3节给出的形式;另一种可能是使用文献@link["blazek2005-r6-73"]{[73]}所述的LU-SGS格式的修正版本。
   }
 
   @emph{LU-SGS on Unstructured Grids 非结构网格上的LU-SGS}
@@ -1061,7 +1061,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     Here, the operators read for a median-dual scheme @link["blazek2005-r6-63"]{[63]}-@link["blazek2005-r6-65"]{[65]}
   }{
-    这里ï¼对中位对偶(median-dual)格式ï¼算子为@link["blazek2005-r6-63"]{[63]}-@link["blazek2005-r6-65"]{[65]}
+    这里，对中位对偶(median-dual)格式，算子为@link["blazek2005-r6-63"]{[63]}-@link["blazek2005-r6-65"]{[65]}
   }
 
   @tex-display-math[#:id "eq-6-57"]{\begin{aligned}
@@ -1073,7 +1073,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     In Eq. @link["blazek2005-ch06#eq-6-57"]{(6.57)}, @tex-math{L(i)}, and @tex-math{U(i)} denote the nearest neighbours of node @tex-math{i} which belong to the lower (upper) matrix, @tex-math{\Delta S_{ij}} represents the face area associated with the edge @tex-math{ij} (see Fig. 5.9), and @tex-math{N_{F}} stands for the number of faces of the control volume @tex-math{\Omega_{i}}, respectively. The spectral radius of the convective fluxes @tex-math{(\hat{\Lambda}_{c})_{i}} is computed by Eq. @link["blazek2005-ch06#eq-6-21"]{(6.21)}. The viscous flux Jacobian @tex-math{\bar{A}_{v}} can be again approximated by its spectral radius @link["blazek2005-r6-63"]{[63]}. In this case, the diagonal operator becomes
   }{
-    在式@link["blazek2005-ch06#eq-6-57"]{(6.57)}中,@tex-math{L(i)}与@tex-math{U(i)}表示属于下(上)矩阵的节点@tex-math{i}的最近邻节点,@tex-math{\Delta S_{ij}}表示与边@tex-math{ij}相关联的面面积(见图5.9),@tex-math{N_{F}}表示控制体@tex-math{\Omega_{i}}的面数。对流通量的谱半径@tex-math{(\hat{\Lambda}_{c})_{i}}由式@link["blazek2005-ch06#eq-6-21"]{(6.21)}计算。黏性通量雅可比@tex-math{\bar{A}_{v}}同样可以用其谱半径近似@link["blazek2005-r6-63"]{[63]}。此时ï¼对角算子变为
+    在式@link["blazek2005-ch06#eq-6-57"]{(6.57)}中,@tex-math{L(i)}与@tex-math{U(i)}表示属于下(上)矩阵的节点@tex-math{i}的最近邻节点,@tex-math{\Delta S_{ij}}表示与边@tex-math{ij}相关联的面面积(见图5.9),@tex-math{N_{F}}表示控制体@tex-math{\Omega_{i}}的面数。对流通量的谱半径@tex-math{(\hat{\Lambda}_{c})_{i}}由式@link["blazek2005-ch06#eq-6-21"]{(6.21)}计算。黏性通量雅可比@tex-math{\bar{A}_{v}}同样可以用其谱半径近似@link["blazek2005-r6-63"]{[63]}。此时，对角算子变为
   }
 
   @tex-display-math[#:id "eq-6-58"]{\mathbf{D} = \frac{\Omega_{i}}{\Delta t_{i}}\bar{I} + \frac{\omega}{2}\left(\hat{\Lambda}_{c}\right)_{i} + \left(\hat{\Lambda}_{v}\right)_{i} - \frac{\partial(\Omega_{i}\vec{Q}_{i})}{\partial\vec{W}}, \tag{6.58}}
@@ -1081,7 +1081,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where @tex-math{(\hat{\Lambda}_{v})_{i}} is evaluated according to Eq. @link["blazek2005-ch06#eq-6-21"]{(6.21)}. Formulae similar to Eq. @link["blazek2005-ch06#eq-6-57"]{(6.57)} and @link["blazek2005-ch06#eq-6-58"]{(6.58)} can be obtained in the case of the cell-centred scheme. The major difference is that the summation in the @tex-math{\mathbf{L}} and the @tex-math{\mathbf{U}} operator is conducted over faces of the cell instead of incident edges.
   }{
-    其中@tex-math{(\hat{\Lambda}_{v})_{i}}按式@link["blazek2005-ch06#eq-6-21"]{(6.21)}计算。对单元中心格式ï¼可以得到与式@link["blazek2005-ch06#eq-6-57"]{(6.57)}、@link["blazek2005-ch06#eq-6-58"]{(6.58)}类似的公式ï¼主要区别是@tex-math{\mathbf{L}}与@tex-math{\mathbf{U}}算子中的求和遍及单元的各个面而非相邻边。
+    其中@tex-math{(\hat{\Lambda}_{v})_{i}}按式@link["blazek2005-ch06#eq-6-21"]{(6.21)}计算。对单元中心格式，可以得到与式@link["blazek2005-ch06#eq-6-57"]{(6.57)}、@link["blazek2005-ch06#eq-6-58"]{(6.58)}类似的公式，主要区别是@tex-math{\mathbf{L}}与@tex-math{\mathbf{U}}算子中的求和遍及单元的各个面而非相邻边。
   }
 
   @bi{
@@ -1092,7 +1092,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
           }
 
   }{
-    式@link["blazek2005-ch06#eq-6-57"]{(6.57)}中的集合@tex-math{L(i)}与@tex-math{U(i)}应起到与结构网格上对角面相同的作用。为此ï¼必须把节点(单元)划分为层ï¼使得@link["blazek2005-r6-63"]{[63]}:
+    式@link["blazek2005-ch06#eq-6-57"]{(6.57)}中的集合@tex-math{L(i)}与@tex-math{U(i)}应起到与结构网格上对角面相同的作用。为此，必须把节点(单元)划分为层，使得@link["blazek2005-r6-63"]{[63]}:
           @itemize{
             @item{当前层的节点@tex-math{i}(单元@tex-math{I})与流动变量已更新的层相连——否则LU-SGS格式退化为Jacobi迭代;}
             @item{同一层内的节点(单元)彼此不相连——否则该格式无法向量化。}
@@ -1103,13 +1103,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The layers can be generated for the median-dual scheme with a procedure described in Ref. @link["blazek2005-r6-63"]{[63]}. Approaches for the cell-centred scheme were suggested in @link["blazek2005-r6-74"]{[74]}, @link["blazek2005-r6-75"]{[75]}.
   }{
-    对中位对偶格式ï¼可按文献@link["blazek2005-r6-63"]{[63]}所述的方法生成分层;单元中心格式的做法见于@link["blazek2005-r6-74"]{[74]}、@link["blazek2005-r6-75"]{[75]}。
+    对中位对偶格式，可按文献@link["blazek2005-r6-63"]{[63]}所述的方法生成分层;单元中心格式的做法见于@link["blazek2005-r6-74"]{[74]}、@link["blazek2005-r6-75"]{[75]}。
   }
 
   @bi{
     An appropriate definition of the sets @tex-math{L(i)} and @tex-math{U(i)} allows for the following two-step inversion procedure @link["blazek2005-r6-63"]{[63]}-@link["blazek2005-r6-65"]{[65]}
   }{
-    恰当定义集合@tex-math{L(i)}与@tex-math{U(i)}后ï¼可实现如下两步求逆过程@link["blazek2005-r6-63"]{[63]}-@link["blazek2005-r6-65"]{[65]}
+    恰当定义集合@tex-math{L(i)}与@tex-math{U(i)}后，可实现如下两步求逆过程@link["blazek2005-r6-63"]{[63]}-@link["blazek2005-r6-65"]{[65]}
   }
 
   @tex-display-math[#:id "eq-6-59"]{\begin{aligned}
@@ -1120,7 +1120,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where the viscous Jacobians were approximated by their spectral radii and where the positive/negative Jacobians were linearised according to Eq. @link["blazek2005-ch06#eq-6-55"]{(6.55)}. Furthermore, the factor @tex-math{(r^{*}_{A})_{j}} is defined as
   }{
-    其中黏性雅可比用其谱半径近似ï¼正/负雅可比按式@link["blazek2005-ch06#eq-6-55"]{(6.55)}线性化。此外ï¼因子@tex-math{(r^{*}_{A})_{j}}定义为
+    其中黏性雅可比用其谱半径近似，正/负雅可比按式@link["blazek2005-ch06#eq-6-55"]{(6.55)}线性化。此外，因子@tex-math{(r^{*}_{A})_{j}}定义为
   }
 
   @tex-display-math[#:id "eq-6-60"]{\begin{aligned}
@@ -1137,7 +1137,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The time step can be computed in the same way as for the explicit scheme (Eq. @link["blazek2005-ch06#eq-6-20"]{(6.20)})). However, the viscous eigenvalue should be omitted, since the viscous terms are already contained in the implicit operator and hence do not reduce the time step as in the case of an explicit scheme. The CFL number can be chosen in the range from @tex-math{10^{4}} to @tex-math{10^{6}} for steady flows. The convergence speed and the robustness of the LU-SGS scheme can then be tuned using the overrelaxation parameter @tex-math{\omega}.
   }{
-    时间步长可按显式格式(式@link["blazek2005-ch06#eq-6-20"]{(6.20)}))同样方式计算。但应略去黏性特征值ï¼因为黏性项已包含在隐式算子中ï¼不会像显式格式那样减小时间步长。对定常流动,CFL数可在@tex-math{10^{4}}到@tex-math{10^{6}}范围内选取。随后可用超松弛参数@tex-math{\omega}来调节LU-SGS格式的收敛速度与稳健性。
+    时间步长可按显式格式(式@link["blazek2005-ch06#eq-6-20"]{(6.20)}))同样方式计算。但应略去黏性特征值，因为黏性项已包含在隐式算子中，不会像显式格式那样减小时间步长。对定常流动,CFL数可在@tex-math{10^{4}}到@tex-math{10^{6}}范围内选取。随后可用超松弛参数@tex-math{\omega}来调节LU-SGS格式的收敛速度与稳健性。
   }
 }
 
@@ -1147,7 +1147,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     First of all, let us rewrite the implicit scheme given by Eq. @link["blazek2005-ch06#eq-6-28"]{(6.28)} as
   }{
-    首先ï¼把式@link["blazek2005-ch06#eq-6-28"]{(6.28)}给出的隐式格式改写为
+    首先，把式@link["blazek2005-ch06#eq-6-28"]{(6.28)}给出的隐式格式改写为
   }
 
   @tex-display-math[#:id "eq-6-61"]{\bar{J}\Delta\vec{W}^{n} = -\vec{R}^{n}, \tag{6.61}}
@@ -1162,7 +1162,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
           }
 
   }{
-    其中@tex-math{\bar{J}}表示隐式算子(系统矩阵)。如前所述,@tex-math{\bar{J}}是一个大型、稀疏且一般非对称的矩阵。在前几小节中ï¼我们讨论了把@tex-math{\bar{J}}分解为若干因子的两种方法ï¼每个因子都比@tex-math{\bar{J}}本身更易求逆。然而ï¼由于因式分解误差(以及@tex-math{\vec{R}^{n+1}}的近似线性化)ï¼只能获得到定态的线性收敛。为了得到求解非线性方程的Newton法的二次收敛ï¼必须满足四个条件:
+    其中@tex-math{\bar{J}}表示隐式算子(系统矩阵)。如前所述,@tex-math{\bar{J}}是一个大型、稀疏且一般非对称的矩阵。在前几小节中，我们讨论了把@tex-math{\bar{J}}分解为若干因子的两种方法，每个因子都比@tex-math{\bar{J}}本身更易求逆。然而，由于因式分解误差(以及@tex-math{\vec{R}^{n+1}}的近似线性化)，只能获得到定态的线性收敛。为了得到求解非线性方程的Newton法的二次收敛，必须满足四个条件:
           @itemize{
             @item{残差的线性化必须精确;}
             @item{@tex-math{\bar{J}}必须被准确求逆;}
@@ -1175,13 +1175,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     Obviously, the main obstacles that have to be overcome are the linearisation and the inversion of the full system matrix.
   }{
-    显然ï¼必须克服的主要障碍是完整系统矩阵的线性化与求逆。
+    显然，必须克服的主要障碍是完整系统矩阵的线性化与求逆。
   }
 
   @bi{
     A particularly suitable class of iterative techniques for the solution of large linear equation systems are the so-called @emph{Krylov-subspace} methods. Several were proposed for the inversion of matrices which arise in CFD. Examples are the @emph{Conjugate Gradient Squared} (CGS) method @link["blazek2005-r6-76"]{[76]}, the @emph{Bi-Conjugate Gradient Stabilised} (Bi-CGSTAB) scheme @link["blazek2005-r6-77"]{[77]}, or the @emph{Transpose-Free Quasi-Minimum Residual} (TFQMR) approach @link["blazek2005-r6-78"]{[78]}. However, the most successful Krylov subspace method became the @emph{Generalised Minimal Residual} (GMRES) technique, which was originally suggested by Saad and Schulz @link["blazek2005-r6-79"]{[79]}, @link["blazek2005-r6-80"]{[80]}. Since then, the GMRES method was improved and augmented by several researchers @link["blazek2005-r6-81"]{[81]}-@link["blazek2005-r6-84"]{[84]}. Because of its popularity, we shall focus on the GMRES approach in the following. Nevertheless, most of what we shall discuss also applies to the other Krylov subspace methods.
   }{
-    对求解大型线性方程组而言ï¼一类特别合适的迭代技术是所谓的Krylov子空间(@emph{Krylov-subspace})方法。针对CFD中出现的矩阵求逆ï¼已有若干方法被提出ï¼例如平方共轭梯度(@emph{Conjugate Gradient Squared},CGS)法@link["blazek2005-r6-76"]{[76]}、稳定双共轭梯度(@emph{Bi-Conjugate Gradient Stabilised},Bi-CGSTAB)格式@link["blazek2005-r6-77"]{[77]}ï¼以及无转置准最小残差(@emph{Transpose-Free Quasi-Minimum Residual},TFQMR)方法@link["blazek2005-r6-78"]{[78]}。然而ï¼最成功的Krylov子空间方法是广义最小残差(@emph{Generalised Minimal Residual},GMRES)技术ï¼它最初由Saad与Schulz@link["blazek2005-r6-79"]{[79]}、@link["blazek2005-r6-80"]{[80]}提出。此后,GMRES方法被多位研究者改进与扩充@link["blazek2005-r6-81"]{[81]}-@link["blazek2005-r6-84"]{[84]}。由于其流行程度ï¼下面将重点讨论GMRES方法。尽管如此ï¼我们将讨论的大部分内容同样适用于其他Krylov子空间方法。
+    对求解大型线性方程组而言，一类特别合适的迭代技术是所谓的Krylov子空间(@emph{Krylov-subspace})方法。针对CFD中出现的矩阵求逆，已有若干方法被提出，例如平方共轭梯度(@emph{Conjugate Gradient Squared},CGS)法@link["blazek2005-r6-76"]{[76]}、稳定双共轭梯度(@emph{Bi-Conjugate Gradient Stabilised},Bi-CGSTAB)格式@link["blazek2005-r6-77"]{[77]}，以及无转置准最小残差(@emph{Transpose-Free Quasi-Minimum Residual},TFQMR)方法@link["blazek2005-r6-78"]{[78]}。然而，最成功的Krylov子空间方法是广义最小残差(@emph{Generalised Minimal Residual},GMRES)技术，它最初由Saad与Schulz@link["blazek2005-r6-79"]{[79]}、@link["blazek2005-r6-80"]{[80]}提出。此后,GMRES方法被多位研究者改进与扩充@link["blazek2005-r6-81"]{[81]}-@link["blazek2005-r6-84"]{[84]}。由于其流行程度，下面将重点讨论GMRES方法。尽管如此，我们将讨论的大部分内容同样适用于其他Krylov子空间方法。
   }
 
   @emph{GMRES Method GMRES方法}
@@ -1196,7 +1196,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
           }
 
   }{
-    如3.2.2小节所述(另见附录A.12),GMRES方法在一组@tex-math{m}个正交归一向量(搜索方向)上最小化全局残差的范数ï¼即@tex-math{\|\bar{J}\Delta\vec{W}^{n} + \vec{R}^{n}\|}ï¼这些向量张成式(3.10)给出的Krylov子空间@tex-math{\mathcal{K}_{m}}。GMRES算法可概括如下:
+    如3.2.2小节所述(另见附录A.12),GMRES方法在一组@tex-math{m}个正交归一向量(搜索方向)上最小化全局残差的范数，即@tex-math{\|\bar{J}\Delta\vec{W}^{n} + \vec{R}^{n}\|}，这些向量张成式(3.10)给出的Krylov子空间@tex-math{\mathcal{K}_{m}}。GMRES算法可概括如下:
           @itemize{
             @item{猜测起始解@tex-math{\Delta\vec{W}^{n}_{0}}并计算初始残差向量@tex-math{\vec{r}_{0} = \bar{J}\Delta\vec{W}^{n}_{0} + \vec{R}^{n}};}
             @item{生成@tex-math{m}个搜索方向(通过Gram-Schmidt正交化);}
@@ -1209,7 +1209,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     Since the memory requirements increase linearly with the number of search directions, @tex-math{m} is restricted to values between 10 and 40 in practice. This might not be sufficient for a converged solution @tex-math{\Delta\vec{W}^{n}}. Thus, the GMRES method has to be restarted, i.e., we set @tex-math{\Delta\vec{W}^{n}_{0} = \Delta\vec{W}^{n}}, compute @tex-math{\vec{r}_{0}} and proceed with step 2. As pointed out in Ref. @link["blazek2005-r6-85"]{[85]}, instead of working with a constant number of search directions, @tex-math{m} should be reduced if the norm of the global residual drops below a specified tolerance. In this way, a large number of operations can be saved in later stages of the Newton iteration.
   }{
-    由于内存需求随搜索方向数目线性增长ï¼实践中@tex-math{m}被限制在10到40之间。这对收敛解@tex-math{\Delta\vec{W}^{n}}而言可能并不足够。因此,GMRES方法必须重启ï¼即令@tex-math{\Delta\vec{W}^{n}_{0} = \Delta\vec{W}^{n}}ï¼计算@tex-math{\vec{r}_{0}}ï¼然后从第2步继续。文献@link["blazek2005-r6-85"]{[85]}指出ï¼与其使用固定数目的搜索方向ï¼不如在全局残差范数降到给定容差以下时减小@tex-math{m}。这样可以在Newton迭代的后期阶段节省大量运算。
+    由于内存需求随搜索方向数目线性增长，实践中@tex-math{m}被限制在10到40之间。这对收敛解@tex-math{\Delta\vec{W}^{n}}而言可能并不足够。因此,GMRES方法必须重启，即令@tex-math{\Delta\vec{W}^{n}_{0} = \Delta\vec{W}^{n}}，计算@tex-math{\vec{r}_{0}}，然后从第2步继续。文献@link["blazek2005-r6-85"]{[85]}指出，与其使用固定数目的搜索方向，不如在全局残差范数降到给定容差以下时减小@tex-math{m}。这样可以在Newton迭代的后期阶段节省大量运算。
   }
 
   @emph{Computation of the Flux Jacobian 通量雅可比的计算}
@@ -1217,7 +1217,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     GMRES and other Krylov subspace methods allow us to circumvent an explicit computation and storage of the flux Jacobian @tex-math{\partial\vec{R}/\partial\vec{W}}. The idea is based on the observation that the methods rely only on matrix-vector products of the form @tex-math{\bar{J}\Delta\vec{W}^{n}} and do not need the matrix @tex-math{\bar{J}} explicitly. The product of the flux Jacobian with the solution update can be approximated by a simple finite difference as
   }{
-    GMRES及其他Krylov子空间方法使我们得以避免显式计算与存储通量雅可比@tex-math{\partial\vec{R}/\partial\vec{W}}。其想法基于如下观察:这些方法只依赖形如@tex-math{\bar{J}\Delta\vec{W}^{n}}的矩阵-向量乘积ï¼并不需要矩阵@tex-math{\bar{J}}本身。通量雅可比与解更新的乘积可以用简单的有限差分近似为
+    GMRES及其他Krylov子空间方法使我们得以避免显式计算与存储通量雅可比@tex-math{\partial\vec{R}/\partial\vec{W}}。其想法基于如下观察:这些方法只依赖形如@tex-math{\bar{J}\Delta\vec{W}^{n}}的矩阵-向量乘积，并不需要矩阵@tex-math{\bar{J}}本身。通量雅可比与解更新的乘积可以用简单的有限差分近似为
   }
 
   @tex-display-math[#:id "eq-6-62"]{\frac{\partial\vec{R}}{\partial\vec{W}}\Delta\vec{W}^{n} \approx \frac{\vec{R}\left(\vec{W}^{n} + h\Delta\vec{W}^{n}\right) - \vec{R}\left(\vec{W}^{n}\right)}{h} \tag{6.62}}
@@ -1225,7 +1225,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     which requires only two evaluations of the residual. The stepsize @tex-math{h} has to be chosen with some care, in order to minimise the numerical error @link["blazek2005-r6-36"]{[36]}. One particularly suitable formulation reads @link["blazek2005-r6-86"]{[86]}
   }{
-    这只需要两次残差计算。为了使数值误差最小ï¼步长@tex-math{h}的选择需要相当谨慎@link["blazek2005-r6-36"]{[36]}。一种特别合适的公式为@link["blazek2005-r6-86"]{[86]}
+    这只需要两次残差计算。为了使数值误差最小，步长@tex-math{h}的选择需要相当谨慎@link["blazek2005-r6-36"]{[36]}。一种特别合适的公式为@link["blazek2005-r6-86"]{[86]}
   }
 
   @tex-display-math[#:id "eq-6-63"]{h = \frac{\sqrt{\epsilon}}{\|\Delta\vec{W}^{n}\|_{2}}\max\left\{|d|,\ \mathrm{typ}\left[\vec{W}^{n}\cdot|\Delta\vec{W}^{n}|\right]\right\}\,\mathrm{sign}(d), \tag{6.63}}
@@ -1233,13 +1233,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where @tex-math{\epsilon} denotes the machine accuracy, @tex-math{d} the scalar product @tex-math{\vec{W}^{n}\cdot\Delta\vec{W}^{n}}, @tex-math{|\Delta\vec{W}^{n}|} is the vector @tex-math{\Delta\vec{W}^{n}} with all elements set to their absolute values, and finally @tex-math{\mathrm{typ}\,U} represents a typical size of @tex-math{U}. Apart from saving memory and operations, there is an even more important advantage of the finite-difference approximation. Namely, numerically accurate linearisation of a high-order residual @tex-math{\vec{R}^{n}} (including boundary conditions, limiters, source terms, etc.) can be easily achieved.
   }{
-    其中@tex-math{\epsilon}为机器精度,@tex-math{d}为标量积@tex-math{\vec{W}^{n}\cdot\Delta\vec{W}^{n}},@tex-math{|\Delta\vec{W}^{n}|}是所有元素取绝对值后的向量@tex-math{\Delta\vec{W}^{n}}ï¼而@tex-math{\mathrm{typ}\,U}表示@tex-math{U}的典型大小。除了节省内存与运算量之外ï¼有限差分近似还有一个更重要的优点:可以容易地实现对高阶残差@tex-math{\vec{R}^{n}}(包括边界条件、限制器、源项等)在数值上精确的线性化。
+    其中@tex-math{\epsilon}为机器精度,@tex-math{d}为标量积@tex-math{\vec{W}^{n}\cdot\Delta\vec{W}^{n}},@tex-math{|\Delta\vec{W}^{n}|}是所有元素取绝对值后的向量@tex-math{\Delta\vec{W}^{n}}，而@tex-math{\mathrm{typ}\,U}表示@tex-math{U}的典型大小。除了节省内存与运算量之外，有限差分近似还有一个更重要的优点:可以容易地实现对高阶残差@tex-math{\vec{R}^{n}}(包括边界条件、限制器、源项等)在数值上精确的线性化。
   }
 
   @bi{
     Thus, the quadratic convergence of Newton's scheme can be realised at moderate costs. For this reason, we speak of such a scheme as of @emph{Newton-Krylov} approach @link["blazek2005-r6-86"]{[86]}-@link["blazek2005-r6-88"]{[88]}.
   }{
-    这样,Newton格式的二次收敛便能以适度的代价实现。因此ï¼我们把这类格式称为@emph{Newton-Krylov}方法@link["blazek2005-r6-86"]{[86]}-@link["blazek2005-r6-88"]{[88]}。
+    这样,Newton格式的二次收敛便能以适度的代价实现。因此，我们把这类格式称为@emph{Newton-Krylov}方法@link["blazek2005-r6-86"]{[86]}-@link["blazek2005-r6-88"]{[88]}。
   }
 
   @emph{Preconditioning 预条件}
@@ -1247,7 +1247,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The efficiency of Krylov-subspace methods depends strongly on a good preconditioner. Its purpose is to cluster the eigenvalues of the system matrix @tex-math{\bar{J}} around unity. Thus, instead of Equation @link["blazek2005-ch06#eq-6-61"]{(6.61)}, the left- or right-preconditioned system according to Eq. (3.11) is solved. Using Eqs. @link["blazek2005-ch06#eq-6-61"]{(6.61)} and @link["blazek2005-ch06#eq-6-62"]{(6.62)} together with the condition @tex-math{\Delta t \to \infty}, the Newton-Krylov method becomes
   }{
-    Krylov子空间方法的效率在很大程度上依赖于一个好的预条件子。其目的是使系统矩阵@tex-math{\bar{J}}的特征值聚集在1附近。于是ï¼不再求解方程@link["blazek2005-ch06#eq-6-61"]{(6.61)}ï¼而是按式(3.11)求解左预条件或右预条件系统。把式@link["blazek2005-ch06#eq-6-61"]{(6.61)}与式@link["blazek2005-ch06#eq-6-62"]{(6.62)}同条件@tex-math{\Delta t \to \infty}相结合,Newton-Krylov方法成为
+    Krylov子空间方法的效率在很大程度上依赖于一个好的预条件子。其目的是使系统矩阵@tex-math{\bar{J}}的特征值聚集在1附近。于是，不再求解方程@link["blazek2005-ch06#eq-6-61"]{(6.61)}，而是按式(3.11)求解左预条件或右预条件系统。把式@link["blazek2005-ch06#eq-6-61"]{(6.61)}与式@link["blazek2005-ch06#eq-6-62"]{(6.62)}同条件@tex-math{\Delta t \to \infty}相结合,Newton-Krylov方法成为
   }
 
   @tex-display-math[#:id "eq-6-64"]{\bar{P}_{L}\frac{\vec{R}\left(\vec{W}^{n} + h\Delta\vec{W}^{n}\right) - \vec{R}\left(\vec{W}^{n}\right)}{h} = -\bar{P}_{L}\vec{R}^{n} \tag{6.64}}
@@ -1266,19 +1266,19 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     in the case of right preconditioning, respectively. The main difference between the two preconditioning methodologies is that left preconditioning scales the residual @tex-math{\vec{R}^{n}} whereas right preconditioning does not. This has to be kept in mind when the convergence of the Krylov method is monitored.
   }{
-    为右预条件的情形。两种预条件方式的主要区别在于:左预条件会缩放残差@tex-math{\vec{R}^{n}}ï¼而右预条件不会。在监测Krylov方法的收敛时须牢记这一点。
+    为右预条件的情形。两种预条件方式的主要区别在于:左预条件会缩放残差@tex-math{\vec{R}^{n}}，而右预条件不会。在监测Krylov方法的收敛时须牢记这一点。
   }
 
   @bi{
     Obviously, the preconditioner should be as close as possible to the inverse of the system matrix (@tex-math{\bar{P}_{L,R} \approx \bar{J}^{-1}}). But on the other hand, it should be invertible with low numerical effort. Therefore, we have to find an optimal tradeoff between the convergence speed of the Krylov method and the time spend for inverting the preconditioning matrix. One of the most successful preconditioners is the @emph{Incomplete Lower Upper} factorisation method @link["blazek2005-r6-89"]{[89]}, @link["blazek2005-r6-90"]{[90]} with varying level of fill-in (mostly with zero, designated as ILU(0)). The ILU preconditioner is especially efficient in the case of viscous, turbulent flows, i.e., for stiff equations @link["blazek2005-r6-91"]{[91]}. In order to obtain a good performance on unstructured grids, it is necessary to reorder the elements of the system matrix such that the bandwidth is reduced. We already discussed the RCM renumbering strategy @link["blazek2005-r6-27"]{[27]}, @link["blazek2005-r6-28"]{[28]} in Section 6.2.1.
   }{
-    显然ï¼预条件子应尽可能接近系统矩阵的逆(@tex-math{\bar{P}_{L,R} \approx \bar{J}^{-1}});但另一方面ï¼它又应以较低的数值代价可逆。因此ï¼我们必须在Krylov方法的收敛速度与求逆预条件矩阵所耗时间之间找到最优折中。最成功的预条件子之一是不完全下-上(@emph{Incomplete Lower Upper})分解方法@link["blazek2005-r6-89"]{[89]}、@link["blazek2005-r6-90"]{[90]}ï¼其填充水平可变(大多取零ï¼记为ILU(0))。ILU预条件子对黏性湍流(即刚性方程)@link["blazek2005-r6-91"]{[91]}特别高效。为了在非结构网格上获得良好性能ï¼必须对系统矩阵的元素重新排序以减小带宽。RCM重编号策略@link["blazek2005-r6-27"]{[27]}、@link["blazek2005-r6-28"]{[28]}已在6.2.1节中讨论过。
+    显然，预条件子应尽可能接近系统矩阵的逆(@tex-math{\bar{P}_{L,R} \approx \bar{J}^{-1}});但另一方面，它又应以较低的数值代价可逆。因此，我们必须在Krylov方法的收敛速度与求逆预条件矩阵所耗时间之间找到最优折中。最成功的预条件子之一是不完全下-上(@emph{Incomplete Lower Upper})分解方法@link["blazek2005-r6-89"]{[89]}、@link["blazek2005-r6-90"]{[90]}，其填充水平可变(大多取零，记为ILU(0))。ILU预条件子对黏性湍流(即刚性方程)@link["blazek2005-r6-91"]{[91]}特别高效。为了在非结构网格上获得良好性能，必须对系统矩阵的元素重新排序以减小带宽。RCM重编号策略@link["blazek2005-r6-27"]{[27]}、@link["blazek2005-r6-28"]{[28]}已在6.2.1节中讨论过。
   }
 
   @bi{
     A serious disadvantage of the ILU preconditioning scheme is that elements of the matrix @tex-math{\bar{J}} have to be computed (see Subsection 6.2.2) and stored. Therefore, some authors suggested to employ the LU-SGS scheme as a preconditioner @link["blazek2005-r6-92"]{[92]}, @link["blazek2005-r6-93"]{[93]}. Hence, when Eq. @link["blazek2005-ch06#eq-6-62"]{(6.62)} is applied, the formation and storage of @tex-math{\bar{J}} is completely avoided. However, it was demonstrated in Ref. @link["blazek2005-r6-91"]{[91]} on behalf of several 2-D cases that the GMRES method with LU-SGS is inferior to GMRES combined with ILU(0) in terms of the CPU-time. Nevertheless, the LU-SGS scheme (best when coupled with multigrid) still represents an attractive alternative, particularly in 3D.
   }{
-    ILU预条件格式的一个严重缺点是必须计算(见6.2.2小节)并存储矩阵@tex-math{\bar{J}}的元素。因此ï¼一些作者建议采用LU-SGS格式作为预条件子@link["blazek2005-r6-92"]{[92]}、@link["blazek2005-r6-93"]{[93]}。这样ï¼应用式@link["blazek2005-ch06#eq-6-62"]{(6.62)}时ï¼便可完全避免@tex-math{\bar{J}}的组建与存储。然而ï¼文献@link["blazek2005-r6-91"]{[91]}通过若干二维算例表明ï¼就CPU时间而言ï¼带LU-SGS的GMRES方法逊于与ILU(0)结合的GMRES。尽管如此,LU-SGS格式(与多重网格耦合时最佳)仍然是一种有吸引力的选择ï¼尤其在三维情形。
+    ILU预条件格式的一个严重缺点是必须计算(见6.2.2小节)并存储矩阵@tex-math{\bar{J}}的元素。因此，一些作者建议采用LU-SGS格式作为预条件子@link["blazek2005-r6-92"]{[92]}、@link["blazek2005-r6-93"]{[93]}。这样，应用式@link["blazek2005-ch06#eq-6-62"]{(6.62)}时，便可完全避免@tex-math{\bar{J}}的组建与存储。然而，文献@link["blazek2005-r6-91"]{[91]}通过若干二维算例表明，就CPU时间而言，带LU-SGS的GMRES方法逊于与ILU(0)结合的GMRES。尽管如此,LU-SGS格式(与多重网格耦合时最佳)仍然是一种有吸引力的选择，尤其在三维情形。
   }
 
   @emph{Start-Up Problem 启动问题}
@@ -1286,7 +1286,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The time step of the implicit Newton-Krylov method is infinitely large. However, it is advisable to use small time steps at the beginning of the Newton iteration process. The reason is that the flow solution is in general far from the steady state at the beginning of the solution process, i.e., the root of the nonlinear equation
   }{
-    隐式Newton-Krylov方法的时间步长为无穷大。然而ï¼在Newton迭代过程的初期ï¼宜采用较小的时间步长。原因在于ï¼求解过程开始时流动解一般远离定态ï¼即非线性方程的根
+    隐式Newton-Krylov方法的时间步长为无穷大。然而，在Newton迭代过程的初期，宜采用较小的时间步长。原因在于，求解过程开始时流动解一般远离定态，即非线性方程的根
   }
 
   @tex-display-math{\vec{R}\left(\vec{W}\right) = 0,}
@@ -1294,7 +1294,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     and this may cause a breakdown of the Newton iteration. One possible remedy is the so-called @emph{Switched Evolution Relaxation} (SER) technique @link["blazek2005-r6-94"]{[94]}. Here, the term @tex-math{\Omega/\Delta t} is retained in Eq. @link["blazek2005-ch06#eq-6-61"]{(6.61)}. The time step is evaluated in the same way as presented for the explicit scheme (Eq. @link["blazek2005-ch06#eq-6-14"]{(6.14)} or Eq. @link["blazek2005-ch06#eq-6-20"]{(6.20)} without the viscous eigenvalue). The CFL number @tex-math{\sigma} is increased starting from a small initial value correspondingly to the reduction of the 2-norm of the residual, i.e.,
   }{
-    而这可能导致Newton迭代崩溃。一种可能的补救是所谓的开关演化松弛(@emph{Switched Evolution Relaxation},SER)技术@link["blazek2005-r6-94"]{[94]}。此时ï¼式@link["blazek2005-ch06#eq-6-61"]{(6.61)}中的@tex-math{\Omega/\Delta t}项予以保留。时间步长按显式格式(式@link["blazek2005-ch06#eq-6-14"]{(6.14)}或式@link["blazek2005-ch06#eq-6-20"]{(6.20)}ï¼略去黏性特征值)同样方式计算。CFL数@tex-math{\sigma}从一个较小的初值开始ï¼随残差2-范数的减小而增大ï¼即
+    而这可能导致Newton迭代崩溃。一种可能的补救是所谓的开关演化松弛(@emph{Switched Evolution Relaxation},SER)技术@link["blazek2005-r6-94"]{[94]}。此时，式@link["blazek2005-ch06#eq-6-61"]{(6.61)}中的@tex-math{\Omega/\Delta t}项予以保留。时间步长按显式格式(式@link["blazek2005-ch06#eq-6-14"]{(6.14)}或式@link["blazek2005-ch06#eq-6-20"]{(6.20)}，略去黏性特征值)同样方式计算。CFL数@tex-math{\sigma}从一个较小的初值开始，随残差2-范数的减小而增大，即
   }
 
   @tex-display-math[#:id "eq-6-66"]{\sigma^{n+1} = \sigma^{n}\,\frac{\|\vec{R}^{n-1}\|_{2}}{\|\vec{R}^{n}\|_{2}} \tag{6.66}}
@@ -1302,13 +1302,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     Hence, the convergence of the iteration procedure @link["blazek2005-ch06#eq-6-61"]{(6.61)} will be at first linear, but it approaches the quadratic convergence of Newton's method for large CFL numbers. A further effect of the time term is the increased diagonal dominance of @tex-math{\bar{J}} (inverse proportional to @tex-math{\Omega/\Delta t}), which will help to stabilise the iteration. In Ref. @link["blazek2005-r6-88"]{[88]}, it was suggested to clip @tex-math{\sigma^{n+1}} in Eq. @link["blazek2005-ch06#eq-6-66"]{(6.66)} such that it increases by maximum factor of two and decreases less than factor of ten.
   }{
-    这样ï¼迭代过程@link["blazek2005-ch06#eq-6-61"]{(6.61)}的收敛起初是线性的ï¼但当CFL数较大时便趋近Newton法的二次收敛。时间项的另一个作用是增强@tex-math{\bar{J}}的对角占优(与@tex-math{\Omega/\Delta t}成反比)ï¼这有助于稳定迭代。文献@link["blazek2005-r6-88"]{[88]}建议对式@link["blazek2005-ch06#eq-6-66"]{(6.66)}中的@tex-math{\sigma^{n+1}}加以限制ï¼使其最多增大到两倍、减小不超过十倍。
+    这样，迭代过程@link["blazek2005-ch06#eq-6-61"]{(6.61)}的收敛起初是线性的，但当CFL数较大时便趋近Newton法的二次收敛。时间项的另一个作用是增强@tex-math{\bar{J}}的对角占优(与@tex-math{\Omega/\Delta t}成反比)，这有助于稳定迭代。文献@link["blazek2005-r6-88"]{[88]}建议对式@link["blazek2005-ch06#eq-6-66"]{(6.66)}中的@tex-math{\sigma^{n+1}}加以限制，使其最多增大到两倍、减小不超过十倍。
   }
 
   @bi{
     A further approach which can be used to overcome the start-up problems of Newton's method consist of grid sequencing, where the initial solution is obtained on a sequence of coarser grids and interpolated onto finer grids. Another possibility is to use a numerically cheap but robust iteration scheme for the initial guess. For example, we could start with a multigrid scheme driven by the LU-SGS method and then switch to GMRES with LU-SGS as preconditioner. This might be particularly interesting for viscous turbulent flows, where the convergence of a multigrid scheme usually slows down after the initial phase. However, the global flow solution is then already close to the steady state.
   }{
-    另一种可用于克服Newton法启动问题的方法是网格序列化(grid sequencing)ï¼即在一系列较粗网格上获得初始解ï¼再插值到较细网格。另一种可能是用数值上廉价但稳健的迭代格式给出初始猜测。例如ï¼可以先运行由LU-SGS方法驱动的多重网格格式ï¼再切换到以LU-SGS为预条件子的GMRES。这对黏性湍流可能特别有吸引力ï¼因为多重网格格式的收敛在初始阶段之后通常会减慢ï¼而此时全局流动解已接近定态。
+    另一种可用于克服Newton法启动问题的方法是网格序列化(grid sequencing)，即在一系列较粗网格上获得初始解，再插值到较细网格。另一种可能是用数值上廉价但稳健的迭代格式给出初始猜测。例如，可以先运行由LU-SGS方法驱动的多重网格格式，再切换到以LU-SGS为预条件子的GMRES。这对黏性湍流可能特别有吸引力，因为多重网格格式的收敛在初始阶段之后通常会减慢，而此时全局流动解已接近定态。
   }
 }
 
@@ -1318,25 +1318,25 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     The simulation of unsteady flow phenomena is becoming increasingly important in many engineering disciplines. Examples are the interaction between stationary and rotating parts in turbomachinery, piston engines, fluid-structure interaction, helicopter aerodynamics, aeroacoustics, DNS or LES of turbulent flows, detonations, etc. Clearly, the simulation has to be conducted efficiently and with accuracy adequate for the problem being solved.
   }{
-    在许多工程学科中ï¼非定常流动现象的模拟正变得日益重要。例子包括:涡轮机械中静止部件与旋转部件的相互作用、活塞式发动机、流固耦合、直升机空气动力学、气动声学、湍流的DNS或LES、爆轰ï¼等等。显然ï¼模拟必须高效地进行ï¼并且精度要与所求解的问题相称。
+    在许多工程学科中，非定常流动现象的模拟正变得日益重要。例子包括:涡轮机械中静止部件与旋转部件的相互作用、活塞式发动机、流固耦合、直升机空气动力学、气动声学、湍流的DNS或LES、爆轰，等等。显然，模拟必须高效地进行，并且精度要与所求解的问题相称。
   }
 
   @bi{
     Explicit schemes represent the best choice for certain unsteady applications when the time scales are comparable to the spatial scales over the eigenvalue, i.e., when the CFL number dictated by the physics is of the order of unity. This is for example the case in aeroacoustics, DNS, and LES. For such applications, explicit Runge-Kutta schemes are quite popular. Since the global physical phenomena evolve much slower than the solution changes locally in these applications, it is necessary to integrate over a long period of physical time. In order to do this accurately, the temporal resolution of the explicit scheme has to be of 3rd or higher order. This requires the use of Runge-Kutta methods different to that we presented in Section 6.1 (see, e.g., @link["blazek2005-r6-95"]{[95]}, @link["blazek2005-r6-96"]{[96]}).
   }{
-    当时间尺度与“空间尺度除以特征值”相当时ï¼即物理决定的CFL数为1的量级时ï¼显式格式对某些非定常应用是最好的选择。气动声学、DNS和LES即属此类。对此类应用ï¼显式Runge-Kutta格式相当流行。由于这些应用中全局物理现象的演化远慢于解的局部变化ï¼必须在很长的物理时间内积分。为准确做到这一点ï¼显式格式的时间分辨率须达三阶或更高。这就需要使用与6.1节所介绍不同的Runge-Kutta方法(参见@link["blazek2005-r6-95"]{[95]}、@link["blazek2005-r6-96"]{[96]})。
+    当时间尺度与“空间尺度除以特征值”相当时，即物理决定的CFL数为1的量级时，显式格式对某些非定常应用是最好的选择。气动声学、DNS和LES即属此类。对此类应用，显式Runge-Kutta格式相当流行。由于这些应用中全局物理现象的演化远慢于解的局部变化，必须在很长的物理时间内积分。为准确做到这一点，显式格式的时间分辨率须达三阶或更高。这就需要使用与6.1节所介绍不同的Runge-Kutta方法(参见@link["blazek2005-r6-95"]{[95]}、@link["blazek2005-r6-96"]{[96]})。
   }
 
   @bi{
     In other cases, where the physical time scales are large in comparison to the spatial scales divided by the eigenvalue (e.g., flutter, rotor-stator interaction, etc.), the CFL number can be chosen in the order of several hundreds or even thousands without impairing the accuracy of the simulation. Obviously, in such cases an implicit scheme is more appropriate. In the following, we shall discuss a particular technique known as the @emph{dual time-stepping} approach, which is very often employed for unsteady flows.
   }{
-    在另一些情形ï¼物理时间尺度相比“空间尺度除以特征值”要大(例如颤振、转子-静子干涉等),CFL数可以取几百甚至几千的量级而不损害模拟精度。显然ï¼这类情形下隐式格式更为合适。下面我们将讨论一种被称为双时间步进(@emph{dual time-stepping})的特定技术ï¼它经常用于非定常流动。
+    在另一些情形，物理时间尺度相比“空间尺度除以特征值”要大(例如颤振、转子-静子干涉等),CFL数可以取几百甚至几千的量级而不损害模拟精度。显然，这类情形下隐式格式更为合适。下面我们将讨论一种被称为双时间步进(@emph{dual time-stepping})的特定技术，它经常用于非定常流动。
   }
 
   @bi{
     The dual time-stepping approach is based on the second-order time accurate version of the basic non-linear scheme in Eq. @link["blazek2005-ch06#eq-6-2"]{(6.2)}. For this purpose we set @tex-math{\beta = 1} and @tex-math{\omega = 1/2} in Eq. @link["blazek2005-ch06#eq-6-2"]{(6.2)}. Hence, we obtain
   }{
-    双时间步进方法基于式@link["blazek2005-ch06#eq-6-2"]{(6.2)}基本非线性格式的二阶时间精度版本。为此ï¼在式@link["blazek2005-ch06#eq-6-2"]{(6.2)}中取@tex-math{\beta = 1}、@tex-math{\omega = 1/2}。于是得到
+    双时间步进方法基于式@link["blazek2005-ch06#eq-6-2"]{(6.2)}基本非线性格式的二阶时间精度版本。为此，在式@link["blazek2005-ch06#eq-6-2"]{(6.2)}中取@tex-math{\beta = 1}、@tex-math{\omega = 1/2}。于是得到
   }
 
   @tex-display-math[#:id "eq-6-67"]{\frac{3\left(\Omega\bar{M}\right)^{n+1}_{I}\vec{W}^{n+1}_{I} - 4\left(\Omega\bar{M}\right)^{n}_{I}\vec{W}^{n}_{I} + \left(\Omega\bar{M}\right)^{n-1}_{I}\vec{W}^{n-1}_{I}}{2\Delta t} = -\vec{R}^{n+1}_{I}, \tag{6.67}}
@@ -1344,7 +1344,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where @tex-math{\Delta t} denotes the @emph{global} physical time step and @tex-math{\bar{M}} the mass matrix, respectively. Equation @link["blazek2005-ch06#eq-6-67"]{(6.67)} constitutes a 3-point backward-difference (backward Euler) approximation of the time derivative in Eq. @link["blazek2005-ch06#eq-6-1"]{(6.1)}. In order to solve the system of non-linear equations given by Eq. @link["blazek2005-ch06#eq-6-67"]{(6.67)}, we can use either Newton's method or a time-stepping methodology. The latter can be written as
   }{
-    其中@tex-math{\Delta t}表示@emph{全局}物理时间步长,@tex-math{\bar{M}}表示质量矩阵。方程@link["blazek2005-ch06#eq-6-67"]{(6.67)}构成对式@link["blazek2005-ch06#eq-6-1"]{(6.1)}中时间导数的三点后向差分(后向Euler)近似。为了求解式@link["blazek2005-ch06#eq-6-67"]{(6.67)}给出的非线性方程组ï¼可以使用Newton法或时间推进方法。后者可写为
+    其中@tex-math{\Delta t}表示@emph{全局}物理时间步长,@tex-math{\bar{M}}表示质量矩阵。方程@link["blazek2005-ch06#eq-6-67"]{(6.67)}构成对式@link["blazek2005-ch06#eq-6-1"]{(6.1)}中时间导数的三点后向差分(后向Euler)近似。为了求解式@link["blazek2005-ch06#eq-6-67"]{(6.67)}给出的非线性方程组，可以使用Newton法或时间推进方法。后者可写为
   }
 
   @tex-display-math[#:id "eq-6-68"]{\frac{\partial}{\partial t^{*}}\left(\Omega^{n+1}_{I}\vec{W}^{*}_{I}\right) = -\vec{R}^{*}_{I}\left(\vec{W}^{*}\right), \tag{6.68}}
@@ -1352,7 +1352,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     where @tex-math{\vec{W}^{*}} is the approximation to @tex-math{\vec{W}^{n+1}} and @tex-math{t^{*}} denotes a pseudo-time variable. Note that there is no mass matrix in the time derivative. The @emph{unsteady} residual is defined as
   }{
-    其中@tex-math{\vec{W}^{*}}是@tex-math{\vec{W}^{n+1}}的近似,@tex-math{t^{*}}表示伪时间变量。注意ï¼时间导数中没有质量矩阵。@emph{非定常}残差定义为
+    其中@tex-math{\vec{W}^{*}}是@tex-math{\vec{W}^{n+1}}的近似,@tex-math{t^{*}}表示伪时间变量。注意，时间导数中没有质量矩阵。@emph{非定常}残差定义为
   }
 
   @tex-display-math[#:id "eq-6-69"]{\vec{R}^{*}_{I}\left(\vec{W}^{*}\right) = \vec{R}_{I}\left(\vec{W}^{*}\right) + \frac{3}{2\Delta t}\left(\Omega\bar{M}\right)^{n+1}_{I}\vec{W}^{*}_{I} - \vec{Q}^{*}_{I}. \tag{6.69}}
@@ -1360,7 +1360,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     All terms which are constant during the time-stepping in Eq. @link["blazek2005-ch06#eq-6-68"]{(6.68)} are gathered in a source term, i.e.,
   }{
-    式@link["blazek2005-ch06#eq-6-68"]{(6.68)}中在时间推进期间保持不变的所有项都归入一个源项ï¼即
+    式@link["blazek2005-ch06#eq-6-68"]{(6.68)}中在时间推进期间保持不变的所有项都归入一个源项，即
   }
 
   @tex-display-math[#:id "eq-6-70"]{\vec{Q}^{*}_{I} = \frac{2}{\Delta t}\left(\Omega\bar{M}\right)^{n}_{I}\vec{W}^{n}_{I} - \frac{1}{2\Delta t}\left(\Omega\bar{M}\right)^{n-1}_{I}\vec{W}^{n-1}_{I}. \tag{6.70}}
@@ -1368,13 +1368,13 @@ stage    alpha   beta      alpha   beta       alpha   beta
   @bi{
     In the case of moving and/or deforming grids, the new size of the control volume, i.e., @tex-math{\Omega^{n+1}} in Eq. @link["blazek2005-ch06#eq-6-68"]{(6.68)} has to satisfy the Geometry Conservation Law (see Appendix A.5 for details and references).
   }{
-    在网格运动和/或变形的情形ï¼控制体的新尺寸ï¼即式@link["blazek2005-ch06#eq-6-68"]{(6.68)}中的@tex-math{\Omega^{n+1}}ï¼必须满足几何守恒定律(详见附录A.5及其所引文献)。
+    在网格运动和/或变形的情形，控制体的新尺寸，即式@link["blazek2005-ch06#eq-6-68"]{(6.68)}中的@tex-math{\Omega^{n+1}}，必须满足几何守恒定律(详见附录A.5及其所引文献)。
   }
 
   @bi{
     The stationary solution of Eq. @link["blazek2005-ch06#eq-6-68"]{(6.68)} corresponds to the flow variables at the new time level, i.e., @tex-math{\vec{W}^{*} = \vec{W}^{n+1}}. Since @tex-math{\vec{R}^{*}_{I} = 0} at steady state in pseudo time, Equation @link["blazek2005-ch06#eq-6-67"]{(6.67)} is fulfilled. Any of the previously presented explicit or implicit time-marching schemes can be employed for the solution of the system of equations @link["blazek2005-ch06#eq-6-68"]{(6.68)} in the pseudo time. In the following, we shall discuss the implementation of the dual time-stepping approach for explicit multistage and implicit schemes.
   }{
-    式@link["blazek2005-ch06#eq-6-68"]{(6.68)}的定常解对应于新时间层上的流动变量ï¼即@tex-math{\vec{W}^{*} = \vec{W}^{n+1}}。由于伪时间内定态时@tex-math{\vec{R}^{*}_{I} = 0}ï¼方程@link["blazek2005-ch06#eq-6-67"]{(6.67)}便得到满足。此前介绍过的任何显式或隐式时间推进格式都可以用来在伪时间内求解方程组@link["blazek2005-ch06#eq-6-68"]{(6.68)}。下面我们将讨论双时间步进方法在显式多级格式与隐式格式中的实现。
+    式@link["blazek2005-ch06#eq-6-68"]{(6.68)}的定常解对应于新时间层上的流动变量，即@tex-math{\vec{W}^{*} = \vec{W}^{n+1}}。由于伪时间内定态时@tex-math{\vec{R}^{*}_{I} = 0}，方程@link["blazek2005-ch06#eq-6-67"]{(6.67)}便得到满足。此前介绍过的任何显式或隐式时间推进格式都可以用来在伪时间内求解方程组@link["blazek2005-ch06#eq-6-68"]{(6.68)}。下面我们将讨论双时间步进方法在显式多级格式与隐式格式中的实现。
   }
 
   @subtree[#:id "blazek2005-6-3-1"]{
@@ -1383,7 +1383,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Jameson @link["blazek2005-r6-97"]{[97]} first implemented the dual-time methodology using an explicit multistage scheme accelerated by local time-stepping and multigrid. The significant advantage of this approach is that the physical time step is not restricted as usual in explicit methods. It can be chosen based solely on the flow physics. On the other hand, additional storage is needed only for the source term @tex-math{\vec{Q}^{*}}, which makes the approach very attractive. An @tex-math{m}-stage explicit scheme for the solution of the pseudo-time problem @link["blazek2005-ch06#eq-6-68"]{(6.68)} reads
     }{
-      Jameson@link["blazek2005-r6-97"]{[97]}首先用由局部时间步进与多重网格加速的显式多级格式实现了双时间方法。该方法的重要优点是物理时间步长不像显式方法通常那样受限制ï¼可以完全依据流动物理来选取。另一方面ï¼只需为源项@tex-math{\vec{Q}^{*}}增加额外存储ï¼这使得该方法非常有吸引力。求解伪时间问题@link["blazek2005-ch06#eq-6-68"]{(6.68)}的@tex-math{m}级显式格式为
+      Jameson@link["blazek2005-r6-97"]{[97]}首先用由局部时间步进与多重网格加速的显式多级格式实现了双时间方法。该方法的重要优点是物理时间步长不像显式方法通常那样受限制，可以完全依据流动物理来选取。另一方面，只需为源项@tex-math{\vec{Q}^{*}}增加额外存储，这使得该方法非常有吸引力。求解伪时间问题@link["blazek2005-ch06#eq-6-68"]{(6.68)}的@tex-math{m}级显式格式为
     }
 
     @tex-display-math[#:id "eq-6-71"]{\begin{aligned}
@@ -1397,7 +1397,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{l} denotes the actual and @tex-math{(l+1)} the new pseudo-time level, respectively. The time-marching process is started either with @tex-math{\left(\vec{W}^{*}\right)^{l} = \vec{W}^{n}} or with a value extrapolated from previous physical time steps, e.g., @link["blazek2005-r6-98"]{[98]}
     }{
-      其中@tex-math{l}表示当前伪时间层,@tex-math{(l+1)}表示新伪时间层。时间推进过程或者以@tex-math{\left(\vec{W}^{*}\right)^{l} = \vec{W}^{n}}启动ï¼或者以由先前物理时间步外推的值启动ï¼例如@link["blazek2005-r6-98"]{[98]}
+      其中@tex-math{l}表示当前伪时间层,@tex-math{(l+1)}表示新伪时间层。时间推进过程或者以@tex-math{\left(\vec{W}^{*}\right)^{l} = \vec{W}^{n}}启动，或者以由先前物理时间步外推的值启动，例如@link["blazek2005-r6-98"]{[98]}
     }
 
     @tex-display-math[#:id "eq-6-72"]{\left(\vec{W}^{*}_{I}\right)^{l} = \vec{W}^{n} + \frac{3\vec{W}^{n} - 4\vec{W}^{n-1} + \vec{W}^{n-2}}{2}. \tag{6.72}}
@@ -1411,7 +1411,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       Arnone et al. @link["blazek2005-r6-98"]{[98]} pointed out that the multistage scheme @link["blazek2005-ch06#eq-6-71"]{(6.71)} becomes unstable when the physical time step @tex-math{\Delta t} is of the order of the pseudo time step @tex-math{\Delta t^{*}} or smaller. Melson et al. @link["blazek2005-r6-99"]{[99]} demonstrated that the instability is caused by the term
     }{
-      Arnone等人@link["blazek2005-r6-98"]{[98]}指出ï¼当物理时间步长@tex-math{\Delta t}与伪时间步长@tex-math{\Delta t^{*}}同量级或更小时ï¼多级格式@link["blazek2005-ch06#eq-6-71"]{(6.71)}会变得不稳定。Melson等人@link["blazek2005-r6-99"]{[99]}证明ï¼不稳定性由如下项引起
+      Arnone等人@link["blazek2005-r6-98"]{[98]}指出，当物理时间步长@tex-math{\Delta t}与伪时间步长@tex-math{\Delta t^{*}}同量级或更小时，多级格式@link["blazek2005-ch06#eq-6-71"]{(6.71)}会变得不稳定。Melson等人@link["blazek2005-r6-99"]{[99]}证明，不稳定性由如下项引起
     }
 
     @tex-display-math{\frac{3}{2\Delta t}\left(\Omega\bar{M}\right)^{n+1}_{I}\vec{W}^{*}_{I}}
@@ -1419,7 +1419,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       in Eq. @link["blazek2005-ch06#eq-6-69"]{(6.69)}, which becomes significant for small @tex-math{\Delta t}. They suggested an implicit treatment of this term. Thus, we have to modify the multistage scheme in Eq. @link["blazek2005-ch06#eq-6-71"]{(6.71)} such that the @tex-math{k}-th stage becomes @link["blazek2005-r6-99"]{[99]}
     }{
-      它出现在式@link["blazek2005-ch06#eq-6-69"]{(6.69)}中ï¼在@tex-math{\Delta t}较小时变得显著。他们建议对这一项作隐式处理。于是ï¼必须修改式@link["blazek2005-ch06#eq-6-71"]{(6.71)}的多级格式ï¼使第@tex-math{k}级变为@link["blazek2005-r6-99"]{[99]}
+      它出现在式@link["blazek2005-ch06#eq-6-69"]{(6.69)}中，在@tex-math{\Delta t}较小时变得显著。他们建议对这一项作隐式处理。于是，必须修改式@link["blazek2005-ch06#eq-6-71"]{(6.71)}的多级格式，使第@tex-math{k}级变为@link["blazek2005-r6-99"]{[99]}
     }
 
     @tex-display-math[#:id "eq-6-73"]{\begin{aligned}
@@ -1436,7 +1436,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       In the case of cell-centred schemes, the mass matrix @tex-math{\bar{M}^{n+1}} in Eq. @link["blazek2005-ch06#eq-6-73"]{(6.73)} can be lumped (substituted by the identity matrix) without reducing the solution accuracy. In this way, the term
     }{
-      对单元中心格式ï¼式@link["blazek2005-ch06#eq-6-73"]{(6.73)}中的质量矩阵@tex-math{\bar{M}^{n+1}}可以集中化(用单位矩阵代替)而不降低解的精度。这样ï¼式中的项
+      对单元中心格式，式@link["blazek2005-ch06#eq-6-73"]{(6.73)}中的质量矩阵@tex-math{\bar{M}^{n+1}}可以集中化(用单位矩阵代替)而不降低解的精度。这样，式中的项
     }
 
     @tex-display-math{\left[\bar{I} + \frac{3}{2\Delta t}\alpha_{k}\Delta t^{*}_{I}\bar{M}^{n+1}\right]^{-1}}
@@ -1444,7 +1444,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       in Eq. @link["blazek2005-ch06#eq-6-73"]{(6.73)} is turned into a scalar value. However, we have to account for the mass matrix in the case of a cell-vertex spatial discretisation scheme. Otherwise, the multistage scheme will be unstable for small physical time steps. In order to circumvent the expensive inversion of @tex-math{\bar{M}^{n+1}}, Venkatakrishnan @link["blazek2005-r6-100"]{[100]} and Venkatakrishnan and Mavriplis @link["blazek2005-r6-101"]{[101]} suggested the following modification to Eq. @link["blazek2005-ch06#eq-6-73"]{(6.73)}
     }{
-      便变成一个标量值。然而ï¼对单元顶点空间离散格式ï¼则必须考虑质量矩阵ï¼否则多级格式在小物理时间步长下会不稳定。为了避免对@tex-math{\bar{M}^{n+1}}的昂贵求逆,Venkatakrishnan@link["blazek2005-r6-100"]{[100]}以及Venkatakrishnan与Mavriplis@link["blazek2005-r6-101"]{[101]}对式@link["blazek2005-ch06#eq-6-73"]{(6.73)}提出了如下修改
+      便变成一个标量值。然而，对单元顶点空间离散格式，则必须考虑质量矩阵，否则多级格式在小物理时间步长下会不稳定。为了避免对@tex-math{\bar{M}^{n+1}}的昂贵求逆,Venkatakrishnan@link["blazek2005-r6-100"]{[100]}以及Venkatakrishnan与Mavriplis@link["blazek2005-r6-101"]{[101]}对式@link["blazek2005-ch06#eq-6-73"]{(6.73)}提出了如下修改
     }
 
     @tex-display-math[#:id "eq-6-74"]{\begin{aligned}
@@ -1461,7 +1461,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The dual time-stepping approach, where the solution in pseudo time is obtained by an explicit multistage scheme, is widely used. The highest computational efficiency results when the multistage scheme is accelerated by local time-stepping (in @tex-math{t^{*}}) and multigrid. The reason is that the multigrid scheme converges quickly (in few cycles) to the stationary solution of Eq. @link["blazek2005-ch06#eq-6-68"]{(6.68)}. Examples of applications on structured grids can be found in Refs. @link["blazek2005-r6-97"]{[97]}-@link["blazek2005-r6-99"]{[99]} as well as in @link["blazek2005-r6-102"]{[102]}-@link["blazek2005-r6-104"]{[104]}. Implementations of the methodology on unstructured grids were described, e.g., in @link["blazek2005-r6-100"]{[100]}, @link["blazek2005-r6-101"]{[101]} and @link["blazek2005-r6-105"]{[105]}.
     }{
-      用显式多级格式获得伪时间内解的双时间步进方法应用广泛。当多级格式由局部时间步进(在@tex-math{t^{*}}内)与多重网格加速时ï¼计算效率最高。原因是多重网格格式能快速(在少数几个循环内)收敛到式@link["blazek2005-ch06#eq-6-68"]{(6.68)}的定常解。结构网格上的应用实例可见文献@link["blazek2005-r6-97"]{[97]}-@link["blazek2005-r6-99"]{[99]}以及@link["blazek2005-r6-102"]{[102]}-@link["blazek2005-r6-104"]{[104]};该方法在非结构网格上的实现例如见于@link["blazek2005-r6-100"]{[100]}、@link["blazek2005-r6-101"]{[101]}与@link["blazek2005-r6-105"]{[105]}。
+      用显式多级格式获得伪时间内解的双时间步进方法应用广泛。当多级格式由局部时间步进(在@tex-math{t^{*}}内)与多重网格加速时，计算效率最高。原因是多重网格格式能快速(在少数几个循环内)收敛到式@link["blazek2005-ch06#eq-6-68"]{(6.68)}的定常解。结构网格上的应用实例可见文献@link["blazek2005-r6-97"]{[97]}-@link["blazek2005-r6-99"]{[99]}以及@link["blazek2005-r6-102"]{[102]}-@link["blazek2005-r6-104"]{[104]};该方法在非结构网格上的实现例如见于@link["blazek2005-r6-100"]{[100]}、@link["blazek2005-r6-101"]{[101]}与@link["blazek2005-r6-105"]{[105]}。
     }
   }
 
@@ -1471,7 +1471,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       The implementation of an implicit scheme for the solution of Eq. @link["blazek2005-ch06#eq-6-68"]{(6.68)} in pseudo time @tex-math{t^{*}} proceeds in the same way as outlined in Section 6.2. First of all, we formulate Eq. @link["blazek2005-ch06#eq-6-68"]{(6.68)} as an nonlinear implicit scheme, i.e.,
     }{
-      用隐式格式在伪时间@tex-math{t^{*}}内求解式@link["blazek2005-ch06#eq-6-68"]{(6.68)}ï¼其实现方式与6.2节所述相同。首先ï¼把式@link["blazek2005-ch06#eq-6-68"]{(6.68)}写成非线性隐式格式ï¼即
+      用隐式格式在伪时间@tex-math{t^{*}}内求解式@link["blazek2005-ch06#eq-6-68"]{(6.68)}，其实现方式与6.2节所述相同。首先，把式@link["blazek2005-ch06#eq-6-68"]{(6.68)}写成非线性隐式格式，即
     }
 
     @tex-display-math[#:id "eq-6-75"]{\frac{\partial}{\partial t^{*}}\left(\Omega^{n+1}_{I}\vec{W}^{*}_{I}\right) = -\left(\vec{R}^{*}_{I}\right)^{l+1} \tag{6.75}}
@@ -1479,7 +1479,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       with @tex-math{(l+1)} being the new pseudo-time level. Note again the absence of @tex-math{\bar{M}} in the time derivative. The unsteady residual, which is defined in Eq. @link["blazek2005-ch06#eq-6-69"]{(6.69)}, can be linearised in pseudo time as follows
     }{
-      其中@tex-math{(l+1)}为新伪时间层。再次注意ï¼时间导数中没有@tex-math{\bar{M}}。式@link["blazek2005-ch06#eq-6-69"]{(6.69)}定义的非定常残差可在伪时间内线性化如下
+      其中@tex-math{(l+1)}为新伪时间层。再次注意，时间导数中没有@tex-math{\bar{M}}。式@link["blazek2005-ch06#eq-6-69"]{(6.69)}定义的非定常残差可在伪时间内线性化如下
     }
 
     @tex-display-math[#:id "eq-6-76"]{\left(\vec{R}^{*}\right)^{l+1} \approx \left(\vec{R}^{*}\right)^{l} + \frac{\partial\vec{R}^{*}}{\partial\vec{W}^{*}}\Delta\vec{W}^{*}, \tag{6.76}}
@@ -1487,7 +1487,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       where @tex-math{\Delta\vec{W}^{*} = \left(\vec{W}^{*}\right)^{l+1} - \left(\vec{W}^{*}\right)^{l}} and the flux Jacobian is defined as
     }{
-      其中@tex-math{\Delta\vec{W}^{*} = \left(\vec{W}^{*}\right)^{l+1} - \left(\vec{W}^{*}\right)^{l}}ï¼通量雅可比定义为
+      其中@tex-math{\Delta\vec{W}^{*} = \left(\vec{W}^{*}\right)^{l+1} - \left(\vec{W}^{*}\right)^{l}}，通量雅可比定义为
     }
 
     @tex-display-math[#:id "eq-6-77"]{\frac{\partial\vec{R}^{*}}{\partial\vec{W}^{*}} = \frac{\partial\vec{R}}{\partial\vec{W}} + \frac{3}{2\Delta t}\left(\Omega\bar{M}\right)^{n+1}. \tag{6.77}}
@@ -1495,7 +1495,7 @@ stage    alpha   beta      alpha   beta       alpha   beta
     @bi{
       If we insert the above linearisation into Eq. @link["blazek2005-ch06#eq-6-75"]{(6.75)}, we obtain the unfactored implicit scheme @link["blazek2005-r6-106"]{[106]}
     }{
-      把上述线性化代入式@link["blazek2005-ch06#eq-6-75"]{(6.75)}ï¼便得到未分解的隐式格式@link["blazek2005-r6-106"]{[106]}
+      把上述线性化代入式@link["blazek2005-ch06#eq-6-75"]{(6.75)}，便得到未分解的隐式格式@link["blazek2005-r6-106"]{[106]}
     }
 
     @tex-display-math[#:id "eq-6-78"]{\left[\left(\frac{1}{\Delta t^{*}_{I}} + \frac{3}{2\Delta t}\right)\left(\Omega\bar{M}\right)^{n+1}_{I} + \left(\frac{\partial\vec{R}}{\partial\vec{W}}\right)_{I}\right]\Delta\vec{W}^{*} = -\left(\vec{R}^{*}_{I}\right)^{l}. \tag{6.78}}
