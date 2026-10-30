@@ -70,7 +70,7 @@
 
   Grove还能为三维欧氏Cartesian空间的多项式右侧@code{f}构造@code{Δu=f}的特解。空间和源项都是输入值：
 
-  方程@code{Δu = y²}的一个特解是 @math[potential]。
+  方程@code{Δu = y^2}的一个特解是 @math[potential]。
 
   求解器采用明确规范：选定坐标上的值及一阶导数在坐标为零处锚定为零。它没有求边界条件，也不声称返回全体解。
 

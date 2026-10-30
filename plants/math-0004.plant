@@ -31,9 +31,7 @@
 }
 
 @(define norm-square
-  (◆:add (◆:power (φ:read "x") (◆:constant 2))
-          (◆:add (◆:power (φ:read "y") (◆:constant 2))
-                 (◆:power (φ:read "z") (◆:constant 2)))))
+  (φ:read "x^2+y^2+z^2"))
 
 @(define gradient-report (math-compute (◆:grad norm-square) #:assumptions (list r3)))
 
@@ -46,9 +44,9 @@
   @taxon["example"]
 
   @itemize{
-    @item{grad of @code{x²+y²+z²}: @math[(math-report-result gradient-report)]}
-    @item{div of @code{(x²,y,z)}: @math[(math-report-result divergence-report)]}
-    @item{Laplacian of @code{x²+y²+z²}: @math[(math-report-result laplacian-report)]}
+    @item{grad of @code{x^2+y^2+z^2}: @math[(math-report-result gradient-report)]}
+    @item{div of @code{(x^2,y,z)}: @math[(math-report-result divergence-report)]}
+    @item{Laplacian of @code{x^2+y^2+z^2}: @math[(math-report-result laplacian-report)]}
   }
 
   结果分别是@code{(2x,2y,2z)}、@code{2x+2}、以及@code{6}。算子先展开成坐标偏导，再由标量规则计算。分量求值并没有通过预设答案替换。

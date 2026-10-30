@@ -58,7 +58,7 @@
 
   @math[(math-report-result partial-report)]
 
-  输出对应@code{3*x² + a*y}。@code{math-partial}的坐标参数和被求导表达式都是Semantic值；空间与参数作为假设提供。对@code{y}或@code{z}求偏导会分别得到@code{a*x}和@code{0}。
+  输出对应@code{3*x^2 + a*y}。@code{math-partial}的坐标参数和被求导表达式都是Semantic值；空间与参数作为假设提供。对@code{y}或@code{z}求偏导会分别得到@code{a*x}和@code{0}。
 
 }
 
