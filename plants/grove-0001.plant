@@ -22,11 +22,9 @@
   @title{最小页面}
   @taxon["example"]
 
-  下面是一个可以独立保存为@code{plants/hello.plant}的最小示例：
+  下面是一个可以保存为 Flora 项目中@code{plants/hello.plant}的最小示例：
 
-  @verbatim["@use-commands{flora}
-
-  @title{Hello}
+  @verbatim["@title{Hello}
   @summary{My first Grove page.}
 
   This sentence becomes a paragraph.
@@ -36,7 +34,7 @@
     This text becomes another paragraph.
   }"]
 
-  第一行载入本项目的命令模块。title与summary是文档元数据；空行把普通文字分成段落；subtree命令建立嵌套的tree，title为这棵tree提供标题。HTML的结构由renderer生成，作者不需要手写@code{<p>}或@code{<h2>}。
+  这个页面可以直接使用Flora预载的命令。独立的Grove项目需要在页面中导入自己的命令集，例如写入@code{@"@"use-commands{flora}}。title与summary是文档元数据；空行把普通文字分成段落；subtree命令建立嵌套的tree，title为这棵tree提供标题。HTML的结构由renderer生成，作者不需要手写@code{<p>}或@code{<h2>}。
 
 }
 
@@ -65,16 +63,14 @@
     @title{一份页面源码的形状}
   @taxon["definition"]
     @paragraph{页面源码由元数据、内容命令、普通文本和可选的Scheme计算组成。它保留为内容树，之后才交给分析和渲染阶段。}
-    @verbatim["@use-commands{flora}
-
-  @title{Page title}
+    @verbatim["@title{Page title}
   @summary{One-sentence description.}
 
   A paragraph written as ordinary text.
 
   @(define value (+ 20 22))
   @paragraph{The result is @code[value].}"]
-    @paragraph{这个例子包含模块导入、元数据、普通段落和Scheme计算；输出是一篇有标题、摘要和显示“The result is 42.”段落的页面。}
+    @paragraph{在Flora中，命令由项目默认提供；这个例子展示元数据、普通段落和Scheme计算。独立项目还需要导入自己的命令集。输出是一篇有标题、摘要和显示“The result is 42.”段落的页面。}
   }
 
 }
