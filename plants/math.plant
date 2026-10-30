@@ -30,7 +30,7 @@
   @title{推导与微分算子}
 
   @itemize{
-    @item{@link["math-0003"]{推导、搜索与独立核验}：对推导链求导、搜索目标并独立重放。}
+    @item{@link["math-0003"]{推导、搜索与独立核验}：演示求导、搜索规则路径，并核验推导结果。}
     @item{@link["math-0004"]{从向量场计算Cartesian算子}：从分量构造grad、div、curl与Laplacian。}
     @item{@link["math-0005"]{向量分量与显式偏导}：检查向量值、坐标分量及偏导项。}
     @item{@link["math-0006"]{Cartesian算子的计算追踪}：查看pass、规则路径和证书。}
