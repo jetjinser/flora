@@ -1,7 +1,10 @@
 ;;; Flora project description.
 
 ;; Load the project-local LP library through Guile's normal module loader.
-(set! %load-path (cons (dirname (current-filename)) %load-path))
+(eval-when (expand load eval)
+  (let ((project-root (dirname (current-filename))))
+    (unless (member project-root %load-path)
+      (set! %load-path (cons project-root %load-path)))))
 
 (use-modules (cjk-fonts)
              (flora)

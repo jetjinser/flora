@@ -67,7 +67,10 @@ a11y: build
 	  exit 1; \
 	}
 	"$(GROVE_ROOT)/scripts/a11y-audit.sh" \
-	  build/index.html build/blazek2005-ch02.html
+	  build/index.html \
+	  build/math-0003.html \
+	  build/lp-0001.html \
+	  build/blazek2005-ch02.html
 
 check: validate test lint a11y preview-check
 

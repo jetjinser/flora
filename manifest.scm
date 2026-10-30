@@ -3,15 +3,14 @@
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 
 ;;; Flora's own development tools, on top of the Grove toolchain.
-;;; Combine with the sibling Grove checkout's manifest - the same
-;;; local input the nix devShell in nix/flake.nix pins:
+;;; Combine with the sibling Grove checkout's manifest and package entry point:
 ;;;
-;;;   guix shell -m ../grove/manifest.scm -m manifest.scm
-;;;   ./regenerate-figures.sh
+;;;   guix time-machine -C channels.scm -- shell \
+;;;     -m ../grove/manifest.scm -m manifest.scm -f ../grove/guix.scm
 ;;;   make check
 ;;;   make build
 ;;;
-;;; Point GROVE_CHECKOUT elsewhere if Grove does not live at ../grove.
+;;; Set GROVE_ROOT for Makefile checks if Grove lives elsewhere.
 
 (use-modules (gnu packages))
 
@@ -25,4 +24,5 @@
                   "python-fonttools"  ; pyftsubset: cut the CJK woff2 subset
                   "python-brotli"     ; woff2 compression for the subset
                   "make"              ; Makefile entry points
-                  "curl"))))          ; fetch-fonts.sh
+                  "curl"              ; fetch-fonts.sh and axe-core bootstrap
+                  "ungoogled-chromium")))) ; browser audits in make check

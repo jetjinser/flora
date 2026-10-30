@@ -11,7 +11,7 @@
 
 求导既可以直接展示结果，也可以明确列出推导步骤或搜索规则路径。下面先从常见写法开始，再看Grove如何记录并核验计算过程。
 
-先看两种常见写法。若要明确列出每一步，用 `@check-derive`；若已知目标，可用 `@search-derive` 搜索一条规则路径。两者都在 `@with-assumptions` 中声明求导坐标：
+先看两种常见写法。若要明确列出每一步，用 @code{@"@"check-derive}；若已知目标，可用 @code{@"@"search-derive} 搜索一条规则路径。两者都在 @code{@"@"with-assumptions} 中声明求导坐标：
 
 @with-assumptions["coordinate(x)"]{
 @subtree{
@@ -44,7 +44,7 @@
 }
 }
 
-如果只关心结果，可以直接用 `@display-math`。它会计算求导并默认把步骤收进可展开的说明块：
+如果只关心结果，可以直接用 @code{@"@"display-math}。它会计算求导并默认把步骤收进可展开的说明块：
 
 @subtree{
   @title{自动计算并折叠展示步骤}

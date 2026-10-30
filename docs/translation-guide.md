@@ -64,7 +64,7 @@
 - 正文引用一律链接化:`[32]` → `@link["blazek2005-r2-32"]{[32]}`,双语 lane 同位置同步。
 - 合并引用拆成多个链接、标点留在链接外(`[14, 15]` → `@link[…]{[14]}、@link[…]{[15]}`);范围引用 `[15]-[17]` 只链两端、连接符留外——与原书可见文字保持一致。
 - 章末不手写文献列表:页面底部"参考文献"区由 Grove 自动汇总本页引用;文献页自身有"反向链接"区列出全部引用位置。
-- `@image` 的替代文本只能是纯文本(见下节);文献引用不要放进 `@image` 或 `@tex-math` 内部。
+- `@figure` 的替代文本只能是纯文本(见下节);文献引用不要放进替代文本或 `@tex-math` 内部。
 
 ## 5. 插图
 
@@ -76,13 +76,9 @@
 }
 ```
 
-裁剪流程(全程可脚本化):
+图片不作为裁剪后的 PNG 入库。`docs/blazek2005-figures.tsv`记录输出文件名、PDF页码和200 dpi坐标框；`project.scm`声明的 `blazek2005-figures` 管线根据这份清单生成 PNG fallback 与 AVIF 变体。管线缓存由 PDF、清单和管线版本共同决定。添加或修正图片时，更新清单并运行 `make build` 检查结果；无需手动注册资产。扫描PDF需通过项目约定放入 `materials/books/`，具体裁剪记录见 `docs/blazek2005-figures.md`。
 
-1. `nix shell nixpkgs#poppler-utils nixpkgs#imagemagick -c bash -c '...'` 后 `pdftoppm -png -r 200 -f <PDF页> -l <PDF页> "<PDF>" out`(整页约 1220×1920)。
-2. Read 整页 PNG,按比例估算图形包围盒(**不含**英文 "Figure X.Y:" 图题行)。
-3. `convert -crop WxH+X+Y +repage -fuzz 8% -trim +repage` 输出到 `assets/blazek2005/fig-<章>-<图>.png`,`-trim` 自动去白边;结果必须 Read 目检:图形完整、无英文图题残留、轴标签/子图标注齐全。
-4. `assets/` 目录由 `project.scm` 递归扫描自动注册(URL 即 `/blazek2005/fig-X-Y.png`),新增图片无需改配置。
-5. 图片样式见 `style.css`(`.article img` 居中、88% 限宽;`figcaption` 与图片对齐、字号略小)。`@figure` 定义于 `plants/lib/commands.plant`(渲染为 /commands.html),渲染为 `<figure>/<figcaption>` 语义标签。
+`@figure`定义于 `plants/lib/commands.plant`(渲染为 /commands.html),输出 `<figure>/<figcaption>` 语义标签。图片样式见 `style.css`(`.article img` 居中、88% 限宽;`figcaption` 与图片对齐、字号略小)。
 
 纯数值表格用 `@verbatim` 重建,不裁图。
 

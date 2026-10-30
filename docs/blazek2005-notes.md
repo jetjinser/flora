@@ -24,7 +24,7 @@ Jiri Blazek《Computational Fluid Dynamics: Principles and Applications》2nd ed
 | 前置材料小节 | `blazek2005-front-ack` / `blazek2005-front-symbols` / `blazek2005-front-abbrev` | |
 | 公式锚点 | `eq-<章>-<编号>` | `eq-4-58` |
 | 文献条目 | `blazek2005-r<章>-<编号>`,章号小写(附录A 为 `ra`) | `blazek2005-r7-154`、`blazek2005-ra-3` |
-| 插图文件 | `assets/blazek2005/fig-<章>-<图>.png` | `cfd/fig-11-24.png` |
+| 插图资源 | `blazek2005/fig-<章>-<图>.png` | `blazek2005/fig-11-24.png` |
 | 索引字母分组 | `blazek2005-idx-<字母>` | `blazek2005-idx-a` |
 
 ## 3. 原书排印疑误与译注清单

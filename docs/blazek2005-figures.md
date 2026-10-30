@@ -4,20 +4,18 @@
 
 ## 工作流
 
-1. **渲染**:`nix shell nixpkgs#poppler-utils nixpkgs#imagemagick -c bash -c '...'`
-   `pdftoppm -png -r 200 -f <PDF页> -l <PDF页> "<PDF>" /tmp/figwork/p<N>`(整页 1220×1920;印刷页 → PDF 页 = +21)。
-2. **定位**:Read 整页 PNG,按比例估算图形包围盒——**不含**英文 "Figure X.Y:" 图题行;同页多幅图分别裁剪。
-3. **裁剪**:`convert p<N>-<页>.png -crop WxH+X+Y +repage -fuzz 8% -trim +repage assets/blazek2005/fig-<章>-<图>.png`
-   (`-trim` 自动去白边;灰度 PNG 单图约 50KB;产物必须 Read 目检:图形完整、无英文图题残留、轴标签/子图标注齐全,不足就调参重裁)。
-4. **嵌入**:替换正文占位为双语块之外的:
+1. **准备环境**:进入项目的 Guix 开发环境(见 `README.md`)，并确保 `materials/books/` 中有扫描 PDF。`make build` 会运行资产管线，自动生成清单中的图片；首次构建也会为对应 PDF 页创建200 dpi缓存。
+2. **定位或修正裁剪框**:印刷页到 PDF 页的偏移为 +21。必要时用 `pdftoppm -png -r 200 -f <PDF页> -l <PDF页> "<PDF>" /tmp/figure-page` 渲染整页，再估算图形包围盒——**不含**英文 "Figure X.Y:" 图题行;同页多幅图分别裁剪。坐标框以200 dpi的像素为单位。
+3. **更新清单并验证**:编辑 `docs/blazek2005-figures.tsv` 中对应的文件名、页码和 `x/y/width/height`，然后运行 `make build`。检查生成的 PNG/AVIF 图形完整、无英文图题残留、轴标签和子图标注齐全；不合适时调整清单中的坐标框再构建。输出由 `project.scm` 中的内容寻址管线生成，不要手工写入 `assets/`。
+4. **引用**:正文中在双语块之外使用 `@figure`:
 
    ```
-   @image["blazek2005/fig-2-1.png"]{图2.1:<中文图题>}
-   @emph{图2.1:<中文图题>。}<图例译文,行内符号用 @tex-math>
+   @figure["blazek2005/fig-2-1.png" "图2.1:<纯文本替代文本>"]{
+     @emph{图2.1:<中文图题>。}图例译文,行内符号用 @tex-math
+   }
    ```
 
-   替代文本(大括号内)只能是**纯文本**——放 `@link` 会导致校验失败(alt 会被文本化)。
-5. **注册与样式**:`assets/` 由 `project.scm` 递归扫描自动注册(URL 即 `/blazek2005/fig-X-Y.png`);样式见 `style.css` 的 `.article img`(居中、88% 限宽)。
+   替代文本只能是**纯文本**——不能在 alt 中放 `@link`。`@figure` 会生成语义化的 `<figure>` 和 `<figcaption>`；管线会同时提供 PNG fallback 与 AVIF 变体。
 
 ## 登记表
 

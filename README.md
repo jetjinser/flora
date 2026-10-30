@@ -4,10 +4,12 @@ Flora is an executable tutorial site built with Grove. Its `.plant` files combin
 
 ## Build and preview
 
-From the Flora directory, enter the development environment. The Grove toolchain comes from the sibling Grove checkout; with Guix:
+From the Flora directory, enter the Guix development environment. The Grove toolchain comes from the sibling Grove checkout:
 
 ```sh
-guix shell -m ../grove/manifest.scm -m manifest.scm
+guix time-machine -C channels.scm -- shell \
+  -m ../grove/manifest.scm -m manifest.scm \
+  -f ../grove/guix.scm
 ```
 
 or with nix (the flake pins the same checkout):
@@ -16,20 +18,8 @@ or with nix (the flake pins the same checkout):
 nix develop ../grove/nix
 ```
 
-If you need to install the CLI, change to the Grove checkout and install it to a temporary prefix:
-
-```sh
-cd ../grove
-blue prefix=/tmp/grove-install exec-prefix=/tmp/grove-install \
-  bindir=/tmp/grove-install/bin \
-  guile-module-dir=/tmp/grove-install/share/guile/site/3.0 \
-  guile-object-dir=/tmp/grove-install/lib/guile/3.0/site-ccache \
-  build -- install
-export PATH=/tmp/grove-install/bin:$PATH
-cd -
-```
-
-Return to the Flora directory and use the Makefile:
+The Guix shell includes the CLI package built from the sibling Grove checkout.
+Use the Makefile from the Flora directory:
 
 ```sh
 make validate
@@ -37,14 +27,18 @@ make build
 make serve
 ```
 
-`make check` is the full gate: `validate`, `lint`, `a11y`, and `preview-check`; `make a11y` builds and runs
-the browser audit on the home page and `blazek2005-ch02.html`; `make preview-check`
+`make check` is the full gate: `validate`, `test`, `lint`, `a11y`, and
+`preview-check`. `make a11y` builds and runs the browser audit on
+representative home, math, literate-programming, and translated-book pages;
+it does not scan every generated page. `make preview-check`
 checks the link preview’s focus, Escape, and focusout behavior; `make lint`
 checks REUSE compliance. The Makefile uses `grove` from `PATH`; override
 `GROVE` to point at another checkout. The audit uses
 `$(GROVE_ROOT)/scripts/a11y-audit.sh` (default `../grove`), so set `GROVE_ROOT`
 when the Grove source is elsewhere. Set `CHROMIUM` if the browser is not on
-`PATH`.
+`PATH`. The Guix manifest provides Chromium; the first
+accessibility audit downloads a pinned, checksum-verified axe-core bundle and
+needs network access unless that bundle is already cached.
 
 The preview is available at `http://127.0.0.1:8080/`. Use `--port` or `--output` to select another port or output directory. Stop the server with Ctrl-C.
 
@@ -88,9 +82,9 @@ Two book-length translations live in `plants/`, both as paragraph-level bilingua
 - **The Elements of Style** (Strunk & White, 4th ed.) — book home `strunk1999` plus nine pages; completed 2026-10-08.
 - **Computational Fluid Dynamics** (Blazek, 2nd ed., 2005) — book home `blazek2005` plus fourteen content pages (front matter, chapters 1–12 with appendix A, index) and 1067 reference entries; completed 2026-10-10.
 
-The conventions these follow (bilingual markup, math anchors, citations, figures, subagent workflow) are documented in `docs/translation-guide.md`; per-book records live in `docs/blazek2005-notes.md` and `docs/blazek2005-figures.md`. Source text extractions and the scanned book files are kept under `materials/` (book PDFs in `materials/books/`). The scanned books are copyrighted and too large for git, so `materials/` is not tracked: provision it out-of-band (copy the private archive into the checkout) before regenerating figures. A third book (Kazmer, *Injection Mold Design Engineering*) is prepared but not started — see `docs/kazmer2016.md`.
+The conventions these follow (bilingual markup, math anchors, citations, figures, subagent workflow) are documented in `docs/translation-guide.md`; per-book records live in `docs/blazek2005-notes.md` and `docs/blazek2005-figures.md`. Source text extractions and the scanned book files are kept under `materials/` (book PDFs in `materials/books/`). The scanned books are copyrighted and too large for git, so `materials/` is not tracked: provision it out-of-band (copy the private archive into the checkout) before the first build or after changing figure inputs, because the figure pipeline needs the PDF to produce its outputs. A third book (Kazmer, *Injection Mold Design Engineering*) is prepared but not started — see `docs/kazmer2016.md`.
 
-The 127 blazek2005 figures are not checked in either: `docs/blazek2005-figures.tsv` records each figure's PDF page and crop box, and the `blazek2005-figures` asset pipeline declared in `project.scm` crops them out of the scanned PDF during `grove build` (needs `pdftoppm` and ImageMagick on `PATH`; the Guix manifest provides both). Pipeline outputs are content-addressed: a build re-crops only when the PDF, the manifest, or the pipeline itself changes, and two checkouts share the rendered figures through the store.
+The 127 blazek2005 figures are not checked in either: `docs/blazek2005-figures.tsv` records each figure's PDF page and crop box, and the `blazek2005-figures` asset pipeline declared in `project.scm` crops them out of the scanned PDF during `grove build` (needs `pdftoppm`, ImageMagick, and `avifenc` on `PATH`; the Guix manifest provides them). Pipeline outputs are content-addressed: a build re-crops only when the PDF, the manifest, or the pipeline itself changes, and two checkouts share the rendered figures through the store.
 
 ## Fonts
 
