@@ -24,11 +24,12 @@
 @subtree{
   @title{检查pass与来源记录}
 
-  @verbatim[(format #f "passes: ~s\ncomplete: ~s"
+  @verbatim[(format #f "passes: ~s\nfinished?: ~s\nstatus: ~s"
     (map math-report-name (math-report-passes report))
-    (math-report-complete? report))]
+    (math-report-finished? report)
+    (math-report-status report))]
 
-  空间计算按职责经过组件展开、偏导和化简等pass。报告会显示本次实际运行的pass；遇到步数或表达式大小上限时，@code{complete?}会是false。
+  空间计算按职责经过组件展开、偏导和化简等pass。报告会显示本次实际运行的pass；遇到步数或表达式大小上限时，@code{math-report-finished?}会是false，@code{math-report-status}会报告@code{cutoff}。
 
   每条derivation step还保留规则名和输入树中的路径：
 

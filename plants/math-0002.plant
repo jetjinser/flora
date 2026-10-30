@@ -57,14 +57,15 @@
 @subtree{
   @title{报告不仅是最终公式}
 
-  一个多阶段计算报告包含完成状态、各pass的名称、每一步应用的规则与路径，以及可重放的derivation。检查求导示例：
+  一个多阶段计算报告包含结束状态、各pass的名称、每一步应用的规则与路径，以及可重放的derivation。检查求导示例：
 
-  @verbatim[(format #f "passes: ~s\ncomplete: ~s\nsteps: ~s"
+  @verbatim[(format #f "passes: ~s\nfinished?: ~s\nstatus: ~s\nsteps: ~s"
     (map math-report-name (math-report-passes derivative-report))
-    (math-report-complete? derivative-report)
+    (math-report-finished? derivative-report)
+    (math-report-status derivative-report)
     (length (math-derivation-steps (math-report-derivation derivative-report))))]
 
-  此处显示本次调用实际经过的pass、是否完整，以及derivation的步数。步数可能随规则集发展而变化；阅读时应关注pass职责和完成状态，而非把某个步数当成数学定理。
+  @code{finished?}只表示计算结束且没有诊断，不保证搜索找到了推导。@code{status}会进一步区分完整结果、含有未求导项的符号结果、无路径、限额截断和失败。步数可能随规则集发展而变化；阅读时应关注pass职责与结果状态，而非把某个步数当成数学定理。
 
   @(paragraph (format #f "独立 replay：~a"
     (math-verification-valid? (math-verify-derivation (math-report-derivation derivative-report)))))
@@ -99,7 +100,7 @@
 
   Formula façade可以让失败报告继续用于文章展示：
 
-  @(math-completed-report->content failure #:on-error 'show)
+  @(math-finished-report->content failure #:on-error 'show)
 
   该输入产生定义域诊断，不会被伪装成普通答案。实际文章命令可使用@code{#:on-error 'show}显示诊断；默认行为则会让构建失败，适合把错误当作必须修复的问题。
 

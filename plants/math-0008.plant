@@ -58,7 +58,7 @@
 
   不同计算需要不同阶数的可微性。一次求导通常需要differentiable；连续交换混合二阶偏导需要C2。下面展示在缺少C2时计算会留下诊断：
 
-  @(math-completed-report->content second-report #:on-error 'show)
+  @(math-finished-report->content second-report #:on-error 'show)
 
   这里的报告状态会指出尚缺的正则性事实。文档使用@code{show}才能继续把失败当作示例展示；正常构建仍会拒绝无效推导。
 
