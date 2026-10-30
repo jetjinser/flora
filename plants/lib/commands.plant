@@ -13,7 +13,7 @@
   ;; term 与 link 同理:本地定义覆盖 forester 原语。term 是术语提及
   ;; 命令(解析进定义关系),原语的 term 是数学记号构造器,站内未用。
   #:re-export-and-replace (link)
-  #:replace (term))
+  #:replace (term bi))
 
 @(begin
    (define (term-id text)
@@ -51,9 +51,21 @@ defaults the kind to span, which the lift would never see."
             body))))
 
 @(define-public (bi . body)
-   "Folded bilingual block: show the Chinese lane, fold the sources.
-The fold hint defaults to the folded lanes' language codes (e.g. en)."
-   (apply bilingual body))
+   "Fold a Flora English–Chinese pair, showing the Chinese translation.
+Write @bi{source}{translation}; each body is ordinary Scribble content.
+Explicit @lang lanes remain accepted for richly structured or other-language
+pairs, and @bilingual is available for the full Forester interface."
+   (let* ((content (command-body body))
+          (pair (filter (lambda (item)
+                          (not (and (string? item)
+                                    (string-every char-whitespace? item))))
+                        content)))
+     (if (and (not (any keyword? body))
+              (= (length pair) 2)
+              (not (and (bilingual-lane? (car pair))
+                        (bilingual-lane? (cadr pair)))))
+         (bilingual (lang "en" (car pair)) (lang "zh-Hans" (cadr pair)))
+         (apply bilingual body))))
 
 @(define-public (emph . body)
    (set! body (command-body body))
@@ -115,7 +127,15 @@ know at authoring time."
 @subtree[#:id "lib-bi"]{
   @title{bi：段落级双语折叠块}
 
-  用法：@code{@"@"bi{ @"@"lang["en"]{…} @"@"lang["zh-Hans"]{…} }}。中文 lane 默认显示，英文原文折叠，折叠提示自动取被折叠 lane 的语言码（如 en ▸）。它是 @code{bilingual[#:reader "zh-Hans"]} 的别名；除非要改阅读语言，不要传 @code{#:source-label}。规范与示例见 @link["blazek2005-front"]{任一译本}。
+  用法：@code{@"@"bi{The source paragraph.}{译文段落。}}。第一个body固定为英文原文，第二个body固定为简体中文译文；两侧都可写普通内容命令。中文默认显示，英文折叠。需要其他语种或自定义多语段落时，直接组合Forester的@code{bilingual}与@code{lang}。译本示例见@link["blazek2005-front"]{任一译本}。
+
+  例如，两侧都能保留各自的强调标记：
+
+  @bi{
+    @emph{An emphasized source phrase.}
+  }{
+    @emph{一段强调译文。}
+  }
 }
 
 @subtree[#:id "lib-emph"]{

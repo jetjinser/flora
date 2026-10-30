@@ -9,8 +9,9 @@
   @title{Acknowledgements 致谢}
 
   @bi{
-    @lang["en"]{First of all, I would like to thank my father for the initial motivation to start this project, as well as for his continuous help with the text and especially with the drawings. Further, I wish to thank my former colleagues Norbert Kroll, Cord Rossow, Jose Longo, Rolf Radespiel and others from the Institute of Design Aerodynamics at the DLR in Braunschweig, Germany for the opportunity to learn a lot about CFD and for the stimulating atmosphere. I also gratefully acknowledge the help of Olaf Brodersen from the DLR in Braunschweig and of Dimitri Mavriplis from the University of Wyoming, who kindly provided several pictures of surface grids of transport aircraft configurations.}
-    @lang["zh-Hans"]{首先，我要感谢我的父亲：是他最初激励我着手这一项目，并始终协助整理文稿，尤其是绘制插图。其次，我要感谢昔日的研究所同事Norbert Kroll、Cord Rossow、Jose Longo、Rolf Radespiel以及德国布伦瑞克DLR设计空气动力学研究所的其他各位同事，感谢他们给了我深入学习CFD的机会，也感谢他们营造的令人振奋的研究氛围。我还诚挚感谢布伦瑞克DLR的Olaf Brodersen和美国怀俄明大学的Dimitri Mavriplis，他们慷慨提供了多幅运输类飞机外形的表面网格图片。}
+    First of all, I would like to thank my father for the initial motivation to start this project, as well as for his continuous help with the text and especially with the drawings. Further, I wish to thank my former colleagues Norbert Kroll, Cord Rossow, Jose Longo, Rolf Radespiel and others from the Institute of Design Aerodynamics at the DLR in Braunschweig, Germany for the opportunity to learn a lot about CFD and for the stimulating atmosphere. I also gratefully acknowledge the help of Olaf Brodersen from the DLR in Braunschweig and of Dimitri Mavriplis from the University of Wyoming, who kindly provided several pictures of surface grids of transport aircraft configurations.
+  }{
+    首先，我要感谢我的父亲：是他最初激励我着手这一项目，并始终协助整理文稿，尤其是绘制插图。其次，我要感谢昔日的研究所同事Norbert Kroll、Cord Rossow、Jose Longo、Rolf Radespiel以及德国布伦瑞克DLR设计空气动力学研究所的其他各位同事，感谢他们给了我深入学习CFD的机会，也感谢他们营造的令人振奋的研究氛围。我还诚挚感谢布伦瑞克DLR的Olaf Brodersen和美国怀俄明大学的Dimitri Mavriplis，他们慷慨提供了多幅运输类飞机外形的表面网格图片。
   }
 }
 

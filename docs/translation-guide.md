@@ -31,16 +31,18 @@
 
 ## 2. 双语形式
 
-散文按原文自然段逐段做成双语块,`@bi` 是 `@bilingual[#:reader "zh-Hans"]` 的别名(定义于 `plants/lib/commands.plant`,文档页 /commands.html):
+散文按原文自然段逐段做成双语块。Flora 的 `@bi` 接受英文原文和简体中文译文两个 body:
 
 ```
 @bi{
-  @lang["en"]{The discussion of the conservation laws leads us…}
-  @lang["zh-Hans"]{对守恒定律的讨论很自然地引导我们……}
+  The discussion of the conservation laws leads us…
+}{
+  对守恒定律的讨论很自然地引导我们……
 }
 ```
 
-- 中文 lane 默认显示,英文原文折叠;折叠提示自动使用被折叠 lane 的语言码(如 "en ▸"),不要传 `#:source-label` 覆盖它。
+- 中文译文默认显示,英文原文折叠;折叠提示自动显示被折叠 lane 的语言码(如 "en ▸")。
+- 两个 body 都是普通 Scribble 内容,可分别包含链接、行内公式、强调等命令。需要三种及以上语言或自选语言标签时,用 Forester 的 `@bilingual` 与 `@lang` 显式组合。
 - 英文 lane **忠实照录原文**:还原行末断字("begin-ning"→"beginning"),删除页眉页脚,原书排印笔误照录不改;中文 lane 按语义翻译。
 - 中文 lane 标点用全角("，" "。" ";"),中文与拉丁字母/数字之间不加手动空格;英文 lane 保持英文标点。
 - 列表、代码块等块级内容随所在段落进入两条 lane,中文 lane 用中文重建。
