@@ -5,6 +5,18 @@
 
 数学页面把输入语法、运算对象和排版结果分开表示。Formula读取公式文本；Semantic保存可计算的结构及其条件；Notation描述数学输出。Scheme连接这些表示，执行明确的计算步骤，并保留来源与诊断。
 
+如果只想在文章里执行一次计算，可以直接从Formula文本开始：
+
+@differentiate["x" #:assumptions "coordinate(x)"]{x^3 + 2*x}
+
+文章命令会读取公式、执行求导并显示结果；默认折叠规则步骤。前提写出@code{x}是独立坐标，避免系统从变量名字猜测语义。反例与手写推导见@link["math-0003"]{推导、搜索与独立核验}。
+
+当前的方程求解是一个更具体的实验：它为三维Cartesian多项式右侧构造Poisson方程@code{Δu=f}的一个特解：
+
+@solve-poisson[#:assumptions "coordinate(x); coordinate(y); coordinate(z); space(x,y,z)"]{y^2}
+
+这不是一般方程求解器；适用范围与所选解的规范见@link["math-0007"]{多项式积分与Poisson特解}。若要在Scheme中组合输入、计算和排版值，可从@link["math-0001"]{Formula、Semantic与Notation}开始。
+
 @subtree{
   @title{表示与执行}
 
