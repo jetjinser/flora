@@ -22,6 +22,8 @@
 (define original-path (getenv "PATH"))
 (define uri "doi:10.1146/annurev.fluid.29.1.123")
 (define unicode-uri "doi:10.1234/例")
+(define complex-uri
+  "doi:10.1002/(SICI)1521-3951(199911)216:1%3C135::AID-PSSB135%3E3.0.CO;2-%23")
 (define fixture
   "{\"status\":\"ok\",\"message\":{\"DOI\":\"10.1146/annurev.fluid.29.1.123\",\"type\":\"journal-article\",\"title\":[\"QUANTIFICATION OF UNCERTAINTY IN COMPUTATIONAL FLUID DYNAMICS\"],\"author\":[{\"given\":\"P. J.\",\"family\":\"Roache\"}],\"published-print\":{\"date-parts\":[[1997,1]]},\"container-title\":[\"Annual Review of Fluid Mechanics\"],\"publisher\":\"Annual Reviews\"}}")
 (define mismatched-fixture
@@ -114,7 +116,19 @@
         unicode-uri (assoc-ref snapshot 'uri))
       (test-equal "Crossref provenance uses the encoded request URL"
         "https://api.crossref.org/works/10.1234/%E4%BE%8B"
-        (assoc-ref snapshot 'source))))
+        (assoc-ref snapshot 'source)))
+    (set! uri complex-uri)
+    (write-text fixture-path
+      "{\"status\":\"ok\",\"message\":{\"DOI\":\"10.1002/(sici)1521-3951(199911)216:1<135::aid-pssb135>3.0.co;2-#\",\"title\":[\"Legacy SICI DOI\"]}}")
+    (install-copying-curl)
+    (test-assert "escaped legacy DOI matches Crossref's literal DOI field"
+      (zero? (run-updater)))
+    (let ((snapshot (indexed-snapshot)))
+      (test-equal "Crossref API request keeps the documented escaped path"
+        "https://api.crossref.org/works/10.1002/(SICI)1521-3951(199911)216:1%3C135::AID-PSSB135%3E3.0.CO;2-%23"
+        (string-trim-both (call-with-input-file request-url-log get-string-all)))
+      (test-equal "legacy DOI snapshot preserves the authored IRI"
+        complex-uri (assoc-ref snapshot 'uri))))
   (lambda ()
     (chdir original-directory)
     (if original-path (setenv "PATH" original-path) (unsetenv "PATH"))

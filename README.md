@@ -71,8 +71,10 @@ unnecessary Grove rebuild. All three adapters share the same snapshot writer;
 source-specific response validation and field mapping stay in each adapter.
 DOI names may contain Unicode in these `doi:` IRIs; the refresh commands
 percent-encode them as UTF-8 only for the HTTP request and keep the authored
-IRI as the snapshot key. Encode literal `?` or `#` in a DOI name as `%3F` or
-`%23`, since unescaped forms delimit the IRI query or fragment.
+IRI as the snapshot key. Percent-encode characters that have IRI syntax, such
+as `?`, `#`, `<`, or `>`, when they are part of the DOI name; for example, use
+`%3F`, `%23`, `%3C`, or `%3E`. The updater compares those escapes with the
+literal DOI name returned by the metadata service.
 `captured-at` marks when the stored metadata was captured or last changed.
 Failed requests and invalid or mismatched records produce a concise error and
 leave the previous snapshot intact. The reference page title and text remain

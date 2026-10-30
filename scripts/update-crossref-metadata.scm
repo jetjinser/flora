@@ -93,7 +93,8 @@
          (record-doi (field record "DOI"))
          (title (first-string (field record "title")))
          (record-authors (authors record)))
-    (unless (and (string? record-doi) (doi-name=? doi record-doi)
+    (unless (and (string? record-doi)
+                 (doi-iri-name-matches? doi record-doi)
                  title (not (string-null? title)))
       (update-error
         (format #f "Crossref response DOI ~s did not match ~a or had no title"

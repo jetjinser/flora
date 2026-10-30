@@ -106,9 +106,15 @@
     (test-equal "raw query syntax is not accepted as part of a DOI name"
       #f (doi-iri-name "doi:10.1234/a?b"))
     (test-assert "DOI comparison folds ASCII only"
-      (doi-name=? "10.1234/ABC例" "10.1234/abc例"))
+      (doi-iri-name-matches? "10.1234/ABC例" "10.1234/abc例"))
     (test-assert "DOI comparison does not fold Unicode letters"
-      (not (doi-name=? "10.1234/Ä" "10.1234/ä")))
+      (not (doi-iri-name-matches? "10.1234/Ä" "10.1234/ä")))
+    (test-assert "percent-encoded DOI punctuation matches literal API data"
+      (doi-iri-name-matches?
+        "10.1002/(SICI)1521-3951(199911)216:1%3C135::AID-PSSB135%3E3.0.CO;2-%23"
+        "10.1002/(sici)1521-3951(199911)216:1<135::aid-pssb135>3.0.co;2-#"))
+    (test-assert "percent-encoded UTF-8 matches a literal Unicode DOI"
+      (doi-iri-name-matches? "10.1234/%E4%BE%8B" "10.1234/例"))
     (write-text fixture-path
       "{\"DOI\":\"10.1234/例\",\"title\":[\"Unicode DOI record\"]}")
     (set! uri unicode-uri))

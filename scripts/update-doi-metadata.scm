@@ -90,7 +90,8 @@
          (title (first-string (json-field record "title")))
          (record-authors (authors record))
          (year (issued-year record)))
-    (unless (and (string? record-doi) (doi-name=? doi record-doi)
+    (unless (and (string? record-doi)
+                 (doi-iri-name-matches? doi record-doi)
                  title)
       (update-error
         (format #f "response DOI ~s did not match ~a or had no title"
