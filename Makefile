@@ -6,7 +6,7 @@ GROVE ?= grove
 GROVE_ROOT ?= ../grove
 REUSE ?= reuse
 
-.PHONY: help validate test check build serve lint a11y preview-check \
+.PHONY: help validate test check build serve lint a11y preview-check verify-sources \
 	update-doi-metadata update-zenodo-metadata update-crossref-metadata clean
 
 help:
@@ -19,9 +19,10 @@ help:
 	  'make update-zenodo-metadata URI=https://zenodo.org/records/ID  Refresh a Zenodo dataset snapshot' \
 	  'make serve       Preview the site' \
 	  'make lint        Check REUSE license compliance' \
+	  'make verify-sources  Verify hashes of non-Git build inputs' \
 	  'make a11y        Build and run the browser accessibility audit' \
 	  'make preview-check  Check link-preview keyboard behavior' \
-	  'make check       Full gate: validate + test + lint + a11y + preview-check' \
+	  'make check       Full gate: source verification + validate + test + lint + a11y + preview-check' \
 	  'make clean       Remove build output'
 
 validate:
@@ -72,7 +73,10 @@ a11y: build
 	  build/lp-0001.html \
 	  build/blazek2005-ch02.html
 
-check: validate test lint a11y preview-check
+check: verify-sources validate test lint a11y preview-check
+
+verify-sources:
+	sha256sum --check sources/fonts.sha256 sources/materials.sha256
 
 clean:
 	rm -rf build

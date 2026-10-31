@@ -27,8 +27,8 @@ make build
 make serve
 ```
 
-`make check` is the full gate: `validate`, `test`, `lint`, `a11y`, and
-`preview-check`. `make a11y` builds and runs the browser audit on
+`make check` is the full gate: source verification, `validate`, `test`, `lint`,
+`a11y`, and `preview-check`. `make a11y` builds and runs the browser audit on
 representative home, math, literate-programming, and translated-book pages;
 it does not scan every generated page. `make preview-check`
 checks the link preview’s focus, Escape, and focusout behavior; `make lint`
@@ -41,6 +41,17 @@ accessibility audit downloads a pinned, checksum-verified axe-core bundle and
 needs network access unless that bundle is already cached.
 
 The preview is available at `http://127.0.0.1:8080/`. Use `--port` or `--output` to select another port or output directory. Stop the server with Ctrl-C.
+
+`make verify-sources` checks the SHA-256 digests of the non-Git inputs used by
+the complete site: the four Noto CJK source fonts, the Inria webfonts and CSS,
+and the Blazek scan PDF. The expected bytes are recorded in
+`sources/fonts.sha256` and `sources/materials.sha256`. The PDF remains in a
+private archive and is not fetched or redistributed by this project. The font
+hashes detect upstream changes after `fetch-fonts.sh`; they do not guarantee
+that an upstream URL will continue serving the locked bytes. Grove's store
+caches derived figures and build outputs, but is not an archive of these
+source files. Builds without CJK sources still support a system-font fallback;
+that intentionally produces a different site from the complete-font build.
 
 ## External entity metadata
 
