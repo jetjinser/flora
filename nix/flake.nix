@@ -28,24 +28,59 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [ inputs.devshell.flakeModule ];
 
-      perSystem = { system, pkgs, ... }: {
-        devshells.default = {
-          packages =
-            let
-              pyEnv = pkgs.python3.withPackages (
-                ps: with ps; [
-                  brotli
-                  fonttools
-                ]
+      perSystem =
+        { system, pkgs, lib, ... }:
+        let
+          grove = inputs.grove.packages.${system}.grove;
+          # Guile libraries Flora uses directly, beyond Grove's own set.
+          floraGuileLibs = with pkgs; [ guile-json guile-lib ];
+          # Mirror the Guile load paths grove bakes into its launcher so
+          # plain `guile` invocations (make test, scripts) see the same
+          # modules: grove's own site dir plus its Guile dependencies.
+          guileEnv = [
+            {
+              name = "GUILE_LOAD_PATH";
+              value = lib.concatStringsSep ":" (
+                [ "${grove}/${pkgs.guile.siteDir}" grove.GUILE_LOAD_PATH ]
+                ++ (map (p: "${p}/${pkgs.guile.siteDir}") floraGuileLibs)
               );
-            in
-            [
-              inputs.grove.packages.${system}.grove
-              pyEnv
-            ]
-            ++ (with pkgs; [ ]);
+            }
+            {
+              name = "GUILE_LOAD_COMPILED_PATH";
+              value = lib.concatStringsSep ":" (
+                [ "${grove}/${pkgs.guile.siteCcacheDir}" grove.GUILE_COMPILED_PATH ]
+                ++ (map (p: "${p}/${pkgs.guile.siteCcacheDir}") floraGuileLibs)
+              );
+            }
+          ];
+        in
+        {
+          devshells.default = {
+            packages =
+              let
+                pyEnv = pkgs.python3.withPackages (
+                  ps: with ps; [
+                    brotli
+                    fonttools
+                  ]
+                );
+              in
+              [
+                grove
+                pyEnv
+              ]
+              ++ (with pkgs; [
+                gnumake
+                guile
+                poppler-utils # pdftoppm: rasterize the scanned PDF
+                imagemagick # magick: crop figures from the pages
+                libavif # avifenc: AVIF figure variants
+                curl # fetch-fonts.sh and axe-core bootstrap
+              ])
+              ++ floraGuileLibs;
+            env = guileEnv;
+          };
         };
-      };
 
       systems = [
         "x86_64-linux"
