@@ -108,7 +108,7 @@
   function watchLinkPreviews() {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-    const INTENT = 180;      // ms of steady hover before a preview appears
+    const INTENT = 240;      // ms of steady pointer intent before a preview appears
     const MAX_CHARS = 1600;  // cap on extracted lead text
     const MAX_NODES = 6;     // cap on extracted block elements
     const SKIP = 'nav, .table-of-contents, .backmatter, .theme-controls, style, script, link, template, h1';
@@ -117,11 +117,11 @@
     // the fallback for browsers without position-area/position-anchor.
     const anchorPositioning =
       typeof CSS !== 'undefined' && CSS.supports &&
-      CSS.supports('position-area: block-end span-inline-end') &&
+      CSS.supports('position-area: block-end') &&
       CSS.supports('position-anchor: --flora-link-preview');
     let card = null;
     let currentLink = null;
-    let currentHref = null;
+    let activeLink = null;
     let hoverTimer = 0;
     let hideTimer = 0;
 
@@ -131,8 +131,14 @@
         card.className = 'link-preview';
         card.setAttribute('aria-hidden', 'true');
         document.body.appendChild(card);
-        card.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-        card.addEventListener('mouseleave', hideSoon);
+        card.addEventListener('pointerenter', () => clearTimeout(hideTimer));
+        // The card is a visual preview, not a nested scroll area. Keep wheel
+        // gestures moving the page even when the pointer is over the card.
+        card.addEventListener('wheel', (event) => {
+          if (event.ctrlKey) return;
+          event.preventDefault();
+          window.scrollBy(event.deltaX, event.deltaY);
+        }, { passive: false });
       }
       return card;
     }
@@ -146,16 +152,19 @@
 
     function hideSoon() {
       clearTimeout(hideTimer);
-      hideTimer = setTimeout(hide, 120);
+      hideTimer = setTimeout(hide, 280);
     }
 
     function hide() {
       clearTimeout(hoverTimer);
+      clearTimeout(hideTimer);
       if (card) {
         card.classList.remove('open');
         card.classList.remove('loading');
       }
-      currentHref = null;
+      if (currentLink) currentLink.style.removeProperty('anchor-name');
+      currentLink = null;
+      activeLink = null;
     }
 
     function extract(doc) {
@@ -202,10 +211,10 @@
       const height = card.offsetHeight;
       let left = rect.left + window.scrollX;
       left = Math.max(8, Math.min(left, window.scrollX + document.documentElement.clientWidth - width - 8));
-      let top = rect.bottom + window.scrollY + 8;
-      if (rect.bottom + height + 8 > window.scrollY + document.documentElement.clientHeight
-          && rect.top - height - 8 > window.scrollY) {
-        top = rect.top + window.scrollY - height - 8;
+      let top = rect.bottom + window.scrollY;
+      if (rect.bottom + height > window.scrollY + document.documentElement.clientHeight
+          && rect.top - height > window.scrollY) {
+        top = rect.top + window.scrollY - height;
       }
       card.style.left = `${left}px`;
       card.style.top = `${top}px`;
@@ -213,8 +222,7 @@
 
     async function showFor(link) {
       const href = link.getAttribute('href');
-      if (!href) return;
-      currentHref = href;
+      if (!href || activeLink !== link) return;
       const pending = ensureCard();
       pending.classList.add('loading');
       try {
@@ -225,7 +233,7 @@
           entry = extract(new DOMParser().parseFromString(await response.text(), 'text/html'));
           cache.set(href, entry);
         }
-        if (currentHref !== href) return; // the pointer moved on mid-fetch
+        if (activeLink !== link) return; // the pointer moved on mid-fetch
         pending.innerHTML = '';
         const heading = document.createElement('div');
         heading.className = 'link-preview-title';
@@ -249,17 +257,40 @@
 
     function enter(link) {
       if (link.closest('.link-preview')) return;
-      const href = link.getAttribute('href');
-      if (currentHref === href) return; // already showing this target
+      if (activeLink === link) {
+        clearTimeout(hideTimer);
+        return;
+      }
       hide();                    // 收起上一张;不得经 hideSoon 延时——它会反杀意图计时器
-      clearTimeout(hoverTimer);
+      activeLink = link;
       hoverTimer = setTimeout(() => showFor(link), INTENT);
     }
 
-    document.addEventListener('mouseover', (event) => {
-      const link = event.target.closest('a[href$=".html"]');
-      if (link && link.getAttribute('href').startsWith('/')) enter(link);
-      else if (!event.target.closest('.link-preview')) hideSoon();
+    const linkSelector = 'a[href$=".html"]';
+    document.addEventListener('pointerover', (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const related = event.relatedTarget instanceof Element ? event.relatedTarget : null;
+      if (!target) return;
+      const link = target.closest(linkSelector);
+      const fromLink = related && related.closest(linkSelector);
+      if (link && link.getAttribute('href').startsWith('/')) {
+        // pointerover bubbles for every descendant; only start a new intent
+        // when the pointer actually entered a different link.
+        if (link !== fromLink) enter(link);
+      } else if (target.closest('.link-preview')) {
+        clearTimeout(hideTimer);
+      }
+    });
+    document.addEventListener('pointerout', (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const related = event.relatedTarget instanceof Element ? event.relatedTarget : null;
+      if (!target) return;
+      const fromLink = target.closest(linkSelector);
+      const toLink = related && related.closest(linkSelector);
+      const fromCard = target.closest('.link-preview');
+      const toCard = related && related.closest('.link-preview');
+      if (fromLink && fromLink !== toLink && !toCard) hideSoon();
+      if (fromCard && !toCard && !toLink) hideSoon();
     });
     document.addEventListener('focusin', (event) => {
       const link = event.target.closest('a[href$=".html"]');

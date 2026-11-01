@@ -603,6 +603,8 @@ figcaption {
   max-inline-size: min(38rem, calc(100vw - 2rem));
   max-block-size: min(24rem, 60vh);
   overflow: auto;
+  visibility: hidden;
+  pointer-events: none;
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--rule);
@@ -620,10 +622,14 @@ figcaption {
     position-anchor: --flora-link-preview;
     position-area: block-end span-inline-end;
     position-try-fallbacks: flip-block;
-    margin-block: 8px;
+    margin-block: 0;
   }
 }
-.link-preview.open { opacity: 1; }
+.link-preview.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 .link-preview.loading { color: var(--muted); font-style: italic; }
 .link-preview-title { font-weight: 600; margin-block-end: 0.4em; }
 .link-preview-body > :first-child { margin-block-start: 0; }
