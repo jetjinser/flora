@@ -11,14 +11,11 @@ pins Grove from its upstream repository:
 nix develop
 ```
 
-Alternatively with Guix, which builds the Grove toolchain from a local
-Grove checkout (default `~/vie/projet/prototype/grove`, override with
-`GROVE_CHECKOUT`):
+Alternatively with Guix, which gets Grove from the pinned Grove channel (no
+local Grove checkout is needed):
 
 ```sh
-guix time-machine -C channels.scm -- shell \
-  -m "$GROVE_CHECKOUT/manifest.scm" -m manifest.scm \
-  -f "$GROVE_CHECKOUT/guix.scm"
+guix time-machine -C channels.scm -- shell -m manifest.scm
 ```
 
 Then use the Makefile from the Flora directory:

@@ -2,13 +2,15 @@
 ;;;
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;;; Flora's development tools, on top of the Grove toolchain.
+;;; Grove and Flora development tools.
 
-(use-modules (gnu packages))
+(use-modules (gnu packages)
+             (grove packages))
 
 (packages->manifest
- (cons (list (specification->package "libavif") "tools")
-       (map specification->package
+ (cons* grove
+        (list (specification->package "libavif") "tools")
+        (map specification->package
             (list "poppler"           ; pdftoppm: rasterize the scanned PDF
                   "imagemagick"       ; magick: crop figures from the pages
                   "libjxl"            ; cjxl: JPEG XL encoding
