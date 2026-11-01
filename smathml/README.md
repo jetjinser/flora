@@ -14,6 +14,12 @@ render rule runs Racket, reads the generated HTML/MathML, and places the body
 inside Flora's normal page shell. The page modules are listed as build inputs,
 so editing one invalidates the generated page.
 
+The bridge records the source site's internal page links as Grove link nodes
+before analysis, so Grove can validate them and build reference/backlink
+backmatter. The route table is checked against each generated SMathML document
+when it renders; a changed or unmapped internal link fails the build instead
+of silently drifting from Grove's relation graph.
+
 SMathML is pinned in `manifest.scm` to upstream commit
 `20dfc39ddf60688870e54cfeaa6215297ea21d0c`. The toolchain is optional:
 

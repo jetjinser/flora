@@ -24,6 +24,41 @@
     "smathml1.rkt" "smathml_guide0.rkt" "proof-tree.rkt"
     "napier.rkt" "smathml_comments.rkt"))
 
+;; SMathML emits links in its HTML, while Grove needs page IDs before render
+;; time to build references and backmatter. Keep that route map here and mirror
+;; each page's internal links as child `link` nodes in the authored IR. The
+;; generated HTML is checked against this table during rendering.
+(define smathml-html-routes
+  '(("smathml0.html" "smathml-zh" "/smathml-zh.html")
+    ("smathml1.html" "smathml-en" "/smathml-en.html")
+    ("smathml_guide0.html" "smathml-guide" "/smathml-guide.html")
+    ("proof_tree_test.html" "smathml-proof-tree" "/smathml-proof-tree.html")
+    ("napier.html" "smathml-napier" "/smathml-napier.html")
+    ("smathml_comments.html" "smathml-comments" "/smathml-comments.html")))
+
+(define smathml-page-reference-files
+  '(("smathml_everything.html"
+     "smathml0.html" "smathml1.html" "smathml_guide0.html"
+     "proof_tree_test.html" "napier.html" "smathml_comments.html")
+    ("smathml1.html" "smathml0.html")
+    ("smathml_guide0.html" "smathml0.html")))
+
+(define (route-for-html-file file)
+  (find (lambda (route) (string=? (car route) file))
+        smathml-html-routes))
+
+(define (page-reference-elements export)
+  (let ((files (assoc export smathml-page-reference-files string=?)))
+    (map
+      (lambda (file)
+        (let ((route (route-for-html-file file)))
+          (unless route
+            (error "SMathML reference has no Flora route" export file))
+          (let ((target (cadr route)))
+            (make-content-element 'link (list target)
+              #:properties `((target . ,target))))))
+      (if files (cdr files) '()))))
+
 (define (valid-relative-source? source)
   (and (string? source)
        (not (string-null? source))
@@ -37,7 +72,7 @@
   (unless (and (string? export)
                (string-match "^[[:alpha:]_][[:alnum:]_.!?-]*$" export))
     (error "SMathML page export must be a Racket identifier" export))
-  (make-content-element 'smathml-page '()
+  (make-content-element 'smathml-page (page-reference-elements export)
     #:properties `((source . ,source) (export . ,export))
     #:flow-kind 'block))
 
@@ -123,19 +158,43 @@
                         attrs)))
         (cons tag (if attrs (cons `(@ ,@attrs) body) body)))))
 
+(define (local-html-page-link? href)
+  (and (string? href)
+       (string-suffix? ".html" href)
+       (not (string-contains href "://"))
+       (not (string-prefix? "//" href))))
+
+(define (html-hrefs tree)
+  (cond
+    ((element? tree)
+     (append
+       (let ((href (and (eq? (car tree) 'a)
+                        (let ((entry (assq 'href (or (attributes tree) '()))))
+                          (and entry (cadr entry))))))
+         (if (string? href) (list href) '()))
+       (append-map html-hrefs (children tree))))
+    ((pair? tree) (append-map html-hrefs tree))
+    (else '())))
+
+(define (validate-page-references export body)
+  (let* ((actual (filter local-html-page-link? (html-hrefs body)))
+         (entry (assoc export smathml-page-reference-files string=?))
+         (expected (if entry (cdr entry) '())))
+    (unless (equal? actual expected)
+      (error "SMathML page links differ from Grove's declared references"
+             export expected actual))))
+
 (define (rewrite-attribute attribute)
   (if (and (pair? attribute) (eq? (car attribute) 'href)
            (string? (cadr attribute))
            (string-suffix? ".html" (cadr attribute)))
       (let ((target (cadr attribute)))
-        (cond
-          ((string=? target "smathml0.html") '(href "/smathml-zh.html"))
-          ((string=? target "smathml1.html") '(href "/smathml-en.html"))
-          ((string=? target "smathml_guide0.html") '(href "/smathml-guide.html"))
-          ((string=? target "proof_tree_test.html") '(href "/smathml-proof-tree.html"))
-          ((string=? target "napier.html") '(href "/smathml-napier.html"))
-          ((string=? target "smathml_comments.html") '(href "/smathml-comments.html"))
-          (else attribute)))
+        (let ((route (route-for-html-file target)))
+          (if route
+              `(href ,(caddr route))
+              (if (local-html-page-link? target)
+                  (error "SMathML page link has no Flora route" target)
+                  attribute))))
       attribute))
 
 (define (page-body document)
@@ -161,5 +220,6 @@
                  (export (content-element-property element 'export))
                  (document (xml->sxml (run-page source-root source export)))
                  (body (page-body document)))
+            (validate-page-references export body)
             `(div (@ (class "smathml-article"))
                   ,@(map rewrite-article body))))))))

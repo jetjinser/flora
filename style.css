@@ -309,12 +309,18 @@ body:has(> main > article > .page-tree) > main > .table-of-contents { margin-blo
 .forest-tree-block > details > summary {
   display: block;
   cursor: pointer;
+  font-size: 1rem;
   line-height: 1.5;
   margin-block-end: .4lh;
 }
-.forest-tree-title { font-size: 1rem; font-weight: 700; }
-.page-tree > details > summary .forest-tree-title { font-size: 1.8rem; line-height: 1.35; }
-.page-tree > details > summary .forest-tree-id { font-size: .62em; vertical-align: -.12em; }
+.forest-tree-title { font-size: 1em; font-weight: 700; }
+.page-tree > details > summary { font-size: 1.8rem; line-height: 1.35; }
+.page-tree > details > summary .forest-tree-id { vertical-align: -.12em; }
+/* Margin notes sit beside the collapsible page tree. Keep the lane in step
+   with the root disclosure so collapsing the article hides its notes too. */
+body > main > article:has(> .page-tree > details:not([open])) > .margin-lane {
+  display: none;
+}
 .forest-tree-content { padding-block: 0 .4lh; padding-inline: .9ic; }
 .backmatter .forest-tree-content { padding-block-end: .15lh; }
 .backmatter section.forest-tree-block > details > summary > .forest-tree-id { margin-inline-start: .35em; }
@@ -331,7 +337,7 @@ body:has(> main > article > .page-tree) > main > .table-of-contents { margin-blo
   margin-inline-start: .25em;
   color: var(--muted);
   opacity: 1;
-  font-size: 1em;
+  font-size: .8em;
   font-weight: 300;
   line-height: 1.3;
   text-decoration-style: dotted;
