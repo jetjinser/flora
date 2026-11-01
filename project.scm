@@ -217,58 +217,51 @@
                         (aria-label "使用夜间配色")))
               (span "Night")))))
 
-(define (flora-title-decorations forest)
-  (map (lambda (page)
-         (let ((taxon (page-taxon page)))
-           (cons (site-page-id page)
-                 (if taxon (taxon-entry-sxml taxon) '()))))
-       (pages forest)))
+(define (flora-title-decoration forest page-id)
+  (let ((taxon (page-taxon (require-page forest page-id))))
+    (if taxon (taxon-entry-sxml taxon) '())))
 
-(define (flora-reference-metadata-items forest)
-  (filter-map
-    (lambda (page)
-      (let find ((uris (or (assq-ref (site-page-metadata page) 'describes) '())))
+(define (flora-reference-metadata-items forest page-id)
+  (or (let find ((uris (or (assq-ref
+                             (site-page-metadata (require-page forest page-id))
+                             'describes)
+                           '())))
         (and (pair? uris)
              (let ((metadata (entity-metadata-ref entity-metadata (car uris))))
                (if metadata
                    (let ((item (entity-metadata-item metadata)))
-                     (if item
-                         (cons (site-page-id page) (list item))
-                         (find (cdr uris))))
-                   (find (cdr uris)))))))
-    (pages forest)))
+                     (if item (list item) (find (cdr uris))))
+                   (find (cdr uris))))))
+      '()))
 
 (define render-flora
-  (make-cached-renderer
-    (lambda (forest)
-      (render-html
-        forest
-        #:options
-        (make-html-options
-          #:routes html-routes
-          #:settings flora-settings
-          #:messages flora-messages
-          #:presentation
-          (compose-html-presentations
-            (make-html-presentation #:style flora-style #:rules flora-rules)
-            (make-html-presentation
-                #:head flora-head
-                #:title-decorations (flora-title-decorations forest)
-                #:home-link
-                (make-html-home-link
-                  '((span (@ (class "home-icon") (aria-hidden "true")) "«")
-                    "Flora")
-                  #:attributes '((title . "回到首页")))
-                #:site-nav (list theme-controls-sxml)
-                #:metadata-items (flora-reference-metadata-items forest)))
-          #:article? #t
-          #:backmatter-details? #t
-          ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
-          ;; 收进 .margin-lane,各带回链——不再依赖 theme.js 搬运 DOM。
-          #:side-lane '(flora-sidenote))))
-    ;; Project.scm and its loaded modules are tracked project inputs, so edits
-    ;; to renderer behavior or configuration invalidate this cached output.
-    #:configuration '(flora-html-renderer 1)))
+  (make-html-renderer
+    #:rules-id 'flora-html-rules-v1
+    #:options
+    (make-html-options
+      #:routes html-routes
+      #:settings flora-settings
+      #:messages flora-messages
+      #:presentation
+      (compose-html-presentations
+        (make-html-presentation #:style flora-style #:rules flora-rules)
+        (make-html-presentation
+          #:head flora-head
+          #:title-decorations flora-title-decoration
+          #:home-link
+          (make-html-home-link
+            '((span (@ (class "home-icon") (aria-hidden "true")) "«")
+              "Flora")
+            #:attributes '((title . "回到首页")))
+          #:site-nav (list theme-controls-sxml)
+          #:metadata-items flora-reference-metadata-items
+          #:page-sources (lambda (_forest _page-id) entity-metadata-sources)
+          #:cache-id 'flora-page-presentation-v1))
+      #:article? #t
+      #:backmatter-details? #t
+      ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
+      ;; 收进 .margin-lane,各带回链——不再依赖 theme.js 搬运 DOM。
+      #:side-lane '(flora-sidenote))))
 
 (define (analyze-flora site)
   ((module-ref (resolve-interface '(flora queries)) 'analyze-flora) (lp-enrich-site site)))
