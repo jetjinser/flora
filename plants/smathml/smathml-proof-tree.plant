@@ -1,0 +1,5 @@
+@title{证明树排版测试}
+@summary{用SMathML构造并排版线性逻辑证明树。}
+@taxon["example"]
+
+@smathml-page["proof-tree.rkt" "proof_tree_test.html"]

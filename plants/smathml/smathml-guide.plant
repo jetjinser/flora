@@ -1,0 +1,5 @@
+@title{SMathML指南}
+@summary{SMathML中文入门指南。}
+@taxon["tutorial"]
+
+@smathml-page["smathml_guide0.rkt" "smathml_guide0.html"]

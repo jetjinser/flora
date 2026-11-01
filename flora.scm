@@ -9,4 +9,4 @@
   #:export (command-modules))
 
 (define-public command-modules
-  '((forester commands) (flora commands)))
+  '((forester commands) (flora commands) (flora smathml)))

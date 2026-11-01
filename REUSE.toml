@@ -13,15 +13,23 @@ SPDX-License-Identifier = "LicenseRef-Blazek2005-Translation"
 [[annotations]]
 path = [
     "plants/*.plant",
+    "plants/smathml/**",
     "plants/person/**",
     "plants/strunk1999/**",
     "docs/**",
     "README.md",
+    "smathml/README.md",
     "GROVE-FEEDBACK.md",
     "idea.txt",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "2026 Jinser Kafka <aimer@purejs.icu>"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["smathml/source/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "alpha-beta-eta"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
@@ -32,6 +40,7 @@ path = [
     "**/*.lock",
     "**/*.js",
     "**/*.css",
+    "**/*.py",
     ".envrc",
     ".gitignore",
     ".zcodeignore",

@@ -1,0 +1,5 @@
+@title{SMathML Reference (New)}
+@summary{The English SMathML reference.}
+@taxon["reference"]
+
+@smathml-page["smathml1.rkt" "smathml1.html"]

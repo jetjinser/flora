@@ -1,0 +1,7 @@
+@title{SMathML}
+@summary{SMathML Everything索引与其子文章，由Racket/SMathML源码生成。}
+@taxon["index"]
+
+@smathml-page["smathml_everything.rkt" "smathml_everything.html"]
+
+源代码与固定版本信息见仓库中的@code{smathml/README.md}。构建需要通过@code{smathml/manifest.scm}启用的可选 Racket/SMathML 开发环境。

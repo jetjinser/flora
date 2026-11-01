@@ -1,0 +1,5 @@
+@title{Napier筹 (排版测试)}
+@summary{Napier筹计算的SMathML排版实验。}
+@taxon["example"]
+
+@smathml-page["napier.rkt" "napier.html"]

@@ -1,0 +1,5 @@
+@title{SMathML注记}
+@summary{关于SMathML设计和实现的工作注记。}
+@taxon["notes"]
+
+@smathml-page["smathml_comments.rkt" "smathml_comments.html"]

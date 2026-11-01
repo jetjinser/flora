@@ -11,6 +11,7 @@
              (flora entity-metadata)
              (flora entity-presentation)
              (flora figure-assets)
+             (flora smathml)
              (ice-9 ftw)
              (ice-9 binary-ports)
              (ice-9 textual-ports)
@@ -88,7 +89,16 @@
   (map project-directory%
        (list "/flora/entity-metadata.scm"
              "/flora/entity-presentation.scm"
-             "/flora/figure-assets.scm")))
+             "/flora/figure-assets.scm"
+             "/flora/smathml.scm")))
+(define smathml-sources
+  (append
+    (map (lambda (name) (project-directory% (string-append "/smathml/source/" name)))
+         smathml-source-files)
+    (map project-directory%
+         '("/smathml/normalize-html.py"
+           "/smathml/manifest.scm"
+           "/channels.scm"))))
 (define entity-metadata-sources
   (entity-metadata-source-paths (dirname (current-filename))))
 (define entity-metadata
@@ -103,8 +113,11 @@
 (define-values (blazek2005-figures figure-image-sets)
   (make-blazek2005-figure-assets (dirname (current-filename))))
 (define flora-rules
-  (make-render-rules
-    (list (cons 'image (image-set-rule figure-image-sets)))))
+  (compose-render-rules
+    (make-render-rules
+      (list (cons 'image (image-set-rule figure-image-sets))))
+    (make-smathml-page-render-rules
+      #:source-root (project-directory% "/smathml/source"))))
 (define flora-style
   (compose-html-styles
     default-html-style
@@ -261,7 +274,8 @@
     #:source-directory plant-directory
     #:extra-sources (append (list stylesheet-path feed-stylesheet-path
                                   theme-script-path)
-                            font-sources flora-module-sources entity-metadata-sources)
+                            font-sources flora-module-sources smathml-sources
+                            entity-metadata-sources)
     #:prepare prepare-flora
     #:read-page (make-page-reader read-flora-page-document)
     #:analyze analyze-flora
