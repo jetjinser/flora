@@ -25,7 +25,13 @@ Use the Makefile from the Flora directory:
 make validate
 make build
 make serve
+make preview
 ```
+
+`make serve` uses Grove’s preview server. `make preview` serves the existing
+`build/` directory with Guile’s built-in HTTP server and does not check,
+build, watch, or update the site; run `make build` first. It listens on
+`127.0.0.1:8080` by default; set `HOST` or `PORT` to change the address.
 
 `make check` is the full gate: source verification, `validate`, `test`, `lint`,
 `a11y`, and `preview-check`. `make a11y` builds and runs the browser audit on

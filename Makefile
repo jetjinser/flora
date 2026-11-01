@@ -5,8 +5,11 @@
 GROVE ?= grove
 GROVE_ROOT ?= ../grove
 REUSE ?= reuse
+GUILE ?= guile
+HOST ?= 127.0.0.1
+PORT ?= 8080
 
-.PHONY: help validate test check build serve lint a11y preview-check verify-sources \
+.PHONY: help validate test check build serve preview lint a11y preview-check verify-sources \
 	update-doi-metadata update-zenodo-metadata update-crossref-metadata clean
 
 help:
@@ -17,7 +20,8 @@ help:
 	  'make update-doi-metadata DOI=doi:10.../...  Refresh one local metadata snapshot' \
 	  'make update-crossref-metadata DOI=doi:10.../...  Refresh via Crossref REST API' \
 	  'make update-zenodo-metadata URI=https://zenodo.org/records/ID  Refresh a Zenodo dataset snapshot' \
-	  'make serve       Preview the site' \
+	  'make serve       Build and preview the site with Grove' \
+	  'make preview     Serve the existing build/ directory without rebuilding' \
 	  'make lint        Check REUSE license compliance' \
 	  'make verify-sources  Verify hashes of non-Git build inputs' \
 	  'make a11y        Build and run the browser accessibility audit' \
@@ -43,6 +47,10 @@ build:
 
 serve:
 	$(GROVE) serve
+
+preview:
+	@test -f build/index.html || { echo 'preview: build/index.html not found; run make build first' >&2; exit 1; }
+	$(GUILE) --no-auto-compile scripts/preview.scm "$(HOST)" "$(PORT)" build
 
 update-doi-metadata:
 	@test -n "$(DOI)" || { echo 'usage: make update-doi-metadata DOI=doi:10.../...' >&2; exit 2; }

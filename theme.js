@@ -46,9 +46,49 @@
     }
   });
 
-  // Sidenotes are lifted into the page-level margin lane at render time
-  // (project #:side-lane); the [notes] grid column places the lane beside
-  // the reading column in CSS, so there is nothing to relocate here.
+  // Sidenotes are lifted into a page-level lane at render time. On wide
+  // layouts, align each note with its in-text marker and push it down when
+  // notes would overlap. Narrow layouts leave them as a normal endnote list.
+  function alignSidenotes() {
+    const lane = document.querySelector('.margin-lane');
+    if (!lane) return;
+
+    const notes = Array.from(lane.querySelectorAll(':scope > .margin-item'));
+    for (const note of notes) note.style.removeProperty('margin-block-start');
+    if (!matchMedia('(width > 60rem)').matches) return;
+
+    const laneTop = lane.getBoundingClientRect().top;
+    const gap = parseFloat(getComputedStyle(lane).rowGap) || 0;
+    let previousBottom = 0;
+    for (const note of notes) {
+      const markerId = `margin-ref-${note.id.slice('margin-'.length)}`;
+      const marker = document.getElementById(markerId);
+      const markerVisible = marker && marker.getClientRects().length > 0;
+      const markerTop = markerVisible
+        ? Math.max(0, marker.getBoundingClientRect().top - laneTop)
+        : previousBottom + (previousBottom ? gap : 0);
+      const naturalTop = previousBottom + (previousBottom ? gap : 0);
+      const top = Math.max(naturalTop, markerTop);
+      note.style.marginBlockStart = `${top - naturalTop}px`;
+      previousBottom = top + note.getBoundingClientRect().height;
+    }
+  }
+
+  function watchSidenotes() {
+    let frame = 0;
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(alignSidenotes);
+    };
+    window.addEventListener('resize', schedule, { passive: true });
+    document.addEventListener('toggle', schedule, true);
+    document.addEventListener('load', (event) => {
+      if (event.target instanceof HTMLImageElement) schedule();
+    }, true);
+    window.addEventListener('load', schedule, { once: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    schedule();
+  }
 
   // Link previews, Gwern-style: hovering an internal link floats a card with
   // the target page's title and lead content. Fetch-on-demand with a short
@@ -227,6 +267,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    watchSidenotes();
     watchLinkPreviews();
     controls = document.querySelector('.theme-controls');
     if (!controls) return;

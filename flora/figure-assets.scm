@@ -9,6 +9,7 @@
   #:use-module (ice-9 binary-ports)
   #:use-module (ice-9 format)
   #:use-module (ice-9 ftw)
+  #:use-module (ice-9 popen)
   #:use-module (ice-9 textual-ports)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-13)
@@ -105,8 +106,15 @@
       (string-append rasterizer-version "\n" (file-fingerprint pdf)))))
 
 (define (encode-variant cache-root command args output)
-  (let ((temporary (string-append cache-root "/" (basename output))))
-    (unless (zero? (apply system* command (append args (list temporary))))
+  (let* ((temporary (string-append cache-root "/" (basename output)))
+         (process
+          (apply open-pipe* OPEN_READ command (append args (list temporary)))))
+    ;; avifenc prints a full report for every successful image to stdout.
+    ;; Drain it quietly; stderr and the process status remain visible to users.
+    (let drain ()
+      (unless (eof-object? (read-char process))
+        (drain)))
+    (unless (zero? (close-pipe process))
       (error "image encode failed" command output))
     (let ((bytes (call-with-input-file temporary get-bytevector-all #:binary #t)))
       (delete-file temporary)

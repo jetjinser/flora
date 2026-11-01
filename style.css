@@ -110,7 +110,7 @@ html { line-height: 1.8; scroll-padding-block-start: 1lh; }
 body {
   /* Match the reading measure to CJK glyphs; let outer gutters follow the viewport. */
   --page-gutter: clamp(1ic, 3vi, 1.5ic);
-  max-inline-size: 62ic;
+  max-inline-size: 72ic;
   margin-block: 1.25lh 2.5lh;
   margin-inline: auto;
   padding-inline: var(--page-gutter);
@@ -130,27 +130,35 @@ body {
      sticky TOC; the notes lane holds the renderer-lifted margin notes, so
      the two never share a lane and cannot collide — no dodge, no veil. */
   grid-template-columns:
-    [contents] minmax(0, 12ic) [article] minmax(0, 38ic) [notes] minmax(0, 1fr);
+    [contents] minmax(12ic, 13ic) [article] minmax(34ic, 1fr) [notes] minmax(12ic, 18ic);
   column-gap: clamp(1ic, 3vi, 2.5ic);
   align-items: start;
 }
-body > header { grid-column: 2; margin-block-end: .8lh; }
-/* The article spans the reading and notes lanes as a subgrid: its tree and
-   backmatter sit in the reading lane, the margin lane rides the notes lane
-   on the same row — sticky travel without leaving the article element. */
-body > article {
-  grid-column: 2 / 4;
+body > header { grid-column: 1 / -1; margin-block-end: .8lh; }
+/* Grove places the table of contents and article inside the semantic main
+   element. Let main inherit the page grid so those regions share its lanes. */
+body > main {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
   min-inline-size: 0;
 }
-body > article > .page-tree { grid-column: 1; grid-row: 1; }
-body > article > .margin-lane { grid-column: 2; grid-row: 1; }
-body > article > .backmatter { grid-column: 1; }
+body > main > .table-of-contents { grid-column: 1; grid-row: 1; }
+/* The article spans the reading and notes lanes as a subgrid: its tree and
+   backmatter sit in the reading lane, the margin lane rides the notes lane
+   on the same row — sticky travel without leaving the article element. */
+body > main > article {
+  grid-column: 2 / 4;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: subgrid;
+  min-inline-size: 0;
+}
+body > main > article > .page-tree { grid-column: 1; grid-row: 1; }
+body > main > article > .margin-lane { grid-column: 2; grid-row: 1; }
+body > main > article > .backmatter { grid-column: 1; }
 body > header nav {
-  position: absolute;
-  inset-block-start: .5rem;
-  inset-inline: var(--page-gutter);
+  position: static;
   margin: 0;
   font-size: .85rem;
 }
@@ -185,6 +193,7 @@ a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px soli
 .table-of-contents {
   grid-column: 1;
   grid-row: 2;
+  align-self: start;
   position: sticky;
   inset-block-start: 1.25rem;
   max-block-size: calc(100svb - 2.5rem);
@@ -205,16 +214,12 @@ a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px soli
 .table-of-contents a { text-decoration: none; }
 .table-of-contents a:hover { text-decoration: underline; }
 
-/* The notes lane: sticky like the contents lane, its own column, entries
-   stacked in document order — the numbered markers keep the association
-   with their anchors in the article. */
+/* On wide layouts, the margin lane shares the article row; theme.js aligns
+   its entries with the in-text markers and prevents them from overlapping. */
 .margin-lane {
-  position: sticky;
-  inset-block-start: 1.25rem;
   align-self: start;
-  max-block-size: calc(100svb - 2.5rem);
-  overflow-y: auto;
-  scrollbar-width: thin;
+  overflow: visible;
+  gap: .65lh;
 }
 
 /* ---- Margin notes ----
@@ -224,27 +229,54 @@ a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px soli
    Item numbers are a CSS counter walking the same document order as the
    renderer's markers, so the two sequences agree without coordination. */
 body { counter-reset: margin-note; }
-.margin-ref { font-variant-numeric: oldstyle-nums; }
+.margin-ref {
+  font-variant-numeric: oldstyle-nums;
+  /* Leave room above the referenced line when a sidenote back-link is used. */
+  scroll-margin-block-start: 40svh;
+}
 .margin-ref a { color: inherit; text-decoration: none; }
 .margin-ref a:hover { color: var(--hover-color); }
+@keyframes margin-ref-arrival {
+  0%, 65% {
+    background-color: color-mix(in oklab, var(--hover-color) 10%, var(--paper));
+  }
+  100% { background-color: transparent; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .margin-ref:target,
+  .margin-item:target { animation: margin-ref-arrival 1.6s ease-out; }
+}
 .margin-item {
   counter-increment: margin-note;
   box-sizing: border-box;
+  scroll-margin-block-start: 40svh;
   margin-block: 0;
-  padding: .1em .35em .2em;
-  line-height: 1.6;
+  padding-block: .45lh;
+  padding-inline: .75ic;
+  border-inline-start: 2px solid var(--rule);
+  line-height: 1.55;
   color: var(--muted);
+  font-size: .85rem;
 }
-.margin-item:hover { background-color: var(--hover); }
+.margin-item:hover { border-inline-start-color: var(--muted); }
 .margin-item::before {
   content: counter(margin-note) " ";
-  font-size: 1.2em;
-  line-height: 0;
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 1.5em;
+  block-size: 1.5em;
+  margin-inline-end: .45em;
+  border-radius: 50%;
+  background: var(--wash);
   color: var(--ink);
+  font-size: .78em;
+  line-height: 1;
   font-variant-numeric: oldstyle-nums;
+  vertical-align: .12em;
 }
 .margin-backref {
-  margin-inline-start: .1em;
+  margin-inline-start: .2em;
+  margin-inline-end: .3em;
   color: var(--quiet);
   text-decoration: none;
 }
@@ -262,11 +294,17 @@ dfn { font-style: normal; }
 
 .forest-tree-block { margin-block: .85lh; border-radius: 0; }
 .forest-tree-block:hover { background-color: var(--hover); }
+/* Keep expanded backmatter compact, with its heading aligned to the body. */
+.backmatter section.forest-tree-block { margin-block: .22lh; }
+.backmatter.forest-tree-block > details > summary,
+.backmatter section.forest-tree-block > details > summary {
+  padding-inline: .9ic 0;
+}
 .page-tree { margin-block-end: 0; }
 /* Standalone titles now live in the article as collapsible trees. Align the
-   contents list with the title through the shared body grid row. */
-body:has(> article > .page-tree) > article > .page-tree { margin-block-start: 0; }
-body:has(> article > .page-tree) > .table-of-contents { margin-block-start: 0; }
+   contents list with the title through the shared main grid row. */
+body:has(> main > article > .page-tree) > main > article > .page-tree { margin-block-start: 0; }
+body:has(> main > article > .page-tree) > main > .table-of-contents { margin-block-start: 0; }
 .page-tree + .backmatter { margin-block-start: .85lh; }
 .forest-tree-block > details > summary {
   display: block;
@@ -278,6 +316,8 @@ body:has(> article > .page-tree) > .table-of-contents { margin-block-start: 0; }
 .page-tree > details > summary .forest-tree-title { font-size: 1.8rem; line-height: 1.35; }
 .page-tree > details > summary .forest-tree-id { font-size: .62em; vertical-align: -.12em; }
 .forest-tree-content { padding-block: 0 .4lh; padding-inline: .9ic; }
+.backmatter .forest-tree-content { padding-block-end: .15lh; }
+.backmatter section.forest-tree-block > details > summary > .forest-tree-id { margin-inline-start: .35em; }
 .forest-tree-content > :last-child { margin-bottom: 0; }
 .forest-tree-id {
   display: inline-block;
@@ -361,15 +401,24 @@ math { font-size: 1.08em; }
 blockquote { margin-inline: 0; padding-inline-start: 1ic; }
 img { height: auto; }
 
+@media (width <= 82rem) {
+  body {
+    grid-template-columns:
+      [contents] minmax(10ic, 13ic) [article] minmax(28ic, 1fr) [notes] minmax(9ic, 12ic);
+    column-gap: clamp(.35ic, 1vi, .8ic);
+  }
+}
 @media (width <= 60rem) {
-  body { display: block; max-inline-size: calc(38ic + 2 * var(--page-gutter)); margin-block-start: 2.5lh; }
-  body > article { display: block; }
-  .table-of-contents { position: static; max-block-size: none; padding-block: .75lh; padding-inline: 0; margin-block-end: 1lh; border-block: 1px solid var(--rule); }
+  body { display: block; max-inline-size: 72ic; margin-block-start: 2.5lh; }
+  body > main { display: block; }
+  body > main > article { display: block; max-inline-size: 38ic; margin-inline: auto; }
+  .table-of-contents { position: static; max-inline-size: 38ic; max-block-size: none; padding-block: .75lh; padding-inline: 0; margin-inline: auto; margin-block-end: 1lh; border-block-end: 1px solid var(--rule); }
   .table-of-contents > ol { columns: 2; column-gap: 1.5ic; }
   .table-of-contents li { break-inside: avoid; }
-  /* No notes lane on narrow viewports: the lifted notes group at the end of
-     the article as a quiet endnote surface, reached through the markers. */
+  /* On narrow viewports, put lifted notes after the article instead of
+     squeezing them into a third column. */
   .margin-lane {
+    position: static;
     margin-block: .85lh;
     padding-block: .5lh;
     border-block: 1px solid var(--rule);
@@ -384,6 +433,7 @@ img { height: auto; }
   }
 }
 @media (width <= 30rem) {
+  body { max-inline-size: calc(38ic + 2 * var(--page-gutter)); }
   body { font-size: 1.0625rem; }
   h1 { font-size: 1.5rem; }
   .table-of-contents > ol { columns: 1; }
@@ -401,7 +451,8 @@ img { height: auto; }
     font-size: 11pt;
   }
   body > header, .table-of-contents, .theme-controls { display: none !important; }
-  body > article { inline-size: auto; display: block; }
+  body > main { display: block; }
+  body > main > article { inline-size: auto; display: block; }
   /* Notes run as a grouped endnote list after the tree, set off by a rule. */
   .margin-lane { margin-block: .7em; }
   .margin-item {
