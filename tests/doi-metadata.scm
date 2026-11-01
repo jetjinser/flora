@@ -21,7 +21,9 @@
 (define fake-curl (string-append test-bin "/curl"))
 (define updater-path (canonicalize-path "scripts/update-doi-metadata.scm"))
 (define flora-modules (canonicalize-path "."))
-(define grove-modules (canonicalize-path "../grove/modules"))
+(define grove-modules
+  (canonicalize-path
+   (dirname (dirname (search-path %load-path "grove/cache.scm")))))
 (define original-path (getenv "PATH"))
 (define uri "doi:10.1234/grove-test")
 (define unicode-uri "doi:10.1234/例")

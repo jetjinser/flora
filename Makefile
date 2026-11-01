@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 GROVE ?= grove
-GROVE_ROOT ?= ../grove
+GROVE_ROOT ?= $(HOME)/vie/projet/prototype/grove
 REUSE ?= reuse
 GUILE ?= guile
 HOST ?= 127.0.0.1

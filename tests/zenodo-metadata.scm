@@ -18,7 +18,9 @@
 (define fake-curl (string-append test-bin "/curl"))
 (define updater-path (canonicalize-path "scripts/update-zenodo-metadata.scm"))
 (define flora-modules (canonicalize-path "."))
-(define grove-modules (canonicalize-path "../grove/modules"))
+(define grove-modules
+  (canonicalize-path
+   (dirname (dirname (search-path %load-path "grove/cache.scm")))))
 (define original-path (getenv "PATH"))
 (define uri "https://zenodo.org/records/12345")
 (define other-uri "doi:10.1234/example")
