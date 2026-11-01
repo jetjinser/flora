@@ -28,6 +28,7 @@
              (grove input scribble)
              (grove project)
              (grove project site)
+             (grove render)
              (grove render html presentation)
              (grove render html routes)
              (grove i18n)
@@ -237,32 +238,37 @@
                    (find (cdr uris)))))))
     (pages forest)))
 
-(define (render-flora forest)
-  (render-html
-    forest
-    #:options
-    (make-html-options
-      #:routes html-routes
-      #:settings flora-settings
-      #:messages flora-messages
-      #:presentation
-      (compose-html-presentations
-        (make-html-presentation #:style flora-style #:rules flora-rules)
-        (make-html-presentation
-            #:head flora-head
-            #:title-decorations (flora-title-decorations forest)
-            #:home-link
-            (make-html-home-link
-              '((span (@ (class "home-icon") (aria-hidden "true")) "«")
-                "Flora")
-              #:attributes '((title . "回到首页")))
-            #:site-nav (list theme-controls-sxml)
-            #:metadata-items (flora-reference-metadata-items forest)))
-      #:article? #t
-      #:backmatter-details? #t
-      ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
-      ;; 收进 .margin-lane,各带回链——不再依赖 theme.js 搬运 DOM。
-      #:side-lane '(flora-sidenote))))
+(define render-flora
+  (make-cached-renderer
+    (lambda (forest)
+      (render-html
+        forest
+        #:options
+        (make-html-options
+          #:routes html-routes
+          #:settings flora-settings
+          #:messages flora-messages
+          #:presentation
+          (compose-html-presentations
+            (make-html-presentation #:style flora-style #:rules flora-rules)
+            (make-html-presentation
+                #:head flora-head
+                #:title-decorations (flora-title-decorations forest)
+                #:home-link
+                (make-html-home-link
+                  '((span (@ (class "home-icon") (aria-hidden "true")) "«")
+                    "Flora")
+                  #:attributes '((title . "回到首页")))
+                #:site-nav (list theme-controls-sxml)
+                #:metadata-items (flora-reference-metadata-items forest)))
+          #:article? #t
+          #:backmatter-details? #t
+          ;; 边注在渲染期抬入页面级 lane:锚点留编号上标,注释按文档序
+          ;; 收进 .margin-lane,各带回链——不再依赖 theme.js 搬运 DOM。
+          #:side-lane '(flora-sidenote))))
+    ;; Project.scm and its loaded modules are tracked project inputs, so edits
+    ;; to renderer behavior or configuration invalidate this cached output.
+    #:configuration '(flora-html-renderer 1)))
 
 (define (analyze-flora site)
   ((module-ref (resolve-interface '(flora queries)) 'analyze-flora) (lp-enrich-site site)))
