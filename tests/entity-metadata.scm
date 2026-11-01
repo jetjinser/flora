@@ -1,8 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 Jinser Kafka <aimer@purejs.icu>
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 ;;;
-;;; Run from Flora's root:
-;;;   guile --no-auto-compile -L . tests/entity-metadata.scm
 
 (use-modules (flora entity-metadata)
              (flora entity-presentation)

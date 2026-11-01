@@ -1,8 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 Jinser Kafka <aimer@purejs.icu>
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 ;;;
-;;; Run from Flora's root inside its Guix environment:
-;;;   guile --no-auto-compile tests/zenodo-metadata.scm
 
 (use-modules (ice-9 ftw)
              (ice-9 textual-ports)

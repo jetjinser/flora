@@ -1,9 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 Jinser Kafka <aimer@purejs.icu>
-;;;
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 ;;;
-;;; Run from Flora's root inside its Guix environment:
-;;;   guile --no-auto-compile tests/figure-page-cache.scm
 
 (use-modules (grove cache)
              (ice-9 ftw)

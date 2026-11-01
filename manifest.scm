@@ -2,14 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;;; Flora's own development tools, on top of the Grove toolchain.
-;;; Combine with the sibling Grove checkout's manifest and package entry point:
-;;;
-;;;   guix time-machine -C channels.scm -- shell \
-;;;     -m "$GROVE_CHECKOUT/manifest.scm" -m manifest.scm -f "$GROVE_CHECKOUT/guix.scm"
-;;;   make check
-;;;   make build
-;;;
+;;; Flora's development tools, on top of the Grove toolchain.
 
 (use-modules (gnu packages))
 
