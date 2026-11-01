@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 ;;;
 ;;; Run from Flora's root:
-;;;   guile --no-auto-compile -L ../grove/modules -L . tests/entity-snapshot.scm
+;;;   guile --no-auto-compile -L . tests/entity-snapshot.scm
 
 (use-modules (flora entity-snapshot)
              (ice-9 ftw)

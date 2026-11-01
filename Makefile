@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 GROVE ?= grove
-GROVE_ROOT ?= $(HOME)/vie/projet/prototype/grove
 REUSE ?= reuse
 GUILE ?= guile
 HOST ?= 127.0.0.1
@@ -35,11 +34,11 @@ validate:
 test:
 	guile --no-auto-compile -L . tests/lp-core.scm
 	guile --no-auto-compile -L . tests/lp-project.scm
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/figure-page-cache.scm
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/entity-snapshot.scm
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/doi-metadata.scm
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/zenodo-metadata.scm
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . tests/crossref-metadata.scm
+	guile --no-auto-compile -L . tests/figure-page-cache.scm
+	guile --no-auto-compile -L . tests/entity-snapshot.scm
+	guile --no-auto-compile -L . tests/doi-metadata.scm
+	guile --no-auto-compile -L . tests/zenodo-metadata.scm
+	guile --no-auto-compile -L . tests/crossref-metadata.scm
 	guile --no-auto-compile -L . tests/entity-metadata.scm
 
 build:
@@ -54,28 +53,24 @@ preview:
 
 update-doi-metadata:
 	@test -n "$(DOI)" || { echo 'usage: make update-doi-metadata DOI=doi:10.../...' >&2; exit 2; }
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . \
+	guile --no-auto-compile -L . \
 	  scripts/update-doi-metadata.scm "$(DOI)"
 
 update-zenodo-metadata:
 	@test -n "$(URI)" || { echo 'usage: make update-zenodo-metadata URI=https://zenodo.org/records/ID' >&2; exit 2; }
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . \
+	guile --no-auto-compile -L . \
 	  scripts/update-zenodo-metadata.scm "$(URI)"
 
 update-crossref-metadata:
 	@test -n "$(DOI)" || { echo 'usage: make update-crossref-metadata DOI=doi:10.../...' >&2; exit 2; }
-	guile --no-auto-compile -L "$(GROVE_ROOT)/modules" -L . \
+	guile --no-auto-compile -L . \
 	  scripts/update-crossref-metadata.scm "$(DOI)"
 
 lint:
 	$(REUSE) --no-multiprocessing lint
 
 a11y: build
-	@test -x "$(GROVE_ROOT)/scripts/a11y-audit.sh" || { \
-	  echo "a11y: set GROVE_ROOT to a Grove checkout with scripts/a11y-audit.sh" >&2; \
-	  exit 1; \
-	}
-	"$(GROVE_ROOT)/scripts/a11y-audit.sh" \
+	scripts/a11y-audit.sh \
 	  build/index.html \
 	  build/math-0003.html \
 	  build/lp-0001.html \

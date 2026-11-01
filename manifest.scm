@@ -6,11 +6,10 @@
 ;;; Combine with the sibling Grove checkout's manifest and package entry point:
 ;;;
 ;;;   guix time-machine -C channels.scm -- shell \
-;;;     -m ../grove/manifest.scm -m manifest.scm -f ../grove/guix.scm
+;;;     -m "$GROVE_CHECKOUT/manifest.scm" -m manifest.scm -f "$GROVE_CHECKOUT/guix.scm"
 ;;;   make check
 ;;;   make build
 ;;;
-;;; Set GROVE_ROOT for Makefile checks if Grove lives elsewhere.
 
 (use-modules (gnu packages))
 

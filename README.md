@@ -4,22 +4,24 @@ Flora is an executable tutorial site built with Grove. Its `.plant` files combin
 
 ## Build and preview
 
-From the Flora directory, enter the Guix development environment. The Grove toolchain comes from the sibling Grove checkout:
+From the Flora directory, enter the Nix development environment; the flake
+pins Grove from its upstream repository:
+
+```sh
+nix develop
+```
+
+Alternatively with Guix, which builds the Grove toolchain from a local
+Grove checkout (default `~/vie/projet/prototype/grove`, override with
+`GROVE_CHECKOUT`):
 
 ```sh
 guix time-machine -C channels.scm -- shell \
-  -m ../grove/manifest.scm -m manifest.scm \
-  -f ../grove/guix.scm
+  -m "$GROVE_CHECKOUT/manifest.scm" -m manifest.scm \
+  -f "$GROVE_CHECKOUT/guix.scm"
 ```
 
-or with nix (the flake pins the same checkout):
-
-```sh
-nix develop ../grove/nix
-```
-
-The Guix shell includes the CLI package built from the sibling Grove checkout.
-Use the Makefile from the Flora directory:
+Then use the Makefile from the Flora directory:
 
 ```sh
 make validate
@@ -39,9 +41,8 @@ representative home, math, literate-programming, and translated-book pages;
 it does not scan every generated page. `make preview-check`
 checks the link preview’s focus, Escape, and focusout behavior; `make lint`
 checks REUSE compliance. The Makefile uses `grove` from `PATH`; override
-`GROVE` to point at another checkout. The audit uses
-`$(GROVE_ROOT)/scripts/a11y-audit.sh` (default `../grove`), so set `GROVE_ROOT`
-when the Grove source is elsewhere. Set `CHROMIUM` if the browser is not on
+`GROVE` to point at another build. The accessibility audit lives in
+`scripts/a11y-audit.sh`. Set `CHROMIUM` if the browser is not on
 `PATH`. The Guix manifest provides Chromium; the first
 accessibility audit downloads a pinned, checksum-verified axe-core bundle and
 needs network access unless that bundle is already cached.

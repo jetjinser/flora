@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 ;;;
 ;;; Run from Flora's root inside its Guix environment:
-;;;   guile --no-auto-compile -L ../grove/modules tests/doi-metadata.scm
+;;;   guile --no-auto-compile tests/doi-metadata.scm
 
 (use-modules (ice-9 ftw)
              (ice-9 textual-ports)

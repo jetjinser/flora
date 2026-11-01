@@ -3,6 +3,7 @@ fonts-src/
 /fonts/*.woff2
 /fonts/*.css
 /materials/
+/assets/
 /.blue-store/
 /.direnv/
 /result

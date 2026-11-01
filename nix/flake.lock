@@ -55,15 +55,15 @@
       "locked": {
         "lastModified": 1793496966,
         "narHash": "sha256-bItWMKReceqFnr1qt45bimtMX2NE8wf+sA0NI+Xq2yo=",
-        "ref": "refs/heads/master",
+        "owner": "jetjinser",
+        "repo": "grove",
         "rev": "a3b90b09edd7cd8bd0cbc638f44d96a70fd4bdd4",
-        "revCount": 1233,
-        "type": "git",
-        "url": "file:///home/jinser/vie/projet/prototype/grove"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/jinser/vie/projet/prototype/grove"
+        "owner": "jetjinser",
+        "repo": "grove",
+        "type": "github"
       }
     },
     "nixpkgs": {
