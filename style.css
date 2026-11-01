@@ -603,6 +603,7 @@ figcaption {
   max-inline-size: min(38rem, calc(100vw - 2rem));
   max-block-size: min(24rem, 60vh);
   overflow: auto;
+  overscroll-behavior: auto;
   visibility: hidden;
   pointer-events: none;
   background: var(--paper);

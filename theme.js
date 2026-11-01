@@ -132,13 +132,6 @@
         card.setAttribute('aria-hidden', 'true');
         document.body.appendChild(card);
         card.addEventListener('pointerenter', () => clearTimeout(hideTimer));
-        // The card is a visual preview, not a nested scroll area. Keep wheel
-        // gestures moving the page even when the pointer is over the card.
-        card.addEventListener('wheel', (event) => {
-          if (event.ctrlKey) return;
-          event.preventDefault();
-          window.scrollBy(event.deltaX, event.deltaY);
-        }, { passive: false });
       }
       return card;
     }
