@@ -54,19 +54,28 @@
     if (!lane) return;
 
     const notes = Array.from(lane.querySelectorAll(':scope > .margin-item'));
-    for (const note of notes) note.style.removeProperty('margin-block-start');
+    const visibleNotes = [];
+    for (const note of notes) {
+      note.style.removeProperty('margin-block-start');
+      const markerId = `margin-ref-${note.id.slice('margin-'.length)}`;
+      const marker = document.getElementById(markerId);
+      const collapsed = marker && marker.closest('details:not([open])');
+      if (marker && !collapsed && marker.getClientRects().length > 0) {
+        note.hidden = false;
+        visibleNotes.push({ note, marker });
+      } else {
+        note.hidden = true;
+      }
+    }
+    lane.hidden = visibleNotes.length === 0;
+    if (!visibleNotes.length) return;
     if (!matchMedia('(width > 60rem)').matches) return;
 
     const laneTop = lane.getBoundingClientRect().top;
     const gap = parseFloat(getComputedStyle(lane).rowGap) || 0;
     let previousBottom = 0;
-    for (const note of notes) {
-      const markerId = `margin-ref-${note.id.slice('margin-'.length)}`;
-      const marker = document.getElementById(markerId);
-      const markerVisible = marker && marker.getClientRects().length > 0;
-      const markerTop = markerVisible
-        ? Math.max(0, marker.getBoundingClientRect().top - laneTop)
-        : previousBottom + (previousBottom ? gap : 0);
+    for (const { note, marker } of visibleNotes) {
+      const markerTop = Math.max(0, marker.getBoundingClientRect().top - laneTop);
       const naturalTop = previousBottom + (previousBottom ? gap : 0);
       const top = Math.max(naturalTop, markerTop);
       note.style.marginBlockStart = `${top - naturalTop}px`;
@@ -81,7 +90,9 @@
       frame = requestAnimationFrame(alignSidenotes);
     };
     window.addEventListener('resize', schedule, { passive: true });
-    document.addEventListener('toggle', schedule, true);
+    document.querySelectorAll('details').forEach((details) => {
+      details.addEventListener('toggle', schedule);
+    });
     document.addEventListener('load', (event) => {
       if (event.target instanceof HTMLImageElement) schedule();
     }, true);

@@ -311,6 +311,8 @@ body:has(> main > article > .page-tree) > main > .table-of-contents { margin-blo
   cursor: pointer;
   font-size: 1rem;
   line-height: 1.5;
+}
+.forest-tree-block > details[open] > summary {
   margin-block-end: .4lh;
 }
 .forest-tree-title { font-size: 1em; font-weight: 700; }
