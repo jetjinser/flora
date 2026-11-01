@@ -4,4 +4,4 @@
 
 @smathml-page["smathml_everything.rkt" "smathml_everything.html"]
 
-源代码与固定版本信息见仓库中的@code{smathml/README.md}。构建需要通过@code{smathml/manifest.scm}启用的可选 Racket/SMathML 开发环境。
+源代码与固定版本信息见仓库中的@code{smathml/README.md}。完整站点构建需要 Racket/SMathML 工具链；仓库的@code{.envrc}会在 Guix 环境中自动启用它。

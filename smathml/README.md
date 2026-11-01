@@ -20,13 +20,17 @@ backmatter. The route table is checked against each generated SMathML document
 when it renders; a changed or unmapped internal link fails the build instead
 of silently drifting from Grove's relation graph.
 
-SMathML is pinned in `manifest.scm` to upstream commit
-`20dfc39ddf60688870e54cfeaa6215297ea21d0c`. The toolchain is optional:
+SMathML is pinned in `smathml/manifest.scm` to upstream commit
+`20dfc39ddf60688870e54cfeaa6215297ea21d0c`. The toolchain is defined
+separately from Flora's base manifest. Load both manifests for a full build:
 
 ```sh
 guix time-machine -C channels.scm -- shell \
   -m manifest.scm -m smathml/manifest.scm -- grove build
 ```
+
+The full Flora build needs this toolchain because the site includes these
+Racket-generated pages. Flora's Guix `.envrc` activates both manifests.
 
 This experiment intentionally preserves SMathML's Racket source and generation
 model. It does not translate SMathML into Grove's math DSL or claim that the two
