@@ -306,6 +306,8 @@ dfn { font-style: normal; }
 body:has(> main > article > .page-tree) > main > article > .page-tree { margin-block-start: 0; }
 body:has(> main > article > .page-tree) > main > .table-of-contents { margin-block-start: 0; }
 .page-tree + .backmatter { margin-block-start: .85lh; }
+/* Consecutive backmatter sections are one grouped area, not separate articles. */
+.backmatter + .backmatter { margin-block-start: .6lh; }
 .forest-tree-block > details > summary {
   display: block;
   cursor: pointer;

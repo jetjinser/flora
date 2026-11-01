@@ -106,3 +106,25 @@ subtree命令把一段内容声明为独立的树；transclude命令把那棵树
 
   @code{#:open? #f}让展示默认折叠，不改变tree身份。目录按实际展示的嵌套顺序生成；相同tree展示多次时，各次展示拥有不同的局部锚点。
 }
+
+@subtree[#:id "backmatter-relations"]{
+  @title{站点关系与 Backmatter}
+
+  每个页面末尾的 backmatter 是从全站内容关系中查询出的导航。四类关系回答不同问题：
+
+  @itemize{
+    @item{@code{语境 Context}：哪些页面通过 subtree 定义或 transclude 展示了这棵tree。}
+    @item{@code{参考文献 References}：这棵tree及其 composition 链接到哪些 taxon 为 @code{reference} 的页面。}
+    @item{@code{反向链接 Backlinks}：哪些页面显式链接到了这棵tree。}
+    @item{@code{相关 Related}：这棵tree直接链接到的非 @code{reference} 页面。}
+  }
+
+  例如，查询 SMathML 索引页（ID 为 @code{smathml}）：
+
+  @code-block[#:language 'scheme "(context-pages forest \"smathml\")
+(reference-pages forest \"smathml\")
+(backlinks forest \"smathml\")
+(related-pages forest \"smathml\")"]
+
+  在当前站点中，@code{reference-pages} 返回中英文 SMathML 参考页；@code{related-pages} 返回 SMathML 指南、证明树与 Napier 排版示例、注记页。@code{context-pages} 和 @code{backlinks} 对这个 ID 没有结果，因此不生成对应区块。页面末尾的导航就是这些查询结果；参考页单独归类，是因为其 taxon 为 @code{reference}。
+}
