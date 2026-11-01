@@ -102,9 +102,8 @@
   }
 
   // Link previews, Gwern-style: hovering an internal link floats a card with
-  // the target page's title and lead content. Fetch-on-demand with a short
-  // intent delay and a per-session cache; click still navigates, touch
-  // devices never see it, and math in the card is typeset after injection.
+  // the target page's title and lead content. Nested links extend a preview
+  // path, keeping each parent card open until the pointer leaves the path.
   function watchLinkPreviews() {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
@@ -112,35 +111,41 @@
     const MAX_CHARS = 1600;  // cap on extracted lead text
     const MAX_NODES = 6;     // cap on extracted block elements
     const SKIP = 'nav, .table-of-contents, .backmatter, .theme-controls, style, script, link, template, h1';
-    const cache = new Map(); // href -> {title, html}
-    // CSS anchor positioning handles placement and flipping; place() remains
-    // the fallback for browsers without position-area/position-anchor.
+    const cache = new Map();
+    const linkSelector = 'a[href]';
     const anchorPositioning =
       typeof CSS !== 'undefined' && CSS.supports &&
       CSS.supports('position-area: block-end') &&
       CSS.supports('position-anchor: --flora-link-preview');
-    let card = null;
-    let currentLink = null;
-    let activeLink = null;
+    const stack = [];
     let hoverTimer = 0;
     let hideTimer = 0;
+    let pending = null;
+    let nextAnchorId = 0;
+    let repositionFrame = 0;
 
-    function ensureCard() {
-      if (!card) {
-        card = document.createElement('div');
-        card.className = 'link-preview';
-        card.setAttribute('aria-hidden', 'true');
-        document.body.appendChild(card);
-        card.addEventListener('pointerenter', () => clearTimeout(hideTimer));
+    function previewHref(link) {
+      try {
+        const url = new URL(link.href, location.href);
+        return url.origin === location.origin && url.pathname.endsWith('.html')
+          ? url.href
+          : null;
+      } catch (_) {
+        return null;
       }
-      return card;
     }
 
-    function setAnchor(link) {
-      if (currentLink === link) return;
-      if (currentLink) currentLink.style.removeProperty('anchor-name');
-      currentLink = link;
-      link.style.setProperty('anchor-name', '--flora-link-preview');
+    function cardIndex(target) {
+      const card = target && target.closest('.link-preview');
+      return card ? stack.findIndex((item) => item.card === card) : -1;
+    }
+
+    function removeFrom(depth) {
+      while (stack.length > depth) {
+        const item = stack.pop();
+        item.link.style.removeProperty('anchor-name');
+        item.card.remove();
+      }
     }
 
     function hideSoon() {
@@ -151,16 +156,11 @@
     function hide() {
       clearTimeout(hoverTimer);
       clearTimeout(hideTimer);
-      if (card) {
-        card.classList.remove('open');
-        card.classList.remove('loading');
-      }
-      if (currentLink) currentLink.style.removeProperty('anchor-name');
-      currentLink = null;
-      activeLink = null;
+      pending = null;
+      removeFrom(0);
     }
 
-    function extract(doc) {
+    function extract(doc, baseUrl) {
       const article = doc.querySelector('article') || doc.body;
       let title = (doc.querySelector('h1') || {}).textContent || '';
       // 预览卡片里,taxon 前缀与地址 chip 都是噪音。
@@ -175,21 +175,31 @@
         if (!text.trim()) continue;
         const clone = node.cloneNode(true);
         for (const gone of clone.querySelectorAll(SKIP)) gone.remove();
-        // The preview is visual-only: keep text and figures, drop every
-        // focusable or interactive descendant and duplicate ids.
+        // Keep internal links for nested previews; remove other interactive
+        // controls and duplicate ids from the embedded fragment.
         for (const gone of clone.querySelectorAll(
-          'a, button, input, select, textarea, summary, [tabindex], ' +
+          'button, input, select, textarea, summary, [tabindex], ' +
           'audio[controls], video[controls], iframe, object, embed, form')) {
           gone.remove();
         }
         for (const details of clone.querySelectorAll('details')) {
           details.replaceWith(...details.childNodes);
         }
-        for (const label of clone.querySelectorAll('label[for]')) {
-          label.removeAttribute('for');
-        }
-        for (const node of clone.querySelectorAll('[id]')) {
-          node.removeAttribute('id');
+        for (const element of [clone, ...clone.querySelectorAll('*')]) {
+          for (const attribute of [...element.attributes]) {
+            if (/^on/i.test(attribute.name) || attribute.name === 'id') {
+              element.removeAttribute(attribute.name);
+            }
+          }
+          if (element.matches('a[href]')) {
+            try {
+              element.href = new URL(element.getAttribute('href'), baseUrl).href;
+              element.removeAttribute('target');
+              element.removeAttribute('download');
+            } catch (_) {
+              element.replaceWith(...element.childNodes);
+            }
+          }
         }
         body.appendChild(clone);
         chars += text.length;
@@ -198,81 +208,128 @@
       return { title, html: body.innerHTML };
     }
 
-    function place(link) {
-      const rect = link.getBoundingClientRect();
-      const width = card.offsetWidth;
-      const height = card.offsetHeight;
+    function place(item) {
+      const rect = item.link.getBoundingClientRect();
+      const width = item.card.offsetWidth;
+      const height = item.card.offsetHeight;
       let left = rect.left + window.scrollX;
       left = Math.max(8, Math.min(left, window.scrollX + document.documentElement.clientWidth - width - 8));
       let top = rect.bottom + window.scrollY;
-      if (rect.bottom + height > window.scrollY + document.documentElement.clientHeight
-          && rect.top - height > window.scrollY) {
+      if (rect.bottom + height > document.documentElement.clientHeight && rect.top - height > 0) {
         top = rect.top + window.scrollY - height;
       }
-      card.style.left = `${left}px`;
-      card.style.top = `${top}px`;
+      item.card.style.left = `${left}px`;
+      item.card.style.top = `${top}px`;
     }
 
-    async function showFor(link) {
-      const href = link.getAttribute('href');
-      if (!href || activeLink !== link) return;
-      const pending = ensureCard();
-      pending.classList.add('loading');
+    function reposition() {
+      if (anchorPositioning || repositionFrame) return;
+      repositionFrame = requestAnimationFrame(() => {
+        repositionFrame = 0;
+        for (const item of stack) place(item);
+      });
+    }
+
+    function makeCard(link, depth) {
+      const card = document.createElement('div');
+      const anchorName = `--flora-link-preview-${++nextAnchorId}`;
+      card.className = 'link-preview';
+      card.setAttribute('aria-hidden', 'true');
+      card.style.zIndex = String(60 + depth);
+      if (anchorPositioning) {
+        link.style.setProperty('anchor-name', anchorName);
+        card.style.setProperty('position-anchor', anchorName);
+      }
+      document.body.appendChild(card);
+      card.addEventListener('pointerenter', () => clearTimeout(hideTimer));
+      const item = { link, card, depth };
+      if (!anchorPositioning) place(item);
+      return item;
+    }
+
+    async function showFor(link, parentDepth) {
+      const href = previewHref(link);
+      if (!href || pending?.link !== link || stack.length !== parentDepth) return;
+      const item = makeCard(link, parentDepth);
+      stack.push(item);
+      item.card.classList.add('loading');
       try {
         let entry = cache.get(href);
         if (!entry) {
           const response = await fetch(href);
           if (!response.ok) throw new Error(response.status);
-          entry = extract(new DOMParser().parseFromString(await response.text(), 'text/html'));
+          const baseUrl = response.url || href;
+          entry = extract(new DOMParser().parseFromString(await response.text(), 'text/html'), baseUrl);
           cache.set(href, entry);
         }
-        if (activeLink !== link) return; // the pointer moved on mid-fetch
-        pending.innerHTML = '';
+        if (pending?.link !== link || stack[parentDepth] !== item) return;
+        item.card.innerHTML = '';
         const heading = document.createElement('div');
         heading.className = 'link-preview-title';
         heading.textContent = entry.title;
-        pending.appendChild(heading);
+        item.card.appendChild(heading);
         const body = document.createElement('div');
         body.className = 'link-preview-body';
         body.innerHTML = entry.html;
-        pending.appendChild(body);
-        if (anchorPositioning) setAnchor(link);
-        else place(link);
+        item.card.appendChild(body);
+        if (!anchorPositioning) place(item);
         if (window.MathJax && MathJax.typesetPromise) {
-          MathJax.typesetPromise([pending]).catch(() => {});
+          MathJax.typesetPromise([item.card]).catch(() => {});
         }
-        pending.classList.remove('loading');
-        pending.classList.add('open');
+        item.card.classList.remove('loading');
+        item.card.classList.add('open');
+        item.card.setAttribute('aria-hidden', 'false');
       } catch (_) {
-        pending.classList.remove('loading'); // previews are optional; stay silent
+        if (stack[parentDepth] === item) removeFrom(parentDepth);
       }
     }
 
     function enter(link) {
-      if (link.closest('.link-preview')) return;
-      if (activeLink === link) {
-        clearTimeout(hideTimer);
+      const href = previewHref(link);
+      if (!href) return;
+      const containingDepth = cardIndex(link);
+      const parentDepth = containingDepth < 0 ? 0 : containingDepth + 1;
+      const existing = stack[parentDepth];
+      clearTimeout(hideTimer);
+      if (existing?.link === link) {
+        pending = { link, parentDepth };
         return;
       }
-      hide();                    // 收起上一张;不得经 hideSoon 延时——它会反杀意图计时器
-      activeLink = link;
-      hoverTimer = setTimeout(() => showFor(link), INTENT);
+      clearTimeout(hoverTimer);
+      removeFrom(parentDepth);
+      pending = { link, parentDepth };
+      hoverTimer = setTimeout(() => showFor(link, parentDepth), INTENT);
     }
 
-    const linkSelector = 'a[href$=".html"]';
+    function isInOpenPath(target) {
+      if (!target) return false;
+      return stack.some((item) => item.card === target || item.card.contains(target) ||
+        item.link === target || item.link.contains(target));
+    }
+
+    function prunePathAt(target) {
+      const depth = cardIndex(target);
+      const hoveredLink = target.closest(linkSelector);
+      const matchingCard = hoveredLink
+        ? stack.findIndex((item) => item.link === hoveredLink)
+        : -1;
+      const keepDepth = matchingCard >= 0 ? matchingCard + 1 : depth >= 0 ? depth + 1 : stack.length;
+      if (stack.length > keepDepth) {
+        clearTimeout(hoverTimer);
+        pending = null;
+        removeFrom(keepDepth);
+      }
+    }
+
     document.addEventListener('pointerover', (event) => {
       const target = event.target instanceof Element ? event.target : null;
       const related = event.relatedTarget instanceof Element ? event.relatedTarget : null;
       if (!target) return;
+      prunePathAt(target);
+      if (isInOpenPath(target)) clearTimeout(hideTimer);
       const link = target.closest(linkSelector);
       const fromLink = related && related.closest(linkSelector);
-      if (link && link.getAttribute('href').startsWith('/')) {
-        // pointerover bubbles for every descendant; only start a new intent
-        // when the pointer actually entered a different link.
-        if (link !== fromLink) enter(link);
-      } else if (target.closest('.link-preview')) {
-        clearTimeout(hideTimer);
-      }
+      if (link && previewHref(link) && link !== fromLink) enter(link);
     });
     document.addEventListener('pointerout', (event) => {
       const target = event.target instanceof Element ? event.target : null;
@@ -280,25 +337,34 @@
       if (!target) return;
       const fromLink = target.closest(linkSelector);
       const toLink = related && related.closest(linkSelector);
-      const fromCard = target.closest('.link-preview');
-      const toCard = related && related.closest('.link-preview');
-      if (fromLink && fromLink !== toLink && !toCard) hideSoon();
-      if (fromCard && !toCard && !toLink) hideSoon();
+      if (fromLink && fromLink !== toLink && !isInOpenPath(related)) {
+        if (pending?.link === fromLink) {
+          clearTimeout(hoverTimer);
+          pending = null;
+        }
+        hideSoon();
+      }
+      if (isInOpenPath(target) && !isInOpenPath(related)) hideSoon();
     });
     document.addEventListener('focusin', (event) => {
-      const link = event.target.closest('a[href$=".html"]');
-      if (link && link.getAttribute('href').startsWith('/')) enter(link);
+      const link = event.target.closest(linkSelector);
+      if (link && previewHref(link)) {
+        prunePathAt(link);
+        enter(link);
+      }
     });
     document.addEventListener('focusout', (event) => {
-      const link = event.target.closest('a[href$=".html"]');
+      const link = event.target.closest(linkSelector);
       if (!link) return;
       const next = event.relatedTarget;
-      if (next && next.closest && next.closest('a[href$=".html"]')) return;
+      if (next && next.closest && next.closest(linkSelector)) return;
       hideSoon();
     });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') hide();
     });
+    window.addEventListener('scroll', reposition, true);
+    window.addEventListener('resize', reposition);
   }
 
   document.addEventListener('DOMContentLoaded', () => {

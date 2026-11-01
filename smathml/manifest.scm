@@ -2,9 +2,9 @@
 ;;;
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;;; Optional Racket/SMathML toolchain for the SMathML Flora trees.
-;;; Keep this separate from manifest.scm so ordinary Flora builds do not
-;;; acquire the Racket runtime.
+;;; Racket/SMathML toolchain for rendering Flora's SMathML trees.
+;;; Keep this separate from manifest.scm so Grove's core development
+;;; manifest stays smaller; Flora's .envrc activates both for full builds.
 ;;;
 ;;;   guix shell -m manifest.scm -m smathml/manifest.scm -- grove build
 
