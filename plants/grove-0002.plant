@@ -71,7 +71,7 @@ subtree命令把一段内容声明为独立的树；transclude命令把那棵树
   页面元数据也属于可查询的内容。taxon说明这棵tree的种类，例如教程、定义、示例或说明；tag则适合标注主题：
 
   @verbatim["@taxon[\"tutorial\"]
-  @tag[\"composition\"]{Composition}"]
+@tag[\"composition\"]{Composition}"]
 
   Flora的taxon只写一个小写英文名称，例如@code{definition}，同时用于分类查询与显示。样式将首字母大写，渲染层添加末尾句点。分类置于标题前，也放入目录；同一棵tree被嵌入时保留自己的分类，独立打开时则在主标题上方显示。上面的“从文本到内容树”因此显示为“Definition. 从文本到内容树”。这里不添加章节编号，分类说明的是内容种类而不是阅读顺序。
 
