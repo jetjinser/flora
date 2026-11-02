@@ -10,19 +10,20 @@
   #:use-module (grove relation dsl)
   #:use-module (grove ir)
   #:use-module (grove site)
+  #:use-module ((forester commands) #:select (forest-query))
   #:use-module (flora commands)
   #:use-module (srfi srfi-1))
 
 @title{flora queries：站点分析管线}
-@summary{analyze-flora 的定义：author 标记解析、查询占位回填与关系驱动的孤儿检测。}
+@summary{analyze-flora 的定义：解析作者标记、运行Forest查询并检测孤儿页面。}
 @taxon["reference"]
 
-Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻全站内容可查，适合做跨页面的改写与统计。本模块的管线分两个阶段——先展开内容里的占位命令（@author 标记回填、查询结果替换），再把分析出的关系交给关系 DSL 做孤儿检测。命令词汇表见 @link["commands"]{flora commands}。
+Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻全站内容可查，适合做跨页面的改写与统计。分析阶段先把作者标记解析为普通链接，并把 Flora 的查询命令降为 Forester 的 @code{forest-query}；随后只构造一次 Forest。查询在完整关系索引建立后运行，结果只加入展示内容，不回写查询所用的作者内容图。命令词汇表见 @link["commands"]{flora commands}。
 
 @subtree[#:id "lib-queries-author"]{
   @title{author 标记的解析}
 
-  @code{flora-author} 占位元素携带 @code{target} 属性（人物树 id）。读取阶段人树未必已读，标题无法就地取得；分析阶段按 @code{target} 查找页面，用人树的 @code{title} 生成原生链接——所以全名只在人树存一处。目标缺失时回退为裸 id 并告警。
+  @code{flora-author} 元素携带 @code{target} 属性（人物树 id）。分析阶段从完整输入站点按 id 查找人物页面，用其标题生成普通链接，所以全名只在人树存一处。作者链接在 Forest 建立前解析，因此也会参与入链、孤儿等关系查询。目标缺失时回退为裸 id 并告警。
 }
 
 @subtree[#:id "lib-queries-relations"]{
@@ -34,7 +35,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
 @subtree[#:id "lib-queries-terms"]{
   @title{术语索引与漂移}
 
-  定义关系收录 @code{defn} 注册的术语（锚点即规范 term-id，display 为术语加释名）；提及关系收录指向无处解析锚点的 fragment 链接与 @code{term} 标记的提及。下面的索引与漂移报告是两个占位命令的回填结果，随语料自动更新——术语表页（@link["glossary"]{glossary}）的第一组条目即按此约定注册。
+  定义关系收录 @code{defn} 注册的术语（锚点即规范 term-id，display 为术语加释名）；提及关系收录指向无处解析锚点的 fragment 链接与 @code{term} 标记的提及。下面的索引与漂移报告由Forest查询生成，随语料自动更新——术语表页（@link["glossary"]{glossary}）的第一组条目即按此约定注册。
 
   标记提及的用法：@term["tree"] 这样裸用，标签取定义的 canonical display；也可以 @term["tree"]{这样覆盖标签}。指向未定义术语时——比如 @term["route"]——行内标为 missing-term 而非死链，并计入下面的 backlog。
 
@@ -52,9 +53,9 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
 }
 
 @subtree[#:id "lib-queries-expand"]{
-  @title{占位展开与站点重组}
+  @title{命令降级与站点分析}
 
-  @code{expand-query-markers} 递归遍历内容树：@code{flora-author} 标记就地解析为作者链接，@code{flora-content-query-results}/@code{flora-orphan-page-results}/@code{flora-term-index}/@code{flora-term-conflicts} 四种标记由 @code{replacements} 表整块替换，其余节点原样重建。@code{analyze-flora} 是 Grove 调用的入口。
+  @code{analyze-flora} 递归遍历内容树：@code{flora-author} 变为普通链接，四种Flora查询命令变为原生 @code{forest-query}，其他节点保持原样。Forest随后一次性建立页面、链接与内容关系索引，并在此基础上运行查询。
 }
 
 @(begin
@@ -267,11 +268,14 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
 )
 
 @(begin
-  (define (author-link forest marker)
+  (define (author-link site marker)
     ;; Resolve an @author marker to a link whose text is the person tree's
-    ;; title; unknown targets fall back to the bare id with a warning.
+    ;; title from the source site; unknown targets fall back to the bare id
+    ;; with a warning.
     (let* ((target (content-element-property marker 'target))
-           (person (find-page forest target)))
+           (person (find (lambda (page)
+                           (equal? target (site-page-id page)))
+                         (site-pages site))))
       (unless person
         (format (current-error-port)
                 "WARNING: @author target is not a known tree: ~a~%" target))
@@ -282,7 +286,7 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
         #:source (content-element-source marker)
         #:properties `((target . ,target)))))
 
-  (define (placeholder-kind content)
+  (define (query-kind content)
     (define (marker-kind child)
       (and (content-element? child)
            (memq (content-element-kind child)
@@ -296,26 +300,40 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
        (any marker-kind (content-element-children content)))
       (else #f)))
 
-  (define (expand-query-markers content replacements forest)
+  (define (make-flora-query site kind)
+    (let ((query
+            (case kind
+              ((flora-content-query-results) math-query-results)
+              ((flora-orphan-page-results) orphan-page-results)
+              ((flora-term-index) term-index-results)
+              ((flora-term-conflicts) term-conflict-results)
+              (else (error "unknown Flora query command" kind)))))
+      (forest-query
+        (lambda (forest _page-id)
+          (make-content-document (query site forest))))))
+
+  (define (expand-flora-content content site)
     (cond
       ((content-document? content)
        (make-content-document
          (append-map (lambda (child)
-                       (expand-query-markers child replacements forest))
+                       (expand-flora-content child site))
                      (content-document-children content))
          #:source (content-document-source content)))
       ((content-element? content)
        (if (eq? (content-element-kind content) 'flora-author)
-           (list (author-link forest content))
-           (let* ((kind (placeholder-kind content))
-                  (replacement (and kind (assq kind replacements))))
-             (if replacement
-                 (cdr replacement)
+           (list (author-link site content))
+           (let ((kind (or (query-kind content)
+                           (and (eq? (content-element-kind content) 'paragraph)
+                                (any query-kind
+                                     (content-element-children content))))))
+             (if kind
+                 (list (make-flora-query site kind))
                  (list
                    (make-content-element
                      (content-element-kind content)
                      (append-map (lambda (child)
-                                   (expand-query-markers child replacements forest))
+                                   (expand-flora-content child site))
                                  (content-element-children content))
                      #:source (content-element-source content)
                      #:properties (content-element-properties content)
@@ -323,13 +341,13 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
                      #:flow-kind (content-element-flow-kind content)))))))
       (else (list content))))
 
-  (define (expand-site-query-markers site replacements forest)
+  (define (expand-flora-site site)
     (make-site
       (map (lambda (page)
              (make-site-page
                (site-page-id page)
                (site-page-title page)
-               (expand-query-markers (site-page-document page) replacements forest)
+               (expand-flora-content (site-page-document page) site)
                #:source (site-page-source page)
                #:metadata (site-page-metadata page)))
            (site-pages site))
@@ -338,15 +356,5 @@ Grove 在所有页面读取完毕后调用一次 @code{analyze-flora}：此刻�
       #:sources (site-sources site)))
 
   (define-public (analyze-flora site)
-    (let* ((forest (make-forest site))
-           (replacements
-             `((flora-content-query-results
-                . ,(math-query-results site forest))
-               (flora-orphan-page-results
-                . ,(orphan-page-results site forest))
-               (flora-term-index
-                . ,(term-index-results site forest))
-               (flora-term-conflicts
-                . ,(term-conflict-results site forest)))))
-      (make-forest (expand-site-query-markers site replacements forest))))
+    (make-forest (expand-flora-site site)))
 )

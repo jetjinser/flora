@@ -89,7 +89,7 @@
                (position position)
                (text text)))))"]
 
-  这会直接查询全站文章IR，不需要另外登记段落。查询结果由下面这个Flora项目本地的占位命令生成并放在此处：
+  这会直接查询全站文章IR，不需要另外登记段落。下面的Flora项目查询命令会在分析阶段转成Forester的Forest查询，并直接作用于全站文章IR：
 
   @content-query-results{}
 

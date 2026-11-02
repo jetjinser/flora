@@ -142,7 +142,7 @@ know at authoring time."
 @subtree[#:id "lib-author"]{
   @title{author：作者标注}
 
-  用法：@code{@"@"author["kazmer"]}——方括号参数是人物树（@code{taxon person}，裸姓氏 id）的 id，不写显示名：链接文本在分析期从人树标题回填，全名只存于 kazmer.plant 一处。目标树不存在时回退为裸 id 并在构建时告警。实现为占位元素 @code{flora-author}，回填逻辑见 @link["queries"]{flora queries}。
+  用法：@code{@"@"author["kazmer"]}——方括号参数是人物树（@code{taxon person}，裸姓氏 id）的 id，不写显示名：分析阶段会按 id 查找人物树，并在构造 Forest 前将标注转成普通链接；链接文本取自人物树标题，因此也会参与站点关系查询。全名只存于 kazmer.plant 一处。目标树不存在时回退为裸 id 并在构建时告警。
 }
 
 @subtree[#:id "lib-figure"]{
@@ -164,7 +164,7 @@ know at authoring time."
 }
 
 @subtree[#:id "lib-query-markers"]{
-  @title{查询占位命令}
+  @title{站点查询命令}
 
-  @code{content-query-results} 与 @code{orphan-page-results} 是两个内部占位命令：页面里放一个空标记，分析阶段（见 @link["queries"]{flora queries}）把标记替换为实际的查询结果。它们不面向正文写作。
+  @code{content-query-results}、@code{orphan-page-results}、@code{term-index} 与 @code{term-conflicts} 是Flora站点内部命令。分析阶段（见 @link["queries"]{flora queries}）会把它们降为Forester的 @code{forest-query}，再由完整Forest关系索引生成并验证展示结果。它们不面向一般正文写作。
 }
