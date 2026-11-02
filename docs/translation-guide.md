@@ -54,7 +54,7 @@
 - 行内公式与变量:`@tex-math{...}`,两条 lane 内各自照写。
 - 原书无编号的展示公式不加 `#:id`,也不写 `\tag`。
 - 正文对公式的引用写成 `@link["blazek2005-chNN#eq-N-M"]{(N.M)}`,可精确滚动到公式;双语 lane 同步;范围引用 `(2.19)–(2.25)` 只链两端、连接符留在外。
-- 公式 id 挂在容器元素上,MathJax 在浏览器端渲染(`flora-head` 已配置 `output.displayOverflow: 'scale'`,超宽公式自动缩放;并在排版完成后对 URL 锚点补一次滚动)。⚠ 内联 `<script>` 的内容会被 HTML 转义,写配置时避开 `=>`、`&`、`<` 等字符。
+- 公式 id 挂在容器元素上。Flora 的 HTML renderer 使用 Guix manifest 固定的 Temml 版本把 TeX 渲染为 MathML；页面使用本地 MathML 样式与字体资源，不需要浏览器加载数学排版脚本。
 
 ## 4. 引用与文献
 
@@ -104,5 +104,5 @@
 ## 9. 已知边界
 
 - 公式 id 的同页唯一性校验不覆盖 transclude 进来的子树(同一公式经 transclude 渲染两次时可重复)。
-- MathJax 从 CDN 加载,浏览需联网;完全离线可改为构建期 temml 转换或本地打包 MathJax。
+- TeX 在 HTML 渲染时由 Temml 转成 MathML；构建输出包含 Temml 样式和字体资源。
 - 子树锚点(`@link["页#子树id"]`)尚未支持——Grove 生成的子树 DOM id 是位置 id;公式锚点不受影响。

@@ -377,9 +377,15 @@ pre code { font-size: inherit; padding: 0; background: transparent; overflow-wra
 .literate-uses { font-size: .85em; color: var(--muted); margin-block-end: .4lh; }
 .literate-result { color: var(--muted); margin-block: .3lh 0; font-size: .9em; }
 .math-display { margin-block: .65lh; padding-block: .175lh; overflow-x: auto; }
-.math-display > math { inline-size: max-content; min-inline-size: 100%; }
+.math-display > math { inline-size: max-content; min-inline-size: 100%; text-align: center; }
 .math-inline { display: inline-block; max-inline-size: 100%; overflow-x: auto; vertical-align: middle; }
 math { font-size: 1.08em; }
+math[display="block"]:not(.tml-display) {
+  display: block;
+  inline-size: max-content;
+  max-inline-size: 100%;
+  margin-inline: auto;
+}
 .math-diagnostic, .tutorial-note {
   padding-block: .3lh;
   padding-inline: 1ic;
@@ -520,18 +526,7 @@ body > header nav { display: flex; justify-content: space-between; align-items: 
     --hover: transparent;
   }
 }
-/* MathJax 4 的 CDN 构建默认开启语音/盲文增强,但未附带隐藏 <mjx-speech> 的规则,
-   导致每个公式旁渲染出一个可见小方块;按标准 visually-hidden 模式收纳,保留可访问性。 */
-mjx-container > mjx-speech {
-  clip-path: inset(50%);
-  inline-size: 1px;
-  block-size: 1px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-/* Grove 的 .math-inline 用 overflow-x:auto 承载窄屏长公式,但 CSS 会把 overflow-y
-   一并抬为 auto;MathJax 容器(组合字符)比中文行框高约 4px,于是每个行内公式
-   都渲染出一条纵向滚动条。纵向改为隐藏:行内公式靠横向滚动即可,字形不受影响。 */
+/* 行内长公式仅允许横向滚动,避免组合字形触发纵向滚动条。 */
 .math-inline { overflow-y: hidden; }
 
 /* ---- 双语折叠(bilingual fold)视觉层 ----

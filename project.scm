@@ -12,6 +12,7 @@
              (flora entity-presentation)
              (flora figure-assets)
              (flora smathml)
+             (flora temml)
              (ice-9 ftw)
              (ice-9 binary-ports)
              (ice-9 textual-ports)
@@ -82,6 +83,22 @@
 (define stylesheet-path (project-directory% "/style.css"))
 (define feed-stylesheet-path (project-directory% "/feed.css"))
 (define theme-script-path (project-directory% "/theme.js"))
+(define temml-directory
+  (let* ((search-path (getenv "TEMML_PACKAGE"))
+         (directory
+          (and search-path
+               (find (lambda (path)
+                       (file-exists?
+                        (string-append path "/dist/Temml-Local.css")))
+                     (string-split search-path #\:)))))
+    (unless directory
+      (error "Temml is unavailable; activate Flora's Guix environment"))
+    directory))
+(define temml-stylesheet-path
+  (string-append temml-directory "/dist/Temml-Local.css"))
+(define temml-font-path
+  (string-append temml-directory "/dist/Temml.woff2"))
+(define temml-worker-path (project-directory% "/scripts/temml-worker.cjs"))
 (define font-directory (project-directory% "/fonts"))
 (define font-sources
   (map (lambda (name) (string-append font-directory "/" name))
@@ -91,7 +108,8 @@
        (list "/flora/entity-metadata.scm"
              "/flora/entity-presentation.scm"
              "/flora/figure-assets.scm"
-             "/flora/smathml.scm")))
+             "/flora/smathml.scm"
+             "/flora/temml.scm")))
 (define smathml-sources
   (append
     (map (lambda (name) (project-directory% (string-append "/smathml/source/" name)))
@@ -118,7 +136,8 @@
     (make-render-rules
       (list (cons 'image (image-set-rule figure-image-sets))))
     (make-smathml-page-render-rules
-      #:source-root (project-directory% "/smathml/source"))))
+      #:source-root (project-directory% "/smathml/source"))
+    (make-temml-html-rules temml-worker-path)))
 (define flora-style
   (compose-html-styles
     default-html-style
@@ -127,7 +146,10 @@
       #:stylesheets
       (list (make-artifact "flora.css"
               (call-with-input-file stylesheet-path get-string-all)
-              #:sources (list stylesheet-path)))
+              #:sources (list stylesheet-path))
+            (make-artifact "temml.css"
+              (call-with-input-file temml-stylesheet-path get-string-all)
+              #:sources (list temml-stylesheet-path)))
       #:assets
       (append
         (list (make-artifact "theme.js"
@@ -136,6 +158,10 @@
               (make-artifact "feed.css"
                 (call-with-input-file feed-stylesheet-path get-string-all)
                 #:sources (list feed-stylesheet-path)))
+        (list (make-byte-artifact "Temml.woff2"
+                (call-with-input-file temml-font-path get-bytevector-all
+                  #:binary #t)
+                #:sources (list temml-font-path)))
         font-assets))))
 
 (define html-routes (make-html-routes #:home-page "flora"))
@@ -196,11 +222,6 @@
                   (content "width=device-width, initial-scale=1")))
         '(link (@ (rel "alternate") (type "application/rss+xml")
                   (title "Flora") (href "/feed.xml")))
-        ;; MathJax 配置必须先于 tex-chtml.js 加载。displayOverflow=scale:超宽展示公式
-        ;; 按比例缩放而非横向滚动;pageReady 钩子在排版完成后补一次锚点滚动——
-        ;; 否则浏览器先按未排版的短文本定位,MathJax 渲染后锚点会漂移出视口。
-        '(script (@ (type "text/javascript"))
-          "window.MathJax = { output: { displayOverflow: 'scale' }, startup: { pageReady: function () { return MathJax.startup.defaultPageReady().then(function () { var h = decodeURIComponent(location.hash.slice(1)); if (h) { var el = document.getElementById(h); if (el) el.scrollIntoView(); } }); } } };")
         '(script (@ (src "/theme.js")) "")))
 
 (define theme-controls-sxml
@@ -236,10 +257,11 @@
 
 (define render-flora
   (make-html-renderer
-    #:rules-id 'flora-html-rules-v1
+    #:rules-id (string-append "flora-html-rules-v2:" temml-directory)
     #:options
     (make-html-options
       #:routes html-routes
+      #:mathjax-src #f
       #:settings flora-settings
       #:messages flora-messages
       #:presentation
@@ -272,7 +294,8 @@
     #:description "A garden of connected notes."
     #:source-directory plant-directory
     #:extra-sources (append (list stylesheet-path feed-stylesheet-path
-                                  theme-script-path)
+                                  theme-script-path temml-stylesheet-path
+                                  temml-font-path temml-worker-path)
                             font-sources flora-module-sources smathml-sources
                             entity-metadata-sources)
     #:prepare prepare-flora

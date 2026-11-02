@@ -302,9 +302,6 @@
         body.innerHTML = entry.html;
         item.card.appendChild(body);
         if (!anchorPositioning) place(item);
-        if (window.MathJax && MathJax.typesetPromise) {
-          MathJax.typesetPromise([item.card]).catch(() => {});
-        }
         item.card.classList.remove('loading');
         item.card.classList.add('open');
         item.card.setAttribute('aria-hidden', 'false');
