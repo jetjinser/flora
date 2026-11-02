@@ -11,17 +11,17 @@ subtree命令把一段内容声明为独立的树；transclude命令把那棵树
   下面定义一个有稳定ID的subtree：
 
   @verbatim["@subtree[#:id \"tree-example\"]{
-    @title{从文本到内容树}
-    @taxon[\"definition\"]
-    @paragraph{普通文本先被解析为内容节点，再由页面分析器链接成森林。}
-    @itemize{
-      @item{源码：作者编写的 .plant 文件。}
-      @item{内容树：命令和文本的结构化结果。}
-      @item{输出：renderer 生成的 HTML 或其他 artifact。}
-    }
+  @title{从文本到内容树}
+  @taxon[\"definition\"]
+  @paragraph{普通文本先被解析为内容节点，再由页面分析器链接成森林。}
+  @itemize{
+    @item{源码：作者编写的 .plant 文件。}
+    @item{内容树：命令和文本的结构化结果。}
+    @item{输出：renderer 生成的 HTML 或其他 artifact。}
   }
+}
 
-  @transclude[\"tree-example\"]"]
+@transclude[\"tree-example\"]"]
 
   @subtree[#:id "tree-example"]{
     @title{从文本到内容树}

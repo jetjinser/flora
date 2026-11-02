@@ -39,12 +39,12 @@ Grove的数学接口把“作者写下的公式”“公式表达的数学对象
   下面的Scheme代码建立多项式。每个构造器都接收Semantic值；数值用精确有理数表示：
 
   @verbatim["@(define x (◆:coordinate 'x))
-  @(define polynomial
-    (◆:add
-      (◆:power x (◆:constant 3))
-      (◆:multiply (◆:constant 2) x)))
+@(define polynomial
+  (◆:add
+    (◆:power x (◆:constant 3))
+    (◆:multiply (◆:constant 2) x)))
 
-  @math[polynomial]"]
+@math[polynomial]"]
 
   @code{◆:coordinate}返回一个携带“独立坐标”声明的数学值；@code{◆:constant}建立精确常数；@code{◆:power}和@code{◆:multiply}构造子项；@code{◆:add}组合它们。最后的math命令只显示这个值，不执行化简。
 
@@ -72,9 +72,9 @@ Grove的数学接口把“作者写下的公式”“公式表达的数学对象
   写短公式时，Formula DSL更方便。@code{φ:read}读出Semantic值；同一个文本也可以交给@code{φ:simplify}这样的便捷包装：
 
   @verbatim["@(define parsed (φ:read \"x^3 + 2*x\"))
-  @(define formula-report
-    (φ:differentiate parsed \"x\" #:assumptions (φ:assumptions \"coordinate(x)\")))
-  @math[(math-report-result formula-report)]"]
+@(define formula-report
+  (φ:differentiate parsed \"x\" #:assumptions (φ:assumptions \"coordinate(x)\")))
+@math[(math-report-result formula-report)]"]
 
   Formula reader负责把文本解析一次。常见写法包括显式运算符、括号和函数调用；数字系数也可直接写在变量前，如@code{2x}。标识符按完整名称读取，因此@code{xy}是一个变量，空格也不会表示乘法；需要写@code{x*y}或@code{x×y}。幂使用@code{^}，如@code{x^2}。Unicode上标字符（如@code{x²}）目前属于变量名的一部分，不会自动转换成幂；下标@code{x_1}属于排版结构，不是Formula语义运算，应使用Notation DSL表达。
   @verbatim["@φ:read{2x + α×β + sin(x)}"]

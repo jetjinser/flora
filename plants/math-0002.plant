@@ -24,10 +24,10 @@
   也可以从头构造相同的值，并直接调用Semantic pipeline：
 
   @verbatim["@(define half
-    (math-calculate
-      (◆:add (◆:divide (◆:constant 1) (◆:constant 3))
-             (◆:divide (◆:constant 1) (◆:constant 6)))))
-  @math[(math-report-result half)]"]
+  (math-calculate
+    (◆:add (◆:divide (◆:constant 1) (◆:constant 3))
+           (◆:divide (◆:constant 1) (◆:constant 6)))))
+@math[(math-report-result half)]"]
 
   @code{math-calculate}的参数是一个Semantic值。构造器只接受Semantic操作数，所以误把字符串传入核心API会立即得到契约错误；要解析文本，就在边界使用@code{φ:read}或@code{φ:calculate}。
 
@@ -84,9 +84,9 @@
   如果源表达式最初来自文章正文，可以先读取并保存：
 
   @verbatim["@(define source (φ:read \"2*x + 3*x\"))
-  @(define collection (math-collect source
-    #:assumptions (φ:assumptions \"coordinate(x)\")))
-  @math[(math-report-result collection)]"]
+@(define collection (math-collect source
+  #:assumptions (φ:assumptions \"coordinate(x)\")))
+@math[(math-report-result collection)]"]
 
   这里Formula reader仅在第一行接触字符串。后续@code{math-collect}接收@code{source}这个Semantic值；计算事实也是解析后的term。把结果保存为值后，它还可以继续参与@code{◆:}构造器、Notation排版或另一个pass。
 
