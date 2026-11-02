@@ -34,7 +34,7 @@ subtree命令把一段内容声明为独立的树；transclude命令把那棵树
     }
   }
 
-  @code{#:id}让这个subtree在移动和编辑后仍可被引用。title是subtree必需的直接子节点；它成为这棵树的标题。正文里的paragraph和itemize会一起保留；普通文本与根文档一样按空行自动解码为段落。
+  @code{#:id}让这个subtree在移动和编辑后仍可被引用。直接的title子节点是可选的；省略时，显式ID或自动生成的@code{unstable-N}会同时作为这棵树的标题。正文里的paragraph和itemize会一起保留；普通文本与根文档一样按空行自动解码为段落。
 
   上面的定义留在原始页面里；真正的嵌入由transclude命令完成。它按ID查询分析后的森林，并把目标正文放在这里。该subtree同时有独立路由，所以内容仍可直接访问。
 
