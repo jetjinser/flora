@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: GPL-3.0-or-later
 
 (define-module (flora smathml)
+  #:use-module (grove highlight)
   #:use-module (grove ir)
   #:use-module (grove render rules)
   #:use-module (grove render context)
@@ -144,13 +145,44 @@
              (or (find-element (car nodes) tag)
                  (search (cdr nodes))))))))
 
+(define scheme-highlighter (delay (assq-ref (default-highlighters) 'scheme)))
+
+(define (sxml-text node)
+  (cond
+    ((string? node) node)
+    ((element? node) (string-concatenate (map sxml-text (children node))))
+    ((pair? node) (string-concatenate (map sxml-text node)))
+    (else "")))
+
+(define (highlight-code-element node)
+  (let ((highlighter (force scheme-highlighter))
+        (source (sxml-text (children node))))
+    (if (not highlighter)
+        node
+        (let* ((attrs (or (attributes node) '()))
+               (attrs (if (assq 'data-language attrs) attrs
+                          (append attrs '((data-language "scheme")))))
+               (pieces (highlight-code highlighter source))
+               (body (map (lambda (piece)
+                            (if (car piece)
+                                `(span (@ (data-syntax ,(car piece))) ,(cdr piece))
+                                (cdr piece)))
+                          pieces)))
+          (cons 'code (cons `(@ ,@attrs) body))))))
+
 (define (rewrite-article node)
   (if (not (element? node))
       node
       (let* ((tag (car node))
-             (attrs (attributes node))
-             (body (map rewrite-article (children node)))
-             (attrs (map rewrite-attribute (or attrs '())))
+             (body
+               (map (lambda (child)
+                      (let ((rewritten (rewrite-article child)))
+                        (if (and (eq? tag 'pre) (element? rewritten)
+                                 (eq? (car rewritten) 'code))
+                            (highlight-code-element rewritten)
+                            rewritten)))
+                    (children node)))
+             (attrs (map rewrite-attribute (or (attributes node) '())))
              (attrs (if (eq? tag 'math)
                         (if (assq 'xmlns attrs) attrs
                             (cons `(xmlns "http://www.w3.org/1998/Math/MathML")
