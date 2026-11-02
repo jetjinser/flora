@@ -12,7 +12,7 @@
   (name 'grove)
   (url "https://github.com/jetjinser/grove.git")
   (branch "master")
-  (commit "16a27a86ba41a1e261793693a6e5148d368904b3")
+  (commit "14d6cb02ad8f0614ae43e4afd1489cd6359d5fdf")
   (introduction
    (make-channel-introduction
     "59ecbbbf4659f49d6953f1de43bcc604ee456dba"
