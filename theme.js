@@ -111,7 +111,10 @@
     const MAX_CHARS = 1600;  // cap on extracted lead text
     const MAX_NODES = 6;     // cap on extracted block elements
     const SKIP = 'nav, .table-of-contents, .backmatter, .theme-controls, style, script, link, template, h1';
+    const OMIT_CONTROLS = 'button, input, select, textarea, summary, [tabindex], ' +
+      'audio[controls], video[controls], iframe, object, embed, form';
     const cache = new Map();
+    const documentCache = new Map();
     const linkSelector = 'a[href]';
     const anchorPositioning =
       typeof CSS !== 'undefined' && CSS.supports &&
@@ -160,26 +163,38 @@
       removeFrom(0);
     }
 
-    function extract(doc, baseUrl) {
+    function extract(doc, baseUrl, fragment) {
       const article = doc.querySelector('article') || doc.body;
-      let title = (doc.querySelector('h1') || {}).textContent || '';
+      let contentRoot = article;
+      let titleElement = doc.querySelector('h1');
+      if (fragment) {
+        try {
+          const anchor = doc.getElementById(decodeURIComponent(fragment.slice(1)));
+          const tree = anchor && anchor.closest('.forest-tree-block');
+          const treeTitle = tree && tree.querySelector(':scope > details > summary .forest-tree-title');
+          const treeContent = tree && tree.querySelector(':scope > details > .forest-tree-content');
+          if (treeTitle && treeContent) {
+            titleElement = treeTitle;
+            contentRoot = treeContent;
+          }
+        } catch (_) { /* An invalid fragment falls back to the page preview. */ }
+      }
+      let title = (titleElement || {}).textContent || '';
       // 预览卡片里,taxon 前缀与地址 chip 都是噪音。
       title = title.replace(/^(reference|chapter|index|tutorial|journal|code|person)\.\s+/i, "")
                    .replace(/\s*\[[^\]]*\]\s*$/, "")
                    .trim();
       const body = document.createElement('div');
       let chars = 0;
-      for (const node of article.children) {
-        if (node.matches(SKIP)) continue;
+      for (const node of contentRoot.children) {
+        if (node.matches(SKIP) || node.matches(OMIT_CONTROLS)) continue;
         const text = node.textContent;
         if (!text.trim()) continue;
         const clone = node.cloneNode(true);
         for (const gone of clone.querySelectorAll(SKIP)) gone.remove();
         // Keep internal links for nested previews; remove other interactive
         // controls and duplicate ids from the embedded fragment.
-        for (const gone of clone.querySelectorAll(
-          'button, input, select, textarea, summary, [tabindex], ' +
-          'audio[controls], video[controls], iframe, object, embed, form')) {
+        for (const gone of clone.querySelectorAll(OMIT_CONTROLS)) {
           gone.remove();
         }
         for (const details of clone.querySelectorAll('details')) {
@@ -254,12 +269,26 @@
       stack.push(item);
       item.card.classList.add('loading');
       try {
+        const url = new URL(href);
+        const fragment = url.hash;
+        url.hash = '';
+        const pageHref = url.href;
         let entry = cache.get(href);
         if (!entry) {
-          const response = await fetch(href);
-          if (!response.ok) throw new Error(response.status);
-          const baseUrl = response.url || href;
-          entry = extract(new DOMParser().parseFromString(await response.text(), 'text/html'), baseUrl);
+          let documentEntry = documentCache.get(pageHref);
+          if (!documentEntry) {
+            documentEntry = (async function () {
+              const response = await fetch(pageHref);
+              if (!response.ok) throw new Error(response.status);
+              const baseUrl = response.url || pageHref;
+              const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+              return { doc, baseUrl };
+            }());
+            documentCache.set(pageHref, documentEntry);
+            documentEntry.catch(() => documentCache.delete(pageHref));
+          }
+          const resource = await documentEntry;
+          entry = extract(resource.doc, resource.baseUrl, fragment);
           cache.set(href, entry);
         }
         if (pending?.link !== link || stack[parentDepth] !== item) return;

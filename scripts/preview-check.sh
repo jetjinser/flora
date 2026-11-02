@@ -3,8 +3,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# Browser check for the link preview: it opens on focus, is visual-only,
-# contains no focusable descendants, and closes on Escape and focusout.
+# Browser check for the link preview: it opens on focus, preserves nested links,
+# removes other controls, and closes on Escape and focusout.
 
 set -eu
 
@@ -54,8 +54,7 @@ cat > "$temporary/target.html" <<'TARGET'
 <html lang="en">
 <body>
 <article>
-<h1>Target page</h1>
-<p>Preview body with <a href="#">a link</a> and <button>a button</button>.</p>
+<section class="forest-tree-block page-tree" id="tree-root-target"><details open><summary><h1 class="forest-tree-title">Target page</h1></summary><div class="forest-tree-content"><p>Page lead outside the anchor.</p><section class="forest-tree-block inline-subtree" id="target-section"><details open><summary><h2 class="forest-tree-title">Target section</h2></summary><div class="forest-tree-content"><p>Anchor-specific body.</p><a href="#">a link</a><button>a button</button></div></details></section></div></details></section>
 </article>
 </body>
 </html>
@@ -71,22 +70,23 @@ cat > "$temporary/probe.html" <<HTML
 <script src="theme.js"></script>
 </head>
 <body>
-<a id="probe" href="$temporary/target.html">preview target</a>
+<a id="probe" href="$temporary/target.html#target-section">preview target</a>
 <script>
 (function () {
   window.addEventListener("load", function () {
     var link = document.getElementById("probe");
     var card;
-    var state = { opened: false, hidden: false, focusable: -1, closed: false, blurClosed: false };
+    var state = { opened: false, hidden: false, focusable: -1, closed: false, blurClosed: false, title: "", body: "" };
     var target = '<!doctype html><html><body><article>' +
-      '<h1>Target page</h1><p>Preview body with <a href="#">a link</a> ' +
-      'and <button>a button</button>.</p></article></body></html>';
+      '<section class="forest-tree-block page-tree" id="tree-root-target"><details open><summary><h1 class="forest-tree-title">Target page</h1></summary><div class="forest-tree-content"><p>Page lead outside the anchor.</p>' +
+      '<section class="forest-tree-block inline-subtree" id="target-section"><details open><summary><h2 class="forest-tree-title">Target section</h2></summary><div class="forest-tree-content"><p>Anchor-specific body.</p><a href="#">a link</a><button>a button</button></div></details></section>' +
+      '</div></details></section></article></body></html>';
     var nativeFetch = window.fetch.bind(window);
 
     // file:// pages cannot fetch sibling files in Chromium. Keep the real
     // preview code under test and provide the target document as a response.
     window.fetch = function (url, options) {
-      if (url === link.getAttribute("href")) {
+      if (url === link.href.split("#")[0]) {
         return Promise.resolve({
           ok: true,
           text: function () { return Promise.resolve(target); }
@@ -98,10 +98,12 @@ cat > "$temporary/probe.html" <<HTML
     function snapshot() {
       card = document.querySelector(".link-preview");
       state.open = !!(card && card.classList.contains("open"));
-      state.hidden = !!(card && card.getAttribute("aria-hidden") === "true");
-      state.focusable = card
-        ? card.querySelectorAll("a,button,input,select,textarea,[tabindex]").length
-        : -1;
+      if (card) {
+        state.hidden = card.getAttribute("aria-hidden") === "true";
+        state.focusable = card.querySelectorAll("a,button,input,select,textarea,[tabindex]").length;
+        state.title = card.querySelector(".link-preview-title").textContent;
+        state.body = card.querySelector(".link-preview-body").textContent;
+      }
     }
 
     function finish() {
@@ -175,9 +177,13 @@ result=$(sed -n '/id="preview-check"/,/<\/pre>/p' "$temporary/dom" |
          sed 's|.*<pre id="preview-check">||; s|</pre>.*||; s|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g')
 printf '%s\n' "$result"
 
-for expected in '"opened":true' '"hidden":true' '"focusable":0' '"closed":true' '"blurClosed":true'; do
+for expected in '"opened":true' '"hidden":false' '"focusable":1' '"closed":true' '"blurClosed":true' '"title":"Target section"' 'Anchor-specific body'; do
     if ! printf '%s\n' "$result" | grep -q "$expected"; then
         echo "preview-check: expected $expected" >&2
         exit 1
     fi
 done
+if printf '%s\n' "$result" | grep -q 'Page lead outside the anchor'; then
+    echo "preview-check: anchor preview included page-level lead content" >&2
+    exit 1
+fi
