@@ -15,7 +15,7 @@ Alternatively with Guix, which gets Grove from the pinned Grove channel (no
 local Grove checkout is needed):
 
 ```sh
-guix time-machine -C channels.scm -- shell -m manifest.scm
+guix time-machine -C channels.scm -- shell -m manifest.scm -m smathml/manifest.scm
 ```
 
 Then use the Makefile from the Flora directory:
@@ -44,7 +44,7 @@ checks REUSE compliance. The Makefile uses `grove` from `PATH`; override
 accessibility audit downloads a pinned, checksum-verified axe-core bundle and
 needs network access unless that bundle is already cached.
 
-The preview is available at `http://127.0.0.1:8080/`. Use `--port` or `--output` to select another port or output directory. Stop the server with Ctrl-C.
+The preview is available at `http://127.0.0.1:8080/`. Set `HOST` or `PORT` when invoking `make preview` to choose another address; the served directory is always `build/`. Stop the server with Ctrl-C.
 
 `make verify-sources` checks the SHA-256 digests of the non-Git inputs used by
 the complete site: the four Noto CJK source fonts, the Inria webfonts and CSS,
@@ -109,18 +109,20 @@ Neither the CJK sources in `fonts-src/` nor the webfonts under `fonts/` are chec
 
 ## Reading and source layout
 
-The home tree links to four topic indexes:
+The home tree links to five topic indexes and one rendering experiment:
 
 - `grove.plant` introduces `.plant` documents, trees, and transclusion.
 - `math.plant` maps the Formula, Semantic, and Notation experiments.
 - `lp.plant` maps the literate-programming library and its examples.
 - `strunk1999.plant` maps the Chinese translation of *The Elements of Style*, 4th edition.
+- `blazek2005.plant` maps the Chinese translation of *Computational Fluid Dynamics*, 2nd edition.
+- `smathml.plant` presents the SMathML-generated Everything page and its child articles as a renderer integration experiment.
 
 A glossary page (`glossary.plant`) collects the terms shared across these topics.
 
 The numbered source files beneath each prefix are stable page identities, not a required reading order: `grove-NNNN`, `math-NNNN`, and `lp-NNNN`. Their four-character suffixes follow Grove's base-36 address convention. A file's name is its page address. Named subtrees use short, descriptive ASCII IDs only when they need a durable link or transclusion; other subtrees use Grove's generated addresses.
 
-`project.scm` declares the source modules, site routes, renderer adapter, and output assets. The sitemap and RSS renderers write `sitemap.xml` and `feed.xml` into the site output alongside the HTML pages, using `https://flora.purejs.icu` as the site URL. HTML pages advertise `feed.xml` for feed-reader autodiscovery; the RSS XML links `feed.css` for browser display. `plants/` contains pages, `plants/lib/` contains the site command library as self-documenting pages, `lp/` contains the experimental literate-programming library, and `tests/` contains its Guile checks. Generated HTML and programs are written to `build/`.
+`project.scm` declares the source modules, site routes, renderer adapter, and output assets. The sitemap and RSS renderers write `sitemap.xml` and `feed.xml` into the site output alongside the HTML pages, using `https://flora.purejs.icu` as the site URL. HTML pages advertise `feed.xml` for feed-reader autodiscovery; the RSS XML links `feed.css` for browser display. `plants/` contains pages; the 1067 Blazek reference trees are grouped under `plants/blazek2005/references/` by source chapter while their basenames, IDs, and routes stay unchanged. `plants/lib/` contains the site command library as self-documenting pages, `lp/` contains the experimental literate-programming library, and `tests/` contains its Guile checks. Generated HTML and programs are written to `build/`.
 
 Flora's reader preloads `(forester commands)` and `(flora commands)` for ordinary pages, so Flora-authored `.plant` files do not need a repeated `@use-commands{flora}` header. The command manifest is in `flora.scm`; projects that use Flora's commands can import that set with `@use-commands{flora}`.
 
@@ -128,7 +130,7 @@ Flora's reader preloads `(forester commands)` and `(flora commands)` for ordinar
 
 Write Chinese prose without manual spaces between CJK text and Latin words or digits. `style.css` uses `text-autospace` for visual separation. Keep spaces required inside English phrases, code, and Scheme source. See [Grove writing](plants/grove-0001.plant).
 
-Margin notes and term definitions are content commands: `@sidenote{…}` attaches a note to the sentence it appears in — it floats into the contents lane on wide screens and folds into the paragraph on narrow ones — and `@defn{…}` marks a term's defining occurrence, rendered as `<dfn>`. When a note crosses the sticky contents, a small script slides the contents up until the note has passed, then lets it settle back; without JS, a paper veil on the note erases the entries beneath it instead. Keep the first note low anyway so it does not cover the contents list.
+Margin notes and term definitions are content commands: `@sidenote{…}` attaches a note to its sentence; on wide screens it appears in the page's side lane, and on narrow screens it follows the article. `@defn{…}` marks a term's defining occurrence and renders as `<dfn>`.
 
 Each page should make sense when opened or linked on its own. Describe topic relationships through links and indexes; avoid relying on “first”, “next”, or similar wording that loses meaning when a subtree is reused elsewhere.
 

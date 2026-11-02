@@ -20,6 +20,14 @@ Grove的写作模型、数学语言、文学编程实验与英语写作翻译彼
 }
 
 @subtree{
+  @title{渲染实验}
+
+  @itemize{
+    @item{@link["smathml"]{SMathML}：将 Everything 索引与子文章作为独立渲染器接入 Flora。}
+  }
+}
+
+@subtree{
   @title{术语表}
 
   三个主题共用的术语集中解释于@link["glossary"]{术语表}，例如tree、片段、计划、实例、taxon与Formula。

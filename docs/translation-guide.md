@@ -12,7 +12,7 @@
 
 - 所有可寻址树 id 一律以书前缀开头(`<书>-…`)且**全小写**(URL 大小写敏感);`unstable` 等位置生成的地址除外。**前缀用 Zotero 引用键:作者姓+出版年**(如 `blazek2005-`、`strunk1999-`):图书在英语引用实践中的通行"缩写"就是作者键(`[Blazek, 2005]`、bibtex `blazek2005`),多版本由年份天然区分;领域通称(`cfd` 这类)撞车风险高,不用。**裸姓氏保留给 `taxon person` 人物树**(`blazek`、`strunk`),书主页用完整键(`blazek2005`)。
 - 页面 id 结构自描述:前置材料 `<书>-front`、章节 `<书>-chNN`(两位补零,章号与 id 直接对应)、书索引 `<书>-index`、后记页 `<书>-back`;一章拆多页时加字母后缀(如 strunk1999 第四章三份 `strunk1999-ch04a/b/c`)。
-- 小节子树 `<书>-<章>-<节>`;词条型子树 `<书>-<类型>-<名称/编号>`(如 `strunk1999-rule-1`、`strunk1999-usage-aggravate`、`blazek2005-front-symbols`)。**禁止裸词 id**——早期 strunk1999 曾有 `foreword`、`rule-1` 这类无前缀子树,会直接污染全站顶层 URL。例外:人物树用裸姓氏(`blazek`、`strunk`、`white`),`@taxon["person"]`,中文小传,存 `plants/person/`;著作页用 `@author["<人树>"]` 标注作者——读取期只记录目标树,链接文本在分析期取自人树标题(实现见 `plants/lib/commands.plant` 与 `plants/lib/queries.plant`(渲染为 /commands.html、/queries.html)),即 jms forester `\author{kazmer}` 引用 `kazmer.plant` 的语义。
+- 小节子树 `<书>-<章>-<节>`;词条型子树 `<书>-<类型>-<名称/编号>`(如 `strunk1999-rule-1`、`strunk1999-usage-aggravate`、`blazek2005-front-symbols`)。除人物树外,具名子树使用带书前缀的 ID,避免污染全站顶层 URL。**禁止裸词 id**——早期 strunk1999 曾有 `foreword`、`rule-1` 这类无前缀子树,会直接污染全站顶层 URL。例外:人物树用裸姓氏(`blazek`、`strunk`、`white`),`@taxon["person"]`,中文小传,存 `plants/person/`;著作页用 `@author["<人树>"]` 标注作者——读取期只记录目标树,链接文本在分析期取自人树标题(实现见 `plants/lib/commands.plant` 与 `plants/lib/queries.plant`(渲染为 /commands.html、/queries.html)),即 jms forester `\author{kazmer}` 引用 `kazmer.plant` 的语义。
 - 文献条目 `<书>-r<章>-<编号>`(附录章号小写,如 `blazek2005-ra-3`);公式锚点 `eq-<章>-<编号>` 是页内 fragment,不占树命名空间,无需前缀。
 
 ```scheme
@@ -23,9 +23,9 @@
 
 - Flora 的 reader 会为站内普通页面预载命令,所以译本页面不需要重复写模块导入。若在其他项目中单独使用这些页面,由该项目通过 `@use-commands{flora}` 提供命令集。`(flora commands)` 提供 `@bi`、`@emph`、`@sidenote`、`@defn` 与 Flora 的术语命令 `@term`,并转出 Forester 的 `bilingual`/`lang`。
 - taxon 约定:正文章节 `chapter`、索引/主题索引 `index`、文献条目页 `reference`;前置材料页不写 taxon。taxon 会以首字母大写形式显示在标题上方(如 "Chapter.")。
-- 小节用可嵌套的 `@subtree[#:id "..."]{ @title{4.2.1 Cell-Centred Scheme 单元中心格式} ... }`,**每个小节必须有稳定 ID**,命名 `blazek2005-<章>-<节>`(如 `blazek2005-3-1-2`);每个小节会生成独立路由页(`blazek2005-3-1-2.html`)。
+- 小节用可嵌套的 `@subtree[#:id "..."]{ @title{4.2.1 Cell-Centred Scheme 单元中心格式} ... }`,**需要独立路由或稳定引用的小节应有稳定 ID**,命名 `blazek2005-<章>-<节>`(如 `blazek2005-3-1-2`);具名小节会生成独立路由页(`blazek2005-3-1-2.html`);仅用于组织内容且无需单独寻址的小节可以省略 ID。
 - 标题双语:英文原题在前、中文译名在后。
-- 同书内所有作者 id 必须带书名前缀且唯一(Grove 会对重复 id 报错);无 id 的子树只能得到位置生成的"不稳定"地址,应避免。
+- 除人物树外,同书内所有具名子树 id 必须带书名前缀且唯一(Grove 会对重复 id 报错);结构性子树可以省略 ID;其位置生成的地址"不稳定"不应用作稳定的外部引用。
 
 ## 2. 双语形式
 
