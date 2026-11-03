@@ -86,3 +86,4 @@ clean:
 
 preview-check: build
 	scripts/preview-check.sh
+	tests/temml-output.sh

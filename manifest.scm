@@ -67,5 +67,6 @@
                   "python-brotli"     ; woff2 compression for the subset
                   "node"              ; run the pinned Temml converter
                   "make"              ; Makefile entry points
+                  "reuse"              ; REUSE license checks in make check
                   "curl"              ; fetch-fonts.sh and axe-core bootstrap
                   "ungoogled-chromium")))) ; browser audits in make check

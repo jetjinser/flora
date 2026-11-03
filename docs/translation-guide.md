@@ -103,6 +103,5 @@
 
 ## 9. 已知边界
 
-- 公式 id 的同页唯一性校验不覆盖 transclude 进来的子树(同一公式经 transclude 渲染两次时可重复)。
 - TeX 在 HTML 渲染时由 Temml 转成 MathML；构建输出包含 Temml 样式和字体资源。
-- 子树锚点(`@link["页#子树id"]`)尚未支持——Grove 生成的子树 DOM id 是位置 id;公式锚点不受影响。
+- 子树和 transclusion 的锚点按最终嵌入路径命名。独立页面中的 `eq-1` 在父页嵌入路径为 `chapter--section` 时，链接应写作 `父页#chapter--section--eq-1`；独立子树页面仍使用 `子树页#eq-1`。Grove 会检查实际渲染出的锚点，并拒绝页面内重复的 DOM ID。
