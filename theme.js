@@ -108,7 +108,7 @@
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
     const PREFETCH_INTENT = 120; // start loading after a brief, steady hover
-    const DISPLAY_INTENT = 420; // show the card only after clear pointer intent
+    const DISPLAY_INTENT = 500; // show the card only after clear pointer intent
     const MAX_CHARS = 1600;  // cap on extracted lead text
     const MAX_NODES = 6;     // cap on extracted block elements
     const SKIP = 'nav, .table-of-contents, .backmatter, .theme-controls, style, script, link, template, h1';
