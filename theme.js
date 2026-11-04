@@ -107,7 +107,8 @@
   function watchLinkPreviews() {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-    const INTENT = 240;      // ms of steady pointer intent before a preview appears
+    const PREFETCH_INTENT = 120; // start loading after a brief, steady hover
+    const DISPLAY_INTENT = 420; // show the card only after clear pointer intent
     const MAX_CHARS = 1600;  // cap on extracted lead text
     const MAX_NODES = 6;     // cap on extracted block elements
     const SKIP = 'nav, .table-of-contents, .backmatter, .theme-controls, style, script, link, template, h1';
@@ -122,6 +123,7 @@
       CSS.supports('position-anchor: --flora-link-preview');
     const stack = [];
     let hoverTimer = 0;
+    let prefetchTimer = 0;
     let hideTimer = 0;
     let pending = null;
     let nextAnchorId = 0;
@@ -158,6 +160,7 @@
 
     function hide() {
       clearTimeout(hoverTimer);
+      clearTimeout(prefetchTimer);
       clearTimeout(hideTimer);
       pending = null;
       removeFrom(0);
@@ -223,6 +226,34 @@
       return { title, html: body.innerHTML };
     }
 
+    function loadPreview(href) {
+      const cached = cache.get(href);
+      if (cached) return Promise.resolve(cached);
+      const url = new URL(href);
+      const fragment = url.hash;
+      url.hash = '';
+      const pageHref = url.href;
+      let documentEntry = documentCache.get(pageHref);
+      if (!documentEntry) {
+        documentEntry = (async function () {
+          const response = await fetch(pageHref);
+          if (!response.ok) throw new Error(response.status);
+          const baseUrl = response.url || pageHref;
+          const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+          return { doc, baseUrl };
+        }());
+        documentCache.set(pageHref, documentEntry);
+        documentEntry.catch(() => documentCache.delete(pageHref));
+      }
+      const entry = documentEntry.then((resource) =>
+        extract(resource.doc, resource.baseUrl, fragment));
+      cache.set(href, entry);
+      entry.catch(() => {
+        if (cache.get(href) === entry) cache.delete(href);
+      });
+      return entry;
+    }
+
     function place(item) {
       const rect = item.link.getBoundingClientRect();
       const width = item.card.offsetWidth;
@@ -269,28 +300,7 @@
       stack.push(item);
       item.card.classList.add('loading');
       try {
-        const url = new URL(href);
-        const fragment = url.hash;
-        url.hash = '';
-        const pageHref = url.href;
-        let entry = cache.get(href);
-        if (!entry) {
-          let documentEntry = documentCache.get(pageHref);
-          if (!documentEntry) {
-            documentEntry = (async function () {
-              const response = await fetch(pageHref);
-              if (!response.ok) throw new Error(response.status);
-              const baseUrl = response.url || pageHref;
-              const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
-              return { doc, baseUrl };
-            }());
-            documentCache.set(pageHref, documentEntry);
-            documentEntry.catch(() => documentCache.delete(pageHref));
-          }
-          const resource = await documentEntry;
-          entry = extract(resource.doc, resource.baseUrl, fragment);
-          cache.set(href, entry);
-        }
+        const entry = await loadPreview(href);
         if (pending?.link !== link || stack[parentDepth] !== item) return;
         item.card.innerHTML = '';
         const heading = document.createElement('div');
@@ -322,9 +332,13 @@
         return;
       }
       clearTimeout(hoverTimer);
+      clearTimeout(prefetchTimer);
       removeFrom(parentDepth);
       pending = { link, parentDepth };
-      hoverTimer = setTimeout(() => showFor(link, parentDepth), INTENT);
+      prefetchTimer = setTimeout(() => {
+        if (pending?.link === link) loadPreview(href).catch(() => {});
+      }, PREFETCH_INTENT);
+      hoverTimer = setTimeout(() => showFor(link, parentDepth), DISPLAY_INTENT);
     }
 
     function isInOpenPath(target) {
@@ -342,6 +356,7 @@
       const keepDepth = matchingCard >= 0 ? matchingCard + 1 : depth >= 0 ? depth + 1 : stack.length;
       if (stack.length > keepDepth) {
         clearTimeout(hoverTimer);
+        clearTimeout(prefetchTimer);
         pending = null;
         removeFrom(keepDepth);
       }
@@ -366,6 +381,7 @@
       if (fromLink && fromLink !== toLink && !isInOpenPath(related)) {
         if (pending?.link === fromLink) {
           clearTimeout(hoverTimer);
+          clearTimeout(prefetchTimer);
           pending = null;
         }
         hideSoon();
