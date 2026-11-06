@@ -129,7 +129,7 @@
            #:sources (list path)))
        font-sources))
 
-(define-values (blazek2005-figures figure-image-sets)
+(define-values (blazek2005-figure-pipelines figure-image-sets)
   (make-blazek2005-figure-assets (dirname (current-filename))))
 (define flora-rules
   (compose-render-rules
@@ -313,7 +313,7 @@
             #:settings flora-settings #:routes html-routes
             #:stylesheet-url "feed.css"
             #:stylesheet-type "text/css"))
-    #:pipelines (list blazek2005-figures)
+    #:pipelines blazek2005-figure-pipelines
     #:create-source
     (make-forester-source-creator
       #:source-directory plant-directory
