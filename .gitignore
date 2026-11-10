@@ -7,3 +7,6 @@ fonts-src/
 /.blue-store/
 /.direnv/
 /result
+
+# SRFI-64 test-runner reports written in the repository root.
+/*.log

@@ -5,7 +5,7 @@ Flora is an executable tutorial site built with Grove. Its `.plant` files combin
 ## Build and preview
 
 From the Flora directory, enter the Nix development environment; the flake
-pins Grove from its upstream repository:
+lock pins Grove from its upstream repository:
 
 ```sh
 nix develop
@@ -17,6 +17,22 @@ local Grove checkout is needed):
 ```sh
 guix time-machine -C channels.scm -- shell -m manifest.scm -m smathml/manifest.scm
 ```
+
+Both environments use their locked Grove revision by default. To try the
+current source in a sibling Grove checkout without changing either lock file,
+set `FLORA_GROVE_SOURCE` before entering or reloading the environment:
+
+```sh
+export FLORA_GROVE_SOURCE=../grove
+direnv reload
+make build
+```
+
+Nix overrides only the `grove` flake input with that local path. Guix loads
+the package definition from the checkout instead of the pinned Grove channel.
+After changing Grove source files, run `direnv reload` to refresh the Guix
+development profile. Unset `FLORA_GROVE_SOURCE` and reload to return to the
+pinned environment.
 
 Then use the Makefile from the Flora directory:
 
