@@ -57,6 +57,8 @@
 
 (packages->manifest
  (cons* grove temml
+        ;; make test invokes Guile directly for Flora's Scheme test scripts.
+        (specification->package "guile")
         (list (specification->package "libavif") "tools")
         (map specification->package
             (list "poppler"           ; pdftoppm: rasterize the scanned PDF
