@@ -61,7 +61,7 @@ This sentence becomes a paragraph.
 
   @subtree[#:id "source-shape"]{
     @title{一份页面源码的形状}
-  @taxon["definition"]
+    @taxon["definition"]
     @paragraph{页面源码由元数据、内容命令、普通文本和可选的Scheme计算组成。它保留为内容树，之后才交给分析和渲染阶段。}
     @verbatim["@title{Page title}
 @summary{One-sentence description.}
