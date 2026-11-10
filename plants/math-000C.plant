@@ -1,0 +1,173 @@
+@use-modules[(ice-9 pretty-print) (lp core) (lp scribble) (lp forester)]
+
+@title{从约简规则到Y组合子：用miniKanren做一次程序综合}
+@summary{从SKI项的树形语法和约简关系出发，展示文学编程如何把叙述、代码片段、搜索结果与生成源码连成一篇教程。}
+@taxon["tutorial"]
+@describes{https://www.thestrangeloop.com/2014/program-synthesis-using-minikanren.html}
+@describes{https://github.com/webyrd/Strange-Loop-2014}
+
+我们要在由@code{I}、@code{K}、@code{S}和函数应用构成的项中，寻找满足固定点性质的组合子。目标是找到@code{Y}，使@code{Y x}能够约简为@code{x (Y x)}。当@code{Y}未知时，这个性质可以写成关系，让miniKanren搜索满足条件的SKI项。
+
+本文也用文学编程（literate programming，LP）的方式组织实验。每个@code{code-fragment}保存具名片段的Scheme定义、原文和来源位置；正文说明定义如何逐步构成搜索。@code{make-program}把片段排成装配计划，@code{instantiate-program}再将这些定义放进一个新的Guile模块中执行。页面中的片段树、计划树、查询结果和下载源码，分别让读者看到定义、装配、运行和复现。
+
+源文件用@code{define}建立片段值，再在讲解相应概念的位置调用@code{fragment-tree}。片段树直接取用片段保存的定义文本和元数据，因此读者看到的源码、依赖说明与之后执行的定义有同一个来源。@code{make-program}中的片段列表则给出装配顺序；实例化计划时，这些Scheme定义会在新模块中依次求值，形成查询可以调用的关系。正文可以按教学顺序介绍它们，而装配顺序由计划明确记录。每个@code{subtree}形成一个可展开的内容树，标题进入目录，树地址可链接到独立页面，便于读者在长篇讲解中定位各步。
+
+@(define syntax-fragment
+  (code-fragment "ski-syntax" "SKI 项的语法"
+    (define (skio term)
+      (conde
+       ((== 'I term))
+       ((== 'K term))
+       ((== 'S term))
+       ((fresh (left right)
+          (== `(,left ,right) term)
+          (skio left)
+          (skio right)))))))
+
+@(define contract-fragment
+  (code-fragment "ski-contract" "SKI 的根部约简规则"
+    (define (contracto term result)
+      (conde
+       ((fresh (value)
+          (== `(I ,value) term)
+          (== value result)))
+       ((fresh (value argument)
+          (== `((K ,value) ,argument) term)
+          (== value result)))
+       ((fresh (f g argument)
+          (== `(((S ,f) ,g) ,argument) term)
+          (== `((,f ,argument) (,g ,argument)) result)))))))
+
+@(define step-fragment
+  (code-fragment "ski-step" "在项中约简一步"
+    #:requires (contracto)
+    (define (stepo term result)
+      (conde
+       ((contracto term result))
+       ((fresh (left right changed)
+          (== `(,left ,right) term)
+          (conde
+           ((== `(,changed ,right) result)
+            (stepo left changed))
+           ((== `(,left ,changed) result)
+            (stepo right changed)))))))))
+
+@(define reduction-fragment
+  (code-fragment "ski-reduce" "零步或多步约简"
+    #:requires (stepo)
+    (define (reduceo term result)
+      (conde
+       ((== term result))
+       ((fresh (next)
+          (stepo term next)
+          (reduceo next result)))))))
+
+@(define query-fragment
+  (code-fragment "ski-y-query" "搜索固定点组合子"
+    #:requires (skio reduceo)
+    (define (find-y)
+      (run 1 (candidate)
+        (fresh (part)
+          (== `(,part ,part) candidate)
+          (reduceo `(,candidate x)
+                   `(x (,candidate x)))
+          (skio candidate))))))
+
+@(define y-program
+  (make-program "ski-y-program" "SKI 固定点搜索"
+    (list syntax-fragment contract-fragment step-fragment
+          reduction-fragment query-fragment)
+    '(find-y)
+    #:imports (list (make-import '(grove relation) '(== conde fresh run)))))
+
+@(define y-instance (instantiate-program y-program))
+@(define y-solutions ((instance-binding y-instance 'find-y)))
+@(define y-solution-source
+  (call-with-output-string
+    (lambda (port) (pretty-print (car y-solutions) port))))
+
+@subtree{
+  @title{1. 用树表示 SKI 项}
+
+SKI 项由三个组合子和二元应用组成。我们用Scheme列表表示它的树结构：@code{(f x)}表示@code{f}应用于@code{x}，@code{((f x) y)}表示先应用@code{f}和@code{x}，再把结果应用于@code{y}。应用按左结合解析。列表在这里充当语法树；后面的关系会递归检查这些树。
+
+关系@code{skio}描述合法项：@code{I}、@code{K}、@code{S}是叶子；一个由两个子项组成的列表是应用节点。@code{conde}列出这四种情况，@code{fresh}引入左右子项，两个递归调用再检查子树。
+
+  @fragment-tree[syntax-fragment y-program]
+
+页面中的“Program.”标记说明这棵树呈现一个程序片段。标题取自片段说明，代码区域显示@code{code-fragment}捕获的定义原文；树下的@code{Defines: (skio)}指出实例化后会提供哪个Scheme绑定。@code{Assembled in}和@code{Outputs}把这段定义连到装配计划与生成文件。读者由此可以从概念说明进入源码，再沿链接看到源码如何进入完整程序。
+}
+
+@subtree{
+  @title{2. 把组合子公理写成关系}
+
+三个组合子的根部约简规则是@code{(I x) → x}、@code{((K x) y) → x}和@code{(((S x) y) z) → ((x z) (y z))}。@code{contracto}把匹配规则的输入项和结果项联系起来。每个@code{conde}分支描述一条规则，@code{fresh}声明规则中尚未确定的子项，@code{==}通过统一（unification）匹配输入结构并构造输出。
+
+  @fragment-tree[contract-fragment y-program]
+
+这个关系既能检查给定的输入和结果是否相差一步，也能在子项未知时用同一组规则寻找匹配值。代码树保留了完整定义，读者可以把三个分支与上面的数学记号逐项对应；后面的递归关系会把这些根部规则应用到更深的子树。
+}
+
+@subtree{
+  @title{3. 把一步扩展成多步}
+
+@code{contracto}处理应用树的根节点。@code{stepo}增加两个递归分支：一个在左子项约简，另一个在右子项约简，并把改变后的子项放回原树。反复沿子树递归，一步约简便能发生在树的任意位置；单独的组合子原子在这些规则下保持不变。
+
+  @fragment-tree[step-fragment y-program]
+
+片段标题和代码树说明了@code{stepo}的工作范围；树下的@code{Requires: (contracto)}则把它与前一片段连接起来。这个依赖由@code{#:requires}写在定义旁，计划构造时会核对所需名称是否有提供者。页面还会链接到声明该片段的计划，使阅读关系与程序依赖都能从同一份描述中追踪。
+
+  @fragment-tree[reduction-fragment y-program]
+
+@code{reduceo}将一步关系扩展为零步或多步：第一分支允许原项直接作为结果，第二分支先走一步，再递归继续。它因此表示单步关系的自反传递闭包。片段树显示定义，@code{Requires: (stepo)}把依赖显式呈现出来；程序计划则会列出这些片段最终采用的装配顺序。
+}
+
+@subtree{
+  @title{4. 把固定点性质写成查询}
+
+Y组合子的固定点性质是：对任意项@code{x}，@code{Y x}可以约简为@code{x (Y x)}。
+
+  @tex-math{Y\,x \longrightarrow^{*} x\,(Y\,x)}
+
+这里的@code{x}充当约简规则中的参数原子；候选项本身则由@code{skio}限制为SKI语法。约简规则对项代换封闭：以@code{x}为占位原子得到的约简路径，可以将其中的@code{x}一致替换为任意项，路径仍然成立。这个性质让一次关系查询表达了对任意参数成立的固定点条件。
+
+可能的SKI项有无限多个。查询把候选限制为自应用形状@code{(part part)}，再要求它满足固定点性质和@code{skio}语法。@code{run 1}请求搜索顺序中的第一个解。这里先约束约简目标，再检查候选语法；在这次搜索中，这个目标顺序比先枚举大量语法树更快。
+
+  @fragment-tree[query-fragment y-program]
+
+查询片段引用@code{skio}和@code{reduceo}，因此页面给它列出这两个依赖。组成程序的五个片段随后由@code{make-program}收集到一个计划中：
+
+  @program-tree[y-program]
+
+计划树的“Module.”分类表示这是一个可查看接口与装配顺序的LP计划。@code{Exports: (find-y)}说明页面实例向文章开放的入口；“Initialization order”列出组成计划的片段，列表中的链接返回各段定义。程序计划同时携带@code{(grove relation)}及所需逻辑操作的导入声明。正文按概念递进安排，计划按声明的顺序组装；两种顺序各自服务于阅读和程序构造。
+}
+
+@subtree{
+  @title{5. 阅读并运行搜索结果}
+
+站点构建读取这份文章时，Flora实例化计划并通过@code{instance-binding}取得公开入口@code{find-y}，随后运行miniKanren查询。下面的代码块由查询返回的第一个候选项格式化生成；可见结果因此来自这次程序运行：
+
+  @code-block[#:language 'scheme y-solution-source]
+
+返回项的外层形状是@code{(A A)}，其中两处@code{A}是同一个组合子子项。@code{skio}确认候选只由@code{I}、@code{K}、@code{S}和应用组成；@code{reduceo}确认它满足查询给出的固定点性质。两项检查共同构成搜索结果的判定条件。
+
+  @program-output["ski-y-search.scm" y-program]
+
+页面中的下载链接由@code{program-output}声明为构建产物。文件从刚才展示的计划生成，包含相同的关系定义和@code{find-y}查询；片段树上的@code{Outputs}链接则把定义导航到这个文件。LP计划的@code{Exports}限制文章实例可取得的入口，下载文件按Guile源码加载，其中定义进入加载时所在的模块。
+
+在Flora的Guix开发环境中，可以加载生成文件并再次运行查询：
+
+@verbatim{guile --no-auto-compile -c '(load "build/programs/ski-y-search.scm") (write (find-y)) (newline)'}
+
+命令会重新运行搜索并打印候选项。页面展示的是文章构建时运行得到的结果，生成文件则让读者在本地Guile环境里复现同一查询。本例把候选范围设为自应用形式，并按当前目标顺序取第一个解；它展示miniKanren如何按声明的语法与关系综合出满足条件的项。若要研究搜索是否覆盖其他形状或能否找到最短项，需要另行定义候选空间、搜索策略和相应判据。
+}
+
+@subtree{
+  @title{6. 从这个例子推广}
+
+这个例子展示了文学编程如何把数学说明、逻辑关系和可运行实验编排在一篇文章里。读者可以从正文理解推理，也能沿具名片段树查看源码、沿计划树查看依赖与入口，或运行生成文件复现结果。要提出新的综合问题，可以替换候选语法、约简关系或目标查询，同时保留相同的片段、计划和展示方式。
+
+本文依据William Byrd与Daniel Friedman在2014 Strange Loop workshop中的miniKanren程序综合演示改写。原仓库以MIT License发布；组合子约简源码位于@code{combinatory-logic/cl.scm}，固定点搜索测试位于同目录的@code{medium-cl-tests.scm}。页头的@code{describes}声明把Workshop页面和原始仓库登记为本文描述的外部实体，因此它们显示在页面末尾的“描述的实体”区块；这项页面关系与LP片段之间的@code{Requires}依赖各自表达不同的联系。
+
+回到@link["math"]{数学索引}，还可以继续看规则查询和计算核验的例子；文学编程的片段、装配与导出见@link["lp-0005"]{从片段到可运行的 Scheme 模块}。
+}
